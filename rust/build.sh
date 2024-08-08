@@ -9,6 +9,8 @@ cargo run --bin uniffi-bindgen generate --library ./target/release/libmwrust.dyl
 
 mv ./bindings/mwrustFFI.modulemap ./bindings/module.modulemap
 
+rustup target add aarch64-apple-ios-sim aarch64-apple-ios
+
 cargo build --target=aarch64-apple-ios-sim --release
 cargo build --target=aarch64-apple-ios --release
 
