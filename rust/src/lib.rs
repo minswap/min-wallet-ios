@@ -38,7 +38,7 @@ pub fn create_wallet(
     address_type: AddressType,
     network_environment: NetworkEnvironment,
 ) -> WalletType {
-    let network_id = NetworkId::from_network_environment(network_environment) as u8;
+    let network_id = NetworkId::from_network_environment(&network_environment) as u8;
     let root_key =
         crypto::Bip32PrivateKey::from_bip39_entropy(mnemonic.as_bytes(), password.as_bytes());
 
