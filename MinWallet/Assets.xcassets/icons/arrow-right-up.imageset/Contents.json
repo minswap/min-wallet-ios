@@ -1,6 +1,7 @@
 {
-  "colors" : [
+  "images" : [
     {
+      "filename" : "arrow-right-up.pdf",
       "idiom" : "universal"
     }
   ],
