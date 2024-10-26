@@ -9,10 +9,10 @@ bip39 = { version = "2.0.0", features = ["rand"] }
 cardano-serialization-lib = "11.5.0"
 hex = "0.4.3"
 rand = "0.8.5"
-uniffi = { version = "0.28.0", features = ["cli"] }
+uniffi = { version = "0.28.1", features = ["cli"] }
 
 [build-dependencies]
-uniffi = { version = "0.28.0", features = ["build"] }
+uniffi = { version = "0.28.1", features = ["build"] }
 
 [lib]
 crate-type = ["cdylib", "staticlib"]

@@ -1,24 +1,35 @@
-use base64::prelude::BASE64_STANDARD;
-use base64::Engine;
-use bip39::Mnemonic;
-use cardano_serialization_lib::emip3::{decrypt_with_password, encrypt_with_password};
-use cardano_serialization_lib::{
-    address::{BaseAddress, NetworkInfo, RewardAddress, StakeCredential},
-    crypto::{Bip32PrivateKey, Bip32PublicKey},
-};
-use cardano_serialization_lib::{utils, Transaction};
-use rand::RngCore;
 use std::collections::{HashMap, HashSet};
+use base64::prelude::*;
+use bip39::Mnemonic;
+use cardano_serialization_lib::{address::{BaseAddress, NetworkInfo, RewardAddress, StakeCredential}, crypto::{Bip32PrivateKey, Bip32PublicKey}, emip3::{decrypt_with_password, encrypt_with_password}, Transaction, utils};
+use rand::RngCore;
 
+use crate::{network::{NetworkEnvironment, NetworkId}, tx_in::TxIn};
+use crate::utils::harden;
 use crate::public_key_hash::PublicKeyHash;
-use crate::tx_in::TxIn;
-use crate::{
-    network::{NetworkEnvironment, NetworkId},
-    utils::harden,
-};
 
 const MINWALLET_VERSION: &str = "2.0.0";
 
+#[derive(Debug)]
+enum TransportType {
+    WEBUSB,
+    WEBHID,
+    WEBBLE,
+    BLE,
+}
+
+impl TransportType {
+    pub fn to_string(&self) -> String {
+        match self {
+            TransportType::WEBUSB => "WebUSB".to_string(),
+            TransportType::WEBHID => "WebHID".to_string(),
+            TransportType::WEBBLE => "WebBluetooth".to_string(),
+            TransportType::BLE => "Bluetooth".to_string(),
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct Minwallet {
     name: String,
     base_address: HashMap<u8, String>,
@@ -29,10 +40,11 @@ pub struct Minwallet {
     version: String,
     account_index: u8,
     wallet_name: String,
+    transport_type: Option<TransportType>,
 }
 
 impl Minwallet {
-    pub fn create(
+    pub fn new(
         mnemonic: &str,
         password: &str,
         network_environment: NetworkEnvironment,
@@ -58,6 +70,7 @@ impl Minwallet {
             reward_address,
             network_id,
             account_index: 0,
+            transport_type: None,
             encrypted_key,
             pub_key_hash_derive_map,
             version: MINWALLET_VERSION.to_string(),
@@ -65,14 +78,51 @@ impl Minwallet {
         }
     }
 
-    pub fn sign_tx(&self, tx: &str, password: &str) -> String {
-        "".to_string()
-    }
+    pub fn sign_tx(&self, raw_tx: &str) {}
 
-    fn get_private_keys(&self, password: &str) -> String {
-        "".to_string()
+    fn get_transaction_from_raw(&self, raw_tx: &str) {
+        let tx = Transaction::from_hex(raw_tx).unwrap();
+        let tx_body = tx.body();
+        let tx_hash = utils::hash_transaction(&tx_body);
+        let tx_id = tx_hash.to_hex();
+        let tx_size = tx.to_bytes().len();
+        let fee = tx_body.fee();
+
+        let witness_set = tx.witness_set();
+        let vkey_witnesses = witness_set.vkeys();
+        let mut signed_pub_key_hashes = HashSet::new();
+
+        if let Some(vkey_witnesses) = vkey_witnesses {
+            for i in 0..vkey_witnesses.len() {
+                let vkey_witness = vkey_witnesses.get(i);
+                let key = vkey_witness.vkey();
+                let pub_key = key.public_key();
+                let pub_key_hash = pub_key.hash();
+                signed_pub_key_hashes.insert(pub_key_hash.to_hex());
+            }
+        }
+
+        let tx_ins = TxIn::get_inputs_from_tx_raw(raw_tx);
+        let tx_collateral_ins = match TxIn::get_collateral_from_tx_raw(raw_tx) {
+            Some(data) => data,
+            None => vec![]
+        };
+        let mut public_key_hashes = HashSet::new();
+
+        for tx_in in tx_ins {
+
+        }
+
+
+        //missing_signatures -> keyHash
+        let missing_signatures = vec![];
+        for signature in signed_pub_key_hashes {
+            let pkh = PublicKeyHash::new(signature);
+            if !signed_pub_key_hashes
+        }
     }
 }
+
 
 fn generate_addresses(public_key: &Bip32PublicKey) -> HashMap<String, Vec<u32>> {
     let mut pub_key_hash_derive_map = HashMap::new();
@@ -205,20 +255,36 @@ fn decrypt_password(password: &str, encrypted_hex: &str) -> String {
     decrypt_with_password(&password_hex, encrypted_hex).unwrap()
 }
 
-fn get_root_key_from_password(password: &str, encrypted_hex: &str) -> String {
-    decrypt_password(password, encrypted_hex)
-}
+#[cfg(test)]
+mod tests {
+    use super::{decrypt_password, encrypt_password, generate_secure_string, Minwallet};
+    use crate::bip39::generate_mnemonic;
+    use crate::network::NetworkEnvironment;
 
-fn get_account_key_from_password(password: &str, encrypted_hex: &str) -> String {
-    let root_key = get_root_key_from_password(password, encrypted_hex);
-    get_account_key_from_root_key(&root_key)
-}
+    #[test]
+    fn can_generate_secure_string_with_length() {
+        let result = generate_secure_string(64);
+        assert_eq!(result.bytes().len(), 64);
+    }
 
-fn get_account_key_from_root_key(root_key_hex: &str) -> String {
-    let account_key = Bip32PrivateKey::from_bytes(root_key_hex.as_bytes())
-        .unwrap()
-        .derive(harden(1852))
-        .derive(harden(1815))
-        .derive(harden(0));
-    account_key.to_hex()
+    #[test]
+    fn can_encrypt_and_decrypt_password() {
+        let password = "MyPassword@@";
+        let data = "aqu23oi45ufdgsaiklojug8oasdff";
+        let data_hex = hex::encode(data);
+        let encrypted_hex = encrypt_password(&password, &data_hex);
+        let decrypted_hex = decrypt_password(&password, &encrypted_hex);
+        assert_eq!(decrypted_hex, data_hex);
+    }
+
+    #[test]
+    fn can_create_new_minwallet() {
+        let mnemonic = generate_mnemonic();
+        let password = "MyPassword@@";
+        let network_environment = NetworkEnvironment::TestnetPreprod;
+        let wallet_name = "W01";
+        let wallet = Minwallet::new(&mnemonic, password, network_environment, wallet_name);
+        println!("{:#?}", wallet);
+        assert_eq!(1, 1);
+    }
 }

@@ -9,9 +9,13 @@ use cardano_serialization_lib::{
 };
 
 pub mod bip39;
-pub mod minwallet;
+mod minswap_provider;
 pub mod network;
+pub mod public_key_hash;
+mod tx_in;
 pub mod utils;
+
+pub mod minwallet;
 
 pub enum AddressType {
     BaseAddress,
@@ -110,7 +114,9 @@ pub fn sign_tx(tx_raw: &str, keys: Vec<String>) -> String {
     }
 
     witness_set.set_vkeys(&vkey_witnesses);
-    witness_set.to_hex()
+    let signed_tx = witness_set.to_hex();
+
+    "".to_owned()
 }
 
 uniffi::include_scaffolding!("mwrust");
