@@ -72,6 +72,48 @@ impl Minwallet {
     fn get_private_keys(&self, password: &str) -> String {
         "".to_string()
     }
+
+    fn get_transaction_from_raw(&self, raw_tx: &str) {
+        let tx = Transaction::from_hex(raw_tx).unwrap();
+        let tx_body = tx.body();
+        let tx_hash = utils::hash_transaction(&tx_body);
+        let tx_id = tx_hash.to_hex();
+        let tx_size = tx.to_bytes().len();
+        let fee = tx_body.fee();
+
+        let witness_set = tx.witness_set();
+        let vkey_witnesses = witness_set.vkeys();
+        let mut signed_pub_key_hashes = HashSet::new();
+
+        if let Some(vkey_witnesses) = vkey_witnesses {
+            for i in 0..vkey_witnesses.len() {
+                let vkey_witness = vkey_witnesses.get(i);
+                let key = vkey_witness.vkey();
+                let pub_key = key.public_key();
+                let pub_key_hash = pub_key.hash();
+                signed_pub_key_hashes.insert(pub_key_hash.to_hex());
+            }
+        }
+
+        let tx_ins = TxIn::get_inputs_from_tx_raw(raw_tx);
+        let tx_collateral_ins = match TxIn::get_collateral_from_tx_raw(raw_tx) {
+            Some(data) => data,
+            None => vec![]
+        };
+        let mut public_key_hashes = HashSet::new();
+
+        for tx_in in tx_ins {
+
+        }
+
+
+        //missing_signatures -> keyHash
+        let missing_signatures = vec![];
+        for signature in signed_pub_key_hashes {
+            let pkh = PublicKeyHash::new(signature);
+            if !signed_pub_key_hashes
+        }
+    }
 }
 
 fn generate_addresses(public_key: &Bip32PublicKey) -> HashMap<String, Vec<u32>> {

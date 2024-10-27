@@ -1,8 +1,8 @@
 use cardano_serialization_lib::{Transaction, TransactionInput};
 
 pub struct TxIn {
-    tx_id: Vec<u8>,
-    index: u32,
+    pub tx_id: Vec<u8>,
+    pub index: u32,
 }
 
 impl TxIn {

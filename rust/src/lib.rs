@@ -1,9 +1,10 @@
 use crate::bip39::generate_mnemonic;
 use crate::network::{NetworkEnvironment, NetworkId};
 use crate::utils::harden;
+use cardano_serialization_lib::crypto::Bip32PrivateKey;
 use cardano_serialization_lib::{
     address::{BaseAddress, EnterpriseAddress, RewardAddress, StakeCredential},
-    crypto::{self, PrivateKey, Vkeywitnesses},
+    crypto::{PrivateKey, Vkeywitnesses},
     utils::{hash_transaction, make_vkey_witness},
     Transaction, TransactionWitnessSet,
 };
@@ -12,8 +13,11 @@ pub mod bip39;
 mod minswap_provider;
 pub mod network;
 pub mod public_key_hash;
+mod translucent_helpers;
 mod tx_in;
+mod tx_out;
 pub mod utils;
+mod utxo;
 
 pub mod minwallet;
 
@@ -43,8 +47,7 @@ pub fn create_wallet(
     network_environment: NetworkEnvironment,
 ) -> WalletType {
     let network_id = NetworkId::from_network_environment(&network_environment) as u8;
-    let root_key =
-        crypto::Bip32PrivateKey::from_bip39_entropy(mnemonic.as_bytes(), password.as_bytes());
+    let root_key = Bip32PrivateKey::from_bip39_entropy(mnemonic.as_bytes(), password.as_bytes());
 
     let account_key = root_key
         .derive(harden(1852))
