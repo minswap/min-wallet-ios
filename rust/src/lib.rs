@@ -9,7 +9,9 @@ use cardano_serialization_lib::{
     Transaction, TransactionWitnessSet,
 };
 
+mod asset;
 pub mod bip39;
+mod bytes;
 mod minswap_provider;
 pub mod network;
 pub mod public_key_hash;
@@ -18,6 +20,7 @@ mod tx_in;
 mod tx_out;
 pub mod utils;
 mod utxo;
+mod value;
 
 pub mod minwallet;
 

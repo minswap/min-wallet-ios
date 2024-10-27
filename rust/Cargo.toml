@@ -8,6 +8,7 @@ base64 = "0.22.1"
 bip39 = { version = "2.1.0", features = ["rand"] }
 cardano-serialization-lib = "11.5.0"
 hex = "0.4.3"
+lazy_static = "1.5.0"
 rand = "0.8.5"
 reqwest = { version = "0.11.27", features = ["json", "blocking"] }
 serde = { version = "1.0.213", features = ["derive"] }
