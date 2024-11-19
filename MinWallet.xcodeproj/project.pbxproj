@@ -48,6 +48,7 @@
 		575157E72CEB4526004CD647 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AF2CEB4526004CD647 /* Inter-Regular.ttf */; };
 		575157E82CEB4526004CD647 /* Inter-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AC2CEB4526004CD647 /* Inter-LightItalic.ttf */; };
 		575157E92CEB4526004CD647 /* Inter-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157A72CEB4526004CD647 /* Inter-ExtraBoldItalic.ttf */; };
+		57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6D91B2CEC3980009CF6CD /* AppBar.swift */; };
 		57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102952C64CCA0000B3544 /* MinWalletApp.swift */; };
 		57F102982C64CCA0000B3544 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102972C64CCA0000B3544 /* ContentView.swift */; };
 		57F1029A2C64CCA1000B3544 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F102992C64CCA1000B3544 /* Assets.xcassets */; };
@@ -119,6 +120,7 @@
 		575157C52CEB4526004CD647 /* InterDisplay-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-ThinItalic.ttf"; sourceTree = "<group>"; };
 		57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
 		57A6D91A2CEC3604009CF6CD /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
+		57A6D91B2CEC3980009CF6CD /* AppBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBar.swift; sourceTree = "<group>"; };
 		57F102922C64CCA0000B3544 /* MinWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102952C64CCA0000B3544 /* MinWalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletApp.swift; sourceTree = "<group>"; };
 		57F102972C64CCA0000B3544 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 		575157942CEB4407004CD647 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				57A6D91B2CEC3980009CF6CD /* AppBar.swift */,
 				575157922CEB4407004CD647 /* AppButton.swift */,
 				575157932CEB4407004CD647 /* Icon.swift */,
 			);
@@ -491,6 +494,7 @@
 				5751579B2CEB4407004CD647 /* AppButton.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
 				5751579D2CEB4407004CD647 /* Icon.swift in Sources */,
+				57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */,
 				5751579E2CEB4407004CD647 /* Font.swift in Sources */,
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 			);
