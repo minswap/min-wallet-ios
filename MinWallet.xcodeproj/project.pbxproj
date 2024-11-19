@@ -55,8 +55,6 @@
 		57F102A72C64CCA1000B3544 /* MinWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102A62C64CCA1000B3544 /* MinWalletTests.swift */; };
 		57F102B12C64CCA1000B3544 /* MinWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102B02C64CCA1000B3544 /* MinWalletUITests.swift */; };
 		57F102B32C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */; };
-		57F102C02C64CCD9000B3544 /* Mobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F102BF2C64CCD8000B3544 /* Mobile.xcframework */; };
-		57F102C22C64CCE1000B3544 /* mwrust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102C12C64CCE1000B3544 /* mwrust.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +117,8 @@
 		575157C32CEB4526004CD647 /* InterDisplay-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		575157C42CEB4526004CD647 /* InterDisplay-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-Thin.ttf"; sourceTree = "<group>"; };
 		575157C52CEB4526004CD647 /* InterDisplay-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-ThinItalic.ttf"; sourceTree = "<group>"; };
+		57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
+		57A6D91A2CEC3604009CF6CD /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		57F102922C64CCA0000B3544 /* MinWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102952C64CCA0000B3544 /* MinWalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletApp.swift; sourceTree = "<group>"; };
 		57F102972C64CCA0000B3544 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -129,8 +129,6 @@
 		57F102AC2C64CCA1000B3544 /* MinWalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinWalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102B02C64CCA1000B3544 /* MinWalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletUITests.swift; sourceTree = "<group>"; };
 		57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		57F102BF2C64CCD8000B3544 /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
-		57F102C12C64CCE1000B3544 /* mwrust.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +136,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57F102C02C64CCD9000B3544 /* Mobile.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,12 +262,12 @@
 		57F102892C64CCA0000B3544 = {
 			isa = PBXGroup;
 			children = (
-				57F102C12C64CCE1000B3544 /* mwrust.swift */,
-				57F102BF2C64CCD8000B3544 /* Mobile.xcframework */,
 				57F102942C64CCA0000B3544 /* MinWallet */,
 				57F102A52C64CCA1000B3544 /* MinWalletTests */,
 				57F102AF2C64CCA1000B3544 /* MinWalletUITests */,
 				57F102932C64CCA0000B3544 /* Products */,
+				57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */,
+				57A6D91A2CEC3604009CF6CD /* mwrust.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -490,7 +487,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				575157912CEB43FF004CD647 /* HomeScreen.swift in Sources */,
-				57F102C22C64CCE1000B3544 /* mwrust.swift in Sources */,
 				57F102982C64CCA0000B3544 /* ContentView.swift in Sources */,
 				5751579B2CEB4407004CD647 /* AppButton.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
