@@ -9,7 +9,7 @@ jobs:
   lint:
     runs-on: macos-latest
     steps:
-      - uses: swift-actions/setup-swift
+      - uses: swift-actions/setup-swift@v2
       - uses: actions/checkout@4
       - name: Lint
         run: swift format lint -r -p MinWallet
