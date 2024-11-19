@@ -4,12 +4,15 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   lint:
     runs-on: macos-latest
     steps:
-      - uses: swift-actions/setup-swift
-      - uses: actions/checkout@4
+      - uses: swift-actions/setup-swift@v2
+      - uses: actions/checkout@v4
       - name: Lint
         run: swift format lint -r -p MinWallet
