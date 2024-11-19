@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        HomeScreen()
-    }
+  var body: some View {
+    HomeScreen()
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView()
 }
