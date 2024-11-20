@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5718EB1A2CEDE5BA00CDE34D /* DisableBounces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5718EB192CEDE5B700CDE34D /* DisableBounces.swift */; };
+		5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */; };
 		575157912CEB43FF004CD647 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5751578E2CEB43FF004CD647 /* HomeScreen.swift */; };
 		5751579B2CEB4407004CD647 /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575157922CEB4407004CD647 /* AppButton.swift */; };
 		5751579C2CEB4407004CD647 /* Others.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575157972CEB4407004CD647 /* Others.swift */; };
@@ -48,6 +50,7 @@
 		575157E72CEB4526004CD647 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AF2CEB4526004CD647 /* Inter-Regular.ttf */; };
 		575157E82CEB4526004CD647 /* Inter-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AC2CEB4526004CD647 /* Inter-LightItalic.ttf */; };
 		575157E92CEB4526004CD647 /* Inter-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157A72CEB4526004CD647 /* Inter-ExtraBoldItalic.ttf */; };
+		5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774769A2CED9A220066CFB6 /* Carousel.swift */; };
 		577550D92CEC442100DD7531 /* AppIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577550D82CEC441D00DD7531 /* AppIconButton.swift */; };
 		57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6D91B2CEC3980009CF6CD /* AppBar.swift */; };
 		57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102952C64CCA0000B3544 /* MinWalletApp.swift */; };
@@ -77,6 +80,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5718EB192CEDE5B700CDE34D /* DisableBounces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisableBounces.swift; sourceTree = "<group>"; };
+		5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortenAddress.swift; sourceTree = "<group>"; };
 		5751578E2CEB43FF004CD647 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		575157922CEB4407004CD647 /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButton.swift; sourceTree = "<group>"; };
 		575157932CEB4407004CD647 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
@@ -119,6 +124,7 @@
 		575157C32CEB4526004CD647 /* InterDisplay-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		575157C42CEB4526004CD647 /* InterDisplay-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-Thin.ttf"; sourceTree = "<group>"; };
 		575157C52CEB4526004CD647 /* InterDisplay-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-ThinItalic.ttf"; sourceTree = "<group>"; };
+		5774769A2CED9A220066CFB6 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		577550D82CEC441D00DD7531 /* AppIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconButton.swift; sourceTree = "<group>"; };
 		57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
 		57A6D91A2CEC3604009CF6CD /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
@@ -160,17 +166,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5751578D2CEB43FF004CD647 /* Components */ = {
+		5718EB182CEDE5AF00CDE34D /* View Modifiers */ = {
 			isa = PBXGroup;
 			children = (
+				5718EB192CEDE5B700CDE34D /* DisableBounces.swift */,
 			);
-			path = Components;
+			path = "View Modifiers";
+			sourceTree = "<group>";
+		};
+		5718EB1B2CEDF71000CDE34D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		5751578F2CEB43FF004CD647 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				5751578D2CEB43FF004CD647 /* Components */,
+				577476992CED9A1D0066CFB6 /* Components */,
 				5751578E2CEB43FF004CD647 /* HomeScreen.swift */,
 			);
 			path = Home;
@@ -207,6 +222,8 @@
 		575157992CEB4407004CD647 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				5718EB1B2CEDF71000CDE34D /* Utils */,
+				5718EB182CEDE5AF00CDE34D /* View Modifiers */,
 				575157A02CEB44F5004CD647 /* Fonts */,
 				575157942CEB4407004CD647 /* Components */,
 				575157982CEB4407004CD647 /* Theme */,
@@ -263,6 +280,14 @@
 				575157C52CEB4526004CD647 /* InterDisplay-ThinItalic.ttf */,
 			);
 			path = Inter;
+			sourceTree = "<group>";
+		};
+		577476992CED9A1D0066CFB6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				5774769A2CED9A220066CFB6 /* Carousel.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		57F102892C64CCA0000B3544 = {
@@ -493,8 +518,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				575157912CEB43FF004CD647 /* HomeScreen.swift in Sources */,
+				5718EB1A2CEDE5BA00CDE34D /* DisableBounces.swift in Sources */,
 				577550D92CEC442100DD7531 /* AppIconButton.swift in Sources */,
 				57F102982C64CCA0000B3544 /* ContentView.swift in Sources */,
+				5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */,
+				5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */,
 				5751579B2CEB4407004CD647 /* AppButton.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
 				5751579D2CEB4407004CD647 /* AppIcon.swift in Sources */,

@@ -4,6 +4,8 @@ enum IconName: String {
   case arrowLeftDown = "arrow-left-down"
   case arrowRightUp = "arrow-right-up"
   case search = "search"
+  case qrCode = "qr-code"
+  case fileCopy = "file-copy"
 
   var image: Image {
     return Image(self.rawValue)
