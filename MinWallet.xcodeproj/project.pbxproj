@@ -57,6 +57,10 @@
 		57F102A72C64CCA1000B3544 /* MinWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102A62C64CCA1000B3544 /* MinWalletTests.swift */; };
 		57F102B12C64CCA1000B3544 /* MinWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102B02C64CCA1000B3544 /* MinWalletUITests.swift */; };
 		57F102B32C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */; };
+		81CCB23B2CEC48750001C32C /* TokenList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CCB23A2CEC48750001C32C /* TokenList.swift */; };
+		81CCB23E2CEC7C600001C32C /* TokenListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CCB23D2CEC7C600001C32C /* TokenListItem.swift */; };
+		81CCB2422CEC7D300001C32C /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CCB2412CEC7D300001C32C /* Token.swift */; };
+		81CCB2452CEC7EF10001C32C /* TokenLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CCB2442CEC7EF10001C32C /* TokenLogo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +137,10 @@
 		57F102AC2C64CCA1000B3544 /* MinWalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinWalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102B02C64CCA1000B3544 /* MinWalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletUITests.swift; sourceTree = "<group>"; };
 		57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		81CCB23A2CEC48750001C32C /* TokenList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TokenList.swift; path = MinWallet/Features/Home/Components/TokenList/TokenList.swift; sourceTree = SOURCE_ROOT; };
+		81CCB23D2CEC7C600001C32C /* TokenListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenListItem.swift; sourceTree = "<group>"; };
+		81CCB2412CEC7D300001C32C /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		81CCB2442CEC7EF10001C32C /* TokenLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenLogo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +171,7 @@
 		5751578D2CEB43FF004CD647 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				81CCB23C2CEC7C300001C32C /* TokenList */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -190,6 +199,7 @@
 				577550D82CEC441D00DD7531 /* AppIconButton.swift */,
 				57A6D91B2CEC3980009CF6CD /* AppBar.swift */,
 				575157922CEB4407004CD647 /* AppButton.swift */,
+				81CCB2442CEC7EF10001C32C /* TokenLogo.swift */,
 				575157932CEB4407004CD647 /* AppIcon.swift */,
 			);
 			path = Components;
@@ -207,6 +217,7 @@
 		575157992CEB4407004CD647 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				81CCB2402CEC7CE70001C32C /* Structs */,
 				575157A02CEB44F5004CD647 /* Fonts */,
 				575157942CEB4407004CD647 /* Components */,
 				575157982CEB4407004CD647 /* Theme */,
@@ -324,6 +335,23 @@
 				57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */,
 			);
 			path = MinWalletUITests;
+			sourceTree = "<group>";
+		};
+		81CCB23C2CEC7C300001C32C /* TokenList */ = {
+			isa = PBXGroup;
+			children = (
+				81CCB23A2CEC48750001C32C /* TokenList.swift */,
+				81CCB23D2CEC7C600001C32C /* TokenListItem.swift */,
+			);
+			path = TokenList;
+			sourceTree = "<group>";
+		};
+		81CCB2402CEC7CE70001C32C /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				81CCB2412CEC7D300001C32C /* Token.swift */,
+			);
+			path = Structs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -497,6 +525,10 @@
 				57F102982C64CCA0000B3544 /* ContentView.swift in Sources */,
 				5751579B2CEB4407004CD647 /* AppButton.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
+				81CCB2452CEC7EF10001C32C /* TokenLogo.swift in Sources */,
+				81CCB23E2CEC7C600001C32C /* TokenListItem.swift in Sources */,
+				81CCB23B2CEC48750001C32C /* TokenList.swift in Sources */,
+				81CCB2422CEC7D300001C32C /* Token.swift in Sources */,
 				5751579D2CEB4407004CD647 /* AppIcon.swift in Sources */,
 				57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */,
 				5751579E2CEB4407004CD647 /* Font.swift in Sources */,
