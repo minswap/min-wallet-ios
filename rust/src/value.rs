@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use cardano_serialization_lib::utils::Value as CSLValue;
+use cardano_serialization_lib::Value as CSLValue;
 
 use crate::asset::{Asset, ADA};
 use crate::bytes::Bytes;

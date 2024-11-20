@@ -5,8 +5,8 @@ edition = "2021"
 
 [dependencies]
 base64 = "0.22.1"
-bip39 = { version = "2.1.0", features = ["rand"] }
-cardano-serialization-lib = "11.5.0"
+tiny-bip39 = "2.0.0"
+cardano-serialization-lib = "13.2.0"
 hex = "0.4.3"
 lazy_static = "1.5.0"
 rand = "0.8.5"

@@ -1,16 +1,15 @@
-use crate::bip39::generate_mnemonic;
 use crate::network::{NetworkEnvironment, NetworkId};
 use crate::utils::harden;
-use cardano_serialization_lib::crypto::Bip32PrivateKey;
+use cardano_serialization_lib::Bip32PrivateKey;
 use cardano_serialization_lib::{
-    address::{BaseAddress, EnterpriseAddress, RewardAddress, StakeCredential},
-    crypto::{PrivateKey, Vkeywitnesses},
-    utils::{hash_transaction, make_vkey_witness},
+    BaseAddress, EnterpriseAddress, RewardAddress,Credential,
+    PrivateKey, Vkeywitnesses,
+    make_vkey_witness,
     Transaction, TransactionWitnessSet,
 };
 
+pub mod wallet;
 mod asset;
-pub mod bip39;
 mod bytes;
 mod minswap_provider;
 pub mod network;
@@ -68,15 +67,15 @@ pub fn create_wallet(
 
             let address = BaseAddress::new(
                 network_id,
-                &StakeCredential::from_keyhash(&payment_key_hash),
-                &StakeCredential::from_keyhash(&stake_key_hash),
+                &Credential::from_keyhash(&payment_key_hash),
+                &Credential::from_keyhash(&stake_key_hash),
             )
-            .to_address()
-            .to_bech32(None)
-            .unwrap();
+                .to_address()
+                .to_bech32(None)
+                .unwrap();
 
             let reward_address =
-                RewardAddress::new(network_id, &StakeCredential::from_keyhash(&stake_key_hash))
+                RewardAddress::new(network_id, &Credential::from_keyhash(&stake_key_hash))
                     .to_address()
                     .to_bech32(None)
                     .unwrap();
@@ -91,11 +90,11 @@ pub fn create_wallet(
         AddressType::EnterpriseAddress => {
             let address = EnterpriseAddress::new(
                 network_id,
-                &StakeCredential::from_keyhash(&payment_key_hash),
+                &Credential::from_keyhash(&payment_key_hash),
             )
-            .to_address()
-            .to_bech32(None)
-            .unwrap();
+                .to_address()
+                .to_bech32(None)
+                .unwrap();
 
             WalletType::EnterpriseWallet {
                 address,
@@ -105,24 +104,24 @@ pub fn create_wallet(
     }
 }
 
-pub fn sign_tx(tx_raw: &str, keys: Vec<String>) -> String {
-    let tx = Transaction::from_bytes(tx_raw.as_bytes().to_vec()).unwrap();
-    let tx_body = tx.body();
-    let tx_hash = hash_transaction(&tx_body);
-
-    let mut witness_set = TransactionWitnessSet::new();
-    let mut vkey_witnesses = Vkeywitnesses::new();
-
-    for key in keys {
-        let pkey = PrivateKey::from_bech32(&key).unwrap();
-        let vkey = make_vkey_witness(&tx_hash, &pkey);
-        vkey_witnesses.add(&vkey);
-    }
-
-    witness_set.set_vkeys(&vkey_witnesses);
-    let signed_tx = witness_set.to_hex();
-
-    "".to_owned()
-}
+// pub fn sign_tx(tx_raw: &str, keys: Vec<String>) -> String {
+//     let tx = Transaction::from_bytes(tx_raw.as_bytes().to_vec()).unwrap();
+//     let tx_body = tx.body();
+//     let tx_hash = hash_transaction(&tx_body);
+//
+//     let mut witness_set = TransactionWitnessSet::new();
+//     let mut vkey_witnesses = Vkeywitnesses::new();
+//
+//     for key in keys {
+//         let pkey = PrivateKey::from_bech32(&key).unwrap();
+//         let vkey = make_vkey_witness(&tx_hash, &pkey);
+//         vkey_witnesses.add(&vkey);
+//     }
+//
+//     witness_set.set_vkeys(&vkey_witnesses);
+//     let signed_tx = witness_set.to_hex();
+//
+//     "".to_owned()
+// }
 
 uniffi::include_scaffolding!("mwrust");

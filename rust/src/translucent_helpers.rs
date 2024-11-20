@@ -13,27 +13,3 @@ impl TOutRef {
         }
     }
 }
-
-pub struct TUTxO {}
-
-impl TUTxO {
-    pub fn from_hex(utxos: &Vec<String>) -> Vec<Self> {
-        for tutxo in utxos {
-            let utxo = Utxo::from_hex(tutxo);
-            utxo.output.value.
-            if let Some(multiasset) = utxo.output.value.multiasset() {
-                for i in 0..multiasset.keys().len() {
-                    let key = multiasset.keys().get(i);
-                    let assets = multiasset.get(&key).unwrap();
-                    for name_index in 0..assets.keys().len() {
-                        // TODO: Continue this
-                        let asset_name = assets.keys().get(name_index);
-                        if asset_name == "" {}
-                        let asset = assets.get(&asset_name).unwrap();
-                    }
-                }
-            }
-        }
-        vec![]
-    }
-}

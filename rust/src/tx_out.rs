@@ -1,4 +1,4 @@
-use cardano_serialization_lib::{address::Address, utils::Value, TransactionOutput};
+use cardano_serialization_lib::{Address, Value, TransactionOutput};
 
 pub enum DatumSource {
     DatumHash { hash: Vec<u8> },

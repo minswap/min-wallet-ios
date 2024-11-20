@@ -1,4 +1,4 @@
-use cardano_serialization_lib::utils::TransactionUnspentOutput;
+use cardano_serialization_lib::TransactionUnspentOutput;
 
 use crate::{tx_in::TxIn, tx_out::TxOut};
 
