@@ -5,14 +5,21 @@ edition = "2021"
 
 [dependencies]
 base64 = "0.22.1"
-bip39 = { version = "2.0.0", features = ["rand"] }
-cardano-serialization-lib = "11.5.0"
+tiny-bip39 = "2.0.0"
+cardano-serialization-lib = "13.2.0"
 hex = "0.4.3"
+lazy_static = "1.5.0"
 rand = "0.8.5"
-uniffi = { version = "0.28.0", features = ["cli"] }
+reqwest = { version = "0.11.27", features = ["json", "blocking"] }
+serde = { version = "1.0.213", features = ["derive"] }
+serde_json = "1.0.132"
+uniffi = { version = "0.28.2", features = ["cli"] }
+cryptoxide = "0.4.4"
+maestro-rust-sdk = { git = "ssh://git@github.com/maestro-org/rust-sdk.git" }
+tokio = { version = "1.41.1", features = ["full"] }
 
 [build-dependencies]
-uniffi = { version = "0.28.0", features = ["build"] }
+uniffi = { version = "0.28.2", features = ["build"] }
 
 [lib]
 crate-type = ["cdylib", "staticlib"]
