@@ -1,6 +1,12 @@
 use std::collections::HashMap;
 use std::error::Error;
 
+use cardano_serialization_lib::Address;
+use cardano_serialization_lib::TransactionHash;
+use cardano_serialization_lib::TransactionInput;
+use cardano_serialization_lib::TransactionOutput;
+use cardano_serialization_lib::TransactionUnspentOutput;
+use cardano_serialization_lib::TransactionUnspentOutputs;
 use reqwest::RequestBuilder;
 use serde::Deserialize;
 use serde::Serialize;
@@ -183,29 +189,55 @@ impl Maestro {
         // Deserialize into the generic wrapper
         let wrapper: WrapperData<LatestBlockData> =
             serde_json::from_str(&response).map_err(|e| Box::new(e) as Box<dyn Error>)?;
-        
+
         // Extract the inner data
         Ok(wrapper.data)
     }
 
-    pub async fn get_utxos(&self, address_bech32: &String) -> Result<Vec<MaestroUtxo>, Box<dyn Error>> {
+    pub async fn get_utxos(
+        &self,
+        address_bech32: &String,
+    ) -> Result<Vec<MaestroUtxo>, Box<dyn Error>> {
         let url = format!("/addresses/{}/utxos?with_cbor=true", address_bech32);
         let response = self.get(&url).await?;
-        eprintln!("Raw API Response: {}", response); // Log the raw response
-
         let wrapper: WrapperData<Vec<MaestroUtxo>> =
             serde_json::from_str(&response).map_err(|e| {
                 eprintln!("Deserialization failed: {:?}", e);
                 eprintln!("Response: {}", response);
                 Box::new(e) as Box<dyn Error>
             })?;
-
-        // Deserialize into the generic wrapper
-        // let wrapper: WrapperData<Vec<MaestroUtxo>> =
-        //     serde_json::from_str(&response).map_err(|e| Box::new(e) as Box<dyn Error>)?;
-
-        // Extract the inner data
         Ok(wrapper.data)
+    }
+
+    pub fn to_csl_utxo(&self, utxo: &MaestroUtxo) -> TransactionUnspentOutput {
+        let tx_hash = TransactionHash::from_hex(utxo.tx_hash.as_str()).unwrap();
+        let tx_index = utxo.index as u32;
+        let tx_in = TransactionInput::new(&tx_hash, tx_index);
+        let tx_out = TransactionOutput::from_hex(utxo.tx_out_cbor.as_str()).unwrap();
+        TransactionUnspentOutput::new(&tx_in, &tx_out)
+    }
+
+    pub async fn get_csl_utxos(
+        &self,
+        address: &Address,
+    ) -> Result<TransactionUnspentOutputs, Box<dyn Error>> {
+        let bech32 = address.to_bech32(None).map_err(|e| {
+            eprintln!("Failed to convert address to Bech32: {:?}", e);
+            e
+        })?;
+
+        let maestro_utxos = self.get_utxos(&bech32).await.map_err(|e| {
+            eprintln!("Failed to fetch UTXOs: {:?}", e);
+            e
+        })?;
+
+        let mut csl_utxos = TransactionUnspentOutputs::new();
+        for utxo in maestro_utxos.into_iter() {
+            let csl_utxo = self.to_csl_utxo(&utxo);
+            csl_utxos.add(&csl_utxo);
+        }
+
+        Ok(csl_utxos)
     }
 }
 
@@ -223,7 +255,7 @@ mod tests {
         assert!(data.height > 0);
     }
 
-    async fn test_maestro() {
+    async fn test_get_utxos() {
         let maestro_client = Maestro::new(
             "QlSHwIRe4Hq47kKgmFQOR0slx8lWyhiD".to_string(),
             "preprod".to_string(),
@@ -231,5 +263,15 @@ mod tests {
         let address_bech32 = String::from("addr_test1qzneme4j4mp3rxjzygvwnafvmzqww0kqhxl50a73u6z5865zvt27s3xuclj7q6mtqd9qn8rhdv3ywhh0gvqrz0f6sgwqxfxeqt");
         let utxos = maestro_client.get_utxos(&address_bech32).await.unwrap();
         assert!(utxos.len() > 0)
+    }
+
+    async fn test_get_csl_utxos() {
+        let maestro_client = Maestro::new(
+            "QlSHwIRe4Hq47kKgmFQOR0slx8lWyhiD".to_string(),
+            "preprod".to_string(),
+        );
+        let address = Address::from_bech32("addr_test1qzneme4j4mp3rxjzygvwnafvmzqww0kqhxl50a73u6z5865zvt27s3xuclj7q6mtqd9qn8rhdv3ywhh0gvqrz0f6sgwqxfxeqt").unwrap();
+        let csl_utxos = maestro_client.get_csl_utxos(&address).await.unwrap();
+        assert!(csl_utxos.len() > 0);
     }
 }
