@@ -19,7 +19,7 @@ struct AppButton: View {
           AppIcon(name: icon)
         }
         Text(title).font(.labelMediumSecondary).foregroundColor(
-          Color.appTent)
+          .appTentPrimary)
       }
       .frame(maxWidth: fullWidth ? .infinity : nil).padding(
         .horizontal, Spacing._3xl
@@ -31,7 +31,7 @@ struct AppButton: View {
       .overlay(
         RoundedRectangle(cornerRadius: BorderRadius.full)
           .stroke(
-            variant == .primary ? Color.appPrimary : Color.appTent,
+            variant == .primary ? .appPrimary : .appTentPrimary,
             lineWidth: 1)
       )
     }.buttonStyle(PlainButtonStyle())

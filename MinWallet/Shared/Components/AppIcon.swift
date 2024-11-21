@@ -3,6 +3,8 @@ import SwiftUI
 enum IconName: String {
   case arrowLeftDown = "arrow-left-down"
   case arrowRightUp = "arrow-right-up"
+  case arrowUpS = "arrow-up-s"
+  case verifiedBadge = "verified-badge"
   case search = "search"
   case qrCode = "qr-code"
   case fileCopy = "file-copy"
@@ -14,12 +16,12 @@ enum IconName: String {
 
 struct AppIcon: View {
   var name: IconName
-  var color: Color = Color.appTent
   var size: CGFloat = 20
+  var color: Color?
 
   var body: some View {
-    name.image.resizable().aspectRatio(contentMode: .fit).frame(
+    name.image.resizable().renderingMode(.template).aspectRatio(contentMode: .fit).frame(
       width: size, height: size
-    ).foregroundColor(.black)
+    ).foregroundColor(color)
   }
 }

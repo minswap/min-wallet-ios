@@ -26,7 +26,7 @@ struct AppBar: View {
       Spacer().frame(width: 10)
 
       Text("SassyCat").font(.labelMediumSecondary).foregroundColor(
-        Color.appTent)
+        .appTentPrimary)
 
       Spacer()
 
