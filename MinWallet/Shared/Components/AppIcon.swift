@@ -6,6 +6,8 @@ enum IconName: String {
   case arrowUpS = "arrow-up-s"
   case verifiedBadge = "verified-badge"
   case search = "search"
+  case qrCode = "qr-code"
+  case fileCopy = "file-copy"
 
   var image: Image {
     return Image(self.rawValue)

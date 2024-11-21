@@ -26,7 +26,7 @@ struct AppButton: View {
       ).padding(.vertical, Spacing.md).cornerRadius(
         BorderRadius.full
       ).background(
-        variant == .primary ? Color.appPrimary : Color.appSecondary
+        variant == .primary ? Color.appPrimary : Color.appBaseBackground
       ).shadow(radius: 50).cornerRadius(BorderRadius.full)
       .overlay(
         RoundedRectangle(cornerRadius: BorderRadius.full)
