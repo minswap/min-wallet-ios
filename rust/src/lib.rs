@@ -2,10 +2,10 @@ use crate::network::{NetworkEnvironment, NetworkId};
 use crate::utils::harden;
 use cardano_serialization_lib::Bip32PrivateKey;
 use cardano_serialization_lib::{
-    BaseAddress, EnterpriseAddress, RewardAddress,Credential,
-    PrivateKey, Vkeywitnesses,
-    make_vkey_witness,
-    Transaction, TransactionWitnessSet,
+    BaseAddress, Credential, EnterpriseAddress, RewardAddress
+
+
+    ,
 };
 
 pub mod wallet;
@@ -14,7 +14,6 @@ mod bytes;
 mod minswap_provider;
 pub mod network;
 pub mod public_key_hash;
-mod translucent_helpers;
 mod tx_in;
 mod tx_out;
 pub mod utils;

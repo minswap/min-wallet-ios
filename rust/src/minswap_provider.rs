@@ -1,5 +1,3 @@
-use crate::translucent_helpers::TOutRef;
-
 struct WalletEndpoints {
     utxo_by_tx_in: &'static str,
 }

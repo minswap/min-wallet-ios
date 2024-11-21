@@ -1,7 +1,5 @@
 namespace mwrust {
-    string generate_mnemonic();
     WalletType create_wallet([ByRef] string mnemonic, [ByRef] string password, u32 account_index, AddressType address_type, NetworkEnvironment network_environment);
-    string sign_tx([ByRef] string tx_raw, sequence<string> keys);
 };
 
 enum NetworkEnvironment {

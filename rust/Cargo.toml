@@ -15,7 +15,6 @@ serde = { version = "1.0.213", features = ["derive"] }
 serde_json = "1.0.132"
 uniffi = { version = "0.28.2", features = ["cli"] }
 cryptoxide = "0.4.4"
-maestro-rust-sdk = { git = "ssh://git@github.com/maestro-org/rust-sdk.git" }
 tokio = { version = "1.41.1", features = ["full"] }
 
 [build-dependencies]
