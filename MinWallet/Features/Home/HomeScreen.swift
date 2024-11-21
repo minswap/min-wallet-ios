@@ -13,7 +13,7 @@ struct HomeScreen: View {
               Text(shortenAddress("Addrasdlfkjasdf12231123")).font(.paragraphXSmall)
                 .foregroundColor(
                   .appInteractiveTentPrimarySub)
-              AppIcon(name: .fileCopy, color: .appInteractiveTentPrimarySub, size: 16)
+              AppIcon(name: .fileCopy, size: 16, color: .appInteractiveTentPrimarySub)
             }
           }.buttonStyle(PlainButtonStyle())
 
