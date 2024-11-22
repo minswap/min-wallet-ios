@@ -30,7 +30,7 @@ struct AppBar: View {
 
       Spacer()
 
-      AppIconButton(icon: .search)
+      AppIconButton(icon: .search, action: {})
     }
     .padding(.horizontal, Spacing.xl)
     .padding(.vertical, Spacing.xs)

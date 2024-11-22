@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct Spacing {
+  static let xxs: CGFloat = 2
   static let xs: CGFloat = 4
   static let md: CGFloat = 8
   static let _2md: CGFloat = 10
@@ -13,4 +14,5 @@ struct Spacing {
 struct BorderRadius {
   static let full: CGFloat = 999
   static let _3xl: CGFloat = 20
+  static let sm: CGFloat = 4
 }
