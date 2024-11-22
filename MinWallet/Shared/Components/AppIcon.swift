@@ -8,6 +8,9 @@ enum IconName: String {
   case search = "search"
   case qrCode = "qr-code"
   case fileCopy = "file-copy"
+  case arrowLeft = "arrow-left"
+  case check = "check"
+  case eye = "eye"
 
   var image: Image {
     return Image(self.rawValue)

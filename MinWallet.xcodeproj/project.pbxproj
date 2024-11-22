@@ -51,8 +51,14 @@
 		575157E72CEB4526004CD647 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AF2CEB4526004CD647 /* Inter-Regular.ttf */; };
 		575157E82CEB4526004CD647 /* Inter-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AC2CEB4526004CD647 /* Inter-LightItalic.ttf */; };
 		575157E92CEB4526004CD647 /* Inter-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157A72CEB4526004CD647 /* Inter-ExtraBoldItalic.ttf */; };
+		575196FD2CF024A900713506 /* AppCheckbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575196FC2CF024A500713506 /* AppCheckbox.swift */; };
 		5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774769A2CED9A220066CFB6 /* Carousel.swift */; };
 		577550D92CEC442100DD7531 /* AppIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577550D82CEC441D00DD7531 /* AppIconButton.swift */; };
+		578451AB2CF0306600439044 /* ReInputSeedPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578451AA2CF0306100439044 /* ReInputSeedPhrase.swift */; };
+		578C60322CEF90A700E93A08 /* CreateWalletScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578C60312CEF90A300E93A08 /* CreateWalletScreen.swift */; };
+		578C60362CEF981000E93A08 /* BeforeYouStart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578C60352CEF980A00E93A08 /* BeforeYouStart.swift */; };
+		579AFF782CEF9D0A00A9B375 /* RevealSeedPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AFF772CEF9D0700A9B375 /* RevealSeedPhrase.swift */; };
+		579AFF7A2CEFA1F400A9B375 /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579AFF792CEFA1F100A9B375 /* AppTextField.swift */; };
 		57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6D91B2CEC3980009CF6CD /* AppBar.swift */; };
 		57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102952C64CCA0000B3544 /* MinWalletApp.swift */; };
 		57F102982C64CCA0000B3544 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102972C64CCA0000B3544 /* ContentView.swift */; };
@@ -130,8 +136,14 @@
 		575157C32CEB4526004CD647 /* InterDisplay-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		575157C42CEB4526004CD647 /* InterDisplay-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-Thin.ttf"; sourceTree = "<group>"; };
 		575157C52CEB4526004CD647 /* InterDisplay-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-ThinItalic.ttf"; sourceTree = "<group>"; };
+		575196FC2CF024A500713506 /* AppCheckbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheckbox.swift; sourceTree = "<group>"; };
 		5774769A2CED9A220066CFB6 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		577550D82CEC441D00DD7531 /* AppIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconButton.swift; sourceTree = "<group>"; };
+		578451AA2CF0306100439044 /* ReInputSeedPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReInputSeedPhrase.swift; sourceTree = "<group>"; };
+		578C60312CEF90A300E93A08 /* CreateWalletScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWalletScreen.swift; sourceTree = "<group>"; };
+		578C60352CEF980A00E93A08 /* BeforeYouStart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeYouStart.swift; sourceTree = "<group>"; };
+		579AFF772CEF9D0700A9B375 /* RevealSeedPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealSeedPhrase.swift; sourceTree = "<group>"; };
+		579AFF792CEFA1F100A9B375 /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
 		57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
 		57A6D91A2CEC3604009CF6CD /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		57A6D91B2CEC3980009CF6CD /* AppBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBar.swift; sourceTree = "<group>"; };
@@ -211,6 +223,7 @@
 		575157902CEB43FF004CD647 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				578C602F2CEF908800E93A08 /* Create Wallet */,
 				5751578F2CEB43FF004CD647 /* Home */,
 			);
 			path = Features;
@@ -219,6 +232,8 @@
 		575157942CEB4407004CD647 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				575196FC2CF024A500713506 /* AppCheckbox.swift */,
+				579AFF792CEFA1F100A9B375 /* AppTextField.swift */,
 				577550D82CEC441D00DD7531 /* AppIconButton.swift */,
 				57A6D91B2CEC3980009CF6CD /* AppBar.swift */,
 				575157922CEB4407004CD647 /* AppButton.swift */,
@@ -306,6 +321,25 @@
 			children = (
 				5774769A2CED9A220066CFB6 /* Carousel.swift */,
 				1AE3C59B4E432256FA9F1732 /* TokenList */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		578C602F2CEF908800E93A08 /* Create Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				578C60332CEF97F300E93A08 /* Components */,
+				578C60312CEF90A300E93A08 /* CreateWalletScreen.swift */,
+			);
+			path = "Create Wallet";
+			sourceTree = "<group>";
+		};
+		578C60332CEF97F300E93A08 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				578451AA2CF0306100439044 /* ReInputSeedPhrase.swift */,
+				579AFF772CEF9D0700A9B375 /* RevealSeedPhrase.swift */,
+				578C60352CEF980A00E93A08 /* BeforeYouStart.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -443,7 +477,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					57F102912C64CCA0000B3544 = {
 						CreatedOnToolsVersion = 15.4;
@@ -546,21 +580,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				575157912CEB43FF004CD647 /* HomeScreen.swift in Sources */,
+				579AFF782CEF9D0A00A9B375 /* RevealSeedPhrase.swift in Sources */,
 				5718EB1A2CEDE5BA00CDE34D /* DisableBounces.swift in Sources */,
 				577550D92CEC442100DD7531 /* AppIconButton.swift in Sources */,
 				57F102982C64CCA0000B3544 /* ContentView.swift in Sources */,
 				5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */,
 				5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */,
+				578C60322CEF90A700E93A08 /* CreateWalletScreen.swift in Sources */,
 				5751579B2CEB4407004CD647 /* AppButton.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
 				5751579D2CEB4407004CD647 /* AppIcon.swift in Sources */,
 				57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */,
 				5751579E2CEB4407004CD647 /* Font.swift in Sources */,
+				578451AB2CF0306600439044 /* ReInputSeedPhrase.swift in Sources */,
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 				7B0080B69E81CABECF03244F /* TokenLogo.swift in Sources */,
 				E92422734A5D6B793E704F95 /* TokenListItem.swift in Sources */,
+				578C60362CEF981000E93A08 /* BeforeYouStart.swift in Sources */,
 				D2B5710AE714343499F0B704 /* TokenList.swift in Sources */,
 				2802CFDB8CD6498862AF73F2 /* Token.swift in Sources */,
+				579AFF7A2CEFA1F400A9B375 /* AppTextField.swift in Sources */,
+				575196FD2CF024A900713506 /* AppCheckbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -777,7 +817,6 @@
 		57F102BA2C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -796,7 +835,6 @@
 		57F102BB2C64CCA1000B3544 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -815,7 +853,6 @@
 		57F102BD2C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -832,7 +869,6 @@
 		57F102BE2C64CCA1000B3544 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;

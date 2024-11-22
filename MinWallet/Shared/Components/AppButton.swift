@@ -5,11 +5,17 @@ enum ButtonVariant {
   case secondary
 }
 
+enum ButtonSize {
+  case md
+  case lg
+}
+
 struct AppButton: View {
   var title: String
   var variant: ButtonVariant
   var fullWidth: Bool = false
   var icon: IconName?
+  var size: ButtonSize? = .md
   var action: () -> Void
 
   var body: some View {
@@ -23,7 +29,7 @@ struct AppButton: View {
       }
       .frame(maxWidth: fullWidth ? .infinity : nil).padding(
         .horizontal, Spacing._3xl
-      ).padding(.vertical, Spacing.md).cornerRadius(
+      ).padding(.vertical, size == .lg ? Spacing.lg : Spacing.md).cornerRadius(
         BorderRadius.full
       ).background(
         variant == .primary ? Color.appPrimary : Color.appBaseBackground
@@ -47,6 +53,9 @@ struct AppButton_Previews: PreviewProvider {
       AppButton(
         title: "Swap", variant: ButtonVariant.secondary,
         fullWidth: true, icon: .arrowRightUp, action: {})
+      AppButton(
+        title: "Swap", variant: ButtonVariant.secondary,
+        fullWidth: true, icon: .arrowRightUp, size: .lg, action: {})
     }.padding()
   }
 }

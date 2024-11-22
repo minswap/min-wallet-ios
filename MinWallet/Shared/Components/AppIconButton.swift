@@ -2,11 +2,12 @@ import SwiftUI
 
 struct AppIconButton: View {
   var icon: IconName
+  var action: () -> Void
 
   var body: some View {
-    Button(action: {}) {
+    Button(action: action) {
       Group {
-        AppIcon(name: icon, size: 24)
+        AppIcon(name: icon, size: 24, color: Color.appInteractiveTentSecondaryDefault)
       }.padding(Spacing.md).clipShape(Circle())
         .overlay(
           Circle()
@@ -19,7 +20,7 @@ struct AppIconButton: View {
 struct AppIconButton_Preview: PreviewProvider {
   static var previews: some View {
     VStack {
-      AppIconButton(icon: .search)
+      AppIconButton(icon: .search, action: {})
     }
   }
 }
