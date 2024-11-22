@@ -1,10 +1,14 @@
 use bip39::{Language, Mnemonic};
 use cardano_serialization_lib::{Address, BaseAddress, Bip32PrivateKey, Credential, RewardAddress};
 
-use crate::utils::harden;
 use crate::wallet::emip3::{decrypt_password, encrypt_password};
 
 pub struct Account {}
+
+
+fn harden(index: u32) -> u32 {
+    index | 0x80_00_00_00
+}
 
 pub trait WalletStaticMethods {
     fn mnemonic_to_entropy(phrase: &str) -> Vec<u8> {
@@ -17,10 +21,6 @@ pub trait WalletStaticMethods {
             entropy,
         password.as_bytes()
         )
-    }
-
-    fn harden(index: u32) -> u32 {
-        index | 0x80_00_00_00
     }
     
     fn get_account(root_key: &Bip32PrivateKey, index: u32) -> Bip32PrivateKey {

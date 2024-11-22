@@ -1,9 +1,7 @@
 use crate::network::NetworkEnvironment;
 use crate::wallet::embedded::WalletStaticMethods;
-use crate::wallet::emip3::encrypt_password;
 use cardano_serialization_lib::{Address, PrivateKey, RewardAddress};
-
-const MINWALLET_VERSION: &str = "2.0.0";
+use uniffi::export;
 
 pub struct Minwallet {
     name: String,
@@ -11,9 +9,7 @@ pub struct Minwallet {
     reward_address: RewardAddress,
     network_id: u8,
     encrypted_key: String,
-    version: String,
     account_index: u32,
-    wallet_name: String,
 }
 
 impl WalletStaticMethods for Minwallet {}
@@ -51,8 +47,6 @@ impl Minwallet {
             network_id,
             account_index,
             encrypted_key,
-            version: MINWALLET_VERSION.to_string(),
-            wallet_name: wallet_name.to_string(),
         }
     }
 
@@ -64,11 +58,25 @@ impl Minwallet {
     }
 }
 
+// Uniffi needs this to expose the `MinWallet` struct and its methods.
+uniffi::export!(
+    fn create_wallet(
+        name: String,
+        address: String,
+        reward_address: String,
+        network_id: u8,
+        encrypted_key: String,
+        account_index: u32,
+    ) -> MinWallet {
+        MinWallet::new(name, address, reward_address, network_id, encrypted_key, account_index)
+    }
+);
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use cardano_serialization_lib::{make_vkey_witness, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitness, Vkeywitnesses};
     use crate::crypto::blake2b256;
+    use cardano_serialization_lib::{make_vkey_witness, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses};
 
     #[test]
     fn test_get_private_key() {
