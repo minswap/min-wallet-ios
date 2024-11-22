@@ -1,9 +1,10 @@
 mod crypto;
 mod wallet;
 pub mod network;
+use crate::crypto::blake2b256;
 use crate::network::NetworkEnvironment;
 use crate::wallet::embedded::WalletStaticMethods;
-use cardano_serialization_lib::PrivateKey;
+use cardano_serialization_lib::{make_vkey_witness, PrivateKey, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses};
 
 pub struct MinWallet {
     address: String,
@@ -51,6 +52,18 @@ impl MinWallet {
         let account_key = MinWallet::get_account(&root_key, account_index);
         let payment_key = account_key.derive(0).derive(0).to_raw_key();
         PrivateKey::from_bech32(payment_key.to_bech32().as_ref()).unwrap()
+    }
+
+    pub fn sign_tx(&self, password: &str, account_index: u32, tx_raw: String) -> String {
+        let private_key = &self.get_private_key(password, account_index);
+        let tx = Transaction::from_hex(tx_raw.as_str()).unwrap();
+        let tx_hash = TransactionHash::from(blake2b256(&tx.body().to_bytes()));
+        let mut witness_set = TransactionWitnessSet::new();
+        let mut v_key_witness = Vkeywitnesses::new();
+        let v_key = make_vkey_witness(&tx_hash, &private_key);
+        v_key_witness.add(&v_key);
+        witness_set.set_vkeys(&v_key_witness);
+        witness_set.to_hex()
     }
 }
 
