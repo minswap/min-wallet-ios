@@ -1,5 +1,4 @@
 use cardano_serialization_lib::{decrypt_with_password, encrypt_with_password};
-use hex::ToHex;
 use rand::Rng;
 
 mod password_encryption_parameter {
