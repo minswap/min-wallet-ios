@@ -6,6 +6,10 @@ use crate::network::NetworkEnvironment;
 use crate::wallet::embedded::WalletStaticMethods;
 use cardano_serialization_lib::{make_vkey_witness, PrivateKey, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses};
 
+fn add(a: u32, b: u32) -> u32 {
+    a + b
+}
+
 pub struct MinWallet {
     address: String,
     network_id: u8,

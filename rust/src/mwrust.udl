@@ -1,4 +1,5 @@
 namespace mwrust {
+    u32 add(u32 a, u32 b);
 };
 
 dictionary MinWallet {
