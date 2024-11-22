@@ -14,6 +14,7 @@ impl NetworkId {
     }
 }
 
+#[derive(uniffi::Enum)]
 pub enum NetworkEnvironment {
     Mainnet = 764824073,
     TestnetPreprod = 1,
