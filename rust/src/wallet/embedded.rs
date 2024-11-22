@@ -1,7 +1,9 @@
-use bip39::{Mnemonic, Language};
+use bip39::{Language, Mnemonic};
 use cardano_serialization_lib::{Address, BaseAddress, Bip32PrivateKey, Credential, RewardAddress};
 
 use crate::utils::harden;
+use crate::wallet::emip3::{decrypt_password, encrypt_password};
+
 pub struct Account {}
 
 pub trait WalletStaticMethods {
@@ -47,6 +49,16 @@ pub trait WalletStaticMethods {
 
         RewardAddress::new(network_id, &stake_credential)
     }
+
+    fn gen_encrypted_key(password: &str, root_key: &Bip32PrivateKey) -> String {
+        let root_key_hex = root_key.to_hex();
+        encrypt_password(password, root_key_hex.as_str())
+    }
+
+    fn get_root_key_from_password(password: &str, encrypted_key: &String) -> Bip32PrivateKey {
+        let decrypted = decrypt_password(password, encrypted_key);
+        Bip32PrivateKey::from_hex(decrypted.as_str()).unwrap()
+    }
 }
 
 #[cfg(test)]
@@ -56,6 +68,17 @@ mod tests {
     struct TestWallet;
 
     impl WalletStaticMethods for TestWallet {}
+
+    #[test]
+    fn test_round_trip_root_key() {
+        let seed = String::from("detect amateur eternal elite dad kangaroo usual chase poem detail tumble amount");
+        let password = String::from("helloworld");
+        let entropy = TestWallet::mnemonic_to_entropy(&seed);
+        let root_key = TestWallet::entropy_to_root_key(&entropy, &password);
+        let encrypted = TestWallet::gen_encrypted_key(&password, &root_key);
+        let decrypted = TestWallet::get_root_key_from_password(&password, &encrypted);
+        assert_eq!(root_key.to_hex(), decrypted.to_hex());
+    }
 
     #[test]
     fn test_base_address() {

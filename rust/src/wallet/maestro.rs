@@ -209,6 +209,30 @@ impl Maestro {
         Ok(wrapper.data)
     }
 
+    pub async fn submit_tx(&self, tx_cbor: &Vec<u8>) -> Result<String, Box<dyn Error>> {
+        let url = "/txmanager";
+        let req = self
+            .http_client
+            .post(format!("{}{}", &self.base_url, url))
+            .header("Content-Type", "application/cbor")
+            .header("Accept", "text/plain")
+            .header("api-key", &self.api_key)
+            .body(tx_cbor.clone())
+            .build()?;
+
+        let response = self.http_client.execute(req).await?;
+        // Clone the status before consuming the response body
+        let status = response.status();
+        let response_body = response.text().await.unwrap_or_else(|_| "Failed to read response body".to_string());
+
+        if status.is_success() {
+            Ok(response_body)
+        } else {
+            eprintln!("Error | Status = {}, Body = {}", status, response_body);
+            Err(format!("Error | Status = {}, Body = {}", status, response_body).into())
+        }
+    }
+
     pub fn to_csl_utxo(&self, utxo: &MaestroUtxo) -> TransactionUnspentOutput {
         let tx_hash = TransactionHash::from_hex(utxo.tx_hash.as_str()).unwrap();
         let tx_index = utxo.index as u32;
@@ -243,6 +267,7 @@ impl Maestro {
 
 #[cfg(test)]
 mod tests {
+    use cardano_serialization_lib::Transaction;
     use super::*;
 
     #[tokio::test]
@@ -255,6 +280,7 @@ mod tests {
         assert!(data.height > 0);
     }
 
+    #[tokio::test]
     async fn test_get_utxos() {
         let maestro_client = Maestro::new(
             "QlSHwIRe4Hq47kKgmFQOR0slx8lWyhiD".to_string(),
@@ -265,6 +291,7 @@ mod tests {
         assert!(utxos.len() > 0)
     }
 
+    #[tokio::test]
     async fn test_get_csl_utxos() {
         let maestro_client = Maestro::new(
             "QlSHwIRe4Hq47kKgmFQOR0slx8lWyhiD".to_string(),
@@ -273,5 +300,18 @@ mod tests {
         let address = Address::from_bech32("addr_test1qzneme4j4mp3rxjzygvwnafvmzqww0kqhxl50a73u6z5865zvt27s3xuclj7q6mtqd9qn8rhdv3ywhh0gvqrz0f6sgwqxfxeqt").unwrap();
         let csl_utxos = maestro_client.get_csl_utxos(&address).await.unwrap();
         assert!(csl_utxos.len() > 0);
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn test_submit_tx() {
+        let maestro_client = Maestro::new(
+            "QlSHwIRe4Hq47kKgmFQOR0slx8lWyhiD".to_string(),
+            "preprod".to_string(),
+        );
+        let tx_raw = "84a300818258203cc12ff1e7e02a953ce2dbe2c3e4edf5fc516c64322778a123e547dbf1886cfc010182825839006980b40d8cf53e77a718cf753ff381846570cde86d325f49193fecc5598d578c63cfe8e4a4d7653144d1559c5146210d70177ec00826d2a91a00989680825839006980b40d8cf53e77a718cf753ff381846570cde86d325f49193fecc5598d578c63cfe8e4a4d7653144d1559c5146210d70177ec00826d2a9821b00000001c9cd8f35a2581ce16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72a2434d494e1a00019ae2444d494e741a00018a7b581ce4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86a258203bb0079303c57812462dec9de8fb867cef8fd3768de7f12c77f6f0dd80381d0d1a00022098582044d75b06a5aafc296e094bf3a450734f739449c62183d4e3bbd50c28522afc971a000428e7021a001eab58a10081825820caef3384a369c8267801777c240bf648aa59719a31a3706113bd7cce67d477a4584090363e91ee07de04952e818bbc67cbd24501c78ced75497b48a6e76e8a9993e33dff2508d319799985643eb7b75e8b4e04a7975cea43da96463378ef6179c30bf5f6";
+        let tx = Transaction::from_hex(&tx_raw).unwrap();
+        let tx_cbor = tx.to_bytes();
+        let result = maestro_client.submit_tx(&tx_cbor).await.unwrap();
     }
 }

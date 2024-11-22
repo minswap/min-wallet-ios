@@ -19,7 +19,7 @@ mod tx_out;
 pub mod utils;
 mod utxo;
 mod value;
-
+mod crypto;
 pub mod minwallet;
 
 pub enum AddressType {
