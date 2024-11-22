@@ -6,8 +6,8 @@ struct ContentView: View {
     VStack {
       HomeScreen()
       Button("Tap Me") {
-          let result = mwrust.add(3, 5)
-          print(result)
+          let result = add(a: 1, b: 2)
+          print("result")
           print("DEBUG: Button tapped!")
       }
       .padding()
