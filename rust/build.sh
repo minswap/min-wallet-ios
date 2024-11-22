@@ -4,7 +4,6 @@ cargo check
 
 cargo build --release
 
-rm -rf bindings
 cargo run --bin uniffi-bindgen generate --library ./target/release/libmwrust.dylib --language swift --out-dir ./bindings
 
 mv ./bindings/mwrustFFI.modulemap ./bindings/module.modulemap
