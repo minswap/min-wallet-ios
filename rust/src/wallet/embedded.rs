@@ -3,9 +3,6 @@ use cardano_serialization_lib::{Address, BaseAddress, Bip32PrivateKey, Credentia
 
 use crate::wallet::emip3::{decrypt_password, encrypt_password};
 
-pub struct Account {}
-
-
 fn harden(index: u32) -> u32 {
     index | 0x80_00_00_00
 }

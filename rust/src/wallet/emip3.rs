@@ -2,21 +2,8 @@ use cardano_serialization_lib::{decrypt_with_password, encrypt_with_password};
 use rand::Rng;
 
 mod password_encryption_parameter {
-    pub const ITER: u32 = 19_162;
     pub const SALT_SIZE: usize = 32;
     pub const NONCE_SIZE: usize = 12;
-    pub const KEY_SIZE: usize = 32;
-    pub const TAG_SIZE: usize = 16;
-
-    pub const METADATA_SIZE: usize = SALT_SIZE + NONCE_SIZE + TAG_SIZE;
-
-    pub const SALT_START: usize = 0;
-    pub const SALT_END: usize = SALT_START + SALT_SIZE;
-    pub const NONCE_START: usize = SALT_END;
-    pub const NONCE_END: usize = NONCE_START + NONCE_SIZE;
-    pub const TAG_START: usize = NONCE_END;
-    pub const TAG_END: usize = TAG_START + TAG_SIZE;
-    pub const ENCRYPTED_START: usize = TAG_END;
 }
 
 /// Generates a random value of the given size in hexadecimal format
