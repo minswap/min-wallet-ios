@@ -10,6 +10,8 @@
 		2802CFDB8CD6498862AF73F2 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091411DC0725C9FF25F366CD /* Token.swift */; };
 		5718EB1A2CEDE5BA00CDE34D /* DisableBounces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5718EB192CEDE5B700CDE34D /* DisableBounces.swift */; };
 		5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */; };
+		57248F152CF08B600070BFD9 /* Mobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57248F142CF08B600070BFD9 /* Mobile.xcframework */; };
+		57248F1D2CF08BF50070BFD9 /* mwrust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57248F1C2CF08BF50070BFD9 /* mwrust.swift */; };
 		575157912CEB43FF004CD647 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5751578E2CEB43FF004CD647 /* HomeScreen.swift */; };
 		5751579B2CEB4407004CD647 /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575157922CEB4407004CD647 /* AppButton.swift */; };
 		5751579C2CEB4407004CD647 /* Others.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575157972CEB4407004CD647 /* Others.swift */; };
@@ -94,6 +96,8 @@
 		2C84DBEF290DC9F64EA0880D /* TokenListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenListItem.swift; sourceTree = "<group>"; };
 		5718EB192CEDE5B700CDE34D /* DisableBounces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisableBounces.swift; sourceTree = "<group>"; };
 		5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortenAddress.swift; sourceTree = "<group>"; };
+		57248F142CF08B600070BFD9 /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
+		57248F1C2CF08BF50070BFD9 /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		5751578E2CEB43FF004CD647 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		575157922CEB4407004CD647 /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButton.swift; sourceTree = "<group>"; };
 		575157932CEB4407004CD647 /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
@@ -144,8 +148,6 @@
 		578C60352CEF980A00E93A08 /* BeforeYouStart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeYouStart.swift; sourceTree = "<group>"; };
 		579AFF772CEF9D0700A9B375 /* RevealSeedPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealSeedPhrase.swift; sourceTree = "<group>"; };
 		579AFF792CEFA1F100A9B375 /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
-		57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
-		57A6D91A2CEC3604009CF6CD /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		57A6D91B2CEC3980009CF6CD /* AppBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBar.swift; sourceTree = "<group>"; };
 		57A6F7C6490456E5F226DC7F /* TokenLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenLogo.swift; sourceTree = "<group>"; };
 		57F102922C64CCA0000B3544 /* MinWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,6 +168,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57248F152CF08B600070BFD9 /* Mobile.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,8 +354,8 @@
 				57F102A52C64CCA1000B3544 /* MinWalletTests */,
 				57F102AF2C64CCA1000B3544 /* MinWalletUITests */,
 				57F102932C64CCA0000B3544 /* Products */,
-				57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */,
-				57A6D91A2CEC3604009CF6CD /* mwrust.swift */,
+				57248F142CF08B600070BFD9 /* Mobile.xcframework */,
+				57248F1C2CF08BF50070BFD9 /* mwrust.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -588,6 +591,7 @@
 				5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */,
 				578C60322CEF90A700E93A08 /* CreateWalletScreen.swift in Sources */,
 				5751579B2CEB4407004CD647 /* AppButton.swift in Sources */,
+				57248F1D2CF08BF50070BFD9 /* mwrust.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
 				5751579D2CEB4407004CD647 /* AppIcon.swift in Sources */,
 				57A6D91C2CEC3982009CF6CD /* AppBar.swift in Sources */,
