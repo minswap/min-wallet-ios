@@ -1,8 +1,68 @@
 # Requirements Details
 
+* ### Portfolio
 * ### Token List
 * ### Token Detail
 * ### Search
+
+---
+
+### Portfolio
+
+* **Functional Requirements**
+
+    * **Overview:** The Wallet Portfolio feature provides users with a comprehensive view of their cryptocurrency
+      holdings, including balances, FT token details, and NFTs.
+
+    * **Features:**
+
+        * **Portfolio Overview**
+
+            * **Description:** Display the total balance and recent performance of the user's wallet.
+
+            * **Fields:**
+
+                * Token Address/AdaHandle
+
+                * Total Balance: Overall value of all holdings.
+
+                * Disclaimer Tooltip: “The data is only for your reference; there is no guarantee that the data is
+                  absolutely accurate.”
+
+                * Performance Indicator: Percentage change in portfolio value.
+
+        * **Your Tokens**
+
+            * **Description:** Show a detailed list of tokens in the user's portfolio.
+
+            * **Fields:**
+
+                * Token Name and Symbol: Displayed with icons.
+
+                * Balance: Amount held by the user.
+
+                * Current Price and Change: Displayed alongside each token.
+
+        * **Your NFTs**
+
+            * **Description:** Show a detailed list of NFTs in the user's wallet.
+
+            * **Fields:**
+
+                * NFT Image: Displayed with a static image; the first frame if the NFT is an animated image.
+
+                * NFT Name: Displayed with NFT.
+
+* **Non-Functional Requirements**
+
+    * **Performance:** Ensure quick loading times and smooth navigation between tabs.
+
+    * **Usability:** Provide an intuitive layout that is easy to navigate and understand.
+
+    * **Security:** Ensure secure handling of user data and transactions.
+
+    * **Error Handling:** If there is a failure to load portfolio data, display an error message: "Unable to load
+      portfolio data. Please try again later."
 
 ---
 
