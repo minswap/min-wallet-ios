@@ -1,24 +1,11 @@
-//
-//  ContentView.swift
-//  MinWallet
-//
-//  Created by Klaus Le on 8/8/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
+  var body: some View {
+    HomeScreen()
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView()
 }
