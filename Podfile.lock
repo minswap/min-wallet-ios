@@ -1,0 +1,20 @@
+PODS:
+  - FlowStacks (0.8.3)
+  - Then (3.0.0)
+
+DEPENDENCIES:
+  - FlowStacks
+  - Then
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - FlowStacks
+    - Then
+
+SPEC CHECKSUMS:
+  FlowStacks: 3dcd2eaa6479b901468fa4206f3840d5671307a1
+  Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
+
+PODFILE CHECKSUM: b5954e1b9d0965b048f9d385bbe11c58cb8950c4
+
+COCOAPODS: 1.15.2

@@ -1,0 +1,404 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    ".00 ₳" : {
+
+    },
+    "%@ ₳" : {
+
+    },
+    "%@%%" : {
+
+    },
+    "$4.70" : {
+
+    },
+    "$9.5B" : {
+
+    },
+    "$12.5B" : {
+
+    },
+    "$223.5B" : {
+
+    },
+    "0" : {
+
+    },
+    "0.0422 ₳" : {
+
+    },
+    "1D" : {
+
+    },
+    "1M" : {
+
+    },
+    "1W" : {
+
+    },
+    "1Y" : {
+
+    },
+    "5.7%" : {
+
+    },
+    "5B MIN" : {
+
+    },
+    "37,016.25" : {
+
+    },
+    "37,016.25 ₳" : {
+
+    },
+    "About" : {
+
+    },
+    "About MIN (Minswap)" : {
+
+    },
+    "About Minwallet" : {
+
+    },
+    "ADA" : {
+
+    },
+    "All time high" : {
+
+    },
+    "Appearance" : {
+
+    },
+    "Audio" : {
+
+    },
+    "Bạn phải đăng nhập với mật khẩu thành công mới có thể sử dụng tính năng này" : {
+
+    },
+    "Basic" : {
+
+    },
+    "Before you start, please read and keep the following security tips in mind." : {
+
+    },
+    "Beware of scam tokens and always verify the policy ID. This token has not been verified yet. Please ensure the correct policyId" : {
+
+    },
+    "Choose your best way to log-in" : {
+
+    },
+    "Circulating supply" : {
+
+    },
+    "Close" : {
+
+    },
+    "close menu" : {
+
+    },
+    "Confirm" : {
+
+    },
+    "Copied" : {
+
+    },
+    "Copy" : {
+
+    },
+    "Create new wallet" : {
+
+    },
+    "Create password" : {
+
+    },
+    "Create your password" : {
+
+    },
+    "Crypto prices" : {
+
+    },
+    "Currency" : {
+
+    },
+    "Dark" : {
+
+    },
+    "Dashboard" : {
+
+    },
+    "Default" : {
+
+    },
+    "Done" : {
+
+    },
+    "Face ID" : {
+
+    },
+    "Face ID/Finger Print" : {
+
+    },
+    "Face ID/Touch ID chưa được cài đặt" : {
+
+    },
+    "Face ID/Touch ID đang bị khoá" : {
+
+    },
+    "Face ID/Touch ID không sẵn sàng" : {
+
+    },
+    "Get help" : {
+
+    },
+    "Getting started now" : {
+
+    },
+    "Give your wallet a nickname" : {
+
+    },
+    "Give your wallet a nickname ..." : {
+
+    },
+    "Got it" : {
+
+    },
+    "Hello" : {
+      "extractionState" : "manual"
+    },
+    "Hide" : {
+
+    },
+    "I have written the seed phrase and stored it in a secured place." : {
+
+    },
+    "If I clear my local storage without backing up the seed phrase, Minswap cannot retrieve it for me." : {
+
+    },
+    "If I lose my seed phrase, my assets will be lost forever." : {
+
+    },
+    "If I share my seed phrase with others, my assets will be stolen." : {
+
+    },
+    "Item %lld" : {
+
+    },
+    "Key" : {
+      "extractionState" : "manual"
+    },
+    "Không thể bắt đầu xác thực vì mật mã chưa được cài đặt trên thiết bị" : {
+
+    },
+    "Language" : {
+
+    },
+    "Light" : {
+
+    },
+    "Local" : {
+
+    },
+    "long.nguyen" : {
+
+    },
+    "Make sure no one is looking at your screen" : {
+
+    },
+    "Market" : {
+
+    },
+    "Market cap" : {
+
+    },
+    "MIN" : {
+
+    },
+    "minswap" : {
+
+    },
+    "Minswap" : {
+
+    },
+    "Minswap aims to bring an innovative multi-model liquidity pool decentralized exchange to the Cardano blockchain.\n\nThe combination of stable pools, multi-asset pools, and concentrated liquidity will benefit both traders and liquidity providers. MIN tokens are fairly distributed without any private or VC investment. This ensures the community is maximally rewarded, not speculators and insiders." : {
+
+    },
+    "Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management." : {
+
+    },
+    "My balance" : {
+
+    },
+    "Next" : {
+
+    },
+    "Nhập mật khẩu để tiếp tục" : {
+
+    },
+    "Nofification" : {
+
+    },
+    "Optic ID" : {
+
+    },
+    "Password" : {
+
+    },
+    "Paste" : {
+
+    },
+    "Phiên đăng nhập của bạn đã hết. Vui lòng đăng nhập lại để tiếp tục sử dụng." : {
+
+    },
+    "Please write down your 24 words seed phrase and store it in a secured place." : {
+
+    },
+    "Please write your seed phrase in the right order. You can paste directly from clipboard." : {
+
+    },
+    "Plot" : {
+
+    },
+    "policy_content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Astibulum dictum ultrices elit a luctus. Sed in ante ut leo congue posuere at sit amet ligula. Pellentesque eget augue nec nisl sodales blandit sed et sem. Aenean quis finibus arcu, in hendrerit purus. Praesent ac aliquet lorem. Morbi feugiat aliquam ligula, et vestibulum ligula hendrerit vitae. Sed ex lorem, pulvinar sed auctor sit amet, molestie a nibh. Ut euismod nisl arcu, sed placerat nulla volutpat aliquet. Ut id convallis nisl. Ut mauris leo, lacinia sed elit id, sagittis rhoncus odio. Pellentesque sapien libero, lobortis a placerat et, malesuada sit amet dui. Nam sem sapien, congue eu rutrum nec, pellentesque eget ligula.\n              Nunc tempor interdum ex, sed cursus nunc egestas aliquet. Pellentesque interdum vulputate elementum. Donec erat diam, pharetra nec enim ut, bibendum pretium tellus. Vestibulum et turpis nibh. Cras vel ornare velit, ac pretium arcu. Cras justo augue, finibus id sollicitudin et, rutrum eget metus. Suspendisse ut mauris eu massa pulvinar sollicitudin vel sed enim. Pellentesque viverra arcu et dignissim vehicula. Donec a velit ac dolor dapibus pellentesque sit amet at erat. Phasellus "
+          }
+        }
+      }
+    },
+    "Privacy policy" : {
+
+    },
+    "QR" : {
+
+    },
+    "Re-input your seed phrase" : {
+
+    },
+    "Receive" : {
+
+    },
+    "Reinput seedphase" : {
+
+    },
+    "Restore" : {
+
+    },
+    "Restore using seed phrase" : {
+
+    },
+    "Restore wallet" : {
+
+    },
+    "Sample" : {
+      "extractionState" : "manual"
+    },
+    "Sample item 1" : {
+
+    },
+    "Sample item 2" : {
+
+    },
+    "Scam token" : {
+
+    },
+    "Seedphrase" : {
+
+    },
+    "Send" : {
+
+    },
+    "Set up nickname" : {
+
+    },
+    "Share feedback" : {
+
+    },
+    "Statistics" : {
+
+    },
+    "Swap" : {
+
+    },
+    "Tap to reveal seed phrase" : {
+
+    },
+    "Terms of service" : {
+
+    },
+    "The seed phrase is only stored on my computer, and Minswap has no access to it." : {
+
+    },
+    "Timezone" : {
+
+    },
+    "Touch ID" : {
+
+    },
+    "Touch ID không sẵn sàng" : {
+
+    },
+    "USD" : {
+
+    },
+    "Use FaceID" : {
+
+    },
+    "UTC" : {
+
+    },
+    "v%@" : {
+
+    },
+    "Value" : {
+
+    },
+    "Volume (7D)" : {
+
+    },
+    "Volume (24H)" : {
+
+    },
+    "Vui lòng cấp quyền sinh trắc học cho ứng dụng để kích hoạt đăng nhập bằng Face ID/Touch ID" : {
+
+    },
+    "Vui lòng chấp nhận đăng nhập bằng Face ID/Touch ID" : {
+
+    },
+    "W01..." : {
+
+    },
+    "Weekday" : {
+
+    },
+    "When you set the appearance to default, theme app will be depended on device settings." : {
+
+    },
+    "Xác thực không hợp lệ, vui lòng thử lại sau" : {
+
+    },
+    "You have successfully create a wallet. Minwallet makes exploring Cardano feel better than ever." : {
+
+    },
+    "You’re all set!" : {
+
+    },
+    "Your NFTs" : {
+
+    },
+    "Your tokens" : {
+
+    },
+    "zzz" : {
+
+    }
+  },
+  "version" : "1.0"
+}
