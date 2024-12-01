@@ -19,7 +19,7 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            Color.colorBackground.ignoresSafeArea()
+            Color.colorBaseBackground.ignoresSafeArea()
             VStack(alignment: .leading, spacing: .zero) {
                 HStack(spacing: .md) {
                     HStack {
@@ -32,7 +32,7 @@ struct HomeView: View {
                     .padding(2)
                     .clipShape(Circle())
                     .overlay(
-                        Circle().stroke(.color050B1810FFFFFF10, lineWidth: 1)
+                        Circle().stroke(.colorBorderPrimarySub, lineWidth: 1)
                     )
                     .shadow(
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.1),
@@ -49,7 +49,7 @@ struct HomeView: View {
                     
                     Text(viewModel.accountName)
                         .font(.labelMediumSecondary)
-                        .foregroundColor(.color050B18FFFFFF)
+                        .foregroundColor(.colorBaseTent)
                     
                     Spacer()
                     Image(.icSearch)
@@ -60,8 +60,9 @@ struct HomeView: View {
                         .clipShape(Circle())
                         .overlay(
                             Circle()
-                                .stroke(Color.color050B184FFFFFF20, lineWidth: 1)
+                                .stroke(Color.colorBorderPrimaryTer, lineWidth: 1)
                         )
+                        .contentShape(.rect)
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
@@ -73,7 +74,7 @@ struct HomeView: View {
                         HStack(spacing: 4) {
                             Text(viewModel.address.shortenAddress)
                                 .font(.paragraphXSmall)
-                                .foregroundStyle(.color050B1856FFFFFF48)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Image(.icCopy)
                                 .resizable()
                                 .scaledToFill()
@@ -84,10 +85,10 @@ struct HomeView: View {
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         Text("0")
                             .font(.titleH3)
-                            .foregroundStyle(.color050B18FFFFFF)
+                            .foregroundStyle(.colorBaseTent)
                         Text(".00 ₳")
                             .font(.titleH5)
-                            .foregroundStyle(.color050B1840FFFFFF38)
+                            .foregroundStyle(.colorInteractiveTentPrimaryDisable)
                     }
                 }
                 .padding(.horizontal, .xl)

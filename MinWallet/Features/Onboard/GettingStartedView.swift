@@ -16,10 +16,10 @@ struct GettingStartedView: View {
             Text("Getting started now")
                 .font(.titleH4)
                 .padding(.top, .xl)
-                .foregroundStyle(.color21231D)
+                .foregroundStyle(.colorBaseTent)
             Text("Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management.")
                 .font(.labelMediumSecondary)
-                .foregroundStyle(.color050B18FFFFFF)
+                .foregroundStyle(.colorBaseTent)
                 .multilineTextAlignment(.center)
                 .padding(.top, .xl)
                 .padding(.horizontal, 16.0)
@@ -46,7 +46,7 @@ struct GettingStartedView: View {
             CustomButton(
                 title: "Create new wallet",
                 action: {
-                    navigator.push(.createWallet(.createWallet))
+                    
                 })
             .frame(height: 56)
             .padding(.horizontal, Spacing.xl)
@@ -54,7 +54,7 @@ struct GettingStartedView: View {
                 title: "Restore wallet",
                 variant: .secondary,
                 action: {
-                    navigator.push(.restoreWallet(.restoreWallet))
+                    
                 })
             .frame(height: 56)
             .padding(.top, 16)
@@ -63,7 +63,7 @@ struct GettingStartedView: View {
         .safeAreaInset(edge: .bottom) {
             Color.clear.frame(height: 0) // Adds 20 points of spacing at the bottom
         }
-        .background(Color.colorBackground)
+        .background(Color.colorBaseBackground)
     }
 }
 

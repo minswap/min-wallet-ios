@@ -67,9 +67,9 @@ extension CustomButton {
         var textColor: Color {
             switch self {
             case .primary:
-                return .color050B18
+                return .colorBaseTentNoDarkMode
             case .secondary:
-                return .color001947FFFFFF78
+                return .colorInteractiveTentSecondaryDefault
             case .other(let textColor,_ , _):
                 return textColor
             }
@@ -78,7 +78,7 @@ extension CustomButton {
         var backgroundColor: Color {
             switch self {
             case .primary:
-                return .color89AAFF
+                return .colorInteractiveTonePrimary
             case .secondary:
                 return .clear
             case .other(_, let backgroundColor , _):
@@ -91,7 +91,7 @@ extension CustomButton {
             case .primary:
                 return .clear
             case .secondary:
-                return .color00194770DAE2FF56
+                return .colorInteractiveTentSecondarySub
             case .other(_,_ , let borderColor):
                 return borderColor
             }

@@ -20,7 +20,7 @@ struct TokenLogoView: View {
                             .scaledToFit()
                     } placeholder: {
                         Circle()
-                            .fill(Color.color001947FFFFFF78.opacity(0.04))
+                            .fill(Color.colorInteractiveTentSecondaryDefault.opacity(0.04))
                             .overlay(
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle())
@@ -33,7 +33,7 @@ struct TokenLogoView: View {
             
             if token.isVerified {
                 Circle()
-                    .fill(.colorBackground)
+                    .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)
                     .overlay(
                         Image(.icVerifiedBadge)
@@ -42,7 +42,7 @@ struct TokenLogoView: View {
                     )
                     .overlay(
                         Circle()
-                            .stroke(.color0019474FFFFFF4, lineWidth: 1)
+                            .stroke(.colorSurfacePrimarySub, lineWidth: 1)
                     )
                     .position(x: 26, y: 26)
             }

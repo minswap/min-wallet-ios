@@ -7,7 +7,7 @@ struct LanguageView: View {
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {
-                Color.color050B1816FFFFFF16.frame(width: 36, height: 4)
+                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                     .padding(.vertical, .md)
                 Text("Language")
                     .font(.titleH5)
@@ -20,7 +20,7 @@ struct LanguageView: View {
                             HStack(spacing: 16) {
                                 Text(language.title)
                                     .font(.labelSmallSecondary)
-                                    .foregroundStyle(language.rawValue == appSetting.language ? .color3C68CB89AAFF : .color050B18FFFFFF)
+                                    .foregroundStyle(language.rawValue == appSetting.language ? .colorInteractiveToneHighlight : .colorBaseTent)
                                 Spacer()
                                 Image(.icChecked)
                                     .opacity(language.rawValue == appSetting.language ? 1 : 0)
@@ -35,7 +35,7 @@ struct LanguageView: View {
                     }
                 }
             }
-            .background(Color.colorBackground)
+            .background(Color.colorBaseBackground)
         }
     }
 }

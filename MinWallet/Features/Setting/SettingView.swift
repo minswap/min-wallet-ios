@@ -32,7 +32,7 @@ struct SettingView: View {
                     
                     if isVerified {
                         Circle()
-                            .fill(.colorBackground)
+                            .fill(.colorBaseBackground)
                             .frame(width: 16, height: 16)
                             .overlay(
                                 Image(.icVerifiedBadge)
@@ -41,7 +41,7 @@ struct SettingView: View {
                             )
                             .overlay(
                                 Circle()
-                                    .stroke(.color0019474FFFFFF4, lineWidth: 1)
+                                    .stroke(.colorSurfacePrimarySub, lineWidth: 1)
                             )
                             .position(x: 54, y: 54)
                     }
@@ -63,39 +63,39 @@ struct SettingView: View {
                 HStack {
                     Text("long.nguyen")
                         .font(.labelSemiSecondary)
-                        .foregroundStyle(.color3C68CB89AAFF)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
                     
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.color3C68CB89AAFF)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
                         .padding(.horizontal, .lg)
                         .padding(.vertical, .xs)
                         .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.color89AAFF16)
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
                         )
                         .frame(height: 20)
                 }
                 Text("Addrasdlfkjasdf12231123".shortenAddress)
                     .font(.paragraphXSmall)
-                    .foregroundStyle(.color050B1856FFFFFF48)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
             .padding(.horizontal, .xl)
             
-            Color.color050B1810FFFFFF10.frame(height: 1)
+            Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)
             Text("Basic")
                 .font(.paragraphXMediumSmall)
-                .foregroundStyle(.color050B1856FFFFFF48)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
                 .padding(.horizontal, .xl)
             VStack(spacing: 0) {
                 HStack(spacing: 12) {
                     Text("Language")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Text((Language(rawValue: appSetting.language) ?? .english).title)
                         .font(.paragraphSmall)
-                        .foregroundStyle(.color050B1856FFFFFF48)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Image(.icNext)
                         .frame(width: 20, height: 20)
                 }
@@ -107,11 +107,11 @@ struct SettingView: View {
                 HStack(spacing: 12) {
                     Text("Currency")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Text("ADA")
                         .font(.paragraphSmall)
-                        .foregroundStyle(.color050B1856FFFFFF48)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Image(.icNext)
                         .frame(width: 20, height: 20)
                 }
@@ -123,11 +123,11 @@ struct SettingView: View {
                 HStack(spacing: 12) {
                     Text("Timezone")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Text(appSetting.timeZone)
                         .font(.paragraphSmall)
-                        .foregroundStyle(.color050B1856FFFFFF48)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Image(.icNext)
                         .frame(width: 20, height: 20)
                 }
@@ -139,7 +139,7 @@ struct SettingView: View {
                 HStack(spacing: 12) {
                     Text("Audio")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Toggle("", isOn: $appSetting.enableAudio)
                         .toggleStyle(SwitchToggleStyle())
@@ -148,7 +148,7 @@ struct SettingView: View {
                 HStack(spacing: 12) {
                     Text("Nofification")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Toggle("", isOn: $appSetting.enableNotification)
                         .toggleStyle(SwitchToggleStyle())
@@ -179,7 +179,7 @@ struct SettingView: View {
                 HStack(spacing: 12) {
                     Text("Face ID/Finger Print")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Toggle("", isOn: $appSetting.enableBiometric)
                         .toggleStyle(SwitchToggleStyle())
@@ -200,7 +200,7 @@ struct SettingView: View {
             }
             .padding(.horizontal, .xl)
             Spacer()
-            Color.color050B1810FFFFFF10.frame(height: 1)
+            Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)
             HStack(spacing: 12) {
                 Image(.icSplash)
@@ -208,11 +208,11 @@ struct SettingView: View {
                     .frame(width: 20, height: 20)
                 Text("About Minwallet")
                     .font(.labelSmallSecondary)
-                    .foregroundStyle(.color050B18FFFFFF78)
+                    .foregroundStyle(.colorBaseTent)
                 Spacer()
                 Text("v\(appVersion ?? "")")
                     .font(.paragraphSmall)
-                    .foregroundStyle(.color050B1856FFFFFF48)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Image(.icNext)
                     .frame(width: 20, height: 20)
             }
@@ -224,7 +224,7 @@ struct SettingView: View {
                 navigator.push(.about)
             }
         }
-        .background(Color.colorBackground)
+        .background(Color.colorBaseBackground)
     }
 }
 

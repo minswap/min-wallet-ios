@@ -17,29 +17,29 @@ struct TokenListView: View {
             Text(label)
                 .padding(.horizontal, .xl)
                 .font(.titleH6)
-                .foregroundStyle(.color050B18FFFFFF)
+                .foregroundStyle(.colorBaseTent)
                 .padding(.bottom, .xl)
             /*
             HStack(spacing: 0) {
                 ForEach(TabType.allCases) { type in
                     Text(type.title)
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.color001947FFFFFF78)
+                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                         .frame(maxHeight: .infinity)
                 }
-                Color.color050B1810FFFFFF10.frame(width: 1, height: 20)
+                Color.colorBorderPrimarySub.frame(width: 1, height: 20)
             }
             .frame(height: 36)
             .padding(.horizontal, .xl)
             .padding(.bottom, .lg)
              */
             ScrollView {
-                VStack(spacing: 0, content: {
-                    ForEach(tokens, id: \.self) { token in
-                        TokenListItemView(tokenWithPrice: token)
+                LazyVStack(spacing: 0, content: {
+                    ForEach(0..<tokens.count, id: \.self) { index in
+                        TokenListItemView(tokenWithPrice: tokens[index])
                             .contentShape(.rect)
                             .onTapGesture {
-                                navigator.push(.tokenDetail(token: token.token))
+                                navigator.push(.tokenDetail(token: tokens[index].token))
                             }
                     }
                 })

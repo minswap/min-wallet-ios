@@ -82,13 +82,7 @@
     "Basic" : {
 
     },
-    "Before you start, please read and keep the following security tips in mind." : {
-
-    },
     "Beware of scam tokens and always verify the policy ID. This token has not been verified yet. Please ensure the correct policyId" : {
-
-    },
-    "Choose your best way to log-in" : {
 
     },
     "Circulating supply" : {
@@ -103,19 +97,7 @@
     "Confirm" : {
 
     },
-    "Copied" : {
-
-    },
-    "Copy" : {
-
-    },
     "Create new wallet" : {
-
-    },
-    "Create password" : {
-
-    },
-    "Create your password" : {
 
     },
     "Crypto prices" : {
@@ -131,9 +113,6 @@
 
     },
     "Default" : {
-
-    },
-    "Done" : {
 
     },
     "Face ID" : {
@@ -157,32 +136,8 @@
     "Getting started now" : {
 
     },
-    "Give your wallet a nickname" : {
-
-    },
-    "Give your wallet a nickname ..." : {
-
-    },
-    "Got it" : {
-
-    },
     "Hello" : {
       "extractionState" : "manual"
-    },
-    "Hide" : {
-
-    },
-    "I have written the seed phrase and stored it in a secured place." : {
-
-    },
-    "If I clear my local storage without backing up the seed phrase, Minswap cannot retrieve it for me." : {
-
-    },
-    "If I lose my seed phrase, my assets will be lost forever." : {
-
-    },
-    "If I share my seed phrase with others, my assets will be stolen." : {
-
     },
     "Item %lld" : {
 
@@ -203,9 +158,6 @@
 
     },
     "long.nguyen" : {
-
-    },
-    "Make sure no one is looking at your screen" : {
 
     },
     "Market" : {
@@ -232,9 +184,6 @@
     "My balance" : {
 
     },
-    "Next" : {
-
-    },
     "Nhập mật khẩu để tiếp tục" : {
 
     },
@@ -244,19 +193,7 @@
     "Optic ID" : {
 
     },
-    "Password" : {
-
-    },
-    "Paste" : {
-
-    },
     "Phiên đăng nhập của bạn đã hết. Vui lòng đăng nhập lại để tiếp tục sử dụng." : {
-
-    },
-    "Please write down your 24 words seed phrase and store it in a secured place." : {
-
-    },
-    "Please write your seed phrase in the right order. You can paste directly from clipboard." : {
 
     },
     "Plot" : {
@@ -279,19 +216,7 @@
     "QR" : {
 
     },
-    "Re-input your seed phrase" : {
-
-    },
     "Receive" : {
-
-    },
-    "Reinput seedphase" : {
-
-    },
-    "Restore" : {
-
-    },
-    "Restore using seed phrase" : {
 
     },
     "Restore wallet" : {
@@ -309,13 +234,7 @@
     "Scam token" : {
 
     },
-    "Seedphrase" : {
-
-    },
     "Send" : {
-
-    },
-    "Set up nickname" : {
 
     },
     "Share feedback" : {
@@ -327,13 +246,7 @@
     "Swap" : {
 
     },
-    "Tap to reveal seed phrase" : {
-
-    },
     "Terms of service" : {
-
-    },
-    "The seed phrase is only stored on my computer, and Minswap has no access to it." : {
 
     },
     "Timezone" : {
@@ -346,9 +259,6 @@
 
     },
     "USD" : {
-
-    },
-    "Use FaceID" : {
 
     },
     "UTC" : {
@@ -382,12 +292,6 @@
 
     },
     "Xác thực không hợp lệ, vui lòng thử lại sau" : {
-
-    },
-    "You have successfully create a wallet. Minwallet makes exploring Cardano feel better than ever." : {
-
-    },
-    "You’re all set!" : {
 
     },
     "Your NFTs" : {

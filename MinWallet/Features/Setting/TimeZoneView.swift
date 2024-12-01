@@ -10,7 +10,7 @@ struct TimeZoneView: View {
         VStack(spacing: 8) {
             Spacer()
             VStack(spacing: 0) {
-                Color.color050B1816FFFFFF16.frame(width: 36, height: 4)
+                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                     .padding(.vertical, .md)
                 Text("Timezone")
                     .font(.titleH5)
@@ -19,7 +19,7 @@ struct TimeZoneView: View {
                 HStack(spacing: 16) {
                     Text("Local")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.timeZone == TimeZone.local.rawValue ? .color3C68CB89AAFF : .color050B18FFFFFF)
+                        .foregroundStyle(appSetting.timeZone == TimeZone.local.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
                         .opacity(appSetting.timeZone == TimeZone.local.rawValue ? 1 : 0)
@@ -32,7 +32,7 @@ struct TimeZoneView: View {
                 HStack(spacing: 16) {
                     Text("UTC")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.timeZone == TimeZone.utc.rawValue ? .color3C68CB89AAFF : .color050B18FFFFFF)
+                        .foregroundStyle(appSetting.timeZone == TimeZone.utc.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
                         .opacity(appSetting.timeZone == TimeZone.utc.rawValue ? 1 : 0)
@@ -46,17 +46,17 @@ struct TimeZoneView: View {
             }
             .padding(.horizontal, .xl)
             .background(content: {
-                RoundedRectangle(cornerRadius: 24).fill(Color.colorBackground)
+                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })
             Button(action: {
                 isShowTimeZone = false
             }, label: {
                 Text("Close")
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(.color001947FFFFFF78)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(content: {
-                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBackground)
+                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
                     })
             })
             .frame(height: 56)

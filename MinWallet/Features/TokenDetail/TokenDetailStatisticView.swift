@@ -8,36 +8,36 @@ struct TokenDetailStatisticView: View {
         VStack(alignment: .leading, spacing: 0, content: {
             Text("Statistics")
                 .font(.titleH6)
-                .foregroundStyle(.color050B18FFFFFF)
+                .foregroundStyle(.colorBaseTent)
                 .padding(.bottom, .lg)
             HStack {
-                DashedUnderlineText(text: "Market cap", textColor: .color050B1856FFFFFF48, font: .paragraphSmall)
+                DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 Text("$223.5B")
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(.color050B18FFFFFF78)
+                    .foregroundStyle(.colorBaseTent)
             }
             .frame(height: 40)
             HStack {
-                DashedUnderlineText(text: "Circulating supply", textColor: .color050B1856FFFFFF48, font: .paragraphSmall)
+                DashedUnderlineText(text: "Circulating supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 Text("5B MIN")
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(.color050B18FFFFFF78)
+                    .foregroundStyle(.colorBaseTent)
             }
             .frame(height: 40)
             
             HStack {
-                DashedUnderlineText(text: "Volume (24H)", textColor: .color050B1856FFFFFF48, font: .paragraphSmall)
+                DashedUnderlineText(text: "Volume (24H)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 VStack(spacing: 4) {
                     Text("$9.5B")
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     HStack(spacing: 0) {
                         Text("5.7%")
                             .font(.labelSmallSecondary)
-                            .foregroundStyle(.color0087661ABB93)
+                            .foregroundStyle(.colorBaseSuccess)
                         Image(.icUp)
                             .resizable()
                             .frame(width: 16, height: 16)
@@ -46,16 +46,16 @@ struct TokenDetailStatisticView: View {
             }
             .frame(height: 60)
             HStack {
-                DashedUnderlineText(text: "Volume (7D)", textColor: .color050B1856FFFFFF48, font: .paragraphSmall)
+                DashedUnderlineText(text: "Volume (7D)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 VStack(spacing: 4) {
                     Text("$12.5B")
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     HStack(spacing: 0) {
                         Text("5.7%")
                             .font(.labelSmallSecondary)
-                            .foregroundStyle(.color0087661ABB93)
+                            .foregroundStyle(.colorBaseSuccess)
                         Image(.icUp)
                             .resizable()
                             .frame(width: 16, height: 16)
@@ -64,17 +64,17 @@ struct TokenDetailStatisticView: View {
             }
             .frame(height: 60)
             HStack {
-                DashedUnderlineText(text: "All time high", textColor: .color050B1856FFFFFF48, font: .paragraphSmall)
+                DashedUnderlineText(text: "All time high", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 Text("$4.70")
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(.color050B18FFFFFF78)
+                    .foregroundStyle(.colorBaseTent)
             }
             .frame(height: 40)
             .padding(.bottom, .xl)
             Text("About MIN (Minswap)")
                 .font(.titleH6)
-                .foregroundStyle(.color050B18FFFFFF)
+                .foregroundStyle(.colorBaseTent)
                 .padding(.bottom, .lg)
             FlexibleView(
                 data: datas,
@@ -83,10 +83,10 @@ struct TokenDetailStatisticView: View {
             ) { item in
                 Text(verbatim: item)
                     .font(.paragraphXSmall)
-                    .foregroundStyle(.color050B1856FFFFFF48)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
                     .padding(.horizontal, .lg)
                     .frame(height: 24)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(.color0019478FFFFFF6))
+                    .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
             }
             
             HStack(spacing: Spacing.md) {
@@ -95,11 +95,11 @@ struct TokenDetailStatisticView: View {
                     .frame(width: 16, height: 16)
                 Text("Scam token")
                     .font(.paragraphXSmall)
-                    .foregroundStyle(.color250003FF5C54)
+                    .foregroundStyle(.colorInteractiveToneDanger)
             }
             .padding(.md)
             .background(
-                RoundedRectangle(cornerRadius: 8).fill(.colorB81F298)
+                RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
             )
             .frame(height: 32)
             .padding(.top, .xl)
@@ -110,12 +110,12 @@ struct TokenDetailStatisticView: View {
                     .frame(width: 16, height: 16)
                 Text("Beware of scam tokens and always verify the policy ID. This token has not been verified yet. Please ensure the correct policyId")
                     .font(.paragraphXSmall)
-                    .foregroundStyle(.color3C2A00FFC047)
+                    .foregroundStyle(.colorInteractiveToneWarning)
                     .lineLimit(nil)
             }
             .padding(.md)
             .background(
-                RoundedRectangle(cornerRadius: 8).fill(.colorB81F298)
+                RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
             )
             .frame(minHeight: 32)
             .padding(.top, .xl)
@@ -127,7 +127,7 @@ The combination of stable pools, multi-asset pools, and concentrated liquidity w
 """)
             .lineLimit(nil)
             .font(.paragraphSmall)
-            .foregroundStyle(.color050B18FFFFFF78)
+            .foregroundStyle(.colorBaseTent)
             .padding(.vertical, .xl)
             Spacer()
         })

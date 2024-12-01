@@ -10,7 +10,7 @@ struct CurrencyView: View {
         VStack(spacing: 8) {
             Spacer()
             VStack(spacing: 0) {
-                Color.color050B1816FFFFFF16.frame(width: 36, height: 4)
+                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                     .padding(.vertical, .md)
                 Text("Currency")
                     .font(.titleH5)
@@ -19,7 +19,7 @@ struct CurrencyView: View {
                 HStack(spacing: 16) {
                     Text("USD")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.currency == Currency.usd.rawValue ? .color3C68CB89AAFF : .color050B18FFFFFF)
+                        .foregroundStyle(appSetting.currency == Currency.usd.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
                         .opacity(appSetting.currency == Currency.usd.rawValue ? 1 : 0)
@@ -31,7 +31,7 @@ struct CurrencyView: View {
                 HStack(spacing: 16) {
                     Text("ADA")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.currency == Currency.ada.rawValue ? .color3C68CB89AAFF : .color050B18FFFFFF)
+                        .foregroundStyle(appSetting.currency == Currency.ada.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
                         .opacity(appSetting.currency == Currency.ada.rawValue ? 1 : 0)
@@ -44,17 +44,17 @@ struct CurrencyView: View {
             }
             .padding(.horizontal, .xl)
             .background(content: {
-                RoundedRectangle(cornerRadius: 24).fill(Color.colorBackground)
+                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })
             Button(action: {
                 isShowCurrency = false
             }, label: {
                 Text("Close")
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(.color001947FFFFFF78)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(content: {
-                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBackground)
+                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
                     })
             })
             .frame(height: 56)

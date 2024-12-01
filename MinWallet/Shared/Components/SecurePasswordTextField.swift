@@ -13,7 +13,7 @@ struct SecurePasswordTextField: View {
             TextField("", text: $visibleInput)
                 .font(.paragraphSmall)
                 .placeholder(placeHolder, when: visibleInput.isEmpty)
-                .foregroundStyle(.color050B18FFFFFF78)
+                .foregroundStyle(.colorBaseTent)
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 50))
                 .onChange(of: visibleInput) { newValue in
                     guard isSecured else { text = newValue; return}

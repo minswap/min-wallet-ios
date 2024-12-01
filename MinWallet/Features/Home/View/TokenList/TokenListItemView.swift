@@ -17,24 +17,24 @@ struct TokenListItemView: View {
                 HStack(spacing: 0) {
                     Text(tokenWithPrice.token.ticker)
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                     Spacer()
                     Text("\(String(tokenWithPrice.price)) ₳")
                         .lineSpacing(24)
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.color050B18FFFFFF78)
+                        .foregroundStyle(.colorBaseTent)
                 }
                 HStack(spacing: 0) {
                     Text(tokenWithPrice.token.project)
                         .font(.paragraphSmall)
-                        .foregroundStyle(.color050B1856FFFFFF48)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
                     Spacer()
                     VStack(alignment: .trailing, spacing: 0) {
                         HStack(spacing: 0) {
                             Text("\(String(abs(tokenWithPrice.changePercent)))%")
                                 .font(.labelSmallSecondary)
-                                .foregroundStyle(isPositive ? .color0087661ABB93 : .colorB81F29FF5C54)
+                                .foregroundStyle(isPositive ? .colorBaseSuccess : .colorBorderDangerDefault)
                             Image(isPositive ? .icUp : .icDown)
                                 .resizable()
                                 .frame(width: 16, height: 16)
@@ -44,7 +44,7 @@ struct TokenListItemView: View {
             }
             .padding(.vertical, 12)
             .overlay(
-                Rectangle().frame(height: 1).foregroundColor(.colorF5F5F61D1E24), alignment: .bottom
+                Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
             )
         }
         .padding(.horizontal, 16)

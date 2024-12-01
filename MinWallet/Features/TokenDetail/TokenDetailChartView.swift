@@ -55,28 +55,28 @@ struct TokenDetailChartView: View {
             HStack(spacing: 0) {
                 Text("1D")
                     .font(.labelSmallSecondary)
-                    .foregroundStyle(.color001947FFFFFF78)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
                 Text("1W")
                     .font(.labelSmallSecondary)
-                    .foregroundStyle(.color001947FFFFFF78)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .shadow(radius: 50).cornerRadius(BorderRadius.full)
-                    .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorFFFFFF111218))
+                    .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorBaseBackground))
                     .padding(.vertical, .xs)
                 Text("1M")
                     .font(.labelSmallSecondary)
-                    .foregroundStyle(.color001947FFFFFF78)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 Text("1Y")
                     .font(.labelSmallSecondary)
-                    .foregroundStyle(.color001947FFFFFF78)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
             }
             .frame(height: 36)
-            .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.color0019474FFFFFF4))
+            .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
             .padding(.top, 20)
         }
     }

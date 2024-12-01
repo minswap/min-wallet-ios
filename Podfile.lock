@@ -1,20 +1,28 @@
 PODS:
   - FlowStacks (0.8.3)
+  - ScalingHeaderScrollView (1.1.4):
+    - SwiftUIIntrospect
+  - SwiftUIIntrospect (1.3.0)
   - Then (3.0.0)
 
 DEPENDENCIES:
   - FlowStacks
+  - ScalingHeaderScrollView
   - Then
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - FlowStacks
+    - ScalingHeaderScrollView
+    - SwiftUIIntrospect
     - Then
 
 SPEC CHECKSUMS:
   FlowStacks: 3dcd2eaa6479b901468fa4206f3840d5671307a1
+  ScalingHeaderScrollView: bbff3ab62d3ac7f1d53f02a0b6ae2f61b919e054
+  SwiftUIIntrospect: fee9aa07293ee280373a591e1824e8ddc869ba5d
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: b5954e1b9d0965b048f9d385bbe11c58cb8950c4
+PODFILE CHECKSUM: 9980690939a9960c32dc6d21122642baead38f18
 
 COCOAPODS: 1.15.2

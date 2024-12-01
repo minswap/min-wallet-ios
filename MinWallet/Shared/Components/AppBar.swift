@@ -4,7 +4,7 @@ import SwiftUI
 struct BaseContentView: ViewModifier {
     var screenTitle: String = ""
     var titleView: (() -> AnyView)?
-    var backgroundColor: Color = .colorBackground
+    var backgroundColor: Color = .colorBaseBackground
     var actionBarHeight: CGFloat = 48
     
     var iconRight: ImageResource?
@@ -14,7 +14,7 @@ struct BaseContentView: ViewModifier {
     
     func body(content: Content) -> some View {
         ZStack {
-            Color.colorBackground.ignoresSafeArea()
+            Color.colorBaseBackground.ignoresSafeArea()
             VStack(spacing: 0, content: {
                 HStack(spacing: .lg) {
                     if let actionLeft = actionLeft {
@@ -25,7 +25,7 @@ struct BaseContentView: ViewModifier {
                                 .resizable()
                                 .frame(width: ._3xl, height: ._3xl)
                                 .padding(.md)
-                                .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.color050B184FFFFFF20, lineWidth: 1))
+                                .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
                         })
                         .buttonStyle(.plain)
                     }

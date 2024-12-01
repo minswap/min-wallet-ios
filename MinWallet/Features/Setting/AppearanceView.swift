@@ -11,7 +11,7 @@ struct AppearanceView: View {
             VStack(spacing: 8) {
                 Spacer()
                 VStack(spacing: 0) {
-                    Color.color050B1816FFFFFF16.frame(width: 36, height: 4)
+                    Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                         .padding(.vertical, .md)
                     Text("Appearance")
                         .font(.titleH5)
@@ -22,12 +22,12 @@ struct AppearanceView: View {
                         VStack(spacing: 10) {
                             Image(.icAppearanceDefault)
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.color3C68CB89AAFF, lineWidth: appSetting.appearance == .system ? 2 : 0))
+                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .system ? 2 : 0))
                             HStack(spacing: 4) {
                                 Image(appSetting.appearance == .system ? .icRadioCheck : .icRadioUncheck)
                                 Text("Default")
                                     .font(.paragraphSmall)
-                                    .foregroundStyle(.color050B18FFFFFF)
+                                    .foregroundStyle(.colorBaseTent)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -39,12 +39,12 @@ struct AppearanceView: View {
                         VStack(spacing: 10) {
                             Image(.icAppearanceDark)
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.color3C68CB89AAFF, lineWidth: appSetting.appearance == .dark ? 2 : 0))
+                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .dark ? 2 : 0))
                             HStack(spacing: 4) {
                                 Image(appSetting.appearance == .dark ? .icRadioCheck : .icRadioUncheck)
                                 Text("Dark")
                                     .font(.paragraphSmall)
-                                    .foregroundStyle(.color050B18FFFFFF)
+                                    .foregroundStyle(.colorBaseTent)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -56,12 +56,12 @@ struct AppearanceView: View {
                         VStack(spacing: 10) {
                             Image(.icAppearanceLight)
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.color3C68CB89AAFF, lineWidth: appSetting.appearance == .light ? 2 : 0))
+                                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .light ? 2 : 0))
                             HStack(spacing: 4) {
                                 Image(appSetting.appearance == .light ? .icRadioCheck : .icRadioUncheck)
                                 Text("Light")
                                     .font(.paragraphSmall)
-                                    .foregroundStyle(.color050B18FFFFFF)
+                                    .foregroundStyle(.colorBaseTent)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -73,23 +73,23 @@ struct AppearanceView: View {
                     .padding(.horizontal, .xl)
                     Text("When you set the appearance to default, theme app will be depended on device settings.")
                         .font(.paragraphXSmall)
-                        .foregroundStyle(.color050B1856FFFFFF48)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .multilineTextAlignment(.center)
                         .padding(.vertical, .xl)
                         .padding(.horizontal, .xl)
                 }
                 .background(content: {
-                    RoundedRectangle(cornerRadius: 24).fill(Color.colorBackground)
+                    RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
                 })
                 Button(action: {
                     isShowAppearance = false
                 }, label: {
                     Text("Close")
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.color001947FFFFFF78)
+                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(content: {
-                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBackground)
+                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
                         })
                 })
                 .frame(height: 56)

@@ -3,9 +3,16 @@ import Combine
 
 
 class AppSetting: ObservableObject {
+    
+    var extraSafeArea: CGFloat {
+        safeArea > 44 ?  32 : 12
+    }
+    
     lazy var biometricAuthentication: BiometricAuthentication = .init()
     
     let objectWillChange = PassthroughSubject<Void, Never>()
+    
+    var safeArea: CGFloat = 59
     
     @UserDefault("enable_audio", defaultValue: false)
     var enableAudio: Bool {
@@ -66,7 +73,7 @@ class AppSetting: ObservableObject {
 
 //MARK: Theme
 extension AppSetting {
-    var appearance: Appearance  {
+    var appearance: Appearance {
         Appearance(rawValue: userInterfaceStyle) ?? .system
     }
     

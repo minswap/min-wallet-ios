@@ -31,11 +31,11 @@ struct Carousel: View {
                                 VStack(alignment: .leading) {
                                     Text(item.title)
                                         .font(.labelMediumSecondary)
-                                        .foregroundStyle(.color050B18FFFFFF)
+                                        .foregroundStyle(.colorBaseTent)
                                     Spacer()
                                         .frame(height: Spacing.xs)
                                     Text(item.description).font(.paragraphXSmall)
-                                        .foregroundStyle(.color050B1856FFFFFF48)
+                                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                                 }
                                 .padding(.top, Spacing.xl)
                                 .padding(.leading, Spacing.xl)
@@ -66,7 +66,7 @@ struct Carousel: View {
             }
             .cornerRadius(BorderRadius._3xl)
             .overlay(
-                RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.color050B1810FFFFFF10, lineWidth: 1)
+                RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1)
             )
             .padding(0)
             .fixedSize(horizontal: false, vertical: true)
@@ -89,7 +89,7 @@ struct IndicatorView: View {
                     )
                     .foregroundColor(
                         indicator == index
-                        ? .color001947FFFFFF : .color0019478FFFFFF6
+                        ? .colorInteractiveTentSecondarySub : .colorSurfacePrimaryDefault
                     )
                     .cornerRadius(BorderRadius.full)
                     .animation(.easeInOut(duration: 0.3), value: scrollIndex)

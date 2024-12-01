@@ -11,7 +11,7 @@ struct PolicyConfirmView: View {
             HStack(spacing: 5) {
                 Image(.icSplash).resizable().frame(width: 32, height: 32)
                 Text("minswap").font(.titleH6)
-                    .foregroundStyle(.color001947FFFFFF)
+                    .foregroundStyle(.colorBaseSecond)
                 Spacer()
             }
             .padding(.horizontal, Spacing.xl)
@@ -19,7 +19,7 @@ struct PolicyConfirmView: View {
             ScrollView {
                 Text("policy_content")
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(.color050B18FFFFFF78)
+                    .foregroundStyle(.colorBaseTent)
                     .padding(.horizontal, Spacing.xl)
                     .padding(.top, Spacing.xl)
             }
@@ -36,6 +36,7 @@ struct PolicyConfirmView: View {
         .safeAreaInset(edge: .bottom) {
             Color.clear.frame(height: 0) // Adds 20 points of spacing at the bottom
         }
+        .background(Color.colorBaseBackground)
     }
 }
 

@@ -11,6 +11,8 @@ extension Font {
     static let labelSmallSecondary: Font = .custom("Inter", size: 14).weight(.medium)
     ///14 regular
     static let paragraphSmall: Font = .custom("Inter", size: 14).weight(.regular)
+    ///14 semibold
+    static let paragraphSemi: Font = .custom("Inter", size: 14).weight(.semibold)
     ///12 regular
     static let paragraphXSmall: Font = .custom("Inter", size: 12)
     ///12 medium
