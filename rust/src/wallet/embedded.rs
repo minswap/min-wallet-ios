@@ -8,7 +8,7 @@ fn harden(index: u32) -> u32 {
 }
 
 pub trait WalletStaticMethods {
-    fn mnemonic_to_entropy(phrase: &str) -> Vec<u8> {
+    fn phrase_to_entropy(phrase: &str) -> Vec<u8> {
         let mnemonic = Mnemonic::from_phrase(&phrase, Language::English).unwrap();
         mnemonic.entropy().to_vec()
     }
@@ -27,7 +27,7 @@ pub trait WalletStaticMethods {
             .derive(harden(index))
     }
 
-    fn get_address(account: &Bip32PrivateKey, network_id: u8) -> Address {
+    fn get_address(account: &Bip32PrivateKey, network_id: u32) -> Address {
         let payment_key = account.derive(0).derive(0).to_raw_key();
         let payment_key_hash = payment_key.to_public().hash();
         let payment_credential = Credential::from_keyhash(&payment_key_hash);
@@ -36,7 +36,7 @@ pub trait WalletStaticMethods {
         let stake_key_hash = stake_key.to_public().hash();
         let stake_credential = Credential::from_keyhash(&stake_key_hash);
 
-        BaseAddress::new(network_id, &payment_credential, &stake_credential).to_address()
+        BaseAddress::new(network_id as u8, &payment_credential, &stake_credential).to_address()
     }
 
     fn gen_reward_address(account: &Bip32PrivateKey, network_id: u8) -> RewardAddress {
@@ -70,7 +70,7 @@ mod tests {
     fn test_round_trip_root_key() {
         let seed = String::from("detect amateur eternal elite dad kangaroo usual chase poem detail tumble amount");
         let password = String::from("helloworld");
-        let entropy = TestWallet::mnemonic_to_entropy(&seed);
+        let entropy = TestWallet::phrase_to_entropy(&seed);
         let root_key = TestWallet::entropy_to_root_key(&entropy, &password);
         let encrypted = TestWallet::gen_encrypted_key(&password, &root_key);
         let decrypted = TestWallet::get_root_key_from_password(&password, &encrypted);
@@ -81,7 +81,7 @@ mod tests {
     fn test_base_address() {
         let seed = String::from("detect amateur eternal elite dad kangaroo usual chase poem detail tumble amount");
         let password = String::from("helloworld");
-        let entropy = TestWallet::mnemonic_to_entropy(&seed);
+        let entropy = TestWallet::phrase_to_entropy(&seed);
         let root_key = TestWallet::entropy_to_root_key(&entropy, &password);
         assert_eq!(root_key.to_bech32(), "xprv1gre69tdkhwnzsl0spaj9n9ty9gc7yx64fm29ff9hea57sd4q03xuatqlpq7qanpl3dnjzdtchx394gdk9w0c9ezaaau45c2wk5aduyht3kw7659u7gzt4qh37na0dsh66txhajlzssf27ay75s8hpdqqug7vwwy6");
 
