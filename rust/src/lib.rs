@@ -1,12 +1,15 @@
 mod crypto;
-mod wallet;
 pub mod network;
+mod wallet;
 
-use bip39::{Language, Mnemonic, MnemonicType};
 use crate::crypto::blake2b256;
 use crate::network::NetworkEnvironment;
 use crate::wallet::embedded::WalletStaticMethods;
-use cardano_serialization_lib::{make_vkey_witness, PrivateKey, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses};
+use bip39::{Language, Mnemonic, MnemonicType};
+use cardano_serialization_lib::{
+    make_vkey_witness, PrivateKey, Transaction, TransactionHash, TransactionWitnessSet,
+    Vkeywitnesses,
+};
 
 fn gen_phrase(word_count: u32) -> String {
     // Match the word_count to the corresponding MnemonicType variant
@@ -41,11 +44,7 @@ pub struct MinWallet {
 impl WalletStaticMethods for MinWallet {}
 
 impl MinWallet {
-    pub fn create(
-        mnemonic: &str,
-        password: &str,
-        network_environment: NetworkEnvironment,
-    ) -> Self {
+    pub fn create(mnemonic: &str, password: &str, network_environment: NetworkEnvironment) -> Self {
         let account_index = 0;
 
         // Convert mnemonic to entropy
@@ -98,7 +97,9 @@ uniffi::include_scaffolding!("mwrust");
 mod tests {
     use super::*;
     use crate::crypto::blake2b256;
-    use cardano_serialization_lib::{make_vkey_witness, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses};
+    use cardano_serialization_lib::{
+        make_vkey_witness, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses,
+    };
 
     #[test]
     fn test_get_private_key() {
