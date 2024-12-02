@@ -26,13 +26,14 @@ fn gen_phrase(word_count: u32) -> String {
     mnemonic.phrase().to_string()
 }
 
-fn add(a: u32, b: u32) -> u32 {
-    a + b
+fn create_wallet(phrase: String, password: String, network_env: String) -> MinWallet {
+    let network_environment = NetworkEnvironment::from_string(network_env).unwrap();
+    MinWallet::create(phrase.as_str(), password.as_str(), network_environment)
 }
 
 pub struct MinWallet {
     address: String,
-    network_id: u8,
+    network_id: u32,
     encrypted_key: String,
     account_index: u32,
 }
@@ -48,7 +49,7 @@ impl MinWallet {
         let account_index = 0;
 
         // Convert mnemonic to entropy
-        let entropy = MinWallet::mnemonic_to_entropy(&mnemonic);
+        let entropy = MinWallet::phrase_to_entropy(&mnemonic);
 
         // Derive root key and account key
         let root_key = MinWallet::entropy_to_root_key(&entropy, &password);
@@ -58,7 +59,7 @@ impl MinWallet {
         let encrypted_key = MinWallet::gen_encrypted_key(password, &root_key);
 
         // Derive network ID
-        let network_id = network_environment.to_network_id() as u8;
+        let network_id = network_environment.to_network_id() as u32;
 
         // Generate addresses
         let address = MinWallet::get_address(&account_key, network_id);
@@ -105,7 +106,7 @@ mod tests {
         let min_wallet = MinWallet::create(
             "belt change crouch decorate advice emerge tongue loop cute olympic tuna donkey",
             &password,
-            network::NetworkEnvironment::TestnetPreprod,
+            network::NetworkEnvironment::Preprod,
         );
         let private_key = min_wallet.get_private_key(&password, 0);
         assert_eq!(private_key.to_hex(), String::from("f838ddcb280f7c89bf5480591a0b46b2b80602134b19179a61c1991d7639ab549009491d6b359c37f03af6422af350e2e041ecde02a734a4b9dae5a6f7a1bf69"));
@@ -117,7 +118,7 @@ mod tests {
         let min_wallet = MinWallet::create(
             "belt change crouch decorate advice emerge tongue loop cute olympic tuna donkey",
             &password,
-            NetworkEnvironment::TestnetPreprod,
+            NetworkEnvironment::Preprod,
         );
         let tx_raw = "84a40081825820dee6b0848594bea01d61450e47827da762947f61ad2387ccf1f8ba629b5252d4020182825839006980b40d8cf53e77a718cf753ff381846570cde86d325f49193fecc5598d578c63cfe8e4a4d7653144d1559c5146210d70177ec00826d2a91a00989680825839006980b40d8cf53e77a718cf753ff381846570cde86d325f49193fecc5598d578c63cfe8e4a4d7653144d1559c5146210d70177ec00826d2a91a1d16ce6d021a0002917d031a048f683ca0f5f6";
         let tx = Transaction::from_hex(tx_raw).unwrap();
