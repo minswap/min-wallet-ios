@@ -64,7 +64,7 @@ impl MinWallet {
         let address = MinWallet::get_address(&account_key, network_id);
 
         MinWallet {
-            address: address.to_hex(),
+            address: address.to_bech32(None).unwrap(),
             network_id,
             account_index,
             encrypted_key,
