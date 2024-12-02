@@ -11,6 +11,14 @@ use cardano_serialization_lib::{
     Vkeywitnesses,
 };
 
+// *************************** EXPORT ***************************
+pub struct MinWallet {
+    address: String,
+    network_id: u32,
+    encrypted_key: String,
+    account_index: u32,
+}
+
 fn gen_phrase(word_count: u32) -> String {
     // Match the word_count to the corresponding MnemonicType variant
     let m_type = match word_count {
@@ -34,12 +42,10 @@ fn create_wallet(phrase: String, password: String, network_env: String) -> MinWa
     MinWallet::create(phrase.as_str(), password.as_str(), network_environment)
 }
 
-pub struct MinWallet {
-    address: String,
-    network_id: u32,
-    encrypted_key: String,
-    account_index: u32,
+fn sign_tx(wallet: MinWallet, password: String, account_index: u32, tx_raw: String) -> String {
+    wallet.sign_tx(password.as_str(), account_index, tx_raw)
 }
+// *************************** END EXPORT ***************************
 
 impl WalletStaticMethods for MinWallet {}
 
@@ -51,7 +57,7 @@ impl MinWallet {
         let entropy = MinWallet::phrase_to_entropy(&mnemonic);
 
         // Derive root key and account key
-        let root_key = MinWallet::entropy_to_root_key(&entropy, &password);
+        let root_key = MinWallet::entropy_to_root_key(&entropy);
         let account_key = MinWallet::get_account(&root_key, account_index);
 
         // Encrypt root key with password
@@ -100,6 +106,18 @@ mod tests {
     use cardano_serialization_lib::{
         make_vkey_witness, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses,
     };
+
+    #[test]
+    fn test_create_wallet() {
+        let phrase = "prevent patrol juice fish need fan genre tomorrow fancy voyage elephant idea journey spoil code assist pact barely excite broom heart degree try label";
+        let password = "123456";
+        let wallet = create_wallet(
+            phrase.to_string(),
+            password.to_string(),
+            "preprod".to_string(),
+        );
+        assert_eq!(wallet.address, "addr_test1qramn7zn2c6frw3p845nwrggkw0yknz4372fwte6t27d9x3gqenr8sqt9tn4d6lfrxn776k4je5mety53psglaz9dgeqhygnh7".to_string());
+    }
 
     #[test]
     fn test_get_private_key() {

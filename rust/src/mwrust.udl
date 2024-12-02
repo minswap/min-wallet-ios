@@ -1,6 +1,7 @@
 namespace mwrust {
     string gen_phrase(u32 word_count);
     MinWallet create_wallet(string phrase, string password, string network_env);
+    string sign_tx(MinWallet wallet, string password, u32 account_index, string tx_raw);
 };
 
 dictionary MinWallet {

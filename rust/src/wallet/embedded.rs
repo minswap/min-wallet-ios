@@ -13,8 +13,8 @@ pub trait WalletStaticMethods {
         mnemonic.entropy().to_vec()
     }
 
-    fn entropy_to_root_key(entropy: &[u8], password: &str) -> Bip32PrivateKey {
-        Bip32PrivateKey::from_bip39_entropy(entropy, password.as_bytes())
+    fn entropy_to_root_key(entropy: &[u8]) -> Bip32PrivateKey {
+        Bip32PrivateKey::from_bip39_entropy(entropy, "".as_bytes())
     }
 
     fn get_account(root_key: &Bip32PrivateKey, index: u32) -> Bip32PrivateKey {
@@ -70,7 +70,7 @@ mod tests {
         );
         let password = String::from("helloworld");
         let entropy = TestWallet::phrase_to_entropy(&seed);
-        let root_key = TestWallet::entropy_to_root_key(&entropy, &password);
+        let root_key = TestWallet::entropy_to_root_key(&entropy);
         let encrypted = TestWallet::gen_encrypted_key(&password, &root_key);
         let decrypted = TestWallet::get_root_key_from_password(&password, &encrypted);
         assert_eq!(root_key.to_hex(), decrypted.to_hex());
@@ -81,9 +81,8 @@ mod tests {
         let seed = String::from(
             "detect amateur eternal elite dad kangaroo usual chase poem detail tumble amount",
         );
-        let password = String::from("helloworld");
         let entropy = TestWallet::phrase_to_entropy(&seed);
-        let root_key = TestWallet::entropy_to_root_key(&entropy, &password);
+        let root_key = TestWallet::entropy_to_root_key(&entropy);
         assert_eq!(root_key.to_bech32(), "xprv1gre69tdkhwnzsl0spaj9n9ty9gc7yx64fm29ff9hea57sd4q03xuatqlpq7qanpl3dnjzdtchx394gdk9w0c9ezaaau45c2wk5aduyht3kw7659u7gzt4qh37na0dsh66txhajlzssf27ay75s8hpdqqug7vwwy6");
 
         let account = TestWallet::get_account(&root_key, 0);
