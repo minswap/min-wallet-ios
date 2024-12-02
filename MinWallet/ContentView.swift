@@ -6,8 +6,9 @@ struct ContentView: View {
     VStack {
       HomeScreen()
       Button("Tap Me") {
-          let result = add(a: 1, b: 2)
-          print("result")
+          let pharse = genPhrase(wordCount: 12)
+          // let result = add(a: 1, b: 2)
+          print(pharse)
           print("DEBUG: Button tapped!")
       }
       .padding()

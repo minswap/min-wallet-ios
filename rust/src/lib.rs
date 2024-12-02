@@ -1,10 +1,30 @@
 mod crypto;
 mod wallet;
 pub mod network;
+
+use bip39::{Language, Mnemonic, MnemonicType};
 use crate::crypto::blake2b256;
 use crate::network::NetworkEnvironment;
 use crate::wallet::embedded::WalletStaticMethods;
 use cardano_serialization_lib::{make_vkey_witness, PrivateKey, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses};
+
+fn gen_phrase(word_count: u32) -> String {
+    // Match the word_count to the corresponding MnemonicType variant
+    let m_type = match word_count {
+        12 => MnemonicType::Words12,
+        15 => MnemonicType::Words15,
+        18 => MnemonicType::Words18,
+        21 => MnemonicType::Words21,
+        24 => MnemonicType::Words24,
+        _ => panic!("Invalid word count! Must be one of: 12, 15, 18, 21, or 24."),
+    };
+
+    // Create a new randomly generated mnemonic phrase
+    let mnemonic = Mnemonic::new(m_type, Language::English);
+
+    // Get the phrase as a string
+    mnemonic.phrase().to_string()
+}
 
 fn add(a: u32, b: u32) -> u32 {
     a + b
