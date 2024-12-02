@@ -63,6 +63,9 @@ struct HomeView: View {
                                 .stroke(Color.colorBorderPrimaryTer, lineWidth: 1)
                         )
                         .contentShape(.rect)
+                        .onTapGesture {
+                            navigator.push(.searchToken)
+                        }
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
@@ -98,14 +101,14 @@ struct HomeView: View {
                     CustomButton(
                         title: "Receive",
                         icon: .icReceive) {
-                            
+                            navigator.push(.receiveToken)
                         }
                         .frame(height: 44)
                     CustomButton(
                         title: "Send",
                         variant: .secondary,
                         icon: .icSend) {
-                            
+                            navigator.push(.sendToken(.sendToken))
                         }
                         .frame(height: 44)
                     CustomButton(
@@ -128,7 +131,7 @@ struct HomeView: View {
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
-                    
+                    navigator.push(.swapToken(.swapToken))
                 }
                 .frame(height: 44)
                 .padding(.horizontal, .xl)

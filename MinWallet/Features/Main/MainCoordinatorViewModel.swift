@@ -17,5 +17,48 @@ extension MainCoordinatorViewModel {
         case tokenDetail(token: Token)
         case about
         case language
+        case createWallet(_ screen: CreateWalletScreen)
+        case restoreWallet(_ screen: RestoreWalletScreen)
+        case walletSetting(_ screen: WalletSettingScreen)
+        case sendToken(_ screen: SendTokenScreen)
+        case selectToken
+        case receiveToken
+        case swapToken(_ screen: SwapTokenScreen)
+        case searchToken
     }
+}
+
+enum CreateWalletScreen: Hashable {
+    case createWallet
+    case seedPhrase
+    case reInputSeedPhrase
+    case setupNickName
+    case biometricSetup
+    case createNewWalletSuccess
+    case createNewPassword
+}
+
+enum RestoreWalletScreen: Hashable {
+    case restoreWallet
+    case seedPhrase
+    case createNewPassword
+    case createNewWalletSuccess
+}
+
+enum WalletSettingScreen: Hashable {
+    case walletAccount
+    case changePassword
+    case changePasswordSuccess
+    case disconnectWallet
+}
+
+enum SendTokenScreen: Hashable {
+    case sendToken
+    case toWallet
+    case confirm
+    case signContract
+}
+
+enum SwapTokenScreen: Hashable {
+    case swapToken
 }
