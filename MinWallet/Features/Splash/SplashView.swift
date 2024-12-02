@@ -25,7 +25,7 @@ struct SplashView: View {
                         }
                     }
                 } else {
-                    HomeView()
+                    RestoreWalletView()
                 }
             }
             .onAppear(perform: {

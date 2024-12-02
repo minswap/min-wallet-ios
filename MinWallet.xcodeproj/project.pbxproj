@@ -88,6 +88,7 @@
 		96DC054B2CF7530D00A78356 /* CreateNewWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC054A2CF7530D00A78356 /* CreateNewWalletViewModel.swift */; };
 		96DC054D2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC054C2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift */; };
 		96DC054F2CF75AFB00A78356 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */; };
+		96F7FA092CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */; };
 		96FE0CED2CF36033008E4BFD /* TokenListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CEC2CF36032008E4BFD /* TokenListView.swift */; };
 		96FE0CF02CF366D7008E4BFD /* TokenDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CEF2CF366D7008E4BFD /* TokenDetailView.swift */; };
 		96FE0CF22CF366FC008E4BFD /* TokenDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CF12CF366FC008E4BFD /* TokenDetailHeaderView.swift */; };
@@ -211,6 +212,7 @@
 		96DC054A2CF7530D00A78356 /* CreateNewWalletViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewWalletViewModel.swift; sourceTree = "<group>"; };
 		96DC054C2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewWalletSeedPhraseView.swift; sourceTree = "<group>"; };
 		96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
+		96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreWalletImportFileView.swift; sourceTree = "<group>"; };
 		96FE0CEC2CF36032008E4BFD /* TokenListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenListView.swift; sourceTree = "<group>"; };
 		96FE0CEF2CF366D7008E4BFD /* TokenDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailView.swift; sourceTree = "<group>"; };
 		96FE0CF12CF366FC008E4BFD /* TokenDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -579,9 +581,10 @@
 		965592172CF8600000301DDB /* Restore */ = {
 			isa = PBXGroup;
 			children = (
+				96F7FA072CFDA8DC00E2EF5B /* ImportFile */,
+				965592252CF9A06B00301DDB /* Password */,
 				9655921E2CF97C6400301DDB /* RestoreWalletView.swift */,
 				9655921D2CF97C6300301DDB /* RestoreWalletViewModel.swift */,
-				965592252CF9A06B00301DDB /* Password */,
 				9655921B2CF97B5D00301DDB /* SeedPhrase */,
 			);
 			path = Restore;
@@ -678,6 +681,14 @@
 				9655920D2CF8252600301DDB /* Success */,
 			);
 			path = Create;
+			sourceTree = "<group>";
+		};
+		96F7FA072CFDA8DC00E2EF5B /* ImportFile */ = {
+			isa = PBXGroup;
+			children = (
+				96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */,
+			);
+			path = ImportFile;
 			sourceTree = "<group>";
 		};
 		96FE0CEE2CF366A1008E4BFD /* TokenDetail */ = {
@@ -963,6 +974,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				965592122CF82C9F00301DDB /* CreateNewPasswordView.swift in Sources */,
+				96F7FA092CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift in Sources */,
 				965591FF2CF810E800301DDB /* BiometricAuthentication.swift in Sources */,
 				9600DED22CF2B747005D997C /* PolicyConfirmView.swift in Sources */,
 				965592422CFABBF900301DDB /* DisconnectWalletView.swift in Sources */,
@@ -1110,7 +1122,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1173,7 +1185,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

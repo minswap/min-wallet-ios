@@ -41,6 +41,8 @@ enum CreateWalletScreen: Hashable {
 enum RestoreWalletScreen: Hashable {
     case restoreWallet
     case seedPhrase
+    case importFile
+    case biometricSetup
     case createNewPassword
     case createNewWalletSuccess
 }

@@ -10,7 +10,6 @@ struct BiometricSetupView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Spacer()
             VStack(alignment: .center, spacing: 16) {
                 Image(.icFaceId)
                 Text("Choose your best way to log-in")
@@ -26,7 +25,7 @@ struct BiometricSetupView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, .xl)
             }
-           
+            .padding(.top, 24)
             Spacer()
             CustomButton(title: "Use FaceID") {
                 Task {

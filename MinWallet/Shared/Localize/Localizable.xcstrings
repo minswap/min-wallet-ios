@@ -262,6 +262,18 @@
     "If I share my seed phrase with others, my assets will be stolen." : {
 
     },
+    "Import" : {
+
+    },
+    "Import file" : {
+
+    },
+    "Import from existing wallet json file" : {
+
+    },
+    "Import Minwallet.json file" : {
+
+    },
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
@@ -418,6 +430,9 @@
 
     },
     "Seedphrase" : {
+
+    },
+    "Select method to restore your wallet:" : {
 
     },
     "Select token" : {

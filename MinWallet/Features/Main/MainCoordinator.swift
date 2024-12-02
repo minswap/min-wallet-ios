@@ -62,6 +62,10 @@ struct MainCoordinator: View {
                             CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true).environmentObject(restoreWalletViewModel)
                         case .createNewPassword:
                             RestoreWalletPasswordView().navigationBarHidden(true).environmentObject(restoreWalletViewModel)
+                        case .importFile:
+                            RestoreWalletImportFileView().navigationBarHidden(true)
+                        case .biometricSetup:
+                            BiometricSetupView().navigationBarHidden(true).environmentObject(createWalletViewModel)
                         }
                         
                     case let .walletSetting(screen):
