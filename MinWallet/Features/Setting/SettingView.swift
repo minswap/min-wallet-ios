@@ -21,7 +21,7 @@ struct SettingView: View {
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 ZStack {
                     Image(.icAvatarDefault)
@@ -80,9 +80,11 @@ struct SettingView: View {
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
             .padding(.horizontal, .xl)
+            .padding(.vertical, .xl)
             
             Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)
+                .padding(.bottom, .xl)
             Text("Basic")
                 .font(.paragraphXMediumSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -145,6 +147,7 @@ struct SettingView: View {
                         .toggleStyle(SwitchToggleStyle())
                 }
                 .frame(height: 52)
+                /*
                 HStack(spacing: 12) {
                     Text("Nofification")
                         .font(.labelSmallSecondary)
@@ -176,6 +179,7 @@ struct SettingView: View {
                         }
                 }
                 .frame(height: 52)
+                 */
                 HStack(spacing: 12) {
                     Text("Face ID/Finger Print")
                         .font(.labelSmallSecondary)
@@ -197,6 +201,43 @@ struct SettingView: View {
                         }
                 }
                 .frame(height: 52)
+            }
+            .padding(.horizontal, .xl)
+            Color.colorBorderPrimarySub.frame(height: 1)
+                .padding(.xl)
+            Text("Security")
+                .font(.paragraphXMediumSmall)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                .padding(.horizontal, .xl)
+            VStack(spacing: 0) {
+                HStack(spacing: 12) {
+                    Text("Authentication")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Spacer()
+                    Text("FaceID")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Image(.icNext)
+                        .frame(width: 20, height: 20)
+                }
+                .frame(height: 52)
+                .contentShape(.rect)
+                .onTapGesture {
+                    navigator.presentSheet(.language)
+                }
+                HStack(spacing: 12) {
+                    Text("Change password")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Spacer()
+                    Image(.icNext)
+                        .frame(width: 20, height: 20)
+                }
+                .frame(height: 52)
+                .contentShape(.rect)
+                .onTapGesture {
+                }
             }
             .padding(.horizontal, .xl)
             Spacer()

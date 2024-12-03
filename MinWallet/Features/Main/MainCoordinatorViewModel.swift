@@ -25,6 +25,7 @@ extension MainCoordinatorViewModel {
         case receiveToken
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
+        case securitySetting(_ screen: SecuritySetting)
     }
 }
 
@@ -63,4 +64,10 @@ enum SendTokenScreen: Hashable {
 
 enum SwapTokenScreen: Hashable {
     case swapToken
+}
+
+enum SecuritySetting: Hashable {
+    case authentication
+    case createPassword
+    case forgotPassword
 }

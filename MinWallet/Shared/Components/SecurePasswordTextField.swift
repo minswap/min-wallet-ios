@@ -36,7 +36,7 @@ struct SecurePasswordTextField: View {
                         isSecured.toggle()
                         visibleInput = isSecured ? String(text.map { _ in Character("*")}) : text
                     } label: {
-                        Image(isSecured ? .icEye : .icBack)
+                        Image(isSecured ? .icEye : .icEyeOff)
                     }
                 }
                 .frame(maxWidth: .infinity)

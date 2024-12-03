@@ -25,7 +25,7 @@ struct SplashView: View {
                         }
                     }
                 } else {
-                    RestoreWalletView()
+                    TestView()
                 }
             }
             .onAppear(perform: {

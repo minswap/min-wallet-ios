@@ -40,6 +40,9 @@
 		9600DED22CF2B747005D997C /* PolicyConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9600DED12CF2B747005D997C /* PolicyConfirmView.swift */; };
 		9600DED42CF2B757005D997C /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9600DED32CF2B757005D997C /* GettingStartedView.swift */; };
 		960D6B292CFF194D0017AF29 /* CustomWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B282CFF194D0017AF29 /* CustomWebImage.swift */; };
+		960D6B2C2CFF51B50017AF29 /* AuthenticationSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B2B2CFF51B40017AF29 /* AuthenticationSettingView.swift */; };
+		960D6B2E2CFF53670017AF29 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B2D2CFF53670017AF29 /* ForgotPasswordView.swift */; };
+		960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B2F2CFF562B0017AF29 /* EnterYourPasswordView.swift */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		965591FF2CF810E800301DDB /* BiometricAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965591FE2CF810E800301DDB /* BiometricAuthentication.swift */; };
 		965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965592002CF813BF00301DDB /* AppGeneralError.swift */; };
@@ -168,6 +171,9 @@
 		9600DED12CF2B747005D997C /* PolicyConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyConfirmView.swift; sourceTree = "<group>"; };
 		9600DED32CF2B757005D997C /* GettingStartedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingStartedView.swift; sourceTree = "<group>"; };
 		960D6B282CFF194D0017AF29 /* CustomWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWebImage.swift; sourceTree = "<group>"; };
+		960D6B2B2CFF51B40017AF29 /* AuthenticationSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationSettingView.swift; sourceTree = "<group>"; };
+		960D6B2D2CFF53670017AF29 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		960D6B2F2CFF562B0017AF29 /* EnterYourPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterYourPasswordView.swift; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
 		965591FE2CF810E800301DDB /* BiometricAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthentication.swift; sourceTree = "<group>"; };
 		965592002CF813BF00301DDB /* AppGeneralError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGeneralError.swift; sourceTree = "<group>"; };
@@ -540,6 +546,16 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		960D6B2A2CFF519F0017AF29 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				960D6B2B2CFF51B40017AF29 /* AuthenticationSettingView.swift */,
+				960D6B2D2CFF53670017AF29 /* ForgotPasswordView.swift */,
+				960D6B2F2CFF562B0017AF29 /* EnterYourPasswordView.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
 		965591FD2CF810E000301DDB /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
@@ -660,6 +676,7 @@
 		96DC05212CF55C4900A78356 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				960D6B2A2CFF519F0017AF29 /* Security */,
 				96DC05222CF55C5400A78356 /* SettingView.swift */,
 				96DC05242CF5668400A78356 /* SettingViewModel.swift */,
 				96DC05282CF56EFA00A78356 /* AboutView.swift */,
@@ -1038,10 +1055,12 @@
 				96DC053C2CF5C34500A78356 /* UserDefault+Ext.swift in Sources */,
 				965592032CF81A0800301DDB /* KeychainStore.swift in Sources */,
 				96FE0CED2CF36033008E4BFD /* TokenListView.swift in Sources */,
+				960D6B2C2CFF51B50017AF29 /* AuthenticationSettingView.swift in Sources */,
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 				9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */,
 				96DC05322CF5A6AF00A78356 /* CurrencyView.swift in Sources */,
 				96DC05472CF74EBD00A78356 /* CreateNewWalletView.swift in Sources */,
+				960D6B2E2CFF53670017AF29 /* ForgotPasswordView.swift in Sources */,
 				96DC054D2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift in Sources */,
 				96DC05272CF5685800A78356 /* SwitchToggleStyle.swift in Sources */,
 				96DC05292CF56EFA00A78356 /* AboutView.swift in Sources */,
@@ -1052,6 +1071,7 @@
 				9655920F2CF8252C00301DDB /* CreateNewWalletSuccessView.swift in Sources */,
 				96FE0CF02CF366D7008E4BFD /* TokenDetailView.swift in Sources */,
 				9600DEC92CF18620005D997C /* SplashView.swift in Sources */,
+				960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */,
 				96DC054B2CF7530D00A78356 /* CreateNewWalletViewModel.swift in Sources */,
 				96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */,
 				9655920C2CF824E000301DDB /* BiometricSetupView.swift in Sources */,

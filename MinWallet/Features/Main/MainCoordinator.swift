@@ -107,6 +107,16 @@ struct MainCoordinator: View {
                         
                     case .searchToken:
                         SearchTokenView().navigationBarHidden(true)
+                        
+                    case let .securitySetting(screen):
+                        switch screen {
+                        case .authentication:
+                            AuthenticationSettingView().navigationBarHidden(true)
+                        case .createPassword:
+                            CreateNewWalletView().navigationBarHidden(true)
+                        case .forgotPassword:
+                            ForgotPasswordView().navigationBarHidden(true)
+                        }
                     }
                 }
                 .navigationBarHidden(true)
