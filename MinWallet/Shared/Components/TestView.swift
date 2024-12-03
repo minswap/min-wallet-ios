@@ -1,18 +1,13 @@
 import SwiftUI
 import UIKit
-
+import SDWebImageSwiftUI
 
 struct TestView: View {
-    @State private var inputText: String = "Highlight this word!"
     
     var body: some View {
         VStack {
-            TextLearnMoreSendTokenView(text: "When available, uses multiple pools for better liquidity and prices. ",
-                                       textClickAble: "Learn more")
-            .padding(.horizontal, .xl)
-            Spacer()
+            CustomWebImage(url: "https://nokiatech.github.io/heif/content/images/ski_jump_1440x960.heic", frameSize: .init(width: 50, height: 50))
         }
-        .padding()
     }
 }
 
