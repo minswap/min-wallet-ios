@@ -68,6 +68,7 @@
 		96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966659FF2CF46D480046A20E /* TokenWithPrice.swift */; };
 		96665A022CF477490046A20E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A012CF477490046A20E /* HomeViewModel.swift */; };
 		96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A032CF4C60D0046A20E /* SideMenuView.swift */; };
+		96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
 		96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */; };
 		96DC05232CF55C5400A78356 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05222CF55C5400A78356 /* SettingView.swift */; };
@@ -89,6 +90,8 @@
 		96DC054D2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC054C2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift */; };
 		96DC054F2CF75AFB00A78356 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */; };
 		96F7FA092CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */; };
+		96F7FA0B2CFDBA6E00E2EF5B /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7FA0A2CFDBA6E00E2EF5B /* TestView.swift */; };
+		96F7FA0D2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */; };
 		96FE0CED2CF36033008E4BFD /* TokenListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CEC2CF36032008E4BFD /* TokenListView.swift */; };
 		96FE0CF02CF366D7008E4BFD /* TokenDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CEF2CF366D7008E4BFD /* TokenDetailView.swift */; };
 		96FE0CF22CF366FC008E4BFD /* TokenDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CF12CF366FC008E4BFD /* TokenDetailHeaderView.swift */; };
@@ -192,6 +195,7 @@
 		966659FF2CF46D480046A20E /* TokenWithPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenWithPrice.swift; sourceTree = "<group>"; };
 		96665A012CF477490046A20E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		96665A032CF4C60D0046A20E /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
+		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
 		96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSettingView.swift; sourceTree = "<group>"; };
 		96DC05222CF55C5400A78356 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 		96DC054C2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewWalletSeedPhraseView.swift; sourceTree = "<group>"; };
 		96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreWalletImportFileView.swift; sourceTree = "<group>"; };
+		96F7FA0A2CFDBA6E00E2EF5B /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseTextField.swift; sourceTree = "<group>"; };
 		96FE0CEC2CF36032008E4BFD /* TokenListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenListView.swift; sourceTree = "<group>"; };
 		96FE0CEF2CF366D7008E4BFD /* TokenDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailView.swift; sourceTree = "<group>"; };
 		96FE0CF12CF366FC008E4BFD /* TokenDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -325,7 +331,10 @@
 				96FE0CFE2CF433E4008E4BFD /* AppBar.swift */,
 				96DC05262CF5685800A78356 /* SwitchToggleStyle.swift */,
 				57A6F7C6490456E5F226DC7F /* TokenLogo.swift */,
+				96F7FA0A2CFDBA6E00E2EF5B /* TestView.swift */,
 				965592152CF858E700301DDB /* SecurePasswordTextField.swift */,
+				96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */,
+				96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1008,6 +1017,7 @@
 				965592242CF97C7E00301DDB /* RestoreWalletSeedPhraseView.swift in Sources */,
 				965592532CFB3A2C00301DDB /* ToWalletAddressView.swift in Sources */,
 				965592212CF97C6400301DDB /* RestoreWalletView.swift in Sources */,
+				96F7FA0B2CFDBA6E00E2EF5B /* TestView.swift in Sources */,
 				965592552CFB3A3700301DDB /* ConfirmSendTokenView.swift in Sources */,
 				5751579B2CEB4407004CD647 /* CustomButton.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
@@ -1041,9 +1051,11 @@
 				96DC054B2CF7530D00A78356 /* CreateNewWalletViewModel.swift in Sources */,
 				96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */,
 				9655920C2CF824E000301DDB /* BiometricSetupView.swift in Sources */,
+				96F7FA0D2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift in Sources */,
 				2802CFDB8CD6498862AF73F2 /* Token.swift in Sources */,
 				965592062CF8224700301DDB /* ReInputSeedPhraseView.swift in Sources */,
 				965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */,
+				96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */,
 				9655924D2CFB38B500301DDB /* SignContractView.swift in Sources */,
 				965592202CF97C6400301DDB /* RestoreWalletViewModel.swift in Sources */,
 				965592162CF858E700301DDB /* SecurePasswordTextField.swift in Sources */,
