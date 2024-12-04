@@ -5,10 +5,10 @@ import FlowStacks
 struct SplashView: View {
     @State private var scale = 0.7
     @State var isActive: Bool = false
-    
+
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     var body: some View {
         GeometryReader { geo in
             ZStack {

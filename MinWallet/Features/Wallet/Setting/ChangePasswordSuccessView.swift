@@ -5,7 +5,7 @@ import FlowStacks
 struct ChangePasswordSuccessView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Image(.icToken)
@@ -43,13 +43,14 @@ struct ChangePasswordSuccessView: View {
             }
             */
             Spacer()
-            
+
             CustomButton(
                 title: "Got it",
                 variant: .primary,
                 action: {
                     navigator.push(.home)
-                })
+                }
+            )
             .frame(height: 56)
             .padding(.horizontal, Spacing.xl)
             .safeAreaInset(edge: .bottom) {

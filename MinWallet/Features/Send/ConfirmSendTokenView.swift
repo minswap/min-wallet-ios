@@ -5,7 +5,7 @@ import FlowStacks
 struct ConfirmSendTokenView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -21,7 +21,7 @@ struct ConfirmSendTokenView: View {
                         Text("235.789")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        
+
                         Spacer()
                         Image(.ada)
                             .resizable()
@@ -36,7 +36,7 @@ struct ConfirmSendTokenView: View {
                         Text("235.789")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        
+
                         Spacer()
                         Image(.ada)
                             .resizable()
@@ -51,7 +51,7 @@ struct ConfirmSendTokenView: View {
                         Text("235.789")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        
+
                         Spacer()
                         Image(.ada)
                             .resizable()
@@ -62,7 +62,7 @@ struct ConfirmSendTokenView: View {
                     }
                     .padding(.horizontal, .xl)
                     .padding(.top, .lg)
-                    
+
                     Color.colorBorderPrimarySub
                         .frame(height: 1)
                         .padding(.horizontal, .xl)
@@ -82,7 +82,7 @@ struct ConfirmSendTokenView: View {
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
-                    
+
                     VStack(alignment: .leading, spacing: 0) {
                         HStack {
                             Text("Select your route")
@@ -139,7 +139,7 @@ struct ConfirmSendTokenView: View {
                         }
                         .padding(.horizontal, .xl)
                         .padding(.bottom, .xl)
-                        
+
                         Text("A small fee (max 0.3₳) may be deducted from your batcher fee for automatically cancellation.")
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(.colorInteractiveToneWarning)
@@ -154,7 +154,7 @@ struct ConfirmSendTokenView: View {
                     .padding(.xl)
                 }
             }
-            
+
             Spacer()
             CustomButton(title: "Next") {
                 navigator.presentSheet(.sendToken(.signContract))
@@ -162,11 +162,12 @@ struct ConfirmSendTokenView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

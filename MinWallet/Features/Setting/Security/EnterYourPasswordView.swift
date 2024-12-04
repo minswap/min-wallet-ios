@@ -1,18 +1,18 @@
 import SwiftUI
 
 struct EnterYourPasswordView: View {
-    
+
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     @State
     private var password: String = ""
-    
+
     @Binding
     var isShowEnterYourPassword: Bool
-    
+
     var onForgotPassword: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -23,7 +23,7 @@ struct EnterYourPasswordView: View {
                         .padding(.vertical, .md)
                     Spacer()
                 }
-                
+
                 Text("Enter your password")
                     .font(.titleH5)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -41,20 +41,23 @@ struct EnterYourPasswordView: View {
                                 .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
                         )
                 }
-                Button(action: {
-                    onForgotPassword()
-                }, label: {
-                    Text("Forgot password?")
-                        .font(.paragraphSemi)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                })
+                Button(
+                    action: {
+                        onForgotPassword()
+                    },
+                    label: {
+                        Text("Forgot password?")
+                            .font(.paragraphSemi)
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                    }
+                )
                 .padding(.top, .xl)
                 .padding(.bottom, 40)
                 CustomButton(title: "Confirm") {
                     let currentPassword: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
-                    guard currentPassword == password 
+                    guard currentPassword == password
                     else {
-                    //TODOz: cuongnv show error
+                        //TODOz: cuongnv show error
                         return
                     }
                     appSetting.authenticationType = .password

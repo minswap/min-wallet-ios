@@ -7,7 +7,7 @@ struct WalletAccountView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @State
     private var isVerified: Bool = true
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -16,7 +16,7 @@ struct WalletAccountView: View {
                     .scaledToFit()
                     .frame(width: 64, height: 64)
                     .clipShape(Circle())
-                
+
                 if isVerified {
                     Circle()
                         .fill(.colorBaseBackground)
@@ -40,7 +40,7 @@ struct WalletAccountView: View {
                     Text("long.nguyen")
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
-                    
+
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)
@@ -85,9 +85,10 @@ struct WalletAccountView: View {
             CustomButton(
                 title: "Edit nickname",
                 variant: .secondary,
-                action: { 
-                    
-                })
+                action: {
+
+                }
+            )
             .frame(height: 36)
             .padding(.xl)
             HStack(spacing: .lg) {
@@ -107,22 +108,24 @@ struct WalletAccountView: View {
             .onTapGesture {
                 navigator.push(.walletSetting(.changePassword))
             }
-            
+
             Spacer()
-            
+
             CustomButton(
                 title: "Disconnect",
                 action: {
-                    
-                })
+
+                }
+            )
             .frame(height: 36)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

@@ -7,13 +7,13 @@ struct RestoreWalletView: View {
         case seedPhrase
         case importJson
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var restoreType: RestoreType = .seedPhrase
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Restore wallet")
@@ -36,23 +36,23 @@ struct RestoreWalletView: View {
                         Image(.icRestoreSeedPhrase)
                             .resizable()
                             .renderingMode(.template)
-                            .foregroundStyle(restoreType == .seedPhrase ?  .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
+                            .foregroundStyle(restoreType == .seedPhrase ? .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
                             .frame(width: 20, height: 20)
                             .padding(.top, 2)
                         Spacer()
                         if restoreType == .seedPhrase {
                             Image(.icChecked)
                         }
-                      
+
                     }
                     Text("Seedphrase")
                         .font(.titleH7)
-                        .foregroundStyle(restoreType == .seedPhrase ? .colorInteractiveToneHighlight: .colorBaseTent)
+                        .foregroundStyle(restoreType == .seedPhrase ? .colorInteractiveToneHighlight : .colorBaseTent)
                         .padding(.top, .xl)
                         .padding(.bottom, .xs)
                     Text("Restore using seed phrase")
                         .font(.paragraphSmall)
-                        .foregroundStyle(restoreType == .seedPhrase ? .colorInteractiveToneHighlight: .colorInteractiveTentPrimarySub)
+                        .foregroundStyle(restoreType == .seedPhrase ? .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
                     Spacer()
                 }
                 .padding(16)
@@ -67,23 +67,23 @@ struct RestoreWalletView: View {
                         Image(.icImportJson)
                             .resizable()
                             .renderingMode(.template)
-                            .foregroundStyle(restoreType == .importJson ?  .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
+                            .foregroundStyle(restoreType == .importJson ? .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
                             .frame(width: 20, height: 20)
                             .padding(.top, 2)
                         Spacer()
                         if restoreType == .importJson {
                             Image(.icChecked)
                         }
-                        
+
                     }
                     Text("Import")
                         .font(.titleH7)
-                        .foregroundStyle(restoreType == .importJson ? .colorInteractiveToneHighlight: .colorBaseTent)
+                        .foregroundStyle(restoreType == .importJson ? .colorInteractiveToneHighlight : .colorBaseTent)
                         .padding(.top, .xl)
                         .padding(.bottom, .xs)
                     Text("Import from existing wallet json file")
                         .font(.paragraphSmall)
-                        .foregroundStyle(restoreType == .importJson ? .colorInteractiveToneHighlight: .colorInteractiveTentPrimarySub)
+                        .foregroundStyle(restoreType == .importJson ? .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
                     Spacer()
                 }
                 .frame(maxHeight: .infinity)
@@ -97,7 +97,7 @@ struct RestoreWalletView: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
-            
+
             Spacer()
             CustomButton(title: "Restore") {
                 switch restoreType {
@@ -110,11 +110,12 @@ struct RestoreWalletView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

@@ -5,13 +5,13 @@ import FlowStacks
 struct ToWalletAddressView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @FocusState
     private var focusedField: Bool
-    
+
     @State
     private var address: String = ""
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("To wallet address:")
@@ -21,7 +21,7 @@ struct ToWalletAddressView: View {
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
-            
+
             HStack(spacing: .md) {
                 TextField("", text: $address)
                     .placeholder("Search, enter address or ADAHandle", when: address.isEmpty)
@@ -33,7 +33,7 @@ struct ToWalletAddressView: View {
             .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
-            
+
             Spacer()
             CustomButton(title: "Next") {
                 navigator.push(.sendToken(.confirm))
@@ -44,18 +44,19 @@ struct ToWalletAddressView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     focusedField = false
                 }
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

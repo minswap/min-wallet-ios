@@ -12,12 +12,12 @@ struct SearchTokenView: View {
     var tokens: [TokenWithPrice] = HomeView.tokens
     @FocusState
     private var isFocus: Bool
-    
+
     @State
     private var tokenSample: [String] = ["ADA - MIN", "ADA - MIN", "MIN", "ADA"]
     @State
     private var hasRecentDelete: Bool = true
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
@@ -56,7 +56,7 @@ struct SearchTokenView: View {
                     .frame(height: 32)
                     .padding(.top, .lg)
                     .padding(.horizontal, .xl)
-                    
+
                     HStack {
                         ForEach(tokenSample, id: \.self) { token in
                             Text(token)
@@ -72,18 +72,20 @@ struct SearchTokenView: View {
                 }
             }
             ScrollView {
-                LazyVStack(spacing: 0, content: {
-                    ForEach(0..<tokens.count, id: \.self) { index in
-                        TokenListItemView(tokenWithPrice: tokens[index])
-                    }
-                })
+                LazyVStack(
+                    spacing: 0,
+                    content: {
+                        ForEach(0..<tokens.count, id: \.self) { index in
+                            TokenListItemView(tokenWithPrice: tokens[index])
+                        }
+                    })
             }
             Spacer()
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     self.isFocus = false
                 }

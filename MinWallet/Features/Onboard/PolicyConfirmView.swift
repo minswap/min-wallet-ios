@@ -2,10 +2,10 @@ import SwiftUI
 import FlowStacks
 
 struct PolicyConfirmView: View {
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 5) {
@@ -28,13 +28,14 @@ struct PolicyConfirmView: View {
                 variant: .primary,
                 action: {
                     navigator.push(.gettingStarted)
-                })
+                }
+            )
             .frame(height: 56)
             .padding(.top, 24)
             .padding(.horizontal, Spacing.xl)
         }
         .safeAreaInset(edge: .bottom) {
-            Color.clear.frame(height: 0) // Adds 20 points of spacing at the bottom
+            Color.clear.frame(height: 0)  // Adds 20 points of spacing at the bottom
         }
         .background(Color.colorBaseBackground)
     }

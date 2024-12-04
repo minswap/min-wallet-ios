@@ -7,12 +7,12 @@ struct CreateNewWalletSeedPhraseView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var viewModel: CreateNewWalletViewModel
-    
+
     @State
     var copied: Bool = false
     @State
     var isRevealPhrase: Bool = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Create new wallet")
@@ -24,7 +24,7 @@ struct CreateNewWalletSeedPhraseView: View {
                 .padding(.horizontal, .xl)
             SeedPhraseContentView(isRevealPhrase: $isRevealPhrase)
             Spacer()
-            
+
             if isRevealPhrase {
                 SeedPhraseCopyView(copied: $copied)
                     .padding(.horizontal, .xl)
@@ -32,18 +32,19 @@ struct CreateNewWalletSeedPhraseView: View {
                 SeedPhraseRevealView(isRevealPhrase: $isRevealPhrase)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, .xl)
-                //.mask(Rectangle().cornerRadius(40, corners: [.topLeft, .topRight]))
+                    //.mask(Rectangle().cornerRadius(40, corners: [.topLeft, .topRight]))
                     .overlay(
                         Rectangle().stroke(.colorBorderPrimarySub, lineWidth: 1)
                             .cornerRadius(20, corners: [.topRight, .topLeft])
                     )
             }
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 
@@ -58,7 +59,7 @@ struct CreateNewWalletSeedPhraseView: View {
 private struct SeedPhraseRevealView: View {
     @Binding
     var isRevealPhrase: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Image(.icReveal)
@@ -88,9 +89,9 @@ private struct SeedPhraseRevealView: View {
 private struct SeedPhraseCopyView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @Binding var copied: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top, spacing: 8) {
@@ -101,13 +102,15 @@ private struct SeedPhraseCopyView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             HStack(spacing: .xl) {
-                CustomButton(title: copied ? "Copied" : "Copy",
-                          variant: .secondary,
-                          iconRight: copied ? .icCheckMark : .icCopySeedPhrase) {
+                CustomButton(
+                    title: copied ? "Copied" : "Copy",
+                    variant: .secondary,
+                    iconRight: copied ? .icCheckMark : .icCopySeedPhrase
+                ) {
                     copied = true
                 }
-                          .frame(height: 56)
-                
+                .frame(height: 56)
+
                 CustomButton(title: "Next") {
                     navigator.push(.createWallet(.reInputSeedPhrase))
                 }
@@ -118,18 +121,17 @@ private struct SeedPhraseCopyView: View {
 }
 
 
-
 private struct SeedPhraseContentView: View {
     @Binding
     var isRevealPhrase: Bool
     @EnvironmentObject
     private var viewModel: CreateNewWalletViewModel
-    
+
     let columns = [
         GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.flexible()),
     ]
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -166,15 +168,18 @@ private struct SeedPhraseContentView: View {
                         if isRevealPhrase {
                             HStack {
                                 Spacer()
-                                Button(action: {
-                                    withAnimation {
-                                        isRevealPhrase = false
+                                Button(
+                                    action: {
+                                        withAnimation {
+                                            isRevealPhrase = false
+                                        }
+                                    },
+                                    label: {
+                                        Text("Hide")
+                                            .font(.labelSmallSecondary)
+                                            .foregroundStyle(.colorInteractiveTentSecondarySub)
                                     }
-                                }, label: {
-                                    Text("Hide")
-                                        .font(.labelSmallSecondary)
-                                        .foregroundStyle(.colorInteractiveTentSecondarySub)
-                                })
+                                )
                                 .frame(height: 28)
                                 .padding(.horizontal, .lg)
                                 .background(.colorBaseBackground)

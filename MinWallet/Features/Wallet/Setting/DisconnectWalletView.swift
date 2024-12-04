@@ -7,15 +7,15 @@ struct DisconnectWalletView: View {
         case logout
         case delete
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var disconnectType: DisconnectType = .logout
     @State
     private var isConfirm: Bool = true
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Disconnect wallet")
@@ -62,13 +62,13 @@ struct DisconnectWalletView: View {
                 Spacer()
             }
             .padding(16)
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(disconnectType == .delete ? .colorInteractiveTentSecondarySub : .colorBorderPrimaryDefault, lineWidth: disconnectType == .logout ? 2 : 1))            .contentShape(.rect)
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(disconnectType == .delete ? .colorInteractiveTentSecondarySub : .colorBorderPrimaryDefault, lineWidth: disconnectType == .logout ? 2 : 1)).contentShape(.rect)
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
             .onTapGesture {
                 disconnectType = .delete
             }
-            
+
             Spacer()
             if disconnectType == .delete {
                 HStack(alignment: .center, spacing: .xl) {
@@ -93,11 +93,12 @@ struct DisconnectWalletView: View {
             .padding(.horizontal, .xl)
             .disabled(!isConfirm && disconnectType == .delete)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

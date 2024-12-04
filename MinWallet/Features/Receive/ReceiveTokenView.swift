@@ -5,14 +5,14 @@ import FlowStacks
 struct ReceiveTokenView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var address: String = "addr1g08hmca9gsnkzguqnevszcz2ea53krrx2h3gjrruap3yd2jxu2ssx0ktcajjr3x8lm5tdxxufu0qnmk68lmxlwnckj0q9qrf9o"
-    
+
     private let qrImage: UIImage? = {
         "address".generateQRCode(with: "address", centerImage: UIImage(resource: .icLogoQr), size: .init(width: 200, height: 200))
     }()
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Receive")
@@ -45,22 +45,23 @@ struct ReceiveTokenView: View {
             Spacer()
             HStack(spacing: .xl) {
                 CustomButton(title: "Share", variant: .secondary) {
-                    
+
                 }
                 .frame(height: 44)
-                
+
                 CustomButton(title: "Copy", variant: .secondary) {
-                    
+
                 }
                 .frame(height: 44)
             }
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

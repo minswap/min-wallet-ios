@@ -5,13 +5,13 @@ import FlowStacks
 struct SignContractView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var password: String = ""
-    
+
     @FocusState
     private var isFocus: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Sign the contract")
@@ -37,7 +37,7 @@ struct SignContractView: View {
                     )
                     .padding(.horizontal, .xl)
             }
-            
+
             Spacer()
             CustomButton(title: "Sign") {
                 navigator.dismiss()
@@ -48,7 +48,7 @@ struct SignContractView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     isFocus = false
                 }

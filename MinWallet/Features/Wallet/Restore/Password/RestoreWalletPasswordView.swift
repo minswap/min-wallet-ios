@@ -6,20 +6,20 @@ struct RestoreWalletPasswordView: View {
     enum FocusedField: Hashable {
         case nickName, password, rePassword
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @EnvironmentObject
     private var viewModel: RestoreWalletViewModel
-    
+
     @State
     private var password: String = ""
     @State
     private var rePassword: String = ""
     @FocusState
     private var focusedField: FocusedField?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Create new wallet")
@@ -83,7 +83,7 @@ struct RestoreWalletPasswordView: View {
                     .padding(.horizontal, .xl)
             }
             .padding(.vertical, .xl)
-            
+
             Spacer()
             CustomButton(title: "Confirm") {
                 viewModel.password = password
@@ -95,7 +95,7 @@ struct RestoreWalletPasswordView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     focusedField = nil
                 }
@@ -105,11 +105,12 @@ struct RestoreWalletPasswordView: View {
         .onAppear(perform: {
             //focusedField = .nickName
         })
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

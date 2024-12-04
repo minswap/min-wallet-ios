@@ -4,16 +4,16 @@ import SwiftUI
 struct SwapTokenSettingView: View {
     enum Slippage: Double, CaseIterable, Identifiable {
         var id: String { UUID().uuidString }
-        
+
         case _01 = 0.1
         case _05 = 0.5
         case _1 = 1
         case _2 = 2
     }
-    
+
     @Binding
     var isShowSwapSetting: Bool
-    
+
     @State
     private var slippages: [Slippage] = Slippage.allCases
     @State
@@ -24,7 +24,7 @@ struct SwapTokenSettingView: View {
     private var isFocus: Bool
     @State
     private var enablePredictSwapPrice: Bool = true
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -34,7 +34,7 @@ struct SwapTokenSettingView: View {
                 Text("Slippage Tolerance")
                     .font(.paragraphXMediumSmall)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top,  20)
+                    .padding(.top, 20)
                 HStack(spacing: 0) {
                     ForEach(slippages) { splippage in
                         Text(String(splippage.rawValue) + "%")
@@ -113,17 +113,20 @@ struct SwapTokenSettingView: View {
             .background(content: {
                 RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })
-            Button(action: {
-                isShowSwapSetting = false
-            }, label: {
-                Text("Close")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(content: {
-                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-                    })
-            })
+            Button(
+                action: {
+                    isShowSwapSetting = false
+                },
+                label: {
+                    Text("Close")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(content: {
+                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
+                        })
+                }
+            )
             .frame(height: 56)
             .buttonStyle(.plain)
             .padding(.bottom, .xl)

@@ -5,16 +5,16 @@ import FlowStacks
 struct MainCoordinator: View {
     @StateObject
     private var viewModel = MainCoordinatorViewModel()
-    
+
     @EnvironmentObject
     private var appSetting: AppSetting
-    
+
     @StateObject
     private var createWalletViewModel: CreateNewWalletViewModel = .init()
-    
+
     @StateObject
     private var restoreWalletViewModel: RestoreWalletViewModel = .init()
-    
+
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
             SplashView()
@@ -32,7 +32,7 @@ struct MainCoordinator: View {
                         AboutView().navigationBarHidden(true)
                     case .language:
                         LanguageView().interactiveDismissDisabled(false)
-                        
+
                     case let .createWallet(screen):
                         switch screen {
                         case .createWallet:
@@ -51,7 +51,7 @@ struct MainCoordinator: View {
                         case .createNewPassword:
                             CreateNewPasswordView().navigationBarHidden(true).environmentObject(createWalletViewModel)
                         }
-                        
+
                     case let .restoreWallet(screen):
                         switch screen {
                         case .restoreWallet:
@@ -67,7 +67,7 @@ struct MainCoordinator: View {
                         case .biometricSetup:
                             BiometricSetupView().navigationBarHidden(true).environmentObject(createWalletViewModel)
                         }
-                        
+
                     case let .walletSetting(screen):
                         switch screen {
                         case .walletAccount:
@@ -79,7 +79,7 @@ struct MainCoordinator: View {
                         case .disconnectWallet:
                             DisconnectWalletView().navigationBarHidden(true)
                         }
-                        
+
                     case let .sendToken(screen):
                         switch screen {
                         case .sendToken:
@@ -92,22 +92,22 @@ struct MainCoordinator: View {
                             SignContractView()
                                 .presentationDragIndicator(.visible)
                         }
-                        
+
                     case .selectToken:
                         SelectTokenView().presentationDragIndicator(.visible)
-                        
+
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)
-                        
+
                     case let .swapToken(screen):
                         switch screen {
                         case .swapToken:
                             SwapTokenView().navigationBarHidden(true)
                         }
-                        
+
                     case .searchToken:
                         SearchTokenView().navigationBarHidden(true)
-                        
+
                     case let .securitySetting(screen):
                         switch screen {
                         case .authentication:

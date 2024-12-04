@@ -5,12 +5,12 @@ import FlowStacks
 struct ForgotPasswordView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var conditionOne: Bool = false
     @State
     private var conditionTwo: Bool = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Authentication")
@@ -26,7 +26,7 @@ struct ForgotPasswordView: View {
                 .padding(.horizontal, .xl)
                 .padding(.top, .lg)
                 .padding(.bottom, ._3xl)
-            
+
             VStack(alignment: .leading, spacing: .xl) {
                 HStack(spacing: .xl) {
                     Image(conditionOne ? .icChecked : .icUnchecked).resizable().frame(width: 20, height: 20)
@@ -53,20 +53,21 @@ struct ForgotPasswordView: View {
                     conditionTwo.toggle()
                 }
             }
-            
+
             Spacer()
             CustomButton(title: "Restore") {
-                
+
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
             .disabled(!conditionOne || !conditionTwo)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

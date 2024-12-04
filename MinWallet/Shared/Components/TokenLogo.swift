@@ -3,7 +3,7 @@ import SwiftUI
 
 struct TokenLogoView: View {
     let token: Token
-    
+
     var body: some View {
         ZStack {
             Group {
@@ -17,7 +17,7 @@ struct TokenLogoView: View {
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
-            
+
             if token.isVerified {
                 Circle()
                     .fill(.colorBaseBackground)
@@ -36,13 +36,13 @@ struct TokenLogoView: View {
         }
         .frame(width: 28, height: 28)
     }
-    
+
     private func buildImageURL(currencySymbol: String, tokenName: String) -> URL? {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"
         return URL(string: "\(baseUrl)/\(path)")
     }
-    
+
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"

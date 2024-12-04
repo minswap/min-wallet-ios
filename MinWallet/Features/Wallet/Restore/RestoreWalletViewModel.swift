@@ -6,11 +6,11 @@ import FlowStacks
 class RestoreWalletViewModel: ObservableObject {
     @Published
     var seedPhrase: [String] = []
-    
+
     var password: String = ""
     @Published
     var nickName: String = ""
-    
+
     init() {
         seedPhrase = CreateNewWalletViewModel.generateRandomWords(count: 24, minLength: 4, maxLength: 8)
     }

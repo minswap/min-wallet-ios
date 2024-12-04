@@ -5,12 +5,12 @@ import FlowStacks
 struct SwapTokenView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var amountYouPay: String = ""
     @State
     private var isShowSwapSetting: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
@@ -62,9 +62,9 @@ struct SwapTokenView: View {
                 }
             }
             .padding(.xl)
-             .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
-             .padding(.horizontal, .xl)
-             .padding(.top, .lg)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
+            .padding(.horizontal, .xl)
+            .padding(.top, .lg)
             Image(.icSwap)
                 .resizable().frame(width: 36, height: 36)
                 .padding(.top, -18)
@@ -125,16 +125,18 @@ struct SwapTokenView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: "Swap",
-            iconRight: .icSwapTokenSetting,
-            alignmentTitle: .center,
-            actionLeft: {
-                navigator.pop()
-            },
-            actionRight: {
-                isShowSwapSetting = true
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: "Swap",
+                iconRight: .icSwapTokenSetting,
+                alignmentTitle: .center,
+                actionLeft: {
+                    navigator.pop()
+                },
+                actionRight: {
+                    isShowSwapSetting = true
+                })
+        )
         .presentSheet(isPresented: $isShowSwapSetting, height: 400) {
             SwapTokenSettingView(isShowSwapSetting: $isShowSwapSetting)
                 .padding(.xl)

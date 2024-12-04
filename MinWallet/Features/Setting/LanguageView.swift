@@ -3,7 +3,7 @@ import SwiftUI
 struct LanguageView: View {
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {

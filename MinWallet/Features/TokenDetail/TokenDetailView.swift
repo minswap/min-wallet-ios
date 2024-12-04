@@ -8,11 +8,11 @@ struct TokenDetailView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     @State var progress: CGFloat = 0
     private var minHeight: CGFloat = TokenDetailHeaderView.smallLargeHeader
     private var maxHeight: CGFloat = TokenDetailHeaderView.heightLargeHeader + TokenDetailHeaderView.smallLargeHeader
-    
+
     var body: some View {
         ZStack {
             ScalingHeaderScrollView {
@@ -28,32 +28,35 @@ struct TokenDetailView: View {
                     TokenDetailStatisticView()
                         .padding(.top, .xl)
                         .padding(.horizontal, .xl)
-                    
+
                 }
             }
             .height(min: minHeight + appSetting.safeArea + appSetting.extraSafeArea, max: maxHeight + appSetting.safeArea)
             .allowsHeaderCollapse()
             .collapseProgress($progress)
             .disableBounces()
-            
+
             VStack(spacing: 0) {
                 HStack(spacing: .lg) {
-                    Button(action: {
-                        
-                    }, label: {
-                        Image(.icBack)
-                            .resizable()
-                            .frame(width: ._3xl, height: ._3xl)
-                            .padding(.md)
-                            .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
-                    })
+                    Button(
+                        action: {
+
+                        },
+                        label: {
+                            Image(.icBack)
+                                .resizable()
+                                .frame(width: ._3xl, height: ._3xl)
+                                .padding(.md)
+                                .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
+                        }
+                    )
                     .buttonStyle(.plain)
                     Spacer()
                 }
                 .frame(height: 48)
                 .padding(.horizontal, .xl)
                 .padding(.top, appSetting.safeArea)
-//                .background(.colorBaseBackground)
+                //                .background(.colorBaseBackground)
                 Spacer()
             }
             VStack {
@@ -62,7 +65,7 @@ struct TokenDetailView: View {
                     .background(.colorBaseBackground)
                     .padding(.horizontal, .xl)
             }
-            
+
         }
         .ignoresSafeArea(edges: .top)
     }

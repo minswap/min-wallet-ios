@@ -5,13 +5,13 @@ import FlowStacks
 struct SendTokenView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @FocusState
     private var focusedField: Bool
-    
+
     @State
     private var amount: String = ""
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("You want to send:")
@@ -21,13 +21,13 @@ struct SendTokenView: View {
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
-            
+
             HStack(spacing: .md) {
                 TextField("", text: $amount)
                     .placeholder("0.0", when: amount.isEmpty)
                     .lineLimit(1)
                     .focused($focusedField)
-                    Text("Max")
+                Text("Max")
                 Image(.ada)
                     .resizable()
                     .frame(width: 24, height: 24)
@@ -40,17 +40,20 @@ struct SendTokenView: View {
             .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
-            Button(action: {
-                navigator.presentSheet(.selectToken)
-            }, label: {
-                Text("Add Token")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(content: {
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
-                    })
-            })
+            Button(
+                action: {
+                    navigator.presentSheet(.selectToken)
+                },
+                label: {
+                    Text("Add Token")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(content: {
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+                        })
+                }
+            )
             .frame(height: 36)
             .padding(.horizontal, .xl)
             .padding(.top, .md)
@@ -65,18 +68,19 @@ struct SendTokenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     focusedField = false
                 }
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

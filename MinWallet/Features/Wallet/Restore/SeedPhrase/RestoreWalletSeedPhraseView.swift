@@ -7,7 +7,7 @@ struct RestoreWalletSeedPhraseView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var viewModel: RestoreWalletViewModel
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Reinput seedphase")
@@ -25,11 +25,12 @@ struct RestoreWalletSeedPhraseView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 
@@ -42,12 +43,12 @@ struct RestoreWalletSeedPhraseView: View {
 private struct SeedPhraseContentView: View {
     @EnvironmentObject
     private var viewModel: RestoreWalletViewModel
-    
+
     private let columns = [
         GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
+        GridItem(.flexible(), spacing: 12),
     ]
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {

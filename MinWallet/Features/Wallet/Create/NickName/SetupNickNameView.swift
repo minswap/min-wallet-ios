@@ -5,13 +5,13 @@ import FlowStacks
 struct SetupNickNameView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @EnvironmentObject
     private var viewModel: CreateNewWalletViewModel
-    
+
     @FocusState
     private var isInputActive: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Set up nickname")
@@ -21,7 +21,7 @@ struct SetupNickNameView: View {
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
-            
+
             TextField("Give your wallet a nickname ...", text: $viewModel.nickName)
                 .font(.paragraphSmall)
                 .foregroundStyle(.colorBaseTent)
@@ -30,7 +30,7 @@ struct SetupNickNameView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
-                        
+
                         Button("Done") {
                             isInputActive = false
                         }
@@ -44,12 +44,13 @@ struct SetupNickNameView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                viewModel.nickName = ""
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    viewModel.nickName = ""
+                    navigator.pop()
+                }))
     }
 }
 

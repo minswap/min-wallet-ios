@@ -7,16 +7,16 @@ struct HomeView: View {
     private var viewModel: HomeViewModel = .init()
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @State
     private var isShowAppearance: Bool = false
     @State
     private var isShowTimeZone: Bool = false
     @State
     private var isShowCurrency: Bool = false
-    @State 
+    @State
     private var showSideMenu: Bool = false
-    
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -40,17 +40,18 @@ struct HomeView: View {
                     )
                     .shadow(
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.06),
-                        radius: 2, x: 0, y: 2)
+                        radius: 2, x: 0, y: 2
+                    )
                     .onTapGesture {
                         withAnimation {
                             showSideMenu = true
                         }
                     }
-                    
+
                     Text(viewModel.accountName)
                         .font(.labelMediumSecondary)
                         .foregroundColor(.colorBaseTent)
-                    
+
                     Spacer()
                     Image(.icSearch)
                         .resizable()
@@ -69,10 +70,10 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     Button(action: {
-                        
+
                     }) {
                         HStack(spacing: 4) {
                             Text(viewModel.address.shortenAddress)
@@ -96,37 +97,40 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .lg)
-                
+
                 HStack(spacing: Spacing.md) {
                     CustomButton(
                         title: "Receive",
-                        icon: .icReceive) {
-                            navigator.push(.receiveToken)
-                        }
-                        .frame(height: 44)
+                        icon: .icReceive
+                    ) {
+                        navigator.push(.receiveToken)
+                    }
+                    .frame(height: 44)
                     CustomButton(
                         title: "Send",
                         variant: .secondary,
-                        icon: .icSend) {
-                            navigator.push(.sendToken(.sendToken))
-                        }
-                        .frame(height: 44)
+                        icon: .icSend
+                    ) {
+                        navigator.push(.sendToken(.sendToken))
+                    }
+                    .frame(height: 44)
                     CustomButton(
                         title: "QR",
                         variant: .secondary,
-                        icon: .icQrCode) {
-                            
-                        }
-                        .frame(height: 44)
+                        icon: .icQrCode
+                    ) {
+
+                    }
+                    .frame(height: 44)
                 }
                 .padding(.vertical, Spacing.md)
                 .padding(.horizontal, Spacing.xl)
-                
+
                 Carousel().frame(height: 98)
-                
+
                     .padding(.vertical, Spacing.md)
                     .padding(.horizontal, Spacing.xl)
-                
+
                 TokenListView(label: "Crypto prices", tokens: Self.tokens, tabType: $viewModel.tabType)
                     .padding(.top, .xl)
                 Spacer()
@@ -169,7 +173,6 @@ extension HomeView {
             token: Token(
                 currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
                 isVerified: true), price: 37123.35, changePercent: 5.7), count: 20)
-    
-    
-}
 
+
+}

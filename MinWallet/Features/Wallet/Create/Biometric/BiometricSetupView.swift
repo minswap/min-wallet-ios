@@ -7,7 +7,7 @@ struct BiometricSetupView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .center, spacing: 16) {
@@ -33,7 +33,8 @@ struct BiometricSetupView: View {
                         try await appSetting.biometricAuthentication.authenticateUser()
                         appSetting.enableBiometric = true
                         navigator.push(.createWallet(.createNewWalletSuccess))
-                    } catch { error
+                    } catch {
+                        error
                         //TODOZ: cuongnv show error
                         appSetting.enableBiometric = false
                     }
@@ -47,11 +48,12 @@ struct BiometricSetupView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

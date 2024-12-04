@@ -6,20 +6,20 @@ struct CreateNewPasswordView: View {
     enum FocusedField: Hashable {
         case password, rePassword
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @EnvironmentObject
     private var viewModel: CreateNewWalletViewModel
-    
+
     @State
     private var password: String = ""
     @State
     private var rePassword: String = ""
     @FocusState
     private var focusedField: FocusedField?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Create your password")
@@ -61,8 +61,8 @@ struct CreateNewPasswordView: View {
                     .padding(.horizontal, .xl)
             }
             .padding(.vertical, .xl)
-          
-            
+
+
             Spacer()
             CustomButton(title: "Confirm") {
                 viewModel.password = password
@@ -74,7 +74,7 @@ struct CreateNewPasswordView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     focusedField = nil
                 }
@@ -84,11 +84,12 @@ struct CreateNewPasswordView: View {
         .onAppear(perform: {
             focusedField = .password
         })
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }))
     }
 }
 

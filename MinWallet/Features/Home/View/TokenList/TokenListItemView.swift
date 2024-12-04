@@ -4,12 +4,12 @@ import SwiftUI
 struct TokenListItemView: View {
     let tokenWithPrice: TokenWithPrice
     let isPositive: Bool
-    
+
     init(tokenWithPrice: TokenWithPrice) {
         self.tokenWithPrice = tokenWithPrice
         self.isPositive = tokenWithPrice.changePercent >= 0
     }
-    
+
     var body: some View {
         HStack(spacing: .xl) {
             TokenLogoView(token: tokenWithPrice.token)

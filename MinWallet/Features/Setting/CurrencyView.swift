@@ -2,10 +2,10 @@ import SwiftUI
 
 struct CurrencyView: View {
     @Binding var isShowCurrency: Bool
-    
+
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -46,17 +46,20 @@ struct CurrencyView: View {
             .background(content: {
                 RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })
-            Button(action: {
-                isShowCurrency = false
-            }, label: {
-                Text("Close")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(content: {
-                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-                    })
-            })
+            Button(
+                action: {
+                    isShowCurrency = false
+                },
+                label: {
+                    Text("Close")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(content: {
+                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
+                        })
+                }
+            )
             .frame(height: 56)
             .buttonStyle(.plain)
             .padding(.bottom, .xl)

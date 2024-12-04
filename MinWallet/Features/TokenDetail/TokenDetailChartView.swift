@@ -5,29 +5,29 @@ import Charts
 enum LineChartType: String, CaseIterable, Plottable {
     case optimal = "Optimal"
     case outside = "Outside range"
-    
+
     var color: Color {
         switch self {
         case .optimal: return .green
         case .outside: return .blue
         }
     }
-    
+
 }
 
 struct LineChartData {
     var id = UUID()
     var date: Date
     var value: Double
-    
+
     var type: LineChartType
 }
 
 
 struct TokenDetailChartView: View {
-    
+
     let data: [LineChartData]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Chart {
@@ -42,7 +42,7 @@ struct TokenDetailChartView: View {
                 }
             }
             .chartXAxis {
-                AxisMarks(preset: .extended, values: .stride (by: .month)) { value in
+                AxisMarks(preset: .extended, values: .stride(by: .month)) { value in
                     AxisValueLabel(format: .dateTime.month())
                 }
             }
@@ -51,13 +51,13 @@ struct TokenDetailChartView: View {
             }
             .chartLegend(.hidden)
             .frame(height: 240)
-            
+
             HStack(spacing: 0) {
                 Text("1D")
                     .font(.labelSmallSecondary)
                     .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
+
                 Text("1W")
                     .font(.labelSmallSecondary)
                     .foregroundStyle(.colorInteractiveTentSecondaryDefault)
@@ -73,7 +73,7 @@ struct TokenDetailChartView: View {
                     .font(.labelSmallSecondary)
                     .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
+
             }
             .frame(height: 36)
             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
@@ -85,7 +85,7 @@ struct TokenDetailChartView: View {
 var chartData: [LineChartData] = {
     let sampleDate = Date().startOfDay.adding(.month, value: -10)!
     var temp = [LineChartData]()
-    
+
     // Line 1
     for i in 0..<8 {
         let value = Double.random(in: 5...20)
@@ -110,10 +110,10 @@ var chartData: [LineChartData] = {
 }
 
 extension Date {
-    func adding (_ component: Calendar.Component, value: Int, using calendar: Calendar = .current) -> Date? {
+    func adding(_ component: Calendar.Component, value: Int, using calendar: Calendar = .current) -> Date? {
         return calendar.date(byAdding: component, value: value, to: self)
     }
-    
+
     var startOfDay: Date {
         return Calendar.current.startOfDay(for: self)
     }
