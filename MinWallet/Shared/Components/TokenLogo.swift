@@ -54,11 +54,23 @@ struct TokenLogoView: View {
     VStack(spacing: 20) {
         TokenLogoView(
             token: Token(
-                currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                isVerified: true))
+                currencySymbol: "",
+                tokenName: "",
+                ticker: "ADA",
+                project: "Cardano",
+                decimals: 6,
+                isVerified: true
+            )
+        )
         TokenLogoView(
             token: Token(
                 currencySymbol: "0254a6ffa78edb03ea8933dbd4ca078758dbfc0fc6bb0d28b7a9c89f",
-                tokenName: "444a4544", ticker: "DJED", project: "DJED", decimals: 6, isVerified: false))
+                tokenName: "444a4544",
+                ticker: "DJED",
+                project: "DJED",
+                decimals: 6,
+                isVerified: false
+            )
+        )
     }
 }

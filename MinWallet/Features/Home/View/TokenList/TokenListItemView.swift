@@ -57,13 +57,31 @@ struct TokenListItemView: View {
             tokenWithPrice: TokenWithPrice(
                 id: UUID(),
                 token: Token(
-                    currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                    isVerified: true), price: 37123.35, changePercent: 5.7))
+                    currencySymbol: "",
+                    tokenName: "",
+                    ticker: "ADA",
+                    project: "Cardano",
+                    decimals: 6,
+                    isVerified: true
+                ),
+                price: 37123.35,
+                changePercent: 5.7
+            )
+        )
         TokenListItemView(
             tokenWithPrice: TokenWithPrice(
                 id: UUID(),
                 token: Token(
-                    currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                    isVerified: true), price: 37123.35, changePercent: -5.7))
+                    currencySymbol: "",
+                    tokenName: "",
+                    ticker: "ADA",
+                    project: "Cardano",
+                    decimals: 6,
+                    isVerified: true
+                ),
+                price: 37123.35,
+                changePercent: -5.7
+            )
+        )
     }
 }
