@@ -1,116 +1,152 @@
-use crate::bip39::generate_mnemonic;
-use crate::network::{NetworkEnvironment, NetworkId};
-use crate::utils::harden;
+mod crypto;
+pub mod network;
+mod wallet;
+
+use crate::crypto::blake2b256;
+use crate::network::NetworkEnvironment;
+use crate::wallet::embedded::WalletStaticMethods;
+use bip39::{Language, Mnemonic, MnemonicType};
 use cardano_serialization_lib::{
-    address::{BaseAddress, EnterpriseAddress, RewardAddress, StakeCredential},
-    crypto::{self, PrivateKey, Vkeywitnesses},
-    utils::{hash_transaction, make_vkey_witness},
-    Transaction, TransactionWitnessSet,
+    make_vkey_witness, PrivateKey, Transaction, TransactionHash, TransactionWitnessSet,
+    Vkeywitnesses,
 };
 
-pub mod bip39;
-pub mod minwallet;
-pub mod network;
-pub mod utils;
-
-pub enum AddressType {
-    BaseAddress,
-    EnterpriseAddress,
-}
-
-pub enum WalletType {
-    BaseWallet {
-        address: String,
-        reward_address: String,
-        payment_key: String,
-        stake_key: String,
-    },
-    EnterpriseWallet {
-        address: String,
-        payment_key: String,
-    },
-}
-
-pub fn create_wallet(
-    mnemonic: &str,
-    password: &str,
+// *************************** EXPORT ***************************
+pub struct MinWallet {
+    address: String,
+    network_id: u32,
+    encrypted_key: String,
     account_index: u32,
-    address_type: AddressType,
-    network_environment: NetworkEnvironment,
-) -> WalletType {
-    let network_id = NetworkId::from_network_environment(&network_environment) as u8;
-    let root_key =
-        crypto::Bip32PrivateKey::from_bip39_entropy(mnemonic.as_bytes(), password.as_bytes());
-
-    let account_key = root_key
-        .derive(harden(1852))
-        .derive(harden(1815))
-        .derive(account_index);
-
-    let payment_key = account_key.derive(0).derive(0).to_raw_key();
-
-    let payment_key_hash = payment_key.to_public().hash();
-
-    match address_type {
-        AddressType::BaseAddress => {
-            let stake_key = account_key.derive(2).derive(0).to_raw_key();
-            let stake_key_hash = stake_key.to_public().hash();
-
-            let address = BaseAddress::new(
-                network_id,
-                &StakeCredential::from_keyhash(&payment_key_hash),
-                &StakeCredential::from_keyhash(&stake_key_hash),
-            )
-            .to_address()
-            .to_bech32(None)
-            .unwrap();
-
-            let reward_address =
-                RewardAddress::new(network_id, &StakeCredential::from_keyhash(&stake_key_hash))
-                    .to_address()
-                    .to_bech32(None)
-                    .unwrap();
-
-            WalletType::BaseWallet {
-                address,
-                reward_address,
-                payment_key: payment_key.to_bech32(),
-                stake_key: stake_key.to_bech32(),
-            }
-        }
-        AddressType::EnterpriseAddress => {
-            let address = EnterpriseAddress::new(
-                network_id,
-                &StakeCredential::from_keyhash(&payment_key_hash),
-            )
-            .to_address()
-            .to_bech32(None)
-            .unwrap();
-
-            WalletType::EnterpriseWallet {
-                address,
-                payment_key: payment_key.to_bech32(),
-            }
-        }
-    }
 }
 
-pub fn sign_tx(tx_raw: &str, keys: Vec<String>) -> String {
-    let tx = Transaction::from_bytes(tx_raw.as_bytes().to_vec()).unwrap();
-    let tx_body = tx.body();
-    let tx_hash = hash_transaction(&tx_body);
+fn gen_phrase(word_count: u32) -> String {
+    // Match the word_count to the corresponding MnemonicType variant
+    let m_type = match word_count {
+        12 => MnemonicType::Words12,
+        15 => MnemonicType::Words15,
+        18 => MnemonicType::Words18,
+        21 => MnemonicType::Words21,
+        24 => MnemonicType::Words24,
+        _ => panic!("Invalid word count! Must be one of: 12, 15, 18, 21, or 24."),
+    };
 
-    let mut witness_set = TransactionWitnessSet::new();
-    let mut vkey_witnesses = Vkeywitnesses::new();
+    // Create a new randomly generated mnemonic phrase
+    let mnemonic = Mnemonic::new(m_type, Language::English);
 
-    for key in keys {
-        let pkey = PrivateKey::from_bech32(&key).unwrap();
-        let vkey = make_vkey_witness(&tx_hash, &pkey);
-        vkey_witnesses.add(&vkey);
+    // Get the phrase as a string
+    mnemonic.phrase().to_string()
+}
+
+fn create_wallet(phrase: String, password: String, network_env: String) -> MinWallet {
+    let network_environment = NetworkEnvironment::from_string(network_env).unwrap();
+    MinWallet::create(phrase.as_str(), password.as_str(), network_environment)
+}
+
+fn sign_tx(wallet: MinWallet, password: String, account_index: u32, tx_raw: String) -> String {
+    wallet.sign_tx(password.as_str(), account_index, tx_raw)
+}
+// *************************** END EXPORT ***************************
+
+impl WalletStaticMethods for MinWallet {}
+
+impl MinWallet {
+    pub fn create(mnemonic: &str, password: &str, network_environment: NetworkEnvironment) -> Self {
+        let account_index = 0;
+
+        // Convert mnemonic to entropy
+        let entropy = MinWallet::phrase_to_entropy(&mnemonic);
+
+        // Derive root key and account key
+        let root_key = MinWallet::entropy_to_root_key(&entropy);
+        let account_key = MinWallet::get_account(&root_key, account_index);
+
+        // Encrypt root key with password
+        let encrypted_key = MinWallet::gen_encrypted_key(password, &root_key);
+
+        // Derive network ID
+        let network_id = network_environment.to_network_id() as u32;
+
+        // Generate addresses
+        let address = MinWallet::get_address(&account_key, network_id);
+
+        MinWallet {
+            address: address.to_bech32(None).unwrap(),
+            network_id,
+            account_index,
+            encrypted_key,
+        }
     }
 
-    witness_set.set_vkeys(&vkey_witnesses);
-    witness_set.to_hex()
+    pub fn get_private_key(&self, password: &str, account_index: u32) -> PrivateKey {
+        let root_key = MinWallet::get_root_key_from_password(&password, &self.encrypted_key);
+        let account_key = MinWallet::get_account(&root_key, account_index);
+        let payment_key = account_key.derive(0).derive(0).to_raw_key();
+        PrivateKey::from_bech32(payment_key.to_bech32().as_ref()).unwrap()
+    }
+
+    pub fn sign_tx(&self, password: &str, account_index: u32, tx_raw: String) -> String {
+        let private_key = &self.get_private_key(password, account_index);
+        let tx = Transaction::from_hex(tx_raw.as_str()).unwrap();
+        let tx_hash = TransactionHash::from(blake2b256(&tx.body().to_bytes()));
+        let mut witness_set = TransactionWitnessSet::new();
+        let mut v_key_witness = Vkeywitnesses::new();
+        let v_key = make_vkey_witness(&tx_hash, &private_key);
+        v_key_witness.add(&v_key);
+        witness_set.set_vkeys(&v_key_witness);
+        witness_set.to_hex()
+    }
 }
 
 uniffi::include_scaffolding!("mwrust");
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::crypto::blake2b256;
+    use cardano_serialization_lib::{
+        make_vkey_witness, Transaction, TransactionHash, TransactionWitnessSet, Vkeywitnesses,
+    };
+
+    #[test]
+    fn test_create_wallet() {
+        let phrase = "prevent patrol juice fish need fan genre tomorrow fancy voyage elephant idea journey spoil code assist pact barely excite broom heart degree try label";
+        let password = "123456";
+        let wallet = create_wallet(
+            phrase.to_string(),
+            password.to_string(),
+            "preprod".to_string(),
+        );
+        assert_eq!(wallet.address, "addr_test1qramn7zn2c6frw3p845nwrggkw0yknz4372fwte6t27d9x3gqenr8sqt9tn4d6lfrxn776k4je5mety53psglaz9dgeqhygnh7".to_string());
+    }
+
+    #[test]
+    fn test_get_private_key() {
+        let password = "Minswap@123456";
+        let min_wallet = MinWallet::create(
+            "belt change crouch decorate advice emerge tongue loop cute olympic tuna donkey",
+            &password,
+            network::NetworkEnvironment::Preprod,
+        );
+        let private_key = min_wallet.get_private_key(&password, 0);
+        assert_eq!(private_key.to_hex(), String::from("f838ddcb280f7c89bf5480591a0b46b2b80602134b19179a61c1991d7639ab549009491d6b359c37f03af6422af350e2e041ecde02a734a4b9dae5a6f7a1bf69"));
+    }
+
+    #[test]
+    fn test_happy_path() {
+        let password = "Minswap@123456";
+        let min_wallet = MinWallet::create(
+            "belt change crouch decorate advice emerge tongue loop cute olympic tuna donkey",
+            &password,
+            NetworkEnvironment::Preprod,
+        );
+        let tx_raw = "84a40081825820dee6b0848594bea01d61450e47827da762947f61ad2387ccf1f8ba629b5252d4020182825839006980b40d8cf53e77a718cf753ff381846570cde86d325f49193fecc5598d578c63cfe8e4a4d7653144d1559c5146210d70177ec00826d2a91a00989680825839006980b40d8cf53e77a718cf753ff381846570cde86d325f49193fecc5598d578c63cfe8e4a4d7653144d1559c5146210d70177ec00826d2a91a1d16ce6d021a0002917d031a048f683ca0f5f6";
+        let tx = Transaction::from_hex(tx_raw).unwrap();
+        let tx_hash = TransactionHash::from(blake2b256(&tx.body().to_bytes()));
+        let mut witness_set = TransactionWitnessSet::new();
+        let mut v_key_witness = Vkeywitnesses::new();
+        let private_key = min_wallet.get_private_key(&password, 0);
+        let v_key = make_vkey_witness(&tx_hash, &private_key);
+        v_key_witness.add(&v_key);
+        witness_set.set_vkeys(&v_key_witness);
+    }
+}
