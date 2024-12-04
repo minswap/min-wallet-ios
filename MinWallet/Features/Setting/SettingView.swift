@@ -240,7 +240,7 @@ struct SettingView: View {
                     .frame(height: 52)
                     .contentShape(.rect)
                     .onTapGesture {
-                        navigator.push(.securitySetting(.createPassword))
+                        //navigator.push(.securitySetting(.createPassword))
                     }
                 }
             }

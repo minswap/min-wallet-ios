@@ -3,6 +3,10 @@ import FlowStacks
 
 
 struct CreateNewPasswordView: View {
+    enum ScreenType {
+        case authenticationSetting
+        case createWallet
+    }
     enum FocusedField: Hashable {
         case password, rePassword
     }
@@ -19,7 +23,10 @@ struct CreateNewPasswordView: View {
     private var rePassword: String = ""
     @FocusState
     private var focusedField: FocusedField?
-
+    
+    var screenType: ScreenType = .createWallet
+    var onCreatePasswordSuccess: ((String) -> Void)?
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Create your password")
@@ -62,11 +69,17 @@ struct CreateNewPasswordView: View {
             }
             .padding(.vertical, .xl)
 
-
             Spacer()
             CustomButton(title: "Confirm") {
-                viewModel.password = password
-                navigator.push(.createWallet(.createNewWalletSuccess))
+                switch screenType {
+                case .authenticationSetting:
+                    onCreatePasswordSuccess?(password)
+                    navigator.pop()
+                case .createWallet:
+                    viewModel.password = password
+                    navigator.push(.createWallet(.createNewWalletSuccess))
+                }
+             
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

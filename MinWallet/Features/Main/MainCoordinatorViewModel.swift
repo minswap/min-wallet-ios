@@ -68,6 +68,26 @@ enum SwapTokenScreen: Hashable {
 
 enum SecuritySetting: Hashable {
     case authentication
-    case createPassword
+    case createPassword(onCreatePassSuccess: CreatePassSuccess)
     case forgotPassword
+}
+
+extension SecuritySetting {
+    struct CreatePassSuccess: Hashable {
+        private var id = UUID().uuidString
+       
+        var onCreatePassSuccess: ((String) -> Void)?
+        
+        init(onCreatePassSuccess: ((String) -> Void)?) {
+            self.onCreatePassSuccess = onCreatePassSuccess
+        }
+        
+        static func == (lhs: SecuritySetting.CreatePassSuccess, rhs: SecuritySetting.CreatePassSuccess) -> Bool {
+            lhs.id == rhs.id
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+    }
 }

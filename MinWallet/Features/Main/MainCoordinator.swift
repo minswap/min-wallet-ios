@@ -112,8 +112,12 @@ struct MainCoordinator: View {
                         switch screen {
                         case .authentication:
                             AuthenticationSettingView().navigationBarHidden(true)
-                        case .createPassword:
-                            CreateNewWalletView().navigationBarHidden(true)
+                        case let .createPassword(onCreatePassSuccess):
+                            CreateNewPasswordView(
+                                screenType: .authenticationSetting,
+                                onCreatePasswordSuccess: { password in
+                                    onCreatePassSuccess.onCreatePassSuccess?(password)
+                                }).navigationBarHidden(true)
                         case .forgotPassword:
                             ForgotPasswordView().navigationBarHidden(true)
                         }

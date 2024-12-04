@@ -229,9 +229,6 @@
     "Face ID/Touch ID không sẵn sàng" : {
 
     },
-    "FaceID" : {
-
-    },
     "Fee" : {
 
     },
@@ -520,6 +517,9 @@
 
     },
     "Tx Size" : {
+
+    },
+    "Unlock your wallet using %@ recognition or a password." : {
 
     },
     "Unlock your wallet using Face ID recognition or a password." : {

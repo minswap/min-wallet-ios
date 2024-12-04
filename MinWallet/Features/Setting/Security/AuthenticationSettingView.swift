@@ -55,11 +55,16 @@ struct AuthenticationSettingView: View {
             .frame(height: 52)
             .contentShape(.rect)
             .onTapGesture {
-                guard appSetting.authenticationType != .biometric else { return }
+                guard appSetting.authenticationType != .password else { return }
                 let password: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
 
                 if password.isEmpty {
-                    navigator.push(.securitySetting(.createPassword))
+                    let createPasswordSuccess: ((String) -> Void)? = { password in
+                        appSetting.authenticationType = .password
+                        try? AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                    }
+                    
+                    navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))
                 } else {
                     isShowEnterYourPassword = true
                 }
