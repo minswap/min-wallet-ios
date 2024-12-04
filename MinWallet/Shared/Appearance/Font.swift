@@ -25,7 +25,7 @@ extension Font {
     static let titleH4: Font = .custom("Inter", size: 32).weight(.semibold)
     ///18 medium
     static let titleH7: Font = .custom("Inter", size: 18).weight(.medium)
-    
+
 }
 
 extension UIFont {

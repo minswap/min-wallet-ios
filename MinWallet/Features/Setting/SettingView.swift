@@ -5,21 +5,20 @@ import FlowStacks
 struct SettingView: View {
     @State var isVerified: Bool = true
     @StateObject private var viewModel = SettingViewModel()
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-    
     @Binding
     var isShowAppearance: Bool
     @Binding
     var isShowTimeZone: Bool
     @Binding
     var isShowCurrency: Bool
-    
+
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -29,7 +28,7 @@ struct SettingView: View {
                         .scaledToFit()
                         .frame(width: 64, height: 64)
                         .clipShape(Circle())
-                    
+
                     if isVerified {
                         Circle()
                             .fill(.colorBaseBackground)
@@ -58,13 +57,13 @@ struct SettingView: View {
             .frame(height: 64)
             .padding(.top, .md)
             .padding(.horizontal, .xl)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text("long.nguyen")
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
-                    
+
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)
@@ -80,7 +79,7 @@ struct SettingView: View {
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
             .padding(.horizontal, .xl)
-            
+
             Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)
             Text("Basic")
@@ -155,7 +154,7 @@ struct SettingView: View {
                         .onChange(of: appSetting.enableNotification) { newValue in
                             Task {
                                 if newValue {
-                                    let center  = UNUserNotificationCenter.current()
+                                    let center = UNUserNotificationCenter.current()
                                     do {
                                         let granted = try await center.requestAuthorization(options: [.sound, .alert, .badge])
                                         if !granted {
@@ -168,7 +167,7 @@ struct SettingView: View {
                                             }
                                         }
                                         appSetting.enableNotification = granted
-                                    } catch { error
+                                    } catch {
                                         appSetting.enableNotification = false
                                     }
                                 }
@@ -188,7 +187,7 @@ struct SettingView: View {
                                 Task {
                                     do {
                                         try await appSetting.biometricAuthentication.authenticateUser()
-                                    } catch { error
+                                    } catch {
                                         //TODO: cuongnv show error
                                         appSetting.enableBiometric = false
                                     }

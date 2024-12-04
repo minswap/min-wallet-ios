@@ -5,7 +5,7 @@ import FlowStacks
 struct AboutView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("About Minwallet")
@@ -66,11 +66,14 @@ struct AboutView: View {
             .padding(.horizontal, .xl)
             Spacer()
         }
-        .modifier(BaseContentView(
-            screenTitle: " ",
-            actionLeft: {
-                navigator.pop()
-            }))
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                }
+            )
+        )
     }
 }
 

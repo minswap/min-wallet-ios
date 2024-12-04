@@ -5,7 +5,7 @@ extension String {
         if self.count <= 12 {
             return self
         }
-        
+
         let first6Characters = self.prefix(6)
         let last6Characters = self.suffix(6)
         return "\(first6Characters)...\(last6Characters)"

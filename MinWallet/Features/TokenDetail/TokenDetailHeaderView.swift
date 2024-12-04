@@ -4,10 +4,10 @@ import SwiftUI
 struct TokenDetailHeaderView: View {
     static let heightLargeHeader: CGFloat = 116
     static let smallLargeHeader: CGFloat = 48
-    
+
     @Binding
     var progress: CGFloat
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
@@ -36,22 +36,29 @@ struct TokenDetailHeaderView: View {
                 .padding(.leading, 68)
                 .background(.colorBaseBackground)
                 .opacity(max(0, min(1, (progress - 0.75) * 4.0)))
-                .frame( height: Self.smallLargeHeader)
-                
+                .frame(height: Self.smallLargeHeader)
+
                 VStack(alignment: .leading, spacing: 0) {
                     Color.clear.frame(height: 12)
-                    HStack(alignment: .center, content: {
-                        TokenLogoView(token: .sampleData)
-                        HStack(alignment: .firstTextBaseline, spacing: 4, content: {
-                            Text("MIN")
-                                .foregroundStyle(.colorBaseTent)
-                                .font(.labelMediumSecondary)
-                            Text("Minswap")
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                                .font(.labelMediumSecondary)
-                        })
-                        Spacer()
-                    })
+                    HStack(
+                        alignment: .center,
+                        content: {
+                            TokenLogoView(token: .sampleData)
+                            HStack(
+                                alignment: .firstTextBaseline,
+                                spacing: 4,
+                                content: {
+                                    Text("MIN")
+                                        .foregroundStyle(.colorBaseTent)
+                                        .font(.labelMediumSecondary)
+                                    Text("Minswap")
+                                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                        .font(.labelMediumSecondary)
+                                }
+                            )
+                            Spacer()
+                        }
+                    )
                     Text("0.0422 ₳")
                         .foregroundStyle(.colorBaseTent)
                         .font(.titleH4)
@@ -67,7 +74,7 @@ struct TokenDetailHeaderView: View {
                     }
                 }
                 .padding(.horizontal, .xl)
-//                .background(.yellow)
+                //                .background(.yellow)
                 .frame(height: Self.heightLargeHeader)
                 .opacity(1 - max(0, min(1, (progress - 0.75) * 4.0)))
             }
@@ -76,9 +83,13 @@ struct TokenDetailHeaderView: View {
 }
 
 #Preview {
-    VStack(alignment: .leading, spacing: 0, content: {
-        TokenDetailHeaderView(progress: .constant(0))
-            .background(.red)
-        Spacer()
-    })
+    VStack(
+        alignment: .leading,
+        spacing: 0,
+        content: {
+            TokenDetailHeaderView(progress: .constant(0))
+                .background(.red)
+            Spacer()
+        }
+    )
 }

@@ -2,10 +2,10 @@ import SwiftUI
 import FlowStacks
 
 struct GettingStartedView: View {
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     var body: some View {
         VStack(spacing: 0) {
             Image(.icToken)
@@ -40,28 +40,30 @@ struct GettingStartedView: View {
                         .padding(.trailing, -50)
                 }
             }
-            
+
             Spacer()
-            
+
             CustomButton(
                 title: "Create new wallet",
                 action: {
-                    
-                })
+
+                }
+            )
             .frame(height: 56)
             .padding(.horizontal, Spacing.xl)
             CustomButton(
                 title: "Restore wallet",
                 variant: .secondary,
                 action: {
-                    
-                })
+
+                }
+            )
             .frame(height: 56)
             .padding(.top, 16)
             .padding(.horizontal, Spacing.xl)
         }
         .safeAreaInset(edge: .bottom) {
-            Color.clear.frame(height: 0) // Adds 20 points of spacing at the bottom
+            Color.clear.frame(height: 0)  // Adds 20 points of spacing at the bottom
         }
         .background(Color.colorBaseBackground)
     }

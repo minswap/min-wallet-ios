@@ -5,8 +5,8 @@ import FlowStacks
 @MainActor
 class MainCoordinatorViewModel: ObservableObject {
     @Published var routes: Routes<Screen> = []
-    
-    init() { }
+
+    init() {}
 }
 
 extension MainCoordinatorViewModel {

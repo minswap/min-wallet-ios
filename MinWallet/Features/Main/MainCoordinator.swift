@@ -5,10 +5,10 @@ import FlowStacks
 struct MainCoordinator: View {
     @StateObject
     private var viewModel = MainCoordinatorViewModel()
-    
+
     @EnvironmentObject
     private var appSetting: AppSetting
-    
+
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
             SplashView()

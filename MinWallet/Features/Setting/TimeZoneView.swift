@@ -2,10 +2,10 @@ import SwiftUI
 
 struct TimeZoneView: View {
     @Binding var isShowTimeZone: Bool
-    
+
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -48,17 +48,20 @@ struct TimeZoneView: View {
             .background(content: {
                 RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })
-            Button(action: {
-                isShowTimeZone = false
-            }, label: {
-                Text("Close")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(content: {
-                        RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-                    })
-            })
+            Button(
+                action: {
+                    isShowTimeZone = false
+                },
+                label: {
+                    Text("Close")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(content: {
+                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
+                        })
+                }
+            )
             .frame(height: 56)
             .buttonStyle(.plain)
             .padding(.bottom, .xl)

@@ -4,12 +4,12 @@ import SwiftUI
 struct TokenListItemView: View {
     let tokenWithPrice: TokenWithPrice
     let isPositive: Bool
-    
+
     init(tokenWithPrice: TokenWithPrice) {
         self.tokenWithPrice = tokenWithPrice
         self.isPositive = tokenWithPrice.changePercent >= 0
     }
-    
+
     var body: some View {
         HStack(spacing: .xl) {
             TokenLogoView(token: tokenWithPrice.token)
@@ -44,7 +44,8 @@ struct TokenListItemView: View {
             }
             .padding(.vertical, 12)
             .overlay(
-                Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
+                Rectangle().frame(height: 1).foregroundColor(.colorBorderItem),
+                alignment: .bottom
             )
         }
         .padding(.horizontal, 16)
@@ -57,13 +58,31 @@ struct TokenListItemView: View {
             tokenWithPrice: TokenWithPrice(
                 id: UUID(),
                 token: Token(
-                    currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                    isVerified: true), price: 37123.35, changePercent: 5.7))
+                    currencySymbol: "",
+                    tokenName: "",
+                    ticker: "ADA",
+                    project: "Cardano",
+                    decimals: 6,
+                    isVerified: true
+                ),
+                price: 37123.35,
+                changePercent: 5.7
+            )
+        )
         TokenListItemView(
             tokenWithPrice: TokenWithPrice(
                 id: UUID(),
                 token: Token(
-                    currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                    isVerified: true), price: 37123.35, changePercent: -5.7))
+                    currencySymbol: "",
+                    tokenName: "",
+                    ticker: "ADA",
+                    project: "Cardano",
+                    decimals: 6,
+                    isVerified: true
+                ),
+                price: 37123.35,
+                changePercent: -5.7
+            )
+        )
     }
 }

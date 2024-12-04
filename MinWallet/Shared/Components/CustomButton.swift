@@ -2,14 +2,14 @@ import SwiftUI
 
 
 struct CustomButton: View {
-    var title     : LocalizedStringKey
-    var variant   : Varriant        = .primary
-    var frameType : FrameType       = .matchParent
-    var icon      : ImageResource?  = nil
-    var iconRight : ImageResource?  = nil
-    
+    var title: LocalizedStringKey
+    var variant: Varriant = .primary
+    var frameType: FrameType = .matchParent
+    var icon: ImageResource? = nil
+    var iconRight: ImageResource? = nil
+
     var action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: Spacing.md) {
@@ -45,13 +45,18 @@ struct CustomButton: View {
         CustomButton(
             title: "Swap",
             variant: .primary,
-            icon: .icReceive, action: { })
+            icon: .icReceive,
+            action: {}
+        )
         .frame(height: 40)
         CustomButton(
-            title: "Swap", 
+            title: "Swap",
             variant: .secondary,
             frameType: .matchParent,
-            icon: .icSend, iconRight: .icUp, action: { })
+            icon: .icSend,
+            iconRight: .icUp,
+            action: {}
+        )
         .frame(height: 40)
     }
     .padding()
@@ -63,41 +68,41 @@ extension CustomButton {
         case primary
         case secondary
         case other(textColor: Color, backgroundColor: Color, borderColor: Color)
-        
+
         var textColor: Color {
             switch self {
             case .primary:
                 return .colorBaseTentNoDarkMode
             case .secondary:
                 return .colorInteractiveTentSecondaryDefault
-            case .other(let textColor,_ , _):
+            case .other(let textColor, _, _):
                 return textColor
             }
         }
-        
+
         var backgroundColor: Color {
             switch self {
             case .primary:
                 return .colorInteractiveTonePrimary
             case .secondary:
                 return .clear
-            case .other(_, let backgroundColor , _):
+            case .other(_, let backgroundColor, _):
                 return backgroundColor
             }
         }
-        
+
         var borderColor: Color {
             switch self {
             case .primary:
                 return .clear
             case .secondary:
                 return .colorInteractiveTentSecondarySub
-            case .other(_,_ , let borderColor):
+            case .other(_, _, let borderColor):
                 return borderColor
             }
         }
     }
-    
+
     enum FrameType {
         case wrapContent
         case matchParent
