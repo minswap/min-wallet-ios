@@ -30,6 +30,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     private let appSetting: AppSetting = .init()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        /*
         if appSetting.enableNotification {
             let center  = UNUserNotificationCenter.current()
             center.delegate = self
@@ -49,7 +50,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
              */
         }
-        
+        */
         return true
     }
     

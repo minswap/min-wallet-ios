@@ -8,12 +8,22 @@ struct EnterYourPasswordView: View {
     @State
     private var password: String = ""
     
+    @Binding
+    var isShowEnterYourPassword: Bool
+    
+    var onForgotPassword: () -> Void
+    
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
             VStack(alignment: .leading, spacing: 0) {
-                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
-                    .padding(.vertical, .md)
+                HStack {
+                    Spacer()
+                    Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
+                        .padding(.vertical, .md)
+                    Spacer()
+                }
+                
                 Text("Enter your password")
                     .font(.titleH5)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -32,7 +42,7 @@ struct EnterYourPasswordView: View {
                         )
                 }
                 Button(action: {
-                    
+                    onForgotPassword()
                 }, label: {
                     Text("Forgot password?")
                         .font(.paragraphSemi)
@@ -41,6 +51,14 @@ struct EnterYourPasswordView: View {
                 .padding(.top, .xl)
                 .padding(.bottom, 40)
                 CustomButton(title: "Confirm") {
+                    let currentPassword: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
+                    guard currentPassword == password 
+                    else {
+                    //TODOz: cuongnv show error
+                        return
+                    }
+                    appSetting.authenticationType = .password
+                    isShowEnterYourPassword = false
                 }
                 .frame(height: 56)
             }
@@ -48,7 +66,6 @@ struct EnterYourPasswordView: View {
             .background(content: {
                 RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })
-            
         }
         .frame(width: .infinity)
     }
@@ -56,7 +73,7 @@ struct EnterYourPasswordView: View {
 
 #Preview {
     VStack {
-        EnterYourPasswordView()
+        EnterYourPasswordView(isShowEnterYourPassword: .constant(false), onForgotPassword: {})
         Spacer()
     }
     .background(Color.black)

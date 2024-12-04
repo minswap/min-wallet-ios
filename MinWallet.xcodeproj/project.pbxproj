@@ -43,6 +43,7 @@
 		960D6B2C2CFF51B50017AF29 /* AuthenticationSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B2B2CFF51B40017AF29 /* AuthenticationSettingView.swift */; };
 		960D6B2E2CFF53670017AF29 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B2D2CFF53670017AF29 /* ForgotPasswordView.swift */; };
 		960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B2F2CFF562B0017AF29 /* EnterYourPasswordView.swift */; };
+		960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B322CFFEBB70017AF29 /* UIDevice+Ext.swift */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		965591FF2CF810E800301DDB /* BiometricAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965591FE2CF810E800301DDB /* BiometricAuthentication.swift */; };
 		965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965592002CF813BF00301DDB /* AppGeneralError.swift */; };
@@ -174,6 +175,8 @@
 		960D6B2B2CFF51B40017AF29 /* AuthenticationSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationSettingView.swift; sourceTree = "<group>"; };
 		960D6B2D2CFF53670017AF29 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		960D6B2F2CFF562B0017AF29 /* EnterYourPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterYourPasswordView.swift; sourceTree = "<group>"; };
+		960D6B312CFFEAF30017AF29 /* MinWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MinWallet.entitlements; sourceTree = "<group>"; };
+		960D6B322CFFEBB70017AF29 /* UIDevice+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
 		965591FE2CF810E800301DDB /* BiometricAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthentication.swift; sourceTree = "<group>"; };
 		965592002CF813BF00301DDB /* AppGeneralError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGeneralError.swift; sourceTree = "<group>"; };
@@ -430,6 +433,7 @@
 		57F102942C64CCA0000B3544 /* MinWallet */ = {
 			isa = PBXGroup;
 			children = (
+				960D6B312CFFEAF30017AF29 /* MinWallet.entitlements */,
 				5751579F2CEB4443004CD647 /* Info.plist */,
 				57F102952C64CCA0000B3544 /* MinWalletApp.swift */,
 				9600DEC22CF18500005D997C /* Data */,
@@ -559,6 +563,7 @@
 		965591FD2CF810E000301DDB /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				960D6B322CFFEBB70017AF29 /* UIDevice+Ext.swift */,
 				965592022CF81A0800301DDB /* KeychainStore.swift */,
 				965591FE2CF810E800301DDB /* BiometricAuthentication.swift */,
 			);
@@ -1049,6 +1054,7 @@
 				96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */,
 				96FE0CFC2CF423D1008E4BFD /* SizeReader.swift in Sources */,
 				96FE0CF42CF3672E008E4BFD /* TokenDetailStatisticView.swift in Sources */,
+				960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */,
 				96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */,
 				96DC052F2CF57E3000A78356 /* View+Modifiers.swift in Sources */,
 				5751579E2CEB4407004CD647 /* Font.swift in Sources */,
@@ -1246,6 +1252,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MinWallet/MinWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
@@ -1282,6 +1289,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MinWallet/MinWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";

@@ -87,7 +87,7 @@ struct DisconnectWalletView: View {
                 }
             }
             CustomButton(title: "Disconnect") {
-                //TODO: cuongnv234 disconnect
+                //TODOZ: cuongnv234 disconnect
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

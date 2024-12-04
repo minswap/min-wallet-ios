@@ -162,7 +162,7 @@ struct SettingView: View {
                                     do {
                                         let granted = try await center.requestAuthorization(options: [.sound, .alert, .badge])
                                         if !granted {
-                                            //TODO: cuongnv show dialog go to setting permission
+                                            //TODOZ: cuongnv show dialog go to setting permission
                                             guard let settingsURL = URL(string: UIApplication.openNotificationSettingsURLString) else {
                                                 return
                                             }
@@ -193,7 +193,7 @@ struct SettingView: View {
                                     do {
                                         try await appSetting.biometricAuthentication.authenticateUser()
                                     } catch { error
-                                        //TODO: cuongnv show error
+                                        //TODOZ: cuongnv show error
                                         appSetting.enableBiometric = false
                                     }
                                 }
@@ -215,7 +215,7 @@ struct SettingView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Text("FaceID")
+                    Text(appSetting.biometricAuthentication.displayName)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Image(.icNext)
@@ -224,19 +224,23 @@ struct SettingView: View {
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    navigator.presentSheet(.language)
+                    navigator.push(.securitySetting(.authentication))
                 }
-                HStack(spacing: 12) {
-                    Text("Change password")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Spacer()
-                    Image(.icNext)
-                        .frame(width: 20, height: 20)
-                }
-                .frame(height: 52)
-                .contentShape(.rect)
-                .onTapGesture {
+                
+                if appSetting.authenticationType == .password {
+                    HStack(spacing: 12) {
+                        Text("Change password")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
+                        Image(.icNext)
+                            .frame(width: 20, height: 20)
+                    }
+                    .frame(height: 52)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        navigator.push(.securitySetting(.createPassword))
+                    }
                 }
             }
             .padding(.horizontal, .xl)

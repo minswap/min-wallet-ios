@@ -71,7 +71,7 @@ struct SwapTokenView: View {
                 .padding(.bottom, -18)
                 .zIndex(999)
                 .onTapGesture {
-                    //TODO: cuongnv swap token
+                    //TODOZ: cuongnv swap token
                 }
             VStack(alignment: .leading, spacing: 4) {
                 Text("You receive")

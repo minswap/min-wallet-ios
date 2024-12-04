@@ -3,6 +3,7 @@ import Combine
 
 
 class AppSetting: ObservableObject {
+    static let USER_NAME = "minWallet"
     
     var extraSafeArea: CGFloat {
         safeArea > 44 ?  32 : 12
@@ -49,18 +50,32 @@ class AppSetting: ObservableObject {
         }
     }
     
+    /*
     @UserDefault("enable_notification", defaultValue: false)
     var enableNotification: Bool {
         willSet {
             objectWillChange.send()
         }
     }
+     */
     
     @UserDefault("enable_biometric", defaultValue: false)
     var enableBiometric: Bool {
         willSet {
             objectWillChange.send()
         }
+    }
+    
+    @UserDefault("security_type", defaultValue: 0)
+    private var securityType: Int {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    var authenticationType: AuthenticationType {
+        get { AuthenticationType(rawValue: securityType) ?? .biometric }
+        set { securityType = newValue.rawValue }
     }
     
     init() {
@@ -110,5 +125,35 @@ extension AppSetting {
                 }
             }
         }
+    }
+}
+
+
+extension AppSetting {
+    static func getPasswordFromKeychain(username: String) throws -> String {
+        let passwordItem = GKeychainStore(
+            service: GKeychainStore.KEYCHAIN_SERVICENAME,
+            key: username,
+            accessGroup: GKeychainStore.KEYCHAIN_ACCESS_GROUP
+        )
+        let keychainPassword = try passwordItem.read()
+        return keychainPassword
+    }
+    
+    static func savePasswordToKeychain(username: String, password: String) throws {
+        let passwordItem = GKeychainStore(
+            service: GKeychainStore.KEYCHAIN_SERVICENAME,
+            key: username,
+            accessGroup: GKeychainStore.KEYCHAIN_ACCESS_GROUP
+        )
+        
+        try passwordItem.save(password)
+    }
+}
+
+extension AppSetting {
+    enum AuthenticationType: Int {
+        case biometric
+        case password
     }
 }

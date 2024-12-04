@@ -4,7 +4,12 @@ import FlowStacks
 
 struct ForgotPasswordView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    
+    @State
+    private var conditionOne: Bool = false
+    @State
+    private var conditionTwo: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -24,28 +29,38 @@ struct ForgotPasswordView: View {
             
             VStack(alignment: .leading, spacing: .xl) {
                 HStack(spacing: .xl) {
-                    Image(.icChecked).resizable().frame(width: 20, height: 20)
+                    Image(conditionOne ? .icChecked : .icUnchecked).resizable().frame(width: 20, height: 20)
                     Text("The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                 }
                 .padding(.horizontal, .xl)
+                .contentShape(.rect)
+                .onTapGesture {
+                    conditionOne.toggle()
+                }
                 Color.colorBorderPrimarySub.frame(height: 1)
                     .padding(.horizontal, .xl)
                 HStack(spacing: .xl) {
-                    Image(.icUnchecked).resizable().frame(width: 20, height: 20)
+                    Image(conditionTwo ? .icChecked : .icUnchecked).resizable().frame(width: 20, height: 20)
                     Text("The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                 }
                 .padding(.horizontal, .xl)
+                .contentShape(.rect)
+                .onTapGesture {
+                    conditionTwo.toggle()
+                }
             }
             
             Spacer()
             CustomButton(title: "Restore") {
+                
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
+            .disabled(!conditionOne || !conditionTwo)
         }
         .modifier(BaseContentView(
             screenTitle: " ",

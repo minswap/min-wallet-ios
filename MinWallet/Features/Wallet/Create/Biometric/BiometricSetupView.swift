@@ -34,7 +34,7 @@ struct BiometricSetupView: View {
                         appSetting.enableBiometric = true
                         navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch { error
-                        //TODO: cuongnv show error
+                        //TODOZ: cuongnv show error
                         appSetting.enableBiometric = false
                     }
                 }
