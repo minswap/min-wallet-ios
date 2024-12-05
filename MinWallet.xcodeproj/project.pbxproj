@@ -46,6 +46,7 @@
 		960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B322CFFEBB70017AF29 /* UIDevice+Ext.swift */; };
 		960D6B362D013ABD0017AF29 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */; };
 		960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B372D0144150017AF29 /* PasswordValidation.swift */; };
+		960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		965591FF2CF810E800301DDB /* BiometricAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965591FE2CF810E800301DDB /* BiometricAuthentication.swift */; };
 		965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965592002CF813BF00301DDB /* AppGeneralError.swift */; };
@@ -181,6 +182,7 @@
 		960D6B322CFFEBB70017AF29 /* UIDevice+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
 		960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		960D6B372D0144150017AF29 /* PasswordValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidation.swift; sourceTree = "<group>"; };
+		960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSheetModifier.swift; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
 		965591FE2CF810E800301DDB /* BiometricAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthentication.swift; sourceTree = "<group>"; };
 		965592002CF813BF00301DDB /* AppGeneralError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGeneralError.swift; sourceTree = "<group>"; };
@@ -705,6 +707,7 @@
 				96DC052C2CF57E3000A78356 /* PartialSheetViews.swift */,
 				96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */,
 				96DC052D2CF57E3000A78356 /* View+Modifiers.swift */,
+				960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */,
 			);
 			path = CoverSheet;
 			sourceTree = "<group>";
@@ -1026,6 +1029,7 @@
 				575157912CEB43FF004CD647 /* HomeView.swift in Sources */,
 				96DC053A2CF5B14F00A78356 /* AppSetting.swift in Sources */,
 				96665A022CF477490046A20E /* HomeViewModel.swift in Sources */,
+				960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */,
 				96FE0CF22CF366FC008E4BFD /* TokenDetailHeaderView.swift in Sources */,
 				5718EB1A2CEDE5BA00CDE34D /* View+Ext.swift in Sources */,
 				9600DED42CF2B757005D997C /* GettingStartedView.swift in Sources */,

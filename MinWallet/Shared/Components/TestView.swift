@@ -4,9 +4,24 @@ import SDWebImageSwiftUI
 
 struct TestView: View {
 
+    @State
+    var isEnable: Bool = true
     var body: some View {
         VStack {
-            CustomWebImage(url: "https://nokiatech.github.io/heif/content/images/ski_jump_1440x960.heic", frameSize: .init(width: 50, height: 50))
+            CustomButton(
+                title: "Swap",
+                variant: .primary,
+                icon: .icReceive,
+                isEnable: $isEnable,
+                action: {}
+            )
+            .frame(height: 40)
+            Button {
+                isEnable.toggle()
+            } label: {
+                Text("togle")
+            }
+
         }
     }
 }

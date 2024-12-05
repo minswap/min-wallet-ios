@@ -55,7 +55,15 @@ struct ForgotPasswordView: View {
             }
 
             Spacer()
-            CustomButton(title: "Restore") {
+            let combinedBinding = Binding<Bool>(
+                get: { conditionOne && conditionTwo },
+                set: { newValue in
+                    conditionOne = newValue
+                    conditionTwo = newValue
+                }
+            )
+            
+            CustomButton(title: "Restore", isEnable: combinedBinding) {
 
             }
             .frame(height: 56)
