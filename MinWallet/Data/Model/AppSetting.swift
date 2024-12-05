@@ -3,6 +3,7 @@ import Combine
 
 
 class AppSetting: ObservableObject {
+    static let TEAM_ID = ""
     static let USER_NAME = "minWallet"
 
     var extraSafeArea: CGFloat {
@@ -148,6 +149,11 @@ extension AppSetting {
         )
 
         try passwordItem.save(password)
+    }
+    
+    func reAuthenticateUser() async throws {
+        biometricAuthentication = .init()
+        try await biometricAuthentication.authenticateUser()
     }
 }
 

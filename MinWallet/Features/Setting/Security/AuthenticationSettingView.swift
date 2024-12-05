@@ -45,7 +45,7 @@ struct AuthenticationSettingView: View {
                 guard appSetting.authenticationType != .biometric else { return }
                 Task {
                     do {
-                        try await appSetting.biometricAuthentication.authenticateUser()
+                        try await appSetting.reAuthenticateUser()
                         appSetting.authenticationType = .biometric
                     } catch {
                         //TODOZ: cuongnv show error
@@ -70,7 +70,11 @@ struct AuthenticationSettingView: View {
                 if password.isEmpty {
                     let createPasswordSuccess: ((String) -> Void)? = { password in
                         appSetting.authenticationType = .password
-                        try? AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                        do {
+                            try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                        } catch {
+                            //TODOZ: check error
+                        }
                     }
                     
                     navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))
