@@ -10,9 +10,14 @@ struct EnterYourPasswordView: View {
 
     @Binding
     var isShowEnterYourPassword: Bool
-
+    @FocusState
+    var isFocus: Bool
+    
+    @StateObject
+    var keyboardObserver: KeyboardObserver = KeyboardObserver.shared
+    
     var onForgotPassword: () -> Void
-
+    
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -35,6 +40,7 @@ struct EnterYourPasswordView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top, .lg)
                     SecurePasswordTextField(placeHolder: "Create new spending password", text: $password)
+                        .focused($isFocus)
                         .frame(height: 44)
                         .overlay(
                             RoundedRectangle(cornerRadius: BorderRadius.full)
@@ -64,13 +70,13 @@ struct EnterYourPasswordView: View {
                     isShowEnterYourPassword = false
                 }
                 .frame(height: 56)
+                Spacer().frame(height: keyboardObserver.keyboardHeight + 16)
             }
             .padding(.horizontal, .xl)
             .background(content: {
-                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
+                RoundedCorner(radius: 24, corners: [.topLeft, .topRight]).fill(Color.colorBaseBackground)
             })
         }
-        .frame(width: .infinity)
     }
 }
 

@@ -10,7 +10,9 @@ struct AuthenticationSettingView: View {
     private var appSetting: AppSetting
     @State
     private var isShowEnterYourPassword: Bool = false
-
+    @FocusState
+    private var isFocus: Bool
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Authentication")
@@ -88,6 +90,17 @@ struct AuthenticationSettingView: View {
                         navigator.push(.securitySetting(.forgotPassword))
                     }
                 })
+            .focused($isFocus)
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                
+                Button("Done") {
+                    isFocus = false
+                }
+                .foregroundStyle(.colorLabelToolbarDone)
+            }
         }
     }
 }

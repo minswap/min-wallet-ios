@@ -55,3 +55,20 @@ extension View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
+
+extension View {
+    func getFrame(onChange: @escaping (CGRect) -> Void) -> some View {
+        background(
+            GeometryReader { geo in
+                Color.clear
+                    .preference(key: FramePreferenceKey.self, value: geo.frame(in: .global))
+            }
+        )
+        .onPreferenceChange(FramePreferenceKey.self, perform: onChange)
+    }
+}
+
+private struct FramePreferenceKey: PreferenceKey {
+    static var defaultValue: CGRect = .zero
+    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {}
+}
