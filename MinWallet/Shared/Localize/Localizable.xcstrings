@@ -217,9 +217,6 @@
     "Face ID" : {
 
     },
-    "Face ID/Finger Print" : {
-
-    },
     "Face ID/Touch ID chưa được cài đặt" : {
 
     },
@@ -362,6 +359,15 @@
 
     },
     "Password Changed" : {
+
+    },
+    "Password incorrect" : {
+
+    },
+    "Password is match" : {
+
+    },
+    "Password is not match" : {
 
     },
     "Paste" : {
@@ -589,6 +595,9 @@
 
     },
     "Your password has been successfully changed." : {
+
+    },
+    "Your password must contain:" : {
 
     },
     "Your tokens" : {

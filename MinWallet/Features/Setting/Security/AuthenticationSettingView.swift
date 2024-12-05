@@ -43,6 +43,14 @@ struct AuthenticationSettingView: View {
             .contentShape(.rect)
             .onTapGesture {
                 guard appSetting.authenticationType != .biometric else { return }
+                Task {
+                    do {
+                        try await appSetting.biometricAuthentication.authenticateUser()
+                        appSetting.authenticationType = .biometric
+                    } catch {
+                        //TODOZ: cuongnv show error
+                    }
+                }
             }
             HStack {
                 Text("Password")
@@ -59,7 +67,6 @@ struct AuthenticationSettingView: View {
             .onTapGesture {
                 guard appSetting.authenticationType != .password else { return }
                 let password: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
-
                 if password.isEmpty {
                     let createPasswordSuccess: ((String) -> Void)? = { password in
                         appSetting.authenticationType = .password
@@ -71,7 +78,6 @@ struct AuthenticationSettingView: View {
                     isShowEnterYourPassword = true
                 }
             }
-
             Spacer()
         }
         .modifier(

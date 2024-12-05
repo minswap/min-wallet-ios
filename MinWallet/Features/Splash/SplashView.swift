@@ -25,7 +25,7 @@ struct SplashView: View {
                         }
                     }
                 } else {
-                    AuthenticationSettingView()
+                    HomeView()
                 }
             }
             .onAppear(perform: {

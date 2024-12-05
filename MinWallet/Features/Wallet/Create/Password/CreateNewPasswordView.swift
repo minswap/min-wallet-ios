@@ -27,6 +27,9 @@ struct CreateNewPasswordView: View {
     var screenType: ScreenType = .createWallet
     var onCreatePasswordSuccess: ((String) -> Void)?
     
+    @State
+    private var passwordValidationMatched: [PasswordValidation] = []
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Create your password")
@@ -48,9 +51,33 @@ struct CreateNewPasswordView: View {
                     .frame(height: 44)
                     .overlay(
                         RoundedRectangle(cornerRadius: BorderRadius.full)
-                            .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+                            .stroke(focusedField == .password ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: focusedField == .password ? 2 : 1)
                     )
                     .padding(.horizontal, .xl)
+                    .onChange(of: password) { newValue in
+                        passwordValidationMatched = PasswordValidation.validateInput(password: newValue)
+                    }
+            }
+            if !password.isEmpty && passwordValidationMatched.count != PasswordValidation.allCases.count{
+                VStack(spacing: 10) {
+                    Text("Your password must contain:")
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(.colorBaseTent)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    ForEach(PasswordValidation.allCases) { validation in
+                        HStack(spacing: .md) {
+                            Image(passwordValidationMatched.contains(validation) ? .icChecked : .icUnchecked)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text(validation.rawValue)
+                                .font(.paragraphXSmall)
+                                .foregroundStyle(!passwordValidationMatched.contains(validation) ? .colorInteractiveTentPrimarySub : .colorBaseTent)
+                            Spacer()
+                        }
+                    }
+                }
+                .padding(.horizontal, .xl)
+                .padding(.top, .xl)
             }
             VStack(spacing: 4) {
                 Text("Confirm")
@@ -63,14 +90,26 @@ struct CreateNewPasswordView: View {
                     .frame(height: 44)
                     .overlay(
                         RoundedRectangle(cornerRadius: BorderRadius.full)
-                            .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+                            .stroke(focusedField == .rePassword ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: focusedField == .rePassword ? 2 : 1)
                     )
                     .padding(.horizontal, .xl)
             }
             .padding(.vertical, .xl)
-
+            if !rePassword.isEmpty {
+                HStack(spacing: .xs) {
+                    Image(password == rePassword ? .icChecked : .icWarning)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                    Text(password == rePassword ? "Password is match" : "Password is not match")
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(password == rePassword ? .colorBaseSecond : .colorInteractiveToneDanger)
+                    Spacer()
+                }
+                .padding(.horizontal, .xl)
+            }
             Spacer()
             CustomButton(title: "Confirm") {
+                guard passwordValidationMatched.count == PasswordValidation.allCases.count, password == rePassword else { return }
                 switch screenType {
                 case .authenticationSetting:
                     onCreatePasswordSuccess?(password)
@@ -79,7 +118,6 @@ struct CreateNewPasswordView: View {
                     viewModel.password = password
                     navigator.push(.createWallet(.createNewWalletSuccess))
                 }
-             
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -94,9 +132,6 @@ struct CreateNewPasswordView: View {
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
-        .onAppear(perform: {
-            focusedField = .password
-        })
         .modifier(
             BaseContentView(
                 screenTitle: " ",

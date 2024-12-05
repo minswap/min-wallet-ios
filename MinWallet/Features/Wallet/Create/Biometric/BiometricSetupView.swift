@@ -31,12 +31,12 @@ struct BiometricSetupView: View {
                 Task {
                     do {
                         try await appSetting.biometricAuthentication.authenticateUser()
-                        appSetting.enableBiometric = true
+                        appSetting.authenticationType = .biometric
                         navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch {
                         error
                         //TODOZ: cuongnv show error
-                        appSetting.enableBiometric = false
+                        appSetting.authenticationType = .password
                     }
                 }
             }

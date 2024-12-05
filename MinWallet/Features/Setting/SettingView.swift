@@ -147,61 +147,6 @@ struct SettingView: View {
                         .toggleStyle(SwitchToggleStyle())
                 }
                 .frame(height: 52)
-                /*
-                HStack(spacing: 12) {
-                    Text("Nofification")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Spacer()
-                    Toggle("", isOn: $appSetting.enableNotification)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: appSetting.enableNotification) { newValue in
-                            Task {
-                                if newValue {
-                                    let center  = UNUserNotificationCenter.current()
-                                    do {
-                                        let granted = try await center.requestAuthorization(options: [.sound, .alert, .badge])
-                                        if !granted {
-                                            //TODOZ: cuongnv show dialog go to setting permission
-                                            guard let settingsURL = URL(string: UIApplication.openNotificationSettingsURLString) else {
-                                                return
-                                            }
-                                            if UIApplication.shared.canOpenURL(settingsURL) {
-                                                UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
-                                            }
-                                        }
-                                        appSetting.enableNotification = granted
-                                    } catch { error
-                                        appSetting.enableNotification = false
-                                    }
-                                }
-                            }
-                        }
-                }
-                .frame(height: 52)
-                 */
-                HStack(spacing: 12) {
-                    Text("Face ID/Finger Print")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Spacer()
-                    Toggle("", isOn: $appSetting.enableBiometric)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: appSetting.enableBiometric) { newValue in
-                            if newValue {
-                                Task {
-                                    do {
-                                        try await appSetting.biometricAuthentication.authenticateUser()
-                                    } catch {
-                                        error
-                                        //TODOZ: cuongnv show error
-                                        appSetting.enableBiometric = false
-                                    }
-                                }
-                            }
-                        }
-                }
-                .frame(height: 52)
             }
             .padding(.horizontal, .xl)
             Color.colorBorderPrimarySub.frame(height: 1)
@@ -216,7 +161,7 @@ struct SettingView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Text(appSetting.biometricAuthentication.displayName)
+                    Text(appSetting.authenticationType == .password ? "Password" : appSetting.biometricAuthentication.displayName)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Image(.icNext)

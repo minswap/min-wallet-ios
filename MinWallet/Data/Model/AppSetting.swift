@@ -60,7 +60,7 @@ class AppSetting: ObservableObject {
      */
 
     @UserDefault("enable_biometric", defaultValue: false)
-    var enableBiometric: Bool {
+    private var enableBiometric: Bool {
         willSet {
             objectWillChange.send()
         }
