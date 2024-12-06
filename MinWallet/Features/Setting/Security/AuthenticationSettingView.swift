@@ -91,23 +91,15 @@ struct AuthenticationSettingView: View {
                     navigator.pop()
                 })
         )
-        .presentSheet(isPresented: $isShowEnterYourPassword, height: 600) {
-            EnterYourPasswordView(
-                isShowEnterYourPassword: $isShowEnterYourPassword,
-                onForgotPassword: {
-                    isShowEnterYourPassword = false
-                    DispatchQueue.main.async {
-                        navigator.push(.securitySetting(.forgotPassword))
-                    }
-                })
-            .focused($isFocus)
-        }
+        .popupSheet(isPresented: $isShowEnterYourPassword, content: {
+            EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword).padding(.top, .xl)
+        })
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 
                 Button("Done") {
-                    isFocus = false
+                    hideKeyboard()
                 }
                 .foregroundStyle(.colorLabelToolbarDone)
             }

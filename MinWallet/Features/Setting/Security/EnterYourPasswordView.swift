@@ -33,16 +33,6 @@ struct EnterYourPasswordView: View {
                         RoundedRectangle(cornerRadius: BorderRadius.full)
                             .stroke(isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: isFocus ? 2 : 1)
                     )
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            
-                            Button("Done") {
-                                isFocus = false
-                            }
-                            .foregroundStyle(.colorLabelToolbarDone)
-                        }
-                    }
             }
             Button(
                 action: {
