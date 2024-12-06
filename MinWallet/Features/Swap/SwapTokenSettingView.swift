@@ -24,7 +24,12 @@ struct SwapTokenSettingView: View {
     private var isFocus: Bool
     @State
     private var enablePredictSwapPrice: Bool = true
-
+    
+    let maxValue: Double = 100.0 // Define the maximum value
+    
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
+    
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -37,7 +42,7 @@ struct SwapTokenSettingView: View {
                     .padding(.top, 20)
                 HStack(spacing: 0) {
                     ForEach(slippages) { splippage in
-                        Text(String(splippage.rawValue) + "%")
+                        Text("\(splippage.rawValue.formatted())%")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(splippage == slippageSelected ? .colorBaseBackground : .colorBaseTent)
                             .fixedSize(horizontal: true, vertical: false)
@@ -54,11 +59,20 @@ struct SwapTokenSettingView: View {
                     }
                     HStack(spacing: .md) {
                         TextField("", text: $percent)
+                            .keyboardType(.decimalPad)
                             .placeholder("Custom", when: percent.isEmpty)
                             .focused($isFocus)
                             .lineLimit(1)
-                            .frame(width: .infinity, alignment: .leading)
-                            .fixedSize(horizontal: true, vertical: false)
+                            .onChange(of: percent) { newValue in
+                                let newValue = newValue.replacingOccurrences(of: ",", with: ".")
+                                let filtered: String = {
+                                    if let number = Double(newValue), number > maxValue {
+                                        return String(maxValue)
+                                    }
+                                    return newValue
+                                }()
+                                percent = filtered
+                            }
                         Text("%")
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -115,7 +129,7 @@ struct SwapTokenSettingView: View {
             })
             Button(
                 action: {
-                    isShowSwapSetting = false
+                    onDismiss?()
                 },
                 label: {
                     Text("Close")
@@ -137,6 +151,7 @@ struct SwapTokenSettingView: View {
 #Preview {
     VStack {
         SwapTokenSettingView(isShowSwapSetting: Binding<Bool>.constant(false))
+            .padding(16)
         Spacer()
     }
     .background(Color.black)

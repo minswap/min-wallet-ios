@@ -5,6 +5,8 @@ struct AppearanceView: View {
 
     @EnvironmentObject
     var appSetting: AppSetting
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -83,7 +85,7 @@ struct AppearanceView: View {
                 })
                 Button(
                     action: {
-                        isShowAppearance = false
+                        onDismiss?()
                     },
                     label: {
                         Text("Close")

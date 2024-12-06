@@ -164,6 +164,7 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environmentObject(AppSetting())
 }
 
 extension HomeView {

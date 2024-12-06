@@ -79,6 +79,7 @@
 		96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
 		96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */; };
+		96D75EC92D02AFA100036AB1 /* CustomVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */; };
 		96DC05232CF55C5400A78356 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05222CF55C5400A78356 /* SettingView.swift */; };
 		96DC05252CF5668400A78356 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05242CF5668400A78356 /* SettingViewModel.swift */; };
 		96DC05272CF5685800A78356 /* SwitchToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05262CF5685800A78356 /* SwitchToggleStyle.swift */; };
@@ -215,6 +216,7 @@
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
 		96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSettingView.swift; sourceTree = "<group>"; };
+		96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVisualEffectView.swift; sourceTree = "<group>"; };
 		96DC05222CF55C5400A78356 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		96DC05242CF5668400A78356 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		96DC05262CF5685800A78356 /* SwitchToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchToggleStyle.swift; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				96DC05262CF5685800A78356 /* SwitchToggleStyle.swift */,
 				57A6F7C6490456E5F226DC7F /* TokenLogo.swift */,
 				96F7FA0A2CFDBA6E00E2EF5B /* TestView.swift */,
+				96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */,
 				965592152CF858E700301DDB /* SecurePasswordTextField.swift */,
 				960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */,
 				960D6B282CFF194D0017AF29 /* CustomWebImage.swift */,
@@ -1056,6 +1059,7 @@
 				96F7FA0B2CFDBA6E00E2EF5B /* TestView.swift in Sources */,
 				965592552CFB3A3700301DDB /* ConfirmSendTokenView.swift in Sources */,
 				5751579B2CEB4407004CD647 /* CustomButton.swift in Sources */,
+				96D75EC92D02AFA100036AB1 /* CustomVisualEffectView.swift in Sources */,
 				5751579C2CEB4407004CD647 /* Others.swift in Sources */,
 				965592092CF8228E00301DDB /* SetupNickNameView.swift in Sources */,
 				96DC05252CF5668400A78356 /* SettingViewModel.swift in Sources */,

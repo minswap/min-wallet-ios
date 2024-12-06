@@ -6,6 +6,9 @@ struct CurrencyView: View {
     @EnvironmentObject
     var appSetting: AppSetting
 
+    @Environment(\.partialSheetDismiss) 
+    var onDismiss
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -50,7 +53,7 @@ struct CurrencyView: View {
             })
             Button(
                 action: {
-                    isShowCurrency = false
+                    onDismiss?()
                 },
                 label: {
                     Text("Close")
