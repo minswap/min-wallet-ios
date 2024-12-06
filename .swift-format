@@ -12,8 +12,6 @@
     "lineBreakAroundMultilineExpressionChainComponents": true,
     "maximumBlankLines": 2,
     "rules": {
-        "OrderedImports" : false,
-        "OnlyOneTrailingClosureArgument" : false,
         "ReplaceForEachWithForLoop": false,
         "UseSingleLinePropertyGetter": false
     }
