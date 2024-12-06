@@ -12,7 +12,7 @@ struct AuthenticationSettingView: View {
     private var isShowEnterYourPassword: Bool = false
     @FocusState
     private var isFocus: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Authentication")
@@ -76,7 +76,7 @@ struct AuthenticationSettingView: View {
                             //TODOZ: check error
                         }
                     }
-                    
+
                     navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))
                 } else {
                     isShowEnterYourPassword = true
@@ -91,13 +91,16 @@ struct AuthenticationSettingView: View {
                     navigator.pop()
                 })
         )
-        .popupSheet(isPresented: $isShowEnterYourPassword, content: {
-            EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword).padding(.top, .xl)
-        })
+        .popupSheet(
+            isPresented: $isShowEnterYourPassword,
+            content: {
+                EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword).padding(.top, .xl)
+            }
+        )
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     hideKeyboard()
                 }

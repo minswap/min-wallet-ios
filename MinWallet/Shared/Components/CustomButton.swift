@@ -7,19 +7,21 @@ struct CustomButton: View {
     var frameType: FrameType = .matchParent
     var icon: ImageResource? = nil
     var iconRight: ImageResource? = nil
-    
+
     var action: () -> Void
-    
+
     @Binding
     private var isEnable: Bool
-    
-    init(title: LocalizedStringKey,
-         variant: Varriant = .primary,
-         frameType: FrameType = .matchParent,
-         icon: ImageResource? = nil,
-         iconRight: ImageResource? = nil,
-         isEnable: Binding<Bool> = .constant(true),
-         action: @escaping () -> Void) {
+
+    init(
+        title: LocalizedStringKey,
+        variant: Varriant = .primary,
+        frameType: FrameType = .matchParent,
+        icon: ImageResource? = nil,
+        iconRight: ImageResource? = nil,
+        isEnable: Binding<Bool> = .constant(true),
+        action: @escaping () -> Void
+    ) {
         self.title = title
         self.variant = variant
         self.frameType = frameType
@@ -28,7 +30,7 @@ struct CustomButton: View {
         self.action = action
         self._isEnable = isEnable
     }
-    
+
     var body: some View {
         Button(action: {
             guard isEnable else { return }
@@ -67,14 +69,14 @@ struct CustomButton: View {
         CustomButton(
             title: "Swap",
             variant: .primary,
-            icon: .icReceive, action: { }
+            icon: .icReceive, action: {}
         )
         .frame(height: 40)
         CustomButton(
             title: "Swap",
             variant: .secondary,
             frameType: .matchParent,
-            icon: .icSend, iconRight: .icUp, action: { }
+            icon: .icSend, iconRight: .icUp, action: {}
         )
         .frame(height: 40)
     }
@@ -87,7 +89,7 @@ extension CustomButton {
         case primary
         case secondary
         case other(textColor: Color, backgroundColor: Color, borderColor: Color)
-        
+
         var textColor: Color {
             switch self {
             case .primary:
@@ -98,7 +100,7 @@ extension CustomButton {
                 return textColor
             }
         }
-        
+
         var backgroundColor: Color {
             switch self {
             case .primary:
@@ -109,7 +111,7 @@ extension CustomButton {
                 return backgroundColor
             }
         }
-        
+
         var borderColor: Color {
             switch self {
             case .primary:
@@ -121,7 +123,7 @@ extension CustomButton {
             }
         }
     }
-    
+
     enum FrameType {
         case wrapContent
         case matchParent

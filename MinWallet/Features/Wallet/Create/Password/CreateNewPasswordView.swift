@@ -23,13 +23,13 @@ struct CreateNewPasswordView: View {
     private var rePassword: String = ""
     @FocusState
     private var focusedField: FocusedField?
-    
+
     var screenType: ScreenType = .createWallet
     var onCreatePasswordSuccess: ((String) -> Void)?
-    
+
     @State
     private var passwordValidationMatched: [PasswordValidation] = []
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Create your password")
@@ -58,7 +58,7 @@ struct CreateNewPasswordView: View {
                         passwordValidationMatched = PasswordValidation.validateInput(password: newValue)
                     }
             }
-            if !password.isEmpty && passwordValidationMatched.count != PasswordValidation.allCases.count{
+            if !password.isEmpty && passwordValidationMatched.count != PasswordValidation.allCases.count {
                 VStack(spacing: 10) {
                     Text("Your password must contain:")
                         .font(.paragraphXSmall)

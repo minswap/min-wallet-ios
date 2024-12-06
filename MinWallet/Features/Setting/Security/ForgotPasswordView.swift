@@ -62,7 +62,7 @@ struct ForgotPasswordView: View {
                     conditionTwo = newValue
                 }
             )
-            
+
             CustomButton(title: "Restore", isEnable: combinedBinding) {
 
             }

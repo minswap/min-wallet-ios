@@ -117,7 +117,9 @@ struct MainCoordinator: View {
                                 screenType: .authenticationSetting,
                                 onCreatePasswordSuccess: { password in
                                     onCreatePassSuccess.onCreatePassSuccess?(password)
-                                }).navigationBarHidden(true)
+                                }
+                            )
+                            .navigationBarHidden(true)
                         case .forgotPassword:
                             ForgotPasswordView().navigationBarHidden(true)
                         }

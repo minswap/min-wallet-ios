@@ -13,7 +13,7 @@ struct EnterYourPasswordView: View {
     var isShowEnterYourPassword: Bool
     @FocusState
     var isFocus: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Enter your password")

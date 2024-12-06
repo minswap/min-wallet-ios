@@ -6,13 +6,13 @@ struct ChangePasswordView: View {
     enum FocusedField: Hashable {
         case oldPassword, password, rePassword
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @EnvironmentObject
     private var viewModel: CreateNewWalletViewModel
-    
+
     @State
     private var oldPassword: String = ""
     @State
@@ -21,13 +21,13 @@ struct ChangePasswordView: View {
     private var rePassword: String = ""
     @FocusState
     private var focusedField: FocusedField?
-    
+
     @State
     private var passwordValidationMatched: [PasswordValidation] = []
-    
+
     @State
     private var currentPassword: String = ""
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Change password")
@@ -165,7 +165,7 @@ struct ChangePasswordView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     focusedField = nil
                 }
@@ -177,7 +177,8 @@ struct ChangePasswordView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                })
+        )
         .task {
             print("WTF ?? ddd")
             currentPassword = "123"

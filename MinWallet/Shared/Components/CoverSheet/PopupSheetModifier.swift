@@ -2,14 +2,14 @@ import SwiftUI
 
 
 struct PopupSheetModifier<SheetContent: View>: ViewModifier {
-    @Binding 
+    @Binding
     var isPresented: Bool
     @State
     private var sheetHeight: CGFloat = .zero
-    
+
     let onDismiss: (() -> Void)?
     let content: () -> SheetContent
-    
+
     func body(content: Content) -> some View {
         content
             .sheet(isPresented: $isPresented, onDismiss: onDismiss) {
