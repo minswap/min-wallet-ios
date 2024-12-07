@@ -24,12 +24,12 @@ struct SwapTokenSettingView: View {
     private var isFocus: Bool
     @State
     private var enablePredictSwapPrice: Bool = true
-    
-    let maxValue: Double = 100.0 // Define the maximum value
-    
+
+    let maxValue: Double = 100.0  // Define the maximum value
+
     @Environment(\.partialSheetDismiss)
     var onDismiss
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()

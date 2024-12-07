@@ -40,7 +40,7 @@ struct TokenDetailView: View {
                 HStack(spacing: .lg) {
                     Button(
                         action: {
-
+                            navigator.pop()
                         },
                         label: {
                             Image(.icBack)

@@ -6,7 +6,7 @@ struct CurrencyView: View {
     @EnvironmentObject
     var appSetting: AppSetting
 
-    @Environment(\.partialSheetDismiss) 
+    @Environment(\.partialSheetDismiss)
     var onDismiss
 
     var body: some View {

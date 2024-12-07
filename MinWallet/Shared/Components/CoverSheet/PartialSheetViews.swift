@@ -37,10 +37,10 @@ private struct BlockingView: View {
 struct PartialSheet<Content: View>: View {
     @Binding var isPresented: Bool
     @Binding var showingContent: Bool
-    
+
     var content: Content
     let height: CGFloat
-    
+
     init(isPresented: Binding<Bool>, showingContent: Binding<Bool>, height: CGFloat, @ViewBuilder content: () -> Content) {
         _isPresented = isPresented
         _showingContent = showingContent
@@ -72,7 +72,7 @@ struct PartialSheet<Content: View>: View {
 struct PartialSheetModifier: ViewModifier {
     @Binding var isPresented: Bool
     @State private var showingContent = false
-    
+
     var height: CGFloat
     let sheet: AnyView
 
@@ -86,7 +86,7 @@ struct PartialSheetModifier: ViewModifier {
             }
         }
     }
-    
+
     func body(content: Content) -> some View {
         ZStack {
             content
@@ -95,16 +95,16 @@ struct PartialSheetModifier: ViewModifier {
                 .transition(.opacity)
                 .opacity(isPresented ? 1 : 0)
         }
-            .overlay(
-                Group {
-                    if isPresented {
-                        PartialSheet(isPresented: self.$isPresented, showingContent: $showingContent, height: height) { sheet }
-                    } else {
-                        EmptyView()
-                    }
+        .overlay(
+            Group {
+                if isPresented {
+                    PartialSheet(isPresented: self.$isPresented, showingContent: $showingContent, height: height) { sheet }
+                } else {
+                    EmptyView()
                 }
-            )
-            .environment(\.partialSheetDismiss, { self.hideContent() })
+            }
+        )
+        .environment(\.partialSheetDismiss, { self.hideContent() })
     }
 }
 

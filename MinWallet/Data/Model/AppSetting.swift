@@ -150,7 +150,7 @@ extension AppSetting {
 
         try passwordItem.save(password)
     }
-    
+
     func reAuthenticateUser() async throws {
         biometricAuthentication = .init()
         try await biometricAuthentication.authenticateUser()

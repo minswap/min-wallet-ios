@@ -29,8 +29,8 @@ public struct SideMenu<MenuContent: View>: ViewModifier {
                         .disabled(isShowing)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .offset(x: self.isShowing ? geometry.size.width * 0.8 : 0)
-                    
-                    VisualEffectBlurView() // Replace .light with .dark or .systemMaterial
+
+                    VisualEffectBlurView()  // Replace .light with .dark or .systemMaterial
                         .edgesIgnoringSafeArea(.all)
                         .transition(.opacity)
                         .opacity(isShowing ? 1 : 0)
@@ -41,7 +41,7 @@ public struct SideMenu<MenuContent: View>: ViewModifier {
                         isShowing = false
                     }
                 }
-           
+
 
                 menuContent()
                     .frame(width: geometry.size.width * 0.8)
