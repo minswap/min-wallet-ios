@@ -10,8 +10,32 @@ struct CustomButton: View {
 
     var action: () -> Void
 
+    @Binding
+    private var isEnable: Bool
+
+    init(
+        title: LocalizedStringKey,
+        variant: Varriant = .primary,
+        frameType: FrameType = .matchParent,
+        icon: ImageResource? = nil,
+        iconRight: ImageResource? = nil,
+        isEnable: Binding<Bool> = .constant(true),
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.variant = variant
+        self.frameType = frameType
+        self.icon = icon
+        self.iconRight = iconRight
+        self.action = action
+        self._isEnable = isEnable
+    }
+
     var body: some View {
-        Button(action: action) {
+        Button(action: {
+            guard isEnable else { return }
+            action()
+        }) {
             HStack(spacing: Spacing.md) {
                 if let icon = icon {
                     Image(icon)
@@ -31,7 +55,7 @@ struct CustomButton: View {
             }
             .frame(maxWidth: frameType == .matchParent ? .infinity : nil, maxHeight: .infinity)
             .padding(.horizontal, 10)
-            .background(variant.backgroundColor)
+            .background(isEnable ? variant.backgroundColor : .colorSurfacePrimaryDefault)
             .shadow(radius: 50).cornerRadius(BorderRadius.full)
             .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(variant.borderColor, lineWidth: 1))
             .contentShape(.rect)
@@ -45,17 +69,14 @@ struct CustomButton: View {
         CustomButton(
             title: "Swap",
             variant: .primary,
-            icon: .icReceive,
-            action: {}
+            icon: .icReceive, action: {}
         )
         .frame(height: 40)
         CustomButton(
             title: "Swap",
             variant: .secondary,
             frameType: .matchParent,
-            icon: .icSend,
-            iconRight: .icUp,
-            action: {}
+            icon: .icSend, iconRight: .icUp, action: {}
         )
         .frame(height: 40)
     }

@@ -30,8 +30,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     private let appSetting: AppSetting = .init()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        /*
         if appSetting.enableNotification {
-            let center = UNUserNotificationCenter.current()
+            let center  = UNUserNotificationCenter.current()
             center.delegate = self
             center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
                 if error == nil {
@@ -42,14 +43,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
 
             /*
-             if
-             let launchDict = launchOptions as NSDictionary?,
-             let urlSchema = launchDict[UIApplication.LaunchOptionsKey.url] as? URL {
-             UIApplication.shared.open(urlSchema, options: [:], completionHandler: nil)
-             }
+            if
+                let launchDict = launchOptions as NSDictionary?,
+                let urlSchema = launchDict[UIApplication.LaunchOptionsKey.url] as? URL {
+                UIApplication.shared.open(urlSchema, options: [:], completionHandler: nil)
+            }
              */
         }
-
+        */
         return true
     }
 

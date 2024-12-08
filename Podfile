@@ -12,6 +12,8 @@ target 'MinWallet' do
   pod 'FlowStacks'
   pod 'Then'
   pod 'ScalingHeaderScrollView'
+  pod 'SwiftyAttributes'
+  pod 'SDWebImageSwiftUI'
   
   target 'MinWalletTests' do
     inherit! :search_paths

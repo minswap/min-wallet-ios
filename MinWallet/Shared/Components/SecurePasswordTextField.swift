@@ -16,6 +16,7 @@ struct SecurePasswordTextField: View {
                 .foregroundStyle(.colorBaseTent)
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 50))
                 .onChange(of: visibleInput) { newValue in
+                    var newValue = newValue.replacingOccurrences(of: " ", with: "")
                     guard isSecured else { text = newValue; return }
                     if newValue.count >= text.count {
                         let newItem = newValue.filter { $0 != Character("*") }
@@ -24,7 +25,7 @@ struct SecurePasswordTextField: View {
                         text.removeLast()
                     }
 
-                    visibleInput = String(newValue.map { _ in Character("*") })
+                    visibleInput = String(newValue.replacingOccurrences(of: " ", with: "").map { _ in Character("*") })
                 }
         }
         .background {
@@ -36,7 +37,7 @@ struct SecurePasswordTextField: View {
                         isSecured.toggle()
                         visibleInput = isSecured ? String(text.map { _ in Character("*") }) : text
                     } label: {
-                        Image(isSecured ? .icEye : .icBack)
+                        Image(isSecured ? .icEye : .icEyeOff)
                     }
                 }
                 .frame(maxWidth: .infinity)

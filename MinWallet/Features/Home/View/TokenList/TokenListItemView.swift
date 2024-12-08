@@ -44,8 +44,7 @@ struct TokenListItemView: View {
             }
             .padding(.vertical, 12)
             .overlay(
-                Rectangle().frame(height: 1).foregroundColor(.colorBorderItem),
-                alignment: .bottom
+                Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
             )
         }
         .padding(.horizontal, 16)

@@ -44,8 +44,7 @@ struct TokenListView: View {
                                     navigator.push(.tokenDetail(token: tokens[index].token))
                                 }
                         }
-                    }
-                )
+                    })
             }
             //            .hidden()
         }
