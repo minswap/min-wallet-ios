@@ -2,23 +2,23 @@ import SwiftUI
 
 
 struct TokenLogoView: View {
-    let token: Token
+    let token: Token?
 
     var body: some View {
         ZStack {
             Group {
-                if token.currencySymbol.isEmpty && token.tokenName.isEmpty {
+                if token?.currencySymbol.isEmpty == true && (token?.tokenName.isEmpty)  == true {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
                 } else {
-                    CustomWebImage(url: buildImageURL(currencySymbol: token.currencySymbol, tokenName: token.tokenName), frameSize: .init(width: 28, height: 28))
+                    CustomWebImage(url: buildImageURL(currencySymbol: token?.currencySymbol ?? "", tokenName: token?.tokenName ?? ""), frameSize: .init(width: 28, height: 28))
                 }
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
 
-            if token.isVerified {
+            if token?.isVerified == true {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)

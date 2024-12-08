@@ -131,7 +131,7 @@ struct HomeView: View {
                     .padding(.vertical, Spacing.md)
                     .padding(.horizontal, Spacing.xl)
 
-                TokenListView(label: "Crypto prices", tokens: Self.tokens, tabType: $viewModel.tabType)
+                TokenListView(label: "Crypto prices", tokens: $viewModel.tokens, showSkeleton: $viewModel.showSkeleton, tabType: $viewModel.tabType)
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
@@ -158,6 +158,9 @@ struct HomeView: View {
         .presentSheet(isPresented: $isShowTimeZone, height: 400) {
             TimeZoneView(isShowTimeZone: $isShowTimeZone)
                 .padding(.xl)
+        }
+        .task {
+            await viewModel.getToken()
         }
     }
 }
