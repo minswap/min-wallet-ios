@@ -5,6 +5,8 @@ struct TimeZoneView: View {
 
     @EnvironmentObject
     var appSetting: AppSetting
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
 
     var body: some View {
         VStack(spacing: 8) {
@@ -50,7 +52,7 @@ struct TimeZoneView: View {
             })
             Button(
                 action: {
-                    isShowTimeZone = false
+                    onDismiss?()
                 },
                 label: {
                     Text("Close")

@@ -46,7 +46,7 @@ struct GettingStartedView: View {
             CustomButton(
                 title: "Create new wallet",
                 action: {
-
+                    navigator.push(.createWallet(.createWallet))
                 }
             )
             .frame(height: 56)
@@ -55,7 +55,7 @@ struct GettingStartedView: View {
                 title: "Restore wallet",
                 variant: .secondary,
                 action: {
-
+                    navigator.push(.restoreWallet(.restoreWallet))
                 }
             )
             .frame(height: 56)

@@ -20,7 +20,7 @@ class BiometricAuthentication {
         }
     }
 
-    var displayName: String {
+    var displayName: LocalizedStringKey {
         switch biometricType {
         case .touchID:
             return "Touch ID"

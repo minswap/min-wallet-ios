@@ -45,8 +45,7 @@ struct TokenDetailHeaderView: View {
                         content: {
                             TokenLogoView(token: .sampleData)
                             HStack(
-                                alignment: .firstTextBaseline,
-                                spacing: 4,
+                                alignment: .firstTextBaseline, spacing: 4,
                                 content: {
                                     Text("MIN")
                                         .foregroundStyle(.colorBaseTent)
@@ -54,11 +53,9 @@ struct TokenDetailHeaderView: View {
                                     Text("Minswap")
                                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                                         .font(.labelMediumSecondary)
-                                }
-                            )
+                                })
                             Spacer()
-                        }
-                    )
+                        })
                     Text("0.0422 ₳")
                         .foregroundStyle(.colorBaseTent)
                         .font(.titleH4)
@@ -84,12 +81,10 @@ struct TokenDetailHeaderView: View {
 
 #Preview {
     VStack(
-        alignment: .leading,
-        spacing: 0,
+        alignment: .leading, spacing: 0,
         content: {
             TokenDetailHeaderView(progress: .constant(0))
                 .background(.red)
             Spacer()
-        }
-    )
+        })
 }

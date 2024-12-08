@@ -6,8 +6,7 @@ struct TokenDetailStatisticView: View {
 
     var body: some View {
         VStack(
-            alignment: .leading,
-            spacing: 0,
+            alignment: .leading, spacing: 0,
             content: {
                 Text("Statistics")
                     .font(.titleH6)
@@ -135,8 +134,7 @@ struct TokenDetailStatisticView: View {
                 .foregroundStyle(.colorBaseTent)
                 .padding(.vertical, .xl)
                 Spacer()
-            }
-        )
+            })
     }
 }
 
@@ -171,9 +169,7 @@ struct DashedUnderlineText: UIViewRepresentable {
                 NSAttributedString.Key.font: font,
                 NSAttributedString.Key.foregroundColor: textColor,
 
-            ],
-            range: NSRange(location: 0, length: attributedString.length)
-        )
+            ], range: NSRange(location: 0, length: attributedString.length))
         label.attributedText = attributedString
         return label
     }

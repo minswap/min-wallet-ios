@@ -71,9 +71,7 @@ struct AboutView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }
-            )
-        )
+                }))
     }
 }
 

@@ -5,7 +5,7 @@ private struct BlockingView: View {
     @Binding var showingContent: Bool
 
     func showContent() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             withAnimation {
                 self.showingContent = true
             }
@@ -16,7 +16,7 @@ private struct BlockingView: View {
         withAnimation {
             self.showingContent = false
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             withAnimation {
                 self.isPresented = false
             }
@@ -36,13 +36,14 @@ private struct BlockingView: View {
 
 struct PartialSheet<Content: View>: View {
     @Binding var isPresented: Bool
+    @Binding var showingContent: Bool
+
     var content: Content
     let height: CGFloat
 
-    @State private var showingContent = false
-
-    init(isPresented: Binding<Bool>, height: CGFloat, @ViewBuilder content: () -> Content) {
+    init(isPresented: Binding<Bool>, showingContent: Binding<Bool>, height: CGFloat, @ViewBuilder content: () -> Content) {
         _isPresented = isPresented
+        _showingContent = showingContent
         self.height = height
         self.content = content()
     }
@@ -70,20 +71,55 @@ struct PartialSheet<Content: View>: View {
 
 struct PartialSheetModifier: ViewModifier {
     @Binding var isPresented: Bool
+    @State private var showingContent = false
+
     var height: CGFloat
     let sheet: AnyView
 
+    func hideContent() {
+        withAnimation {
+            self.showingContent = false
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            withAnimation {
+                self.isPresented = false
+            }
+        }
+    }
+
     func body(content: Content) -> some View {
-        content
-            .blur(radius: isPresented ? 4.0 : 0.0)
-            .overlay(
-                Group {
-                    if isPresented {
-                        PartialSheet(isPresented: self.$isPresented, height: height) { sheet }
-                    } else {
-                        EmptyView()
-                    }
+        ZStack {
+            content
+            VisualEffectBlurView(tintAlpha: 0, blurRadius: 2)
+                .ignoresSafeArea()
+                .transition(.opacity)
+                .opacity(isPresented ? 1 : 0)
+        }
+        .overlay(
+            Group {
+                if isPresented {
+                    PartialSheet(isPresented: self.$isPresented, showingContent: $showingContent, height: height) { sheet }
+                } else {
+                    EmptyView()
                 }
-            )
+            }
+        )
+        .environment(\.partialSheetDismiss, { self.hideContent() })
+    }
+}
+
+#Preview {
+    HomeView()
+        .environmentObject(AppSetting())
+}
+
+struct PartialSheetDismissKey: EnvironmentKey {
+    static let defaultValue: (() -> Void)? = nil
+}
+
+extension EnvironmentValues {
+    var partialSheetDismiss: (() -> Void)? {
+        get { self[PartialSheetDismissKey.self] }
+        set { self[PartialSheetDismissKey.self] = newValue }
     }
 }

@@ -6,6 +6,9 @@ struct CurrencyView: View {
     @EnvironmentObject
     var appSetting: AppSetting
 
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
+
     var body: some View {
         VStack(spacing: 8) {
             Spacer()
@@ -25,6 +28,7 @@ struct CurrencyView: View {
                         .opacity(appSetting.currency == Currency.usd.rawValue ? 1 : 0)
                 }
                 .frame(height: 52)
+                .contentShape(.rect)
                 .onTapGesture {
                     appSetting.currency = Currency.usd.rawValue
                 }
@@ -38,6 +42,7 @@ struct CurrencyView: View {
                 }
                 .frame(height: 52)
                 .padding(.bottom, .xl)
+                .contentShape(.rect)
                 .onTapGesture {
                     appSetting.currency = Currency.ada.rawValue
                 }
@@ -48,7 +53,7 @@ struct CurrencyView: View {
             })
             Button(
                 action: {
-                    isShowCurrency = false
+                    onDismiss?()
                 },
                 label: {
                     Text("Close")
@@ -69,7 +74,7 @@ struct CurrencyView: View {
 
 #Preview {
     VStack {
-        CurrencyView(isShowCurrency: Binding<Bool>.constant(false))
+        CurrencyView(isShowCurrency: Binding<Bool>.constant(false)).environmentObject(AppSetting())
         Spacer()
     }
     .background(Color.black)

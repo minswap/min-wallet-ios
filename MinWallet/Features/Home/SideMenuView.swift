@@ -24,22 +24,31 @@ public struct SideMenu<MenuContent: View>: ViewModifier {
             }
         return GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                content
-                    .disabled(isShowing)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .offset(x: self.isShowing ? geometry.size.width * 0.8 : 0)
-                    .onTapGesture {
-                        withAnimation {
-                            isShowing = false
-                        }
+                ZStack {
+                    content
+                        .disabled(isShowing)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .offset(x: self.isShowing ? geometry.size.width * 0.8 : 0)
+
+                    VisualEffectBlurView()  // Replace .light with .dark or .systemMaterial
+                        .edgesIgnoringSafeArea(.all)
+                        .transition(.opacity)
+                        .opacity(isShowing ? 1 : 0)
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .onTapGesture {
+                    withAnimation {
+                        isShowing = false
                     }
-                    .blur(radius: isShowing ? 4.0 : 0.0)
+                }
+
 
                 menuContent()
                     .frame(width: geometry.size.width * 0.8)
                     .transition(.move(edge: .leading))
                     .offset(x: self.isShowing ? 0 : -geometry.size.width * 0.8)
                     .shadow(color: isShowing ? .black.opacity(0.1) : .clear, radius: 2, x: 2, y: 0)
+                    .zIndex(999)
             }
             .gesture(drag)
         }
@@ -72,8 +81,7 @@ private struct SideMenuTest: View {
                 }) {
                     Image(systemName: "line.horizontal.3")
                         .imageScale(.large)
-                })
-            )
+                }))
         }
         .sideMenu(isShowing: $showSideMenu) {
             VStack(alignment: .leading) {
@@ -110,6 +118,7 @@ private struct SideMenuTest: View {
 
 struct SideMenu_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuTest()
+        HomeView()
+            .environmentObject(AppSetting())
     }
 }
