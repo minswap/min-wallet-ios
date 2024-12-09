@@ -32,7 +32,9 @@ end
 lane :beta do
   setup_ci if ENV['CI']
   match(type: "appstore", force_for_new_devices: true, readonly: is_ci)
-  increment_build_number
+  increment_build_number(
+    build_number: "3"
+  )
   build_app(
     export_method: "app-store",
     export_options: {
@@ -41,5 +43,6 @@ lane :beta do
       }
     },
   )
-  upload_to_testflight(skip_waiting_for_build_processing: true)
+  upload_to_testflight(skip_waiting_for_build_processing: true),
+  commit_version_bump(message: "Version Bump")
 end
