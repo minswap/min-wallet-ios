@@ -24,4 +24,4 @@ jobs:
       - name: Lint
         run: swift format lint --strict -r -p MinWallet
       - name: Build and test
-        run: xcodebuild -scheme MinWallet test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=18.1"
+        run: xcodebuild -scheme MinWallet CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED="NO" -disable-concurrent-destination-testing test -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=18.1"
