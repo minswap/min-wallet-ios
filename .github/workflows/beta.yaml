@@ -1,0 +1,35 @@
+name: Beta release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release-beta:
+    runs-on: macos-latest
+    environment: Production
+    steps:
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.0.2"
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-strict: true
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Install Dependencies
+        run: bundle install
+      - name: Build
+        run: bundle exec fastlane beta
+        env:
+          LC_ALL: en_US.UTF-8
+          LANG: en_US.UTF-8
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
+          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
