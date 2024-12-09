@@ -1,0 +1,43 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+lane :build do
+  setup_ci if ENV['CI']
+  match(type: "development", force_for_new_devices: true)
+  build_app(
+    export_method: "development",
+    export_options: {
+      provisioningProfiles: { 
+        "org.minswap.MinWallet" => "match Development org.minswap.MinWallet",
+      }
+    },
+  )
+end
+
+lane :beta do
+  setup_ci if ENV['CI']
+  match(type: "appstore", force_for_new_devices: true)
+  build_app(
+    export_method: "app-store",
+    export_options: {
+      provisioningProfiles: { 
+        "org.minswap.MinWallet" => "match AppStore org.minswap.MinWallet",
+      }
+    },
+  )
+  upload_to_testflight
+end
