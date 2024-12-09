@@ -10,6 +10,7 @@ struct SettingView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
+
     @Binding
     var isShowAppearance: Bool
     @Binding
@@ -20,7 +21,7 @@ struct SettingView: View {
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 ZStack {
                     Image(.icAvatarDefault)
@@ -79,9 +80,11 @@ struct SettingView: View {
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
             .padding(.horizontal, .xl)
+            .padding(.vertical, .xl)
 
             Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)
+                .padding(.bottom, .xl)
             Text("Basic")
                 .font(.paragraphXMediumSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -144,58 +147,47 @@ struct SettingView: View {
                         .toggleStyle(SwitchToggleStyle())
                 }
                 .frame(height: 52)
+            }
+            .padding(.horizontal, .xl)
+            Color.colorBorderPrimarySub.frame(height: 1)
+                .padding(.xl)
+            Text("Security")
+                .font(.paragraphXMediumSmall)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                .padding(.horizontal, .xl)
+            VStack(spacing: 0) {
                 HStack(spacing: 12) {
-                    Text("Nofification")
+                    Text("Authentication")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Toggle("", isOn: $appSetting.enableNotification)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: appSetting.enableNotification) { newValue in
-                            Task {
-                                if newValue {
-                                    let center = UNUserNotificationCenter.current()
-                                    do {
-                                        let granted = try await center.requestAuthorization(options: [.sound, .alert, .badge])
-                                        if !granted {
-                                            //TODO: cuongnv show dialog go to setting permission
-                                            guard let settingsURL = URL(string: UIApplication.openNotificationSettingsURLString) else {
-                                                return
-                                            }
-                                            if UIApplication.shared.canOpenURL(settingsURL) {
-                                                UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
-                                            }
-                                        }
-                                        appSetting.enableNotification = granted
-                                    } catch {
-                                        appSetting.enableNotification = false
-                                    }
-                                }
-                            }
-                        }
+                    Text(appSetting.authenticationType == .password ? "Password" : appSetting.biometricAuthentication.displayName)
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Image(.icNext)
+                        .frame(width: 20, height: 20)
                 }
                 .frame(height: 52)
-                HStack(spacing: 12) {
-                    Text("Face ID/Finger Print")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Spacer()
-                    Toggle("", isOn: $appSetting.enableBiometric)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: appSetting.enableBiometric) { newValue in
-                            if newValue {
-                                Task {
-                                    do {
-                                        try await appSetting.biometricAuthentication.authenticateUser()
-                                    } catch {
-                                        //TODO: cuongnv show error
-                                        appSetting.enableBiometric = false
-                                    }
-                                }
-                            }
-                        }
+                .contentShape(.rect)
+                .onTapGesture {
+                    navigator.push(.securitySetting(.authentication))
                 }
-                .frame(height: 52)
+
+                if appSetting.authenticationType == .password {
+                    HStack(spacing: 12) {
+                        Text("Change password")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
+                        Image(.icNext)
+                            .frame(width: 20, height: 20)
+                    }
+                    .frame(height: 52)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        //navigator.push(.securitySetting(.createPassword))
+                    }
+                }
             }
             .padding(.horizontal, .xl)
             Spacer()

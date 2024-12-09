@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import SkeletonUI
 
 
 struct TokenListView: View {
@@ -7,8 +8,10 @@ struct TokenListView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
     let label: LocalizedStringKey
-    @State
-    var tokens: [TokenWithPrice] = []
+    @Binding
+    var tokens: [TokenWithPrice]
+    @Binding
+    var showSkeleton: Bool
 
     @Binding var tabType: TokenListView.TabType
 
@@ -34,26 +37,34 @@ struct TokenListView: View {
             .padding(.bottom, .lg)
              */
             ScrollView {
-                LazyVStack(
-                    spacing: 0,
-                    content: {
-                        ForEach(0..<tokens.count, id: \.self) { index in
-                            TokenListItemView(tokenWithPrice: tokens[index])
-                                .contentShape(.rect)
-                                .onTapGesture {
-                                    navigator.push(.tokenDetail(token: tokens[index].token))
-                                }
-                        }
+                if showSkeleton {
+                    ForEach(0..<20, id: \.self) { index in
+                        TokenListItemSkeletonView()
                     }
-                )
+                } else {
+                    LazyVStack(
+                        spacing: 0,
+                        content: {
+                            ForEach(0..<tokens.count, id: \.self) { index in
+                                TokenListItemView(tokenWithPrice: tokens[index])
+                                    .contentShape(.rect)
+                                    .onTapGesture {
+                                        navigator.push(.tokenDetail(token: tokens[index].token))
+                                    }
+                            }
+                        })
+                }
             }
-            //            .hidden()
         }
     }
 }
 
 #Preview {
-    TokenListView(label: "Crypto prices", tokens: HomeView.tokens, tabType: State(initialValue: .market).projectedValue)
+    TokenListView(
+        label: "Crypto prices",
+        tokens: .constant(HomeView.tokens),
+        showSkeleton: .constant(true),
+        tabType: State(initialValue: .market).projectedValue)
 }
 
 

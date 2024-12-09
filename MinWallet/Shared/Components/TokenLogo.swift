@@ -2,36 +2,23 @@ import SwiftUI
 
 
 struct TokenLogoView: View {
-    let token: Token
+    let token: Token?
 
     var body: some View {
         ZStack {
             Group {
-                if token.currencySymbol.isEmpty && token.tokenName.isEmpty {
+                if token?.currencySymbol.isEmpty == true && (token?.tokenName.isEmpty) == true {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
                 } else {
-                    AsyncImage(
-                        url: buildImageURL(currencySymbol: token.currencySymbol, tokenName: token.tokenName)
-                    ) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        Circle()
-                            .fill(Color.colorInteractiveTentSecondaryDefault.opacity(0.04))
-                            .overlay(
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle())
-                            )
-                    }
+                    CustomWebImage(url: buildImageURL(currencySymbol: token?.currencySymbol ?? "", tokenName: token?.tokenName ?? ""), frameSize: .init(width: 28, height: 28))
                 }
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
 
-            if token.isVerified {
+            if token?.isVerified == true {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)
@@ -54,6 +41,12 @@ struct TokenLogoView: View {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"
         return URL(string: "\(baseUrl)/\(path)")
+    }
+
+    private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
+        let baseUrl = "https://asset-logos-testnet.minswap.org"
+        let path = "\(currencySymbol)\(tokenName)"
+        return "\(baseUrl)/\(path)"
     }
 }
 

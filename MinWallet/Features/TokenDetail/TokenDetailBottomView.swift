@@ -37,8 +37,7 @@ struct TokenDetailBottomView: View {
                     }
                     .padding(.horizontal, .xl)
                     .padding(.bottom, .xl)
-                }
-            )
+                })
         }
         .foregroundStyle(.colorBaseBackground)
         .cornerRadius(BorderRadius._3xl)

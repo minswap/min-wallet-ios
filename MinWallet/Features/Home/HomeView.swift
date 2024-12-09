@@ -36,15 +36,11 @@ struct HomeView: View {
                     )
                     .shadow(
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.1),
-                        radius: 3,
-                        x: 0,
-                        y: 4
+                        radius: 3, x: 0, y: 4
                     )
                     .shadow(
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.06),
-                        radius: 2,
-                        x: 0,
-                        y: 2
+                        radius: 2, x: 0, y: 2
                     )
                     .onTapGesture {
                         withAnimation {
@@ -68,6 +64,9 @@ struct HomeView: View {
                                 .stroke(Color.colorBorderPrimaryTer, lineWidth: 1)
                         )
                         .contentShape(.rect)
+                        .onTapGesture {
+                            navigator.push(.searchToken)
+                        }
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
@@ -104,7 +103,7 @@ struct HomeView: View {
                         title: "Receive",
                         icon: .icReceive
                     ) {
-
+                        navigator.push(.receiveToken)
                     }
                     .frame(height: 44)
                     CustomButton(
@@ -112,7 +111,7 @@ struct HomeView: View {
                         variant: .secondary,
                         icon: .icSend
                     ) {
-
+                        navigator.push(.sendToken(.sendToken))
                     }
                     .frame(height: 44)
                     CustomButton(
@@ -132,11 +131,11 @@ struct HomeView: View {
                     .padding(.vertical, Spacing.md)
                     .padding(.horizontal, Spacing.xl)
 
-                TokenListView(label: "Crypto prices", tokens: Self.tokens, tabType: $viewModel.tabType)
+                TokenListView(label: "Crypto prices", tokens: $viewModel.tokens, showSkeleton: $viewModel.showSkeleton, tabType: $viewModel.tabType)
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
-
+                    navigator.push(.swapToken(.swapToken))
                 }
                 .frame(height: 44)
                 .padding(.horizontal, .xl)
@@ -160,11 +159,15 @@ struct HomeView: View {
             TimeZoneView(isShowTimeZone: $isShowTimeZone)
                 .padding(.xl)
         }
+        .task {
+            await viewModel.getToken()
+        }
     }
 }
 
 #Preview {
     HomeView()
+        .environmentObject(AppSetting())
 }
 
 extension HomeView {
@@ -172,18 +175,8 @@ extension HomeView {
         repeating: TokenWithPrice(
             id: UUID(),
             token: Token(
-                currencySymbol: "",
-                tokenName: "",
-                ticker: "ADA",
-                project: "Cardano",
-                decimals: 6,
-                isVerified: true
-            ),
-            price: 37123.35,
-            changePercent: 5.7
-        ),
-        count: 20
-    )
+                currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
+                isVerified: true), price: 37123.35, changePercent: 5.7), count: 20)
 
 
 }

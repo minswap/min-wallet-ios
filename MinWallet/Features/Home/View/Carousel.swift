@@ -9,8 +9,7 @@ struct Carousel: View {
     private let data = [
         Data(
             title: "Get your first token now",
-            description: "Let's grow your property"
-        ),
+            description: "Let's grow your property"),
         Data(title: "Join the latest IDO today?", description: "Get your tokens early"),
         Data(title: "Join the latest IDO today?", description: "Get your tokens early"),
     ]
@@ -45,9 +44,7 @@ struct Carousel: View {
 
                                 Image(.comingSoon).resizable()
                                     .frame(
-                                        width: 98,
-                                        height: 98
-                                    )
+                                        width: 98, height: 98)
                             }
                             .frame(
                                 width: geometry.size.width,  // 80% of container's width
@@ -89,8 +86,7 @@ struct IndicatorView: View {
                 let index = scrollIndex ?? 0
                 Rectangle()
                     .frame(
-                        width: indicator == index ? 12 : 6,
-                        height: 4
+                        width: indicator == index ? 12 : 6, height: 4
                     )
                     .foregroundColor(
                         indicator == index
