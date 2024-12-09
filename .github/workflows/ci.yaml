@@ -25,6 +25,9 @@ jobs:
         run: bundle install
       - name: Lint
         run: swift format lint --strict -r -p MinWallet
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Build
         run: bundle exec fastlane build
         env:
