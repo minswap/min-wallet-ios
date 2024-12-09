@@ -32,5 +32,5 @@ jobs:
       - name: Build
         run: bundle exec fastlane build
         env:
-          # MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_ACCESS_TOKEN }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
