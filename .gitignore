@@ -40,3 +40,6 @@ Carthage/Build
 
 fastlane/.env.default
 fastlane/report.xml
+
+.bundle
+vendor
