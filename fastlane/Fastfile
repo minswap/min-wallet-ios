@@ -41,6 +41,5 @@ lane :beta do
     },
   )
   increment_build_number
-  increment_version_number(bump_type: "patch")
   upload_to_testflight(skip_waiting_for_build_processing: true)
 end
