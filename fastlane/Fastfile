@@ -23,7 +23,8 @@ lane :build do
     export_options: {
       provisioningProfiles: { 
         "org.minswap.MinWallet" => "match Development org.minswap.MinWallet",
-      }
+      },
+      compileBitcode: false
     },
   )
 end
