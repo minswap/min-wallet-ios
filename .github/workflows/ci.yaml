@@ -27,3 +27,5 @@ jobs:
         run: swift format lint --strict -r -p MinWallet
       - name: Build
         run: bundle exec fastlane build
+        with:
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_ACCESS_TOKEN }}
