@@ -21,6 +21,8 @@ jobs:
           ssh-strict: true
       - name: Lint
         run: swift format lint --strict -r -p MinWallet
+      - name: Build
+        run: xcodebuild -scheme MinWallet build
   
   build:
     runs-on: macos-latest
