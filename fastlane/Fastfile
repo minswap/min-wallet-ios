@@ -21,6 +21,9 @@ lane :beta do
   increment_build_number({
     build_number: latest_testflight_build_number + 1
   })
+  commit_version_bump(message: "Version Bump", xcodeproj: "MinWallet.xcodeproj")
+  add_git_tag
+  push_to_git_remote
   build_app(
     export_method: "app-store",
     export_options: {
@@ -29,8 +32,5 @@ lane :beta do
       }
     },
   )
-  commit_version_bump(message: "Version Bump", xcodeproj: "MinWallet.xcodeproj")
-  add_git_tag
-  push_to_git_remote
   upload_to_testflight(skip_waiting_for_build_processing: true)
 end
