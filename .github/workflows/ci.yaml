@@ -19,7 +19,9 @@ jobs:
         with:
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-strict: true
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
       - name: Lint
         run: swift format lint --strict -r -p MinWallet
       - name: Build and test
-        run: xcodebuild -scheme MinWallet test
+        run: xcodebuild -scheme MinWallet test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=18.1"
