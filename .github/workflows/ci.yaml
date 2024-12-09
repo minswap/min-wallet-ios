@@ -19,8 +19,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Update bundler
-        run: gem update
       - name: Install Dependencies
         run: bundle install
       - name: Lint
@@ -29,3 +27,4 @@ jobs:
         run: bundle exec fastlane build
         env:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_ACCESS_TOKEN }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
