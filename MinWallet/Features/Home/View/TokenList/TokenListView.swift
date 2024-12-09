@@ -12,7 +12,7 @@ struct TokenListView: View {
     var tokens: [TokenWithPrice]
     @Binding
     var showSkeleton: Bool
-    
+
     @Binding var tabType: TokenListView.TabType
 
     var body: some View {
@@ -53,16 +53,18 @@ struct TokenListView: View {
                                     }
                             }
                         })
-                }}
+                }
+            }
         }
     }
 }
 
 #Preview {
-    TokenListView(label: "Crypto prices",
-                  tokens: .constant(HomeView.tokens),
-                  showSkeleton: .constant(true),
-                  tabType: State(initialValue: .market).projectedValue)
+    TokenListView(
+        label: "Crypto prices",
+        tokens: .constant(HomeView.tokens),
+        showSkeleton: .constant(true),
+        tabType: State(initialValue: .market).projectedValue)
 }
 
 

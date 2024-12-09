@@ -55,7 +55,7 @@ struct TokenListItemView: View {
 struct TokenListItemSkeletonView: View {
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(token: nil).skeleton(with: true,size: .init(width: 28, height: 28))
+            TokenLogoView(token: nil).skeleton(with: true, size: .init(width: 28, height: 28))
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
                     Text("")

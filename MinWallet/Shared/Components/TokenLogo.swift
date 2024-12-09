@@ -7,7 +7,7 @@ struct TokenLogoView: View {
     var body: some View {
         ZStack {
             Group {
-                if token?.currencySymbol.isEmpty == true && (token?.tokenName.isEmpty)  == true {
+                if token?.currencySymbol.isEmpty == true && (token?.tokenName.isEmpty) == true {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
