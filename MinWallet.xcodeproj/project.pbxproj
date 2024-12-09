@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2802CFDB8CD6498862AF73F2 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091411DC0725C9FF25F366CD /* Token.swift */; };
+		551663DE2D06E2040031F933 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 551663DD2D06E2040031F933 /* SwiftUIIntrospect */; };
 		571262C52D05E57F00B83940 /* FlowStacks in Frameworks */ = {isa = PBXBuildFile; productRef = 571262C42D05E57F00B83940 /* FlowStacks */; };
 		571262C72D05E59500B83940 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 571262C62D05E59500B83940 /* Then */; };
 		571262C92D05E59800B83940 /* ScalingHeaderScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 571262C82D05E59800B83940 /* ScalingHeaderScrollView */; };
@@ -172,6 +173,7 @@
 				571262C52D05E57F00B83940 /* FlowStacks in Frameworks */,
 				571262C72D05E59500B83940 /* Then in Frameworks */,
 				571262C92D05E59800B83940 /* ScalingHeaderScrollView in Frameworks */,
+				551663DE2D06E2040031F933 /* SwiftUIIntrospect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +592,7 @@
 				5728BEC02D05E3B300A17D91 /* XCRemoteSwiftPackageReference "FlowStacks" */,
 				5728BEC12D05E3FD00A17D91 /* XCRemoteSwiftPackageReference "Then" */,
 				5728BEC22D05E43800A17D91 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
+				551663DC2D06E2040031F933 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 57F102932C64CCA0000B3544 /* Products */;
@@ -1047,6 +1050,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		551663DC2D06E2040031F933 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftui-introspect";
+			requirement = {
+				kind = exactVersion;
+				version = 1.3.0;
+			};
+		};
 		5728BEC02D05E3B300A17D91 /* XCRemoteSwiftPackageReference "FlowStacks" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/FlowStacks";
@@ -1074,6 +1085,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		551663DD2D06E2040031F933 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 551663DC2D06E2040031F933 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = SwiftUIIntrospect;
+		};
 		571262C42D05E57F00B83940 /* FlowStacks */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5728BEC02D05E3B300A17D91 /* XCRemoteSwiftPackageReference "FlowStacks" */;

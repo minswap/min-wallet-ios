@@ -40,5 +40,6 @@ lane :beta do
       }
     },
   )
+  increment_build_number
   upload_to_testflight
 end

@@ -12,6 +12,21 @@ jobs:
   lint:
     runs-on: macos-latest
     steps:
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.0.2"
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-strict: true
+      - name: Lint
+        run: swift format lint --strict -r -p MinWallet
+      - name: Build
+        run: xcodebuild build -scheme MinWallet
+  
+  build:
+    runs-on: macos-latest
+    steps:
       - uses: webfactory/ssh-agent@v0.9.0
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -27,10 +42,8 @@ jobs:
           bundler-cache: true
       - name: Install Dependencies
         run: bundle install
-      - name: Lint
-        run: swift format lint --strict -r -p MinWallet
       - name: Build
-        run: bundle exec fastlane build
+        run: bundle exec fastlane beta
         env:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.FASTLANE_MATCH_PASSWORD }}
