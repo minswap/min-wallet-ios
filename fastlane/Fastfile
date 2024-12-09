@@ -32,6 +32,7 @@ end
 lane :beta do
   setup_ci if ENV['CI']
   match(type: "appstore", force_for_new_devices: true, readonly: is_ci)
+  increment_build_number
   build_app(
     export_method: "app-store",
     export_options: {
@@ -40,6 +41,5 @@ lane :beta do
       }
     },
   )
-  increment_build_number
   upload_to_testflight(skip_waiting_for_build_processing: true)
 end
