@@ -41,5 +41,5 @@ lane :beta do
     },
   )
   increment_build_number
-  upload_to_testflight
+  upload_to_testflight(skip_waiting_for_build_processing: true)
 end
