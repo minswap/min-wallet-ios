@@ -23,5 +23,19 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_16.1.app
       - name: Lint
         run: swift format lint --strict -r -p MinWallet
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.0.2"
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-strict: true
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+      - name: Build rust
+        run: cd rust && ./build.sh
       - name: Build and test
         run: xcodebuild -scheme MinWallet CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED="NO" -disable-concurrent-destination-testing test -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=18.1"
