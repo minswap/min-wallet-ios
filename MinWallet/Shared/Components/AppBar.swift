@@ -1,47 +1,107 @@
 import SwiftUI
 
-struct AppBar: View {
-  var body: some View {
-    HStack {
-      HStack {
-        Image("avatar")
-          .resizable()
-          .scaledToFit()
-          .frame(width: 36, height: 36)
-          .clipShape(Circle())
-      }
-      .padding(2)
-      .clipShape(Circle())
-      .overlay(
-        Circle().stroke(Color.appBorderPrimarySub, lineWidth: 1)
-      )
-      .shadow(
-        color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.1),
-        radius: 3, x: 0, y: 4
-      )
-      .shadow(
-        color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.06),
-        radius: 2, x: 0, y: 2)
 
-      Spacer().frame(width: 10)
+struct BaseContentView: ViewModifier {
+    var screenTitle: String = ""
+    var titleView: (() -> AnyView)?
+    var backgroundColor: Color = .colorBaseBackground
+    var actionBarHeight: CGFloat = 48
 
-      Text("SassyCat").font(.labelMediumSecondary).foregroundColor(
-        .appTentPrimary)
+    var iconRight: ImageResource?
+    var alignmentTitle: Alignment = .leading
+    var actionLeft: (() -> Void)?
+    var actionRight: (() -> Void)?
 
-      Spacer()
+    func body(content: Content) -> some View {
+        ZStack {
+            Color.colorBaseBackground.ignoresSafeArea()
+            VStack(
+                spacing: 0,
+                content: {
+                    HStack(spacing: .lg) {
+                        if let actionLeft = actionLeft {
+                            Button(
+                                action: {
+                                    actionLeft()
+                                },
+                                label: {
+                                    Image(.icBack)
+                                        .resizable()
+                                        .frame(width: ._3xl, height: ._3xl)
+                                        .padding(.md)
+                                        .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
+                                }
+                            )
+                            .buttonStyle(.plain)
+                        }
 
-      AppIconButton(icon: .search, action: {})
+                        if let titleView = titleView {
+                            if alignmentTitle != .leading {
+                                Spacer()
+                            }
+                            titleView()
+                            if alignmentTitle != .trailing {
+                                Spacer()
+                            }
+                        }
+                        if !screenTitle.isEmpty {
+                            if alignmentTitle != .leading {
+                                Spacer()
+                            }
+                            Text(screenTitle)
+                                .lineLimit(1)
+                            if alignmentTitle != .trailing {
+                                Spacer()
+                            }
+                        }
+
+                        if let actionRight = actionRight, let iconRight = iconRight {
+                            Button(
+                                action: {
+                                    actionRight()
+                                },
+                                label: {
+                                    Image(iconRight)
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                }
+                            )
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .frame(height: 48)
+                    .padding(.horizontal, .xl)
+                    content
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .safeAreaInset(edge: .bottom) {
+                            Color.clear.frame(height: 0)
+                        }
+                })
+        }
     }
-    .padding(.horizontal, Spacing.xl)
-    .padding(.vertical, Spacing.xs)
-    .frame(maxWidth: .infinity)
-  }
+
+    static func text() -> some View { Text("zzz") }
 }
 
-struct AppBar_Previews: PreviewProvider {
-  static var previews: some View {
-    HStack {
-      AppBar()
+#Preview {
+    VStack {
+        Text("zzz")
+        Spacer()
     }
-  }
+    .modifier(
+        BaseContentView(
+            titleView: {
+                AnyView(
+                    VStack {
+                        BaseContentView.text()
+                    }
+                )
+            },
+            iconRight: .icFavourite,
+            actionLeft: {
+
+            },
+            actionRight: {
+
+            }))
 }
