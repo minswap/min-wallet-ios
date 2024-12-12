@@ -14,56 +14,61 @@ The library exposes the `mwrust` namespace with the following functions and type
 
 ### Functions
 
-#### `gen_phrase(u32 word_count) -> string`
+#### `genPhrase(wordCount: UInt32) -> String`
 Generates a mnemonic phrase with the specified word count.
 
 - **Parameters**:
-    - `word_count`: Number of words in the generated mnemonic phrase (e.g., 12, 15, 24).
+    - `wordCount`: Number of words in the generated mnemonic phrase (e.g., 12, 15, 24).
 - **Returns**:
-    - A string containing the generated mnemonic phrase.
+    - A `String` containing the generated mnemonic phrase.
 
 #### Example:
-```cpp
-string phrase = mwrust::gen_phrase(12);
+```swift
+let phrase = genPhrase(wordCount: 12)
 ```
 
 ---
 
-#### `create_wallet(string phrase, string password, string network_env) -> MinWallet`
+#### `createWallet(phrase: String, password: String, networkEnv: String) -> MinWallet`
 Creates a wallet based on the provided mnemonic phrase, password, and network environment.
 
 - **Parameters**:
     - `phrase`: The mnemonic phrase used to derive the wallet.
     - `password`: A user-defined password for encrypting the wallet's private key.
-    - `network_env`: The network environment for the wallet (e.g., `"mainnet"` or `"preprod"`).
+    - `networkEnv`: The network environment for the wallet (e.g., `"mainnet"` or `"preprod"`).
 - **Returns**:
     - A `MinWallet` object containing wallet details.
 
 #### Example:
-```cpp
-MinWallet wallet = mwrust::create_wallet(
-    "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
-    "secure_password",
-    "testnet"
-);
+```swift
+let wallet = createWallet(
+    phrase: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    password: "secure_password",
+    networkEnv: "preprod"
+)
 ```
 
 ---
 
-#### `sign_tx(MinWallet wallet, string password, u32 account_index, string tx_raw) -> string`
+#### `signTx(wallet: MinWallet, password: String, accountIndex: UInt32, txRaw: String) -> String`
 Signs a raw transaction using the provided wallet.
 
 - **Parameters**:
     - `wallet`: A `MinWallet` object containing wallet details.
     - `password`: The password used to decrypt the wallet's private key.
-    - `account_index`: The account index to sign the transaction from (default `account_index = 0`).
-    - `tx_raw`: The raw transaction string to be signed.
+    - `accountIndex`: The account index to sign the transaction from (default `accountIndex = 0`).
+    - `txRaw`: The raw transaction string to be signed.
 - **Returns**:
-    - A signed transaction string.
+    - A signed transaction `String`.
 
 #### Example:
-```cpp
-string signed_tx = mwrust::sign_tx(wallet, "secure_password", 0, "raw_tx_data");
+```swift
+let signedTx = signTx(
+    wallet: wallet,
+    password: "secure_password",
+    accountIndex: 0,
+    txRaw: "raw_tx_data"
+)
 ```
 
 ---
@@ -71,57 +76,46 @@ string signed_tx = mwrust::sign_tx(wallet, "secure_password", 0, "raw_tx_data");
 ### Types
 
 #### `MinWallet`
-A dictionary object containing details of a wallet.
+A dictionary-like object containing details of a wallet.
 
 - **Fields**:
-    - `address` (`string`): The wallet's address.
-    - `network_id` (`u32`): The ID of the network the wallet belongs to (e.g., `1` for mainnet).
-    - `account_index` (`u32`): The account index within the wallet.
-    - `encrypted_key` (`string`): The wallet's encrypted private key.
+    - `address` (`String`): The wallet's address.
+    - `networkId` (`UInt32`): The ID of the network the wallet belongs to (mainnet: 764824073, preprod: 1).
+    - `accountIndex` (`UInt32`): The account index within the wallet.
+    - `encryptedKey` (`UInt32`): The wallet's encrypted private key.
 
 #### Example:
-```cpp
-MinWallet wallet = {
-    "address": "addr_test1...",
-    "network_id": 0,
-    "account_index": 0,
-    "encrypted_key": "<encrypted_data>"
-};
+```swift
+let wallet = MinWallet(
+    address: "addr_test1...",
+    networkId: 1,
+    accountIndex: 0,
+    encryptedKey: "<encrypted_data>"
+)
 ```
 
 ## Usage Examples
 
 ### Generate a Mnemonic Phrase
-```cpp
-string phrase = mwrust::gen_phrase(24);
+```swift
+let phrase = genPhrase(wordCount: UInt32) -> String
 ```
 
 ### Create a Wallet
-```cpp
-MinWallet wallet = mwrust::create_wallet(
-    "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
-    "secure_password",
-    "mainnet"
-);
+```swift
+let wallet = createWallet(
+    phrase: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    password: "secure_password",
+    networkEnv: "preprod"
+)
 ```
 
 ### Sign a Transaction
-```cpp
-string signed_tx = mwrust::sign_tx(
-    wallet,
-    "secure_password",
-    0,
-    "raw_tx_data"
-);
+```swift
+let signedTx = signTx(
+    wallet: wallet,
+    password: "secure_password",
+    accountIndex: 0,
+    txRaw: "raw_tx_data"
+)
 ```
-
-## Requirements
-- C++ compiler
-- Rust integration (if applicable for `mwrust` implementation)
-
-## License
-This library is licensed under the MIT License. See the LICENSE file for more details.
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request on the repository.
-
