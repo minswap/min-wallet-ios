@@ -22,6 +22,8 @@
 		575157DA2CEB4526004CD647 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AD2CEB4526004CD647 /* Inter-Medium.ttf */; };
 		575157DE2CEB4526004CD647 /* InterDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157C12CEB4526004CD647 /* InterDisplay-Regular.ttf */; };
 		575157E72CEB4526004CD647 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 575157AF2CEB4526004CD647 /* Inter-Regular.ttf */; };
+		5761D7162D0ADFE800D2809A /* Mobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5761D7152D0ADFE800D2809A /* Mobile.xcframework */; };
+		5761D7182D0ADFF400D2809A /* mwrust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5761D7172D0ADFF400D2809A /* mwrust.swift */; };
 		5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774769A2CED9A220066CFB6 /* Carousel.swift */; };
 		57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102952C64CCA0000B3544 /* MinWalletApp.swift */; };
 		57F1029A2C64CCA1000B3544 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F102992C64CCA1000B3544 /* Assets.xcassets */; };
@@ -152,9 +154,9 @@
 		575157BF2CEB4526004CD647 /* InterDisplay-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-Medium.ttf"; sourceTree = "<group>"; };
 		575157C12CEB4526004CD647 /* InterDisplay-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-Regular.ttf"; sourceTree = "<group>"; };
 		575157C22CEB4526004CD647 /* InterDisplay-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-SemiBold.ttf"; sourceTree = "<group>"; };
+		5761D7152D0ADFE800D2809A /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
+		5761D7172D0ADFF400D2809A /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		5774769A2CED9A220066CFB6 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
-		57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mobile.xcframework; path = rust/ios/Mobile.xcframework; sourceTree = "<group>"; };
-		57A6D91A2CEC3604009CF6CD /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		57A6F7C6490456E5F226DC7F /* TokenLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenLogo.swift; sourceTree = "<group>"; };
 		57F102922C64CCA0000B3544 /* MinWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102952C64CCA0000B3544 /* MinWalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletApp.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 			files = (
 				9651CAA32D067760006C46DB /* SDWebImageSwiftUI in Frameworks */,
 				9651CAAC2D0677B5006C46DB /* SkeletonUI in Frameworks */,
+				5761D7162D0ADFE800D2809A /* Mobile.xcframework in Frameworks */,
 				9651CAA92D0677A3006C46DB /* Then in Frameworks */,
 				9651CAA62D067793006C46DB /* FlowStacks in Frameworks */,
 				9651CAAF2D0677C4006C46DB /* ScalingHeaderScrollView in Frameworks */,
@@ -410,8 +413,8 @@
 				57F102A52C64CCA1000B3544 /* MinWalletTests */,
 				57F102AF2C64CCA1000B3544 /* MinWalletUITests */,
 				57F102932C64CCA0000B3544 /* Products */,
-				57A6D9192CEC35BF009CF6CD /* Mobile.xcframework */,
-				57A6D91A2CEC3604009CF6CD /* mwrust.swift */,
+				5761D7152D0ADFE800D2809A /* Mobile.xcframework */,
+				5761D7172D0ADFF400D2809A /* mwrust.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -971,6 +974,7 @@
 				E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */,
 				96FE0CFF2CF433E4008E4BFD /* AppBar.swift in Sources */,
 				9655920F2CF8252C00301DDB /* CreateNewWalletSuccessView.swift in Sources */,
+				5761D7182D0ADFF400D2809A /* mwrust.swift in Sources */,
 				96FE0CF02CF366D7008E4BFD /* TokenDetailView.swift in Sources */,
 				9600DEC92CF18620005D997C /* SplashView.swift in Sources */,
 				960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */,

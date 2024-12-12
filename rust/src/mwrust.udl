@@ -1,22 +1,12 @@
 namespace mwrust {
-    string generate_mnemonic();
-    WalletType create_wallet([ByRef] string mnemonic, [ByRef] string password, u32 account_index, AddressType address_type, NetworkEnvironment network_environment);
-    string sign_tx([ByRef] string tx_raw, sequence<string> keys);
+    string gen_phrase(u32 word_count);
+    MinWallet create_wallet(string phrase, string password, string network_env);
+    string sign_tx(MinWallet wallet, string password, u32 account_index, string tx_raw);
 };
 
-enum NetworkEnvironment {
-    "Mainnet",
-    "TestnetPreprod",
-    "TestnetPreview",
-};
-
-enum AddressType {
-    "BaseAddress",
-    "EnterpriseAddress",
-};
-
-[Enum]
-interface WalletType {
-    BaseWallet(string address, string reward_address, string payment_key, string stake_key);
-    EnterpriseWallet(string address, string payment_key);
+dictionary MinWallet {
+    string address;
+    u32 network_id;
+    u32 account_index;
+    string encrypted_key;
 };
