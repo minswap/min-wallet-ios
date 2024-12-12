@@ -1,5 +1,5 @@
 use bip39::{Language, Mnemonic};
-use cardano_serialization_lib::{Address, BaseAddress, Bip32PrivateKey, Credential, RewardAddress};
+use cardano_serialization_lib::{Address, BaseAddress, Bip32PrivateKey, Credential};
 
 use crate::wallet::emip3::{decrypt_password, encrypt_password};
 
@@ -36,14 +36,6 @@ pub trait WalletStaticMethods {
         BaseAddress::new(network_id as u8, &payment_credential, &stake_credential).to_address()
     }
 
-    fn gen_reward_address(account: &Bip32PrivateKey, network_id: u8) -> RewardAddress {
-        let stake_key = account.derive(2).derive(0).to_raw_key();
-        let stake_key_hash = stake_key.to_public().hash();
-        let stake_credential = Credential::from_keyhash(&stake_key_hash);
-
-        RewardAddress::new(network_id, &stake_credential)
-    }
-
     fn gen_encrypted_key(password: &str, root_key: &Bip32PrivateKey) -> String {
         let root_key_hex = root_key.to_hex();
         encrypt_password(password, root_key_hex.as_str())
@@ -74,25 +66,5 @@ mod tests {
         let encrypted = TestWallet::gen_encrypted_key(&password, &root_key);
         let decrypted = TestWallet::get_root_key_from_password(&password, &encrypted);
         assert_eq!(root_key.to_hex(), decrypted.to_hex());
-    }
-
-    #[test]
-    fn test_base_address() {
-        let seed = String::from(
-            "detect amateur eternal elite dad kangaroo usual chase poem detail tumble amount",
-        );
-        let entropy = TestWallet::phrase_to_entropy(&seed);
-        let root_key = TestWallet::entropy_to_root_key(&entropy);
-        assert_eq!(root_key.to_bech32(), "xprv1gre69tdkhwnzsl0spaj9n9ty9gc7yx64fm29ff9hea57sd4q03xuatqlpq7qanpl3dnjzdtchx394gdk9w0c9ezaaau45c2wk5aduyht3kw7659u7gzt4qh37na0dsh66txhajlzssf27ay75s8hpdqqug7vwwy6");
-
-        let account = TestWallet::get_account(&root_key, 0);
-        let address = TestWallet::get_address(&account, 1);
-        assert_eq!(address.to_bech32(None).unwrap(), "addr1q82vnh5g9epl7x8c3m0zngjtfzcjttt5gjpf8eptvjxk74397eag00jf7yvzj28v38mufm9keaygaywu0eprdwnu40hsm6eekf");
-
-        let reward_address = TestWallet::gen_reward_address(&account, 1);
-        assert_eq!(
-            reward_address.to_address().to_bech32(None).unwrap(),
-            "stake1uyjlv758heylzxpf9rkgna7yajmv7jywj8w8us3khf72hmcmx40fs"
-        );
     }
 }
