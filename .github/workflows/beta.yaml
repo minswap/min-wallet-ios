@@ -32,7 +32,7 @@ jobs:
       - name: Install Dependencies
         run: bundle install
       - name: Build rust
-        run: cd rust && ./build.sh
+        run: ./rust/build.sh
       - name: Build
         run: bundle exec fastlane beta
         env:
