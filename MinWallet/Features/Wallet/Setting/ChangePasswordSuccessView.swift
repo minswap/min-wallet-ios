@@ -3,12 +3,19 @@ import FlowStacks
 
 
 struct ChangePasswordSuccessView: View {
+    enum ScreenType {
+        case setting
+        case walletSetting
+    }
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
+    var screenType: ScreenType
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Image(.icToken)
+            Image(.icChangePasswordSuccess)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 200)
@@ -23,32 +30,19 @@ struct ChangePasswordSuccessView: View {
                 .multilineTextAlignment(.center)
                 .padding(.top, .xl)
                 .padding(.horizontal, 16.0)
-            /*
-            ZStack {
-                HStack(alignment: .top) {
-                    Image(.icTokenDark)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 172)
-                        .padding(.top, 16.0)
-                        .padding(.leading, -72)
-                    Spacer()
-                    Image(.icToken)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 120)
-                        .padding(.top, -16.0)
-                        .padding(.trailing, -50)
-                }
-            }
-            */
             Spacer()
-
             CustomButton(
                 title: "Got it",
                 variant: .primary,
                 action: {
-                    navigator.push(.home)
+                    switch screenType {
+                    case .setting:
+                        if !navigator.popTo(.home) {
+                            navigator.popToRoot()
+                        }
+                    case .walletSetting:
+                        break
+                    }
                 }
             )
             .frame(height: 56)
@@ -62,5 +56,5 @@ struct ChangePasswordSuccessView: View {
 }
 
 #Preview {
-    ChangePasswordSuccessView()
+    ChangePasswordSuccessView(screenType: .setting)
 }

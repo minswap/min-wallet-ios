@@ -229,6 +229,9 @@
     "Fee" : {
 
     },
+    "Forgot password" : {
+
+    },
     "Forgot password?" : {
 
     },
@@ -238,13 +241,13 @@
     "Getting started now" : {
 
     },
-    "Give your wallet a nickname" : {
-
-    },
     "Give your wallet a nickname ..." : {
 
     },
     "Got it" : {
+
+    },
+    "Got it!" : {
 
     },
     "Half" : {
@@ -295,6 +298,9 @@
     "Language" : {
 
     },
+    "Learn more" : {
+
+    },
     "Light" : {
 
     },
@@ -305,9 +311,6 @@
 
     },
     "Logout" : {
-
-    },
-    "long.nguyen" : {
 
     },
     "Make sure no one is looking at your screen" : {
@@ -379,9 +382,6 @@
     "Please write down your 24 words seed phrase and store it in a secured place." : {
 
     },
-    "Please write your seed phrase in the right order. You can paste directly from clipboard." : {
-
-    },
     "Plot" : {
 
     },
@@ -415,9 +415,6 @@
 
     },
     "Recommended" : {
-
-    },
-    "Reinput seedphase" : {
 
     },
     "Restore" : {
@@ -478,6 +475,9 @@
 
     },
     "Slippage Tolerance" : {
+
+    },
+    "Something went wrong!" : {
 
     },
     "Statistics" : {
@@ -567,7 +567,7 @@
     "Weekday" : {
 
     },
-    "When available, uses multiple pools for better liquidity and prices." : {
+    "When available, uses multiple pools for better liquidity and prices. " : {
 
     },
     "When you set the appearance to default, theme app will be depended on device settings." : {

@@ -113,9 +113,10 @@ struct SwapTokenSettingView: View {
                 }
                 .frame(height: 24)
                 .padding(.bottom, 4)
-                Text("When available, uses multiple pools for better liquidity and prices.")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                HorizontalGeometryReader { width in
+                    TextLearnMoreSendTokenView(text: "When available, uses multiple pools for better liquidity and prices. ", textClickAble: "Learn more", preferredMaxLayoutWidth: width)
+                }
+
                 Color.colorBorderPrimarySub.frame(height: 1)
                     .padding(.vertical, .xl)
                 Text("To view risky options like Unlimited Slippage you must disable safe mode")

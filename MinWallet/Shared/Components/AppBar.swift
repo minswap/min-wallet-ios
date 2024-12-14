@@ -11,6 +11,7 @@ struct BaseContentView: ViewModifier {
     var alignmentTitle: Alignment = .leading
     var actionLeft: (() -> Void)?
     var actionRight: (() -> Void)?
+    var ignoreSafeArea: Bool = false
 
     func body(content: Content) -> some View {
         ZStack {
@@ -71,11 +72,17 @@ struct BaseContentView: ViewModifier {
                     }
                     .frame(height: 48)
                     .padding(.horizontal, .xl)
-                    content
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .safeAreaInset(edge: .bottom) {
-                            Color.clear.frame(height: 0)
-                        }
+                    if !ignoreSafeArea {
+                        content
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .safeAreaInset(edge: .bottom) {
+                                Color.clear.frame(height: 0)
+                            }
+                    } else {
+                        content
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .ignoresSafeArea()
+                    }
                 })
         }
     }

@@ -7,6 +7,8 @@ struct HomeView: View {
     private var viewModel: HomeViewModel = .init()
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    var userInfo: UserInfo
 
     @State
     private var isShowAppearance: Bool = false
@@ -48,9 +50,11 @@ struct HomeView: View {
                         }
                     }
 
-                    Text(viewModel.accountName)
+                    Text(userInfo.nickName)
+                        .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundColor(.colorBaseTent)
+                        .frame(maxWidth: 200, alignment: .leading)
 
                     Spacer()
                     Image(.icSearch)
@@ -76,7 +80,7 @@ struct HomeView: View {
 
                     }) {
                         HStack(spacing: 4) {
-                            Text(viewModel.address.shortenAddress)
+                            Text(userInfo.walletAddress.shortenAddress)
                                 .font(.paragraphXSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Image(.icCopy)
@@ -173,6 +177,7 @@ struct HomeView: View {
 #Preview {
     HomeView()
         .environmentObject(AppSetting())
+        .environmentObject(UserInfo())
 }
 
 extension HomeView {
@@ -181,7 +186,9 @@ extension HomeView {
             id: UUID(),
             token: Token(
                 currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                isVerified: true), price: 37123.35, changePercent: 5.7), count: 20)
+                isVerified: true), price: 37123.35, changePercent: 5.7), count: 20
+    )
+    .map { $0.with { $0.id = UUID() } }
 
 
 }

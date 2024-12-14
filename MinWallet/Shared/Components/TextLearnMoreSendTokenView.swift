@@ -6,23 +6,32 @@ struct TextLearnMoreSendTokenView: UIViewRepresentable {
     let text: LocalizedStringKey
     let textClickAble: LocalizedStringKey
 
+    var preferredMaxLayoutWidth: CGFloat = .greatestFiniteMagnitude
+
     func makeUIView(context: Context) -> UILabel {
         let label = UILabel()
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
+
+        label.setContentHuggingPriority(.required, for: .vertical)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
         let tapGesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onViewTap(recognizer:)))
         tapGesture.delegate = context.coordinator
         tapGesture.numberOfTapsRequired = 1
         label.addGestureRecognizer(tapGesture)
 
         context.coordinator.label = label
+
         return label
     }
 
     func updateUIView(_ uiView: UILabel, context: Context) {
         context.coordinator.label = uiView
         uiView.attributedText = context.coordinator.getAttributedText(text: text, textClickAble: textClickAble)
+        uiView.preferredMaxLayoutWidth = preferredMaxLayoutWidth
     }
 
     func makeCoordinator() -> Coordinator {
@@ -90,4 +99,43 @@ struct TextLearnMoreSendTokenView: UIViewRepresentable {
             return attributedString
         }
     }
+}
+
+
+struct HorizontalGeometryReader<Content: View>: View {
+    var content: (CGFloat) -> Content
+    @State private var width: CGFloat = 0
+
+    public init(@ViewBuilder content: @escaping (CGFloat) -> Content) {
+        self.content = content
+    }
+
+    public var body: some View {
+        content(width)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .background(
+                GeometryReader { geometry in
+                    Color.clear
+                        .preference(key: WidthPreferenceKey.self, value: geometry.size.width)
+                }
+            )
+            .onPreferenceChange(WidthPreferenceKey.self) { width in
+                self.width = width
+            }
+    }
+}
+
+fileprivate struct WidthPreferenceKey: PreferenceKey, Equatable {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+    }
+}
+
+#Preview {
+    VStack {
+        SwapTokenSettingView(isShowSwapSetting: Binding<Bool>.constant(false))
+            .padding(16)
+        Spacer()
+    }
+    .background(Color.black)
 }

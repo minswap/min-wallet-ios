@@ -9,9 +9,8 @@ struct SeedPhraseTextField: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
-
         textView.delegate = context.coordinator
-        textView.isScrollEnabled = false
+        textView.isScrollEnabled = true
         textView.backgroundColor = .clear
         textView.font = .systemFont(ofSize: 14)
 

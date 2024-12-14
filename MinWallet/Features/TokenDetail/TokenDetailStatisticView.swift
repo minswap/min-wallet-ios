@@ -147,7 +147,7 @@ struct TokenDetailStatisticView: View {
 struct DashedUnderlineText: UIViewRepresentable {
     let text: LocalizedStringKey
     var textColor: UIColor = .white
-    var font: UIFont = .systemFont(ofSize: 14)
+    var font: UIFont? = .systemFont(ofSize: 14)
 
     func makeUIView(context: Context) -> UILabel {
         let text = text.toString()
@@ -166,7 +166,7 @@ struct DashedUnderlineText: UIViewRepresentable {
         attributedString.addAttributes(
             [
                 NSAttributedString.Key.baselineOffset: 5,
-                NSAttributedString.Key.font: font,
+                NSAttributedString.Key.font: font ?? .systemFont(ofSize: 14),
                 NSAttributedString.Key.foregroundColor: textColor,
 
             ], range: NSRange(location: 0, length: attributedString.length))

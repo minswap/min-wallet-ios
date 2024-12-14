@@ -3,17 +3,27 @@ import FlowStacks
 
 
 struct ForgotPasswordView: View {
+    enum ScreenType {
+        case enterPassword
+        case changeYourPassword(ChangePasswordView.ScreenType)
+    }
+
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    @EnvironmentObject
+    private var appSetting: AppSetting
+    @EnvironmentObject
+    private var userInfo: UserInfo
     @State
     private var conditionOne: Bool = false
     @State
     private var conditionTwo: Bool = false
+    @State
+    var screenType: ScreenType
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Authentication")
+            Text("Forgot password")
                 .font(.titleH5)
                 .foregroundStyle(.colorBaseTent)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,7 +74,29 @@ struct ForgotPasswordView: View {
             )
 
             CustomButton(title: "Restore", isEnable: combinedBinding) {
-
+                userInfo.deleteAccount()
+                appSetting.deleteAccount()
+                appSetting.rootScreen = .gettingStarted
+                navigator.popToRoot()
+                /*
+                switch screenType {
+                case .enterPassword:
+                    break
+                case .changeYourPassword(let screenType):
+                    switch screenType {
+                    case .setting:
+                        userInfo.deleteAccount()
+                        appSetting.deleteAccount()
+                        appSetting.rootScreen = .gettingStarted
+                        navigator.popToRoot()
+                    case .walletSetting:
+                        userInfo.deleteAccount()
+                        appSetting.deleteAccount()
+                        appSetting.rootScreen = .gettingStarted
+                        navigator.popToRoot()
+                    }
+                }
+                 */
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -80,5 +112,5 @@ struct ForgotPasswordView: View {
 }
 
 #Preview {
-    ForgotPasswordView()
+    ForgotPasswordView(screenType: .enterPassword)
 }

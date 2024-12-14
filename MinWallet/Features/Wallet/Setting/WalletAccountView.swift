@@ -5,6 +5,8 @@ import FlowStacks
 struct WalletAccountView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var userInfo: UserInfo
     @State
     private var isVerified: Bool = true
 
@@ -37,10 +39,10 @@ struct WalletAccountView: View {
             .padding(.vertical, .lg)
             VStack(alignment: .center, spacing: 4) {
                 HStack {
-                    Text("long.nguyen")
+                    Text(userInfo.nickName)
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
-
+                        .lineLimit(1)
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)
@@ -51,7 +53,7 @@ struct WalletAccountView: View {
                         )
                         .frame(height: 20)
                 }
-                Text("Addrasdlfkjasdf12231123".shortenAddress)
+                Text(userInfo.walletAddress.shortenAddress)
                     .font(.paragraphXSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -86,7 +88,7 @@ struct WalletAccountView: View {
                 title: "Edit nickname",
                 variant: .secondary,
                 action: {
-
+                    navigator.push(.walletSetting(.editNickName))
                 }
             )
             .frame(height: 36)
@@ -114,7 +116,7 @@ struct WalletAccountView: View {
             CustomButton(
                 title: "Disconnect",
                 action: {
-
+                    navigator.push(.walletSetting(.disconnectWallet))
                 }
             )
             .frame(height: 36)
@@ -131,4 +133,5 @@ struct WalletAccountView: View {
 
 #Preview {
     WalletAccountView()
+        .environmentObject(UserInfo())
 }

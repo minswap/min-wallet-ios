@@ -120,7 +120,7 @@ struct SwapTokenView: View {
             .padding(.top, .xs)
             Spacer()
             CustomButton(title: "Swap") {
-                navigator.push(.createWallet(.biometricSetup))
+                //navigator.push(.createWallet(.biometricSetup))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -137,7 +137,7 @@ struct SwapTokenView: View {
                     isShowSwapSetting = true
                 })
         )
-        .presentSheet(isPresented: $isShowSwapSetting, height: 400) {
+        .presentSheet(isPresented: $isShowSwapSetting, height: 600) {
             SwapTokenSettingView(isShowSwapSetting: $isShowSwapSetting)
                 .padding(.xl)
         }

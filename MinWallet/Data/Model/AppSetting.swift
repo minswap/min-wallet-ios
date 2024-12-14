@@ -3,8 +3,14 @@ import Combine
 
 
 class AppSetting: ObservableObject {
+    enum NetworkEnv: String {
+        case mainnet
+        case preprod
+    }
+
     static let TEAM_ID = ""
     static let USER_NAME = "minWallet"
+    static let PASS_FOR_FACE_ID = "org.minswap.MinWallet.wallet"
 
     var extraSafeArea: CGFloat {
         safeArea > 44 ? 32 : 12
@@ -14,7 +20,14 @@ class AppSetting: ObservableObject {
 
     let objectWillChange = PassthroughSubject<Void, Never>()
 
-    var safeArea: CGFloat = 59
+    var safeArea: CGFloat = UIApplication.safeArea.top
+
+    var rootScreen: MainCoordinatorViewModel.Screen = .policy
+    {
+        willSet {
+            objectWillChange.send()
+        }
+    }
 
     @UserDefault("enable_audio", defaultValue: false)
     var enableAudio: Bool {
@@ -74,6 +87,13 @@ class AppSetting: ObservableObject {
         }
     }
 
+    @UserDefault("is_login", defaultValue: false)
+    var isLogin: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
     var authenticationType: AuthenticationType {
         get { AuthenticationType(rawValue: securityType) ?? .biometric }
         set { securityType = newValue.rawValue }
@@ -83,6 +103,14 @@ class AppSetting: ObservableObject {
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }
+
+        rootScreen = isLogin ? .home : .policy
+    }
+
+    func deleteAccount() {
+        isLogin = false
+        authenticationType = .biometric
+        try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
     }
 }
 
@@ -149,6 +177,16 @@ extension AppSetting {
         )
 
         try passwordItem.save(password)
+    }
+
+    static func deletePasswordToKeychain(username: String) throws {
+        let passwordItem = GKeychainStore(
+            service: GKeychainStore.KEYCHAIN_SERVICENAME,
+            key: username,
+            accessGroup: GKeychainStore.KEYCHAIN_ACCESS_GROUP
+        )
+
+        try passwordItem.deleteItem()
     }
 
     func reAuthenticateUser() async throws {

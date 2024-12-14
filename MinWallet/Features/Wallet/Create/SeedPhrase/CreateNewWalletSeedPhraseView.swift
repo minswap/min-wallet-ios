@@ -5,13 +5,14 @@ import FlowStacks
 struct CreateNewWalletSeedPhraseView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    @EnvironmentObject
-    private var viewModel: CreateNewWalletViewModel
-
     @State
-    var copied: Bool = false
+    private var copied: Bool = false
     @State
-    var isRevealPhrase: Bool = false
+    private var isRevealPhrase: Bool = false
+    @State
+    private var seedPhrase: [String] = []
+    @State
+    private var isConfirm: Bool = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -22,21 +23,20 @@ struct CreateNewWalletSeedPhraseView: View {
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
-            SeedPhraseContentView(isRevealPhrase: $isRevealPhrase)
+            SeedPhraseContentView(isRevealPhrase: $isRevealPhrase, seedPhrase: $seedPhrase)
             Spacer()
-
             if isRevealPhrase {
-                SeedPhraseCopyView(copied: $copied)
+                SeedPhraseCopyView(copied: $copied, seedPhrase: $seedPhrase, isConfirm: $isConfirm)
                     .padding(.horizontal, .xl)
+                    .padding(.bottom, UIApplication.safeArea.bottom > 0 ? UIApplication.safeArea.bottom : .xl)
             } else {
                 SeedPhraseRevealView(isRevealPhrase: $isRevealPhrase)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, .xl)
-                    //.mask(Rectangle().cornerRadius(40, corners: [.topLeft, .topRight]))
-                    .overlay(
-                        Rectangle().stroke(.colorBorderPrimarySub, lineWidth: 1)
-                            .cornerRadius(20, corners: [.topRight, .topLeft])
-                    )
+                    .padding(.bottom, UIApplication.safeArea.bottom > 0 ? UIApplication.safeArea.bottom : .md)
+                    .background(.colorBaseBackground)
+                    .cornerRadius(24, corners: [.topLeft, .topRight])
+                    .shadow(color: .colorBorderPrimarySub, radius: 4, x: 0, y: 2)
             }
         }
         .modifier(
@@ -44,17 +44,19 @@ struct CreateNewWalletSeedPhraseView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                },
+                ignoreSafeArea: true)
+        )
+        .task {
+            guard seedPhrase.isEmpty else { return }
+            seedPhrase = genPhrase(wordCount: 24).split(separator: " ").map({ String($0) })
+        }
     }
 }
 
 #Preview {
     CreateNewWalletSeedPhraseView()
-        .environmentObject(CreateNewWalletViewModel())
-        .frame(width: .infinity)
-    //    SeedPhraseRevealView()
 }
-
 
 private struct SeedPhraseRevealView: View {
     @Binding
@@ -89,17 +91,24 @@ private struct SeedPhraseRevealView: View {
 private struct SeedPhraseCopyView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
     @Binding var copied: Bool
+    @Binding var seedPhrase: [String]
+    @Binding var isConfirm: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top, spacing: 8) {
-                Image(.icSquareCheckBox)
+                Image(isConfirm ? .icSquareCheckBox : .icSquareUncheckBox)
+                    .resizable()
+                    .frame(width: 20, height: 20)
                 Text("I have written the seed phrase and stored it in a secured place.")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                     .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .contentShape(.rect)
+            .onTapGesture {
+                isConfirm.toggle()
             }
             HStack(spacing: .xl) {
                 CustomButton(
@@ -108,12 +117,21 @@ private struct SeedPhraseCopyView: View {
                     iconRight: copied ? .icCheckMark : .icCopySeedPhrase
                 ) {
                     copied = true
+                    UIPasteboard.general.string = seedPhrase.joined(separator: " ")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        withAnimation {
+                            copied = false
+                        }
+                    }
                 }
                 .frame(height: 56)
 
-                CustomButton(title: "Next") {
-                    navigator.push(.createWallet(.reInputSeedPhrase))
-                }
+                CustomButton(
+                    title: "Next", isEnable: $isConfirm,
+                    action: {
+                        navigator.push(.createWallet(.reInputSeedPhrase(seedPhrase: seedPhrase)))
+                    }
+                )
                 .frame(height: 56)
             }
         }
@@ -124,10 +142,10 @@ private struct SeedPhraseCopyView: View {
 private struct SeedPhraseContentView: View {
     @Binding
     var isRevealPhrase: Bool
-    @EnvironmentObject
-    private var viewModel: CreateNewWalletViewModel
+    @Binding
+    var seedPhrase: [String]
 
-    let columns = [
+    private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
     ]
@@ -143,13 +161,13 @@ private struct SeedPhraseContentView: View {
                     .padding(.top, .lg)
                     .padding(.bottom, ._3xl)
                 LazyVGrid(columns: columns, spacing: 0) {
-                    ForEach(0..<viewModel.seedPhrase.count, id: \.self) { index in
+                    ForEach(0..<seedPhrase.count, id: \.self) { index in
                         HStack() {
                             Text(String(index + 1))
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimaryDisable)
                                 .frame(width: 20, alignment: .leading)
-                            Text(viewModel.seedPhrase[index])
+                            Text(seedPhrase[index])
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -202,5 +220,21 @@ private struct SeedPhraseContentView: View {
                 .padding(.bottom, .xl)
             }
         }
+    }
+}
+
+
+extension CreateNewWalletSeedPhraseView {
+    static func generateRandomWords(count: Int, minLength: Int, maxLength: Int) -> [String] {
+        let letters = "abcdefghijklmnopqrstuvwxyz"
+        var words: [String] = []
+
+        for _ in 0..<count {
+            let length = Int.random(in: minLength...maxLength)
+            let word = String((0..<length).map { _ in letters.randomElement()! })
+            words.append(word)
+        }
+
+        return words
     }
 }

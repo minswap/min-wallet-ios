@@ -10,7 +10,10 @@ struct DisconnectWalletView: View {
 
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    @EnvironmentObject
+    private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     private var disconnectType: DisconnectType = .logout
     @State
@@ -87,7 +90,10 @@ struct DisconnectWalletView: View {
                 }
             }
             CustomButton(title: "Disconnect", variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear)) {
-                //TODOZ: cuongnv234 disconnect
+                appSetting.deleteAccount()
+                userInfo.deleteAccount()
+                appSetting.rootScreen = .gettingStarted
+                navigator.popToRoot()
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

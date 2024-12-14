@@ -3,10 +3,24 @@ import FlowStacks
 
 
 struct BiometricSetupView: View {
+    enum ScreenType {
+        case createWallet(seedPhase: [String], nickName: String)
+        case restoreWallet(seedPhase: [String], nickName: String)
+    }
+
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var userInfo: UserInfo
+
+    @State
+    var screenType: ScreenType?
+    @State
+    private var showingAlert: Bool = false
+    @State
+    private var msg: String = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -32,10 +46,24 @@ struct BiometricSetupView: View {
                     do {
                         try await appSetting.biometricAuthentication.authenticateUser()
                         appSetting.authenticationType = .biometric
+                        switch screenType {
+                        case .createWallet(let seedPhrase, let nickName):
+                            let seedPhrase = seedPhrase.joined(separator: " ")
+                            let wallet = createWallet(phrase: seedPhrase, password: AppSetting.PASS_FOR_FACE_ID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
+                            userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
+                            appSetting.isLogin = true
+
+                        case .restoreWallet:
+                            //TODO: cuongnv check restore wallet
+                            break
+                        default:
+                            break
+                        }
                         navigator.push(.createWallet(.createNewWalletSuccess))
+
                     } catch {
-                        error
-                        //TODOZ: cuongnv show error
+                        msg = error.localizedDescription
+                        showingAlert = true
                         appSetting.authenticationType = .password
                     }
                 }
@@ -43,7 +71,16 @@ struct BiometricSetupView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
             CustomButton(title: "Create password", variant: .secondary) {
-                navigator.push(.createWallet(.createNewPassword))
+                switch screenType {
+                case .createWallet(let seedPhase, let nickName):
+                    navigator.push(.createWallet(.createNewPassword(seedPhrase: seedPhase, nickName: nickName)))
+
+                case .restoreWallet(let seedPhase, let nickName):
+                    navigator.push(.restoreWallet(.createNewPassword(seedPhrase: seedPhase, nickName: nickName)))
+
+                default:
+                    break
+                }
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -53,7 +90,11 @@ struct BiometricSetupView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                })
+        )
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Something went wrong!"), message: Text(msg), dismissButton: .default(Text("Got it!")))
+        }
     }
 }
 

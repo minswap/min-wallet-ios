@@ -72,3 +72,11 @@ private struct FramePreferenceKey: PreferenceKey {
     static var defaultValue: CGRect = .zero
     static func reduce(value: inout CGRect, nextValue: () -> CGRect) {}
 }
+
+
+extension UIApplication {
+    static var safeArea: UIEdgeInsets {
+        let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        return scene?.windows.first?.safeAreaInsets ?? .zero
+    }
+}

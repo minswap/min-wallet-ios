@@ -4,10 +4,6 @@ import Foundation
 class HomeViewModel: ObservableObject {
 
     @Published
-    var address: String = ""
-    @Published
-    var accountName: String = ""
-    @Published
     var tabType: TokenListView.TabType = .market
 
     @Published
@@ -16,10 +12,7 @@ class HomeViewModel: ObservableObject {
     @Published
     var showSkeleton: Bool = true
 
-    init() {
-        self.address = "Addrasdlfkjasdf12231123"
-        self.accountName = "SassyCat"
-    }
+    init() {}
 
     func getToken() async {
         try? await Task.sleep(nanoseconds: 3_000_000_000)

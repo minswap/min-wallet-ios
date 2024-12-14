@@ -8,15 +8,17 @@ struct SearchTokenView: View {
 
     @State
     private var keyword: String = ""
-    @State
-    var tokens: [TokenWithPrice] = HomeView.tokens
+
     @FocusState
     private var isFocus: Bool
 
     @State
-    private var tokenSample: [String] = ["ADA - MIN", "ADA - MIN", "MIN", "ADA"]
+    private var tokenSample: [String] = ["ADA - MIN", "ADA - MINZ", "MIN", "ADA"]
     @State
     private var hasRecentDelete: Bool = true
+
+    @StateObject
+    private var viewModel: SearchTokenViewModel = .init()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -75,12 +77,18 @@ struct SearchTokenView: View {
                 LazyVStack(
                     spacing: 0,
                     content: {
-                        ForEach(0..<tokens.count, id: \.self) { index in
-                            TokenListItemView(tokenWithPrice: tokens[index])
+                        ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                            TokenListItemView(tokenWithPrice: viewModel.tokens[index])
+                                .swipeToDelete(
+                                    offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
+                                    onDelete: {
+                                        viewModel.offsets.remove(at: index)
+                                        viewModel.isDeleted.remove(at: index)
+                                        viewModel.tokens.remove(at: index)
+                                    })
                         }
                     })
             }
-            Spacer()
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -92,6 +100,7 @@ struct SearchTokenView: View {
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
+
         .background(.colorBaseBackground)
     }
 }
