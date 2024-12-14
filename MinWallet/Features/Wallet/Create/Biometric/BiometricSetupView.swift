@@ -49,7 +49,7 @@ struct BiometricSetupView: View {
                         switch screenType {
                         case .createWallet(let seedPhrase, let nickName):
                             let seedPhrase = seedPhrase.joined(separator: " ")
-                            let wallet = createWallet(phrase: seedPhrase, password: AppSetting.PASS_FOR_FACE_ID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
+                            let wallet = createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
                             userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
                             appSetting.isLogin = true
 

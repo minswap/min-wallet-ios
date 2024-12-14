@@ -184,9 +184,6 @@ public
 
 // MARK: - Constants
 extension GKeychainStore {
-    static let KEYCHAIN_ACCESS_GROUP: String? = "\(AppSetting.TEAM_ID).org.minswap.MinWallet.shareItem"
-    static let KEYCHAIN_SERVICENAME: String = "minWallet"
-
     // MARK: Unique ID
     public
         static let UNIQUE_ID_KEYCHAIN_SERVICE = "UniqueIdService"

@@ -4,13 +4,12 @@ import MinWalletAPI
 
 
 class MinWalletService {
-    private static let BASE_URL: String = "https://monorepo-testnet-preprod.minswap.org/graphql"
     static let shared: MinWalletService = .init()
 
     private let apolloClient: ApolloClient
 
     private init() {
-        apolloClient = ApolloClient(url: URL(string: Self.BASE_URL)!)
+        apolloClient = ApolloClient(url: URL(string: MinWalletConstant.minWalletURL)!)
     }
 
     func fetch<Query: GraphQLQuery>(query: Query) async throws -> Query.Data? {

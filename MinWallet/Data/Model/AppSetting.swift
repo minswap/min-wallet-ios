@@ -8,9 +8,7 @@ class AppSetting: ObservableObject {
         case preprod
     }
 
-    static let TEAM_ID = ""
     static let USER_NAME = "minWallet"
-    static let PASS_FOR_FACE_ID = "org.minswap.MinWallet.wallet"
 
     var extraSafeArea: CGFloat {
         safeArea > 44 ? 32 : 12
@@ -161,9 +159,9 @@ extension AppSetting {
 extension AppSetting {
     static func getPasswordFromKeychain(username: String) throws -> String {
         let passwordItem = GKeychainStore(
-            service: GKeychainStore.KEYCHAIN_SERVICENAME,
+            service: MinWalletConstant.keyChainService,
             key: username,
-            accessGroup: GKeychainStore.KEYCHAIN_ACCESS_GROUP
+            accessGroup: MinWalletConstant.keyChainAccessGroup
         )
         let keychainPassword = try passwordItem.read()
         return keychainPassword
@@ -171,9 +169,9 @@ extension AppSetting {
 
     static func savePasswordToKeychain(username: String, password: String) throws {
         let passwordItem = GKeychainStore(
-            service: GKeychainStore.KEYCHAIN_SERVICENAME,
+            service: MinWalletConstant.keyChainService,
             key: username,
-            accessGroup: GKeychainStore.KEYCHAIN_ACCESS_GROUP
+            accessGroup: MinWalletConstant.keyChainAccessGroup
         )
 
         try passwordItem.save(password)
@@ -181,9 +179,9 @@ extension AppSetting {
 
     static func deletePasswordToKeychain(username: String) throws {
         let passwordItem = GKeychainStore(
-            service: GKeychainStore.KEYCHAIN_SERVICENAME,
+            service: MinWalletConstant.keyChainService,
             key: username,
-            accessGroup: GKeychainStore.KEYCHAIN_ACCESS_GROUP
+            accessGroup: MinWalletConstant.keyChainAccessGroup
         )
 
         try passwordItem.deleteItem()

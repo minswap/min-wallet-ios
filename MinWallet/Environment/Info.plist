@@ -2,17 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Using Face ID to login</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>MIN_BASE_URL</key>
+	<string>${MIN_BASE_URL}</string>
+	<key>MIN_KEYCHAIN_ACCESS_GROUP</key>
+	<string>${MIN_KEYCHAIN_ACCESS_GROUP}</string>
+	<key>MIN_KEYCHAIN_SERVICE_NAME</key>
+	<string>${MIN_KEYCHAIN_SERVICE_NAME}</string>
+	<key>MIN_PASS_DEFAULT_FOR_FACE_ID</key>
+	<string>${MIN_PASS_DEFAULT_FOR_FACE_ID}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>
