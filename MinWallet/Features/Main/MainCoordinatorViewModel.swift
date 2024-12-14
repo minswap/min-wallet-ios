@@ -1,12 +1,24 @@
 import SwiftUI
 import FlowStacks
+import Apollo
+import ApolloAPI
+import MinWalletAPI
 
 
 @MainActor
 class MainCoordinatorViewModel: ObservableObject {
     @Published var routes: Routes<Screen> = []
 
-    init() {}
+    init() {
+        Task {
+            do {
+                let data = try await MinWalletService.shared.fetch(query: TopAssetQuery())
+                print("wtf \(data?.topAssets.searchAfter)")
+            } catch {
+
+            }
+        }
+    }
 }
 
 extension MainCoordinatorViewModel {
