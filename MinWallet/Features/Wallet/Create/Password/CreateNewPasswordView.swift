@@ -132,7 +132,11 @@ struct CreateNewPasswordView: View {
                     let seedPhrase = seedPhrase.joined(separator: " ")
                     let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
                     userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
-
+                    do {
+                        try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                    } catch {
+                        //TODOZ: check error
+                    }
                     navigator.push(.createWallet(.createNewWalletSuccess))
                 case let .restoreWallet(seedPhase, nickName):
                     //TODO: cuongnv restore wallet

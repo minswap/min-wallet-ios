@@ -41,7 +41,7 @@ struct BiometricSetupView: View {
             }
             .padding(.top, 24)
             Spacer()
-            CustomButton(title: "Use FaceID") {
+            CustomButton(title: appSetting.biometricAuthentication.biometricType == .faceID ? "Use FaceID" : "Use TouchID") {
                 Task {
                     do {
                         try await appSetting.biometricAuthentication.authenticateUser()
@@ -52,7 +52,12 @@ struct BiometricSetupView: View {
                             let wallet = createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
                             userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
                             appSetting.isLogin = true
-
+                            do {
+                                try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
+                            } catch {
+                                //TODOZ: check error
+                            }
+                            
                         case .restoreWallet:
                             //TODO: cuongnv check restore wallet
                             break
