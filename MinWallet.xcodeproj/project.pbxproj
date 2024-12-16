@@ -452,6 +452,7 @@
 				575157902CEB43FF004CD647 /* Features */,
 				575157992CEB4407004CD647 /* Shared */,
 				57F1029B2C64CCA1000B3544 /* Preview Content */,
+				5751579F2CEB4443004CD647 /* Info.plist */,
 			);
 			path = MinWallet;
 			sourceTree = "<group>";
@@ -687,7 +688,6 @@
 		96BD2A622D0E8F3E00D81277 /* Environment */ = {
 			isa = PBXGroup;
 			children = (
-				5751579F2CEB4443004CD647 /* Info.plist */,
 				96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */,
 				960D6B312CFFEAF30017AF29 /* MinWallet.entitlements */,
 				96BD2A692D0ED06400D81277 /* Constant.swift */,
@@ -1205,7 +1205,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "${MIN_INFOPLIST_FILE}";
+				INFOPLIST_FILE = MinWallet/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Using Face ID to login";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1248,7 +1248,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "${MIN_INFOPLIST_FILE}";
+				INFOPLIST_FILE = MinWallet/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Using Face ID to login";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

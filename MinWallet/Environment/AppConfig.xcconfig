@@ -9,7 +9,6 @@
 MIN_PRODUCT_NAME      = MinWallet
 MIN_PRODUCT_BUNDLE_ID = org.minswap.MinWallet
 MIN_DEVELOPMENT_TEAM  = 3FM7JRXRKW
-MIN_INFOPLIST_FILE    = MinWallet/Environment/Info.plist
 MIN_CODE_SIGN_ENTITLEMENTS = MinWallet/Environment/MinWallet.entitlements
 
 MIN_KEYCHAIN_SERVICE_NAME = minWallet

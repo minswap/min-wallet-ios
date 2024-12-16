@@ -10,7 +10,6 @@ jobs:
   release-beta:
     runs-on: macos-latest
     environment: Production
-    if: ${{ !startsWith(github.event.head_commit.message, '[skip ci] ') }}
     steps:
       - uses: webfactory/ssh-agent@v0.9.0
         with:
