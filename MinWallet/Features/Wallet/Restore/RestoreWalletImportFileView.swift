@@ -5,15 +5,15 @@ import FlowStacks
 struct RestoreWalletImportFileView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    @EnvironmentObject
+    var hudState: HUDState
+    
     @State
     private var isShowing = false
     @State
     private var fileURL: URL?
     @State
     private var fileSize: String = "0KB"
-    @State
-    private var showingAlert: Bool = false
     @State
     private var msg: String = ""
 
@@ -84,8 +84,7 @@ struct RestoreWalletImportFileView: View {
             }
             Spacer()
             CustomButton(title: "Next") {
-                //navigator.push(.restoreWallet(.biometricSetup))
-                showingAlert = true
+                navigator.push(.restoreWallet(.biometricSetup(seedPhrase: [], nickName: "")))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -108,7 +107,7 @@ struct RestoreWalletImportFileView: View {
                         let _ = try FileManager.default.attributesOfItem(atPath: url.path)
                     } catch {
                         msg = error.localizedDescription
-                        showingAlert = true
+                        hudState.showMsg(msg: msg)
                     }
                     guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
                         let fileSize = attributes[.size] as? Int64
@@ -121,9 +120,6 @@ struct RestoreWalletImportFileView: View {
             case let .failure(error):
                 print(error)
             }
-        }
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Something went wrong!"), message: Text(msg), dismissButton: .default(Text("Got it!")))
         }
     }
 

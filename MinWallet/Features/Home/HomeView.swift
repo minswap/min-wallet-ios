@@ -164,11 +164,6 @@ struct HomeView: View {
                 .padding(.xl)
         }
         .task {
-            // Test rust code, feel free to remove
-            let v = genPhrase(wordCount: 24)
-            print(v)
-            // Test rust code, feel free to remove
-
             await viewModel.getToken()
         }
     }

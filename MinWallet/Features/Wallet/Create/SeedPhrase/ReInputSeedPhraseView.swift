@@ -75,8 +75,7 @@ struct ReInputSeedPhraseView: View {
                 set: { newValue in }
             )
             CustomButton(title: "Next", isEnable: enableNext) {
-                //TODO: cuongnv check seedphrase equal
-                //guard inputSeedPhrase == seedPhrase.joined(separator: " ") else { return }
+                guard inputSeedPhrase == seedPhrase.joined(separator: " ") else { return }
                 switch screenType {
                 case .createWallet:
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))

@@ -14,7 +14,8 @@ struct BiometricSetupView: View {
     private var appSetting: AppSetting
     @EnvironmentObject
     private var userInfo: UserInfo
-
+    @EnvironmentObject
+    private var hudState: HUDState
     @State
     var screenType: ScreenType?
     @State
@@ -55,7 +56,7 @@ struct BiometricSetupView: View {
                             do {
                                 try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
                             } catch {
-                                //TODOZ: check error
+                                hudState.showMsg(msg: error.localizedDescription)
                             }
                             
                         case .restoreWallet:

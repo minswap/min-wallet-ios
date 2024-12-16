@@ -79,6 +79,7 @@
 		96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966659FF2CF46D480046A20E /* TokenWithPrice.swift */; };
 		96665A022CF477490046A20E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A012CF477490046A20E /* HomeViewModel.swift */; };
 		96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A032CF4C60D0046A20E /* SideMenuView.swift */; };
+		966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966920FE2D100CCD00D503B7 /* HUDState.swift */; };
 		96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */; };
 		96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
@@ -216,6 +217,7 @@
 		966659FF2CF46D480046A20E /* TokenWithPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenWithPrice.swift; sourceTree = "<group>"; };
 		96665A012CF477490046A20E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		96665A032CF4C60D0046A20E /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
+		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteModifier.swift; sourceTree = "<group>"; };
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 		575157942CEB4407004CD647 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				966921002D100CD400D503B7 /* Hub */,
 				5718EB192CEDE5B700CDE34D /* View+Ext.swift */,
 				96DC05302CF57E3200A78356 /* CoverSheet */,
 				96FE0CFD2CF432D2008E4BFD /* FlexibleView */,
@@ -665,6 +668,14 @@
 				965592542CFB3A3700301DDB /* ConfirmSendTokenView.swift */,
 			);
 			path = Send;
+			sourceTree = "<group>";
+		};
+		966921002D100CD400D503B7 /* Hub */ = {
+			isa = PBXGroup;
+			children = (
+				966920FE2D100CCD00D503B7 /* HUDState.swift */,
+			);
+			path = Hub;
 			sourceTree = "<group>";
 		};
 		96B467062CFC092900FA3211 /* Swap */ = {
@@ -1019,6 +1030,7 @@
 				5761D7182D0ADFF400D2809A /* mwrust.swift in Sources */,
 				96FE0CF02CF366D7008E4BFD /* TokenDetailView.swift in Sources */,
 				9600DEC92CF18620005D997C /* SplashView.swift in Sources */,
+				966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */,
 				960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */,
 				96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */,
 				9655920C2CF824E000301DDB /* BiometricSetupView.swift in Sources */,

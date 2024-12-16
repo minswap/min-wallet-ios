@@ -13,11 +13,13 @@ struct CreateNewPasswordView: View {
     }
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
-    var appSetting: AppSetting
+    private var appSetting: AppSetting
     @EnvironmentObject
-    var userInfo: UserInfo
+    private var userInfo: UserInfo
+    @EnvironmentObject
+    private var hudState: HUDState
 
     @State
     private var password: String = ""
@@ -135,7 +137,7 @@ struct CreateNewPasswordView: View {
                     do {
                         try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                     } catch {
-                        //TODOZ: check error
+                        hudState.showMsg(msg: error.localizedDescription)
                     }
                     navigator.push(.createWallet(.createNewWalletSuccess))
                 case let .restoreWallet(seedPhase, nickName):
