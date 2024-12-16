@@ -28,6 +28,7 @@ lane :beta do
         "org.minswap.MinWallet" => "match AppStore org.minswap.MinWallet",
       }
     },
+    xcconfig: "MinWallet/Environment/AppConfig.xcconfig"
   )
   upload_to_testflight(skip_waiting_for_build_processing: true)
   clean_build_artifacts
