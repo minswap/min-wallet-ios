@@ -14,7 +14,7 @@ struct TokenListItemView: View {
     var body: some View {
         HStack(spacing: .xl) {
             TokenLogoView(token: tokenWithPrice?.token)
-            VStack(spacing: 0) {
+            VStack(spacing: 4) {
                 HStack(spacing: 0) {
                     Text(tokenWithPrice?.token.ticker)
                         .font(.labelMediumSecondary)
@@ -43,7 +43,7 @@ struct TokenListItemView: View {
                     }
                 }
             }
-            .padding(.vertical, 12)
+            .padding(.vertical, 14)
             .overlay(
                 Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
             )
@@ -84,6 +84,7 @@ struct TokenListItemSkeletonView: View {
 
 #Preview {
     VStack(spacing: 0) {
+        SearchTokenView()
         TokenListItemSkeletonView()
         TokenListItemView(
             tokenWithPrice: TokenWithPrice(

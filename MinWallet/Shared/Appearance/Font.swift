@@ -2,39 +2,54 @@ import SwiftUI
 
 extension Font {
     ///20 semibold
-    static let titleH6: Font = .custom("Inter Display", size: 20).weight(.semibold)
+    static let titleH6: Font = .custom("InterDisplay-SemiBold", size: 20)
     ///16 medium
-    static let labelMediumSecondary: Font = .custom("Inter", size: 16).weight(.medium)
+    static let labelMediumSecondary: Font = .custom("InterDisplay-Medium", size: 16)
     ///16 semibold
-    static let labelSemiSecondary: Font = .custom("Inter", size: 16).weight(.semibold)
+    static let labelSemiSecondary: Font = .custom("InterDisplay-SemiBold", size: 16)
     ///14 medium
-    static let labelSmallSecondary: Font = .custom("Inter", size: 14).weight(.medium)
+    static let labelSmallSecondary: Font = .custom("InterDisplay-Medium", size: 14)
     ///14 regular
-    static let paragraphSmall: Font = .custom("Inter", size: 14).weight(.regular)
+    static let paragraphSmall: Font = .custom("InterDisplay-Regular", size: 14)
     ///14 semibold
-    static let paragraphSemi: Font = .custom("Inter", size: 14).weight(.semibold)
+    static let paragraphSemi: Font = .custom("InterDisplay-SemiBold", size: 14)
     ///12 regular
-    static let paragraphXSmall: Font = .custom("Inter", size: 12)
+    static let paragraphXSmall: Font = .custom("InterDisplay-Regular", size: 12)
     ///12 medium
-    static let paragraphXMediumSmall: Font = .custom("Inter", size: 12).weight(.medium)
+    static let paragraphXMediumSmall: Font = .custom("InterDisplay-Medium", size: 12)
     ///24 semibold
-    static let titleH5: Font = .custom("Inter", size: 24).weight(.semibold)
+    static let titleH5: Font = .custom("InterDisplay-SemiBold", size: 24)
     ///40 semibold
-    static let titleH3: Font = .custom("Inter", size: 40).weight(.semibold)
+    static let titleH3: Font = .custom("InterDisplay-SemiBold", size: 40)
     ///32 semibold
-    static let titleH4: Font = .custom("Inter", size: 32).weight(.semibold)
+    static let titleH4: Font = .custom("InterDisplay-SemiBold", size: 32)
     ///18 medium
-    static let titleH7: Font = .custom("Inter", size: 18).weight(.medium)
-
+    static let titleH7: Font = .custom("InterDisplay-Medium", size: 18)
 }
 
 extension UIFont {
-    //static let titleH6: UIFont =  UIFont(name: "Inter Display", size: 20) ?? .systemFont(ofSize: 20)
-    //static let labelMediumSecondary: UIFont =  UIFont(name: "Inter Display", size: 16) ?? .systemFont(ofSize: 16)
-    //static let labelSmallSecondary: UIFont = .custom("Inter", size: 14).weight(.medium)
-    static let paragraphSmall: UIFont = UIFont(name: "Lobster-Regular", size: 14) ?? .systemFont(ofSize: 14)
-    //static let paragraphXSmall: UIFont = .custom("Inter", size: 12)
-    //static let titleH5: UIFont = .custom("Inter", size: 24).weight(.semibold)
-    //static let titleH3: UIFont = .custom("Inter", size: 40).weight(.semibold)
-    //static let titleH4: UIFont = .custom("Inter", size: 32).weight(.semibold)
+    ///20 semibold
+    static let titleH6: UIFont? = UIFont(name: "InterDisplay-SemiBold", size: 20)
+    ///16 medium
+    static let labelMediumSecondary: UIFont? = UIFont(name: "InterDisplay-Medium", size: 16)
+    ///16 semibold
+    static let labelSemiSecondary: UIFont? = UIFont(name: "InterDisplay-SemiBold", size: 16)
+    ///14 medium
+    static let labelSmallSecondary: UIFont? = UIFont(name: "InterDisplay-Medium", size: 14)
+    ///14 regular
+    static let paragraphSmall: UIFont? = UIFont(name: "InterDisplay-Regular", size: 14)
+    ///14 semibold
+    static let paragraphSemi: UIFont? = UIFont(name: "InterDisplay-SemiBold", size: 14)
+    ///12 regular
+    static let paragraphXSmall: UIFont? = UIFont(name: "InterDisplay-Regular", size: 12)
+    ///12 medium
+    static let paragraphXMediumSmall: UIFont? = UIFont(name: "InterDisplay-Medium", size: 12)
+    ///24 semibold
+    static let titleH5: UIFont? = UIFont(name: "InterDisplay-SemiBold", size: 24)
+    ///40 semibold
+    static let titleH3: UIFont? = UIFont(name: "InterDisplay-SemiBold", size: 40)
+    ///32 semibold
+    static let titleH4: UIFont? = UIFont(name: "InterDisplay-SemiBold", size: 32)
+    ///18 medium
+    static let titleH7: UIFont? = UIFont(name: "InterDisplay-Medium", size: 18)
 }

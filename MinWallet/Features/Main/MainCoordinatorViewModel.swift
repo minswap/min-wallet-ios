@@ -1,12 +1,24 @@
 import SwiftUI
 import FlowStacks
+import Apollo
+import ApolloAPI
+import MinWalletAPI
 
 
 @MainActor
 class MainCoordinatorViewModel: ObservableObject {
     @Published var routes: Routes<Screen> = []
 
-    init() {}
+    init() {
+        Task {
+            do {
+                let data = try await MinWalletService.shared.fetch(query: TopAssetQuery())
+                print("wtf \(data?.topAssets.searchAfter)")
+            } catch {
+
+            }
+        }
+    }
 }
 
 extension MainCoordinatorViewModel {
@@ -17,6 +29,9 @@ extension MainCoordinatorViewModel {
         case tokenDetail(token: Token)
         case about
         case language
+        case changePassword
+        case changePasswordSuccess(_ screenType: ChangePasswordSuccessView.ScreenType)
+        case forgotPassword(_ screenType: ChangePasswordView.ScreenType)
         case createWallet(_ screen: CreateWalletScreen)
         case restoreWallet(_ screen: RestoreWalletScreen)
         case walletSetting(_ screen: WalletSettingScreen)
@@ -32,24 +47,25 @@ extension MainCoordinatorViewModel {
 enum CreateWalletScreen: Hashable {
     case createWallet
     case seedPhrase
-    case reInputSeedPhrase
-    case setupNickName
-    case biometricSetup
+    case reInputSeedPhrase(seedPhrase: [String])
+    case setupNickName(seedPhrase: [String])
+    case biometricSetup(seedPhrase: [String], nickName: String)
+    case createNewPassword(seedPhrase: [String], nickName: String)
     case createNewWalletSuccess
-    case createNewPassword
 }
 
 enum RestoreWalletScreen: Hashable {
     case restoreWallet
-    case seedPhrase
     case importFile
-    case biometricSetup
-    case createNewPassword
+    case seedPhrase
+    case biometricSetup(seedPhrase: [String], nickName: String)
+    case createNewPassword(seedPhrase: [String], nickName: String)
     case createNewWalletSuccess
 }
 
 enum WalletSettingScreen: Hashable {
     case walletAccount
+    case editNickName
     case changePassword
     case changePasswordSuccess
     case disconnectWallet

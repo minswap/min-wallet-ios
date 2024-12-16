@@ -3,6 +3,10 @@ import CoreImage
 
 
 extension String {
+    var isBlank: Bool {
+        trimmingCharacters(in: .whitespacesAndNewlines) == ""
+    }
+
     func generateQRCode(
         with text: String,
         centerImage: UIImage?,

@@ -12,6 +12,10 @@ struct RestoreWalletImportFileView: View {
     private var fileURL: URL?
     @State
     private var fileSize: String = "0KB"
+    @State
+    private var showingAlert: Bool = false
+    @State
+    private var msg: String = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -80,7 +84,8 @@ struct RestoreWalletImportFileView: View {
             }
             Spacer()
             CustomButton(title: "Next") {
-                navigator.push(.restoreWallet(.biometricSetup))
+                //navigator.push(.restoreWallet(.biometricSetup))
+                showingAlert = true
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -100,10 +105,10 @@ struct RestoreWalletImportFileView: View {
                     guard url.startAccessingSecurityScopedResource() else { return }
 
                     do {
-                        let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+                        let _ = try FileManager.default.attributesOfItem(atPath: url.path)
                     } catch {
-                        error
-                        print("WTF \(error.localizedDescription)")
+                        msg = error.localizedDescription
+                        showingAlert = true
                     }
                     guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
                         let fileSize = attributes[.size] as? Int64
@@ -112,11 +117,13 @@ struct RestoreWalletImportFileView: View {
                         return
                     }
                     self.fileSize = self.formatFileSize(bytes: fileSize)
-
                 }
             case let .failure(error):
                 print(error)
             }
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Something went wrong!"), message: Text(msg), dismissButton: .default(Text("Got it!")))
         }
     }
 

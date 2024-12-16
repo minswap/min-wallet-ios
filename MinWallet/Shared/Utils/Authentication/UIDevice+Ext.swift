@@ -7,7 +7,7 @@ extension UIDevice {
     {
         guard var uniqueId = self.identifierForVendor?.uuidString else { return nil }
         // Nếu không setup đủ Team & Keychain Access Group, thì chỉ trả ra `identifierForVendor` bth
-        guard let keychainAccessGroup = GKeychainStore.KEYCHAIN_ACCESS_GROUP else { return uniqueId }
+        let keychainAccessGroup = MinWalletConstant.keyChainAccessGroup
 
         if let uniqueIdStore = try? GKeychainStore(
             service: GKeychainStore.UNIQUE_ID_KEYCHAIN_SERVICE,

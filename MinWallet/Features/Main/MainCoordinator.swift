@@ -9,12 +9,6 @@ struct MainCoordinator: View {
     @EnvironmentObject
     private var appSetting: AppSetting
 
-    @StateObject
-    private var createWalletViewModel: CreateNewWalletViewModel = .init()
-
-    @StateObject
-    private var restoreWalletViewModel: RestoreWalletViewModel = .init()
-
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
             SplashView()
@@ -32,40 +26,45 @@ struct MainCoordinator: View {
                         AboutView().navigationBarHidden(true)
                     case .language:
                         LanguageView().interactiveDismissDisabled(false)
-
+                    case .changePassword:
+                        ChangePasswordView(screenType: .setting).navigationBarHidden(true)
+                    case let .changePasswordSuccess(screenType):
+                        ChangePasswordSuccessView(screenType: screenType).navigationBarHidden(true)
+                    case let .forgotPassword(screenType):
+                        ForgotPasswordView(screenType: .changeYourPassword(screenType)).navigationBarHidden(true)
                     case let .createWallet(screen):
                         switch screen {
                         case .createWallet:
-                            CreateNewWalletView().navigationBarHidden(true).environmentObject(createWalletViewModel)
+                            CreateNewWalletView().navigationBarHidden(true)
                         case .seedPhrase:
-                            CreateNewWalletSeedPhraseView().navigationBarHidden(true).environmentObject(createWalletViewModel)
-                        case .reInputSeedPhrase:
-                            ReInputSeedPhraseView().navigationBarHidden(true).environmentObject(createWalletViewModel)
-                        case .setupNickName:
-                            SetupNickNameView().navigationBarHidden(true).environmentObject(createWalletViewModel)
-                                .environmentObject(viewModel)
-                        case .biometricSetup:
-                            BiometricSetupView().navigationBarHidden(true).environmentObject(createWalletViewModel)
+                            CreateNewWalletSeedPhraseView().navigationBarHidden(true)
+                        case let .reInputSeedPhrase(seedPhrase):
+                            ReInputSeedPhraseView(seedPhrase: seedPhrase).navigationBarHidden(true)
+                        case let .setupNickName(seedPhrase):
+                            SetupNickNameView(seedPhrase: seedPhrase, screenType: .createWallet).navigationBarHidden(true)
+                        case let .biometricSetup(seedPhrase, nickName):
+                            BiometricSetupView(screenType: .createWallet(seedPhase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
+                        case let .createNewPassword(seedPhrase, nickName):
+                            CreateNewPasswordView(screenType: .createWallet(seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .createNewWalletSuccess:
-                            CreateNewWalletSuccessView(screenType: .newWallet).navigationBarHidden(true).environmentObject(createWalletViewModel)
-                        case .createNewPassword:
-                            CreateNewPasswordView().navigationBarHidden(true).environmentObject(createWalletViewModel)
+                            CreateNewWalletSuccessView(screenType: .newWallet).navigationBarHidden(true)
                         }
 
                     case let .restoreWallet(screen):
                         switch screen {
                         case .restoreWallet:
-                            RestoreWalletView().navigationBarHidden(true).environmentObject(restoreWalletViewModel)
+                            RestoreWalletView().navigationBarHidden(true)
                         case .seedPhrase:
-                            RestoreWalletSeedPhraseView().navigationBarHidden(true).environmentObject(restoreWalletViewModel)
+                            //TODO: cuongnv check seed phrase from somewhere
+                            ReInputSeedPhraseView(seedPhrase: CreateNewWalletSeedPhraseView.generateRandomWords(count: 20, minLength: 4, maxLength: 8)).navigationBarHidden(true)
                         case .createNewWalletSuccess:
-                            CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true).environmentObject(restoreWalletViewModel)
-                        case .createNewPassword:
-                            RestoreWalletPasswordView().navigationBarHidden(true).environmentObject(restoreWalletViewModel)
+                            CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true)
+                        case let .createNewPassword(seedPhrase, nickName):
+                            CreateNewPasswordView(screenType: .restoreWallet(seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .importFile:
                             RestoreWalletImportFileView().navigationBarHidden(true)
-                        case .biometricSetup:
-                            BiometricSetupView().navigationBarHidden(true).environmentObject(createWalletViewModel)
+                        case let .biometricSetup(seedPhrase, nickName):
+                            BiometricSetupView(screenType: .restoreWallet(seedPhase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         }
 
                     case let .walletSetting(screen):
@@ -73,11 +72,13 @@ struct MainCoordinator: View {
                         case .walletAccount:
                             WalletAccountView().navigationBarHidden(true)
                         case .changePassword:
-                            ChangePasswordView().navigationBarHidden(true)
+                            ChangePasswordView(screenType: .walletSetting).navigationBarHidden(true)
                         case .changePasswordSuccess:
-                            ChangePasswordSuccessView().navigationBarHidden(true)
+                            ChangePasswordSuccessView(screenType: .walletSetting).navigationBarHidden(true)
                         case .disconnectWallet:
                             DisconnectWalletView().navigationBarHidden(true)
+                        case .editNickName:
+                            SetupNickNameView(screenType: .walletSetting).navigationBarHidden(true)
                         }
 
                     case let .sendToken(screen):
@@ -121,7 +122,7 @@ struct MainCoordinator: View {
                             )
                             .navigationBarHidden(true)
                         case .forgotPassword:
-                            ForgotPasswordView().navigationBarHidden(true)
+                            ForgotPasswordView(screenType: .enterPassword).navigationBarHidden(true)
                         }
                     }
                 }

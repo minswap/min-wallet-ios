@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import UIKit
 
 
 struct SplashView: View {
@@ -25,11 +26,20 @@ struct SplashView: View {
                         }
                     }
                 } else {
-                    HomeView()
+                    switch appSetting.rootScreen {
+                    case .home:
+                        HomeView()
+                    case .policy:
+                        PolicyConfirmView()
+                    case .gettingStarted:
+                        GettingStartedView()
+                    default:
+                        EmptyView()
+                    }
                 }
             }
             .onAppear(perform: {
-                appSetting.safeArea = geo.safeAreaInsets.top
+                appSetting.safeArea = UIApplication.safeArea.top
             })
         }
         .onAppear {

@@ -3,15 +3,17 @@ import FlowStacks
 
 
 struct ChangePasswordView: View {
+    enum ScreenType {
+        case setting
+        case walletSetting
+    }
+
     enum FocusedField: Hashable {
         case oldPassword, password, rePassword
     }
 
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
-    @EnvironmentObject
-    private var viewModel: CreateNewWalletViewModel
 
     @State
     private var oldPassword: String = ""
@@ -27,6 +29,9 @@ struct ChangePasswordView: View {
 
     @State
     private var currentPassword: String = ""
+
+    @State
+    var screenType: ScreenType
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -141,6 +146,7 @@ struct ChangePasswordView: View {
                     }
                     Button(
                         action: {
+                            navigator.push(.forgotPassword(screenType))
                         },
                         label: {
                             Text("Forgot password?")
@@ -154,9 +160,17 @@ struct ChangePasswordView: View {
             }
             Spacer()
             if focusedField == nil {
-                CustomButton(title: "Change") {
-                    viewModel.password = password
-                    navigator.push(.createWallet(.createNewWalletSuccess))
+                let combinedBinding = Binding<Bool>(
+                    get: { (passwordValidationMatched.count == PasswordValidation.allCases.count) && (password == rePassword) && !currentPassword.isEmpty },
+                    set: { newValue in }
+                )
+                CustomButton(title: "Change", isEnable: combinedBinding) {
+                    switch screenType {
+                    case .setting:
+                        navigator.push(.changePasswordSuccess(.setting))
+                    case .walletSetting:
+                        navigator.push(.changePasswordSuccess(.walletSetting))
+                    }
                 }
                 .frame(height: 56)
                 .padding(.horizontal, .xl)
@@ -180,13 +194,13 @@ struct ChangePasswordView: View {
                 })
         )
         .task {
-            print("WTF ?? ddd")
-            currentPassword = "123"
+            guard currentPassword.isEmpty else { return }
+            currentPassword = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
         }
     }
 }
 
 #Preview {
-    ChangePasswordView()
-        .environmentObject(CreateNewWalletViewModel())
+    ChangePasswordView(screenType: .setting)
+        .environmentObject(AppSetting())
 }

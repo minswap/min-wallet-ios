@@ -87,7 +87,7 @@ class BiometricAuthentication {
                 }
 
                 if let errorMessage = errorMessage {
-                    continuation.resume(throwing: AppGeneralError.localError(message: errorMessage.rawValue))
+                    continuation.resume(throwing: AppGeneralError.localErrorLocalized(message: errorMessage.rawValue))
                 } else {
                     continuation.resume(returning: ())
                 }

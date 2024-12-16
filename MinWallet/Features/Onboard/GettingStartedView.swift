@@ -6,6 +6,9 @@ struct GettingStartedView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
+    @EnvironmentObject
+    var appSetting: AppSetting
+
     var body: some View {
         VStack(spacing: 0) {
             Image(.icToken)

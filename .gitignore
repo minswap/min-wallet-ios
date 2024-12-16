@@ -40,8 +40,10 @@ Carthage/Build
 
 fastlane/.env.default
 fastlane/report.xml
-
 .bundle
 vendor
 
 .DS_Store
+
+MinWalletAPI/.build
+apollo-ios-cli

@@ -2,12 +2,12 @@ import Foundation
 
 
 struct Token: Hashable {
-    let currencySymbol: String
-    let tokenName: String
-    let ticker: String
-    let project: String
-    let decimals: Int
-    let isVerified: Bool
+    var currencySymbol: String = ""
+    var tokenName: String = ""
+    var ticker: String = ""
+    var project: String = ""
+    var decimals: Int = 6
+    var isVerified: Bool = false
 }
 
 extension Token {

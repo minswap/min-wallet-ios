@@ -3,12 +3,21 @@ import FlowStacks
 
 
 struct ReInputSeedPhraseView: View {
+    enum ScreenType {
+        case createWallet
+        case restoreWallet
+    }
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
     @State
     private var inputSeedPhrase: String = ""
+    @State
+    var seedPhrase: [String] = []
+    @State
+    var screenType: ScreenType = .createWallet
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -42,7 +51,7 @@ struct ReInputSeedPhraseView: View {
                 Button(
                     action: {
                         if let clipBoardText = UIPasteboard.general.string {
-                            inputSeedPhrase = clipBoardText
+                            inputSeedPhrase = clipBoardText + " "
                         }
                     },
                     label: {
@@ -61,9 +70,20 @@ struct ReInputSeedPhraseView: View {
             .padding(.bottom, 34)
             .padding(.top, .xl)
             .padding(.horizontal, .xl)
-
-            CustomButton(title: "Next") {
-                navigator.push(.createWallet(.setupNickName))
+            let enableNext = Binding<Bool>(
+                get: { !inputSeedPhrase.isBlank },
+                set: { newValue in }
+            )
+            CustomButton(title: "Next", isEnable: enableNext) {
+                //TODO: cuongnv check seedphrase equal
+                //guard inputSeedPhrase == seedPhrase.joined(separator: " ") else { return }
+                switch screenType {
+                case .createWallet:
+                    navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
+                case .restoreWallet:
+                    //TODO: Cuongnv check nickname
+                    navigator.push(.restoreWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: "")))
+                }
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -79,5 +99,4 @@ struct ReInputSeedPhraseView: View {
 
 #Preview {
     ReInputSeedPhraseView()
-        .environmentObject(CreateNewWalletViewModel())
 }

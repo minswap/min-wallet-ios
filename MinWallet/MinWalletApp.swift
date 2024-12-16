@@ -12,11 +12,13 @@ struct MinWalletApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @State var appSetting: AppSetting = .init()
+    @State var userInfo: UserInfo = .init()
 
     var body: some Scene {
         WindowGroup {
             MainCoordinator()
                 .environmentObject(appSetting)
+                .environmentObject(userInfo)
                 .environment(\.locale, .init(identifier: appSetting.language))
                 .onAppear {
                     appSetting.initAppearanceStyle()

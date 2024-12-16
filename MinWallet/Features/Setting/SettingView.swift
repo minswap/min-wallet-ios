@@ -10,6 +10,8 @@ struct SettingView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
+    @EnvironmentObject
+    var userInfo: UserInfo
 
     @Binding
     var isShowAppearance: Bool
@@ -47,6 +49,10 @@ struct SettingView: View {
                     }
                 }
                 .frame(width: 64, height: 64)
+                .contentShape(.rect)
+                .onTapGesture {
+                    navigator.push(.walletSetting(.walletAccount))
+                }
                 Spacer()
                 Image(.icSettingDarkMode)
                     .resizable()
@@ -61,9 +67,11 @@ struct SettingView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text("long.nguyen")
+                    Text(userInfo.nickName)
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
+                        .lineLimit(1)
+                        .frame(maxWidth: 150, alignment: .leading)
 
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
@@ -75,7 +83,7 @@ struct SettingView: View {
                         )
                         .frame(height: 20)
                 }
-                Text("Addrasdlfkjasdf12231123".shortenAddress)
+                Text(userInfo.walletAddress.shortenAddress)
                     .font(.paragraphXSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
@@ -185,7 +193,7 @@ struct SettingView: View {
                     .frame(height: 52)
                     .contentShape(.rect)
                     .onTapGesture {
-                        //navigator.push(.securitySetting(.createPassword))
+                        navigator.push(.changePassword)
                     }
                 }
             }
@@ -223,5 +231,6 @@ struct SettingView: View {
     VStack {
         SettingView(isShowAppearance: .constant(false), isShowTimeZone: .constant(false), isShowCurrency: .constant(false))
             .environmentObject(AppSetting())
+            .environmentObject(UserInfo())
     }
 }
