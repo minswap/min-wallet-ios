@@ -7,6 +7,7 @@ namespace mwrust {
     string? export_wallet(MinWallet wallet, string password, string network_env);
     MinWallet? import_wallet(string data, string password, string wallet_name);
     string? get_wallet_name_from_export_wallet(string data);
+    MinWallet? change_wallet_name(MinWallet wallet, string password, string new_wallet_name);
 };
 
 dictionary MinWallet {

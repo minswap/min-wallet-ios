@@ -107,6 +107,22 @@ pub fn sign_tx(
     wallet.sign_tx(password.as_str(), account_index, tx_raw)
 }
 
+pub fn change_wallet_name(
+    wallet: MinWallet,
+    password: String,
+    new_wallet_name: String,
+) -> Option<MinWallet> {
+    let encrypted_key = wallet.encrypted_key.clone();
+    // verify password
+    match MinWallet::get_root_key_from_password(password.as_str(), &encrypted_key) {
+        Some(_) => Some(MinWallet {
+            wallet_name: new_wallet_name,
+            ..wallet
+        }),
+        None => None,
+    }
+}
+
 pub fn change_password(
     wallet: MinWallet,
     current_password: String,
@@ -142,7 +158,10 @@ pub fn verify_password(wallet: MinWallet, password: String) -> bool {
 }
 
 pub fn export_wallet(wallet: MinWallet, password: String, network_env: String) -> Option<String> {
-    let network_environment = NetworkEnvironment::from_string(network_env.clone()).unwrap();
+    let network_environment = match NetworkEnvironment::from_string(network_env.clone()) {
+        Some(v) => v,
+        None => return None,
+    };
     let network_suffix = match network_environment {
         NetworkEnvironment::Mainnet => "mm",
         NetworkEnvironment::Preprod => "pm",
@@ -199,9 +218,15 @@ pub fn get_wallet_name_from_export_wallet(data: String) -> Option<String> {
 }
 
 pub fn import_wallet(data: String, password: String, wallet_name: String) -> Option<MinWallet> {
-    let wallet_export: EWType = serde_json::from_str(data.as_str()).unwrap();
+    let wallet_export: EWType = match serde_json::from_str(data.as_str()) {
+        Ok(v) => v,
+        Err(_) => return None,
+    };
     let root_key_hex = wallet_export.wallet.root_key.prv;
-    let root_key = Bip32PrivateKey::from_hex(root_key_hex.as_str()).unwrap();
+    let root_key = match Bip32PrivateKey::from_hex(root_key_hex.as_str()) {
+        Ok(v) => v,
+        Err(_) => return None,
+    };
     let account_index = 0;
     let account_key = MinWallet::get_account(&root_key, account_index);
 
@@ -213,15 +238,21 @@ pub fn import_wallet(data: String, password: String, wallet_name: String) -> Opt
 
     // Derive network ID
     let network_env = wallet_export.wallet.network_id;
-    let network_environment = NetworkEnvironment::from_string(network_env).unwrap();
+    let network_environment = match NetworkEnvironment::from_string(network_env) {
+        Some(v) => v,
+        None => return None,
+    };
     let network_id = network_environment.to_network_id() as u32;
 
     // Generate addresses
     let address = MinWallet::get_address(&account_key, network_id);
-
+    let address_bech32 = match address.to_bech32(None) {
+        Ok(v) => v,
+        Err(_) => return None,
+    };
     Some(MinWallet {
         wallet_name,
-        address: address.to_bech32(None).unwrap(),
+        address: address_bech32,
         network_id,
         account_index,
         encrypted_key,
@@ -261,10 +292,13 @@ impl MinWallet {
 
         // Generate addresses
         let address = MinWallet::get_address(&account_key, network_id);
-
+        let address_bech32 = match address.to_bech32(None) {
+            Ok(v) => v,
+            Err(_) => return None,
+        };
         Some(MinWallet {
             wallet_name,
-            address: address.to_bech32(None).unwrap(),
+            address: address_bech32,
             network_id,
             account_index,
             encrypted_key,
@@ -311,6 +345,24 @@ mod tests {
     use crate::crypto::hash_transaction;
     use cardano_serialization_lib::Transaction;
 
+    #[test]
+    fn test_change_wallet_name() {
+        let phrase =
+            "belt change crouch decorate advice emerge tongue loop cute olympic tuna donkey";
+        let password = "Minswap@123456";
+        let wallet_name = "My MinWallet".to_string();
+        let wallet = create_wallet(
+            phrase.to_string(),
+            password.to_string(),
+            "preprod".to_string(),
+            wallet_name.clone(),
+        )
+        .unwrap();
+        let new_wallet_name = "New Wallet Name";
+        let new_wallet =
+            change_wallet_name(wallet, password.to_string(), new_wallet_name.to_string()).unwrap();
+        assert_eq!(new_wallet.wallet_name, new_wallet_name);
+    }
     #[test]
     fn test_export_wallet() {
         let phrase =
@@ -416,7 +468,7 @@ mod tests {
             "preprod".to_string(),
             "My MinWallet".to_string(),
         )
-            .unwrap();
+        .unwrap();
         assert_eq!(verify_password(wallet, "wrong_pass".to_string()), false);
     }
 }
