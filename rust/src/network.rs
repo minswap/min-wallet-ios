@@ -26,12 +26,12 @@ impl NetworkEnvironment {
         NetworkId::from_network_environment(self)
     }
 
-    pub fn from_string(network: String) -> Result<Self, String> {
+    pub fn from_string(network: String) -> Option<NetworkEnvironment> {
         match network.to_lowercase().as_str() {
-            "mainnet" => Ok(NetworkEnvironment::Mainnet),
-            "preprod" => Ok(NetworkEnvironment::Preprod),
-            "preview" => Ok(NetworkEnvironment::Preview),
-            _ => Err(format!("Unknown network environment: {}", network)),
+            "mainnet" => Some(NetworkEnvironment::Mainnet),
+            "preprod" => Some(NetworkEnvironment::Preprod),
+            "preview" => Some(NetworkEnvironment::Preview),
+            _ => None,
         }
     }
 }

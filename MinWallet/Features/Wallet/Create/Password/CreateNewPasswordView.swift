@@ -130,7 +130,7 @@ struct CreateNewPasswordView: View {
                     appSetting.authenticationType = .password
                     appSetting.isLogin = true
                     let seedPhrase = seedPhrase.joined(separator: " ")
-                    let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
+                    let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: "FIX ME")
                     userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
 
                     navigator.push(.createWallet(.createNewWalletSuccess))
