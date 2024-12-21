@@ -49,7 +49,7 @@ struct CreateNewWalletSeedPhraseView: View {
         )
         .task {
             guard seedPhrase.isEmpty else { return }
-            seedPhrase = genPhrase(wordCount: 24).split(separator: " ").map({ String($0) })
+            seedPhrase = genPhrase(wordCount: 24)?.split(separator: " ").map({ String($0) }) ?? []
         }
     }
 }

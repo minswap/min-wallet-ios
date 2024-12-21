@@ -4,7 +4,7 @@ import FlowStacks
 
 struct ReInputSeedPhraseView: View {
     enum ScreenType {
-        case createWallet
+        case createWallet(seedPhrase: [String])
         case restoreWallet
     }
 
@@ -15,9 +15,7 @@ struct ReInputSeedPhraseView: View {
     @State
     private var inputSeedPhrase: String = ""
     @State
-    var seedPhrase: [String] = []
-    @State
-    var screenType: ScreenType = .createWallet
+    var screenType: ScreenType
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -75,14 +73,13 @@ struct ReInputSeedPhraseView: View {
                 set: { newValue in }
             )
             CustomButton(title: "Next", isEnable: enableNext) {
-                //TODO: cuongnv check seedphrase equal
-                //guard inputSeedPhrase == seedPhrase.joined(separator: " ") else { return }
                 switch screenType {
-                case .createWallet:
+                case let .createWallet(seedPhrase):
+                    guard inputSeedPhrase == seedPhrase.joined(separator: " ") else { return }
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
                 case .restoreWallet:
-                    //TODO: Cuongnv check nickname
-                    navigator.push(.restoreWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: "")))
+                    guard !inputSeedPhrase.isBlank else { return }
+                    navigator.push(.restoreWallet(.biometricSetup(fileContent: "", seedPhrase: inputSeedPhrase.split(separator: " ").map({ String($0) }), nickName: "")))
                 }
             }
             .frame(height: 56)
@@ -98,5 +95,5 @@ struct ReInputSeedPhraseView: View {
 }
 
 #Preview {
-    ReInputSeedPhraseView()
+    ReInputSeedPhraseView(screenType: .restoreWallet)
 }

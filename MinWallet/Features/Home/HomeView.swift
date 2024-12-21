@@ -50,7 +50,7 @@ struct HomeView: View {
                         }
                     }
 
-                    Text(userInfo.nickName)
+                    Text(userInfo.minWallet?.walletName)
                         .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundColor(.colorBaseTent)
@@ -80,7 +80,7 @@ struct HomeView: View {
 
                     }) {
                         HStack(spacing: 4) {
-                            Text(userInfo.walletAddress.shortenAddress)
+                            Text(userInfo.minWallet?.address.shortenAddress)
                                 .font(.paragraphXSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Image(.icCopy)
@@ -129,12 +129,12 @@ struct HomeView: View {
                 }
                 .padding(.vertical, Spacing.md)
                 .padding(.horizontal, Spacing.xl)
-
+                /*
                 Carousel().frame(height: 98)
 
                     .padding(.vertical, Spacing.md)
                     .padding(.horizontal, Spacing.xl)
-
+*/
                 TokenListView(label: "Crypto prices", tokens: $viewModel.tokens, showSkeleton: $viewModel.showSkeleton, tabType: $viewModel.tabType)
                     .padding(.top, .xl)
                 Spacer()
@@ -164,11 +164,6 @@ struct HomeView: View {
                 .padding(.xl)
         }
         .task {
-            // Test rust code, feel free to remove
-            let v = genPhrase(wordCount: 24)
-            print(v)
-            // Test rust code, feel free to remove
-
             await viewModel.getToken()
         }
     }
