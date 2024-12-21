@@ -62,8 +62,8 @@ extension CoreDataRepository {
                     subscription = subscriptionProvider
                     subscriptionProvider.start()
                     if let _self = self,
-                       let _subjectCancellable = subjectCancellable,
-                       let _fetchCancellable = fetchCancellable
+                        let _subjectCancellable = subjectCancellable,
+                        let _fetchCancellable = fetchCancellable
                     {
                         _self.subscriptions.append(subscriptionProvider)
                         _self.cancellables.insert(_subjectCancellable)
@@ -98,6 +98,7 @@ extension CoreDataRepository {
                     promise(.failure(.coreData(error as NSError)))
                 }
             }
-        }.eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
     }
 }

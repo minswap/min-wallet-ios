@@ -45,35 +45,38 @@ extension CoreDataRepository {
     ) async -> (success: [Model], failed: [Model]) {
         var successes = [Model]()
         var failures = [Model]()
-        await withTaskGroup(of: _Result<Model, Model>.self, body: { [weak self] group in
-            guard let self = self else {
-                group.cancelAll()
-                return
-            }
-            for item in items {
-                let added = group.addTaskUnlessCancelled {
-                    async let result: Result<Model, CoreDataRepositoryError> = self
-                        .create(item, transactionAuthor: transactionAuthor)
-                    switch await result {
-                    case let .success(created):
-                        return _Result<Model, Model>.success(created)
-                    case .failure:
-                        return _Result<Model, Model>.failure(item)
-                    }
-                }
-                if !added {
+        await withTaskGroup(
+            of: _Result<Model, Model>.self,
+            body: { [weak self] group in
+                guard let self = self else {
+                    group.cancelAll()
                     return
                 }
-            }
-            for await result in group {
-                switch result {
-                case let .success(success):
-                    successes.append(success)
-                case let .failure(failure):
-                    failures.append(failure)
+                for item in items {
+                    let added = group.addTaskUnlessCancelled {
+                        async let result: Result<Model, CoreDataRepositoryError> =
+                            self
+                            .create(item, transactionAuthor: transactionAuthor)
+                        switch await result {
+                        case let .success(created):
+                            return _Result<Model, Model>.success(created)
+                        case .failure:
+                            return _Result<Model, Model>.failure(item)
+                        }
+                    }
+                    if !added {
+                        return
+                    }
                 }
-            }
-        })
+                for await result in group {
+                    switch result {
+                    case let .success(success):
+                        successes.append(success)
+                    case let .failure(failure):
+                        failures.append(failure)
+                    }
+                }
+            })
         return (success: successes, failed: failures)
     }
 
@@ -98,34 +101,36 @@ extension CoreDataRepository {
     public func read<Model: UnmanagedModel>(urls: [URL]) async -> (success: [Model], failed: [URL]) {
         var successes = [Model]()
         var failures = [URL]()
-        await withTaskGroup(of: _Result<Model, URL>.self, body: { [weak self] group in
-            guard let self = self else {
-                group.cancelAll()
-                return
-            }
-            for url in urls {
-                let added = group.addTaskUnlessCancelled {
-                    async let result: Result<Model, CoreDataRepositoryError> = self.read(url)
-                    switch await result {
-                    case let .success(created):
-                        return _Result<Model, URL>.success(created)
-                    case .failure:
-                        return _Result<Model, URL>.failure(url)
-                    }
-                }
-                if !added {
+        await withTaskGroup(
+            of: _Result<Model, URL>.self,
+            body: { [weak self] group in
+                guard let self = self else {
+                    group.cancelAll()
                     return
                 }
-            }
-            for await result in group {
-                switch result {
-                case let .success(success):
-                    successes.append(success)
-                case let .failure(failure):
-                    failures.append(failure)
+                for url in urls {
+                    let added = group.addTaskUnlessCancelled {
+                        async let result: Result<Model, CoreDataRepositoryError> = self.read(url)
+                        switch await result {
+                        case let .success(created):
+                            return _Result<Model, URL>.success(created)
+                        case .failure:
+                            return _Result<Model, URL>.failure(url)
+                        }
+                    }
+                    if !added {
+                        return
+                    }
                 }
-            }
-        })
+                for await result in group {
+                    switch result {
+                    case let .success(success):
+                        successes.append(success)
+                    case let .failure(failure):
+                        failures.append(failure)
+                    }
+                }
+            })
         return (success: successes, failed: failures)
     }
 
@@ -162,38 +167,41 @@ extension CoreDataRepository {
     ) async -> (success: [Model], failed: [Model]) {
         var successes = [Model]()
         var failures = [Model]()
-        await withTaskGroup(of: _Result<Model, Model>.self, body: { [weak self] group in
-            guard let self = self else {
-                group.cancelAll()
-                return
-            }
-            for item in items {
-                let added = group.addTaskUnlessCancelled {
-                    guard let url = item.managedRepoUrl else {
-                        return _Result<Model, Model>.failure(item)
-                    }
-                    async let result: Result<Model, CoreDataRepositoryError> = self
-                        .update(url, with: item, transactionAuthor: transactionAuthor)
-                    switch await result {
-                    case let .success(created):
-                        return _Result<Model, Model>.success(created)
-                    case .failure:
-                        return _Result<Model, Model>.failure(item)
-                    }
-                }
-                if !added {
+        await withTaskGroup(
+            of: _Result<Model, Model>.self,
+            body: { [weak self] group in
+                guard let self = self else {
+                    group.cancelAll()
                     return
                 }
-            }
-            for await result in group {
-                switch result {
-                case let .success(success):
-                    successes.append(success)
-                case let .failure(failure):
-                    failures.append(failure)
+                for item in items {
+                    let added = group.addTaskUnlessCancelled {
+                        guard let url = item.managedRepoUrl else {
+                            return _Result<Model, Model>.failure(item)
+                        }
+                        async let result: Result<Model, CoreDataRepositoryError> =
+                            self
+                            .update(url, with: item, transactionAuthor: transactionAuthor)
+                        switch await result {
+                        case let .success(created):
+                            return _Result<Model, Model>.success(created)
+                        case .failure:
+                            return _Result<Model, Model>.failure(item)
+                        }
+                    }
+                    if !added {
+                        return
+                    }
                 }
-            }
-        })
+                for await result in group {
+                    switch result {
+                    case let .success(success):
+                        successes.append(success)
+                    case let .failure(failure):
+                        failures.append(failure)
+                    }
+                }
+            })
         return (success: successes, failed: failures)
     }
 
@@ -229,35 +237,38 @@ extension CoreDataRepository {
     ) async -> (success: [URL], failed: [URL]) {
         var successes = [URL]()
         var failures = [URL]()
-        await withTaskGroup(of: _Result<URL, URL>.self, body: { [weak self] group in
-            guard let self = self else {
-                group.cancelAll()
-                return
-            }
-            for url in urls {
-                let added = group.addTaskUnlessCancelled {
-                    async let result: Result<Void, CoreDataRepositoryError> = self
-                        .delete(url, transactionAuthor: transactionAuthor)
-                    switch await result {
-                    case .success:
-                        return _Result<URL, URL>.success(url)
-                    case .failure:
-                        return _Result<URL, URL>.failure(url)
-                    }
-                }
-                if !added {
+        await withTaskGroup(
+            of: _Result<URL, URL>.self,
+            body: { [weak self] group in
+                guard let self = self else {
+                    group.cancelAll()
                     return
                 }
-            }
-            for await result in group {
-                switch result {
-                case let .success(success):
-                    successes.append(success)
-                case let .failure(failure):
-                    failures.append(failure)
+                for url in urls {
+                    let added = group.addTaskUnlessCancelled {
+                        async let result: Result<Void, CoreDataRepositoryError> =
+                            self
+                            .delete(url, transactionAuthor: transactionAuthor)
+                        switch await result {
+                        case .success:
+                            return _Result<URL, URL>.success(url)
+                        case .failure:
+                            return _Result<URL, URL>.failure(url)
+                        }
+                    }
+                    if !added {
+                        return
+                    }
                 }
-            }
-        })
+                for await result in group {
+                    switch result {
+                    case let .success(success):
+                        successes.append(success)
+                    case let .failure(failure):
+                        failures.append(failure)
+                    }
+                }
+            })
         return (success: successes, failed: failures)
     }
 }

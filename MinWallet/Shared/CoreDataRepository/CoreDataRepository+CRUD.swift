@@ -135,38 +135,41 @@ extension CoreDataRepository {
 
             let id = UUID()
             var subscription: SubscriptionProvider?
-            self?.cancellables.insert(readPublisher.sink(
-                receiveCompletion: { completion in
-                    if case .failure = completion {
-                        subject.send(completion: completion)
-                    }
-                },
-                receiveValue: { repoManaged in
-                    let subscriptionProvider = ReadSubscription(
-                        id: id,
-                        objectId: repoManaged.objectID,
-                        context: readContext,
-                        subject: subject
-                    )
-                    subscription = subscriptionProvider
-                    subscriptionProvider.start()
-                    if let _self = self,
-                       let _subjectCancellable = subjectCancellable
-                    {
-                        _self.subscriptions.append(subscriptionProvider)
-                        _self.cancellables.insert(_subjectCancellable)
-                    } else {
-                        subjectCancellable?.cancel()
-                        subscription?.cancel()
-                    }
-                    subscriptionProvider.manualFetch()
-                }
-            ))
+            self?.cancellables
+                .insert(
+                    readPublisher.sink(
+                        receiveCompletion: { completion in
+                            if case .failure = completion {
+                                subject.send(completion: completion)
+                            }
+                        },
+                        receiveValue: { repoManaged in
+                            let subscriptionProvider = ReadSubscription(
+                                id: id,
+                                objectId: repoManaged.objectID,
+                                context: readContext,
+                                subject: subject
+                            )
+                            subscription = subscriptionProvider
+                            subscriptionProvider.start()
+                            if let _self = self,
+                                let _subjectCancellable = subjectCancellable
+                            {
+                                _self.subscriptions.append(subscriptionProvider)
+                                _self.cancellables.insert(_subjectCancellable)
+                            } else {
+                                subjectCancellable?.cancel()
+                                subscription?.cancel()
+                            }
+                            subscriptionProvider.manualFetch()
+                        }
+                    ))
             return AnyCancellable {
                 subscription?.cancel()
                 self?.subscriptions.removeAll(where: { $0.id == id as AnyHashable })
             }
-        }.eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
     }
 
     private static func getObjectId(
@@ -183,8 +186,7 @@ extension CoreDataRepository {
         _ url: URL,
         readContext: NSManagedObjectContext
     ) -> AnyPublisher<T, CoreDataRepositoryError>
-        where T: RepositoryManagedModel
-    {
+    where T: RepositoryManagedModel {
         Future { promise in
             readContext.performAndWait {
                 let result: Result<T, CoreDataRepositoryError> = readContext.objectId(from: url)
@@ -193,6 +195,7 @@ extension CoreDataRepository {
                     .mapToRepoError()
                 promise(result)
             }
-        }.eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
     }
 }

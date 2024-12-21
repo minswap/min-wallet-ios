@@ -1,6 +1,5 @@
 import Foundation
 import CoreData
-import CoreDataRepository
 
 
 extension CoreDataRepository {

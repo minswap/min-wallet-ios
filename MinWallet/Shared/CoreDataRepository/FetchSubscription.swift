@@ -61,12 +61,14 @@ final class FetchSubscription<
         if request.resultType != .dictionaryResultType {
             frc.delegate = self
         } else {
-            changeNotificationCancellable = NotificationCenter.default.publisher(
-                for: .NSManagedObjectContextObjectsDidChange,
-                object: context
-            ).sink(receiveValue: { _ in
-                self.fetch()
-            })
+            changeNotificationCancellable = NotificationCenter.default
+                .publisher(
+                    for: .NSManagedObjectContextObjectsDidChange,
+                    object: context
+                )
+                .sink(receiveValue: { _ in
+                    self.fetch()
+                })
         }
     }
 
