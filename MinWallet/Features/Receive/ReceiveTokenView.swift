@@ -5,13 +5,10 @@ import FlowStacks
 struct ReceiveTokenView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    @EnvironmentObject
+    private var userInfo: UserInfo
     @State
-    private var address: String = "addr1g08hmca9gsnkzguqnevszcz2ea53krrx2h3gjrruap3yd2jxu2ssx0ktcajjr3x8lm5tdxxufu0qnmk68lmxlwnckj0q9qrf9o"
-
-    private let qrImage: UIImage? = {
-        "address".generateQRCode(with: "address", centerImage: UIImage(resource: .icLogoQr), size: .init(width: 200, height: 200))
-    }()
+    private var qrImage: UIImage?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -32,7 +29,7 @@ struct ReceiveTokenView: View {
                 Image(uiImage: qrImage ?? UIImage())
                     .resizable()
                     .frame(width: 180, height: 180)
-                Text(address)
+                Text(userInfo.minWallet?.address)
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                     .multilineTextAlignment(.center)
@@ -61,10 +58,16 @@ struct ReceiveTokenView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                })
+        )
+        .task {
+            guard qrImage == nil else { return }
+            qrImage = userInfo.minWallet?.address.generateQRCode(centerImage: UIImage(resource: .icLogoQr), size: .init(width: 200, height: 200))
+        }
     }
 }
 
 #Preview {
     ReceiveTokenView()
+        .environmentObject(UserInfo())
 }

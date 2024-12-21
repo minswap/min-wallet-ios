@@ -4,11 +4,11 @@ import FlowStacks
 
 struct SignContractView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var userInfo: UserInfo
     @State
     private var password: String = ""
-
     @FocusState
     private var isFocus: Bool
 
@@ -40,6 +40,8 @@ struct SignContractView: View {
 
             Spacer()
             CustomButton(title: "Sign") {
+                guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
+                let _ = signTx(wallet: minWallet, password: password, accountIndex: minWallet.accountIndex, txRaw: "")
                 navigator.dismiss()
             }
             .frame(height: 56)

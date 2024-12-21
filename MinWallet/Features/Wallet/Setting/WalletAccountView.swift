@@ -39,7 +39,7 @@ struct WalletAccountView: View {
             .padding(.vertical, .lg)
             VStack(alignment: .center, spacing: 4) {
                 HStack {
-                    Text(userInfo.nickName)
+                    Text(userInfo.minWallet?.walletName)
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)
@@ -53,7 +53,7 @@ struct WalletAccountView: View {
                         )
                         .frame(height: 20)
                 }
-                Text(userInfo.walletAddress.shortenAddress)
+                Text(userInfo.minWallet?.address.shortenAddress)
                     .font(.paragraphXSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                     .frame(maxWidth: .infinity, alignment: .center)

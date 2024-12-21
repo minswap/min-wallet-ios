@@ -13,7 +13,6 @@ class MainCoordinatorViewModel: ObservableObject {
         Task {
             do {
                 let data = try await MinWalletService.shared.fetch(query: TopAssetQuery())
-                print("wtf \(data?.topAssets.searchAfter)")
             } catch {
 
             }
@@ -58,8 +57,8 @@ enum RestoreWalletScreen: Hashable {
     case restoreWallet
     case importFile
     case seedPhrase
-    case biometricSetup(seedPhrase: [String], nickName: String)
-    case createNewPassword(seedPhrase: [String], nickName: String)
+    case biometricSetup(fileContent: String, seedPhrase: [String], nickName: String)
+    case createNewPassword(fileContent: String, seedPhrase: [String], nickName: String)
     case createNewWalletSuccess
 }
 

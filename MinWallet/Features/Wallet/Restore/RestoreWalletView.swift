@@ -74,7 +74,6 @@ struct RestoreWalletView: View {
                         if restoreType == .importJson {
                             Image(.icChecked)
                         }
-
                     }
                     Text("Import")
                         .font(.titleH7)
@@ -97,7 +96,6 @@ struct RestoreWalletView: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
-
             Spacer()
             CustomButton(title: "Restore") {
                 switch restoreType {

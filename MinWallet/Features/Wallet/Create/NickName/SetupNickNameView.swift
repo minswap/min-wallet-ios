@@ -4,7 +4,7 @@ import FlowStacks
 
 struct SetupNickNameView: View {
     enum ScreenType {
-        case createWallet
+        case createWallet(seedPhrase: [String])
         case walletSetting
     }
 
@@ -12,11 +12,10 @@ struct SetupNickNameView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
-
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @FocusState
     private var isInputActive: Bool
-    @State
-    var seedPhrase: [String] = []
     @State
     private var nickName: String = ""
 
@@ -47,12 +46,22 @@ struct SetupNickNameView: View {
                     }
                 }
             Spacer()
-            CustomButton(title: screenType == .createWallet ? "Next" : "Change") {
+            let title: LocalizedStringKey = {
                 switch screenType {
                 case .createWallet:
+                    "Next"
+                case .walletSetting:
+                    "Change"
+                }
+            }()
+            CustomButton(title: title) {
+                switch screenType {
+                case let .createWallet(seedPhrase):
                     navigator.push(.createWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines))))
                 case .walletSetting:
-                    userInfo.setupNickName(nickName.trimmingCharacters(in: .whitespacesAndNewlines))
+                    guard let minWallet = userInfo.minWallet, !nickName.isBlank else { return }
+                    guard let minWallet = changeWalletName(wallet: minWallet, password: appSetting.password, newWalletName: nickName.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
+                    userInfo.saveWalletInfo(walletInfo: minWallet)
                     navigator.pop()
                 }
             }
@@ -67,13 +76,13 @@ struct SetupNickNameView: View {
                 })
         )
         .task {
-            guard screenType == .walletSetting else { return }
-            nickName = userInfo.nickName
+            guard case .walletSetting = screenType else { return }
+            nickName = userInfo.minWallet?.walletName ?? ""
         }
     }
 }
 
 #Preview {
-    SetupNickNameView(screenType: .createWallet)
+    SetupNickNameView(screenType: .walletSetting)
         .environmentObject(UserInfo())
 }

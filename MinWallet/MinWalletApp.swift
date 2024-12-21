@@ -11,15 +11,26 @@ import SwiftUI
 struct MinWalletApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-    @State var appSetting: AppSetting = .init()
-    @State var userInfo: UserInfo = .init()
+    @StateObject var appSetting: AppSetting = .init()
+    @StateObject var userInfo: UserInfo = .init()
+    @StateObject var hudState: HUDState = .init()
 
     var body: some Scene {
         WindowGroup {
             MainCoordinator()
                 .environmentObject(appSetting)
                 .environmentObject(userInfo)
+                .environmentObject(hudState)
                 .environment(\.locale, .init(identifier: appSetting.language))
+                .alert(isPresented: $hudState.isPresented) {
+                    Alert(
+                        title: Text("Notice"), message: Text(hudState.msg),
+                        dismissButton: .default(
+                            Text("Got it!"),
+                            action: {
+                                hudState.onAction?()
+                            }))
+                }
                 .onAppear {
                     appSetting.initAppearanceStyle()
                 }

@@ -39,9 +39,9 @@ struct MainCoordinator: View {
                         case .seedPhrase:
                             CreateNewWalletSeedPhraseView().navigationBarHidden(true)
                         case let .reInputSeedPhrase(seedPhrase):
-                            ReInputSeedPhraseView(seedPhrase: seedPhrase).navigationBarHidden(true)
+                            ReInputSeedPhraseView(screenType: .createWallet(seedPhrase: seedPhrase)).navigationBarHidden(true)
                         case let .setupNickName(seedPhrase):
-                            SetupNickNameView(seedPhrase: seedPhrase, screenType: .createWallet).navigationBarHidden(true)
+                            SetupNickNameView(screenType: .createWallet(seedPhrase: seedPhrase)).navigationBarHidden(true)
                         case let .biometricSetup(seedPhrase, nickName):
                             BiometricSetupView(screenType: .createWallet(seedPhase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case let .createNewPassword(seedPhrase, nickName):
@@ -55,16 +55,15 @@ struct MainCoordinator: View {
                         case .restoreWallet:
                             RestoreWalletView().navigationBarHidden(true)
                         case .seedPhrase:
-                            //TODO: cuongnv check seed phrase from somewhere
-                            ReInputSeedPhraseView(seedPhrase: CreateNewWalletSeedPhraseView.generateRandomWords(count: 20, minLength: 4, maxLength: 8)).navigationBarHidden(true)
+                            ReInputSeedPhraseView(screenType: .restoreWallet).navigationBarHidden(true)
                         case .createNewWalletSuccess:
                             CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true)
-                        case let .createNewPassword(seedPhrase, nickName):
-                            CreateNewPasswordView(screenType: .restoreWallet(seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
+                        case let .createNewPassword(fileContent, seedPhrase, nickName):
+                            CreateNewPasswordView(screenType: .restoreWallet(fileContent: fileContent, seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .importFile:
                             RestoreWalletImportFileView().navigationBarHidden(true)
-                        case let .biometricSetup(seedPhrase, nickName):
-                            BiometricSetupView(screenType: .restoreWallet(seedPhase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
+                        case let .biometricSetup(fileContent, seedPhrase, nickName):
+                            BiometricSetupView(screenType: .restoreWallet(fileContent: fileContent, seedPhase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         }
 
                     case let .walletSetting(screen):

@@ -191,6 +191,15 @@ extension AppSetting {
         biometricAuthentication = .init()
         try await biometricAuthentication.authenticateUser()
     }
+
+    var password: String {
+        switch authenticationType {
+        case .password:
+            (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
+        case .biometric:
+            MinWalletConstant.passDefaultForFaceID
+        }
+    }
 }
 
 extension AppSetting {
