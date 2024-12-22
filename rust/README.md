@@ -29,14 +29,13 @@ let phrase = genPhrase(wordCount: 12)
 
 ---
 
-#### `createWallet(phrase: String, password: String, networkEnv: String, walletName: String) -> MinWallet`
+#### `createWallet(phrase: String, password: String, networkEnv: String) -> MinWallet`
 Creates a wallet based on the provided mnemonic phrase, password, and network environment.
 
 - **Parameters**:
     - `phrase`: The mnemonic phrase used to derive the wallet.
     - `password`: A user-defined password for encrypting the wallet's private key.
     - `networkEnv`: The network environment for the wallet (e.g., `"mainnet"` or `"preprod"`).
-    - `walletName`: The Name of Wallet.
 - **Returns**:
     - A `MinWallet` object containing wallet details.
 
@@ -45,8 +44,7 @@ Creates a wallet based on the provided mnemonic phrase, password, and network en
 let wallet = createWallet(
     phrase: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
     password: "secure_password",
-    networkEnv: "preprod",
-    walletName: "My MinWallet"
+    networkEnv: "preprod"
 )
 ```
 
@@ -62,62 +60,6 @@ Signs a raw transaction using the provided wallet.
     - `txRaw`: The raw transaction string to be signed.
 - **Returns**:
     - A signed transaction `String`.
----
-
-#### `change_password(wallet: MinWallet, current_password: String, new_password: String) -> MinWallet`
-Changes the password of a given wallet.
-
-- **Parameters**:
-  - `wallet`: A `MinWallet` object containing wallet details.
-  - `current_password`: The current password used to decrypt the wallet.
-  - `new_password`: The new password to set for the wallet.
-- **Returns**:
-  - An updated `MinWallet` object with the new password applied.
-
----
-
-#### `verify_password(wallet: MinWallet, password: String) -> boolean`
-Verifies whether the provided password matches the wallet's password.
-
-- **Parameters**:
-  - `wallet`: A `MinWallet` object containing wallet details.
-  - `password`: The password to be verified.
-- **Returns**:
-  - A `boolean` indicating whether the password is correct (`true`) or incorrect (`false`).
-
----
-
-#### `export_wallet(wallet: MinWallet, password: String, network_env: String) -> String`
-Exports the wallet's data as a string for backup or transfer purposes.
-
-- **Parameters**:
-  - `wallet`: A `MinWallet` object containing wallet details.
-  - `password`: The password used to encrypt the exported wallet data.
-  - `network_env`: The network environment for which the wallet data is exported (e.g., `mainnet` or `testnet`).
-- **Returns**:
-  - A `String` containing the encrypted wallet data.
-
----
-
-#### `import_wallet(data: String, password: String, wallet_name: String) -> MinWallet`
-Imports a wallet from encrypted data.
-
-- **Parameters**:
-  - `data`: The encrypted wallet data as a string.
-  - `password`: The password to decrypt the wallet data.
-  - `wallet_name`: The name to assign to the imported wallet.
-- **Returns**:
-  - A `MinWallet` object representing the imported wallet.
-
----
-
-#### `get_wallet_name_from_export_wallet(data: String) -> String`
-Retrieves the wallet name from exported wallet data.
-
-- **Parameters**:
-  - `data`: The exported wallet data as a string.
-- **Returns**:
-  - A `String` containing the wallet name.
 
 #### Example:
 ```swift
@@ -133,7 +75,7 @@ let signedTx = signTx(
 
 ### Types
 
-### `MinWallet`
+#### `MinWallet`
 A dictionary-like object containing details of a wallet.
 
 - **Fields**:
@@ -141,7 +83,6 @@ A dictionary-like object containing details of a wallet.
     - `networkId` (`UInt32`): The ID of the network the wallet belongs to (mainnet: 764824073, preprod: 1).
     - `accountIndex` (`UInt32`): The account index within the wallet.
     - `encryptedKey` (`UInt32`): The wallet's encrypted private key.
-    - `walletName` (`String`): the wallet's name.
 
 #### Example:
 ```swift
@@ -149,8 +90,7 @@ let wallet = MinWallet(
     address: "addr_test1...",
     networkId: 1,
     accountIndex: 0,
-    encryptedKey: "<encrypted_data>",
-    walletName: "My MinWallet"
+    encryptedKey: "<encrypted_data>"
 )
 ```
 
