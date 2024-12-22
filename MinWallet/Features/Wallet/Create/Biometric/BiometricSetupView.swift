@@ -47,16 +47,19 @@ struct BiometricSetupView: View {
                         case .createWallet(let seedPhrase, let nickName):
                             let seedPhrase = seedPhrase.joined(separator: " ")
                             let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
+                            /*TODO: cuongnv
                             guard let wallet = createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
                             else {
                                 throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
                             }
                             userInfo.saveWalletInfo(walletInfo: wallet)
+                             */
                             appSetting.isLogin = true
 
                             try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
 
                         case let .restoreWallet(fileContent, seedPhrase, nickName):
+                            /* TODO: cuongnv
                             let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
                             let wallet: MinWallet? = {
                                 if !fileContent.isBlank {
@@ -67,9 +70,10 @@ struct BiometricSetupView: View {
                             }()
                             guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
                             userInfo.saveWalletInfo(walletInfo: wallet)
+                             */
                             appSetting.isLogin = true
-
                             try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
+
                         }
                         navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch {

@@ -67,12 +67,13 @@ struct SettingView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
+                    /*TODO: cuongnv
                     Text(userInfo.minWallet?.walletName)
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)
                         .frame(maxWidth: 150, alignment: .leading)
-
+*/
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)

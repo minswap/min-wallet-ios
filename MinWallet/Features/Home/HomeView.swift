@@ -49,13 +49,13 @@ struct HomeView: View {
                             showSideMenu = true
                         }
                     }
-
+                    /*TODO: cuongnv
                     Text(userInfo.minWallet?.walletName)
                         .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundColor(.colorBaseTent)
                         .frame(maxWidth: 200, alignment: .leading)
-
+*/
                     Spacer()
                     Image(.icSearch)
                         .resizable()
