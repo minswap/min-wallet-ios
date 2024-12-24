@@ -5,7 +5,7 @@ import FlowStacks
 struct BiometricSetupView: View {
     enum ScreenType {
         case createWallet(seedPhase: [String], nickName: String)
-        case restoreWallet(seedPhase: [String], nickName: String)
+        case restoreWallet(fileContent: String, seedPhase: [String], nickName: String)
     }
 
     @EnvironmentObject
@@ -14,13 +14,10 @@ struct BiometricSetupView: View {
     private var appSetting: AppSetting
     @EnvironmentObject
     private var userInfo: UserInfo
-
+    @EnvironmentObject
+    private var hudState: HUDState
     @State
-    var screenType: ScreenType?
-    @State
-    private var showingAlert: Bool = false
-    @State
-    private var msg: String = ""
+    var screenType: ScreenType
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -41,7 +38,7 @@ struct BiometricSetupView: View {
             }
             .padding(.top, 24)
             Spacer()
-            CustomButton(title: "Use FaceID") {
+            CustomButton(title: appSetting.biometricAuthentication.biometricType == .faceID ? "Use FaceID" : "Use TouchID") {
                 Task {
                     do {
                         try await appSetting.biometricAuthentication.authenticateUser()
@@ -49,21 +46,38 @@ struct BiometricSetupView: View {
                         switch screenType {
                         case .createWallet(let seedPhrase, let nickName):
                             let seedPhrase = seedPhrase.joined(separator: " ")
-                            let wallet = createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
-                            userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
+                            let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
+                            /*TODO: cuongnv
+                            guard let wallet = createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
+                            else {
+                                throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                            }
+                            userInfo.saveWalletInfo(walletInfo: wallet)
+                             */
                             appSetting.isLogin = true
 
-                        case .restoreWallet:
-                            //TODO: cuongnv check restore wallet
-                            break
-                        default:
-                            break
+                            try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
+
+                        case let .restoreWallet(fileContent, seedPhrase, nickName):
+                            /* TODO: cuongnv
+                            let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
+                            let wallet: MinWallet? = {
+                                if !fileContent.isBlank {
+                                    return importWallet(data: fileContent, password: MinWalletConstant.passDefaultForFaceID, walletName: nickName)
+                                } else {
+                                    return createWallet(phrase: seedPhrase.joined(separator: " "), password: MinWalletConstant.passDefaultForFaceID, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
+                                }
+                            }()
+                            guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
+                            userInfo.saveWalletInfo(walletInfo: wallet)
+                             */
+                            appSetting.isLogin = true
+                            try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
+
                         }
                         navigator.push(.createWallet(.createNewWalletSuccess))
-
                     } catch {
-                        msg = error.localizedDescription
-                        showingAlert = true
+                        hudState.showMsg(msg: error.localizedDescription)
                         appSetting.authenticationType = .password
                     }
                 }
@@ -75,11 +89,8 @@ struct BiometricSetupView: View {
                 case .createWallet(let seedPhase, let nickName):
                     navigator.push(.createWallet(.createNewPassword(seedPhrase: seedPhase, nickName: nickName)))
 
-                case .restoreWallet(let seedPhase, let nickName):
-                    navigator.push(.restoreWallet(.createNewPassword(seedPhrase: seedPhase, nickName: nickName)))
-
-                default:
-                    break
+                case .restoreWallet(let fileContent, let seedPhase, let nickName):
+                    navigator.push(.restoreWallet(.createNewPassword(fileContent: fileContent, seedPhrase: seedPhase, nickName: nickName)))
                 }
             }
             .frame(height: 56)
@@ -92,12 +103,9 @@ struct BiometricSetupView: View {
                     navigator.pop()
                 })
         )
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Something went wrong!"), message: Text(msg), dismissButton: .default(Text("Got it!")))
-        }
     }
 }
 
 #Preview {
-    BiometricSetupView()
+    BiometricSetupView(screenType: .createWallet(seedPhase: [], nickName: ""))
 }

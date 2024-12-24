@@ -6,18 +6,20 @@ struct CreateNewPasswordView: View {
     enum ScreenType {
         case authenticationSetting
         case createWallet(seedPhrase: [String], nickName: String)
-        case restoreWallet(seedPhrase: [String], nickName: String)
+        case restoreWallet(fileContent: String, seedPhrase: [String], nickName: String)
     }
     enum FocusedField: Hashable {
         case password, rePassword
     }
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
-    var appSetting: AppSetting
+    private var appSetting: AppSetting
     @EnvironmentObject
-    var userInfo: UserInfo
+    private var userInfo: UserInfo
+    @EnvironmentObject
+    private var hudState: HUDState
 
     @State
     private var password: String = ""
@@ -127,24 +129,47 @@ struct CreateNewPasswordView: View {
                     onCreatePasswordSuccess?(password)
                     navigator.pop()
                 case let .createWallet(seedPhrase, nickName):
-                    appSetting.authenticationType = .password
-                    appSetting.isLogin = true
-                    let seedPhrase = seedPhrase.joined(separator: " ")
-                    let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue)
-                    userInfo.saveWalletInfo(seedPhrase: seedPhrase, nickName: nickName, walletAddress: wallet.address)
-
+                    do {
+                        appSetting.authenticationType = .password
+                        appSetting.isLogin = true
+                        let seedPhrase = seedPhrase.joined(separator: " ")
+                        /*TODO: cuongnv
+                        guard let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
+                        else {
+                            throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                        }
+                        userInfo.saveWalletInfo(walletInfo: wallet)
+                         */
+                        try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                    } catch {
+                        hudState.showMsg(msg: error.localizedDescription)
+                    }
                     navigator.push(.createWallet(.createNewWalletSuccess))
-                case let .restoreWallet(seedPhase, nickName):
-                    //TODO: cuongnv restore wallet
-                    appSetting.authenticationType = .password
-                    appSetting.isLogin = true
-
+                case let .restoreWallet(fileContent, seedPhrase, nickName):
+                    do {
+                        appSetting.authenticationType = .password
+                        appSetting.isLogin = true
+                        /*TODO: cuongnv
+                        let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
+                        let wallet: MinWallet? = {
+                            if !fileContent.isBlank {
+                                importWallet(data: fileContent, password: password, walletName: nickName)
+                            } else {
+                                createWallet(phrase: seedPhrase.joined(separator: " "), password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
+                            }
+                        }()
+                        guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
+                        userInfo.saveWalletInfo(walletInfo: wallet)
+                         */
+                        try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                    } catch {
+                        hudState.showMsg(msg: error.localizedDescription)
+                    }
                     navigator.push(.restoreWallet(.createNewWalletSuccess))
                 }
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
-
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {

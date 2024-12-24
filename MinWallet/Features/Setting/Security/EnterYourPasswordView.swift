@@ -7,6 +7,8 @@ struct EnterYourPasswordView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var hudState: HUDState
     @State
     private var password: String = ""
     @Binding
@@ -51,7 +53,6 @@ struct EnterYourPasswordView: View {
                 let currentPassword: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
                 guard currentPassword == password
                 else {
-                    //TODOz: cuongnv show error
                     return
                 }
                 hideKeyboard()

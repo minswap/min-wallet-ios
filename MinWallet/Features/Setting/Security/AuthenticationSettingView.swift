@@ -5,9 +5,10 @@ import FlowStacks
 struct AuthenticationSettingView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var hudState: HUDState
     @State
     private var isShowEnterYourPassword: Bool = false
     @FocusState
@@ -48,7 +49,7 @@ struct AuthenticationSettingView: View {
                         try await appSetting.reAuthenticateUser()
                         appSetting.authenticationType = .biometric
                     } catch {
-                        //TODOZ: cuongnv show error
+                        hudState.showMsg(msg: error.localizedDescription)
                     }
                 }
             }
@@ -73,10 +74,9 @@ struct AuthenticationSettingView: View {
                         do {
                             try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                         } catch {
-                            //TODOZ: check error
+                            hudState.showMsg(msg: error.localizedDescription)
                         }
                     }
-
                     navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))
                 } else {
                     isShowEnterYourPassword = true
@@ -100,7 +100,6 @@ struct AuthenticationSettingView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
                 Button("Done") {
                     hideKeyboard()
                 }

@@ -5,6 +5,8 @@ import FlowStacks
 struct RestoreWalletImportFileView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    var hudState: HUDState
 
     @State
     private var isShowing = false
@@ -13,9 +15,7 @@ struct RestoreWalletImportFileView: View {
     @State
     private var fileSize: String = "0KB"
     @State
-    private var showingAlert: Bool = false
-    @State
-    private var msg: String = ""
+    private var fileContent: String = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -84,8 +84,8 @@ struct RestoreWalletImportFileView: View {
             }
             Spacer()
             CustomButton(title: "Next") {
-                //navigator.push(.restoreWallet(.biometricSetup))
-                showingAlert = true
+                guard !fileContent.isBlank else { return }
+                navigator.push(.restoreWallet(.biometricSetup(fileContent: fileContent, seedPhrase: [], nickName: "")))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -101,19 +101,18 @@ struct RestoreWalletImportFileView: View {
             switch result {
             case let .success(url):
                 withAnimation {
-                    self.fileURL = url
-                    guard url.startAccessingSecurityScopedResource() else { return }
-
                     do {
-                        let _ = try FileManager.default.attributesOfItem(atPath: url.path)
+                        self.fileURL = url
+                        guard url.startAccessingSecurityScopedResource() else { return }
+                        self.fileContent = try String(contentsOf: url, encoding: .utf8)
                     } catch {
-                        msg = error.localizedDescription
-                        showingAlert = true
+                        hudState.showMsg(msg: error.localizedDescription)
                     }
                     guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
                         let fileSize = attributes[.size] as? Int64
                     else {
                         self.fileSize = "0KB"
+                        self.fileContent = ""
                         return
                     }
                     self.fileSize = self.formatFileSize(bytes: fileSize)
@@ -121,9 +120,6 @@ struct RestoreWalletImportFileView: View {
             case let .failure(error):
                 print(error)
             }
-        }
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Something went wrong!"), message: Text(msg), dismissButton: .default(Text("Got it!")))
         }
     }
 

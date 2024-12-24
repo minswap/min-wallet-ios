@@ -1,6 +1,6 @@
 import SwiftUI
 
-//TODO: TEst sau
+
 struct RoundedCorner: Shape {
     let radius: CGFloat
     let corners: UIRectCorner
