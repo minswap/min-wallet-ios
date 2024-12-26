@@ -2,10 +2,11 @@ import Foundation
 
 
 struct MinWalletConstant {
-    static let minWalletURL = GetInfoDictionaryString(for: "MIN_BASE_URL", true)
+    static let minGraphQLURL = GetInfoDictionaryString(for: "MIN_GRAPHQL_URL", true)
     static let keyChainService = GetInfoDictionaryString(for: "MIN_KEYCHAIN_SERVICE_NAME")
     static let keyChainAccessGroup = GetInfoDictionaryString(for: "MIN_KEYCHAIN_ACCESS_GROUP")
     static let passDefaultForFaceID = GetInfoDictionaryString(for: "MIN_PASS_DEFAULT_FOR_FACE_ID")
+    static let networkID = GetInfoDictionaryString(for: "MIN_PUBLIC_NETWORK_ID")
 
     private init() {
 

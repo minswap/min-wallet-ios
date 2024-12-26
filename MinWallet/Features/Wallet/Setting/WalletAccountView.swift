@@ -39,12 +39,10 @@ struct WalletAccountView: View {
             .padding(.vertical, .lg)
             VStack(alignment: .center, spacing: 4) {
                 HStack {
-                    /*TODO: cuongnv
                     Text(userInfo.minWallet?.walletName)
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)
-                     */
                     Text("W01...")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)

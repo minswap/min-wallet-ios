@@ -199,6 +199,8 @@
 		960D6B372D0144150017AF29 /* PasswordValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidation.swift; sourceTree = "<group>"; };
 		960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSheetModifier.swift; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
+		963D218D2D1D3A2E002E258E /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		963D218E2D1D3A34002E258E /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		964FCE742D126892003BF81F /* MinWallet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MinWallet.xcdatamodel; sourceTree = "<group>"; };
 		964FCE762D1268D7003BF81F /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		964FCE7A2D1269AC003BF81F /* TokenEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntity.swift; sourceTree = "<group>"; };
@@ -732,6 +734,8 @@
 			isa = PBXGroup;
 			children = (
 				96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */,
+				963D218D2D1D3A2E002E258E /* Development.xcconfig */,
+				963D218E2D1D3A34002E258E /* Production.xcconfig */,
 				960D6B312CFFEAF30017AF29 /* MinWallet.entitlements */,
 				96BD2A692D0ED06400D81277 /* Constant.swift */,
 			);
@@ -1122,7 +1126,7 @@
 /* Begin XCBuildConfiguration section */
 		57F102B42C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */;
+			baseConfigurationReference = 963D218D2D1D3A2E002E258E /* Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1186,7 +1190,7 @@
 		};
 		57F102B52C64CCA1000B3544 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */;
+			baseConfigurationReference = 963D218E2D1D3A34002E258E /* Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1243,7 +1247,7 @@
 		};
 		57F102B72C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */;
+			baseConfigurationReference = 963D218D2D1D3A2E002E258E /* Development.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1288,7 +1292,7 @@
 		};
 		57F102B82C64CCA1000B3544 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */;
+			baseConfigurationReference = 963D218E2D1D3A34002E258E /* Production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1332,6 +1336,7 @@
 		};
 		57F102BA2C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 963D218D2D1D3A2E002E258E /* Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1352,6 +1357,7 @@
 		};
 		57F102BB2C64CCA1000B3544 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 963D218E2D1D3A34002E258E /* Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1372,6 +1378,7 @@
 		};
 		57F102BD2C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 963D218D2D1D3A2E002E258E /* Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1390,6 +1397,7 @@
 		};
 		57F102BE2C64CCA1000B3544 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 963D218E2D1D3A34002E258E /* Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

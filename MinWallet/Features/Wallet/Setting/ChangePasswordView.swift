@@ -166,7 +166,6 @@ struct ChangePasswordView: View {
                 )
                 CustomButton(title: "Change", isEnable: combinedBinding) {
                     do {
-                        /*TODO: cuongnv
                         guard let minWallet = userInfo.minWallet else { return }
                         guard verifyPassword(wallet: minWallet, password: currentPassword) else { return }
                         guard let newWallet = changePassword(wallet: minWallet, currentPassword: currentPassword, newPassword: password)
@@ -175,7 +174,7 @@ struct ChangePasswordView: View {
                         }
 
                         userInfo.saveWalletInfo(walletInfo: newWallet)
-                         */
+
                         switch screenType {
                         case .setting:
                             navigator.push(.changePasswordSuccess(.setting))

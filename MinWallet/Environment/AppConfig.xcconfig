@@ -14,5 +14,4 @@ MIN_CODE_SIGN_ENTITLEMENTS = MinWallet/Environment/MinWallet.entitlements
 MIN_KEYCHAIN_SERVICE_NAME = minWallet
 MIN_KEYCHAIN_ACCESS_GROUP = ${MIN_DEVELOPMENT_TEAM}.${PRODUCT_BUNDLE_IDENTIFIER}
 
-MIN_BASE_URL      = https:\/\/monorepo-testnet-preprod.minswap.org\/graphql
 MIN_PASS_DEFAULT_FOR_FACE_ID = org.minswap.MinWallet

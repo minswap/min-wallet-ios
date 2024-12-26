@@ -59,11 +59,10 @@ struct SetupNickNameView: View {
                 case let .createWallet(seedPhrase):
                     navigator.push(.createWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines))))
                 case .walletSetting:
-                    /*TODO: cuongnv
                     guard let minWallet = userInfo.minWallet, !nickName.isBlank else { return }
                     guard let minWallet = changeWalletName(wallet: minWallet, password: appSetting.password, newWalletName: nickName.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
                     userInfo.saveWalletInfo(walletInfo: minWallet)
-                     */
+
                     navigator.pop()
                 }
             }
@@ -78,10 +77,8 @@ struct SetupNickNameView: View {
                 })
         )
         .task {
-            /*TODO: cuongnv
             guard case .walletSetting = screenType else { return }
             nickName = userInfo.minWallet?.walletName ?? ""
-             */
         }
     }
 }

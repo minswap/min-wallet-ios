@@ -3,11 +3,6 @@ import Combine
 
 
 class AppSetting: ObservableObject {
-    enum NetworkEnv: String {
-        case mainnet
-        case preprod
-    }
-
     static let USER_NAME = "minWallet"
 
     var extraSafeArea: CGFloat {

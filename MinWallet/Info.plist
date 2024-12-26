@@ -2,12 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>MIN_PUBLIC_NETWORK_ID</key>
+	<string>${MIN_PUBLIC_NETWORK_ID}</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Using Face ID to login</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>MIN_BASE_URL</key>
-	<string>${MIN_BASE_URL}</string>
+	<key>MIN_GRAPHQL_URL</key>
+	<string>${MIN_GRAPHQL_URL}</string>
 	<key>MIN_KEYCHAIN_ACCESS_GROUP</key>
 	<string>${MIN_KEYCHAIN_ACCESS_GROUP}</string>
 	<key>MIN_KEYCHAIN_SERVICE_NAME</key>
