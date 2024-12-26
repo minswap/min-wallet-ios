@@ -14,7 +14,10 @@ struct ChangePasswordView: View {
 
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    @EnvironmentObject
+    private var hudState: HUDState
+    @EnvironmentObject
+    private var userInfo: UserInfo
     @State
     private var oldPassword: String = ""
     @State
@@ -23,13 +26,10 @@ struct ChangePasswordView: View {
     private var rePassword: String = ""
     @FocusState
     private var focusedField: FocusedField?
-
     @State
     private var passwordValidationMatched: [PasswordValidation] = []
-
     @State
     private var currentPassword: String = ""
-
     @State
     var screenType: ScreenType
 
@@ -165,12 +165,27 @@ struct ChangePasswordView: View {
                     set: { newValue in }
                 )
                 CustomButton(title: "Change", isEnable: combinedBinding) {
-                    switch screenType {
-                    case .setting:
-                        navigator.push(.changePasswordSuccess(.setting))
-                    case .walletSetting:
-                        navigator.push(.changePasswordSuccess(.walletSetting))
+                    do {
+                        /*TODO: cuongnv
+                        guard let minWallet = userInfo.minWallet else { return }
+                        guard verifyPassword(wallet: minWallet, password: currentPassword) else { return }
+                        guard let newWallet = changePassword(wallet: minWallet, currentPassword: currentPassword, newPassword: password)
+                        else {
+                            throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                        }
+
+                        userInfo.saveWalletInfo(walletInfo: newWallet)
+                         */
+                        switch screenType {
+                        case .setting:
+                            navigator.push(.changePasswordSuccess(.setting))
+                        case .walletSetting:
+                            navigator.push(.changePasswordSuccess(.walletSetting))
+                        }
+                    } catch {
+                        hudState.showMsg(msg: error.localizedDescription)
                     }
+
                 }
                 .frame(height: 56)
                 .padding(.horizontal, .xl)

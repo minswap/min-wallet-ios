@@ -352,6 +352,9 @@
     "Nhập mật khẩu để tiếp tục" : {
 
     },
+    "Notice" : {
+
+    },
     "Old Password" : {
 
     },
@@ -474,9 +477,6 @@
     "Slippage Tolerance" : {
 
     },
-    "Something went wrong!" : {
-
-    },
     "Statistics" : {
 
     },
@@ -535,6 +535,9 @@
 
     },
     "Use FaceID" : {
+
+    },
+    "Use TouchID" : {
 
     },
     "UTC" : {

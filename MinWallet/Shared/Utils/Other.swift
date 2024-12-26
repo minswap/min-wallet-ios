@@ -8,7 +8,6 @@ extension String {
     }
 
     func generateQRCode(
-        with text: String,
         centerImage: UIImage?,
         centerImageSize: CGSize = .init(width: 38, height: 38),
         size: CGSize,
@@ -16,7 +15,7 @@ extension String {
         centerBackgroundColor: UIColor? = nil
     ) -> UIImage? {
         // Generate QR Code
-        guard let data = text.data(using: .ascii),
+        guard let data = self.data(using: .ascii),
             let filter = CIFilter(name: "CIQRCodeGenerator")
         else { return nil }
         filter.setValue(data, forKey: "inputMessage")
