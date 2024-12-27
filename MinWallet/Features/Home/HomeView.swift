@@ -133,7 +133,7 @@ struct HomeView: View {
                     .padding(.vertical, Spacing.md)
                     .padding(.horizontal, Spacing.xl)
 */
-                TokenListView(label: "Crypto prices", tokens: $viewModel.tokens, showSkeleton: $viewModel.showSkeleton, tabType: $viewModel.tabType)
+                TokenListView(label: "Crypto prices", tokens: $viewModel.tokens, showSkeleton: $viewModel.showSkeleton, tabType: $viewModel.tabType, viewModel: viewModel)
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
@@ -162,7 +162,7 @@ struct HomeView: View {
                 .padding(.xl)
         }
         .task {
-            await viewModel.getToken()
+            viewModel.getTokens()
         }
     }
 }

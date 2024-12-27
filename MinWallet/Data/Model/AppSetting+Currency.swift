@@ -7,16 +7,10 @@ extension AppSetting {
     func getAdaPrice() {
         Task {
             repeat {
-                do {
-                    let data = try await MinWalletService.shared.fetch(query: AdaPriceQuery(currency: .case(.usd)))
-                    
-                    currencyInADA = data?.adaPrice.value ?? 0
-                    print("WTF \(currencyInADA)")
-                } catch {
-                    
-                }
+                let data = try? await MinWalletService.shared.fetch(query: AdaPriceQuery(currency: .case(.usd)))
                 
-                try? await Task.sleep(for: .seconds(5))
+                currencyInADA = data?.adaPrice.value ?? 0
+                try? await Task.sleep(for: .seconds(5*60))
             } while (!Task.isCancelled)
         }
     }

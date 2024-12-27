@@ -1,39 +1,47 @@
 import SwiftUI
 import SkeletonUI
+import MinWalletAPI
 
 
 struct TokenListItemView: View {
-    let tokenWithPrice: TokenWithPrice?
+    var tokenWithPrice: TokenWithPrice? = nil
+    
     let isPositive: Bool
-
-    init(tokenWithPrice: TokenWithPrice?) {
-        self.tokenWithPrice = tokenWithPrice
-        self.isPositive = (tokenWithPrice?.changePercent ?? 0) >= 0
+    var token: TopAssetQuery.Data.TopAssets.TopAsset?
+    
+    init(tokenWithPrice: TokenWithPrice? = nil) {
+        self.isPositive = false
+        self.tokenWithPrice = nil
+    }
+    
+    init(token: TopAssetQuery.Data.TopAssets.TopAsset? = nil) {
+        self.token = token
+        self.isPositive = (Double(token?.priceChange24h ?? "") ?? 0) >= 0
     }
 
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(token: tokenWithPrice?.token)
+            TokenLogoView(asset: token?.asset)
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
-                    Text(tokenWithPrice?.token.ticker)
+                    Text(token?.asset.metadata?.ticker)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Text("\(String(tokenWithPrice?.price ?? 0)) ₳")
+                    Text("\(token?.price ?? "") ₳")
                         .lineSpacing(24)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
                 HStack(spacing: 0) {
-                    Text(tokenWithPrice?.token.project)
+                    Text(token?.asset.metadata?.name)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
                     Spacer()
                     VStack(alignment: .trailing, spacing: 0) {
                         HStack(spacing: 0) {
-                            Text("\(String(abs(tokenWithPrice?.changePercent ?? 0)))%")
+                            Text("\(String(abs(token?.changePercent ?? 0)))%")
                                 .font(.labelSmallSecondary)
                                 .foregroundStyle(isPositive ? .colorBaseSuccess : .colorBorderDangerDefault)
                             Image(isPositive ? .icUp : .icDown)

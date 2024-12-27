@@ -1,5 +1,6 @@
 import Foundation
 import Then
+import MinWalletAPI
 
 
 struct Token: Then, Hashable {
@@ -15,4 +16,14 @@ struct Token: Then, Hashable {
 
 extension Token {
     static let sampleData = Token(currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6, isVerified: true)
+}
+
+
+extension TopAssetsInput: Then {}
+extension TopAssetsSortInput: Then {}
+
+extension TopAssetQuery.Data.TopAssets.TopAsset {
+    var changePercent: Double {
+        Double(priceChange24h) ?? 0
+    }
 }

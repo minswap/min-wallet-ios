@@ -1,24 +1,27 @@
 import SwiftUI
+import MinWalletAPI
 
 
 struct TokenLogoView: View {
-    let token: Token?
+    var token: Token? = nil
 
+    var asset: TopAssetQuery.Data.TopAssets.TopAsset.Asset? = nil
+    
     var body: some View {
         ZStack {
             Group {
-                if token?.currencySymbol.isEmpty == true && (token?.tokenName.isEmpty) == true {
+                if asset?.currencySymbol.isEmpty == true && (asset?.tokenName.isEmpty) == true {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
                 } else {
-                    CustomWebImage(url: buildImageURL(currencySymbol: token?.currencySymbol ?? "", tokenName: token?.tokenName ?? ""), frameSize: .init(width: 28, height: 28))
+                    CustomWebImage(url: buildImageURL(currencySymbol: asset?.currencySymbol ?? "", tokenName: asset?.tokenName ?? ""), frameSize: .init(width: 28, height: 28))
                 }
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
 
-            if token?.isVerified == true {
+            if asset?.metadata?.isVerified == true {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)
@@ -36,13 +39,7 @@ struct TokenLogoView: View {
         }
         .frame(width: 28, height: 28)
     }
-
-    private func buildImageURL(currencySymbol: String, tokenName: String) -> URL? {
-        let baseUrl = "https://asset-logos-testnet.minswap.org"
-        let path = "\(currencySymbol)\(tokenName)"
-        return URL(string: "\(baseUrl)/\(path)")
-    }
-
+    
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"

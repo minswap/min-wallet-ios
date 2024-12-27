@@ -1,6 +1,7 @@
 import SwiftUI
 import FlowStacks
 import SkeletonUI
+import MinWalletAPI
 
 
 struct TokenListView: View {
@@ -9,12 +10,14 @@ struct TokenListView: View {
 
     let label: LocalizedStringKey
     @Binding
-    var tokens: [TokenWithPrice]
+    var tokens: [TopAssetQuery.Data.TopAssets.TopAsset]
     @Binding
     var showSkeleton: Bool
 
     @Binding var tabType: TokenListView.TabType
-
+    @ObservedObject
+    var viewModel: HomeViewModel
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(label)
@@ -46,14 +49,22 @@ struct TokenListView: View {
                         spacing: 0,
                         content: {
                             ForEach(0..<tokens.count, id: \.self) { index in
-                                TokenListItemView(tokenWithPrice: tokens[index])
+                                let item = tokens[index]
+                                TokenListItemView(token: item)
                                     .contentShape(.rect)
+                                    .onAppear() {
+                                        viewModel.loadMoreData(item: item)
+                                    }
                                     .onTapGesture {
-                                        navigator.push(.tokenDetail(token: tokens[index].token))
+                                        //TODO: Cuongnv
+                                        //navigator.push(.tokenDetail(token: tokens[index].token))
                                     }
                             }
                         })
                 }
+            }
+            .refreshable {
+                viewModel.getTokens()
             }
         }
     }
@@ -62,9 +73,10 @@ struct TokenListView: View {
 #Preview {
     TokenListView(
         label: "Crypto prices",
-        tokens: .constant(HomeView.tokens),
+        tokens: .constant([]),
         showSkeleton: .constant(true),
-        tabType: State(initialValue: .market).projectedValue)
+        tabType: State(initialValue: .market).projectedValue,
+        viewModel: HomeViewModel())
 }
 
 
