@@ -1802,6 +1802,7 @@ type Query {
   volumeChart(input: PoolChartInput!): [SimpleChart!]!
   volumeContribution: VolumeContribution
   volumeSeries(interval: String!): [SimpleChart!]!
+  wrapUp(address: String!): WrapUp
 }
 
 enum RiskCategory {
@@ -2269,6 +2270,16 @@ type WithdrawOverSlippageDetail {
   maxWithdrawawls: [BigInt!]
   receivedAmounts: [BigInt!]!
   type: OrderOverSlippage!
+}
+
+type WrapUp {
+  firstTimeJoined: String!
+  topHoldingAssets: [Asset!]!
+  totalDaysJoined: Int!
+  totalLaunchJoined: Int!
+  totalOrders: Int!
+  totalRewardsEarned: BigInt!
+  totalTradingVolume: BigInt!
 }
 
 type ZapInOverSlippageDetail {

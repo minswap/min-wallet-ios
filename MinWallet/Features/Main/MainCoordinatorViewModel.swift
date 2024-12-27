@@ -11,11 +11,11 @@ class MainCoordinatorViewModel: ObservableObject {
 
     init() {
         Task {
-            do {
-                let data = try await MinWalletService.shared.fetch(query: TopAssetQuery())
-            } catch {
-
-            }
+//            do {
+//                let data = try await MinWalletService.shared.fetch(query: TopAssetQuery(input: <#T##GraphQLNullable<TopAssetsInput>#>))
+//            } catch {
+//
+//            }
         }
     }
 }

@@ -40,8 +40,6 @@ struct MinWalletApp: App {
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    private let appSetting: AppSetting = .init()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         /*
         if appSetting.enableNotification {

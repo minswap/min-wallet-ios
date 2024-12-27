@@ -92,12 +92,18 @@ class AppSetting: ObservableObject {
         set { securityType = newValue.rawValue }
     }
 
+    @Published
+    var currencyInADA: Double = 0
+    
     init() {
+        print("WTF init")
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }
 
         rootScreen = isLogin ? .home : .policy
+        
+        getAdaPrice()
     }
 
     func deleteAccount() {

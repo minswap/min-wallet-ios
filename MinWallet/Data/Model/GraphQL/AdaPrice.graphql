@@ -1,0 +1,6 @@
+query AdaPriceQuery($currency: SupportedCurrency!) {
+  adaPrice(currency: $currency) {
+    value
+    currency
+  }
+}
