@@ -133,7 +133,7 @@ struct HomeView: View {
                     .padding(.vertical, Spacing.md)
                     .padding(.horizontal, Spacing.xl)
 */
-                TokenListView(label: "Crypto prices", tokens: $viewModel.tokens, showSkeleton: $viewModel.showSkeleton, tabType: $viewModel.tabType, viewModel: viewModel)
+                TokenListView(viewModel: viewModel)
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
@@ -161,9 +161,6 @@ struct HomeView: View {
             TimeZoneView(isShowTimeZone: $isShowTimeZone)
                 .padding(.xl)
         }
-        .task {
-            viewModel.getTokens()
-        }
     }
 }
 
@@ -171,17 +168,4 @@ struct HomeView: View {
     HomeView()
         .environmentObject(AppSetting())
         .environmentObject(UserInfo())
-}
-
-extension HomeView {
-    static let tokens: [TokenWithPrice] = Array(
-        repeating: TokenWithPrice(
-            id: UUID(),
-            token: Token(
-                currencySymbol: "", tokenName: "", ticker: "ADA", project: "Cardano", decimals: 6,
-                isVerified: true), price: 37123.35, changePercent: 5.7), count: 20
-    )
-    .map { $0.with { $0.id = UUID() } }
-
-
 }

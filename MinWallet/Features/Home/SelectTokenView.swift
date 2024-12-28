@@ -1,10 +1,12 @@
 import SwiftUI
+import MinWalletAPI
+
 
 struct SelectTokenView: View {
     @State
     private var keyword: String = ""
     @State
-    var tokens: [TokenWithPrice] = HomeView.tokens
+    var tokens: [TopAssetQuery.Data.TopAssets.TopAsset] = []
     @FocusState
     private var isFocus: Bool
 
@@ -28,7 +30,7 @@ struct SelectTokenView: View {
                     spacing: 0,
                     content: {
                         ForEach(0..<tokens.count, id: \.self) { index in
-                            TokenListItemView(tokenWithPrice: tokens[index])
+                            TokenListItemView(token: tokens[index])
                         }
                     })
             }

@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import MinWalletAPI
 
 
@@ -9,27 +10,30 @@ class HomeViewModel: ObservableObject {
     var tabType: TokenListView.TabType = .market
 
     @Published
-    var tokens: [TopAssetQuery.Data.TopAssets.TopAsset] = []
-
+    private var tokensDic: [TokenListView.TabType: [TopAssetQuery.Data.TopAssets.TopAsset]] = [:]
     @Published
-    var showSkeleton: Bool = true
+    private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
 
     private var input: TopAssetsInput = .init()
     private var searchAfter :[String]? = nil
-    private var hasLoadMore: Bool = true
+    private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
     private let limit: Int = 20
     
-    init() {}
+    private var cancellables: Set<AnyCancellable> = []
+
+    init() {
+        $tabType
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.getTokens()
+            }
+            .store(in: &cancellables)
+    }
     
     func getTokens(isLoadMore: Bool = false) {
-        showSkeleton = true
+        showSkeletonDic[tabType] = !isLoadMore
         input = TopAssetsInput().with({
             $0.limit = .some(limit)
-            if let searchAfter = searchAfter, isLoadMore {
-                $0.searchAfter = .some(searchAfter)
-            } else {
-                $0.searchAfter = nil
-            }
             $0.onlyVerified = .some(true)
             $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
         })
@@ -37,22 +41,34 @@ class HomeViewModel: ObservableObject {
         Task {
             let tokens = try? await MinWalletService.shared.fetch(query: TopAssetQuery(input: .some(input)))
             let _tokens = tokens?.topAssets.topAssets ?? []
+            var currentTokens  = tokensDic[tabType] ?? []
             if isLoadMore {
-                self.tokens += _tokens
+                currentTokens += _tokens
             } else {
-                self.tokens = _tokens
+                currentTokens = _tokens
             }
             self.searchAfter = tokens?.topAssets.searchAfter
-            self.hasLoadMore = _tokens.count >= self.limit
-            showSkeleton = false
+            self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit
+            showSkeletonDic[tabType] = false
         }
     }
     
     func loadMoreData(item: TopAssetQuery.Data.TopAssets.TopAsset) {
-        guard hasLoadMore else { return }
+        guard (hasLoadMoreDic[tabType] ?? true) else { return }
+        let tokens = tokensDic[tabType] ?? []
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
         if tokens.firstIndex(where: { ($0.asset.currencySymbol + $0.asset.tokenName) == (item.asset.currencySymbol + $0.asset.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
+    }
+}
+
+extension HomeViewModel {
+    var showSkeleton: Bool {
+        showSkeletonDic[tabType] ?? true
+    }
+    
+    var tokens: [TopAssetQuery.Data.TopAssets.TopAsset] {
+        tokensDic[tabType] ?? []
     }
 }

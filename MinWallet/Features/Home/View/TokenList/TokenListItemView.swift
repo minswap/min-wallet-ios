@@ -4,17 +4,10 @@ import MinWalletAPI
 
 
 struct TokenListItemView: View {
-    var tokenWithPrice: TokenWithPrice? = nil
-    
     let isPositive: Bool
-    var token: TopAssetQuery.Data.TopAssets.TopAsset?
+    let token: TopAssetQuery.Data.TopAssets.TopAsset?
     
-    init(tokenWithPrice: TokenWithPrice? = nil) {
-        self.isPositive = false
-        self.tokenWithPrice = nil
-    }
-    
-    init(token: TopAssetQuery.Data.TopAssets.TopAsset? = nil) {
+    init(token: TopAssetQuery.Data.TopAssets.TopAsset?) {
         self.token = token
         self.isPositive = (Double(token?.priceChange24h ?? "") ?? 0) >= 0
     }
@@ -94,35 +87,5 @@ struct TokenListItemSkeletonView: View {
     VStack(spacing: 0) {
         SearchTokenView()
         TokenListItemSkeletonView()
-        TokenListItemView(
-            tokenWithPrice: TokenWithPrice(
-                id: UUID(),
-                token: Token(
-                    currencySymbol: "",
-                    tokenName: "",
-                    ticker: "ADA",
-                    project: "Cardano",
-                    decimals: 6,
-                    isVerified: true
-                ),
-                price: 37123.35,
-                changePercent: 5.7
-            )
-        )
-        TokenListItemView(
-            tokenWithPrice: TokenWithPrice(
-                id: UUID(),
-                token: Token(
-                    currencySymbol: "",
-                    tokenName: "",
-                    ticker: "ADA",
-                    project: "Cardano",
-                    decimals: 6,
-                    isVerified: true
-                ),
-                price: 37123.35,
-                changePercent: -5.7
-            )
-        )
     }
 }

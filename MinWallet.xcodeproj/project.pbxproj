@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2802CFDB8CD6498862AF73F2 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091411DC0725C9FF25F366CD /* Token.swift */; };
 		5718EB1A2CEDE5BA00CDE34D /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5718EB192CEDE5B700CDE34D /* View+Ext.swift */; };
 		5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */; };
 		575157912CEB43FF004CD647 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5751578E2CEB43FF004CD647 /* HomeView.swift */; };
@@ -153,7 +152,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		091411DC0725C9FF25F366CD /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenListItemView.swift; sourceTree = "<group>"; };
 		5718EB192CEDE5B700CDE34D /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		5718EB1C2CEDF71500CDE34D /* ShortenAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortenAddress.swift; sourceTree = "<group>"; };
@@ -535,7 +533,6 @@
 			children = (
 				96BD2A532D0D65B900D81277 /* GraphQL */,
 				966659FF2CF46D480046A20E /* TokenWithPrice.swift */,
-				091411DC0725C9FF25F366CD /* Token.swift */,
 				96DC05352CF5AD1B00A78356 /* Language.swift */,
 				96DC05392CF5B14F00A78356 /* AppSetting.swift */,
 				963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */,
@@ -1084,7 +1081,6 @@
 				96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */,
 				9655920C2CF824E000301DDB /* BiometricSetupView.swift in Sources */,
 				96F7FA0D2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift in Sources */,
-				2802CFDB8CD6498862AF73F2 /* Token.swift in Sources */,
 				965592062CF8224700301DDB /* ReInputSeedPhraseView.swift in Sources */,
 				965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */,
 				96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */,
