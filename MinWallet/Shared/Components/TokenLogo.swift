@@ -3,25 +3,27 @@ import MinWalletAPI
 
 
 struct TokenLogoView: View {
-    var token: Token? = nil
-
-    var asset: TopAssetQuery.Data.TopAssets.TopAsset.Asset? = nil
+    @State
+    var currencySymbol: String?
+    @State
+    var tokenName: String?
+    @State
+    var isVerified: Bool?
     
     var body: some View {
         ZStack {
             Group {
-                if asset?.currencySymbol.isEmpty == true && (asset?.tokenName.isEmpty) == true {
+                if currencySymbol?.isEmpty == true && (tokenName?.isEmpty) == true {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
                 } else {
-                    CustomWebImage(url: buildImageURL(currencySymbol: asset?.currencySymbol ?? "", tokenName: asset?.tokenName ?? ""), frameSize: .init(width: 28, height: 28))
+                    CustomWebImage(url: buildImageURL(currencySymbol: currencySymbol ?? "", tokenName: tokenName ?? ""), frameSize: .init(width: 28, height: 28))
                 }
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
-
-            if asset?.metadata?.isVerified == true {
+            if isVerified == true {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)
@@ -44,30 +46,5 @@ struct TokenLogoView: View {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"
         return "\(baseUrl)/\(path)"
-    }
-}
-
-#Preview {
-    VStack(spacing: 20) {
-        TokenLogoView(
-            token: Token(
-                currencySymbol: "",
-                tokenName: "",
-                ticker: "ADA",
-                project: "Cardano",
-                decimals: 6,
-                isVerified: true
-            )
-        )
-        TokenLogoView(
-            token: Token(
-                currencySymbol: "0254a6ffa78edb03ea8933dbd4ca078758dbfc0fc6bb0d28b7a9c89f",
-                tokenName: "444a4544",
-                ticker: "DJED",
-                project: "DJED",
-                decimals: 6,
-                isVerified: false
-            )
-        )
     }
 }

@@ -5,19 +5,19 @@ import MinWalletAPI
 
 struct TokenListItemView: View {
     let isPositive: Bool
-    let token: TopAssetQuery.Data.TopAssets.TopAsset?
+    let token: TokenProtocol?
     
-    init(token: TopAssetQuery.Data.TopAssets.TopAsset?) {
+    init(token: TokenProtocol?) {
         self.token = token
         self.isPositive = (Double(token?.priceChange24h ?? "") ?? 0) >= 0
     }
 
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(asset: token?.asset)
+            TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
-                    Text(token?.asset.metadata?.ticker)
+                    Text(token?.ticker)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
@@ -27,7 +27,7 @@ struct TokenListItemView: View {
                         .foregroundStyle(.colorBaseTent)
                 }
                 HStack(spacing: 0) {
-                    Text(token?.asset.metadata?.name)
+                    Text(token?.name)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
@@ -56,7 +56,7 @@ struct TokenListItemView: View {
 struct TokenListItemSkeletonView: View {
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(token: nil).skeleton(with: true, size: .init(width: 28, height: 28))
+//            TokenLogoView(token: nil).skeleton(with: true, size: .init(width: 28, height: 28))
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
                     Text("")

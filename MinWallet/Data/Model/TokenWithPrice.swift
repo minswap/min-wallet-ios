@@ -21,9 +21,3 @@ extension Token {
 
 extension TopAssetsInput: Then {}
 extension TopAssetsSortInput: Then {}
-
-extension TopAssetQuery.Data.TopAssets.TopAsset {
-    var changePercent: Double {
-        Double(priceChange24h) ?? 0
-    }
-}

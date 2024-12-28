@@ -22,10 +22,14 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     switch typename {
     case "AdaPrice": return MinWalletAPI.Objects.AdaPrice
     case "Asset": return MinWalletAPI.Objects.Asset
+    case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
+    case "PortfolioLPPosition": return MinWalletAPI.Objects.PortfolioLPPosition
+    case "PortfolioTokenPosition": return MinWalletAPI.Objects.PortfolioTokenPosition
     case "Query": return MinWalletAPI.Objects.Query
     case "TopAsset": return MinWalletAPI.Objects.TopAsset
     case "TopAssetsResponse": return MinWalletAPI.Objects.TopAssetsResponse
+    case "WalletAssetsPositions": return MinWalletAPI.Objects.WalletAssetsPositions
     default: return nil
     }
   }

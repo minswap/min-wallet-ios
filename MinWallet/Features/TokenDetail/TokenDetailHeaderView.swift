@@ -13,7 +13,8 @@ struct TokenDetailHeaderView: View {
             Spacer()
             ZStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 12) {
-                    TokenLogoView(token: .sampleData)
+                    //TODO: cuongnv
+                    //TokenLogoView(token: .sampleData)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("MIN")
                             .foregroundStyle(.colorBaseTent)
@@ -43,7 +44,8 @@ struct TokenDetailHeaderView: View {
                     HStack(
                         alignment: .center,
                         content: {
-                            TokenLogoView(token: .sampleData)
+                            //TODO: cuongnv
+                            //TokenLogoView(token: .sampleData)
                             HStack(
                                 alignment: .firstTextBaseline, spacing: 4,
                                 content: {

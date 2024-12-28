@@ -48,6 +48,7 @@
 		960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */; };
+		963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21932D1FAC40002E258E /* TokenProtocol.swift */; };
 		964FCE772D1268D7003BF81F /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE762D1268D7003BF81F /* PersistenceController.swift */; };
 		964FCE7B2D1269AC003BF81F /* TokenEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE7A2D1269AC003BF81F /* TokenEntity.swift */; };
 		9651CAA32D067760006C46DB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAA22D067760006C46DB /* SDWebImageSwiftUI */; };
@@ -202,6 +203,8 @@
 		963D218E2D1D3A34002E258E /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		963D218F2D1E5DE7002E258E /* AdaPrice.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AdaPrice.graphql; sourceTree = "<group>"; };
 		963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSetting+Currency.swift"; sourceTree = "<group>"; };
+		963D21922D1FABB5002E258E /* WalletAssetsQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = WalletAssetsQuery.graphql; sourceTree = "<group>"; };
+		963D21932D1FAC40002E258E /* TokenProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProtocol.swift; sourceTree = "<group>"; };
 		964FCE742D126892003BF81F /* MinWallet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MinWallet.xcdatamodel; sourceTree = "<group>"; };
 		964FCE762D1268D7003BF81F /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		964FCE7A2D1269AC003BF81F /* TokenEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntity.swift; sourceTree = "<group>"; };
@@ -533,6 +536,7 @@
 			children = (
 				96BD2A532D0D65B900D81277 /* GraphQL */,
 				966659FF2CF46D480046A20E /* TokenWithPrice.swift */,
+				963D21932D1FAC40002E258E /* TokenProtocol.swift */,
 				96DC05352CF5AD1B00A78356 /* Language.swift */,
 				96DC05392CF5B14F00A78356 /* AppSetting.swift */,
 				963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */,
@@ -727,6 +731,7 @@
 			children = (
 				96BD2A552D0D6C6100D81277 /* TopAsset.graphql */,
 				963D218F2D1E5DE7002E258E /* AdaPrice.graphql */,
+				963D21922D1FABB5002E258E /* WalletAssetsQuery.graphql */,
 				96BD2A512D0D65B300D81277 /* schema.graphqls */,
 			);
 			path = GraphQL;
@@ -1056,6 +1061,7 @@
 				965592032CF81A0800301DDB /* KeychainStore.swift in Sources */,
 				96FE0CED2CF36033008E4BFD /* TokenListView.swift in Sources */,
 				960D6B2C2CFF51B50017AF29 /* AuthenticationSettingView.swift in Sources */,
+				963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */,
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 				9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */,
 				96DC05322CF5A6AF00A78356 /* CurrencyView.swift in Sources */,
