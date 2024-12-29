@@ -43,6 +43,6 @@ struct LanguageView: View {
 #Preview {
     VStack {
         LanguageView()
-            .environmentObject(AppSetting())
+            .environmentObject(AppSetting.shared)
     }
 }

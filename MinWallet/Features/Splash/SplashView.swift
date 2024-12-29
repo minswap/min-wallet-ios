@@ -55,5 +55,5 @@ struct SplashView: View {
 
 #Preview {
     SplashView()
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }

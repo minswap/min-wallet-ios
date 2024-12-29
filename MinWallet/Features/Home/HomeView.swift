@@ -166,6 +166,6 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .environmentObject(AppSetting())
-        .environmentObject(UserInfo())
+        .environmentObject(AppSetting.shared)
+        .environmentObject(UserInfo.shared)
 }

@@ -133,5 +133,5 @@ struct MainCoordinator: View {
 
 #Preview {
     MainCoordinator()
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }

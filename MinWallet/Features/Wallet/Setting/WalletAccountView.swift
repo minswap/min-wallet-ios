@@ -133,5 +133,5 @@ struct WalletAccountView: View {
 
 #Preview {
     WalletAccountView()
-        .environmentObject(UserInfo())
+        .environmentObject(UserInfo.shared)
 }

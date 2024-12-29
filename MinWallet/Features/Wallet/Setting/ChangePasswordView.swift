@@ -216,5 +216,5 @@ struct ChangePasswordView: View {
 
 #Preview {
     ChangePasswordView(screenType: .setting)
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }

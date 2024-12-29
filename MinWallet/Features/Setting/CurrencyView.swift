@@ -74,7 +74,7 @@ struct CurrencyView: View {
 
 #Preview {
     VStack {
-        CurrencyView(isShowCurrency: Binding<Bool>.constant(false)).environmentObject(AppSetting())
+        CurrencyView(isShowCurrency: Binding<Bool>.constant(false)).environmentObject(AppSetting.shared)
         Spacer()
     }
     .background(Color.black)

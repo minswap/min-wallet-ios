@@ -108,7 +108,7 @@ struct AppearanceView: View {
 #Preview {
     VStack {
         AppearanceView(isShowAppearance: Binding<Bool>.constant(false))
-            .environmentObject(AppSetting())
+            .environmentObject(AppSetting.shared)
         Spacer()
     }
     .background(Color.black)

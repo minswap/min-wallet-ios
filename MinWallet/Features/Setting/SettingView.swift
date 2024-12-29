@@ -228,7 +228,7 @@ struct SettingView: View {
 #Preview {
     VStack {
         SettingView(isShowAppearance: .constant(false), isShowTimeZone: .constant(false), isShowCurrency: .constant(false))
-            .environmentObject(AppSetting())
-            .environmentObject(UserInfo())
+            .environmentObject(AppSetting.shared)
+            .environmentObject(UserInfo.shared)
     }
 }

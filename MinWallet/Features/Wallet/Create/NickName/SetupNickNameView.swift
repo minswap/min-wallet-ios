@@ -85,5 +85,5 @@ struct SetupNickNameView: View {
 
 #Preview {
     SetupNickNameView(screenType: .walletSetting)
-        .environmentObject(UserInfo())
+        .environmentObject(UserInfo.shared)
 }

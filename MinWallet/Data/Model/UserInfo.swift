@@ -6,9 +6,11 @@ class UserInfo: ObservableObject {
 
     static let nickNameDefault: String = "My MinWallet"
 
+    static let shared: UserInfo = .init()
+    
     @Published var minWallet: MinWallet?
 
-    init() {
+    private init() {
         self.readMinWallet()
     }
 

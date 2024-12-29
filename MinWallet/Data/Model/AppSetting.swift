@@ -5,6 +5,8 @@ import Combine
 class AppSetting: ObservableObject {
     static let USER_NAME = "minWallet"
 
+    static let shared: AppSetting = .init()
+    
     var extraSafeArea: CGFloat {
         safeArea > 44 ? 32 : 12
     }
@@ -95,8 +97,7 @@ class AppSetting: ObservableObject {
     @Published
     var currencyInADA: Double = 0
     
-    init() {
-        print("WTF init")
+    private init() {
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }

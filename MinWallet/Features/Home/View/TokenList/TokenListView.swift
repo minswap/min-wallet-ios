@@ -100,14 +100,16 @@ extension TokenListView {
                 return marketUUID
             case .yourToken:
                 return yourTokenUUID
+                /*
             case .nft:
                 return nftUUID
+                 */
             }
         }
 
         case market
         case yourToken
-        case nft
+        //case nft
 
         var title: LocalizedStringKey {
             switch self {
@@ -115,8 +117,10 @@ extension TokenListView {
                 "Market"
             case .yourToken:
                 "Your tokens"
+                /*
             case .nft:
                 "Your NFTs"
+                 */
             }
         }
     }

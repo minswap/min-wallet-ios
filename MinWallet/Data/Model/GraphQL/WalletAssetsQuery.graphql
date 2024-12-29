@@ -1,26 +1,27 @@
 query WalletAssetsQuery($address: String!) {
   getWalletAssetsPositions(address: $address) {
     lpTokens {
-      amountAssets {
+      pnl24H
+      amountLPAsset {
         asset {
           currencySymbol
+          tokenName
           metadata {
-            description
             isVerified
             name
             ticker
             decimals
           }
-          tokenName
         }
+        amount
       }
+      lpAdaValue
     }
     assets {
       amountAsset {
         asset {
           currencySymbol
           metadata {
-            description
             isVerified
             name
             ticker
@@ -28,8 +29,10 @@ query WalletAssetsQuery($address: String!) {
           }
           tokenName
         }
+        amount
       }
-      priceInAda
+      pnl24H
+      valueInAda
     }
   }
 }

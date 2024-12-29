@@ -73,5 +73,5 @@ struct TokenDetailView: View {
 
 #Preview {
     TokenDetailView()
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }
