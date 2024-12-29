@@ -6,7 +6,7 @@ class AppSetting: ObservableObject {
     static let USER_NAME = "minWallet"
 
     static let shared: AppSetting = .init()
-    
+
     var extraSafeArea: CGFloat {
         safeArea > 44 ? 32 : 12
     }
@@ -94,16 +94,23 @@ class AppSetting: ObservableObject {
         set { securityType = newValue.rawValue }
     }
 
-    @Published
-    var currencyInADA: Double = 0
-    
+    var currencyInADA: Double = 1 {
+        willSet {
+            Task {
+                await MainActor.run {
+                    objectWillChange.send()
+                }
+            }
+        }
+    }
+
     private init() {
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }
 
         rootScreen = isLogin ? .home : .policy
-        
+
         getAdaPrice()
     }
 

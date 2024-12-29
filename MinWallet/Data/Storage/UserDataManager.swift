@@ -21,7 +21,7 @@ class UserDataManager {
             defaults!.set(newValue, forKey: Self.DEVICE_TOKEN)
         }
     }
-    
+
     var tokenRecentSearch: [String] {
         get {
             return (defaults!.array(forKey: Self.TOKEN_RECENT_SEARCH) as? [String]) ?? []

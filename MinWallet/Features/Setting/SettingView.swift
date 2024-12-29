@@ -118,7 +118,7 @@ struct SettingView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Text("ADA")
+                    Text(appSetting.currency)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Image(.icNext)

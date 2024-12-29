@@ -7,8 +7,17 @@ enum TimeZone: String {
 }
 
 enum Currency: String {
-    case usd
-    case ada
+    case usd = "USD"
+    case ada = "ADA"
+
+    var prefix: String {
+        switch self {
+        case .usd:
+            return "$"
+        case .ada:
+            return "₳"
+        }
+    }
 }
 
 enum Language: String, CaseIterable, Identifiable {

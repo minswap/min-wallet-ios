@@ -9,7 +9,7 @@ struct TokenLogoView: View {
     var tokenName: String?
     @State
     var isVerified: Bool?
-    
+
     var body: some View {
         ZStack {
             Group {
@@ -41,7 +41,7 @@ struct TokenLogoView: View {
         }
         .frame(width: 28, height: 28)
     }
-    
+
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"

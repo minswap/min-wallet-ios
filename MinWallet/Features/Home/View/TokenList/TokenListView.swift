@@ -6,11 +6,11 @@ import MinWalletAPI
 
 struct TokenListView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+
     @ObservedObject
     var viewModel: HomeViewModel
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             /*
@@ -46,24 +46,28 @@ struct TokenListView: View {
             .frame(height: 36)
             .padding(.horizontal, .xl)
             .padding(.bottom, .lg)
-            
+
             ScrollView {
                 if viewModel.showSkeleton {
                     ForEach(0..<20, id: \.self) { index in
                         TokenListItemSkeletonView()
                     }
                 } else if viewModel.tokens.isEmpty {
-                    Text("No data")
-                        .padding(.horizontal, .xl)
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                    HStack {
+                        Spacer()
+                        Text("No data")
+                            .padding(.horizontal, .xl)
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
+                    }
                 } else {
                     LazyVStack(
                         spacing: 0,
                         content: {
                             ForEach(0..<viewModel.tokens.count, id: \.self) { index in
                                 let item = viewModel.tokens[index]
-                                TokenListItemView(token: item)
+                                TokenListItemView(token: item, showSubPrice: viewModel.tabType == .yourToken)
                                     .contentShape(.rect)
                                     .onAppear() {
                                         viewModel.loadMoreData(item: item)
@@ -85,6 +89,7 @@ struct TokenListView: View {
 
 #Preview {
     TokenListView(viewModel: HomeViewModel())
+        .environmentObject(AppSetting.shared)
 }
 
 
@@ -100,7 +105,7 @@ extension TokenListView {
                 return marketUUID
             case .yourToken:
                 return yourTokenUUID
-                /*
+            /*
             case .nft:
                 return nftUUID
                  */
@@ -117,7 +122,7 @@ extension TokenListView {
                 "Market"
             case .yourToken:
                 "Your tokens"
-                /*
+            /*
             case .nft:
                 "Your NFTs"
                  */

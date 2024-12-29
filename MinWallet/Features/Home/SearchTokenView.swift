@@ -69,24 +69,42 @@ struct SearchTokenView: View {
                 }
             }
             ScrollView {
-                LazyVStack(
-                    spacing: 0,
-                    content: {
-                        ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                            let item = viewModel.tokens[index]
-                            TokenListItemView(token: item)
-                                .swipeToDelete(
-                                    offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
-                                    onDelete: {
-                                        viewModel.offsets.remove(at: index)
-                                        viewModel.isDeleted.remove(at: index)
-                                        viewModel.tokens.remove(at: index)
-                                    })
-                                .onAppear() {
-                                    viewModel.loadMoreData(item: item)
-                                }
-                        }
-                    })
+                if viewModel.showSkeleton {
+                    ForEach(0..<20, id: \.self) { index in
+                        TokenListItemSkeletonView()
+                    }
+                    .padding(.top, .xl)
+                } else if viewModel.tokens.isEmpty {
+                    HStack {
+                        Spacer()
+                        Text("No data")
+                            .padding(.horizontal, .xl)
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
+                    }
+                    .padding(.top, .xl)
+                } else {
+                    LazyVStack(
+                        spacing: 0,
+                        content: {
+                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                                let item = viewModel.tokens[index]
+                                TokenListItemView(token: item)
+                                    .swipeToDelete(
+                                        offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
+                                        onDelete: {
+                                            viewModel.offsets.remove(at: index)
+                                            viewModel.isDeleted.remove(at: index)
+                                            viewModel.tokens.remove(at: index)
+                                        }
+                                    )
+                                    .onAppear() {
+                                        viewModel.loadMoreData(item: item)
+                                    }
+                            }
+                        })
+                }
             }
             .refreshable {
                 viewModel.getTokens()

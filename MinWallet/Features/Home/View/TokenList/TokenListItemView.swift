@@ -4,12 +4,15 @@ import MinWalletAPI
 
 
 struct TokenListItemView: View {
-    let isPositive: Bool
+    @EnvironmentObject
+    private var appSetting: AppSetting
+
     let token: TokenProtocol?
-    
-    init(token: TokenProtocol?) {
+    let showSubPrice: Bool
+
+    init(token: TokenProtocol?, showSubPrice: Bool = false) {
         self.token = token
-        self.isPositive = (Double(token?.priceChange24h ?? "") ?? 0) >= 0
+        self.showSubPrice = showSubPrice
     }
 
     var body: some View {
@@ -21,8 +24,15 @@ struct TokenListItemView: View {
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Text("\(token?.price ?? "") ₳")
-                        .lineSpacing(24)
+                    let priceValue: AttributedString = {
+                        switch appSetting.currency {
+                        case Currency.ada.rawValue:
+                            return (token?.priceValue ?? 0).formatNumber(suffix: Currency.ada.prefix)
+                        default:
+                            return ((token?.priceValue ?? 0) * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix)
+                        }
+                    }()
+                    Text(priceValue)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
@@ -31,16 +41,30 @@ struct TokenListItemView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 0) {
-                        HStack(spacing: 0) {
-                            Text("\(String(abs(token?.changePercent ?? 0)))%")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(isPositive ? .colorBaseSuccess : .colorBorderDangerDefault)
-                            Image(isPositive ? .icUp : .icDown)
+                        .padding(.trailing, .md)
+                    if !showSubPrice {
+                        Spacer()
+                    }
+                    let percentChange: Double = token?.percentChange ?? 0
+                    HStack(spacing: 0) {
+                        let foregroundStyle: Color = {
+                            guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
+                            return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
+                        }()
+                        Text("\(percentChange.formattedPercent)%")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(foregroundStyle)
+                        if !percentChange.isZero {
+                            Image(percentChange > 0 ? .icUp : .icDown)
                                 .resizable()
                                 .frame(width: 16, height: 16)
                         }
+                    }
+                    if showSubPrice {
+                        Spacer()
+                        let subPrice: Double = token?.subPriceValue ?? 0
+                        Text(subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
+                            .font(.paragraphSmall)
                     }
                 }
             }
@@ -85,7 +109,9 @@ struct TokenListItemSkeletonView: View {
 
 #Preview {
     VStack(spacing: 0) {
-        SearchTokenView()
-        TokenListItemSkeletonView()
+        //        TokenListItemSkeletonView()
+        TokenListItemView(token: TokenProtocolDefault(), showSubPrice: false)
+        Spacer()
     }
+    .environmentObject(AppSetting.shared)
 }
