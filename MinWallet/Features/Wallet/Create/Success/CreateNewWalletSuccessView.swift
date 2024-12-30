@@ -10,6 +10,8 @@ struct CreateNewWalletSuccessView: View {
 
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
 
     @State
     var screenType: ScreenType = .newWallet
@@ -48,13 +50,14 @@ struct CreateNewWalletSuccessView: View {
                         .padding(.trailing, -50)
                 }
             }
-
             Spacer()
-
             CustomButton(
                 title: "Got it",
                 variant: .primary,
                 action: {
+                    Task {
+                        try? await portfolioOverviewViewModel.getPortfolioOverview()
+                    }
                     navigator.push(.home)
                 }
             )
@@ -70,4 +73,5 @@ struct CreateNewWalletSuccessView: View {
 
 #Preview {
     CreateNewWalletSuccessView()
+        .environmentObject(PortfolioOverviewViewModel())
 }

@@ -27,6 +27,14 @@ class HomeViewModel: ObservableObject {
                 self?.getTokens()
             }
             .store(in: &cancellables)
+        
+        Task {
+            try? await Task.sleep(for: .seconds(5 * 60))
+            repeat {
+                self.getTokens()
+                try? await Task.sleep(for: .seconds(5 * 60))
+            } while (!Task.isCancelled)
+        }
     }
 
     func getTokens(isLoadMore: Bool = false) {

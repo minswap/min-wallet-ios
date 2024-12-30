@@ -6,10 +6,13 @@ struct HomeView: View {
     @StateObject
     private var viewModel: HomeViewModel = .init()
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
-    var userInfo: UserInfo
-
+    private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
+    @EnvironmentObject
+    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
     @State
     private var isShowAppearance: Bool = false
     @State
@@ -18,7 +21,7 @@ struct HomeView: View {
     private var isShowCurrency: Bool = false
     @State
     private var showSideMenu: Bool = false
-
+  
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -72,10 +75,9 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
-
                 VStack(alignment: .leading, spacing: 4) {
                     Button(action: {
-
+                        UIPasteboard.general.string = userInfo.minWallet?.address
                     }) {
                         HStack(spacing: 4) {
                             Text(userInfo.minWallet?.address.shortenAddress)
@@ -88,13 +90,47 @@ struct HomeView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
+                    let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
-                        Text("0")
+                        let netValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.netAdaValue : (portfolioOverviewViewModel.netAdaValue * appSetting.currencyInADA)
+                        let netValueString: String = netValue.formatNumber
+                        let components = netValueString.split(separator: ".")
+                        Text(prefix + String(components.first ?? ""))
                             .font(.titleH3)
                             .foregroundStyle(.colorBaseTent)
-                        Text(".00 ₳")
-                            .font(.titleH5)
-                            .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                            .minimumScaleFactor(0.01)
+                            .lineLimit(1)
+                        if components.count > 1 {
+                            Text(".\(components[1])" + suffix)
+                                .font(.titleH5)
+                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.01)
+                        } else {
+                            Text(suffix)
+                                .font(.titleH5)
+                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.01)
+                        }
+                    }
+                    if !portfolioOverviewViewModel.pnl24H.isZero {
+                        HStack(spacing: 4) {
+                            let pnl24H: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.pnl24H : (portfolioOverviewViewModel.pnl24H * appSetting.currencyInADA)
+                            let foregroundStyle: Color = portfolioOverviewViewModel.pnl24H > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
+                            Text("\(prefix)\(pnl24H.formatted())\(suffix)")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(foregroundStyle)
+                            Circle().frame(width: 4, height: 4)
+                                .foregroundStyle(.colorBaseTent)
+                            Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatNumber + "%")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(foregroundStyle)
+                            Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                        }
                     }
                 }
                 .padding(.horizontal, .xl)
@@ -161,6 +197,9 @@ struct HomeView: View {
             TimeZoneView(isShowTimeZone: $isShowTimeZone)
                 .padding(.xl)
         }
+        .task {
+            portfolioOverviewViewModel.initPortfolioOverview()
+        }
     }
 }
 
@@ -168,4 +207,5 @@ struct HomeView: View {
     HomeView()
         .environmentObject(AppSetting.shared)
         .environmentObject(UserInfo.shared)
+        .environmentObject(PortfolioOverviewViewModel())
 }

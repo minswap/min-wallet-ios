@@ -132,6 +132,7 @@
 		96FE0CFA2CF423C2008E4BFD /* _FlexibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CF82CF423C2008E4BFD /* _FlexibleView.swift */; };
 		96FE0CFC2CF423D1008E4BFD /* SizeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CFB2CF423D1008E4BFD /* SizeReader.swift */; };
 		96FE0CFF2CF433E4008E4BFD /* AppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CFE2CF433E4008E4BFD /* AppBar.swift */; };
+		96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -276,6 +277,8 @@
 		96FE0CF82CF423C2008E4BFD /* _FlexibleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _FlexibleView.swift; sourceTree = "<group>"; };
 		96FE0CFB2CF423D1008E4BFD /* SizeReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeReader.swift; sourceTree = "<group>"; };
 		96FE0CFE2CF433E4008E4BFD /* AppBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBar.swift; sourceTree = "<group>"; };
+		96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = PortfolioOverviewQuery.graphql; sourceTree = "<group>"; };
+		96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioOverviewViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +343,7 @@
 				5751578E2CEB43FF004CD647 /* HomeView.swift */,
 				96665A032CF4C60D0046A20E /* SideMenuView.swift */,
 				96665A012CF477490046A20E /* HomeViewModel.swift */,
+				96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */,
 				965592502CFB3A0E00301DDB /* SelectTokenView.swift */,
 				962BFACE2CFC5675003B1042 /* SearchTokenView.swift */,
 				96D6884D2D08501300D8C060 /* SearchTokenViewModel.swift */,
@@ -730,6 +734,7 @@
 			isa = PBXGroup;
 			children = (
 				96BD2A552D0D6C6100D81277 /* TopAsset.graphql */,
+				96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */,
 				963D218F2D1E5DE7002E258E /* AdaPrice.graphql */,
 				963D21922D1FABB5002E258E /* WalletAssetsQuery.graphql */,
 				96BD2A512D0D65B300D81277 /* schema.graphqls */,
@@ -820,7 +825,6 @@
 				57F1028E2C64CCA0000B3544 /* Sources */,
 				57F1028F2C64CCA0000B3544 /* Frameworks */,
 				57F102902C64CCA0000B3544 /* Resources */,
-				96BD2A5C2D0D837A00D81277 /* GraphQL generate */,
 			);
 			buildRules = (
 			);
@@ -971,28 +975,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		96BD2A5C2D0D837A00D81277 /* GraphQL generate */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "GraphQL generate";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "FILE_PATH=\"./apollo-ios-cli\"\n\nif [ -f \"$FILE_PATH\" ]; then\n    ./apollo-ios-cli generate\nelse\n    echo \"File does not exist at path: $FILE_PATH\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		57F1028E2C64CCA0000B3544 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1010,6 +992,7 @@
 				96DC054F2CF75AFB00A78356 /* RoundedCorner.swift in Sources */,
 				96DC052E2CF57E3000A78356 /* PartialSheetViews.swift in Sources */,
 				96DC05362CF5AD1B00A78356 /* Language.swift in Sources */,
+				96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */,
 				96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */,
 				575157912CEB43FF004CD647 /* HomeView.swift in Sources */,
 				96DC053A2CF5B14F00A78356 /* AppSetting.swift in Sources */,

@@ -10,6 +10,10 @@ extension String {
         let last6Characters = self.suffix(6)
         return "\(first6Characters)...\(last6Characters)"
     }
+    
+    var doubleValue: Double {
+        Double(self) ?? 0
+    }
 }
 
 
@@ -22,7 +26,7 @@ extension Data {
 
 
 extension Double {
-    var formattedPercent: String {
+    var formatNumber: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = ","

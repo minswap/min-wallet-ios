@@ -7,9 +7,13 @@ struct WalletAccountView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     private var isVerified: Bool = true
-
+    @EnvironmentObject
+    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -43,7 +47,7 @@ struct WalletAccountView: View {
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)
-                    Text("W01...")
+                    Text(userInfo.minWallet?.walletName)
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .padding(.horizontal, .lg)
@@ -74,7 +78,10 @@ struct WalletAccountView: View {
                         .font(.paragraphXSmall)
                         .foregroundStyle(.colorInteractiveToneWarning)
                     Spacer()
-                    Text("29.253 ₳")
+                    let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
+                    let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
+                    let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.adaValue : (portfolioOverviewViewModel.adaValue * appSetting.currencyInADA)
+                    Text(prefix + adaValue.formatNumber + suffix)
                         .font(.paragraphSemi)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                 }
@@ -110,9 +117,7 @@ struct WalletAccountView: View {
             .onTapGesture {
                 navigator.push(.walletSetting(.changePassword))
             }
-
             Spacer()
-
             CustomButton(
                 title: "Disconnect",
                 action: {
@@ -134,4 +139,6 @@ struct WalletAccountView: View {
 #Preview {
     WalletAccountView()
         .environmentObject(UserInfo.shared)
+        .environmentObject(PortfolioOverviewViewModel())
+        .environmentObject(AppSetting.shared)
 }

@@ -73,7 +73,8 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
     }
 
     var priceValue: Double {
-        let price = (Double(amountAsset.amount) ?? 0) / max(1.0, Double(amountAsset.asset.metadata?.decimals ?? 0))
+        let decimals = pow(10.0, Double(amountAsset.asset.metadata?.decimals ?? 0))
+        let price = (Double(amountAsset.amount) ?? 0) / decimals
         return price
     }
 
@@ -112,7 +113,8 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
     }
 
     var priceValue: Double {
-        let price = (Double(amountLPAsset.amount) ?? 0) / max(1.0, Double(amountLPAsset.asset.metadata?.decimals ?? 0))
+        let decimals = pow(10.0, Double(amountLPAsset.asset.metadata?.decimals ?? 0))
+        let price = (Double(amountLPAsset.amount) ?? 0) / decimals
         return price
     }
 
