@@ -24,16 +24,22 @@ pub fn generate_nonce() -> String {
     generate_random_hex(password_encryption_parameter::NONCE_SIZE)
 }
 
-pub fn encrypt_password(password: &str, data: &str) -> String {
+pub fn encrypt_password(password: &str, data: &str) -> Option<String> {
     let salt = generate_salt();
     let nonce = generate_nonce();
     let password_hex = hex::encode(password);
-    encrypt_with_password(&password_hex, &salt, &nonce, &data).unwrap()
+    match encrypt_with_password(&password_hex, &salt, &nonce, &data) {
+        Ok(v) => Some(v),
+        Err(_) => None,
+    }
 }
 
-pub fn decrypt_password(password: &str, data: &str) -> String {
+pub fn decrypt_password(password: &str, data: &str) -> Option<String> {
     let password_hex = hex::encode(password);
-    decrypt_with_password(&password_hex, &data).unwrap()
+    match decrypt_with_password(&password_hex, &data) {
+        Ok(v) => Some(v),
+        Err(_) => None,
+    }
 }
 
 #[cfg(test)]
@@ -44,8 +50,8 @@ mod tests {
     fn test_round_trip_encryption() {
         let password = "fMESeaTVyCklzUD";
         let data = String::from("736f6d65206461746120746f20656e6372797074");
-        let encrypted_data = encrypt_password(&password, &data);
-        let decrypted_data = decrypt_password(&password, &encrypted_data);
+        let encrypted_data = encrypt_password(&password, &data).unwrap();
+        let decrypted_data = decrypt_password(&password, &encrypted_data).unwrap();
         assert_eq!(data, decrypted_data);
     }
 }
