@@ -79,8 +79,6 @@ struct MainCoordinator: View {
                             ChangePasswordView(screenType: .walletSetting).navigationBarHidden(true)
                         case .changePasswordSuccess:
                             ChangePasswordSuccessView(screenType: .walletSetting).navigationBarHidden(true)
-                        case .disconnectWallet:
-                            DisconnectWalletView().navigationBarHidden(true)
                         case .editNickName:
                             SetupNickNameView(screenType: .walletSetting).navigationBarHidden(true)
                         }

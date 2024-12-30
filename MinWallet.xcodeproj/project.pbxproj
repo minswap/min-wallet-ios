@@ -133,6 +133,7 @@
 		96FE0CFC2CF423D1008E4BFD /* SizeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CFB2CF423D1008E4BFD /* SizeReader.swift */; };
 		96FE0CFF2CF433E4008E4BFD /* AppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CFE2CF433E4008E4BFD /* AppBar.swift */; };
 		96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */; };
+		96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC042D227CFD006AD24F /* EditNickNameView.swift */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -279,6 +280,7 @@
 		96FE0CFE2CF433E4008E4BFD /* AppBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBar.swift; sourceTree = "<group>"; };
 		96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = PortfolioOverviewQuery.graphql; sourceTree = "<group>"; };
 		96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioOverviewViewModel.swift; sourceTree = "<group>"; };
+		96FEDC042D227CFD006AD24F /* EditNickNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNickNameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -689,6 +691,7 @@
 				9655923B2CFABBF900301DDB /* ChangePasswordSuccessView.swift */,
 				9655923C2CFABBF900301DDB /* ChangePasswordView.swift */,
 				9655923D2CFABBF900301DDB /* DisconnectWalletView.swift */,
+				96FEDC042D227CFD006AD24F /* EditNickNameView.swift */,
 				9655923E2CFABBF900301DDB /* WalletAccountView.swift */,
 			);
 			path = Setting;
@@ -991,6 +994,7 @@
 				9600DED02CF18804005D997C /* MainCoordinatorViewModel.swift in Sources */,
 				96DC054F2CF75AFB00A78356 /* RoundedCorner.swift in Sources */,
 				96DC052E2CF57E3000A78356 /* PartialSheetViews.swift in Sources */,
+				96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */,
 				96DC05362CF5AD1B00A78356 /* Language.swift in Sources */,
 				96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */,
 				96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */,

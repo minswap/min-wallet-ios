@@ -13,7 +13,11 @@ struct WalletAccountView: View {
     private var isVerified: Bool = true
     @EnvironmentObject
     private var portfolioOverviewViewModel: PortfolioOverviewViewModel
-
+    @State
+    private var showEditNickName: Bool = false
+    @State
+    private var showDisconnectWallet: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -47,7 +51,7 @@ struct WalletAccountView: View {
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)
-                    Text(userInfo.minWallet?.walletName)
+                    Text("Wallet 1")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .padding(.horizontal, .lg)
@@ -63,6 +67,7 @@ struct WalletAccountView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(.horizontal, .xl)
+            /*
             VStack(spacing: 4) {
                 HStack(spacing: .md) {
                     Text("Account #0")
@@ -91,15 +96,18 @@ struct WalletAccountView: View {
             .contentShape(.rect)
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
+             */
             CustomButton(
                 title: "Edit nickname",
                 variant: .secondary,
                 action: {
-                    navigator.push(.walletSetting(.editNickName))
+                    //navigator.push(.walletSetting(.editNickName))
+                    showEditNickName = true
                 }
             )
             .frame(height: 36)
             .padding(.xl)
+            /*
             HStack(spacing: .lg) {
                 Image(.icLockPassword)
                     .resizable()
@@ -117,14 +125,16 @@ struct WalletAccountView: View {
             .onTapGesture {
                 navigator.push(.walletSetting(.changePassword))
             }
+             */
             Spacer()
             CustomButton(
                 title: "Disconnect",
+                variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
                 action: {
-                    navigator.push(.walletSetting(.disconnectWallet))
+                    showDisconnectWallet = true
                 }
             )
-            .frame(height: 36)
+            .frame(height: 56)
             .padding(.horizontal, .xl)
         }
         .modifier(
@@ -133,6 +143,18 @@ struct WalletAccountView: View {
                 actionLeft: {
                     navigator.pop()
                 }))
+        .popupSheet(
+            isPresented: $showEditNickName,
+            content: {
+                EditNickNameView(showEditNickName: $showEditNickName).padding(.top, .xl)
+            }
+        )
+        .popupSheet(
+            isPresented: $showDisconnectWallet,
+            content: {
+                DisconnectWalletView(showDisconnectWallet: $showDisconnectWallet).padding(.top, .xl)
+            }
+        )
     }
 }
 

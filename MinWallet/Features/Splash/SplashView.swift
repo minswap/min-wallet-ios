@@ -26,17 +26,16 @@ struct SplashView: View {
                         }
                     }
                 } else {
-                    //                    switch appSetting.rootScreen {
-                    //                    case .home:
-                    //                        HomeView()
-                    //                    case .policy:
-                    //                        PolicyConfirmView()
-                    //                    case .gettingStarted:
-                    //                        GettingStartedView()
-                    //                    default:
-                    //                        EmptyView()
-                    //                    }
-                    HomeView()
+                    switch appSetting.rootScreen {
+                    case .home:
+                        HomeView()
+                    case .policy:
+                        PolicyConfirmView()
+                    case .gettingStarted:
+                        GettingStartedView()
+                    default:
+                        EmptyView()
+                    }
                 }
             }
             .onAppear(perform: {
