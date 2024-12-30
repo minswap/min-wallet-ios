@@ -12,7 +12,6 @@ struct CreateNewWalletSuccessView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var portfolioOverviewViewModel: PortfolioOverviewViewModel
-
     @State
     var screenType: ScreenType = .newWallet
 

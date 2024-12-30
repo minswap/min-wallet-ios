@@ -15,10 +15,10 @@ class UserInfo: ObservableObject {
     }
 
     func saveWalletInfo(walletInfo: MinWallet) {
-        guard let encoded = try? JSONEncoder().encode(minWallet) else { return }
+        guard let encoded = try? JSONEncoder().encode(walletInfo) else { return }
         UserDefaults.standard.set(encoded, forKey: Self.MIN_WALLET_KEY)
 
-        self.minWallet = minWallet
+        self.minWallet = walletInfo
     }
 
     func deleteAccount() {

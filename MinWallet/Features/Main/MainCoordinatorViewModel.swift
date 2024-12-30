@@ -8,7 +8,7 @@ import MinWalletAPI
 @MainActor
 class MainCoordinatorViewModel: ObservableObject {
     @Published var routes: Routes<Screen> = []
-    
+
     init() {}
 }
 

@@ -17,7 +17,7 @@ struct WalletAccountView: View {
     private var showEditNickName: Bool = false
     @State
     private var showDisconnectWallet: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -142,7 +142,8 @@ struct WalletAccountView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                })
+        )
         .popupSheet(
             isPresented: $showEditNickName,
             content: {

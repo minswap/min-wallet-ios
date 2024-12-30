@@ -15,7 +15,7 @@ struct DisconnectWalletView: View {
     private var conditionTwo: Bool = false
     @Binding
     var showDisconnectWallet: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Disconnect wallet")
@@ -57,7 +57,7 @@ struct DisconnectWalletView: View {
             .onTapGesture {
                 conditionTwo.toggle()
             }
-            
+
             let combinedBinding = Binding<Bool>(
                 get: { conditionOne && conditionTwo },
                 set: { newValue in
@@ -67,21 +67,22 @@ struct DisconnectWalletView: View {
             )
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
-                      showDisconnectWallet = false
-                    }
-                    .frame(height: 56)
+                    showDisconnectWallet = false
+                }
+                .frame(height: 56)
                 CustomButton(
                     title: "Disconnect",
                     variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
-                    isEnable: combinedBinding) {
-                        appSetting.deleteAccount()
-                        userInfo.deleteAccount()
-                        showDisconnectWallet = false
-                        appSetting.rootScreen = .gettingStarted
-                        navigator.popToRoot()
-                    }
-                    .frame(height: 56)
-                    .disabled(!conditionOne || !conditionTwo)
+                    isEnable: combinedBinding
+                ) {
+                    appSetting.deleteAccount()
+                    userInfo.deleteAccount()
+                    showDisconnectWallet = false
+                    appSetting.rootScreen = .gettingStarted
+                    navigator.popToRoot()
+                }
+                .frame(height: 56)
+                .disabled(!conditionOne || !conditionTwo)
             }
             .padding(.top, 40)
             .padding(.bottom, .md)

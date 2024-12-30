@@ -37,7 +37,7 @@ struct TokenListView: View {
                 if viewModel.tabType == .yourToken, !viewModel.tokens.isEmpty {
                     Spacer()
                     Color.colorBorderPrimarySub.frame(width: 1, height: 20)
-                    Text("\(viewModel.tokens) tokens")
+                    Text("\(viewModel.tokens.count) tokens")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .padding(.leading, .md)

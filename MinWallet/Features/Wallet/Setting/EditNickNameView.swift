@@ -13,7 +13,7 @@ struct EditNickNameView: View {
     var showEditNickName: Bool
     @FocusState
     var isFocus: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Edit nickname")

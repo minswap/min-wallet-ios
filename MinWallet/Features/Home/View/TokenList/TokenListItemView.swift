@@ -27,9 +27,9 @@ struct TokenListItemView: View {
                     let priceValue: AttributedString = {
                         switch appSetting.currency {
                         case Currency.ada.rawValue:
-                            return (token?.priceValue ?? 0).formatNumber(suffix: Currency.ada.prefix)
+                            return (token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : "")
                         default:
-                            return ((token?.priceValue ?? 0) * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix)
+                            return ((token?.priceValue ?? 0) * appSetting.currencyInADA).formatNumber(prefix: !showSubPrice ? Currency.usd.prefix : "")
                         }
                     }()
                     Text(priceValue)
@@ -46,18 +46,21 @@ struct TokenListItemView: View {
                         Spacer()
                     }
                     let percentChange: Double = token?.percentChange ?? 0
-                    HStack(spacing: 0) {
-                        let foregroundStyle: Color = {
-                            guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
-                            return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
-                        }()
-                        Text("\(percentChange.formatNumber)%")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(foregroundStyle)
-                        if !percentChange.isZero {
-                            Image(percentChange > 0 ? .icUp : .icDown)
-                                .resizable()
-                                .frame(width: 16, height: 16)
+
+                    if !(showSubPrice && percentChange.isZero) {
+                        HStack(spacing: 0) {
+                            let foregroundStyle: Color = {
+                                guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
+                                return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
+                            }()
+                            Text("\(percentChange.formatNumber)%")
+                                .font(.labelSmallSecondary)
+                                .foregroundStyle(foregroundStyle)
+                            if !percentChange.isZero {
+                                Image(percentChange > 0 ? .icUp : .icDown)
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                            }
                         }
                     }
                     if showSubPrice {
