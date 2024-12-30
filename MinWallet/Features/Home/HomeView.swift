@@ -21,7 +21,7 @@ struct HomeView: View {
     private var isShowCurrency: Bool = false
     @State
     private var showSideMenu: Bool = false
-  
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()

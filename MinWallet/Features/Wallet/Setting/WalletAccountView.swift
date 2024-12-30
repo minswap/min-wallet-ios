@@ -13,7 +13,7 @@ struct WalletAccountView: View {
     private var isVerified: Bool = true
     @EnvironmentObject
     private var portfolioOverviewViewModel: PortfolioOverviewViewModel
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack {

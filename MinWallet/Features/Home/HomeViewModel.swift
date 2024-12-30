@@ -27,7 +27,7 @@ class HomeViewModel: ObservableObject {
                 self?.getTokens()
             }
             .store(in: &cancellables)
-        
+
         Task {
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
