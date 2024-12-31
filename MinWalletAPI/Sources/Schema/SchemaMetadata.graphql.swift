@@ -24,6 +24,9 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "Asset": return MinWalletAPI.Objects.Asset
     case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
+    case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
+    case "OrderHistoryResponse": return MinWalletAPI.Objects.OrderHistoryResponse
+    case "OrderLinkedPool": return MinWalletAPI.Objects.OrderLinkedPool
     case "PortfolioLPPosition": return MinWalletAPI.Objects.PortfolioLPPosition
     case "PortfolioNFTPosition": return MinWalletAPI.Objects.PortfolioNFTPosition
     case "PortfolioOverview": return MinWalletAPI.Objects.PortfolioOverview
@@ -31,6 +34,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "Query": return MinWalletAPI.Objects.Query
     case "TopAsset": return MinWalletAPI.Objects.TopAsset
     case "TopAssetsResponse": return MinWalletAPI.Objects.TopAssetsResponse
+    case "TxIn": return MinWalletAPI.Objects.TxIn
     case "WalletAssetsPositions": return MinWalletAPI.Objects.WalletAssetsPositions
     default: return nil
     }

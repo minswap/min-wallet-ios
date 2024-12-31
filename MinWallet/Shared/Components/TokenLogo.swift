@@ -39,7 +39,6 @@ struct TokenLogoView: View {
                     .position(x: 26, y: 26)
             }
         }
-        .frame(width: 28, height: 28)
     }
 
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {

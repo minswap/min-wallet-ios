@@ -18,18 +18,10 @@ struct OrderHistoryView: View {
             ScalingHeaderScrollView {
                 ZStack {
                     Color.colorBaseBackground.ignoresSafeArea()
-                    TokenDetailHeaderView(progress: $progress)
+                    OrderHistoryHeaderView(progress: $progress)
                 }
             } content: {
-                VStack(spacing: 0) {
-                    TokenDetailChartView(data: chartData)
-                        .padding(.top, .xl)
-                        .padding(.horizontal, .xl)
-                    TokenDetailStatisticView()
-                        .padding(.top, .xl)
-                        .padding(.horizontal, .xl)
-                    
-                }
+                OrderHistoryContentView()
             }
             .height(min: minHeight + appSetting.safeArea + appSetting.extraSafeArea, max: maxHeight + appSetting.safeArea)
             .allowsHeaderCollapse()
@@ -59,19 +51,12 @@ struct OrderHistoryView: View {
                 //                .background(.colorBaseBackground)
                 Spacer()
             }
-            VStack {
-                Spacer()
-                TokenDetailBottomView()
-                    .background(.colorBaseBackground)
-                    .padding(.horizontal, .xl)
-            }
-            
         }
         .ignoresSafeArea(edges: .top)
     }
 }
 
 #Preview {
-    TokenDetailView()
+    OrderHistoryView()
         .environmentObject(AppSetting.shared)
 }

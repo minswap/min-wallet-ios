@@ -62,6 +62,9 @@
     "5B MIN" : {
 
     },
+    "20 MINv2LP" : {
+
+    },
     "37,016.25" : {
 
     },
@@ -92,6 +95,9 @@
     "ADA" : {
 
     },
+    "ADA - MIN" : {
+
+    },
     "Add Token" : {
 
     },
@@ -101,7 +107,13 @@
     "All time high" : {
 
     },
+    "Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”" : {
+
+    },
     "Appearance" : {
+
+    },
+    "Apply" : {
 
     },
     "Audio" : {
@@ -213,6 +225,12 @@
 
     },
     "Fee" : {
+
+    },
+    "Fill" : {
+
+    },
+    "Filter" : {
 
     },
     "Forgot password" : {
@@ -371,6 +389,9 @@
     "Paste" : {
 
     },
+    "Pending" : {
+
+    },
     "Please write down your 24 words seed phrase and store it in a secured place." : {
 
     },
@@ -407,6 +428,9 @@
 
     },
     "Recommended" : {
+
+    },
+    "Reset" : {
 
     },
     "Restore" : {
@@ -523,6 +547,9 @@
     "Unlock your wallet using Face ID recognition or a password." : {
 
     },
+    "Update" : {
+
+    },
     "USD" : {
 
     },
@@ -536,6 +563,9 @@
 
     },
     "v%@" : {
+
+    },
+    "V1" : {
 
     },
     "Value" : {
@@ -572,6 +602,9 @@
 
     },
     "You have to re-enter your seed phrases when reconnecting your wallet." : {
+
+    },
+    "You paid" : {
 
     },
     "You pay" : {

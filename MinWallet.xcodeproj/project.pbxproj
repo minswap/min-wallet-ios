@@ -135,8 +135,12 @@
 		96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */; };
 		96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC042D227CFD006AD24F /* EditNickNameView.swift */; };
 		96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */; };
-		96FEDC0A2D238C7E006AD24F /* DetailOrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC092D238C7E006AD24F /* DetailOrderHistoryView.swift */; };
+		96FEDC0A2D238C7E006AD24F /* OrderHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC092D238C7E006AD24F /* OrderHistoryDetailView.swift */; };
 		96FEDC0C2D238F51006AD24F /* OrderHistoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */; };
+		96FEDC112D23A463006AD24F /* OrderHistoryContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC102D23A463006AD24F /* OrderHistoryContentView.swift */; };
+		96FEDC132D23A4A4006AD24F /* OrderHistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */; };
+		96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */; };
+		96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC192D23C836006AD24F /* OrderHistory.swift */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -285,9 +289,14 @@
 		96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioOverviewViewModel.swift; sourceTree = "<group>"; };
 		96FEDC042D227CFD006AD24F /* EditNickNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNickNameView.swift; sourceTree = "<group>"; };
 		96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryView.swift; sourceTree = "<group>"; };
-		96FEDC092D238C7E006AD24F /* DetailOrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOrderHistoryView.swift; sourceTree = "<group>"; };
+		96FEDC092D238C7E006AD24F /* OrderHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryDetailView.swift; sourceTree = "<group>"; };
 		96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryHeaderView.swift; sourceTree = "<group>"; };
 		96FEDC0D2D2393C2006AD24F /* ADAHandleNameQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = ADAHandleNameQuery.graphql; sourceTree = "<group>"; };
+		96FEDC102D23A463006AD24F /* OrderHistoryContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryContentView.swift; sourceTree = "<group>"; };
+		96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryItemView.swift; sourceTree = "<group>"; };
+		96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryFilterView.swift; sourceTree = "<group>"; };
+		96FEDC182D23AF67006AD24F /* OrderHistoryQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = OrderHistoryQuery.graphql; sourceTree = "<group>"; };
+		96FEDC192D23C836006AD24F /* OrderHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -551,6 +560,7 @@
 				96BD2A532D0D65B900D81277 /* GraphQL */,
 				966659FF2CF46D480046A20E /* TokenWithPrice.swift */,
 				963D21932D1FAC40002E258E /* TokenProtocol.swift */,
+				96FEDC192D23C836006AD24F /* OrderHistory.swift */,
 				96DC05352CF5AD1B00A78356 /* Language.swift */,
 				96DC05392CF5B14F00A78356 /* AppSetting.swift */,
 				963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */,
@@ -745,6 +755,7 @@
 			isa = PBXGroup;
 			children = (
 				96BD2A552D0D6C6100D81277 /* TopAsset.graphql */,
+				96FEDC182D23AF67006AD24F /* OrderHistoryQuery.graphql */,
 				96FEDC0D2D2393C2006AD24F /* ADAHandleNameQuery.graphql */,
 				96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */,
 				963D218F2D1E5DE7002E258E /* AdaPrice.graphql */,
@@ -830,11 +841,30 @@
 		96FEDC062D238C61006AD24F /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				96FEDC092D238C7E006AD24F /* DetailOrderHistoryView.swift */,
+				96FEDC172D23AE6E006AD24F /* Detail */,
+				96FEDC102D23A463006AD24F /* OrderHistoryContentView.swift */,
 				96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */,
 				96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */,
+				96FEDC142D23AE22006AD24F /* View */,
 			);
 			path = Order;
+			sourceTree = "<group>";
+		};
+		96FEDC142D23AE22006AD24F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */,
+				96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		96FEDC172D23AE6E006AD24F /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				96FEDC092D238C7E006AD24F /* OrderHistoryDetailView.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1032,11 +1062,12 @@
 				966659FE2CF463AC0046A20E /* TokenDetailChartView.swift in Sources */,
 				9600DEAE2CF172C9005D997C /* Appearance.swift in Sources */,
 				96C139712D0AC61B00766399 /* UserInfo.swift in Sources */,
-				96FEDC0A2D238C7E006AD24F /* DetailOrderHistoryView.swift in Sources */,
+				96FEDC0A2D238C7E006AD24F /* OrderHistoryDetailView.swift in Sources */,
 				965592512CFB3A0E00301DDB /* SelectTokenView.swift in Sources */,
 				96DC052B2CF5721500A78356 /* AppearanceView.swift in Sources */,
 				9655924F2CFB39EE00301DDB /* SendTokenView.swift in Sources */,
 				5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */,
+				96FEDC132D23A4A4006AD24F /* OrderHistoryItemView.swift in Sources */,
 				965592462CFAC68200301DDB /* ReceiveTokenView.swift in Sources */,
 				965592412CFABBF900301DDB /* ChangePasswordView.swift in Sources */,
 				96DC05342CF5A87B00A78356 /* TimeZoneView.swift in Sources */,
@@ -1052,8 +1083,10 @@
 				965592092CF8228E00301DDB /* SetupNickNameView.swift in Sources */,
 				96DC05252CF5668400A78356 /* SettingViewModel.swift in Sources */,
 				962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */,
+				96FEDC112D23A463006AD24F /* OrderHistoryContentView.swift in Sources */,
 				96FE0CFA2CF423C2008E4BFD /* _FlexibleView.swift in Sources */,
 				96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */,
+				96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */,
 				96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */,
 				964FCE7B2D1269AC003BF81F /* TokenEntity.swift in Sources */,
 				960D6B362D013ABD0017AF29 /* KeyboardObserver.swift in Sources */,
@@ -1074,6 +1107,7 @@
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 				9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */,
 				96DC05322CF5A6AF00A78356 /* CurrencyView.swift in Sources */,
+				96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */,
 				96DC05472CF74EBD00A78356 /* CreateNewWalletView.swift in Sources */,
 				960D6B2E2CFF53670017AF29 /* ForgotPasswordView.swift in Sources */,
 				966921022D102B3D00D503B7 /* MinWallet+Mapper.swift in Sources */,
