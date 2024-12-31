@@ -59,7 +59,7 @@ struct CreateNewWalletSuccessView: View {
                     Task {
                         async let adaHandleName = portfolioOverviewViewModel.fetchAdaHandleName()
                         async let overView: Void = portfolioOverviewViewModel.getPortfolioOverview()
-                        
+
                         let (name, _) = await (adaHandleName, overView)
                         userInfo.adaHandleName = name
                     }

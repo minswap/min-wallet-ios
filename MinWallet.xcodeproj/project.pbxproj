@@ -141,6 +141,7 @@
 		96FEDC132D23A4A4006AD24F /* OrderHistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */; };
 		96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */; };
 		96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC192D23C836006AD24F /* OrderHistory.swift */; };
+		96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -297,6 +298,7 @@
 		96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryFilterView.swift; sourceTree = "<group>"; };
 		96FEDC182D23AF67006AD24F /* OrderHistoryQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = OrderHistoryQuery.graphql; sourceTree = "<group>"; };
 		96FEDC192D23C836006AD24F /* OrderHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistory.swift; sourceTree = "<group>"; };
+		96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -406,6 +408,7 @@
 				960D6B282CFF194D0017AF29 /* CustomWebImage.swift */,
 				96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */,
 				96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */,
+				96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1094,6 +1097,7 @@
 				96FE0CF42CF3672E008E4BFD /* TokenDetailStatisticView.swift in Sources */,
 				960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */,
 				96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */,
+				96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */,
 				96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */,
 				960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */,
 				96DC052F2CF57E3000A78356 /* View+Modifiers.swift in Sources */,

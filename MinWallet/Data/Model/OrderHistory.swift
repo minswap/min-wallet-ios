@@ -50,7 +50,7 @@ extension OrderV2Status: Identifiable {
 
 extension ContractType: Identifiable {
     public var id: String { UUID().uuidString }
-    
+
     var title: LocalizedStringKey {
         switch self {
         case .dex:

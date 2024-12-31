@@ -4,6 +4,9 @@
     "" : {
 
     },
+    " " : {
+
+    },
     "%" : {
 
     },
@@ -18,6 +21,9 @@
       }
     },
     "%@%%" : {
+
+    },
+    "%lld" : {
 
     },
     "%lld tokens" : {
@@ -92,16 +98,25 @@
     "About Minwallet" : {
 
     },
+    "Action" : {
+
+    },
     "ADA" : {
 
     },
     "ADA - MIN" : {
 
     },
+    "Add one" : {
+
+    },
     "Add Token" : {
 
     },
     "addr1qxjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cq5svq4r" : {
+
+    },
+    "All" : {
 
     },
     "All time high" : {
@@ -143,6 +158,9 @@
     "Cancel" : {
 
     },
+    "Cancelled" : {
+
+    },
     "Change" : {
 
     },
@@ -161,6 +179,9 @@
     "close menu" : {
 
     },
+    "Completed" : {
+
+    },
     "Confirm" : {
 
     },
@@ -168,6 +189,9 @@
 
     },
     "Confirmation" : {
+
+    },
+    "Contract" : {
 
     },
     "Copied" : {
@@ -197,10 +221,19 @@
     "Default" : {
 
     },
+    "Delete all" : {
+
+    },
+    "Deposit" : {
+
+    },
     "Disconnect" : {
 
     },
     "Disconnect wallet" : {
+
+    },
+    "Donation" : {
 
     },
     "Done" : {
@@ -237,6 +270,9 @@
 
     },
     "Forgot password?" : {
+
+    },
+    "From" : {
 
     },
     "Get help" : {
@@ -311,6 +347,9 @@
     "Light" : {
 
     },
+    "Limit" : {
+
+    },
     "LIQ" : {
 
     },
@@ -365,10 +404,16 @@
     "Notice" : {
 
     },
+    "OCO" : {
+
+    },
     "Old Password" : {
 
     },
     "Optic ID" : {
+
+    },
+    "Partial swap" : {
 
     },
     "Password" : {
@@ -496,7 +541,16 @@
     "Something went wrong!" : {
 
     },
+    "Stableswap" : {
+
+    },
     "Statistics" : {
+
+    },
+    "Status" : {
+
+    },
+    "Stop loss" : {
 
     },
     "Swap" : {
@@ -524,9 +578,6 @@
 
     },
     "To wallet address:" : {
-
-    },
-    "togle" : {
 
     },
     "Touch ID" : {
@@ -568,6 +619,9 @@
     "V1" : {
 
     },
+    "V2" : {
+
+    },
     "Value" : {
 
     },
@@ -590,6 +644,9 @@
 
     },
     "When you set the appearance to default, theme app will be depended on device settings." : {
+
+    },
+    "Withdraw" : {
 
     },
     "Xác thực không hợp lệ, vui lòng thử lại sau" : {
@@ -626,6 +683,12 @@
 
     },
     "Your tokens" : {
+
+    },
+    "Zap in" : {
+
+    },
+    "Zap out" : {
 
     },
     "zzz" : {

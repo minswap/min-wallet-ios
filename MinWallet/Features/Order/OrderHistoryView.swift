@@ -8,11 +8,11 @@ struct OrderHistoryView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-    
+
     @State var progress: CGFloat = 0
     private var minHeight: CGFloat = TokenDetailHeaderView.smallLargeHeader
     private var maxHeight: CGFloat = TokenDetailHeaderView.heightLargeHeader + TokenDetailHeaderView.smallLargeHeader
-    
+
     var body: some View {
         ZStack {
             ScalingHeaderScrollView {
@@ -27,7 +27,7 @@ struct OrderHistoryView: View {
             .allowsHeaderCollapse()
             .collapseProgress($progress)
             .disableBounces()
-            
+
             VStack(spacing: 0) {
                 HStack(spacing: .lg) {
                     Button(

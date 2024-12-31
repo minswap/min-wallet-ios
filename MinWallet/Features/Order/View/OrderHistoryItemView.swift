@@ -40,14 +40,16 @@ struct OrderHistoryItemView: View {
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
-                VStack(spacing: 4, content: {
-                    Text("20 MINv2LP")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Text("20 MINv2LP")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                })
+                VStack(
+                    spacing: 4,
+                    content: {
+                        Text("20 MINv2LP")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                        Text("20 MINv2LP")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    })
             }
             HStack(spacing: Spacing.md) {
                 Image(.icWarningYellow)
@@ -65,23 +67,23 @@ struct OrderHistoryItemView: View {
             .frame(minHeight: 32)
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
-                   
+
                 }
                 .frame(height: 36)
                 CustomButton(title: "Update") {
-                   
+
                 }
                 .frame(height: 36)
             }
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }
-    
+
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
                 ForEach(0..<colors.count) { i in
-                   TokenLogoView()
+                    TokenLogoView()
                         .frame(width: 24, height: 24)
                 }
             }

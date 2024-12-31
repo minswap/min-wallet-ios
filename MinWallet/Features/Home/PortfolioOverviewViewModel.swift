@@ -20,7 +20,7 @@ class PortfolioOverviewViewModel: ObservableObject {
     func initPortfolioOverview() {
         guard !isLoaded else { return }
         isLoaded = true
-        
+
         Task {
             repeat {
                 await getPortfolioOverview()
@@ -36,13 +36,13 @@ class PortfolioOverviewViewModel: ObservableObject {
         self.pnl24H = (portfolioOverview?.portfolioOverview.pnl24H.doubleValue ?? 0) / 1_000_000
         self.adaValue = (portfolioOverview?.portfolioOverview.adaValue.doubleValue ?? 0) / 1_000_000
     }
-    
+
     func fetchAdaHandleName() async -> String {
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return "" }
-        
+
         let adaHandleNameQuery = try? await MinWalletService.shared.fetch(query: ADAHandleNameQuery(address: address))
         let tokenName = adaHandleNameQuery?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName ?? ""
-        
+
         let adaName: String? = {
             guard tokenName.count > 8 else { return nil }
             let prefix = tokenName.prefix(8)
@@ -53,8 +53,8 @@ class PortfolioOverviewViewModel: ObservableObject {
                 return tokenName.hexToText
             }
         }()
-        
+
         return adaName ?? ""
     }
-    
+
 }

@@ -20,17 +20,13 @@ struct OrderHistoryFilterView: View {
     private var showSelectFromDate: Bool = false
     @State
     private var showSelectToDate: Bool = false
-    
+
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-YYYY"
         return formatter
     }()
-    
-    private let columns = [
-        GridItem(.adaptive(minimum: 80))
-    ]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Filter")
@@ -44,12 +40,12 @@ struct OrderHistoryFilterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
                     HStack(spacing: 8) {
-                        TextSelectable(content: "All",selected: $contractTypeSelected, value: nil)
+                        TextSelectable(content: "All", selected: $contractTypeSelected, value: nil)
                             .onTapGesture {
                                 contractTypeSelected = nil
                             }
                         ForEach(ContractType.allCases) { type in
-                            TextSelectable(content: type.title ,selected: $contractTypeSelected, value: type)
+                            TextSelectable(content: type.title, selected: $contractTypeSelected, value: type)
                                 .onTapGesture {
                                     contractTypeSelected = type
                                 }
@@ -61,39 +57,41 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    //                ScrollView {
-                    //                    LazyVGrid(columns: columns, spacing: 0) {
-                    //                        ForEach(OrderV2Action.allCases) { type in
-                    //                            TextSelectable(content: type.title ,selected: $actionSelected, value: type)
-                    //                                .onTapGesture {
-                    //                                    actionSelected = type
-                    //                                }
-                    //                        }
-                    //                    }
-                    //                }
+                    let actions: [String] = ["All"] + OrderV2Action.allCases.map({ $0.rawValue })
+                    FlowLayout(
+                        mode: .scrollable,
+                        items: actions
+                    ) { action in
+                        let action = OrderV2Action(rawValue: action)
+                        TextSelectable(content: action?.title ?? "All", selected: $actionSelected, value: action ?? nil)
+                            .onTapGesture {
+                                actionSelected = action
+                            }
+                    }
+                    .padding(.bottom, .xl)
                     Text("Status")
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
                     HStack(spacing: 8) {
-                        TextSelectable(content: "All",selected: $statusSelected, value: nil)
+                        TextSelectable(content: "All", selected: $statusSelected, value: nil)
                             .onTapGesture {
                                 statusSelected = nil
                             }
                         ForEach(OrderV2Status.allCases) { type in
-                            TextSelectable(content: type.title ,selected: $statusSelected, value: type)
+                            TextSelectable(content: type.title, selected: $statusSelected, value: type)
                                 .onTapGesture {
                                     statusSelected = type
                                 }
                         }
                         Spacer()
                     }
-                    
+
                     Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
                 }
                 .padding(.top, .lg)
             }
-            
+
             HStack(spacing: .xl) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("From")
@@ -119,7 +117,7 @@ struct OrderHistoryFilterView: View {
                             }
                         }
                 }
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text("To")
                         .font(.labelSmallSecondary)
@@ -146,32 +144,32 @@ struct OrderHistoryFilterView: View {
                 }
             }
             .padding(.top, (showSelectToDate || showSelectFromDate) ? .lg : 0)
-            
             if !showSelectToDate && !showSelectFromDate {
                 Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
             }
-            
             if showSelectFromDate || showSelectToDate {
                 ZStack {
                     if showSelectFromDate {
-                        DatePicker(" ",
-                                   selection: $fromDate,
-                                   in: toDate.adding(.year, value: -20)!...toDate,
-                                   displayedComponents: [.date]
+                        DatePicker(
+                            " ",
+                            selection: $fromDate,
+                            in: toDate.adding(.year, value: -20)!...toDate,
+                            displayedComponents: [.date]
                         )
                         .datePickerStyle(.wheel)
                     }
                     if showSelectToDate {
-                        DatePicker(" ",
-                                   selection: $toDate,
-                                   in: fromDate...fromDate.adding(.year, value: 20)!,
-                                   displayedComponents: [.date]
+                        DatePicker(
+                            " ",
+                            selection: $toDate,
+                            in: fromDate...fromDate.adding(.year, value: 20)!,
+                            displayedComponents: [.date]
                         )
                         .datePickerStyle(.wheel)
                     }
                 }
             }
-            
+
             HStack(spacing: .xl) {
                 CustomButton(title: "Reset", variant: .secondary) {
                     isShowFilterView = false
@@ -190,7 +188,6 @@ struct OrderHistoryFilterView: View {
                 .frame(height: 56)
             }
             .padding(.vertical, .md)
-            
         }
         .padding(.horizontal, .xl)
         .fixedSize(horizontal: false, vertical: true)
@@ -200,7 +197,6 @@ struct OrderHistoryFilterView: View {
 #Preview {
     VStack {
         OrderHistoryFilterView(isShowFilterView: .constant(false))
-//        TextSelectable(content: "All")
         Spacer()
     }
 }
@@ -209,7 +205,7 @@ private struct TextSelectable<T: Equatable>: View {
     @State var content: LocalizedStringKey = "All"
     @Binding var selected: T?
     @State var value: T?
-    
+
     var body: some View {
         Text(content)
             .font(.labelSmallSecondary)
