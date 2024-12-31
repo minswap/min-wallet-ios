@@ -14,6 +14,24 @@ extension String {
     var doubleValue: Double {
         Double(self) ?? 0
     }
+    
+    var hexToText: String? {
+        var hexStr = self
+        var text = ""
+        
+        while hexStr.count >= 2 {
+            let hexChar = String(hexStr.prefix(2))
+            hexStr = String(hexStr.dropFirst(2))
+            
+            if let charCode = UInt8(hexChar, radix: 16) {
+                text.append(Character(UnicodeScalar(charCode)))
+            } else {
+                return nil
+            }
+        }
+        
+        return text
+    }
 }
 
 

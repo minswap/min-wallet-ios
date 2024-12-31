@@ -52,11 +52,36 @@ struct HomeView: View {
                             showSideMenu = true
                         }
                     }
-                    Text(userInfo.minWallet?.walletName)
-                        .lineLimit(1)
-                        .font(.labelMediumSecondary)
-                        .foregroundColor(.colorBaseTent)
-                        .frame(maxWidth: 200, alignment: .leading)
+                    HStack(alignment: .center, spacing: 4) {
+                        if !userInfo.adaHandleName.isBlank {
+                            Image(.icAdahandle)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text(userInfo.adaHandleName)
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorInteractiveToneHighlight)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
+                                .padding(.trailing, 4)
+                            Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                                .font(.paragraphXMediumSmall)
+                                .foregroundStyle(.colorInteractiveToneHighlight)
+                                .padding(.horizontal, .lg)
+                                .padding(.vertical, .xs)
+                                .background(
+                                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                                )
+                                .frame(height: 20)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
+                        } else {
+                            Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                                .font(.titleH7)
+                                .foregroundStyle(.colorBaseTent)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
+                        }
+                    }
                     Spacer()
                     Image(.icSearch)
                         .resizable()
@@ -199,6 +224,11 @@ struct HomeView: View {
         }
         .task {
             portfolioOverviewViewModel.initPortfolioOverview()
+        }
+        .onFirstAppear {
+            Task {
+                userInfo.adaHandleName = await portfolioOverviewViewModel.fetchAdaHandleName()
+            }
         }
     }
 }

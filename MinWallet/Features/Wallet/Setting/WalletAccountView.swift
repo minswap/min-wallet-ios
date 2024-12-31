@@ -46,20 +46,35 @@ struct WalletAccountView: View {
             .frame(width: 64, height: 64)
             .padding(.vertical, .lg)
             VStack(alignment: .center, spacing: 4) {
-                HStack {
-                    Text(userInfo.minWallet?.walletName)
-                        .font(.labelSemiSecondary)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        .lineLimit(1)
-                    Text("Wallet 1")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        .padding(.horizontal, .lg)
-                        .padding(.vertical, .xs)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
-                        )
-                        .frame(height: 20)
+                HStack(spacing: 4) {
+                    if !userInfo.adaHandleName.isBlank {
+                        Image(.icAdahandle)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text(userInfo.adaHandleName)
+                            .font(.titleH7)
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                            .padding(.trailing, 4)
+                        Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                            .font(.paragraphXMediumSmall)
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            .padding(.horizontal, .lg)
+                            .padding(.vertical, .xs)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                            )
+                            .frame(height: 20)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    } else {
+                        Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                            .font(.titleH7)
+                            .foregroundStyle(.colorBaseTent)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    }
                 }
                 Text(userInfo.minWallet?.address.shortenAddress)
                     .font(.paragraphXSmall)

@@ -242,6 +242,9 @@
     "Hello" : {
       "extractionState" : "manual"
     },
+    "Hello, World!" : {
+
+    },
     "Hide" : {
 
     },
@@ -548,12 +551,6 @@
 
     },
     "Vui lòng chấp nhận đăng nhập bằng Face ID/Touch ID" : {
-
-    },
-    "W01..." : {
-
-    },
-    "Wallet 1" : {
 
     },
     "Weekday" : {

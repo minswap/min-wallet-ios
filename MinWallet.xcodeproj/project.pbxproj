@@ -134,6 +134,9 @@
 		96FE0CFF2CF433E4008E4BFD /* AppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE0CFE2CF433E4008E4BFD /* AppBar.swift */; };
 		96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */; };
 		96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC042D227CFD006AD24F /* EditNickNameView.swift */; };
+		96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */; };
+		96FEDC0A2D238C7E006AD24F /* DetailOrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC092D238C7E006AD24F /* DetailOrderHistoryView.swift */; };
+		96FEDC0C2D238F51006AD24F /* OrderHistoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -281,6 +284,10 @@
 		96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = PortfolioOverviewQuery.graphql; sourceTree = "<group>"; };
 		96FEDC022D225D77006AD24F /* PortfolioOverviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioOverviewViewModel.swift; sourceTree = "<group>"; };
 		96FEDC042D227CFD006AD24F /* EditNickNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNickNameView.swift; sourceTree = "<group>"; };
+		96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryView.swift; sourceTree = "<group>"; };
+		96FEDC092D238C7E006AD24F /* DetailOrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOrderHistoryView.swift; sourceTree = "<group>"; };
+		96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryHeaderView.swift; sourceTree = "<group>"; };
+		96FEDC0D2D2393C2006AD24F /* ADAHandleNameQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = ADAHandleNameQuery.graphql; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -356,16 +363,17 @@
 		575157902CEB43FF004CD647 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				96B467062CFC092900FA3211 /* Swap */,
-				965592492CFB38A000301DDB /* Send */,
-				965592442CFAC67900301DDB /* Receive */,
-				96DC05212CF55C4900A78356 /* Setting */,
-				96FE0CEE2CF366A1008E4BFD /* TokenDetail */,
-				9600DECC2CF187F9005D997C /* Main */,
-				9600DECB2CF187D0005D997C /* Wallet */,
 				5751578F2CEB43FF004CD647 /* Home */,
+				9600DECC2CF187F9005D997C /* Main */,
 				9600DECA2CF18797005D997C /* Onboard */,
+				96FEDC062D238C61006AD24F /* Order */,
+				965592442CFAC67900301DDB /* Receive */,
+				965592492CFB38A000301DDB /* Send */,
+				96DC05212CF55C4900A78356 /* Setting */,
 				9600DEC72CF18615005D997C /* Splash */,
+				96B467062CFC092900FA3211 /* Swap */,
+				96FE0CEE2CF366A1008E4BFD /* TokenDetail */,
+				9600DECB2CF187D0005D997C /* Wallet */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -737,6 +745,7 @@
 			isa = PBXGroup;
 			children = (
 				96BD2A552D0D6C6100D81277 /* TopAsset.graphql */,
+				96FEDC0D2D2393C2006AD24F /* ADAHandleNameQuery.graphql */,
 				96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */,
 				963D218F2D1E5DE7002E258E /* AdaPrice.graphql */,
 				963D21922D1FABB5002E258E /* WalletAssetsQuery.graphql */,
@@ -816,6 +825,16 @@
 				96FE0CFB2CF423D1008E4BFD /* SizeReader.swift */,
 			);
 			path = FlexibleView;
+			sourceTree = "<group>";
+		};
+		96FEDC062D238C61006AD24F /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				96FEDC092D238C7E006AD24F /* DetailOrderHistoryView.swift */,
+				96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */,
+				96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */,
+			);
+			path = Order;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1013,6 +1032,7 @@
 				966659FE2CF463AC0046A20E /* TokenDetailChartView.swift in Sources */,
 				9600DEAE2CF172C9005D997C /* Appearance.swift in Sources */,
 				96C139712D0AC61B00766399 /* UserInfo.swift in Sources */,
+				96FEDC0A2D238C7E006AD24F /* DetailOrderHistoryView.swift in Sources */,
 				965592512CFB3A0E00301DDB /* SelectTokenView.swift in Sources */,
 				96DC052B2CF5721500A78356 /* AppearanceView.swift in Sources */,
 				9655924F2CFB39EE00301DDB /* SendTokenView.swift in Sources */,
@@ -1041,6 +1061,7 @@
 				96FE0CF42CF3672E008E4BFD /* TokenDetailStatisticView.swift in Sources */,
 				960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */,
 				96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */,
+				96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */,
 				960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */,
 				96DC052F2CF57E3000A78356 /* View+Modifiers.swift in Sources */,
 				5751579E2CEB4407004CD647 /* Font.swift in Sources */,
@@ -1048,6 +1069,7 @@
 				965592032CF81A0800301DDB /* KeychainStore.swift in Sources */,
 				96FE0CED2CF36033008E4BFD /* TokenListView.swift in Sources */,
 				960D6B2C2CFF51B50017AF29 /* AuthenticationSettingView.swift in Sources */,
+				96FEDC0C2D238F51006AD24F /* OrderHistoryHeaderView.swift in Sources */,
 				963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */,
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 				9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */,
@@ -1250,7 +1272,7 @@
 				CODE_SIGN_ENTITLEMENTS = "${MIN_CODE_SIGN_ENTITLEMENTS}";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
@@ -1295,7 +1317,7 @@
 				CODE_SIGN_ENTITLEMENTS = "${MIN_CODE_SIGN_ENTITLEMENTS}";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
@@ -1336,7 +1358,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 19;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -1357,7 +1379,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 19;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -1377,7 +1399,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 19;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1396,7 +1418,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 19;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;

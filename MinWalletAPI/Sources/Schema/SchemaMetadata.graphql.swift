@@ -25,6 +25,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
     case "PortfolioLPPosition": return MinWalletAPI.Objects.PortfolioLPPosition
+    case "PortfolioNFTPosition": return MinWalletAPI.Objects.PortfolioNFTPosition
     case "PortfolioOverview": return MinWalletAPI.Objects.PortfolioOverview
     case "PortfolioTokenPosition": return MinWalletAPI.Objects.PortfolioTokenPosition
     case "Query": return MinWalletAPI.Objects.Query
