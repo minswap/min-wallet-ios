@@ -55,24 +55,28 @@ struct OrderHistoryHeaderView: View {
                                     }
                                 }
                         }
+                        .transition(.move(edge: .trailing).combined(with: .opacity))
                     } else {
                         Spacer()
-                        Image(.icSearchOrder)
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .onTapGesture {
-                                withAnimation {
-                                    showSearch = true
+                        HStack(spacing: .md) {
+                            Image(.icSearchOrder)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .onTapGesture {
+                                    withAnimation {
+                                        showSearch = true
+                                    }
                                 }
-                            }
-                        Image(.icFilter)
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .onTapGesture {
-                                withAnimation {
-                                    showSearch = true
+                            Image(.icFilter)
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .onTapGesture {
+                                    withAnimation {
+                                        showSearch = true
+                                    }
                                 }
-                            }
+                        }
+                        .transition(.scale.combined(with: .opacity))
                     }
                 }
                 .padding(.horizontal, .xl)
@@ -85,8 +89,6 @@ struct OrderHistoryHeaderView: View {
                     HStack(
                         alignment: .center,
                         content: {
-                            //TODO: cuongnv
-                            //TokenLogoView(token: .sampleData)
                             HStack(
                                 alignment: .firstTextBaseline, spacing: 4,
                                 content: {
