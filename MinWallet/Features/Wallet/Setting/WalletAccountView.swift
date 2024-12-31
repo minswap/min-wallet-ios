@@ -7,8 +7,16 @@ struct WalletAccountView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     private var isVerified: Bool = true
+    @EnvironmentObject
+    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
+    @State
+    private var showEditNickName: Bool = false
+    @State
+    private var showDisconnectWallet: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -39,13 +47,11 @@ struct WalletAccountView: View {
             .padding(.vertical, .lg)
             VStack(alignment: .center, spacing: 4) {
                 HStack {
-                    /*TODO: cuongnv
                     Text(userInfo.minWallet?.walletName)
                         .font(.labelSemiSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)
-                     */
-                    Text("W01...")
+                    Text("Wallet 1")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .padding(.horizontal, .lg)
@@ -61,6 +67,7 @@ struct WalletAccountView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(.horizontal, .xl)
+            /*
             VStack(spacing: 4) {
                 HStack(spacing: .md) {
                     Text("Account #0")
@@ -76,7 +83,10 @@ struct WalletAccountView: View {
                         .font(.paragraphXSmall)
                         .foregroundStyle(.colorInteractiveToneWarning)
                     Spacer()
-                    Text("29.253 ₳")
+                    let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
+                    let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
+                    let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.adaValue : (portfolioOverviewViewModel.adaValue * appSetting.currencyInADA)
+                    Text(prefix + adaValue.formatNumber + suffix)
                         .font(.paragraphSemi)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                 }
@@ -86,15 +96,18 @@ struct WalletAccountView: View {
             .contentShape(.rect)
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
+             */
             CustomButton(
                 title: "Edit nickname",
                 variant: .secondary,
                 action: {
-                    navigator.push(.walletSetting(.editNickName))
+                    //navigator.push(.walletSetting(.editNickName))
+                    showEditNickName = true
                 }
             )
             .frame(height: 36)
             .padding(.xl)
+            /*
             HStack(spacing: .lg) {
                 Image(.icLockPassword)
                     .resizable()
@@ -112,16 +125,16 @@ struct WalletAccountView: View {
             .onTapGesture {
                 navigator.push(.walletSetting(.changePassword))
             }
-
+             */
             Spacer()
-
             CustomButton(
                 title: "Disconnect",
+                variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
                 action: {
-                    navigator.push(.walletSetting(.disconnectWallet))
+                    showDisconnectWallet = true
                 }
             )
-            .frame(height: 36)
+            .frame(height: 56)
             .padding(.horizontal, .xl)
         }
         .modifier(
@@ -129,11 +142,26 @@ struct WalletAccountView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                })
+        )
+        .popupSheet(
+            isPresented: $showEditNickName,
+            content: {
+                EditNickNameView(showEditNickName: $showEditNickName).padding(.top, .xl)
+            }
+        )
+        .popupSheet(
+            isPresented: $showDisconnectWallet,
+            content: {
+                DisconnectWalletView(showDisconnectWallet: $showDisconnectWallet).padding(.top, .xl)
+            }
+        )
     }
 }
 
 #Preview {
     WalletAccountView()
-        .environmentObject(UserInfo())
+        .environmentObject(UserInfo.shared)
+        .environmentObject(PortfolioOverviewViewModel())
+        .environmentObject(AppSetting.shared)
 }

@@ -3,111 +3,98 @@ import FlowStacks
 
 
 struct DisconnectWalletView: View {
-    enum DisconnectType {
-        case logout
-        case delete
-    }
-
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
     @EnvironmentObject
     private var appSetting: AppSetting
     @State
-    private var disconnectType: DisconnectType = .logout
+    private var conditionOne: Bool = false
     @State
-    private var isConfirm: Bool = true
+    private var conditionTwo: Bool = false
+    @Binding
+    var showDisconnectWallet: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Disconnect wallet")
                 .font(.titleH5)
-                .foregroundStyle(.colorBaseTent)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(height: 60)
+            Image(.icDisconnectWallet)
+                .resizable()
+                .frame(width: 124, height: 124)
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
-                .padding(.horizontal, .xl)
-            HStack(alignment: .top, spacing: .md) {
-                Image(disconnectType == .logout ? .icChecked : .icRadioUncheck)
+            Text("You are disconnecting your wallet?")
+                .font(.labelMediumSecondary)
+            HStack(alignment: .center, spacing: .md) {
+                Image(conditionOne ? .icChecked : .icRadioUncheck)
                     .resizable()
-                    .frame(width: 24, height: 24)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Logout")
-                        .font(.titleH7)
-                        .foregroundStyle(.colorBaseTent)
-                    Text("Allows you to reconnect your wallet without having to re-enter your seed phrases.")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                }
-                Spacer()
+                    .frame(width: 20, height: 20)
+                Text("You have to re-enter your seed phrases when reconnecting your wallet.")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
-            .padding(16)
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(disconnectType == .logout ? .colorInteractiveTentSecondarySub : .colorBorderPrimaryDefault, lineWidth: disconnectType == .logout ? 2 : 1))
+            .padding(.top, .xl)
             .contentShape(.rect)
-            .padding(.horizontal, .xl)
-            .padding(.top, .lg)
             .onTapGesture {
-                disconnectType = .logout
+                conditionOne.toggle()
             }
-            HStack(alignment: .top, spacing: .md) {
-                Image(disconnectType == .delete ? .icChecked : .icRadioUncheck)
+            Color.colorBorderPrimaryTer.frame(height: 1)
+                .padding(.leading, 28)
+                .padding(.vertical, .xl)
+            HStack(alignment: .center, spacing: .md) {
+                Image(conditionTwo ? .icChecked : .icRadioUncheck)
                     .resizable()
-                    .frame(width: 24, height: 24)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Delete")
-                        .font(.titleH7)
-                        .foregroundStyle(.colorBaseTent)
-                    Text("You have to re-enter your seed phrases when reconnecting your wallet.")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                }
-                Spacer()
+                    .frame(width: 20, height: 20)
+                Text("In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button.")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
-            .padding(16)
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(disconnectType == .delete ? .colorInteractiveTentSecondarySub : .colorBorderPrimaryDefault, lineWidth: disconnectType == .logout ? 2 : 1)).contentShape(.rect)
-            .padding(.horizontal, .xl)
-            .padding(.top, .lg)
+            .contentShape(.rect)
             .onTapGesture {
-                disconnectType = .delete
+                conditionTwo.toggle()
             }
 
-            Spacer()
-            if disconnectType == .delete {
-                HStack(alignment: .center, spacing: .xl) {
-                    Image(isConfirm ? .icSquareCheckBox : .icSquareUncheckBox)
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                    Text("In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button.")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+            let combinedBinding = Binding<Bool>(
+                get: { conditionOne && conditionTwo },
+                set: { newValue in
+                    conditionOne = newValue
+                    conditionTwo = newValue
                 }
-                .padding(.xl)
-                .contentShape(.rect)
-                .onTapGesture {
-                    isConfirm.toggle()
+            )
+            HStack(spacing: .xl) {
+                CustomButton(title: "Cancel", variant: .secondary) {
+                    showDisconnectWallet = false
                 }
+                .frame(height: 56)
+                CustomButton(
+                    title: "Disconnect",
+                    variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
+                    isEnable: combinedBinding
+                ) {
+                    appSetting.deleteAccount()
+                    userInfo.deleteAccount()
+                    showDisconnectWallet = false
+                    appSetting.rootScreen = .gettingStarted
+                    navigator.popToRoot()
+                }
+                .frame(height: 56)
+                .disabled(!conditionOne || !conditionTwo)
             }
-            CustomButton(title: "Disconnect", variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear)) {
-                appSetting.deleteAccount()
-                userInfo.deleteAccount()
-                appSetting.rootScreen = .gettingStarted
-                navigator.popToRoot()
-            }
-            .frame(height: 56)
-            .padding(.horizontal, .xl)
-            .disabled(!isConfirm && disconnectType == .delete)
+            .padding(.top, 40)
+            .padding(.bottom, .md)
         }
-        .modifier(
-            BaseContentView(
-                screenTitle: " ",
-                actionLeft: {
-                    navigator.pop()
-                }))
+        .padding(.horizontal, .xl)
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
 #Preview {
-    DisconnectWalletView()
+    VStack {
+        DisconnectWalletView(showDisconnectWallet: .constant(false))
+        Spacer()
+    }
 }

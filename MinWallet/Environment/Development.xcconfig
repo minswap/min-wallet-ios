@@ -1,0 +1,4 @@
+#include "AppConfig.xcconfig"
+
+MIN_GRAPHQL_URL      = https:\/\/dev-3.minswap.org/\graphql
+MIN_PUBLIC_NETWORK_ID = preprod

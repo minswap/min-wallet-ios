@@ -1,70 +1,95 @@
 import SwiftUI
 import FlowStacks
 import SkeletonUI
+import MinWalletAPI
 
 
 struct TokenListView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
-    let label: LocalizedStringKey
-    @Binding
-    var tokens: [TokenWithPrice]
-    @Binding
-    var showSkeleton: Bool
-
-    @Binding var tabType: TokenListView.TabType
+    @ObservedObject
+    var viewModel: HomeViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            /*
             Text(label)
                 .padding(.horizontal, .xl)
                 .font(.titleH6)
                 .foregroundStyle(.colorBaseTent)
                 .padding(.bottom, .xl)
-            /*
+            */
             HStack(spacing: 0) {
                 ForEach(TabType.allCases) { type in
                     Text(type.title)
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                        .frame(maxHeight: .infinity)
+                        .foregroundStyle(viewModel.tabType == type ? .colorInteractiveTentSecondaryDefault : .colorInteractiveTentPrimarySub)
+                        .frame(height: 28)
+                        .padding(.horizontal, .lg)
+                        .background(viewModel.tabType == type ? .colorSurfacePrimaryDefault : .clear)
+                        .cornerRadius(BorderRadius.full)
+                        .padding(.trailing, .lg)
+                        .onTapGesture {
+                            viewModel.tabType = type
+                        }
                 }
-                Color.colorBorderPrimarySub.frame(width: 1, height: 20)
+                if viewModel.tabType == .yourToken, !viewModel.tokens.isEmpty {
+                    Spacer()
+                    Color.colorBorderPrimarySub.frame(width: 1, height: 20)
+                    Text("\(viewModel.tokens.count) tokens")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        .padding(.leading, .md)
+                }
             }
             .frame(height: 36)
             .padding(.horizontal, .xl)
             .padding(.bottom, .lg)
-             */
+
             ScrollView {
-                if showSkeleton {
+                if viewModel.showSkeleton {
                     ForEach(0..<20, id: \.self) { index in
                         TokenListItemSkeletonView()
+                    }
+                } else if viewModel.tokens.isEmpty {
+                    HStack {
+                        Spacer()
+                        Text("No data")
+                            .padding(.horizontal, .xl)
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
                     }
                 } else {
                     LazyVStack(
                         spacing: 0,
                         content: {
-                            ForEach(0..<tokens.count, id: \.self) { index in
-                                TokenListItemView(tokenWithPrice: tokens[index])
+                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                                let item = viewModel.tokens[index]
+                                TokenListItemView(token: item, showSubPrice: viewModel.tabType == .yourToken)
                                     .contentShape(.rect)
+                                    .onAppear() {
+                                        viewModel.loadMoreData(item: item)
+                                    }
                                     .onTapGesture {
-                                        navigator.push(.tokenDetail(token: tokens[index].token))
+                                        //TODO: Cuongnv
+                                        //navigator.push(.tokenDetail(token: tokens[index].token))
                                     }
                             }
                         })
                 }
+            }
+            .refreshable {
+                viewModel.getTokens()
             }
         }
     }
 }
 
 #Preview {
-    TokenListView(
-        label: "Crypto prices",
-        tokens: .constant(HomeView.tokens),
-        showSkeleton: .constant(true),
-        tabType: State(initialValue: .market).projectedValue)
+    TokenListView(viewModel: HomeViewModel())
+        .environmentObject(AppSetting.shared)
 }
 
 
@@ -80,14 +105,16 @@ extension TokenListView {
                 return marketUUID
             case .yourToken:
                 return yourTokenUUID
+            /*
             case .nft:
                 return nftUUID
+                 */
             }
         }
 
         case market
         case yourToken
-        case nft
+        //case nft
 
         var title: LocalizedStringKey {
             switch self {
@@ -95,8 +122,10 @@ extension TokenListView {
                 "Market"
             case .yourToken:
                 "Your tokens"
+            /*
             case .nft:
                 "Your NFTs"
+                 */
             }
         }
     }

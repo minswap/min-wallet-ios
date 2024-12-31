@@ -69,5 +69,5 @@ struct ReceiveTokenView: View {
 
 #Preview {
     ReceiveTokenView()
-        .environmentObject(UserInfo())
+        .environmentObject(UserInfo.shared)
 }

@@ -6,17 +6,19 @@ class UserInfo: ObservableObject {
 
     static let nickNameDefault: String = "My MinWallet"
 
+    static let shared: UserInfo = .init()
+
     @Published var minWallet: MinWallet?
 
-    init() {
+    private init() {
         self.readMinWallet()
     }
 
     func saveWalletInfo(walletInfo: MinWallet) {
-        guard let encoded = try? JSONEncoder().encode(minWallet) else { return }
+        guard let encoded = try? JSONEncoder().encode(walletInfo) else { return }
         UserDefaults.standard.set(encoded, forKey: Self.MIN_WALLET_KEY)
 
-        self.minWallet = minWallet
+        self.minWallet = walletInfo
     }
 
     func deleteAccount() {

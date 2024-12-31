@@ -4,19 +4,9 @@ import FlowStacks
 
 struct SearchTokenView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
-    @State
-    private var keyword: String = ""
-
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
-
-    @State
-    private var tokenSample: [String] = ["ADA - MIN", "ADA - MINZ", "MIN", "ADA"]
-    @State
-    private var hasRecentDelete: Bool = true
-
     @StateObject
     private var viewModel: SearchTokenViewModel = .init()
 
@@ -27,8 +17,8 @@ struct SearchTokenView: View {
                     Image(.icSearch)
                         .resizable()
                         .frame(width: 20, height: 20)
-                    TextField("", text: $keyword)
-                        .placeholder("Search", when: keyword.isEmpty)
+                    TextField("", text: $viewModel.keyword)
+                        .placeholder("Search", when: viewModel.keyword.isEmpty)
                         .focused($isFocus)
                         .lineLimit(1)
                 }
@@ -44,7 +34,7 @@ struct SearchTokenView: View {
             }
             .padding(.leading, .xl)
             .padding(.top, .lg)
-            if hasRecentDelete {
+            if !viewModel.recentSearch.isEmpty {
                 VStack(alignment: .leading, spacing: .md) {
                     HStack {
                         Text("Recent searches")
@@ -54,19 +44,24 @@ struct SearchTokenView: View {
                         Image(.icDelete)
                             .resizable()
                             .frame(width: .xl, height: .xl)
+                            .onTapGesture {
+                                viewModel.clearRecentSearch()
+                            }
                     }
                     .frame(height: 32)
                     .padding(.top, .lg)
                     .padding(.horizontal, .xl)
-
                     HStack {
-                        ForEach(tokenSample, id: \.self) { token in
+                        ForEach(viewModel.recentSearch, id: \.self) { token in
                             Text(token)
                                 .font(.paragraphXMediumSmall)
                                 .foregroundStyle(.colorBaseTent)
                                 .padding(.horizontal, .md)
                                 .frame(height: 40)
                                 .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
+                                .onTapGesture {
+                                    viewModel.keyword = token
+                                }
                         }
                     }
                     .padding(.horizontal, .xl)
@@ -74,33 +69,57 @@ struct SearchTokenView: View {
                 }
             }
             ScrollView {
-                LazyVStack(
-                    spacing: 0,
-                    content: {
-                        ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                            TokenListItemView(tokenWithPrice: viewModel.tokens[index])
-                                .swipeToDelete(
-                                    offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
-                                    onDelete: {
-                                        viewModel.offsets.remove(at: index)
-                                        viewModel.isDeleted.remove(at: index)
-                                        viewModel.tokens.remove(at: index)
-                                    })
-                        }
-                    })
+                if viewModel.showSkeleton {
+                    ForEach(0..<20, id: \.self) { index in
+                        TokenListItemSkeletonView()
+                    }
+                    .padding(.top, .xl)
+                } else if viewModel.tokens.isEmpty {
+                    HStack {
+                        Spacer()
+                        Text("No data")
+                            .padding(.horizontal, .xl)
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
+                    }
+                    .padding(.top, .xl)
+                } else {
+                    LazyVStack(
+                        spacing: 0,
+                        content: {
+                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                                let item = viewModel.tokens[index]
+                                TokenListItemView(token: item)
+                                    .swipeToDelete(
+                                        offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
+                                        onDelete: {
+                                            viewModel.offsets.remove(at: index)
+                                            viewModel.isDeleted.remove(at: index)
+                                            viewModel.tokens.remove(at: index)
+                                        }
+                                    )
+                                    .onAppear() {
+                                        viewModel.loadMoreData(item: item)
+                                    }
+                            }
+                        })
+                }
+            }
+            .refreshable {
+                viewModel.getTokens()
             }
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
                 Button("Done") {
                     self.isFocus = false
+                    viewModel.addRecentSearch()
                 }
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
-
         .background(.colorBaseBackground)
     }
 }

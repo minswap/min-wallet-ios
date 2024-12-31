@@ -110,7 +110,7 @@ struct PartialSheetModifier: ViewModifier {
 
 #Preview {
     HomeView()
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }
 
 struct PartialSheetDismissKey: EnvironmentKey {

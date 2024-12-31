@@ -49,9 +49,7 @@ struct CreateNewWalletSeedPhraseView: View {
         )
         .task {
             guard seedPhrase.isEmpty else { return }
-            /*TODO: cuongnv
             seedPhrase = genPhrase(wordCount: 24)?.split(separator: " ").map({ String($0) }) ?? []
-             */
         }
     }
 }

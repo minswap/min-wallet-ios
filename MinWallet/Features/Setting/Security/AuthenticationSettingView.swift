@@ -111,5 +111,5 @@ struct AuthenticationSettingView: View {
 
 #Preview {
     AuthenticationSettingView()
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }

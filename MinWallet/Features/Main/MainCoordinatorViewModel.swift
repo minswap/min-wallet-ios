@@ -9,15 +9,7 @@ import MinWalletAPI
 class MainCoordinatorViewModel: ObservableObject {
     @Published var routes: Routes<Screen> = []
 
-    init() {
-        Task {
-            do {
-                let data = try await MinWalletService.shared.fetch(query: TopAssetQuery())
-            } catch {
-
-            }
-        }
-    }
+    init() {}
 }
 
 extension MainCoordinatorViewModel {
@@ -67,7 +59,6 @@ enum WalletSettingScreen: Hashable {
     case editNickName
     case changePassword
     case changePasswordSuccess
-    case disconnectWallet
 }
 
 enum SendTokenScreen: Hashable {

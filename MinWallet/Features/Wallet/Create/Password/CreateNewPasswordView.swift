@@ -133,13 +133,12 @@ struct CreateNewPasswordView: View {
                         appSetting.authenticationType = .password
                         appSetting.isLogin = true
                         let seedPhrase = seedPhrase.joined(separator: " ")
-                        /*TODO: cuongnv
-                        guard let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
+                        guard let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                         else {
                             throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
                         }
                         userInfo.saveWalletInfo(walletInfo: wallet)
-                         */
+
                         try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                     } catch {
                         hudState.showMsg(msg: error.localizedDescription)
@@ -149,18 +148,18 @@ struct CreateNewPasswordView: View {
                     do {
                         appSetting.authenticationType = .password
                         appSetting.isLogin = true
-                        /*TODO: cuongnv
+
                         let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
                         let wallet: MinWallet? = {
                             if !fileContent.isBlank {
                                 importWallet(data: fileContent, password: password, walletName: nickName)
                             } else {
-                                createWallet(phrase: seedPhrase.joined(separator: " "), password: password, networkEnv: AppSetting.NetworkEnv.mainnet.rawValue, walletName: nickName)
+                                createWallet(phrase: seedPhrase.joined(separator: " "), password: password, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                             }
                         }()
                         guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
                         userInfo.saveWalletInfo(walletInfo: wallet)
-                         */
+
                         try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                     } catch {
                         hudState.showMsg(msg: error.localizedDescription)

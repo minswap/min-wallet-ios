@@ -1,45 +1,73 @@
 import SwiftUI
 import SkeletonUI
+import MinWalletAPI
 
 
 struct TokenListItemView: View {
-    let tokenWithPrice: TokenWithPrice?
-    let isPositive: Bool
+    @EnvironmentObject
+    private var appSetting: AppSetting
 
-    init(tokenWithPrice: TokenWithPrice?) {
-        self.tokenWithPrice = tokenWithPrice
-        self.isPositive = (tokenWithPrice?.changePercent ?? 0) >= 0
+    let token: TokenProtocol?
+    let showSubPrice: Bool
+
+    init(token: TokenProtocol?, showSubPrice: Bool = false) {
+        self.token = token
+        self.showSubPrice = showSubPrice
     }
 
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(token: tokenWithPrice?.token)
+            TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
-                    Text(tokenWithPrice?.token.ticker)
+                    Text(token?.ticker)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    Text("\(String(tokenWithPrice?.price ?? 0)) ₳")
-                        .lineSpacing(24)
+                    let priceValue: AttributedString = {
+                        switch appSetting.currency {
+                        case Currency.ada.rawValue:
+                            return (token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : "")
+                        default:
+                            return ((token?.priceValue ?? 0) * appSetting.currencyInADA).formatNumber(prefix: !showSubPrice ? Currency.usd.prefix : "")
+                        }
+                    }()
+                    Text(priceValue)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
                 HStack(spacing: 0) {
-                    Text(tokenWithPrice?.token.project)
+                    Text(token?.name)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 0) {
+                        .padding(.trailing, .md)
+                    if !showSubPrice {
+                        Spacer()
+                    }
+                    let percentChange: Double = token?.percentChange ?? 0
+
+                    if !(showSubPrice && percentChange.isZero) {
                         HStack(spacing: 0) {
-                            Text("\(String(abs(tokenWithPrice?.changePercent ?? 0)))%")
+                            let foregroundStyle: Color = {
+                                guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
+                                return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
+                            }()
+                            Text("\(percentChange.formatNumber)%")
                                 .font(.labelSmallSecondary)
-                                .foregroundStyle(isPositive ? .colorBaseSuccess : .colorBorderDangerDefault)
-                            Image(isPositive ? .icUp : .icDown)
-                                .resizable()
-                                .frame(width: 16, height: 16)
+                                .foregroundStyle(foregroundStyle)
+                            if !percentChange.isZero {
+                                Image(percentChange > 0 ? .icUp : .icDown)
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                            }
                         }
+                    }
+                    if showSubPrice {
+                        Spacer()
+                        let subPrice: Double = token?.subPriceValue ?? 0
+                        Text(subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
+                            .font(.paragraphSmall)
                     }
                 }
             }
@@ -55,7 +83,7 @@ struct TokenListItemView: View {
 struct TokenListItemSkeletonView: View {
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(token: nil).skeleton(with: true, size: .init(width: 28, height: 28))
+            TokenLogoView(currencySymbol: nil, tokenName: nil, isVerified: false).skeleton(with: true, size: .init(width: 28, height: 28))
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
                     Text("")
@@ -84,37 +112,9 @@ struct TokenListItemSkeletonView: View {
 
 #Preview {
     VStack(spacing: 0) {
-        SearchTokenView()
-        TokenListItemSkeletonView()
-        TokenListItemView(
-            tokenWithPrice: TokenWithPrice(
-                id: UUID(),
-                token: Token(
-                    currencySymbol: "",
-                    tokenName: "",
-                    ticker: "ADA",
-                    project: "Cardano",
-                    decimals: 6,
-                    isVerified: true
-                ),
-                price: 37123.35,
-                changePercent: 5.7
-            )
-        )
-        TokenListItemView(
-            tokenWithPrice: TokenWithPrice(
-                id: UUID(),
-                token: Token(
-                    currencySymbol: "",
-                    tokenName: "",
-                    ticker: "ADA",
-                    project: "Cardano",
-                    decimals: 6,
-                    isVerified: true
-                ),
-                price: 37123.35,
-                changePercent: -5.7
-            )
-        )
+        //        TokenListItemSkeletonView()
+        TokenListItemView(token: TokenProtocolDefault(), showSubPrice: false)
+        Spacer()
     }
+    .environmentObject(AppSetting.shared)
 }

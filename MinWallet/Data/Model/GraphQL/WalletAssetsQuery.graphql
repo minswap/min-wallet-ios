@@ -1,0 +1,38 @@
+query WalletAssetsQuery($address: String!) {
+  getWalletAssetsPositions(address: $address) {
+    lpTokens {
+      pnl24H
+      amountLPAsset {
+        asset {
+          currencySymbol
+          tokenName
+          metadata {
+            isVerified
+            name
+            ticker
+            decimals
+          }
+        }
+        amount
+      }
+      lpAdaValue
+    }
+    assets {
+      amountAsset {
+        asset {
+          currencySymbol
+          metadata {
+            isVerified
+            name
+            ticker
+            decimals
+          }
+          tokenName
+        }
+        amount
+      }
+      pnl24H
+      valueInAda
+    }
+  }
+}

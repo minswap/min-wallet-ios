@@ -74,7 +74,7 @@ struct TimeZoneView: View {
 #Preview {
     VStack {
         TimeZoneView(isShowTimeZone: Binding<Bool>.constant(false))
-            .environmentObject(AppSetting())
+            .environmentObject(AppSetting.shared)
         Spacer()
     }
     .background(Color.black)

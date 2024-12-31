@@ -16,6 +16,7 @@ struct SecurePasswordTextField: View {
                 .foregroundStyle(.colorBaseTent)
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 50))
                 .onChange(of: visibleInput) { newValue in
+                    //TODO: cuongnv check lai logic
                     var newValue = newValue.replacingOccurrences(of: " ", with: "")
                     guard isSecured else { text = newValue; return }
                     if newValue.count >= text.count {

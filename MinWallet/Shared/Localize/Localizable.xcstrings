@@ -4,16 +4,23 @@
     "" : {
 
     },
-    ".00 ₳" : {
-
-    },
     "%" : {
 
     },
-    "%@ ₳" : {
-
+    "%@%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@%3$@"
+          }
+        }
+      }
     },
     "%@%%" : {
+
+    },
+    "%lld tokens" : {
 
     },
     "$0.0" : {
@@ -29,9 +36,6 @@
 
     },
     "$223.5B" : {
-
-    },
-    "0" : {
 
     },
     "0.3 ₳" : {
@@ -56,9 +60,6 @@
 
     },
     "5B MIN" : {
-
-    },
-    "29.253 ₳" : {
 
     },
     "37,016.25" : {
@@ -88,12 +89,6 @@
     "About Minwallet" : {
 
     },
-    "Account #0" : {
-
-    },
-    "Active" : {
-
-    },
     "ADA" : {
 
     },
@@ -104,9 +99,6 @@
 
     },
     "All time high" : {
-
-    },
-    "Allows you to reconnect your wallet without having to re-enter your seed phrases." : {
 
     },
     "Appearance" : {
@@ -181,9 +173,6 @@
     "Create your password" : {
 
     },
-    "Crypto prices" : {
-
-    },
     "Currency" : {
 
     },
@@ -194,9 +183,6 @@
 
     },
     "Default" : {
-
-    },
-    "Delete" : {
 
     },
     "Disconnect" : {
@@ -310,9 +296,6 @@
     "Local" : {
 
     },
-    "Logout" : {
-
-    },
     "Make sure no one is looking at your screen" : {
 
     },
@@ -350,6 +333,12 @@
 
     },
     "Nhập mật khẩu để tiếp tục" : {
+
+    },
+    "Nickname" : {
+
+    },
+    "No data" : {
 
     },
     "Notice" : {
@@ -477,6 +466,9 @@
     "Slippage Tolerance" : {
 
     },
+    "Something went wrong!" : {
+
+    },
     "Statistics" : {
 
     },
@@ -508,9 +500,6 @@
 
     },
     "togle" : {
-
-    },
-    "Total Funds" : {
 
     },
     "Touch ID" : {
@@ -564,6 +553,9 @@
     "W01..." : {
 
     },
+    "Wallet 1" : {
+
+    },
     "Weekday" : {
 
     },
@@ -574,6 +566,9 @@
 
     },
     "Xác thực không hợp lệ, vui lòng thử lại sau" : {
+
+    },
+    "You are disconnecting your wallet?" : {
 
     },
     "You have successfully create a wallet. Minwallet makes exploring Cardano feel better than ever." : {
@@ -592,9 +587,6 @@
 
     },
     "You’re all set!" : {
-
-    },
-    "Your NFTs" : {
 
     },
     "Your password has been successfully changed." : {

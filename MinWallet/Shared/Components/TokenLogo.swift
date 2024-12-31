@@ -1,24 +1,29 @@
 import SwiftUI
+import MinWalletAPI
 
 
 struct TokenLogoView: View {
-    let token: Token?
+    @State
+    var currencySymbol: String?
+    @State
+    var tokenName: String?
+    @State
+    var isVerified: Bool?
 
     var body: some View {
         ZStack {
             Group {
-                if token?.currencySymbol.isEmpty == true && (token?.tokenName.isEmpty) == true {
+                if currencySymbol?.isEmpty == true && (tokenName?.isEmpty) == true {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
                 } else {
-                    CustomWebImage(url: buildImageURL(currencySymbol: token?.currencySymbol ?? "", tokenName: token?.tokenName ?? ""), frameSize: .init(width: 28, height: 28))
+                    CustomWebImage(url: buildImageURL(currencySymbol: currencySymbol ?? "", tokenName: tokenName ?? ""), frameSize: .init(width: 28, height: 28))
                 }
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
-
-            if token?.isVerified == true {
+            if isVerified == true {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)
@@ -37,40 +42,9 @@ struct TokenLogoView: View {
         .frame(width: 28, height: 28)
     }
 
-    private func buildImageURL(currencySymbol: String, tokenName: String) -> URL? {
-        let baseUrl = "https://asset-logos-testnet.minswap.org"
-        let path = "\(currencySymbol)\(tokenName)"
-        return URL(string: "\(baseUrl)/\(path)")
-    }
-
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"
         return "\(baseUrl)/\(path)"
-    }
-}
-
-#Preview {
-    VStack(spacing: 20) {
-        TokenLogoView(
-            token: Token(
-                currencySymbol: "",
-                tokenName: "",
-                ticker: "ADA",
-                project: "Cardano",
-                decimals: 6,
-                isVerified: true
-            )
-        )
-        TokenLogoView(
-            token: Token(
-                currencySymbol: "0254a6ffa78edb03ea8933dbd4ca078758dbfc0fc6bb0d28b7a9c89f",
-                tokenName: "444a4544",
-                ticker: "DJED",
-                project: "DJED",
-                decimals: 6,
-                isVerified: false
-            )
-        )
     }
 }

@@ -11,8 +11,8 @@ import SwiftUI
 struct MinWalletApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-    @StateObject var appSetting: AppSetting = .init()
-    @StateObject var userInfo: UserInfo = .init()
+    @StateObject var appSetting: AppSetting = AppSetting.shared
+    @StateObject var userInfo: UserInfo = UserInfo.shared
     @StateObject var hudState: HUDState = .init()
 
     var body: some Scene {
@@ -40,8 +40,6 @@ struct MinWalletApp: App {
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    private let appSetting: AppSetting = .init()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         /*
         if appSetting.enableNotification {

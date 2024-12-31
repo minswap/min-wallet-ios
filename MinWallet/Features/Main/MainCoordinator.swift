@@ -5,17 +5,20 @@ import FlowStacks
 struct MainCoordinator: View {
     @StateObject
     private var viewModel = MainCoordinatorViewModel()
-
+    @StateObject
+    private var portfolioOverviewViewModel = PortfolioOverviewViewModel()
     @EnvironmentObject
     private var appSetting: AppSetting
 
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
             SplashView()
+                .environmentObject(portfolioOverviewViewModel)
                 .flowDestination(for: MainCoordinatorViewModel.Screen.self) { screen in
                     switch screen {
                     case .home:
                         HomeView().navigationBarHidden(true)
+                            .environmentObject(portfolioOverviewViewModel)
                     case .policy:
                         PolicyConfirmView().navigationBarHidden(true)
                     case .gettingStarted:
@@ -48,6 +51,7 @@ struct MainCoordinator: View {
                             CreateNewPasswordView(screenType: .createWallet(seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .createNewWalletSuccess:
                             CreateNewWalletSuccessView(screenType: .newWallet).navigationBarHidden(true)
+                                .environmentObject(portfolioOverviewViewModel)
                         }
 
                     case let .restoreWallet(screen):
@@ -70,12 +74,11 @@ struct MainCoordinator: View {
                         switch screen {
                         case .walletAccount:
                             WalletAccountView().navigationBarHidden(true)
+                                .environmentObject(portfolioOverviewViewModel)
                         case .changePassword:
                             ChangePasswordView(screenType: .walletSetting).navigationBarHidden(true)
                         case .changePasswordSuccess:
                             ChangePasswordSuccessView(screenType: .walletSetting).navigationBarHidden(true)
-                        case .disconnectWallet:
-                            DisconnectWalletView().navigationBarHidden(true)
                         case .editNickName:
                             SetupNickNameView(screenType: .walletSetting).navigationBarHidden(true)
                         }
@@ -133,5 +136,5 @@ struct MainCoordinator: View {
 
 #Preview {
     MainCoordinator()
-        .environmentObject(AppSetting())
+        .environmentObject(AppSetting.shared)
 }
