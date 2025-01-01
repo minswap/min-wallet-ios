@@ -143,6 +143,8 @@
 		96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC192D23C836006AD24F /* OrderHistory.swift */; };
 		96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */; };
 		96FEDC1E2D24E135006AD24F /* OrderHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC1D2D24E135006AD24F /* OrderHistoryViewModel.swift */; };
+		96FEDC202D24F96F006AD24F /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */; };
+		96FEDC232D253DCB006AD24F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 96FEDC222D253DCB006AD24F /* SwiftyJSON */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -301,6 +303,7 @@
 		96FEDC192D23C836006AD24F /* OrderHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistory.swift; sourceTree = "<group>"; };
 		96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		96FEDC1D2D24E135006AD24F /* OrderHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewModel.swift; sourceTree = "<group>"; };
+		96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +315,7 @@
 				9651CAA32D067760006C46DB /* SDWebImageSwiftUI in Frameworks */,
 				9651CAAC2D0677B5006C46DB /* SkeletonUI in Frameworks */,
 				5761D7162D0ADFE800D2809A /* Mobile.xcframework in Frameworks */,
+				96FEDC232D253DCB006AD24F /* SwiftyJSON in Frameworks */,
 				96BD2A592D0D758700D81277 /* MinWalletAPI in Frameworks */,
 				9651CAA92D0677A3006C46DB /* Then in Frameworks */,
 				9651CAA62D067793006C46DB /* FlowStacks in Frameworks */,
@@ -408,6 +412,7 @@
 				965592152CF858E700301DDB /* SecurePasswordTextField.swift */,
 				960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */,
 				960D6B282CFF194D0017AF29 /* CustomWebImage.swift */,
+				96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */,
 				96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */,
 				96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */,
 				96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */,
@@ -899,6 +904,7 @@
 				96BD2A472D0D644A00D81277 /* Apollo */,
 				96BD2A582D0D758700D81277 /* MinWalletAPI */,
 				96A285092D17B9FC00F3CCEF /* CoreDataRepository */,
+				96FEDC222D253DCB006AD24F /* SwiftyJSON */,
 			);
 			productName = MinWallet;
 			productReference = 57F102922C64CCA0000B3544 /* MinWallet.app */;
@@ -982,6 +988,7 @@
 				96BD2A462D0D644900D81277 /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				96BD2A572D0D758700D81277 /* XCLocalSwiftPackageReference "MinWalletAPI" */,
 				96A285082D17B9FC00F3CCEF /* XCLocalSwiftPackageReference "CoreDataRepository" */,
+				96FEDC212D253DCB006AD24F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 57F102932C64CCA0000B3544 /* Products */;
 			projectDirPath = "";
@@ -1135,6 +1142,7 @@
 				9600DEC92CF18620005D997C /* SplashView.swift in Sources */,
 				966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */,
 				960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */,
+				96FEDC202D24F96F006AD24F /* OffsetObservingScrollView.swift in Sources */,
 				96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */,
 				9655920C2CF824E000301DDB /* BiometricSetupView.swift in Sources */,
 				96F7FA0D2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift in Sources */,
@@ -1582,6 +1590,14 @@
 				minimumVersion = 1.15.3;
 			};
 		};
+		96FEDC212D253DCB006AD24F /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1627,6 +1643,11 @@
 		96BD2A582D0D758700D81277 /* MinWalletAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MinWalletAPI;
+		};
+		96FEDC222D253DCB006AD24F /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96FEDC212D253DCB006AD24F /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 

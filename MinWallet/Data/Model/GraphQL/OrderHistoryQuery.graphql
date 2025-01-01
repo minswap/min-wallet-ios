@@ -7,7 +7,6 @@ query OrderHistoryQuery($ordersInput2: OrderV2Input!) {
       type
       txIn {
         txId
-        txIndex
       }
       expiredAt
       linkedPools {
@@ -33,6 +32,8 @@ query OrderHistoryQuery($ordersInput2: OrderV2Input!) {
         }
       }
       status
+      updatedAt
+      updatedTxId
     }
   }
 }

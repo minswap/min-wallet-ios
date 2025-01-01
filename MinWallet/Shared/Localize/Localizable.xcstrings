@@ -95,9 +95,6 @@
     "318.362341 MIN" : {
 
     },
-    "2024-01-11 15:58 GMT+7" : {
-
-    },
     "11817" : {
 
     },
@@ -161,6 +158,9 @@
     "Basic" : {
 
     },
+    "Batched at" : {
+
+    },
     "Before you start, please read and keep the following security tips in mind." : {
 
     },
@@ -174,6 +174,9 @@
 
     },
     "Cancelled" : {
+
+    },
+    "Cancelled at" : {
 
     },
     "Change" : {
@@ -288,9 +291,6 @@
 
     },
     "Fee" : {
-
-    },
-    "Fill" : {
 
     },
     "Filter" : {
@@ -629,9 +629,6 @@
 
     },
     "To wallet address:" : {
-
-    },
-    "togle" : {
 
     },
     "Touch ID" : {

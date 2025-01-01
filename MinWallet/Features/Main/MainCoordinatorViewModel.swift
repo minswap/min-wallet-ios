@@ -32,7 +32,7 @@ extension MainCoordinatorViewModel {
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
         case securitySetting(_ screen: SecuritySetting)
-        case orderHistoryDetail(order: OrderHistoryQuery.Data.Orders.Order)
+        case orderHistoryDetail(order: OrderHistoryQuery.Data.Orders.WrapOrder)
         case orderHistory
     }
 }

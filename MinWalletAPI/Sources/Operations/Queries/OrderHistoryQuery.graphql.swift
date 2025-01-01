@@ -7,7 +7,7 @@ public class OrderHistoryQuery: GraphQLQuery {
   public static let operationName: String = "OrderHistoryQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId txIndex } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status } } }"#
+      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId } } }"#
     ))
 
   public var ordersInput2: OrderV2Input
@@ -62,6 +62,8 @@ public class OrderHistoryQuery: GraphQLQuery {
           .field("expiredAt", String?.self),
           .field("linkedPools", [LinkedPool].self),
           .field("status", GraphQLEnum<MinWalletAPI.OrderV2Status>.self),
+          .field("updatedAt", String?.self),
+          .field("updatedTxId", String?.self),
         ] }
 
         public var action: GraphQLEnum<MinWalletAPI.OrderV2Action> { __data["action"] }
@@ -72,6 +74,8 @@ public class OrderHistoryQuery: GraphQLQuery {
         public var expiredAt: String? { __data["expiredAt"] }
         public var linkedPools: [LinkedPool] { __data["linkedPools"] }
         public var status: GraphQLEnum<MinWalletAPI.OrderV2Status> { __data["status"] }
+        public var updatedAt: String? { __data["updatedAt"] }
+        public var updatedTxId: String? { __data["updatedTxId"] }
 
         /// Orders.Order.TxIn
         ///
@@ -84,11 +88,9 @@ public class OrderHistoryQuery: GraphQLQuery {
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("txId", String.self),
-            .field("txIndex", Int.self),
           ] }
 
           public var txId: String { __data["txId"] }
-          public var txIndex: Int { __data["txIndex"] }
         }
 
         /// Orders.Order.LinkedPool

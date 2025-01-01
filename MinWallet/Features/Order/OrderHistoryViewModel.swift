@@ -2,7 +2,7 @@ import SwiftUI
 import MinWalletAPI
 import Combine
 
-
+@MainActor
 class OrderHistoryViewModel: ObservableObject {
     @Published
     var showSearch: Bool = false
@@ -11,7 +11,7 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var keyword: String = ""
     @Published
-    var orders: [OrderHistoryQuery.Data.Orders.Order] = []
+    var orders: [OrderHistoryQuery.Data.Orders.WrapOrder] = []
     @Published
     var showSkeleton: Bool = true
 
@@ -39,7 +39,7 @@ class OrderHistoryViewModel: ObservableObject {
             showSkeleton = true
             try? await Task.sleep(for: .seconds(2))
             let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-            self.orders = orderData?.orders.orders ?? []
+            self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
 
             showSkeleton = false
         }

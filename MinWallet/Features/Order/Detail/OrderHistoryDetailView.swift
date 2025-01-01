@@ -9,7 +9,7 @@ struct OrderHistoryDetailView: View {
     let colors: [Color] = [.red, .blue, .purple]
 
     @State
-    var order: OrderHistoryQuery.Data.Orders.Order?
+    var order: OrderHistoryQuery.Data.Orders.WrapOrder?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -29,48 +29,54 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
-                        Text(order?.action.value?.title)
+                        Text(order?.order?.action.value?.title)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                     }
                     .padding(.horizontal, .xl)
                     .frame(height: 36)
                     .padding(.top, .md)
-                    HStack(spacing: Spacing.md) {
-                        Image(.icWarningYellow)
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                        Text("Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”")
-                            .font(.paragraphXSmall)
-                            .foregroundStyle(.colorInteractiveToneWarning)
-                            .lineLimit(nil)
+                    if order?.order?.status.value == .created {
+                        HStack(spacing: Spacing.md) {
+                            Image(.icWarningYellow)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text("Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”")
+                                .font(.paragraphXSmall)
+                                .foregroundStyle(.colorInteractiveToneWarning)
+                                .lineLimit(nil)
+                        }
+                        .padding(.md)
+                        .background(
+                            RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
+                        )
+                        .frame(minHeight: 32)
+                        .padding(.top, .xl)
+                        .padding(.horizontal, .xl)
                     }
-                    .padding(.md)
-                    .background(
-                        RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
-                    )
-                    .frame(minHeight: 32)
-                    .padding(.top, .xl)
-                    .padding(.horizontal, .xl)
                     Color.colorBorderPrimarySub.frame(height: 1)
                         .padding(.xl)
                     inputInfoView.padding(.horizontal, .xl)
                     executeInfoView.padding(.horizontal, .xl)
-                    outputInfoView.padding(.horizontal, .xl)
+                    if order?.order?.status.value != .created {
+                        outputInfoView.padding(.horizontal, .xl)
+                    }
                 }
             }
             Spacer()
-            HStack(spacing: .xl) {
-                CustomButton(title: "Cancel", variant: .secondary) {
-
+            if order?.order?.status.value == .created {
+                HStack(spacing: .xl) {
+                    CustomButton(title: "Cancel", variant: .secondary) {
+                        
+                    }
+                    .frame(height: 56)
+                    CustomButton(title: "Update") {
+                        
+                    }
+                    .frame(height: 56)
                 }
-                .frame(height: 56)
-                CustomButton(title: "Update") {
-
-                }
-                .frame(height: 56)
+                .padding(EdgeInsets(top: 24, leading: .xl, bottom: .xl, trailing: .xl))
             }
-            .padding(EdgeInsets(top: 24, leading: .xl, bottom: .xl, trailing: .xl))
         }
         .modifier(
             BaseContentView(
@@ -100,13 +106,13 @@ struct OrderHistoryDetailView: View {
                         .frame(width: 24, height: 24)
                 }
             }
-            Text(order?.type.value?.title)
+            Text(order?.order?.type.value?.title)
                 .font(.paragraphXMediumSmall)
-                .foregroundStyle(order?.type.value?.foregroundColor ?? .colorInteractiveToneHighlight)
+                .foregroundStyle(order?.order?.type.value?.foregroundColor ?? .colorInteractiveToneHighlight)
                 .padding(.horizontal, .md)
                 .padding(.vertical, .xs)
                 .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.type.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.order?.type.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
                 )
                 .frame(height: 20)
                 .lineLimit(1)
@@ -115,15 +121,15 @@ struct OrderHistoryDetailView: View {
             Spacer()
             HStack(spacing: 4) {
                 Circle().frame(width: 4, height: 4)
-                    .foregroundStyle(order?.status.value?.foregroundCircleColor ?? .clear)
-                Text(order?.status.value?.title)
+                    .foregroundStyle(order?.order?.status.value?.foregroundCircleColor ?? .clear)
+                Text(order?.order?.status.value?.title)
                     .font(.paragraphXMediumSmall)
-                    .foregroundStyle(order?.status.value?.foregroundColor ?? .colorInteractiveToneHighlight)
+                    .foregroundStyle(order?.order?.status.value?.foregroundColor ?? .colorInteractiveToneHighlight)
             }
             .padding(.horizontal, .lg)
             .padding(.vertical, .xs)
             .background(
-                RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.status.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
+                RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.order?.status.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
             )
             .frame(height: 20)
             .lineLimit(1)
@@ -189,13 +195,20 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text("2024-01-11 15:58 GMT+7")
+                    Text(order?.order?.createdAt.formattedDateGMT)
                         .underline()
                         .baselineOffset(4)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
+                        .onTapGesture {
+                            //let link = order?.txIn.txId
+                        }
                     Image(.icArrowUp)
                         .fixSize(.xl)
+                        .onTapGesture {
+                            //let link = order?.txIn.txId
+                            
+                        }
                 }
                 .padding(.top, .md)
                 .padding(.bottom, .xl)
@@ -214,7 +227,9 @@ struct OrderHistoryDetailView: View {
                         computeValue: { dimension in
                             dimension[VerticalAlignment.center]
                         })
-                Color.colorBorderPrimaryDefault.frame(width: 1)
+                if order?.order?.status.value != .created {
+                    Color.colorBorderPrimaryDefault.frame(width: 1)
+                }
             }
 
             VStack(alignment: .leading, spacing: 0) {
@@ -328,17 +343,23 @@ struct OrderHistoryDetailView: View {
                 }
                 .padding(.vertical, .md)
                 HStack(spacing: 4) {
-                    Text("Created at")
+                    Text(order?.order?.status.value == .batched ? "Batched at" : "Cancelled at")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text("2024-01-11 15:58 GMT+7")
+                    Text(order?.order?.updatedAt?.formattedDateGMT)
                         .underline()
                         .baselineOffset(4)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
+                        .onTapGesture {
+                            let link = order?.order?.updatedTxId
+                        }
                     Image(.icArrowUp)
                         .fixSize(.xl)
+                        .onTapGesture {
+                            let link = order?.order?.updatedTxId
+                        }
                 }
                 .padding(.top, .md)
             }
