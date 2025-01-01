@@ -6,6 +6,7 @@ struct OrderHistoryItemView: View {
     var body: some View {
         VStack(spacing: .lg) {
             tokenView
+                .padding(.top, .xl)
             HStack {
                 Text("ADA - MIN")
                     .font(.labelMediumSecondary)

@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import MinWalletAPI
 
 
 struct MainCoordinator: View {
@@ -53,7 +54,7 @@ struct MainCoordinator: View {
                             CreateNewWalletSuccessView(screenType: .newWallet).navigationBarHidden(true)
                                 .environmentObject(portfolioOverviewViewModel)
                         }
-
+                        
                     case let .restoreWallet(screen):
                         switch screen {
                         case .restoreWallet:
@@ -69,7 +70,7 @@ struct MainCoordinator: View {
                         case let .biometricSetup(fileContent, seedPhrase, nickName):
                             BiometricSetupView(screenType: .restoreWallet(fileContent: fileContent, seedPhase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         }
-
+                        
                     case let .walletSetting(screen):
                         switch screen {
                         case .walletAccount:
@@ -82,7 +83,7 @@ struct MainCoordinator: View {
                         case .editNickName:
                             SetupNickNameView(screenType: .walletSetting).navigationBarHidden(true)
                         }
-
+                        
                     case let .sendToken(screen):
                         switch screen {
                         case .sendToken:
@@ -95,22 +96,22 @@ struct MainCoordinator: View {
                             SignContractView()
                                 .presentationDragIndicator(.visible)
                         }
-
+                        
                     case .selectToken:
                         SelectTokenView().presentationDragIndicator(.visible)
-
+                        
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)
-
+                        
                     case let .swapToken(screen):
                         switch screen {
                         case .swapToken:
                             SwapTokenView().navigationBarHidden(true)
                         }
-
+                        
                     case .searchToken:
                         SearchTokenView().navigationBarHidden(true)
-
+                        
                     case let .securitySetting(screen):
                         switch screen {
                         case .authentication:
@@ -126,6 +127,10 @@ struct MainCoordinator: View {
                         case .forgotPassword:
                             ForgotPasswordView(screenType: .enterPassword).navigationBarHidden(true)
                         }
+                    case let .orderHistoryDetail(order):
+                        OrderHistoryDetailView()
+                    case .orderHistory:
+                        OrderHistoryView()
                     }
                 }
                 .navigationBarHidden(true)

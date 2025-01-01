@@ -47,6 +47,12 @@
     "0.0422 ₳" : {
 
     },
+    "0.042448 ADA" : {
+
+    },
+    "1 ADA = 22.612 MIN" : {
+
+    },
     "1D" : {
 
     },
@@ -57,6 +63,12 @@
 
     },
     "1Y" : {
+
+    },
+    "2" : {
+
+    },
+    "2 ₳" : {
 
     },
     "5.7%" : {
@@ -78,6 +90,12 @@
 
     },
     "235.789" : {
+
+    },
+    "318.362341 MIN" : {
+
+    },
+    "2024-01-11 15:58 GMT+7" : {
 
     },
     "11817" : {
@@ -102,6 +120,9 @@
 
     },
     "ADA - MIN" : {
+
+    },
+    "ADA > MIN" : {
 
     },
     "Add Token" : {
@@ -203,6 +224,9 @@
     "Create your password" : {
 
     },
+    "Created at" : {
+
+    },
     "Currency" : {
 
     },
@@ -216,6 +240,9 @@
 
     },
     "Deposit" : {
+
+    },
+    "Deposit ADA" : {
 
     },
     "Disconnect" : {
@@ -234,6 +261,18 @@
 
     },
     "Enter your password" : {
+
+    },
+    "Estimated batcher fee" : {
+
+    },
+    "Executed batcher fee" : {
+
+    },
+    "Executed price" : {
+
+    },
+    "Execution information" : {
 
     },
     "Face ID" : {
@@ -287,9 +326,6 @@
     "Hello" : {
       "extractionState" : "manual"
     },
-    "Hello, World!" : {
-
-    },
     "Hide" : {
 
     },
@@ -320,6 +356,9 @@
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
+    "Input information" : {
+
+    },
     "Item %lld" : {
 
     },
@@ -333,6 +372,9 @@
 
     },
     "Learn more" : {
+
+    },
+    "Let's swap now" : {
 
     },
     "Light" : {
@@ -360,6 +402,9 @@
 
     },
     "MIN" : {
+
+    },
+    "Minimum receive" : {
 
     },
     "minswap" : {
@@ -392,6 +437,9 @@
     "No data" : {
 
     },
+    "No results" : {
+
+    },
     "Notice" : {
 
     },
@@ -404,7 +452,13 @@
     "Optic ID" : {
 
     },
+    "Order type" : {
+
+    },
     "Orders" : {
+
+    },
+    "Output information" : {
 
     },
     "Partial swap" : {
@@ -479,6 +533,9 @@
 
     },
     "Restore wallet" : {
+
+    },
+    "Route" : {
 
     },
     "Sample" : {
@@ -574,10 +631,16 @@
     "To wallet address:" : {
 
     },
+    "togle" : {
+
+    },
     "Touch ID" : {
 
     },
     "Touch ID không sẵn sàng" : {
+
+    },
+    "Trading fee" : {
 
     },
     "Transaction Id" : {
@@ -647,6 +710,9 @@
 
     },
     "You are disconnecting your wallet?" : {
+
+    },
+    "You have no order" : {
 
     },
     "You have successfully create a wallet. Minwallet makes exploring Cardano feel better than ever." : {

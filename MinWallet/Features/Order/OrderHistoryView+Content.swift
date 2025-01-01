@@ -1,10 +1,13 @@
 import SwiftUI
+import FlowStacks
+import MinWalletAPI
+
 
 extension OrderHistoryView {
     var contentView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("")
-                .frame(maxWidth: .infinity, maxHeight: 0.01, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: viewModel.showSearch ? 12 :0.01, alignment: .leading)
             if !viewModel.showSearch {
                 Text("Orders")
                     .foregroundStyle(.colorBaseTent)
@@ -35,7 +38,17 @@ extension OrderHistoryView {
                 .padding(.top, 56)
                 .transition(.opacity)
             } else {
-                
+                LazyVStack(spacing: 0) {
+                    ForEach(0..<viewModel.orders.count, id: \.self) { index in
+                        let item = viewModel.orders[index]
+                        OrderHistoryItemView()
+                            .padding(.horizontal, .xl)
+                            .contentShape(.rect)
+                            .onTapGesture {
+                                navigator.push(.orderHistoryDetail(order: item))
+                            }
+                    }
+                }
             }
             Spacer()
         }
