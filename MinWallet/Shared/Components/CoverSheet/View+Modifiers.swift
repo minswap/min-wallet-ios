@@ -30,3 +30,12 @@ struct ViewFirstAppearModifier: ViewModifier {
         }
     }
 }
+
+
+extension Image {
+    func fixSize(_ size: CGFloat) -> some View {
+        self
+            .resizable()
+            .frame(width: size, height: size)
+    }
+}

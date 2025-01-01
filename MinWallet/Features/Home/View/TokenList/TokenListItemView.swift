@@ -82,11 +82,16 @@ struct TokenListItemView: View {
 }
 
 struct TokenListItemSkeletonView: View {
+    @State
+    var showLogo: Bool = true
+    
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(currencySymbol: nil, tokenName: nil, isVerified: false)
-                .frame(width: 28, height: 28)
-                .skeleton(with: true, size: .init(width: 28, height: 28))
+            if showLogo {
+                TokenLogoView(currencySymbol: nil, tokenName: nil, isVerified: false)
+                    .frame(width: 28, height: 28)
+                    .skeleton(with: true, size: .init(width: 28, height: 28))
+            }
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
                     Text("")

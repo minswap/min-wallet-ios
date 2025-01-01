@@ -1,0 +1,90 @@
+import SwiftUI
+import FlowStacks
+
+
+extension OrderHistoryView {
+    var headerView: some View {
+        HStack(alignment: .center, spacing: .md) {
+            if viewModel.showSearch {
+                HStack(alignment: .center, spacing: 0) {
+                    HStack(spacing: .md) {
+                        Image(.icSearch)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        TextField("", text: $viewModel.keyword)
+                            .placeholder("Search by token name, txID", when: viewModel.keyword.isEmpty)
+                            .focused($isFocus)
+                            .lineLimit(1)
+                        if !viewModel.keyword.isEmpty {
+                            Image(.icCloseFill)
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .onTapGesture {
+                                    viewModel.keyword = ""
+                                }
+                        }
+                    }
+                    .padding(.md)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: BorderRadius.full)
+                            .stroke(isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: isFocus ? 2 : 1)
+                    )
+                    Text("Cancel")
+                        .padding(.horizontal, .xl)
+                        .padding(.vertical, 6)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            withAnimation {
+                                viewModel.keyword = ""
+                                viewModel.showSearch = false
+                            }
+                        }
+                }
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+            } else {
+                Button(action: {
+                    navigator.pop()
+                },
+                       label: {
+                    Image(.icBack)
+                        .fixSize(._3xl)
+                        .padding(.md)
+                        .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
+                }
+                )
+                .buttonStyle(.plain)
+                .padding(.trailing,.xs)
+                Text("Orders")
+                    .foregroundStyle(.colorBaseTent)
+                    .font(.labelMediumSecondary)
+                    .transition(.scale.combined(with: .opacity))
+                Spacer()
+                HStack(spacing: .md) {
+                    Image(.icSearchOrder)
+                        .fixSize(40)
+                        .onTapGesture {
+                            withAnimation {
+                                viewModel.showSearch = true
+                                isFocus = true
+                            }
+                        }
+                    Image(.icFilter)
+                        .fixSize(40)
+                        .onTapGesture {
+                            viewModel.showFilterView = true
+                        }
+                }
+                .transition(.scale.combined(with: .opacity))
+            }
+        }
+        .padding(.horizontal, .xl)
+        .background(.colorBaseBackground)
+    }
+}
+
+
+
+#Preview {
+    OrderHistoryView()
+        .environmentObject(AppSetting.shared)
+}

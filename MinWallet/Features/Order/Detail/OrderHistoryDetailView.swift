@@ -1,12 +1,349 @@
 import SwiftUI
+import FlowStacks
 
 
 struct OrderHistoryDetailView: View {
+    @EnvironmentObject
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    let colors: [Color] = [.red, .blue, .purple]
+
     var body: some View {
-        Text( /*@START_MENU_TOKEN@*/"Hello, World!" /*@END_MENU_TOKEN@*/)
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    tokenView
+                        .padding(.horizontal, .xl)
+                        .padding(.top, .lg)
+                    Text("ADA - MIN")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .padding(.top, .md)
+                        .padding(.horizontal, .xl)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        Text("Order type")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                        Text("Fill")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    }
+                    .padding(.horizontal, .xl)
+                    .frame(height: 36)
+                    .padding(.top, .md)
+                    HStack(spacing: Spacing.md) {
+                        Image(.icWarningYellow)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”")
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(.colorInteractiveToneWarning)
+                            .lineLimit(nil)
+                    }
+                    .padding(.md)
+                    .background(
+                        RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
+                    )
+                    .frame(minHeight: 32)
+                    .padding(.top, .xl)
+                    .padding(.horizontal, .xl)
+                    Color.colorBorderPrimarySub.frame(height: 1)
+                        .padding(.xl)
+                    inputInfoView.padding(.horizontal, .xl)
+                    executeInfoView.padding(.horizontal, .xl)
+                    outputInfoView.padding(.horizontal, .xl)
+                }
+            }
+            Spacer()
+            HStack(spacing: .xl) {
+                CustomButton(title: "Cancel", variant: .secondary) {
+                    
+                }
+                .frame(height: 56)
+                CustomButton(title: "Update") {
+                    
+                }
+                .frame(height: 56)
+            }
+            .padding(EdgeInsets(top: 24, leading: .xl, bottom: .xl, trailing: .xl))
+        }
+        .modifier(
+            BaseContentView(
+                screenTitle: " ",
+                actionLeft: {
+                    navigator.pop()
+                })
+        )
     }
+    
+    private var tokenView: some View {
+        HStack(spacing: .xs) {
+            HStack(spacing: -4) {
+                ForEach(0..<colors.count) { i in
+                    TokenLogoView()
+                        .frame(width: 24, height: 24)
+                }
+            }
+            Image(.icBack)
+                .resizable()
+                .rotationEffect(.degrees(180))
+                .frame(width: 16, height: 16)
+                .padding(.horizontal, 2)
+            HStack(spacing: -4) {
+                ForEach(0..<colors.count) { i in
+                    TokenLogoView()
+                        .frame(width: 24, height: 24)
+                }
+            }
+            Text("V1")
+                .font(.paragraphXMediumSmall)
+                .foregroundStyle(.colorInteractiveToneHighlight)
+                .padding(.horizontal, .md)
+                .padding(.vertical, .xs)
+                .background(
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                )
+                .frame(height: 20)
+                .lineLimit(1)
+                .minimumScaleFactor(0.1)
+                .padding(.trailing)
+            Spacer()
+            HStack(spacing: 4) {
+                Circle().frame(width: 4, height: 4)
+                    .foregroundStyle(.colorBaseTent)
+                Text("Pending")
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveToneHighlight)
+            }
+            .padding(.horizontal, .lg)
+            .padding(.vertical, .xs)
+            .background(
+                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+            )
+            .frame(height: 20)
+            .lineLimit(1)
+        }
+    }
+    
+    private var inputInfoView: some View {
+        HStack(alignment: .timelineAlignment, spacing: .xl) {
+            VStack(spacing: 0) {
+                Image(.icInputInfo)
+                    .resizable()
+                    .frame(width: 36, height: 36)
+                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
+                        dimension[VerticalAlignment.center]
+                    })
+                    Color.colorBorderPrimaryDefault.frame(width: 1)
+            }
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Input information")
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
+                        dimension[VerticalAlignment.center]
+                    })
+                HStack {
+                    Text("You paid")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("20 MINv2LP")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                .padding(.top, .md)
+                HStack {
+                    Text("Deposit ADA")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("2")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                HStack {
+                    Text("Estimated batcher fee")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("2")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                HStack(spacing: 4) {
+                    Text("Created at")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("2024-01-11 15:58 GMT+7")
+                        .underline()
+                        .baselineOffset(4)
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Image(.icArrowUp)
+                        .fixSize(.xl)
+                }
+                .padding(.top, .md)
+                .padding(.bottom, .xl)
+            }
+        }
+    }
+    
+    private var executeInfoView: some View {
+        HStack(alignment: .timelineAlignment, spacing: .xl) {
+            VStack(spacing: 0) {
+                Image(.icExecuteInfo)
+                    .resizable()
+                    .frame(width: 36, height: 36)
+                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
+                        dimension[VerticalAlignment.center]
+                    })
+                Color.colorBorderPrimaryDefault.frame(width: 1)
+            }
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Execution information")
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
+                        dimension[VerticalAlignment.center]
+                    })
+                HStack {
+                    Text("Minimum receive")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("318.362341 MIN")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                .padding(.top, .md)
+                HStack {
+                    Text("Trading fee")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("0.042448 ADA")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                HStack {
+                    Text("Executed batcher fee")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("2 ₳")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                HStack(spacing: 4) {
+                    Text("Route")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("ADA > MIN")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.top, .md)
+                .padding(.bottom, .xl)
+            }
+        }
+    }
+    
+    private var outputInfoView: some View {
+        HStack(alignment: .timelineAlignment, spacing: .xl) {
+            VStack(spacing: 0) {
+                Image(.icOutputInfo)
+                    .resizable()
+                    .frame(width: 36, height: 36)
+                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
+                        dimension[VerticalAlignment.center]
+                    })
+            }
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Output information")
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
+                        dimension[VerticalAlignment.center]
+                    })
+                HStack {
+                    Text("You receive")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("318.362341 MIN")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseSuccess)
+                }
+                .padding(.vertical, .md)
+                .padding(.top, .md)
+                HStack(spacing: 4) {
+                    Text("Executed price")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("1 ADA = 22.612 MIN")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Image(.icExecutePrice)
+                        .fixSize(.xl)
+                }
+                .padding(.vertical, .md)
+                HStack {
+                    Text("Deposit ADA")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("2 ₳")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.vertical, .md)
+                HStack(spacing: 4) {
+                    Text("Created at")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Text("2024-01-11 15:58 GMT+7")
+                        .underline()
+                        .baselineOffset(4)
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Image(.icArrowUp)
+                        .fixSize(.xl)
+                }
+                .padding(.top, .md)
+            }
+        }
+    }
+
+
+
+}
+
+
+fileprivate extension VerticalAlignment {
+    struct TimelineAlignment: AlignmentID {
+        static func defaultValue(in context: ViewDimensions) -> CGFloat {
+            context[.top]
+        }
+    }
+    
+    static let timelineAlignment = VerticalAlignment(TimelineAlignment.self)
 }
 
 #Preview {
-    OrderHistoryView()
+    OrderHistoryDetailView()
 }

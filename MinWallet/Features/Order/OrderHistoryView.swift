@@ -8,50 +8,42 @@ struct OrderHistoryView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-
-    @State var progress: CGFloat = 0
-    private var minHeight: CGFloat = OrderHistoryHeaderView.smallLargeHeader
-    private var maxHeight: CGFloat = OrderHistoryHeaderView.heightLargeHeader + OrderHistoryHeaderView.smallLargeHeader
-
+    
+    @StateObject
+    var viewModel: OrderHistoryViewModel = .init()
+    @FocusState
+    var isFocus: Bool
+    
     var body: some View {
         ZStack {
-            ScalingHeaderScrollView {
-                ZStack {
-                    Color.colorBaseBackground.ignoresSafeArea()
-                    OrderHistoryHeaderView(progress: $progress)
+            Color.colorBaseBackground.ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 0) {
+                headerView
+                ScrollView {
+                    contentView
                 }
-            } content: {
-                OrderHistoryContentView()
+                .refreshable {
+                    viewModel.fetchData()
+                }
+                if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
+                    CustomButton(title: "Swap") {
+                        navigator.push(.swapToken(.swapToken))
+                    }
+                    .frame(height: 44)
+                    .padding(.horizontal, .xl)
+                    .transition(.opacity)
+                }
             }
-            .height(min: minHeight + appSetting.safeArea + appSetting.extraSafeArea, max: maxHeight + appSetting.safeArea)
-            .allowsHeaderCollapse()
-            .collapseProgress($progress)
-
-            VStack(spacing: 0) {
-                HStack(spacing: .lg) {
-                    Button(
-                        action: {
-                            navigator.pop()
-                        },
-                        label: {
-                            Image(.icBack)
-                                .resizable()
-                                .frame(width: ._3xl, height: ._3xl)
-                                .padding(.md)
-                                .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
-                        }
-                    )
-                    .buttonStyle(.plain)
-                    Spacer()
-                }
-                .frame(height: 48)
-                .padding(.horizontal, .xl)
-                .padding(.top, appSetting.safeArea)
-//                                .background(.colorBaseBackground)
-                Spacer()
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 0)
             }
         }
-        .ignoresSafeArea(edges: .top)
+        .popupSheet(
+            isPresented: $viewModel.showFilterView,
+            content: {
+                OrderHistoryFilterView(isShowFilterView: $viewModel.showFilterView).padding(.top, .xl)
+            }
+        )
     }
 }
 

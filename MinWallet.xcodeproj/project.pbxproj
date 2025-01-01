@@ -136,12 +136,13 @@
 		96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC042D227CFD006AD24F /* EditNickNameView.swift */; };
 		96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */; };
 		96FEDC0A2D238C7E006AD24F /* OrderHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC092D238C7E006AD24F /* OrderHistoryDetailView.swift */; };
-		96FEDC0C2D238F51006AD24F /* OrderHistoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */; };
-		96FEDC112D23A463006AD24F /* OrderHistoryContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC102D23A463006AD24F /* OrderHistoryContentView.swift */; };
+		96FEDC0C2D238F51006AD24F /* OrderHistoryView+Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC0B2D238F51006AD24F /* OrderHistoryView+Header.swift */; };
+		96FEDC112D23A463006AD24F /* OrderHistoryView+Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC102D23A463006AD24F /* OrderHistoryView+Content.swift */; };
 		96FEDC132D23A4A4006AD24F /* OrderHistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */; };
 		96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */; };
 		96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC192D23C836006AD24F /* OrderHistory.swift */; };
 		96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */; };
+		96FEDC1E2D24E135006AD24F /* OrderHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FEDC1D2D24E135006AD24F /* OrderHistoryViewModel.swift */; };
 		E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -291,14 +292,15 @@
 		96FEDC042D227CFD006AD24F /* EditNickNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNickNameView.swift; sourceTree = "<group>"; };
 		96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryView.swift; sourceTree = "<group>"; };
 		96FEDC092D238C7E006AD24F /* OrderHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryDetailView.swift; sourceTree = "<group>"; };
-		96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryHeaderView.swift; sourceTree = "<group>"; };
+		96FEDC0B2D238F51006AD24F /* OrderHistoryView+Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrderHistoryView+Header.swift"; sourceTree = "<group>"; };
 		96FEDC0D2D2393C2006AD24F /* ADAHandleNameQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = ADAHandleNameQuery.graphql; sourceTree = "<group>"; };
-		96FEDC102D23A463006AD24F /* OrderHistoryContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryContentView.swift; sourceTree = "<group>"; };
+		96FEDC102D23A463006AD24F /* OrderHistoryView+Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrderHistoryView+Content.swift"; sourceTree = "<group>"; };
 		96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryItemView.swift; sourceTree = "<group>"; };
 		96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryFilterView.swift; sourceTree = "<group>"; };
 		96FEDC182D23AF67006AD24F /* OrderHistoryQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = OrderHistoryQuery.graphql; sourceTree = "<group>"; };
 		96FEDC192D23C836006AD24F /* OrderHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistory.swift; sourceTree = "<group>"; };
 		96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
+		96FEDC1D2D24E135006AD24F /* OrderHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -845,9 +847,10 @@
 			isa = PBXGroup;
 			children = (
 				96FEDC172D23AE6E006AD24F /* Detail */,
-				96FEDC102D23A463006AD24F /* OrderHistoryContentView.swift */,
-				96FEDC0B2D238F51006AD24F /* OrderHistoryHeaderView.swift */,
+				96FEDC102D23A463006AD24F /* OrderHistoryView+Content.swift */,
+				96FEDC0B2D238F51006AD24F /* OrderHistoryView+Header.swift */,
 				96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */,
+				96FEDC1D2D24E135006AD24F /* OrderHistoryViewModel.swift */,
 				96FEDC142D23AE22006AD24F /* View */,
 			);
 			path = Order;
@@ -1047,6 +1050,7 @@
 				96DC054F2CF75AFB00A78356 /* RoundedCorner.swift in Sources */,
 				96DC052E2CF57E3000A78356 /* PartialSheetViews.swift in Sources */,
 				96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */,
+				96FEDC1E2D24E135006AD24F /* OrderHistoryViewModel.swift in Sources */,
 				96DC05362CF5AD1B00A78356 /* Language.swift in Sources */,
 				96FEDC032D225D77006AD24F /* PortfolioOverviewViewModel.swift in Sources */,
 				96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */,
@@ -1086,7 +1090,7 @@
 				965592092CF8228E00301DDB /* SetupNickNameView.swift in Sources */,
 				96DC05252CF5668400A78356 /* SettingViewModel.swift in Sources */,
 				962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */,
-				96FEDC112D23A463006AD24F /* OrderHistoryContentView.swift in Sources */,
+				96FEDC112D23A463006AD24F /* OrderHistoryView+Content.swift in Sources */,
 				96FE0CFA2CF423C2008E4BFD /* _FlexibleView.swift in Sources */,
 				96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */,
 				96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */,
@@ -1106,7 +1110,7 @@
 				965592032CF81A0800301DDB /* KeychainStore.swift in Sources */,
 				96FE0CED2CF36033008E4BFD /* TokenListView.swift in Sources */,
 				960D6B2C2CFF51B50017AF29 /* AuthenticationSettingView.swift in Sources */,
-				96FEDC0C2D238F51006AD24F /* OrderHistoryHeaderView.swift in Sources */,
+				96FEDC0C2D238F51006AD24F /* OrderHistoryView+Header.swift in Sources */,
 				963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */,
 				57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */,
 				9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */,
