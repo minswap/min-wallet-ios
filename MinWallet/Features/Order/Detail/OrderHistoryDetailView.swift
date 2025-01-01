@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import MinWalletAPI
 
 
 struct OrderHistoryDetailView: View {
@@ -7,6 +8,9 @@ struct OrderHistoryDetailView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     let colors: [Color] = [.red, .blue, .purple]
 
+    @State
+    var order: OrderHistoryQuery.Data.Orders.Order?
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -25,7 +29,7 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
-                        Text("Fill")
+                        Text(order?.action.value?.title)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                     }
@@ -96,13 +100,13 @@ struct OrderHistoryDetailView: View {
                         .frame(width: 24, height: 24)
                 }
             }
-            Text("V1")
+            Text(order?.type.value?.title)
                 .font(.paragraphXMediumSmall)
-                .foregroundStyle(.colorInteractiveToneHighlight)
+                .foregroundStyle(order?.type.value?.foregroundColor ?? .colorInteractiveToneHighlight)
                 .padding(.horizontal, .md)
                 .padding(.vertical, .xs)
                 .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.type.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
                 )
                 .frame(height: 20)
                 .lineLimit(1)
@@ -111,15 +115,15 @@ struct OrderHistoryDetailView: View {
             Spacer()
             HStack(spacing: 4) {
                 Circle().frame(width: 4, height: 4)
-                    .foregroundStyle(.colorBaseTent)
-                Text("Pending")
+                    .foregroundStyle(order?.status.value?.foregroundCircleColor ?? .clear)
+                Text(order?.status.value?.title)
                     .font(.paragraphXMediumSmall)
-                    .foregroundStyle(.colorInteractiveToneHighlight)
+                    .foregroundStyle(order?.status.value?.foregroundColor ?? .colorInteractiveToneHighlight)
             }
             .padding(.horizontal, .lg)
             .padding(.vertical, .xs)
             .background(
-                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.status.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
             )
             .frame(height: 20)
             .lineLimit(1)

@@ -1,7 +1,11 @@
 import SwiftUI
+import MinWalletAPI
 
 
 struct OrderHistoryItemView: View {
+    @State
+    var order: OrderHistoryQuery.Data.Orders.Order?
+    
     let colors: [Color] = [.red, .blue, .purple]
     var body: some View {
         VStack(spacing: .lg) {
@@ -14,15 +18,15 @@ struct OrderHistoryItemView: View {
                 Spacer()
                 HStack(spacing: 4) {
                     Circle().frame(width: 4, height: 4)
-                        .foregroundStyle(.colorBaseTent)
-                    Text("Pending")
+                        .foregroundStyle(order?.status.value?.foregroundCircleColor ?? .clear)
+                    Text(order?.status.value?.title)
                         .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
+                        .foregroundStyle(order?.status.value?.foregroundColor ?? .colorInteractiveToneHighlight)
                 }
                 .padding(.horizontal, .lg)
                 .padding(.vertical, .xs)
                 .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.status.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
                 )
                 .frame(height: 20)
                 .lineLimit(1)
@@ -99,20 +103,20 @@ struct OrderHistoryItemView: View {
                         .frame(width: 24, height: 24)
                 }
             }
-            Text("V1")
+            Text(order?.type.value?.title)
                 .font(.paragraphXMediumSmall)
-                .foregroundStyle(.colorInteractiveToneHighlight)
+                .foregroundStyle(order?.type.value?.forcegroundColor ?? .colorInteractiveToneHighlight)
                 .padding(.horizontal, .md)
                 .padding(.vertical, .xs)
                 .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.type.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
                 )
                 .frame(height: 20)
                 .lineLimit(1)
                 .minimumScaleFactor(0.1)
                 .padding(.trailing)
             Spacer()
-            Text("Fill")
+            Text(order?.action.value?.title)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
         }
@@ -121,7 +125,7 @@ struct OrderHistoryItemView: View {
 
 #Preview {
     VStack {
-        OrderHistoryItemView()
+        OrderHistoryView()
             .padding(.horizontal, .xl)
         Spacer()
     }

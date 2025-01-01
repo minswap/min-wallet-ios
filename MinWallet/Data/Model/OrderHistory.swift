@@ -6,7 +6,7 @@ typealias ContractType = AMMType
 
 extension OrderV2Action: Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .deposit:
@@ -35,7 +35,7 @@ extension OrderV2Action: Identifiable {
 
 extension OrderV2Status: Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .batched:
@@ -46,11 +46,44 @@ extension OrderV2Status: Identifiable {
             "Pending"
         }
     }
+    
+    var foregroundColor: Color {
+        switch self {
+        case .batched:
+                .colorInteractiveToneSuccess
+        case .cancelled:
+                .colorInteractiveToneDanger
+        case .created:
+                .colorInteractiveToneWarning
+        }
+    }
+    
+    var foregroundCircleColor: Color {
+        switch self {
+        case .batched:
+                .colorInteractiveToneSuccessSub
+        case .cancelled:
+                .colorInteractiveToneDangerSub
+        case .created:
+                .colorInteractiveToneWarningSub
+        }
+    }
+    
+    var backgroundColor: Color {
+        switch self {
+        case .batched:
+                .colorSurfaceSuccess
+        case .cancelled:
+                .colorSurfaceDanger
+        case .created:
+                .colorSurfaceWarningDefault
+        }
+    }
 }
 
 extension ContractType: Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .dex:
@@ -59,6 +92,28 @@ extension ContractType: Identifiable {
             "V2"
         case .stableswap:
             "Stableswap"
+        }
+    }
+    
+    var backgroundColor: Color {
+        switch self {
+        case .dex:
+                .colorDecorativeYellowDefault
+        case .dexV2:
+                .colorBrandRiver
+        case .stableswap:
+                .colorBaseBackground
+        }
+    }
+    
+    var foregroundColor: Color {
+        switch self {
+        case .dex:
+                .colorDecorativeBrandSub
+        case .dexV2:
+                .colorDecorativeYellowSub
+        case .stableswap:
+                .colorDecorativeLeafSub
         }
     }
 }

@@ -128,7 +128,7 @@ struct MainCoordinator: View {
                             ForgotPasswordView(screenType: .enterPassword).navigationBarHidden(true)
                         }
                     case let .orderHistoryDetail(order):
-                        OrderHistoryDetailView().navigationBarHidden(true)
+                        OrderHistoryDetailView(order: order).navigationBarHidden(true)
                     case .orderHistory:
                         OrderHistoryView().navigationBarHidden(true)
                     }
