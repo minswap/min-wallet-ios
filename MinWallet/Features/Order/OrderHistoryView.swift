@@ -6,20 +6,19 @@ import ScalingHeaderScrollView
 struct OrderHistoryView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    @EnvironmentObject
-    var appSetting: AppSetting
-    
+
     @StateObject
     var viewModel: OrderHistoryViewModel = .init()
     @FocusState
     var isFocus: Bool
-    
+    @State var scrollOffset: CGPoint = .zero
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
                 headerView
-                ScrollView {
+                OffsetObservingScrollView(offset: $scrollOffset) {
                     contentView
                 }
                 .refreshable {
@@ -37,6 +36,8 @@ struct OrderHistoryView: View {
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 0)
             }
+
+
         }
         .popupSheet(
             isPresented: $viewModel.showFilterView,
@@ -49,5 +50,4 @@ struct OrderHistoryView: View {
 
 #Preview {
     OrderHistoryView()
-        .environmentObject(AppSetting.shared)
 }

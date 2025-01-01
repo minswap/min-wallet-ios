@@ -42,22 +42,26 @@ extension OrderHistoryView {
                 }
                 .transition(.move(edge: .trailing).combined(with: .opacity))
             } else {
-                Button(action: {
-                    navigator.pop()
-                },
-                       label: {
-                    Image(.icBack)
-                        .fixSize(._3xl)
-                        .padding(.md)
-                        .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
-                }
+                Button(
+                    action: {
+                        navigator.pop()
+                    },
+                    label: {
+                        Image(.icBack)
+                            .fixSize(._3xl)
+                            .padding(.md)
+                            .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
+                    }
                 )
                 .buttonStyle(.plain)
-                .padding(.trailing,.xs)
+                .padding(.trailing, .xs)
+                let offset = scrollOffset.y
+                let heightOrders = Self.heightOrder
+                let opacity = abs(max(0, min(1, (offset - heightOrders / 2) / (heightOrders / 2))))
                 Text("Orders")
                     .foregroundStyle(.colorBaseTent)
                     .font(.labelMediumSecondary)
-                    .transition(.scale.combined(with: .opacity))
+                    .opacity((Self.heightOrder / 2 - offset) < 0 ? (opacity) : 0)
                 Spacer()
                 HStack(spacing: .md) {
                     Image(.icSearchOrder)
@@ -81,7 +85,6 @@ extension OrderHistoryView {
         .background(.colorBaseBackground)
     }
 }
-
 
 
 #Preview {

@@ -4,15 +4,17 @@ import MinWalletAPI
 
 
 extension OrderHistoryView {
+    static let heightOrder: CGFloat = 60
+
     var contentView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("")
-                .frame(maxWidth: .infinity, maxHeight: viewModel.showSearch ? 12 :0.01, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: viewModel.showSearch ? 12 : 0.01, alignment: .leading)
             if !viewModel.showSearch {
                 Text("Orders")
                     .foregroundStyle(.colorBaseTent)
                     .font(.titleH4)
-                    .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+                    .frame(maxWidth: .infinity, minHeight: Self.heightOrder, maxHeight: Self.heightOrder, alignment: .leading)
                     .padding(.horizontal)
             }
             if viewModel.showSkeleton {
@@ -53,7 +55,7 @@ extension OrderHistoryView {
             Spacer()
         }
     }
-    
+
     var emptyOrders: some View {
         VStack(alignment: .center, spacing: 16) {
             Image(.icEmptyOrder)
@@ -66,7 +68,7 @@ extension OrderHistoryView {
                 .foregroundStyle(.colorBaseTent)
         }
     }
-    
+
     var emptySearch: some View {
         VStack(alignment: .center, spacing: 16) {
             Image(.icEmptyResult)

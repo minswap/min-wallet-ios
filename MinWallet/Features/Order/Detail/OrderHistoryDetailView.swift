@@ -58,11 +58,11 @@ struct OrderHistoryDetailView: View {
             Spacer()
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
-                    
+
                 }
                 .frame(height: 56)
                 CustomButton(title: "Update") {
-                    
+
                 }
                 .frame(height: 56)
             }
@@ -76,7 +76,7 @@ struct OrderHistoryDetailView: View {
                 })
         )
     }
-    
+
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
@@ -125,26 +125,30 @@ struct OrderHistoryDetailView: View {
             .lineLimit(1)
         }
     }
-    
+
     private var inputInfoView: some View {
         HStack(alignment: .timelineAlignment, spacing: .xl) {
             VStack(spacing: 0) {
                 Image(.icInputInfo)
                     .resizable()
                     .frame(width: 36, height: 36)
-                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
-                        dimension[VerticalAlignment.center]
-                    })
-                    Color.colorBorderPrimaryDefault.frame(width: 1)
+                    .alignmentGuide(
+                        .timelineAlignment,
+                        computeValue: { dimension in
+                            dimension[VerticalAlignment.center]
+                        })
+                Color.colorBorderPrimaryDefault.frame(width: 1)
             }
-            
+
             VStack(alignment: .leading, spacing: 0) {
                 Text("Input information")
                     .font(.labelSmallSecondary)
                     .foregroundStyle(.colorBaseTent)
-                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
-                        dimension[VerticalAlignment.center]
-                    })
+                    .alignmentGuide(
+                        .timelineAlignment,
+                        computeValue: { dimension in
+                            dimension[VerticalAlignment.center]
+                        })
                 HStack {
                     Text("You paid")
                         .font(.paragraphSmall)
@@ -194,26 +198,30 @@ struct OrderHistoryDetailView: View {
             }
         }
     }
-    
+
     private var executeInfoView: some View {
         HStack(alignment: .timelineAlignment, spacing: .xl) {
             VStack(spacing: 0) {
                 Image(.icExecuteInfo)
                     .resizable()
                     .frame(width: 36, height: 36)
-                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
-                        dimension[VerticalAlignment.center]
-                    })
+                    .alignmentGuide(
+                        .timelineAlignment,
+                        computeValue: { dimension in
+                            dimension[VerticalAlignment.center]
+                        })
                 Color.colorBorderPrimaryDefault.frame(width: 1)
             }
-            
+
             VStack(alignment: .leading, spacing: 0) {
                 Text("Execution information")
                     .font(.labelSmallSecondary)
                     .foregroundStyle(.colorBaseTent)
-                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
-                        dimension[VerticalAlignment.center]
-                    })
+                    .alignmentGuide(
+                        .timelineAlignment,
+                        computeValue: { dimension in
+                            dimension[VerticalAlignment.center]
+                        })
                 HStack {
                     Text("Minimum receive")
                         .font(.paragraphSmall)
@@ -259,25 +267,29 @@ struct OrderHistoryDetailView: View {
             }
         }
     }
-    
+
     private var outputInfoView: some View {
         HStack(alignment: .timelineAlignment, spacing: .xl) {
             VStack(spacing: 0) {
                 Image(.icOutputInfo)
                     .resizable()
                     .frame(width: 36, height: 36)
-                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
-                        dimension[VerticalAlignment.center]
-                    })
+                    .alignmentGuide(
+                        .timelineAlignment,
+                        computeValue: { dimension in
+                            dimension[VerticalAlignment.center]
+                        })
             }
-            
+
             VStack(alignment: .leading, spacing: 0) {
                 Text("Output information")
                     .font(.labelSmallSecondary)
                     .foregroundStyle(.colorBaseTent)
-                    .alignmentGuide(.timelineAlignment, computeValue: { dimension in
-                        dimension[VerticalAlignment.center]
-                    })
+                    .alignmentGuide(
+                        .timelineAlignment,
+                        computeValue: { dimension in
+                            dimension[VerticalAlignment.center]
+                        })
                 HStack {
                     Text("You receive")
                         .font(.paragraphSmall)
@@ -330,7 +342,6 @@ struct OrderHistoryDetailView: View {
     }
 
 
-
 }
 
 
@@ -340,7 +351,7 @@ fileprivate extension VerticalAlignment {
             context[.top]
         }
     }
-    
+
     static let timelineAlignment = VerticalAlignment(TimelineAlignment.self)
 }
 

@@ -84,7 +84,7 @@ struct TokenListItemView: View {
 struct TokenListItemSkeletonView: View {
     @State
     var showLogo: Bool = true
-    
+
     var body: some View {
         HStack(spacing: .xl) {
             if showLogo {
