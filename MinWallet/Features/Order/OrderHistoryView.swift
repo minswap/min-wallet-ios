@@ -10,8 +10,8 @@ struct OrderHistoryView: View {
     var appSetting: AppSetting
 
     @State var progress: CGFloat = 0
-    private var minHeight: CGFloat = TokenDetailHeaderView.smallLargeHeader
-    private var maxHeight: CGFloat = TokenDetailHeaderView.heightLargeHeader + TokenDetailHeaderView.smallLargeHeader
+    private var minHeight: CGFloat = OrderHistoryHeaderView.smallLargeHeader
+    private var maxHeight: CGFloat = OrderHistoryHeaderView.heightLargeHeader + OrderHistoryHeaderView.smallLargeHeader
 
     var body: some View {
         ZStack {
@@ -26,7 +26,6 @@ struct OrderHistoryView: View {
             .height(min: minHeight + appSetting.safeArea + appSetting.extraSafeArea, max: maxHeight + appSetting.safeArea)
             .allowsHeaderCollapse()
             .collapseProgress($progress)
-            .disableBounces()
 
             VStack(spacing: 0) {
                 HStack(spacing: .lg) {
@@ -48,7 +47,7 @@ struct OrderHistoryView: View {
                 .frame(height: 48)
                 .padding(.horizontal, .xl)
                 .padding(.top, appSetting.safeArea)
-                //                .background(.colorBaseBackground)
+//                                .background(.colorBaseBackground)
                 Spacer()
             }
         }

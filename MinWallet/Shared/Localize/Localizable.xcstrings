@@ -23,9 +23,6 @@
     "%@%%" : {
 
     },
-    "%lld" : {
-
-    },
     "%lld tokens" : {
 
     },
@@ -105,9 +102,6 @@
 
     },
     "ADA - MIN" : {
-
-    },
-    "Add one" : {
 
     },
     "Add Token" : {
@@ -219,9 +213,6 @@
 
     },
     "Default" : {
-
-    },
-    "Delete all" : {
 
     },
     "Deposit" : {
@@ -411,6 +402,9 @@
 
     },
     "Optic ID" : {
+
+    },
+    "Orders" : {
 
     },
     "Partial swap" : {
