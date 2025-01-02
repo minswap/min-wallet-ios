@@ -22,7 +22,7 @@ struct OrderHistoryFilterView: View {
     private var showSelectToDate: Bool = false
 
     var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
-    
+
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-YYYY"

@@ -15,18 +15,18 @@ class OrderHistoryViewModel: ObservableObject {
     var orders: [OrderHistoryQuery.Data.Orders.WrapOrder] = []
     @Published
     var showSkeleton: Bool = true
-    
+
     private var cancellables: Set<AnyCancellable> = []
-    
+
     var contractTypeSelected: ContractType?
     var statusSelected: OrderV2Status?
     var actionSelected: OrderV2Action?
     var fromDate: Date?
     var toDate: Date?
-    
+
     private var pagination: OrderPaginationCursorInput?
     private var hasLoadMore: Bool = true
-    
+
     init() {
         $keyword
             .removeDuplicates()
@@ -46,7 +46,7 @@ class OrderHistoryViewModel: ObservableObject {
             pagination = nil
             let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
             self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-            
+
             self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
             if let cursor = orderData?.orders.cursor {
                 self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
@@ -54,7 +54,7 @@ class OrderHistoryViewModel: ObservableObject {
             showSkeleton = false
         }
     }
-    
+
     func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
         guard hasLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
@@ -62,7 +62,7 @@ class OrderHistoryViewModel: ObservableObject {
             Task {
                 let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
                 let _orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-                
+
                 self.orders += _orders
                 self.hasLoadMore = !_orders.isEmpty
                 if let cursor = orderData?.orders.cursor {
@@ -71,7 +71,7 @@ class OrderHistoryViewModel: ObservableObject {
             }
         }
     }
-    
+
     var input: OrderV2Input {
         //let address = UserInfo.shared.minWallet?.address ?? ""
         let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
@@ -85,7 +85,7 @@ class OrderHistoryViewModel: ObservableObject {
             status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
             toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil
         )
-        
+
         return input
     }
 }
@@ -93,13 +93,13 @@ class OrderHistoryViewModel: ObservableObject {
 extension OrderV2Input {
     var fromDateTimeInterval: Date? {
         guard let fromDate = fromDate.unwrapped, !fromDate.isEmpty else { return nil }
-        let fromDateTime  = (Double(fromDate) ?? 0) / 1000
+        let fromDateTime = (Double(fromDate) ?? 0) / 1000
         return fromDateTime > 0 ? Date(timeIntervalSince1970: fromDateTime) : nil
     }
-    
+
     var toDateTimeInterval: Date? {
         guard let toDate = toDate.unwrapped, !toDate.isEmpty else { return nil }
-        let toDateTime  = (Double(toDate) ?? 0) / 1000
+        let toDateTime = (Double(toDate) ?? 0) / 1000
         return toDateTime > 0 ? Date(timeIntervalSince1970: toDateTime) : nil
     }
 }

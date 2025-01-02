@@ -7,7 +7,7 @@ import Combine
 @MainActor
 class SearchTokenViewModel: ObservableObject {
     @Published
-    var tokens: [TopAssetQuery.Data.TopAssets.TopAsset] = []
+    var tokens: [TopAssetsQuery.Data.TopAssets.TopAsset] = []
     @Published
     var isDeleted: [Bool] = []
     @Published
@@ -57,7 +57,7 @@ class SearchTokenViewModel: ObservableObject {
             })
 
         Task {
-            let tokens = try? await MinWalletService.shared.fetch(query: TopAssetQuery(input: .some(input)))
+            let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
             let _tokens = tokens?.topAssets.topAssets ?? []
             if isLoadMore {
                 self.tokens += _tokens
@@ -72,7 +72,7 @@ class SearchTokenViewModel: ObservableObject {
         }
     }
 
-    func loadMoreData(item: TopAssetQuery.Data.TopAssets.TopAsset) {
+    func loadMoreData(item: TopAssetsQuery.Data.TopAssets.TopAsset) {
         guard hasLoadMore else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
         if tokens.firstIndex(where: { ($0.asset.currencySymbol + $0.asset.tokenName) == (item.asset.currencySymbol + $0.asset.tokenName) }) == thresholdIndex {

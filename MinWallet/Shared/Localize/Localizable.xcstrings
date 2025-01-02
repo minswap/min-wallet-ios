@@ -493,9 +493,6 @@
     "Privacy policy" : {
 
     },
-    "QR" : {
-
-    },
     "Re-input your seed phrase" : {
 
     },
@@ -614,6 +611,9 @@
 
     },
     "To wallet address:" : {
+
+    },
+    "togle" : {
 
     },
     "Touch ID" : {

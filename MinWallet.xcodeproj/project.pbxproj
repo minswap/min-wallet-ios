@@ -90,7 +90,7 @@
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
 		96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */; };
 		96BD2A482D0D644A00D81277 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 96BD2A472D0D644A00D81277 /* Apollo */; };
-		96BD2A562D0D6C6100D81277 /* TopAsset.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A552D0D6C6100D81277 /* TopAsset.graphql */; };
+		96BD2A562D0D6C6100D81277 /* TopAssets.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A552D0D6C6100D81277 /* TopAssets.graphql */; };
 		96BD2A592D0D758700D81277 /* MinWalletAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 96BD2A582D0D758700D81277 /* MinWalletAPI */; };
 		96BD2A5B2D0D792100D81277 /* MinWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BD2A5A2D0D792100D81277 /* MinWalletService.swift */; };
 		96BD2A642D0E8F4C00D81277 /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */; };
@@ -248,12 +248,13 @@
 		96665A032CF4C60D0046A20E /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MinWallet+Mapper.swift"; sourceTree = "<group>"; };
+		967A8D022D26AEDA007146BE /* TopAsset.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAsset.graphql; sourceTree = "<group>"; };
 		96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteModifier.swift; sourceTree = "<group>"; };
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
 		96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSettingView.swift; sourceTree = "<group>"; };
 		96BD2A512D0D65B300D81277 /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; path = schema.graphqls; sourceTree = "<group>"; };
-		96BD2A552D0D6C6100D81277 /* TopAsset.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TopAsset.graphql; sourceTree = "<group>"; };
+		96BD2A552D0D6C6100D81277 /* TopAssets.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TopAssets.graphql; sourceTree = "<group>"; };
 		96BD2A5A2D0D792100D81277 /* MinWalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletService.swift; sourceTree = "<group>"; };
 		96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
 		96BD2A692D0ED06400D81277 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
@@ -764,7 +765,8 @@
 		96BD2A532D0D65B900D81277 /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
-				96BD2A552D0D6C6100D81277 /* TopAsset.graphql */,
+				96BD2A552D0D6C6100D81277 /* TopAssets.graphql */,
+				967A8D022D26AEDA007146BE /* TopAsset.graphql */,
 				96FEDC182D23AF67006AD24F /* OrderHistoryQuery.graphql */,
 				96FEDC0D2D2393C2006AD24F /* ADAHandleNameQuery.graphql */,
 				96FEDC012D2247CA006AD24F /* PortfolioOverviewQuery.graphql */,
@@ -1010,7 +1012,7 @@
 				575157CD2CEB4526004CD647 /* InterDisplay-SemiBold.ttf in Resources */,
 				575157D02CEB4526004CD647 /* Inter-SemiBold.ttf in Resources */,
 				575157D62CEB4526004CD647 /* InterDisplay-Medium.ttf in Resources */,
-				96BD2A562D0D6C6100D81277 /* TopAsset.graphql in Resources */,
+				96BD2A562D0D6C6100D81277 /* TopAssets.graphql in Resources */,
 				575157D72CEB4526004CD647 /* Inter-Bold.ttf in Resources */,
 				575157DA2CEB4526004CD647 /* Inter-Medium.ttf in Resources */,
 				575157DE2CEB4526004CD647 /* InterDisplay-Regular.ttf in Resources */,

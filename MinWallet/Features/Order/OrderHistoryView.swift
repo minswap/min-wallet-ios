@@ -57,7 +57,8 @@ struct OrderHistoryView: View {
                         viewModel.toDate = toDate
                         viewModel.fetchData()
                     }
-                ).padding(.top, .xl)
+                )
+                .padding(.top, .xl)
             }
         )
     }

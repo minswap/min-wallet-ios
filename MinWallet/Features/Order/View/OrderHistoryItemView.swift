@@ -5,7 +5,7 @@ import MinWalletAPI
 struct OrderHistoryItemView: View {
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
-    
+
     var body: some View {
         VStack(spacing: .lg) {
             tokenView
@@ -75,11 +75,11 @@ struct OrderHistoryItemView: View {
                 .frame(minHeight: 32)
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-                        
+
                     }
                     .frame(height: 36)
                     CustomButton(title: "Update") {
-                        
+
                     }
                     .frame(height: 36)
                 }

@@ -9,7 +9,7 @@ struct OrderHistoryDetailView: View {
 
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -66,11 +66,11 @@ struct OrderHistoryDetailView: View {
             if order?.order?.status.value == .created {
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-                        
+
                     }
                     .frame(height: 56)
                     CustomButton(title: "Update") {
-                        
+
                     }
                     .frame(height: 56)
                 }
@@ -207,7 +207,7 @@ struct OrderHistoryDetailView: View {
                         .foregroundStyle(.colorBaseTent)
                         .onTapGesture {
                             guard let link = order?.order?.txIn.txId,
-                                     let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
+                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
                             else { return }
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         }
@@ -215,7 +215,7 @@ struct OrderHistoryDetailView: View {
                         .fixSize(.xl)
                         .onTapGesture {
                             guard let link = order?.order?.txIn.txId,
-                                  let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
+                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
                             else { return }
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         }
@@ -266,7 +266,7 @@ struct OrderHistoryDetailView: View {
                 }
                 .padding(.vertical, .md)
                 .padding(.top, .md)
-                
+
                 let tradingFees = order?.detail.tradingFee ?? []
                 if !tradingFees.isEmpty {
                     HStack(alignment: .top) {
@@ -283,7 +283,7 @@ struct OrderHistoryDetailView: View {
                     }
                     .padding(.vertical, .md)
                 }
-               
+
                 HStack {
                     Text("Executed batcher fee")
                         .font(.paragraphSmall)
@@ -357,7 +357,7 @@ struct OrderHistoryDetailView: View {
                         .fixSize(.xl)
                 }
                 .padding(.vertical, .md)
-                
+
                 let changeAmount = order?.detail.changeAmount ?? []
                 if !changeAmount.isEmpty {
                     HStack(alignment: .top) {
@@ -406,7 +406,7 @@ struct OrderHistoryDetailView: View {
                         .foregroundStyle(.colorBaseTent)
                         .onTapGesture {
                             guard let link = order?.order?.updatedTxId,
-                                  let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
+                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
                             else { return }
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         }
@@ -414,7 +414,7 @@ struct OrderHistoryDetailView: View {
                         .fixSize(.xl)
                         .onTapGesture {
                             guard let link = order?.order?.updatedTxId,
-                                     let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
+                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
                             else { return }
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         }

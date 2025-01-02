@@ -178,11 +178,11 @@ struct HomeView: View {
                     }
                     .frame(height: 44)
                     CustomButton(
-                        title: "QR",
+                        title: "Orders",
                         variant: .secondary,
-                        icon: .icQrCode
+                        icon: .icOrderHistory
                     ) {
-
+                        navigator.push(.orderHistory)
                     }
                     .frame(height: 44)
                 }
