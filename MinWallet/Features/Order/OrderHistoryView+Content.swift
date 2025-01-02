@@ -46,6 +46,9 @@ extension OrderHistoryView {
                         OrderHistoryItemView(order: item)
                             .padding(.horizontal, .xl)
                             .contentShape(.rect)
+                            .onAppear {
+                                viewModel.loadMoreData(order: item)
+                            }
                             .onTapGesture {
                                 navigator.push(.orderHistoryDetail(order: item))
                             }

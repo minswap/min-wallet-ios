@@ -35,5 +35,10 @@ query OrderHistoryQuery($ordersInput2: OrderV2Input!) {
       updatedAt
       updatedTxId
     }
+    cursor {
+      stableswap
+      v1
+      v2
+    }
   }
 }

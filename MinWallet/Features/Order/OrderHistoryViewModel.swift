@@ -2,6 +2,7 @@ import SwiftUI
 import MinWalletAPI
 import Combine
 
+
 @MainActor
 class OrderHistoryViewModel: ObservableObject {
     @Published
@@ -23,8 +24,10 @@ class OrderHistoryViewModel: ObservableObject {
     var fromDate: Date?
     var toDate: Date?
     
+    private var pagination: OrderPaginationCursorInput?
+    private var hasLoadMore: Bool = true
+    
     init() {
-        //input = OrderV2Input.init(address: UserInfo.shared.minWallet?.address ?? "")
         $keyword
             .removeDuplicates()
             .debounce(
@@ -40,24 +43,45 @@ class OrderHistoryViewModel: ObservableObject {
     func fetchData() {
         Task {
             showSkeleton = true
-            try? await Task.sleep(for: .seconds(2))
+            pagination = nil
             let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
             self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-
+            
+            self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
+            if let cursor = orderData?.orders.cursor {
+                self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
+            }
             showSkeleton = false
+        }
+    }
+    
+    func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
+        guard hasLoadMore else { return }
+        let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
+        if orders.firstIndex(of: order) == thresholdIndex {
+            Task {
+                let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
+                let _orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
+                
+                self.orders += _orders
+                self.hasLoadMore = !_orders.isEmpty
+                if let cursor = orderData?.orders.cursor {
+                    self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
+                }
+            }
         }
     }
     
     var input: OrderV2Input {
         //let address = UserInfo.shared.minWallet?.address ?? ""
         let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
-        //        return OrderV2Input.init(address: "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu")
         var input = OrderV2Input(
             action: actionSelected != nil ? .some(.case(actionSelected!)) : nil,
             address: address,
             ammType: contractTypeSelected != nil ? .some(.case(contractTypeSelected!)) : nil,
+            asset: !keyword.isBlank ? .some(keyword) : nil,
             fromDate: fromDate != nil ? .some(String(Int(fromDate!.timeIntervalSince1970 * 1000))) : nil,
-            //            pagination: .some(OrderPaginationCursorInput),
+            pagination: pagination != nil ? .some(pagination!) : nil,
             status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
             toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil
         )

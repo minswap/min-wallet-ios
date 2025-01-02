@@ -27,6 +27,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
     case "OrderHistoryResponse": return MinWalletAPI.Objects.OrderHistoryResponse
     case "OrderLinkedPool": return MinWalletAPI.Objects.OrderLinkedPool
+    case "OrderPaginationCursor": return MinWalletAPI.Objects.OrderPaginationCursor
     case "PortfolioLPPosition": return MinWalletAPI.Objects.PortfolioLPPosition
     case "PortfolioNFTPosition": return MinWalletAPI.Objects.PortfolioNFTPosition
     case "PortfolioOverview": return MinWalletAPI.Objects.PortfolioOverview

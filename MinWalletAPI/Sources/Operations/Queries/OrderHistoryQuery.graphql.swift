@@ -7,7 +7,7 @@ public class OrderHistoryQuery: GraphQLQuery {
   public static let operationName: String = "OrderHistoryQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId } } }"#
+      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId } cursor { __typename stableswap v1 v2 } } }"#
     ))
 
   public var ordersInput2: OrderV2Input
@@ -40,9 +40,11 @@ public class OrderHistoryQuery: GraphQLQuery {
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("orders", [Order].self),
+        .field("cursor", Cursor.self),
       ] }
 
       public var orders: [Order] { __data["orders"] }
+      public var cursor: Cursor { __data["cursor"] }
 
       /// Orders.Order
       ///
@@ -194,6 +196,26 @@ public class OrderHistoryQuery: GraphQLQuery {
             }
           }
         }
+      }
+
+      /// Orders.Cursor
+      ///
+      /// Parent Type: `OrderPaginationCursor`
+      public struct Cursor: MinWalletAPI.SelectionSet {
+        public let __data: DataDict
+        public init(_dataDict: DataDict) { __data = _dataDict }
+
+        public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.OrderPaginationCursor }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("stableswap", MinWalletAPI.BigInt?.self),
+          .field("v1", MinWalletAPI.BigInt?.self),
+          .field("v2", MinWalletAPI.BigInt?.self),
+        ] }
+
+        public var stableswap: MinWalletAPI.BigInt? { __data["stableswap"] }
+        public var v1: MinWalletAPI.BigInt? { __data["v1"] }
+        public var v2: MinWalletAPI.BigInt? { __data["v2"] }
       }
     }
   }
