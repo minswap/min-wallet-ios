@@ -6,7 +6,6 @@ struct OrderHistoryItemView: View {
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
     
-    let colors: [Color] = [.red, .blue, .purple]
     var body: some View {
         VStack(spacing: .lg) {
             tokenView
@@ -31,30 +30,33 @@ struct OrderHistoryItemView: View {
                 .frame(height: 20)
                 .lineLimit(1)
             }
-            HStack {
+            HStack(alignment: .top) {
                 Text("You paid")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
-                Text(order?.order?.youPaid)
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorBaseTent)
+                let inputs = order?.detail.inputs ?? []
+                VStack(alignment: .trailing, spacing: 4) {
+                    ForEach(inputs, id: \.self) { input in
+                        Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    }
+                }
             }
             HStack(alignment: .top) {
                 Text("You receive")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
-                VStack(
-                    spacing: 4,
-                    content: {
-                        Text(order?.order?.youReceive)
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                        Text("20 MINv2LP")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    })
+                let outputs = order?.detail.outputs ?? []
+                VStack(alignment: .trailing, spacing: 4) {
+                    ForEach(outputs, id: \.self) { output in
+                        Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    }
+                }
             }
             if order?.order?.status.value == .created {
                 HStack(spacing: Spacing.md) {
@@ -81,16 +83,17 @@ struct OrderHistoryItemView: View {
                     }
                     .frame(height: 36)
                 }
-                Color.colorBorderPrimarySub.frame(height: 1)
             }
+            Color.colorBorderPrimarySub.frame(height: 1)
         }
     }
 
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
-                ForEach(0..<colors.count) { i in
-                    TokenLogoView()
+                let inputs = order?.detail.inputs ?? []
+                ForEach(inputs, id: \.self) { input in
+                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified)
                         .frame(width: 24, height: 24)
                 }
             }
@@ -100,8 +103,9 @@ struct OrderHistoryItemView: View {
                 .frame(width: 16, height: 16)
                 .padding(.horizontal, 2)
             HStack(spacing: -4) {
-                ForEach(0..<colors.count) { i in
-                    TokenLogoView()
+                let outputs = order?.detail.outputs ?? []
+                ForEach(outputs, id: \.self) { output in
+                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified)
                         .frame(width: 24, height: 24)
                 }
             }

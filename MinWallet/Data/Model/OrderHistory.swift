@@ -120,33 +120,6 @@ extension ContractType: Identifiable {
     }
 }
 
-
-extension OrderHistoryQuery.Data.Orders.Order {
-    var youPaid: String {
-        let json = JSON(parseJSON: details)
-        ///60_000_000
-        let amounts = json["inputs"].arrayValue.map { input in
-            //TODO: cuongnv mapping currency
-            return input["amount"]["$bigint"].doubleValue
-        }
-        
-        return ""
-    }
-    
-    var youReceive: String {
-        let json = JSON(parseJSON: details)
-        let amount = json["outputs"]["executedAmount"]["$bigint"].doubleValue / 1_000_000
-        return amount > 0 ? amount.formatted() : "--"
-    }
-    var depositAda: String {
-        let json = JSON(parseJSON: details)
-        ///60_000_000
-        let amount = json["depositAda"]["$bigint"].doubleValue
-        return amount.formatted() + " t\(Currency.ada.prefix)"
-    }
-   
-}
-
 extension OrderHistoryQuery.Data.Orders {
     struct WrapOrder: Hashable {
         var order: OrderHistoryQuery.Data.Orders.Order?
@@ -164,21 +137,18 @@ extension OrderHistoryQuery.Data.Orders {
                 let assetSplit = asset.split(separator: ".")
                 let currencySymbol = String(assetSplit.first ?? "")
                 let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
-                let assets = linkedPools.flatMap { $0.assets }
-                let lpAssets = linkedPools.compactMap { $0.lpAsset }
-                let isVerified: Bool? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                let name: String? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
-                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
-                let decimals: Int? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
-                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
+                
+                let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
+                
+                let isVerified: Bool? = metaData?.isVerified
+                let name: String? = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? "ADA"
+                let decimals: Int? = metaData?.decimals ?? 6
                 
                 return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                     currencySymbol: currencySymbol,
                     tokenName: tokenName,
                     isVerified: isVerified,
-                    decimals: decimals,
-                    amount: amount ,
+                    amount: amount / pow(10.0, Double(decimals ?? 0)),
                     currency: name ?? "")
             })
             detail.outputs = json["outputs"].arrayValue.map({ input in
@@ -188,22 +158,20 @@ extension OrderHistoryQuery.Data.Orders {
                 let assetSplit = asset.split(separator: ".")
                 let currencySymbol = String(assetSplit.first ?? "")
                 let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
-                let assets = linkedPools.flatMap { $0.assets }
-                let lpAssets = linkedPools.compactMap { $0.lpAsset }
-                let isVerified: Bool? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                let name: String? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
-                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
-                let decimals: Int? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
-                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
+                
+                let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
+                
+                let isVerified: Bool? = metaData?.isVerified
+                let name: String? = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? "ADA"
+                let decimals: Int? = metaData?.decimals ?? 6
+                
                 
                 return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                     currencySymbol: currencySymbol,
                     tokenName: tokenName,
                     isVerified: isVerified,
-                    decimals: decimals,
-                    amount: amount,
-                    satisfiedAmount: satisfiedAmount,
+                    amount: amount / pow(10.0, Double(decimals ?? 0)),
+                    satisfiedAmount: satisfiedAmount / pow(10.0, Double(decimals ?? 0)),
                     currency: name ?? "")
             })
             detail.tradingFee = json["lpFees"].arrayValue.map({ input in
@@ -216,7 +184,7 @@ extension OrderHistoryQuery.Data.Orders {
                 let lpAssets = linkedPools.compactMap { $0.lpAsset }
                 let isVerified: Bool? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
                 ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                let name: String? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
+                let name: String? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? tokenName?.adaName ?? tokenName
                 ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
                 let decimals: Int? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
                 ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
@@ -225,12 +193,38 @@ extension OrderHistoryQuery.Data.Orders {
                     currencySymbol: currencySymbol,
                     tokenName: tokenName,
                     isVerified: isVerified,
-                    decimals: decimals,
-                    amount: amount,
+                    amount: amount / pow(10.0, Double(decimals ?? 0)),
                     currency: name ?? "")
             })
             
-            let name = detail.inputs.map { $0.currency }.joined(separator: ",") + " - " + detail.outputs.map({ $0.currency }).joined(separator: ",")
+            detail.changeAmount = json["change_amount"].arrayValue.map({ input in
+                let amount = input["amount"]["$bigint"].doubleValue
+                let asset = input["asset"]["$asset"].stringValue
+                let assetSplit = asset.split(separator: ".")
+                let currencySymbol = String(assetSplit.first ?? "")
+                let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
+                let assets = linkedPools.flatMap { $0.assets }
+                let lpAssets = linkedPools.compactMap { $0.lpAsset }
+                let isVerified: Bool? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
+                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
+                let name: String? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? tokenName?.adaName ?? tokenName
+                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
+                let decimals: Int? = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
+                ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
+                
+                return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
+                    currencySymbol: currencySymbol,
+                    tokenName: tokenName,
+                    isVerified: isVerified,
+                    amount: amount / pow(10.0, Double(decimals ?? 0)),
+                    currency: name ?? "")
+            })
+            
+            let name = detail.inputs.map { $0.currency }.joined(separator: ", ") + " - " + detail.outputs.map({ $0.currency }).joined(separator: ",")
+            detail.name = name
+            detail.depositAda = json["depositAda"]["$bigint"].doubleValue 
+            detail.estimatedBatcherFee = json["maxBatcherFee"]["$bigint"].doubleValue
+            detail.executedBatcherFee = json["executedBatcherFee"]["$bigint"].doubleValue
         }
     }
 }
@@ -254,11 +248,11 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
 }
 
 extension OrderHistoryQuery.Data.Orders.WrapOrder.Detail {
-    struct Token: Hashable {
+    struct Token: Hashable, Identifiable {
+        var id: UUID = .init()
         var currencySymbol: String?
         var tokenName: String?
         var isVerified: Bool?
-        var decimals: Int?
         ///net receive
         var amount: Double = 0
         ///minimumReceive

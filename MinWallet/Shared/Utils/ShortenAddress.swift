@@ -50,6 +50,17 @@ extension String {
         outputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return outputFormatter.string(from: date)
     }
+    
+    var adaName: String? {
+        if self.count < 6 {
+            return self
+        }
+        if self.count == 6 {
+            return self.hexToText
+        }
+        
+        return self.shortenAddress
+    }
 }
 
 
@@ -76,6 +87,7 @@ extension Double {
     func formatNumber(
         prefix: String = "",
         suffix: String = "",
+        roundingOffset: Int = 3,
         font: Font = .labelMediumSecondary,
         fontColor: Color = .colorBaseTent
     ) -> AttributedString {
@@ -135,7 +147,7 @@ extension Double {
             startIndex = decimalPart.index(after: startIndex)
         }
 
-        let roundingIndex = decimalPart.index(startIndex, offsetBy: 3, limitedBy: decimalPart.endIndex) ?? decimalPart.endIndex
+        let roundingIndex = decimalPart.index(startIndex, offsetBy: roundingOffset, limitedBy: decimalPart.endIndex) ?? decimalPart.endIndex
         let roundedDecimal = String(decimalPart[startIndex..<roundingIndex])
 
         if zerosCount >= 4 {
