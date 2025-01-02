@@ -13,14 +13,16 @@ struct OrderHistoryFilterView: View {
     @State
     var actionSelected: OrderV2Action?
     @State
-    var fromDate: Date = .init()
+    var fromDate: Date?
     @State
-    var toDate: Date = .init()
+    var toDate: Date?
     @State
     private var showSelectFromDate: Bool = false
     @State
     private var showSelectToDate: Bool = false
 
+    var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
+    
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-YYYY"
@@ -98,7 +100,7 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(fromDate, formatter: dateFormatter)
+                    Text(fromDate ?? Date(), formatter: dateFormatter)
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .overlay(
@@ -123,7 +125,7 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(toDate, formatter: dateFormatter)
+                    Text(toDate ?? Date(), formatter: dateFormatter)
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .overlay(
@@ -150,19 +152,31 @@ struct OrderHistoryFilterView: View {
             if showSelectFromDate || showSelectToDate {
                 ZStack {
                     if showSelectFromDate {
+                        let fromDateBinding = Binding<Date>(
+                            get: { fromDate ?? Date() },
+                            set: { newValue in
+                                fromDate = newValue
+                            }
+                        )
                         DatePicker(
                             " ",
-                            selection: $fromDate,
-                            in: toDate.adding(.year, value: -20)!...toDate,
+                            selection: fromDateBinding,
+                            in: (toDate ?? Date()).adding(.year, value: -20)!...(toDate ?? Date()),
                             displayedComponents: [.date]
                         )
                         .datePickerStyle(.wheel)
                     }
                     if showSelectToDate {
+                        let toDateBinding = Binding<Date>(
+                            get: { toDate ?? Date() },
+                            set: { newValue in
+                                toDate = newValue
+                            }
+                        )
                         DatePicker(
                             " ",
-                            selection: $toDate,
-                            in: fromDate...fromDate.adding(.year, value: 20)!,
+                            selection: toDateBinding,
+                            in: (fromDate ?? Date())...(fromDate ?? Date()).adding(.year, value: 20)!,
                             displayedComponents: [.date]
                         )
                         .datePickerStyle(.wheel)
@@ -173,6 +187,7 @@ struct OrderHistoryFilterView: View {
             HStack(spacing: .xl) {
                 CustomButton(title: "Reset", variant: .secondary) {
                     isShowFilterView = false
+                    onFilterSelected?(nil, nil, nil, nil, nil)
                 }
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
@@ -184,6 +199,7 @@ struct OrderHistoryFilterView: View {
                         return
                     }
                     isShowFilterView = false
+                    onFilterSelected?(contractTypeSelected, statusSelected, actionSelected, fromDate, toDate)
                 }
                 .frame(height: 56)
             }
