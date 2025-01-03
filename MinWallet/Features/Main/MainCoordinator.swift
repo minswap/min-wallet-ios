@@ -25,7 +25,7 @@ struct MainCoordinator: View {
                     case .gettingStarted:
                         GettingStartedView().navigationBarHidden(true)
                     case let .tokenDetail(token):
-                        TokenDetailView().navigationBarHidden(true)
+                        TokenDetailView(viewModel: TokenDetailViewModel(token: token.base)).navigationBarHidden(true)
                     case .about:
                         AboutView().navigationBarHidden(true)
                     case .language:

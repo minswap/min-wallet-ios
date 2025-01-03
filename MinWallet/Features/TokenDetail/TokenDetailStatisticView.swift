@@ -1,10 +1,8 @@
 import SwiftUI
 
 
-struct TokenDetailStatisticView: View {
-    let datas = ["DEX", "DeFi", "Smart contract", "Staking"]
-
-    var body: some View {
+extension TokenDetailView {
+    var tokenDetailStatisticView: some View {
         VStack(
             alignment: .leading, spacing: 0,
             content: {
@@ -140,7 +138,7 @@ struct TokenDetailStatisticView: View {
 
 #Preview {
     ScrollView {
-        TokenDetailStatisticView().padding(.xl)
+        TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault())).padding(.xl)
     }
 }
 

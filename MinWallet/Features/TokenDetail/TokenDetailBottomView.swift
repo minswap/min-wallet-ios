@@ -1,8 +1,8 @@
 import SwiftUI
 
 
-struct TokenDetailBottomView: View {
-    var body: some View {
+extension TokenDetailView {
+    var tokenDetailBottomView: some View {
         ZStack {
             VStack(
                 alignment: .leading,
@@ -44,13 +44,5 @@ struct TokenDetailBottomView: View {
         .overlay(
             RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1)
         )
-    }
-}
-
-#Preview {
-    VStack {
-        TokenDetailBottomView().frame(height: 136)
-            .padding(.xl)
-        Spacer()
     }
 }

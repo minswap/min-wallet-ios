@@ -24,11 +24,8 @@ struct LineChartData {
 }
 
 
-struct TokenDetailChartView: View {
-
-    let data: [LineChartData]
-
-    var body: some View {
+extension TokenDetailView {
+    var tokenDetailChartView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Chart {
                 ForEach(data, id: \.id) { item in
@@ -51,29 +48,31 @@ struct TokenDetailChartView: View {
             }
             .chartLegend(.hidden)
             .frame(height: 240)
-
             HStack(spacing: 0) {
-                Text("1D")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                Text("1W")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .shadow(radius: 50).cornerRadius(BorderRadius.full)
-                    .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorBaseBackground))
-                    .padding(.vertical, .xs)
-                Text("1M")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                Text("1Y")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+                ForEach(viewModel.chartPeriods, id: \.self) { period in
+                    if viewModel.chartPeriod == period {
+                        Text(period.title)
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .shadow(radius: 50).cornerRadius(BorderRadius.full)
+                            .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorBaseBackground))
+                            .padding(.vertical, .xs)
+                            .contentShape(.rect)
+                            .onTapGesture {
+                                viewModel.chartPeriod = period
+                            }
+                    } else {
+                        Text(period.title)
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .contentShape(.rect)
+                            .onTapGesture {
+                                viewModel.chartPeriod = period
+                            }
+                    }
+                }
             }
             .frame(height: 36)
             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
@@ -99,15 +98,6 @@ var chartData: [LineChartData] = {
     }
     return temp
 }()
-
-
-#Preview {
-    VStack {
-        TokenDetailChartView(data: chartData)
-            .padding(.xl)
-        Spacer()
-    }
-}
 
 extension Date {
     func adding(_ component: Calendar.Component, value: Int, using calendar: Calendar = .current) -> Date? {

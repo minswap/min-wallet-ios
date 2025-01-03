@@ -17,7 +17,7 @@ extension MainCoordinatorViewModel {
         case home
         case policy
         case gettingStarted
-        case tokenDetail(token: Token)
+        case tokenDetail(token: WrapTokenModel)
         case about
         case language
         case changePassword
