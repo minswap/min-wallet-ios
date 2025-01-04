@@ -212,6 +212,9 @@
     "Dashboard" : {
 
     },
+    "Date" : {
+
+    },
     "Default" : {
 
     },
@@ -461,9 +464,6 @@
     "Please write down your 24 words seed phrase and store it in a secured place." : {
 
     },
-    "Plot" : {
-
-    },
     "policy_content" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -662,9 +662,6 @@
 
     },
     "Vui lòng chấp nhận đăng nhập bằng Face ID/Touch ID" : {
-
-    },
-    "Weekday" : {
 
     },
     "When available, uses multiple pools for better liquidity and prices. " : {

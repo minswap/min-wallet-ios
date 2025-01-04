@@ -51,6 +51,15 @@ extension String {
         return outputFormatter.string(from: date)
     }
 
+    var formatToDate: Date {
+        let inputDateString = self
+        
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        return inputFormatter.date(from: inputDateString) ?? Date()
+    }
     var adaName: String? {
         if self.count < 6 {
             return self

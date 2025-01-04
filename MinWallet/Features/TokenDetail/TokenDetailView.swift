@@ -8,19 +8,15 @@ struct TokenDetailView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-
     @State
     var progress: CGFloat = 0
-    private var minHeight: CGFloat = Self.smallLargeHeader
-    private var maxHeight: CGFloat = Self.heightLargeHeader + Self.smallLargeHeader
-    let datas = ["DEX", "DeFi", "Smart contract", "Staking"]
-    var data: [LineChartData] = []
-
-    let viewModel: TokenDetailViewModel
+   
+    @StateObject
+    var viewModel: TokenDetailViewModel = .init()
     
-    init(viewModel: TokenDetailViewModel) {
-        self.viewModel = viewModel
-    }
+    private let minHeight: CGFloat = Self.smallLargeHeader
+    private let maxHeight: CGFloat = Self.heightLargeHeader + Self.smallLargeHeader
+    var datas = ["DEX", "DeFi", "Smart contract", "Staking"]
     
     var body: some View {
         ZStack {

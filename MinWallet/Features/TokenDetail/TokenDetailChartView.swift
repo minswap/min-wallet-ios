@@ -9,7 +9,7 @@ enum LineChartType: String, CaseIterable, Plottable {
     var color: Color {
         switch self {
         case .optimal: return .green
-        case .outside: return .blue
+        case .outside: return .red
         }
     }
 
@@ -23,31 +23,46 @@ struct LineChartData {
     var type: LineChartType
 }
 
-
 extension TokenDetailView {
     var tokenDetailChartView: some View {
         VStack(alignment: .leading, spacing: 0) {
+            let maxY: Double = (viewModel.chartDatas.map { $0.value }.max() ?? 0) * 1.5
+            let minDate: Date = viewModel.chartDatas.map { $0.date }.min() ?? Date()
+            let maxDate: Date = viewModel.chartDatas.map { $0.date }.max() ?? Date()
+//            let strideValue = maxY / 6
             Chart {
-                ForEach(data, id: \.id) { item in
+                ForEach(viewModel.chartDatas, id: \.id) { item in
                     LineMark(
-                        x: .value("Weekday", item.date),
+                        x: .value("Date", item.date),
                         y: .value("Value", item.value)
                     )
-                    .foregroundStyle(by: .value("Plot", item.type))
-                    .interpolationMethod(.catmullRom)
-                    .lineStyle(.init(lineWidth: 2))
+                    .foregroundStyle(.colorInteractiveToneHighlight)
+                    //.interpolationMethod(.catmullRom)
+                    .lineStyle(.init(lineWidth: 1))
                 }
             }
             .chartXAxis {
-                AxisMarks(preset: .extended, values: .stride(by: .month)) { value in
-                    AxisValueLabel(format: .dateTime.month())
+                AxisMarks(preset: .extended, values: .stride(by: .day)) { value in
+                    AxisValueLabel(format: .dateTime.day())
                 }
             }
             .chartYAxis {
-                AxisMarks(preset: .extended, position: .leading, values: .stride(by: 5))
+                AxisMarks(preset: .extended, position: .leading)
             }
+            .chartYScale(domain: 0...maxY)
+//            .chartYAxis(.hidden)
+            .chartXAxis(.hidden)
             .chartLegend(.hidden)
-            .frame(height: 240)
+            .frame(height: 200)
+            HStack {
+                Text(viewModel.formatDate(value: minDate))
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                Spacer()
+                Text(viewModel.formatDate(value: maxDate))
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+            }
             HStack(spacing: 0) {
                 ForEach(viewModel.chartPeriods, id: \.self) { period in
                     if viewModel.chartPeriod == period {
@@ -76,28 +91,10 @@ extension TokenDetailView {
             }
             .frame(height: 36)
             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
-            .padding(.top, 20)
+            .padding(.top, .xl)
         }
     }
 }
-
-var chartData: [LineChartData] = {
-    let sampleDate = Date().startOfDay.adding(.month, value: -10)!
-    var temp = [LineChartData]()
-
-    // Line 1
-    for i in 0..<8 {
-        let value = Double.random(in: 5...20)
-        temp.append(
-            LineChartData(
-                date: sampleDate.adding(.month, value: i)!,
-                value: value,
-                type: .outside
-            )
-        )
-    }
-    return temp
-}()
 
 extension Date {
     func adding(_ component: Calendar.Component, value: Int, using calendar: Calendar = .current) -> Date? {
@@ -107,4 +104,10 @@ extension Date {
     var startOfDay: Date {
         return Calendar.current.startOfDay(for: self)
     }
+}
+
+
+#Preview {
+    TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
+        .environmentObject(AppSetting.shared)
 }
