@@ -16,6 +16,20 @@ class TokenDetailViewModel: ObservableObject {
     var chartPeriod: ChartPeriod = .oneDay
     @Published
     var chartDatas: [LineChartData] = []
+    @Published
+    var isFav: Bool = false
+    
+    @Published
+    var scrollOffset: CGPoint = .zero
+    @Published
+    var sizeOfLargeHeader: CGSize = .zero
+    @Published
+    var selectedIndex: Int?
+    
+    var chartDataSelected: LineChartData? {
+        guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
+        return chartDatas[selectedIndex]
+    }
     
     private var cancellables: Set<AnyCancellable> = []
   
@@ -25,11 +39,14 @@ class TokenDetailViewModel: ObservableObject {
         $chartPeriod
             .removeDuplicates()
             .sink { [weak self] newData in
-                self?.chartPeriod = newData
-                self?.chartDatas = []
-                self?.getPriceChart()
+                guard let self = self else { return }
+                self.chartPeriod = newData
+                self.chartDatas = []
+                self.getPriceChart()
             }
             .store(in: &cancellables)
+        
+        isFav = AppSetting.shared.tokenFav.contains(token.currencySymbol + "." + token.tokenName)
     }
     
     private func getTokenDetail() {

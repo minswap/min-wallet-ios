@@ -50,14 +50,12 @@
 		963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */; };
 		963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21932D1FAC40002E258E /* TokenProtocol.swift */; };
 		9640BBD22D27C14900B0DC42 /* TokenDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640BBD12D27C14900B0DC42 /* TokenDetailViewModel.swift */; };
-		9640BBD42D27C42000B0DC42 /* WrapTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640BBD32D27C42000B0DC42 /* WrapTokenModel.swift */; };
 		964FCE772D1268D7003BF81F /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE762D1268D7003BF81F /* PersistenceController.swift */; };
 		964FCE7B2D1269AC003BF81F /* TokenEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE7A2D1269AC003BF81F /* TokenEntity.swift */; };
 		9651CAA32D067760006C46DB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAA22D067760006C46DB /* SDWebImageSwiftUI */; };
 		9651CAA62D067793006C46DB /* FlowStacks in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAA52D067793006C46DB /* FlowStacks */; };
 		9651CAA92D0677A3006C46DB /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAA82D0677A3006C46DB /* Then */; };
 		9651CAAC2D0677B5006C46DB /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAAB2D0677B5006C46DB /* SkeletonUI */; };
-		9651CAAF2D0677C4006C46DB /* ScalingHeaderScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAAE2D0677C4006C46DB /* ScalingHeaderScrollView */; };
 		9651CAB22D0677DA006C46DB /* SwiftyAttributes in Frameworks */ = {isa = PBXBuildFile; productRef = 9651CAB12D0677DA006C46DB /* SwiftyAttributes */; };
 		965591FF2CF810E800301DDB /* BiometricAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965591FE2CF810E800301DDB /* BiometricAuthentication.swift */; };
 		965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965592002CF813BF00301DDB /* AppGeneralError.swift */; };
@@ -221,7 +219,6 @@
 		963D21922D1FABB5002E258E /* WalletAssetsQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = WalletAssetsQuery.graphql; sourceTree = "<group>"; };
 		963D21932D1FAC40002E258E /* TokenProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProtocol.swift; sourceTree = "<group>"; };
 		9640BBD12D27C14900B0DC42 /* TokenDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailViewModel.swift; sourceTree = "<group>"; };
-		9640BBD32D27C42000B0DC42 /* WrapTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapTokenModel.swift; sourceTree = "<group>"; };
 		9640BBD52D27C88100B0DC42 /* PoolsByPairsQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = PoolsByPairsQuery.graphql; sourceTree = "<group>"; };
 		9640BBD62D27C8CD00B0DC42 /* PriceChartQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = PriceChartQuery.graphql; sourceTree = "<group>"; };
 		964FCE742D126892003BF81F /* MinWallet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MinWallet.xcdatamodel; sourceTree = "<group>"; };
@@ -327,7 +324,6 @@
 				9651CAA92D0677A3006C46DB /* Then in Frameworks */,
 				9651CAA62D067793006C46DB /* FlowStacks in Frameworks */,
 				96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */,
-				9651CAAF2D0677C4006C46DB /* ScalingHeaderScrollView in Frameworks */,
 				9651CAB22D0677DA006C46DB /* SwiftyAttributes in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -577,7 +573,6 @@
 				96BD2A532D0D65B900D81277 /* GraphQL */,
 				966659FF2CF46D480046A20E /* TokenWithPrice.swift */,
 				963D21932D1FAC40002E258E /* TokenProtocol.swift */,
-				9640BBD32D27C42000B0DC42 /* WrapTokenModel.swift */,
 				96FEDC192D23C836006AD24F /* OrderHistory.swift */,
 				96DC05352CF5AD1B00A78356 /* Language.swift */,
 				96DC05392CF5B14F00A78356 /* AppSetting.swift */,
@@ -911,7 +906,6 @@
 				9651CAA52D067793006C46DB /* FlowStacks */,
 				9651CAA82D0677A3006C46DB /* Then */,
 				9651CAAB2D0677B5006C46DB /* SkeletonUI */,
-				9651CAAE2D0677C4006C46DB /* ScalingHeaderScrollView */,
 				9651CAB12D0677DA006C46DB /* SwiftyAttributes */,
 				96BD2A472D0D644A00D81277 /* Apollo */,
 				96BD2A582D0D758700D81277 /* MinWalletAPI */,
@@ -995,7 +989,6 @@
 				9651CAA42D067793006C46DB /* XCRemoteSwiftPackageReference "FlowStacks" */,
 				9651CAA72D0677A3006C46DB /* XCRemoteSwiftPackageReference "Then" */,
 				9651CAAA2D0677B5006C46DB /* XCRemoteSwiftPackageReference "SkeletonUI" */,
-				9651CAAD2D0677C4006C46DB /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
 				9651CAB02D0677DA006C46DB /* XCRemoteSwiftPackageReference "SwiftyAttributes" */,
 				96BD2A462D0D644900D81277 /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				96BD2A572D0D758700D81277 /* XCLocalSwiftPackageReference "MinWalletAPI" */,
@@ -1120,7 +1113,6 @@
 				96FE0CFC2CF423D1008E4BFD /* SizeReader.swift in Sources */,
 				96FE0CF42CF3672E008E4BFD /* TokenDetailStatisticView.swift in Sources */,
 				960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */,
-				9640BBD42D27C42000B0DC42 /* WrapTokenModel.swift in Sources */,
 				96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */,
 				96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */,
 				96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */,
@@ -1580,14 +1572,6 @@
 				minimumVersion = 2.0.2;
 			};
 		};
-		9651CAAD2D0677C4006C46DB /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/exyte/ScalingHeaderScrollView.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.5;
-			};
-		};
 		9651CAB02D0677DA006C46DB /* XCRemoteSwiftPackageReference "SwiftyAttributes" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/eddiekaiger/SwiftyAttributes.git";
@@ -1634,11 +1618,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9651CAAA2D0677B5006C46DB /* XCRemoteSwiftPackageReference "SkeletonUI" */;
 			productName = SkeletonUI;
-		};
-		9651CAAE2D0677C4006C46DB /* ScalingHeaderScrollView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9651CAAD2D0677C4006C46DB /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */;
-			productName = ScalingHeaderScrollView;
 		};
 		9651CAB12D0677DA006C46DB /* SwiftyAttributes */ = {
 			isa = XCSwiftPackageProductDependency;

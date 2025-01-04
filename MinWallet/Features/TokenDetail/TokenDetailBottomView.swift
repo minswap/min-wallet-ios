@@ -1,4 +1,5 @@
 import SwiftUI
+import FlowStacks
 
 
 extension TokenDetailView {
@@ -31,7 +32,7 @@ extension TokenDetailView {
                         }
                         Spacer()
                         CustomButton(title: "Swap") {
-
+                            navigator.push(.swapToken(.swapToken))
                         }
                         .frame(width: 90, height: 44)
                     }

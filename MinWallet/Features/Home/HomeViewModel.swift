@@ -23,8 +23,10 @@ class HomeViewModel: ObservableObject {
     init() {
         $tabType
             .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.getTokens()
+            .sink { [weak self] newValue in
+                guard let self = self else { return }
+                self.tabType = newValue
+                self.getTokens()
             }
             .store(in: &cancellables)
 

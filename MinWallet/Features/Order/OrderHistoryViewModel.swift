@@ -35,7 +35,9 @@ class OrderHistoryViewModel: ObservableObject {
                 scheduler: DispatchQueue.main
             )
             .sink(receiveValue: { [weak self] value in
-                self?.fetchData()
+                guard let self = self else { return }
+                self.keyword = keyword
+                self.fetchData()
             })
             .store(in: &cancellables)
     }

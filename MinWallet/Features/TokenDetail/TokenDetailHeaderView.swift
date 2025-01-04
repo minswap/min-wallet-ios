@@ -1,77 +1,107 @@
 import SwiftUI
+import FlowStacks
 
 
 extension TokenDetailView {
-    static let heightLargeHeader: CGFloat = 116
-    static let smallLargeHeader: CGFloat = 48
-
-    var tokenDetailHeaderView: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Spacer()
-            ZStack(alignment: .leading) {
-                HStack(alignment: .center, spacing: 12) {
-                    TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(viewModel.token.name)
-                            .foregroundStyle(.colorBaseTent)
-                            .font(.labelMediumSecondary)
-                        HStack(spacing: 4) {
-                            Text("0.0422 ₳")
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                                .font(.paragraphXSmall)
-                            Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
-                            Text("5.7%")
-                                .font(.paragraphXSmall)
-                                .foregroundStyle(.colorBaseSuccess)
-                            Image(.icUp)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                        }
-                    }
-                    Spacer()
+    var smallHeader: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Button(
+                action: {
+                    navigator.pop()
+                },
+                label: {
+                    Image(.icBack)
+                        .resizable()
+                        .frame(width: ._3xl, height: ._3xl)
+                        .padding(.md)
+                        .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
                 }
-                .padding(.leading, 68)
-                .background(.colorBaseBackground)
-                .opacity(max(0, min(1, (progress - 0.75) * 4.0)))
-                .frame(height: Self.smallLargeHeader)
-
-                VStack(alignment: .leading, spacing: 0) {
-                    Color.clear.frame(height: 12)
-                    HStack(
-                        alignment: .center,
-                        content: {
-                            TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
-                            HStack(
-                                alignment: .firstTextBaseline, spacing: 4,
-                                content: {
-                                    Text(viewModel.token.name)
-                                        .foregroundStyle(.colorBaseTent)
-                                        .font(.labelMediumSecondary)
-                                    Text("Minswap")
-                                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                                        .font(.labelMediumSecondary)
-                                })
-                            Spacer()
-                        })
-                    Text("0.0422 ₳")
+            )
+            .buttonStyle(.plain)
+            let offset = viewModel.scrollOffset.y
+            let heightOrders = viewModel.sizeOfLargeHeader.height
+            let opacity = abs(max(0, min(1, (offset - heightOrders / 2) / (heightOrders / 2))))
+            
+            HStack(alignment: .center, spacing: 12) {
+                TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
+                    .frame(width: 24, height: 24)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(viewModel.token.name)
                         .foregroundStyle(.colorBaseTent)
-                        .font(.titleH4)
-                        .padding(.top, .lg)
-                        .padding(.bottom, .xs)
+                        .font(.labelMediumSecondary)
+                    let chartSelected = viewModel.chartDataSelected?.value.formatNumber(
+                        prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
+                        suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                        font: .paragraphXSmall,
+                        fontColor: .colorInteractiveTentPrimarySub) ?? "-"
                     HStack(spacing: 4) {
+                        Text(chartSelected)
+                        Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
                         Text("5.7%")
-                            .font(.labelSmallSecondary)
+                            .font(.paragraphXSmall)
                             .foregroundStyle(.colorBaseSuccess)
                         Image(.icUp)
                             .resizable()
                             .frame(width: 16, height: 16)
                     }
                 }
-                .padding(.horizontal, .xl)
-                .frame(height: Self.heightLargeHeader)
-                .opacity(1 - max(0, min(1, (progress - 0.75) * 4.0)))
+            }
+            .opacity((viewModel.sizeOfLargeHeader.height / 2 - offset) < 0 ? (opacity) : 0)
+            Spacer()
+            Image(.icFavourite)
+                .fixSize(40)
+                .onTapGesture {
+                    viewModel.isFav.toggle()
+                    let key = viewModel.token.currencySymbol + "." + viewModel.token.tokenName
+                    if viewModel.isFav {
+                        appSetting.tokenFav.append(key)
+                    } else {
+                        appSetting.tokenFav.removeAll { $0 == key }
+                    }
+                }
+        }
+        .background(.colorBaseBackground)
+        .padding(.horizontal, .xl)
+    }
+    
+    var largeHeader: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Color.clear.frame(height: .md)
+            HStack(
+                alignment: .center,
+                content: {
+                    TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
+                        .frame(width: 24, height: 24)
+                    HStack(
+                        alignment: .firstTextBaseline, spacing: 4,
+                        content: {
+                            Text(viewModel.token.name)
+                                .foregroundStyle(.colorBaseTent)
+                                .font(.labelMediumSecondary)
+                            Text("Minswap")
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .font(.labelMediumSecondary)
+                        })
+                    Spacer()
+                })
+            let chartSelected = viewModel.chartDataSelected?.value.formatNumber(
+                prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
+                suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                font: .titleH4,
+                fontColor: .colorBaseTent) ?? "-"
+            Text(chartSelected)
+                .padding(.top, .lg)
+                .padding(.bottom, .xs)
+            HStack(spacing: 4) {
+                Text("5.7%")
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseSuccess)
+                Image(.icUp)
+                    .resizable()
+                    .frame(width: 16, height: 16)
             }
         }
+        .padding(.horizontal, .xl)
     }
 }
 

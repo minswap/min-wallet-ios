@@ -30,7 +30,9 @@ class SearchTokenViewModel: ObservableObject {
             .removeDuplicates()
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink { [weak self] newData in
-                self?.getTokens()
+                guard let self = self else { return }
+                self.keyword = newData
+                self.getTokens()
             }
             .store(in: &cancellables)
 

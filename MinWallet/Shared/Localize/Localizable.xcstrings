@@ -44,9 +44,6 @@
     "0.3 ₳" : {
 
     },
-    "0.0422 ₳" : {
-
-    },
     "1 ADA = 22.612 MIN" : {
 
     },
@@ -330,6 +327,9 @@
 
     },
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
+
+    },
+    "Index" : {
 
     },
     "Input information" : {

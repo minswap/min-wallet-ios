@@ -8,70 +8,46 @@ struct TokenDetailView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-    @State
-    var progress: CGFloat = 0
-   
     @StateObject
     var viewModel: TokenDetailViewModel = .init()
     
-    private let minHeight: CGFloat = Self.smallLargeHeader
-    private let maxHeight: CGFloat = Self.heightLargeHeader + Self.smallLargeHeader
     var datas = ["DEX", "DeFi", "Smart contract", "Staking"]
+   
     
     var body: some View {
         ZStack {
-            ScalingHeaderScrollView {
-                ZStack {
-                    Color.colorBaseBackground.ignoresSafeArea()
-                    tokenDetailHeaderView
-                }
-            } content: {
-                VStack(spacing: 0) {
-                    tokenDetailChartView
-                        .padding(.top, .xl)
-                        .padding(.horizontal, .xl)
-                    tokenDetailStatisticView
-                        .padding(.top, .xl)
-                        .padding(.horizontal, .xl)
-                }
-            }
-            .height(min: minHeight + appSetting.safeArea + appSetting.extraSafeArea, max: maxHeight + appSetting.safeArea)
-            .allowsHeaderCollapse()
-            .collapseProgress($progress)
-            .disableBounces()
-
-            VStack(spacing: 0) {
-                HStack(spacing: .lg) {
-                    Button(
-                        action: {
-                            navigator.pop()
-                        },
-                        label: {
-                            Image(.icBack)
-                                .resizable()
-                                .frame(width: ._3xl, height: ._3xl)
-                                .padding(.md)
-                                .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
+            Color.colorBaseBackground.ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 0) {
+                smallHeader
+                    .padding(.top, .md)
+                    .padding(.bottom, .md)
+                OffsetObservingScrollView(offset: $viewModel.scrollOffset) {
+                    VStack(spacing: 0) {
+                        largeHeader.background {
+                            GeometryReader { proxy in
+                                Color.clear
+                                    .onAppear {
+                                        viewModel.sizeOfLargeHeader = proxy.size
+                                    }
+                            }
                         }
-                    )
-                    .buttonStyle(.plain)
-                    Spacer()
+                        tokenDetailChartView
+                            .padding(.top, .xl)
+                            .padding(.horizontal, .xl)
+                        tokenDetailStatisticView
+                            .padding(.top, .xl)
+                            .padding(.horizontal, .xl)
+                    }
                 }
-                .frame(height: 48)
-                .padding(.horizontal, .xl)
-                .padding(.top, appSetting.safeArea)
-                //                .background(.colorBaseBackground)
-                Spacer()
-            }
-            VStack {
                 Spacer()
                 tokenDetailBottomView
                     .background(.colorBaseBackground)
                     .padding(.horizontal, .xl)
             }
-
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 0)
+            }
         }
-        .ignoresSafeArea(edges: .top)
     }
 }
 
