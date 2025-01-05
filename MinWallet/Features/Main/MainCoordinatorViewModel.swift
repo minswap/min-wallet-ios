@@ -8,7 +8,7 @@ import MinWalletAPI
 @MainActor
 class MainCoordinatorViewModel: ObservableObject {
     @Published var routes: Routes<Screen> = []
-    
+
     init() {}
 }
 
@@ -83,17 +83,17 @@ enum SecuritySetting: Hashable {
 extension SecuritySetting {
     struct CreatePassSuccess: Hashable {
         private var id = UUID().uuidString
-        
+
         var onCreatePassSuccess: ((String) -> Void)?
-        
+
         init(onCreatePassSuccess: ((String) -> Void)?) {
             self.onCreatePassSuccess = onCreatePassSuccess
         }
-        
+
         static func == (lhs: SecuritySetting.CreatePassSuccess, rhs: SecuritySetting.CreatePassSuccess) -> Bool {
             lhs.id == rhs.id
         }
-        
+
         func hash(into hasher: inout Hasher) {
             hasher.combine(id)
         }
@@ -102,11 +102,11 @@ extension SecuritySetting {
 
 extension MainCoordinatorViewModel.Screen: Identifiable {
     var id: UUID { UUID() }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     static func == (lhs: MainCoordinatorViewModel.Screen, rhs: MainCoordinatorViewModel.Screen) -> Bool {
         switch (lhs, rhs) {
         case (.home, .home),
@@ -120,36 +120,36 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.searchToken, .searchToken),
             (.orderHistory, .orderHistory):
             return true
-            
+
         case (.tokenDetail, .tokenDetail):
             return true
         case (.changePasswordSuccess(let screenType1), .changePasswordSuccess(let screenType2)):
             return screenType1 == screenType2
-            
+
         case (.forgotPassword(let screenType1), .forgotPassword(let screenType2)):
             return screenType1 == screenType2
-            
+
         case (.createWallet(let screen1), .createWallet(let screen2)):
             return screen1 == screen2
-            
+
         case (.restoreWallet(let screen1), .restoreWallet(let screen2)):
             return screen1 == screen2
-            
+
         case (.walletSetting(let screen1), .walletSetting(let screen2)):
             return screen1 == screen2
-            
+
         case (.sendToken(let screen1), .sendToken(let screen2)):
             return screen1 == screen2
-            
+
         case (.swapToken(let screen1), .swapToken(let screen2)):
             return screen1 == screen2
-            
+
         case (.securitySetting(let setting1), .securitySetting(let setting2)):
             return setting1 == setting2
-            
+
         case (.orderHistoryDetail, .orderHistoryDetail):
             return true
-            
+
         default:
             return false
         }

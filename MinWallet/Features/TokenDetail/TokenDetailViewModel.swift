@@ -5,7 +5,7 @@ import Combine
 
 @MainActor
 class TokenDetailViewModel: ObservableObject {
-  
+
     var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .oneYear]
 
     @Published
@@ -18,24 +18,24 @@ class TokenDetailViewModel: ObservableObject {
     var chartDatas: [LineChartData] = []
     @Published
     var isFav: Bool = false
-    
+
     @Published
     var scrollOffset: CGPoint = .zero
     @Published
     var sizeOfLargeHeader: CGSize = .zero
     @Published
     var selectedIndex: Int?
-    
+
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
         return chartDatas[selectedIndex]
     }
-    
+
     private var cancellables: Set<AnyCancellable> = []
-  
+
     init(token: TokenProtocol = TokenProtocolDefault()) {
         self.token = token
-        
+
         $chartPeriod
             .removeDuplicates()
             .sink { [weak self] newData in
@@ -45,38 +45,39 @@ class TokenDetailViewModel: ObservableObject {
                 self.getPriceChart()
             }
             .store(in: &cancellables)
-        
+
         isFav = AppSetting.shared.tokenFav.contains(token.currencySymbol + "." + token.tokenName)
     }
-    
+
     private func getTokenDetail() {
         Task {
             let asset = try? await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
             self.topAsset = asset?.topAsset
         }
     }
-    
+
     private func getPoolsByPairs() {
         Task {
             let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
             let asset = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
         }
     }
-    
+
     private func getPriceChart() {
         Task {
             let input = PriceChartInput(assetIn: InputAsset(currencySymbol: "", tokenName: ""), assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName), lpAsset: InputAsset(currencySymbol: "d6aae2059baee188f74917493cf7637e679cd219bdfbbf4dcbeb1d0b", tokenName: "12166ca33ba1e6b68102f2d778c074ca3b75c7567868f9789474a3e6ea52fd3a"), period: .case(chartPeriod))
             let data = try? await MinWalletService.shared.fetch(query: PriceChartQuery(input: input))
-            let chartDatas = data?.priceChart.map({ priceChart in
-                //2025-01-03T07:00:00.000Z
-                let time = priceChart.time
-                let value = priceChart.value
-                return LineChartData(date: time.formatToDate, value: Double(value) ?? 0, type: .outside)
-            })
+            let chartDatas = data?.priceChart
+                .map({ priceChart in
+                    //2025-01-03T07:00:00.000Z
+                    let time = priceChart.time
+                    let value = priceChart.value
+                    return LineChartData(date: time.formatToDate, value: Double(value) ?? 0, type: .outside)
+                })
             self.chartDatas = chartDatas ?? []
         }
     }
-    
+
     func formatDate(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()
@@ -101,7 +102,7 @@ extension ChartPeriod: Identifiable {
     public var id: UUID {
         UUID()
     }
-    
+
     var title: String {
         switch self {
         case .oneDay:

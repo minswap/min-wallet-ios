@@ -29,7 +29,7 @@ extension TokenDetailView {
             let maxY: Double = (viewModel.chartDatas.map { $0.value }.max() ?? 0) * 1.5
             let minDate: Date = viewModel.chartDatas.map { $0.date }.min() ?? Date()
             let maxDate: Date = viewModel.chartDatas.map { $0.date }.max() ?? Date()
-//            let strideValue = maxY / 6
+            //            let strideValue = maxY / 6
             Chart {
                 ForEach(Array(zip(viewModel.chartDatas, viewModel.chartDatas.indices)), id: \.0) { item, index in
                     if let selectedIndex = viewModel.selectedIndex, selectedIndex == index {
@@ -50,11 +50,11 @@ extension TokenDetailView {
                     .lineStyle(.init(lineWidth: 1))
                 }
             }
-//            .chartXAxis {
-//                AxisMarks(preset: .extended, values: .stride(by: .day)) { value in
-//                    AxisValueLabel(format: .dateTime.day())
-//                }
-//            }
+            //            .chartXAxis {
+            //                AxisMarks(preset: .extended, values: .stride(by: .day)) { value in
+            //                    AxisValueLabel(format: .dateTime.day())
+            //                }
+            //            }
             .chartYAxis {
                 AxisMarks(preset: .extended, position: .leading)
             }
@@ -71,7 +71,7 @@ extension TokenDetailView {
                             guard currentX >= 0, currentX < chart.plotAreaSize.width else {
                                 return
                             }
-                            
+
                             guard let index = chart.value(atX: currentX, as: Int.self) else { return }
                             viewModel.selectedIndex = index
                         }

@@ -10,7 +10,7 @@ struct OrderHistoryDetailView: View {
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
     @State
     private var isExchangeRate: Bool = true
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -299,7 +299,7 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
-                        Text("ADA > MIN")
+                        Text(order?.detail.routes)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                     }

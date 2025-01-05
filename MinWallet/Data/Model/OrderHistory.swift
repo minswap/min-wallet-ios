@@ -142,7 +142,7 @@ extension OrderHistoryQuery.Data.Orders {
                     let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
 
                     let isVerified: Bool? = metaData?.isVerified
-                    let name: String? = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? "ADA"
+                    let name: String = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? ""
                     let decimals: Int? = metaData?.decimals ?? 6
 
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
@@ -150,7 +150,7 @@ extension OrderHistoryQuery.Data.Orders {
                         tokenName: tokenName,
                         isVerified: isVerified,
                         amount: amount / pow(10.0, Double(decimals ?? 0)),
-                        currency: name ?? "")
+                        currency: currencySymbol == UserInfo.TOKEN_ADA ? "ADA" : name)
                 })
             detail.outputs = json["outputs"].arrayValue
                 .map({ input in
@@ -164,17 +164,16 @@ extension OrderHistoryQuery.Data.Orders {
                     let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
 
                     let isVerified: Bool? = metaData?.isVerified
-                    let name: String? = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? "ADA"
+                    let name: String = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? ""
                     let decimals: Int? = metaData?.decimals ?? 6
-
 
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
                         isVerified: isVerified,
-                        amount: amount / pow(10.0, Double(decimals ?? 0)),
+                        amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
                         satisfiedAmount: satisfiedAmount / pow(10.0, Double(decimals ?? 0)),
-                        currency: name ?? "")
+                        currency: currencySymbol == UserInfo.TOKEN_ADA ? "ADA" : name)
                 })
             detail.tradingFee = json["lpFees"].arrayValue
                 .map({ input in
@@ -188,9 +187,9 @@ extension OrderHistoryQuery.Data.Orders {
                     let isVerified: Bool? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                    let name: String? =
+                    let name: String =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? tokenName?.adaName ?? tokenName
-                        ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
+                        ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? ""
                     let decimals: Int? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
@@ -199,8 +198,8 @@ extension OrderHistoryQuery.Data.Orders {
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
                         isVerified: isVerified,
-                        amount: amount / pow(10.0, Double(decimals ?? 0)),
-                        currency: name ?? "")
+                        amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
+                        currency: currencySymbol == UserInfo.TOKEN_ADA ? "ADA" : name)
                 })
 
             detail.changeAmount = json["change_amount"].arrayValue
@@ -215,9 +214,9 @@ extension OrderHistoryQuery.Data.Orders {
                     let isVerified: Bool? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                    let name: String? =
+                    let name: String =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? tokenName?.adaName ?? tokenName
-                        ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker
+                        ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? ""
                     let decimals: Int? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
@@ -226,8 +225,8 @@ extension OrderHistoryQuery.Data.Orders {
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
                         isVerified: isVerified,
-                        amount: amount / pow(10.0, Double(decimals ?? 0)),
-                        currency: name ?? "")
+                        amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
+                        currency: currencySymbol == UserInfo.TOKEN_ADA ? "ADA" : name)
                 })
 
             let name = detail.inputs.map { $0.currency }.joined(separator: ", ") + " - " + detail.outputs.map({ $0.currency }).joined(separator: ",")
@@ -235,6 +234,7 @@ extension OrderHistoryQuery.Data.Orders {
             detail.depositAda = json["depositAda"]["$bigint"].doubleValue
             detail.estimatedBatcherFee = json["maxBatcherFee"]["$bigint"].doubleValue
             detail.executedBatcherFee = json["executedBatcherFee"]["$bigint"].doubleValue
+            detail.routes = routes
         }
     }
 }
@@ -253,7 +253,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
         var tradingFee: [Token] = []
         var changeAmount: [Token] = []
         var isKillable: Int?
-        //TODO: route
+        var routes: String = ""
     }
 }
 
@@ -277,5 +277,48 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
     var isShowRouter: Bool {
         guard let action = order?.action.value else { return false }
         return OrderHistoryQuery.Data.Orders.WrapOrder.TYPE_SHOW_ROUTER.contains(action)
+    }
+
+    //TODO: cuongnv check lai link pools
+    private var routes: String {
+        let linkPools = order?.linkedPools ?? []
+        var assetMap: [String: String] = [:]
+        var reverseMap: [String: String] = [:]
+
+        let linkPoolsCount = linkPools.count
+        for (poolIndex, pool) in linkPools.enumerated() {
+            for (index, asset) in pool.assets.enumerated() where index < pool.assets.count - 1 {
+                if poolIndex < linkPoolsCount && poolIndex > 0 {
+
+                    let current = asset.metadata?.ticker ?? ""
+                    let next = pool.assets[index + 1].metadata?.ticker ?? ""
+
+                    let currentNextPool = linkPools[poolIndex - 1].assets.first?.metadata?.ticker ?? ""
+                    let nextNextPool = linkPools[poolIndex - 1].assets.last?.metadata?.ticker ?? ""
+                    if assetMap[currentNextPool] == next || assetMap[nextNextPool] == next {
+                        assetMap[next] = current
+                        reverseMap[current] = next
+                    } else {
+                        assetMap[current] = next
+                        reverseMap[next] = current
+                    }
+                } else {
+                    let current = asset.metadata?.ticker ?? ""
+                    let next = pool.assets[index + 1].metadata?.ticker ?? ""
+                    assetMap[current] = next
+                    reverseMap[next] = current
+                }
+            }
+        }
+        var startingAsset = assetMap.keys.first { reverseMap[$0] == nil }
+        guard startingAsset != nil else { return "" }
+
+        var chain: [String] = []
+        while let asset = startingAsset {
+            chain.append(asset)
+            startingAsset = assetMap[asset]
+        }
+
+        return chain.reversed().joined(separator: " > ")
     }
 }

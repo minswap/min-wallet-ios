@@ -10,10 +10,10 @@ struct TokenDetailView: View {
     var appSetting: AppSetting
     @StateObject
     var viewModel: TokenDetailViewModel = .init()
-    
+
     var datas = ["DEX", "DeFi", "Smart contract", "Staking"]
-   
-    
+
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()

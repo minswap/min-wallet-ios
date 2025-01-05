@@ -88,7 +88,7 @@ class AppSetting: ObservableObject {
             objectWillChange.send()
         }
     }
-    
+
     ///symbol + . +  token name
     @UserDefault("token_fav", defaultValue: [])
     var tokenFav: [String] {
@@ -96,7 +96,7 @@ class AppSetting: ObservableObject {
             objectWillChange.send()
         }
     }
-    
+
     var authenticationType: AuthenticationType {
         get { AuthenticationType(rawValue: securityType) ?? .biometric }
         set { securityType = newValue.rawValue }

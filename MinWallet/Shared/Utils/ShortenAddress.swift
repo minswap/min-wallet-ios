@@ -39,7 +39,7 @@ extension String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
-
+        inputFormatter.timeZone = .gmt
         guard let date = inputFormatter.date(from: inputDateString) else {
             return self
         }
@@ -53,18 +53,21 @@ extension String {
 
     var formatToDate: Date {
         let inputDateString = self
-        
+
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
-        
+        inputFormatter.timeZone = .gmt
         return inputFormatter.date(from: inputDateString) ?? Date()
     }
+
+    //TODO: cuongnv check lai hex to text
     var adaName: String? {
         if self.count < 6 {
             return self
         }
-        if self.count == 6 {
+
+        if self.count == 6 || self.count == 8 || self.count == 10 {
             return self.hexToText
         }
 

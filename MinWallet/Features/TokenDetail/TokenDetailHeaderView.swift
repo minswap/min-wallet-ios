@@ -21,7 +21,7 @@ extension TokenDetailView {
             let offset = viewModel.scrollOffset.y
             let heightOrders = viewModel.sizeOfLargeHeader.height
             let opacity = abs(max(0, min(1, (offset - heightOrders / 2) / (heightOrders / 2))))
-            
+
             HStack(alignment: .center, spacing: 12) {
                 TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
                     .frame(width: 24, height: 24)
@@ -29,11 +29,13 @@ extension TokenDetailView {
                     Text(viewModel.token.name)
                         .foregroundStyle(.colorBaseTent)
                         .font(.labelMediumSecondary)
-                    let chartSelected = viewModel.chartDataSelected?.value.formatNumber(
-                        prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
-                        suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
-                        font: .paragraphXSmall,
-                        fontColor: .colorInteractiveTentPrimarySub) ?? "-"
+                    let chartSelected =
+                        viewModel.chartDataSelected?.value
+                        .formatNumber(
+                            prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
+                            suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                            font: .paragraphXSmall,
+                            fontColor: .colorInteractiveTentPrimarySub) ?? "-"
                     HStack(spacing: 4) {
                         Text(chartSelected)
                         Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
@@ -63,7 +65,7 @@ extension TokenDetailView {
         .background(.colorBaseBackground)
         .padding(.horizontal, .xl)
     }
-    
+
     var largeHeader: some View {
         VStack(alignment: .leading, spacing: 0) {
             Color.clear.frame(height: .md)
@@ -84,11 +86,13 @@ extension TokenDetailView {
                         })
                     Spacer()
                 })
-            let chartSelected = viewModel.chartDataSelected?.value.formatNumber(
-                prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
-                suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
-                font: .titleH4,
-                fontColor: .colorBaseTent) ?? "-"
+            let chartSelected =
+                viewModel.chartDataSelected?.value
+                .formatNumber(
+                    prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
+                    suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                    font: .titleH4,
+                    fontColor: .colorBaseTent) ?? "-"
             Text(chartSelected)
                 .padding(.top, .lg)
                 .padding(.bottom, .xs)

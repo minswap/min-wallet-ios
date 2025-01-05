@@ -13,7 +13,7 @@ struct TokenLogoView: View {
     var body: some View {
         ZStack {
             Group {
-                if currencySymbol?.isEmpty == true && (tokenName?.isEmpty) == true {
+                if currencySymbol?.isEmpty == true && (tokenName?.isEmpty) == true || currencySymbol == UserInfo.TOKEN_ADA {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
@@ -23,7 +23,7 @@ struct TokenLogoView: View {
             }
             .frame(width: 28, height: 28)
             .clipShape(Circle())
-            if isVerified == true {
+            if isVerified == true || currencySymbol == UserInfo.TOKEN_ADA {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 16, height: 16)
