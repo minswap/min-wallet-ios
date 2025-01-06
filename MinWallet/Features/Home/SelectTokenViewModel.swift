@@ -16,7 +16,7 @@ class SelectTokenViewModel: ObservableObject {
     private var hasLoadMore: Bool = true
     private var isFetching: Bool = true
     private var ignoreToken: TokenProtocol?
-    
+
     private var cancellables: Set<AnyCancellable> = []
     var showSkeleton: Bool = true
 

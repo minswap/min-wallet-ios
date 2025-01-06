@@ -12,7 +12,7 @@ struct SwapTokenView: View {
     private var isShowSwapSetting: Bool = false
     @StateObject
     private var viewModel: SwapTokenViewModel = .init()
-    
+
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
@@ -35,10 +35,12 @@ struct SwapTokenView: View {
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
                     HStack(alignment: .center, spacing: .md) {
-                        TokenLogoView(currencySymbol: viewModel.tokenPay?.currencySymbol,
-                                      tokenName: viewModel.tokenPay?.tokenName,
-                                      isVerified: viewModel.tokenPay?.isVerified)
-                            .frame(width: 24, height: 24)
+                        TokenLogoView(
+                            currencySymbol: viewModel.tokenPay?.currencySymbol,
+                            tokenName: viewModel.tokenPay?.tokenName,
+                            isVerified: viewModel.tokenPay?.isVerified
+                        )
+                        .frame(width: 24, height: 24)
                         Text(viewModel.tokenPay?.name)
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
@@ -52,9 +54,12 @@ struct SwapTokenView: View {
                     .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                     .contentShape(.rect)
                     .onTapGesture {
-                        navigator.presentSheet(.selectToken(ignoreToken: nil, onSelectToken: { token in
-                            self.viewModel.tokenPay = token
-                        }))
+                        navigator.presentSheet(
+                            .selectToken(
+                                ignoreToken: nil,
+                                onSelectToken: { token in
+                                    self.viewModel.tokenPay = token
+                                }))
                     }
                 }
                 HStack(alignment: .center, spacing: 4) {
@@ -94,9 +99,11 @@ struct SwapTokenView: View {
                     Spacer()
                     HStack(alignment: .center, spacing: .md) {
                         if let tokenReceive = viewModel.tokenReceive {
-                            TokenLogoView(currencySymbol: tokenReceive.currencySymbol,
-                                          tokenName: tokenReceive.tokenName,
-                                          isVerified: tokenReceive.isVerified)
+                            TokenLogoView(
+                                currencySymbol: tokenReceive.currencySymbol,
+                                tokenName: tokenReceive.tokenName,
+                                isVerified: tokenReceive.isVerified
+                            )
                             .frame(width: 24, height: 24)
                             Text(tokenReceive.name)
                                 .font(.labelMediumSecondary)
@@ -120,9 +127,12 @@ struct SwapTokenView: View {
                     .padding(.md)
                     .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                     .onTapGesture {
-                        navigator.presentSheet(.selectToken(ignoreToken: nil, onSelectToken: { token in
-                            self.viewModel.tokenReceive = token
-                        }))
+                        navigator.presentSheet(
+                            .selectToken(
+                                ignoreToken: nil,
+                                onSelectToken: { token in
+                                    self.viewModel.tokenReceive = token
+                                }))
                     }
                 }
                 HStack(alignment: .center, spacing: 4) {
@@ -144,7 +154,7 @@ struct SwapTokenView: View {
             .padding(.top, .xs)
             Spacer()
             CustomButton(title: "Swap") {
-//                navigator.push(.createWallet(.biometricSetup))
+                //                navigator.push(.createWallet(.biometricSetup))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

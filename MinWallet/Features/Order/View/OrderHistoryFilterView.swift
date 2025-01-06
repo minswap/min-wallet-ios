@@ -114,15 +114,15 @@ struct OrderHistoryFilterView: View {
                                 .stroke(showSelectFromDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectFromDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            withAnimation {
-                                guard !showSelectFromDate else {
-                                    showSelectToDate = false
-                                    showSelectFromDate = false
-                                    return
-                                }
+                            //                            withAnimation {
+                            guard !showSelectFromDate else {
                                 showSelectToDate = false
-                                showSelectFromDate = true
+                                showSelectFromDate = false
+                                return
                             }
+                            showSelectToDate = false
+                            showSelectFromDate = true
+                            //                            }
                         }
                 }
 
@@ -139,15 +139,15 @@ struct OrderHistoryFilterView: View {
                                 .stroke(showSelectToDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectToDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            withAnimation {
-                                guard !showSelectToDate else {
-                                    showSelectToDate = false
-                                    showSelectFromDate = false
-                                    return
-                                }
-                                showSelectToDate = true
+                            //                            withAnimation {
+                            guard !showSelectToDate else {
+                                showSelectToDate = false
                                 showSelectFromDate = false
+                                return
                             }
+                            showSelectToDate = true
+                            showSelectFromDate = false
+                            //                            }
                         }
                 }
             }
@@ -198,10 +198,10 @@ struct OrderHistoryFilterView: View {
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
                     if showSelectToDate || showSelectFromDate {
-                        withAnimation {
-                            showSelectToDate = false
-                            showSelectFromDate = false
-                        }
+                        //                        withAnimation {
+                        showSelectToDate = false
+                        showSelectFromDate = false
+                        //                        }
                         return
                     }
                     isShowFilterView = false
@@ -254,7 +254,8 @@ extension OrderHistoryFilterView {
                     $0.append(
                         action
                             .withAttributes([
-                                .font(.labelSmallSecondary ?? .systemFont(ofSize: 14, weight: .medium))]))
+                                .font(.labelSmallSecondary ?? .systemFont(ofSize: 14, weight: .medium))
+                            ]))
                 }
                 .gkWidth(consideringHeight: 32) + .lg * 2 + .md
         }

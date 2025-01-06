@@ -275,7 +275,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder.Detail {
 
 extension OrderHistoryQuery.Data.Orders.WrapOrder {
     static let TYPE_SHOW_ROUTER: [OrderV2Action] = [OrderV2Action.market, .limit, .stopLoss, .oco, .partialSwap]
-    
+
     var isShowRouter: Bool {
         guard let action = order?.action.value else { return false }
         return OrderHistoryQuery.Data.Orders.WrapOrder.TYPE_SHOW_ROUTER.contains(action)

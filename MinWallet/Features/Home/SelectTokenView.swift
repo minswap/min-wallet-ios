@@ -13,12 +13,12 @@ struct SelectTokenView: View {
         self._viewModel = .init(wrappedValue: viewModel)
         self.onSelectToken = onSelectToken
     }
-    
+
     @StateObject
     private var viewModel: SelectTokenViewModel
-    
+
     var onSelectToken: ((TokenProtocol) -> Void)?
-    
+
     var body: some View {
         VStack(spacing: .md) {
             HStack(spacing: .md) {

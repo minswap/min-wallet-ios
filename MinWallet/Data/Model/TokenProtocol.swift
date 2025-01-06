@@ -19,7 +19,7 @@ protocol TokenProtocol {
 extension TokenProtocol {
     var adaName: String {
         if ticker.isBlank {
-            return UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ??  tokenName.hexToText ?? ""
+            return UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? tokenName.hexToText ?? ""
         } else {
             return ticker
         }
@@ -175,15 +175,15 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
     var isVerified: Bool {
         metadata?.isVerified ?? false
     }
-    
+
     var ticker: String {
         UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? metadata?.ticker ?? ""
     }
-    
+
     var name: String {
         metadata?.name ?? ""
     }
-    
+
     var priceValue: Double {
         /* TODO: price value
         let decimals = pow(10.0, Double(amountAsset.asset.metadata?.decimals ?? 0))
@@ -192,11 +192,11 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
          */
         return 0
     }
-    
+
     var percentChange: Double {
         0
     }
-    
+
     var subPriceValue: Double {
         0
     }

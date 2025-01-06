@@ -69,11 +69,11 @@ extension String {
         if self.count <= 6 || self.count == 10 {
             return self.hexToText
         }
-        
+
         if self.count > 10 {
             return String(self.prefix(10) + "...")
         }
-        
+
         return self
     }
 }
@@ -197,31 +197,35 @@ extension Double {
 
 
 extension NSAttributedString {
-    
+
     func gkWidth(consideringHeight height: CGFloat) -> CGFloat {
         let size = self.gkSize(consideringHeight: height)
         return size.width
     }
-    
+
     func gkHeight(consideringWidth width: CGFloat) -> CGFloat {
         let size = self.gkSize(consideringWidth: width)
         return size.height
     }
-    
+
     func gkSize(consideringHeight height: CGFloat) -> CGSize {
         let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
         return self.gkSize(consideringRect: constraintRect)
     }
-    
+
     func gkSize(consideringWidth width: CGFloat) -> CGSize {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
         return self.gkSize(consideringRect: constraintRect)
     }
-    
+
     func gkSize(consideringRect size: CGSize) -> CGSize {
-        let rect = self.boundingRect(with: size,
-                                     options: [.usesLineFragmentOrigin, .usesFontLeading],
-                                     context: nil).integral
+        let rect =
+            self.boundingRect(
+                with: size,
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                context: nil
+            )
+            .integral
         return rect.size
     }
 }

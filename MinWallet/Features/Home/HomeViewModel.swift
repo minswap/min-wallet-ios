@@ -46,7 +46,7 @@ class HomeViewModel: ObservableObject {
                 showSkeletonDic[tabType] = !isLoadMore
             }
             self.isFetching[tabType] = true
-            
+
             switch tabType {
             case .market:
                 input = TopAssetsInput()
@@ -69,7 +69,7 @@ class HomeViewModel: ObservableObject {
                 self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit
                 self.showSkeletonDic[tabType] = false
                 self.isFetching[tabType] = false
-                
+
             case .yourToken:
                 let tokens = try? await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
                 let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
