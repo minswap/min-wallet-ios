@@ -58,6 +58,7 @@ struct OrderHistoryItemView: View {
                     }
                 }
             }
+            /*
             if order?.order?.status.value == .created {
                 HStack(spacing: Spacing.md) {
                     Image(.icWarningYellow)
@@ -84,6 +85,7 @@ struct OrderHistoryItemView: View {
                     .frame(height: 36)
                 }
             }
+             */
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }

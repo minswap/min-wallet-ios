@@ -63,6 +63,7 @@ struct OrderHistoryDetailView: View {
                     }
                 }
             }
+            /*
             Spacer()
             if order?.order?.status.value == .created {
                 HStack(spacing: .xl) {
@@ -77,6 +78,7 @@ struct OrderHistoryDetailView: View {
                 }
                 .padding(EdgeInsets(top: 24, leading: .xl, bottom: .xl, trailing: .xl))
             }
+             */
         }
         .modifier(
             BaseContentView(

@@ -1,6 +1,5 @@
 import SwiftUI
 import FlowStacks
-import ScalingHeaderScrollView
 
 
 struct TokenDetailView: View {
