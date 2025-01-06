@@ -27,7 +27,7 @@ extension MainCoordinatorViewModel {
         case restoreWallet(_ screen: RestoreWalletScreen)
         case walletSetting(_ screen: WalletSettingScreen)
         case sendToken(_ screen: SendTokenScreen)
-        case selectToken
+        case selectToken(ignoreToken: TokenProtocol?, onSelectToken: ((TokenProtocol) -> Void)?)
         case receiveToken
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken

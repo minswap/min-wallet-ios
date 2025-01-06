@@ -97,8 +97,8 @@ struct MainCoordinator: View {
                                 .presentationDragIndicator(.visible)
                         }
 
-                    case .selectToken:
-                        SelectTokenView().presentationDragIndicator(.visible)
+                    case let .selectToken(ignoreToken, onSelectToken):
+                        SelectTokenView(viewModel: SelectTokenViewModel(ignoreToken: ignoreToken), onSelectToken: onSelectToken).presentationDragIndicator(.visible)
 
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)

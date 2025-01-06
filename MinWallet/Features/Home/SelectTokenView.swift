@@ -1,23 +1,32 @@
 import SwiftUI
 import MinWalletAPI
+import FlowStacks
 
 
 struct SelectTokenView: View {
-    @State
-    private var keyword: String = ""
-    @State
-    var tokens: [TopAssetsQuery.Data.TopAssets.TopAsset] = []
+    @EnvironmentObject
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
 
+    init(viewModel: SelectTokenViewModel, onSelectToken: ((TokenProtocol) -> Void)?) {
+        self._viewModel = .init(wrappedValue: viewModel)
+        self.onSelectToken = onSelectToken
+    }
+    
+    @StateObject
+    private var viewModel: SelectTokenViewModel
+    
+    var onSelectToken: ((TokenProtocol) -> Void)?
+    
     var body: some View {
         VStack(spacing: .md) {
             HStack(spacing: .md) {
                 Image(.icSearch)
                     .resizable()
                     .frame(width: 20, height: 20)
-                TextField("", text: $keyword)
-                    .placeholder("Search", when: keyword.isEmpty)
+                TextField("", text: $viewModel.keyword)
+                    .placeholder("Search", when: viewModel.keyword.isEmpty)
                     .focused($isFocus)
                     .lineLimit(1)
             }
@@ -26,15 +35,42 @@ struct SelectTokenView: View {
             .padding(.horizontal, .xl)
             .padding(.top, 30)
             ScrollView {
-                LazyVStack(
-                    spacing: 0,
-                    content: {
-                        ForEach(0..<tokens.count, id: \.self) { index in
-                            TokenListItemView(token: tokens[index])
-                        }
-                    })
+                if viewModel.showSkeleton {
+                    ForEach(0..<20, id: \.self) { index in
+                        TokenListItemSkeletonView()
+                    }
+                    .padding(.top, .xl)
+                } else if viewModel.tokens.isEmpty {
+                    HStack {
+                        Spacer()
+                        Text("No data")
+                            .padding(.horizontal, .xl)
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorBaseTent)
+                        Spacer()
+                    }
+                    .padding(.top, .xl)
+                } else {
+                    LazyVStack(
+                        spacing: 0,
+                        content: {
+                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                                let item = viewModel.tokens[index]
+                                TokenListItemView(token: item)
+                                    .onTapGesture {
+                                        navigator.dismiss()
+                                        onSelectToken?(item)
+                                    }
+                                    .onAppear() {
+                                        viewModel.loadMoreData(item: item)
+                                    }
+                            }
+                        })
+                }
             }
-            Spacer()
+            .refreshable {
+                viewModel.getTokens()
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -51,5 +87,5 @@ struct SelectTokenView: View {
 }
 
 #Preview {
-    SelectTokenView()
+    SelectTokenView(viewModel: SelectTokenViewModel(ignoreToken: TokenProtocolDefault()), onSelectToken: { _ in })
 }

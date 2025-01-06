@@ -16,6 +16,7 @@ class HomeViewModel: ObservableObject {
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
     private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
+    private var isFetching: [TokenListView.TabType: Bool] = [:]
     private let limit: Int = 20
 
     private var cancellables: Set<AnyCancellable> = []
@@ -44,7 +45,8 @@ class HomeViewModel: ObservableObject {
             if showSkeletonDic[tabType] == nil {
                 showSkeletonDic[tabType] = !isLoadMore
             }
-
+            self.isFetching[tabType] = true
+            
             switch tabType {
             case .market:
                 input = TopAssetsInput()
@@ -66,7 +68,8 @@ class HomeViewModel: ObservableObject {
                 self.searchAfter = tokens?.topAssets.searchAfter
                 self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit
                 self.showSkeletonDic[tabType] = false
-
+                self.isFetching[tabType] = false
+                
             case .yourToken:
                 let tokens = try? await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
                 let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
@@ -75,12 +78,13 @@ class HomeViewModel: ObservableObject {
                 self.tokensDic[tabType] = normalToken + lpToken
                 self.hasLoadMoreDic[tabType] = false
                 self.showSkeletonDic[tabType] = false
+                self.isFetching[tabType] = false
             }
         }
     }
 
     func loadMoreData(item: TokenProtocol) {
-        guard (hasLoadMoreDic[tabType] ?? true) else { return }
+        guard (hasLoadMoreDic[tabType] ?? true), !(isFetching[tabType] ?? true) else { return }
         let tokens = tokensDic[tabType] ?? []
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
         if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {

@@ -26,6 +26,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "Asset": return MinWalletAPI.Objects.Asset
     case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
+    case "AssetsResponse": return MinWalletAPI.Objects.AssetsResponse
     case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
     case "OrderHistoryResponse": return MinWalletAPI.Objects.OrderHistoryResponse
     case "OrderLinkedPool": return MinWalletAPI.Objects.OrderLinkedPool

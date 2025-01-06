@@ -21,3 +21,4 @@ extension Token {
 
 extension TopAssetsInput: Then {}
 extension TopAssetsSortInput: Then {}
+extension AssetsInput: Then {}

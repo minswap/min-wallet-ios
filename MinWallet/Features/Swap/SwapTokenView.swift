@@ -4,13 +4,15 @@ import FlowStacks
 
 struct SwapTokenView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
     @State
     private var amountYouPay: String = ""
     @State
     private var isShowSwapSetting: Bool = false
-
+    @StateObject
+    private var viewModel: SwapTokenViewModel = .init()
+    
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
@@ -33,10 +35,11 @@ struct SwapTokenView: View {
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
                     HStack(alignment: .center, spacing: .md) {
-                        Image(.ada)
-                            .resizable()
+                        TokenLogoView(currencySymbol: viewModel.tokenPay?.currencySymbol,
+                                      tokenName: viewModel.tokenPay?.tokenName,
+                                      isVerified: viewModel.tokenPay?.isVerified)
                             .frame(width: 24, height: 24)
-                        Text("ADA")
+                        Text(viewModel.tokenPay?.name)
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
                         Image(.icDown)
@@ -47,6 +50,12 @@ struct SwapTokenView: View {
                     }
                     .padding(.md)
                     .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        navigator.presentSheet(.selectToken(ignoreToken: nil, onSelectToken: { token in
+                            self.viewModel.tokenPay = token
+                        }))
+                    }
                 }
                 HStack(alignment: .center, spacing: 4) {
                     Text("$0.0")
@@ -84,14 +93,24 @@ struct SwapTokenView: View {
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
                     HStack(alignment: .center, spacing: .md) {
-                        Image(.icAdd)
-                            .resizable()
+                        if let tokenReceive = viewModel.tokenReceive {
+                            TokenLogoView(currencySymbol: tokenReceive.currencySymbol,
+                                          tokenName: tokenReceive.tokenName,
+                                          isVerified: tokenReceive.isVerified)
                             .frame(width: 24, height: 24)
-                        Text("Select token")
-                            .font(.labelMediumSecondary)
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: false)
-                            .foregroundStyle(.colorBaseTent)
+                            Text(tokenReceive.name)
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorBaseTent)
+                        } else {
+                            Image(.icAdd)
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                            Text("Select token")
+                                .font(.labelMediumSecondary)
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .foregroundStyle(.colorBaseTent)
+                        }
                         Image(.icDown)
                             .resizable()
                             .renderingMode(.template)
@@ -100,6 +119,11 @@ struct SwapTokenView: View {
                     }
                     .padding(.md)
                     .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
+                    .onTapGesture {
+                        navigator.presentSheet(.selectToken(ignoreToken: nil, onSelectToken: { token in
+                            self.viewModel.tokenReceive = token
+                        }))
+                    }
                 }
                 HStack(alignment: .center, spacing: 4) {
                     Text("$0.0")
@@ -120,7 +144,7 @@ struct SwapTokenView: View {
             .padding(.top, .xs)
             Spacer()
             CustomButton(title: "Swap") {
-                //navigator.push(.createWallet(.biometricSetup))
+//                navigator.push(.createWallet(.biometricSetup))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

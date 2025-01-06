@@ -42,7 +42,7 @@ struct SendTokenView: View {
             .padding(.top, .lg)
             Button(
                 action: {
-                    navigator.presentSheet(.selectToken)
+                    navigator.presentSheet(.selectToken(ignoreToken: nil, onSelectToken: { _ in }))
                 },
                 label: {
                     Text("Add Token")

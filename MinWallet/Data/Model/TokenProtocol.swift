@@ -159,3 +159,35 @@ struct TokenProtocolDefault: TokenProtocol {
 
     init() {}
 }
+
+
+extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
+    var isVerified: Bool {
+        metadata?.isVerified ?? false
+    }
+    
+    var ticker: String {
+        metadata?.ticker ?? ""
+    }
+    
+    var name: String {
+        metadata?.name ?? ""
+    }
+    
+    var priceValue: Double {
+        /* TODO: price value
+        let decimals = pow(10.0, Double(amountAsset.asset.metadata?.decimals ?? 0))
+        let price = (Double(amountAsset.amount) ?? 0) / decimals
+        return price
+         */
+        return 0
+    }
+    
+    var percentChange: Double {
+        0
+    }
+    
+    var subPriceValue: Double {
+        0
+    }
+}
