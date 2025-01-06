@@ -43,17 +43,7 @@ class PortfolioOverviewViewModel: ObservableObject {
         let adaHandleNameQuery = try? await MinWalletService.shared.fetch(query: ADAHandleNameQuery(address: address))
         let tokenName = adaHandleNameQuery?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName ?? ""
 
-        let adaName: String? = {
-            guard tokenName.count > 8 else { return tokenName.hexToText }
-            let prefix = tokenName.prefix(8)
-            if prefix.first == "0" && prefix.last == "0" {
-                let remaining = String(tokenName.dropFirst(8))
-                return remaining.hexToText
-            } else {
-                return tokenName.hexToText
-            }
-        }()
-
+        let adaName: String? = tokenName.adaName
         return adaName ?? ""
     }
 

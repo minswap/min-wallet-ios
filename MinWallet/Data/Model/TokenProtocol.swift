@@ -16,6 +16,16 @@ protocol TokenProtocol {
     var subPriceValue: Double { get }
 }
 
+extension TokenProtocol {
+    var adaName: String {
+        if ticker.isBlank {
+            return UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ??  tokenName.hexToText ?? ""
+        } else {
+            return ticker
+        }
+    }
+}
+
 extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
     var currencySymbol: String {
         asset.currencySymbol
@@ -30,7 +40,7 @@ extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
     }
 
     var ticker: String {
-        asset.metadata?.ticker ?? ""
+        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? asset.metadata?.ticker ?? ""
     }
 
     var name: String {
@@ -65,7 +75,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
     }
 
     var ticker: String {
-        amountAsset.asset.metadata?.ticker ?? ""
+        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? amountAsset.asset.metadata?.ticker ?? ""
     }
 
     var name: String {
@@ -101,7 +111,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
     }
 
     var ticker: String {
-        amountLPAsset.asset.metadata?.ticker ?? ""
+        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? amountLPAsset.asset.metadata?.ticker ?? ""
     }
 
     var name: String {
@@ -167,7 +177,7 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
     }
     
     var ticker: String {
-        metadata?.ticker ?? ""
+        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? metadata?.ticker ?? ""
     }
     
     var name: String {

@@ -61,17 +61,20 @@ extension String {
         return inputFormatter.date(from: inputDateString) ?? Date()
     }
 
-    //TODO: cuongnv check lai hex to text
     var adaName: String? {
-        if self.count < 6 {
-            return self
+        let prefix = self.prefix(8)
+        if prefix.first == "0" && prefix.last == "0" || self.count == 8 {
+            return String(prefix).hexToText
         }
-
-        if self.count == 6 || self.count == 8 || self.count == 10 {
+        if self.count <= 6 || self.count == 10 {
             return self.hexToText
         }
-
-        return self.shortenAddress
+        
+        if self.count > 10 {
+            return String(self.prefix(10) + "...")
+        }
+        
+        return self
     }
 }
 

@@ -1,10 +1,20 @@
-import Foundation
+import SwiftUI
 
 
 class UserInfo: ObservableObject {
     static let POLICY_ID: String = "f0ff48bbb7bbe9d59a40f1ce90e9e9d0ff5002ec48f232b49ca0fb9a"
     static let TOKEN_ADA: String = "lovelace"
-
+    static let TOKEN_LP: String = "e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86"
+    static let TOKEN_NAME_DEFAULT: [String /*currency or token name*/: String] = [
+        "lovelace" : "ADA",
+        "e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86" : "LP",
+        "4d494e" : "MIN", //token name
+    ]
+    static let TOKEN_IMAGE_DEFAULT: [String: ImageResource] = [
+        "lovelace" : .ada,
+        "4d494e" : .min,
+    ]
+    
     static let MIN_WALLET_KEY: String = "MIN_WALLET_KEY"
 
     static let nickNameDefault: String = "My MinWallet"

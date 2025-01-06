@@ -21,7 +21,7 @@ struct TokenListItemView: View {
                 .frame(width: 28, height: 28)
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
-                    Text(token?.ticker)
+                    Text(token?.adaName)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
