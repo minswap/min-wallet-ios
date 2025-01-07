@@ -34,6 +34,60 @@ query OrderHistoryQuery($ordersInput2: OrderV2Input!) {
       status
       updatedAt
       updatedTxId
+      overSlippage {
+        ... on DepositOverSlippageDetail {
+          receivedLPAmount
+          type
+        }
+        ... on DexV2WithdrawImbalanceOverSlippageDetail {
+          receivedAmountA
+          receivedAmountB
+          type
+        }
+        ... on OCOOverSlipageDetail {
+          receivedAmount
+          type
+        }
+        ... on PartialFillOverSlippageDetail {
+          swapableAmount
+          type
+        }
+        ... on RoutingOverSlipageDetail {
+          receivedAmount
+          type
+        }
+        ... on StableswapWithdrawImbalanceOverSlippageDetail {
+          necessaryLPAmount
+          type
+        }
+        ... on StopOverSlippageDetail {
+          receivedAmount
+          type
+        }
+        ... on SwapExactInOverSlippageDetail {
+          maxReceivableOut
+          receivedAmount
+          type
+        }
+        ... on SwapExactOutOverSlippageDetail {
+          maxReceivableOut
+          necessarySwapAmount
+          type
+        }
+        ... on WithdrawOverSlippageDetail {
+          maxWithdrawawls
+          receivedAmounts
+          type
+        }
+        ... on ZapInOverSlippageDetail {
+          receivedLPAmount
+          type
+        }
+        ... on ZapOutOverSlippageDetail {
+          receivedAmount
+          type
+        }
+      }
     }
     cursor {
       stableswap

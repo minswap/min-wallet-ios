@@ -36,14 +36,12 @@ struct OrderHistoryDetailView: View {
                     .padding(.horizontal, .xl)
                     .frame(height: 36)
                     .padding(.top, .md)
-                    if order?.order?.status.value == .created {
+                    if let order = order, let warningContent = order.overSlippageWarning, order.order?.status.value == .created {
                         HStack(spacing: Spacing.md) {
                             Image(.icWarningYellow)
                                 .resizable()
                                 .frame(width: 16, height: 16)
-                            Text("Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”")
-                                .font(.paragraphXSmall)
-                                .foregroundStyle(.colorInteractiveToneWarning)
+                            Text(warningContent)
                                 .lineLimit(nil)
                         }
                         .padding(.md)

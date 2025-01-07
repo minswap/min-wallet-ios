@@ -7,7 +7,7 @@ public class OrderHistoryQuery: GraphQLQuery {
   public static let operationName: String = "OrderHistoryQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId } cursor { __typename stableswap v1 v2 } } }"#
+      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId overSlippage { __typename ... on DepositOverSlippageDetail { receivedLPAmount type } ... on DexV2WithdrawImbalanceOverSlippageDetail { receivedAmountA receivedAmountB type } ... on OCOOverSlipageDetail { receivedAmount type } ... on PartialFillOverSlippageDetail { swapableAmount type } ... on RoutingOverSlipageDetail { receivedAmount type } ... on StableswapWithdrawImbalanceOverSlippageDetail { necessaryLPAmount type } ... on StopOverSlippageDetail { receivedAmount type } ... on SwapExactInOverSlippageDetail { maxReceivableOut receivedAmount type } ... on SwapExactOutOverSlippageDetail { maxReceivableOut necessarySwapAmount type } ... on WithdrawOverSlippageDetail { maxWithdrawawls receivedAmounts type } ... on ZapInOverSlippageDetail { receivedLPAmount type } ... on ZapOutOverSlippageDetail { receivedAmount type } } } cursor { __typename stableswap v1 v2 } } }"#
     ))
 
   public var ordersInput2: OrderV2Input
@@ -66,6 +66,7 @@ public class OrderHistoryQuery: GraphQLQuery {
           .field("status", GraphQLEnum<MinWalletAPI.OrderV2Status>.self),
           .field("updatedAt", String?.self),
           .field("updatedTxId", String?.self),
+          .field("overSlippage", OverSlippage?.self),
         ] }
 
         public var action: GraphQLEnum<MinWalletAPI.OrderV2Action> { __data["action"] }
@@ -78,6 +79,7 @@ public class OrderHistoryQuery: GraphQLQuery {
         public var status: GraphQLEnum<MinWalletAPI.OrderV2Status> { __data["status"] }
         public var updatedAt: String? { __data["updatedAt"] }
         public var updatedTxId: String? { __data["updatedTxId"] }
+        public var overSlippage: OverSlippage? { __data["overSlippage"] }
 
         /// Orders.Order.TxIn
         ///
@@ -194,6 +196,268 @@ public class OrderHistoryQuery: GraphQLQuery {
               public var ticker: String? { __data["ticker"] }
               public var name: String? { __data["name"] }
             }
+          }
+        }
+
+        /// Orders.Order.OverSlippage
+        ///
+        /// Parent Type: `OrderOverSlippageDetail`
+        public struct OverSlippage: MinWalletAPI.SelectionSet {
+          public let __data: DataDict
+          public init(_dataDict: DataDict) { __data = _dataDict }
+
+          public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Unions.OrderOverSlippageDetail }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .inlineFragment(AsDepositOverSlippageDetail.self),
+            .inlineFragment(AsDexV2WithdrawImbalanceOverSlippageDetail.self),
+            .inlineFragment(AsOCOOverSlipageDetail.self),
+            .inlineFragment(AsPartialFillOverSlippageDetail.self),
+            .inlineFragment(AsRoutingOverSlipageDetail.self),
+            .inlineFragment(AsStableswapWithdrawImbalanceOverSlippageDetail.self),
+            .inlineFragment(AsStopOverSlippageDetail.self),
+            .inlineFragment(AsSwapExactInOverSlippageDetail.self),
+            .inlineFragment(AsSwapExactOutOverSlippageDetail.self),
+            .inlineFragment(AsWithdrawOverSlippageDetail.self),
+            .inlineFragment(AsZapInOverSlippageDetail.self),
+            .inlineFragment(AsZapOutOverSlippageDetail.self),
+          ] }
+
+          public var asDepositOverSlippageDetail: AsDepositOverSlippageDetail? { _asInlineFragment() }
+          public var asDexV2WithdrawImbalanceOverSlippageDetail: AsDexV2WithdrawImbalanceOverSlippageDetail? { _asInlineFragment() }
+          public var asOCOOverSlipageDetail: AsOCOOverSlipageDetail? { _asInlineFragment() }
+          public var asPartialFillOverSlippageDetail: AsPartialFillOverSlippageDetail? { _asInlineFragment() }
+          public var asRoutingOverSlipageDetail: AsRoutingOverSlipageDetail? { _asInlineFragment() }
+          public var asStableswapWithdrawImbalanceOverSlippageDetail: AsStableswapWithdrawImbalanceOverSlippageDetail? { _asInlineFragment() }
+          public var asStopOverSlippageDetail: AsStopOverSlippageDetail? { _asInlineFragment() }
+          public var asSwapExactInOverSlippageDetail: AsSwapExactInOverSlippageDetail? { _asInlineFragment() }
+          public var asSwapExactOutOverSlippageDetail: AsSwapExactOutOverSlippageDetail? { _asInlineFragment() }
+          public var asWithdrawOverSlippageDetail: AsWithdrawOverSlippageDetail? { _asInlineFragment() }
+          public var asZapInOverSlippageDetail: AsZapInOverSlippageDetail? { _asInlineFragment() }
+          public var asZapOutOverSlippageDetail: AsZapOutOverSlippageDetail? { _asInlineFragment() }
+
+          /// Orders.Order.OverSlippage.AsDepositOverSlippageDetail
+          ///
+          /// Parent Type: `DepositOverSlippageDetail`
+          public struct AsDepositOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.DepositOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedLPAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedLPAmount: MinWalletAPI.BigInt { __data["receivedLPAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsDexV2WithdrawImbalanceOverSlippageDetail
+          ///
+          /// Parent Type: `DexV2WithdrawImbalanceOverSlippageDetail`
+          public struct AsDexV2WithdrawImbalanceOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.DexV2WithdrawImbalanceOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedAmountA", MinWalletAPI.BigInt.self),
+              .field("receivedAmountB", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedAmountA: MinWalletAPI.BigInt { __data["receivedAmountA"] }
+            public var receivedAmountB: MinWalletAPI.BigInt { __data["receivedAmountB"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsOCOOverSlipageDetail
+          ///
+          /// Parent Type: `OCOOverSlipageDetail`
+          public struct AsOCOOverSlipageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.OCOOverSlipageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedAmount: MinWalletAPI.BigInt { __data["receivedAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsPartialFillOverSlippageDetail
+          ///
+          /// Parent Type: `PartialFillOverSlippageDetail`
+          public struct AsPartialFillOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.PartialFillOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("swapableAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var swapableAmount: MinWalletAPI.BigInt { __data["swapableAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsRoutingOverSlipageDetail
+          ///
+          /// Parent Type: `RoutingOverSlipageDetail`
+          public struct AsRoutingOverSlipageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.RoutingOverSlipageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedAmount: MinWalletAPI.BigInt { __data["receivedAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsStableswapWithdrawImbalanceOverSlippageDetail
+          ///
+          /// Parent Type: `StableswapWithdrawImbalanceOverSlippageDetail`
+          public struct AsStableswapWithdrawImbalanceOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.StableswapWithdrawImbalanceOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("necessaryLPAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var necessaryLPAmount: MinWalletAPI.BigInt { __data["necessaryLPAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsStopOverSlippageDetail
+          ///
+          /// Parent Type: `StopOverSlippageDetail`
+          public struct AsStopOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.StopOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedAmount: MinWalletAPI.BigInt { __data["receivedAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsSwapExactInOverSlippageDetail
+          ///
+          /// Parent Type: `SwapExactInOverSlippageDetail`
+          public struct AsSwapExactInOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.SwapExactInOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("maxReceivableOut", MinWalletAPI.BigInt?.self),
+              .field("receivedAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var maxReceivableOut: MinWalletAPI.BigInt? { __data["maxReceivableOut"] }
+            public var receivedAmount: MinWalletAPI.BigInt { __data["receivedAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsSwapExactOutOverSlippageDetail
+          ///
+          /// Parent Type: `SwapExactOutOverSlippageDetail`
+          public struct AsSwapExactOutOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.SwapExactOutOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("maxReceivableOut", MinWalletAPI.BigInt?.self),
+              .field("necessarySwapAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var maxReceivableOut: MinWalletAPI.BigInt? { __data["maxReceivableOut"] }
+            public var necessarySwapAmount: MinWalletAPI.BigInt { __data["necessarySwapAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsWithdrawOverSlippageDetail
+          ///
+          /// Parent Type: `WithdrawOverSlippageDetail`
+          public struct AsWithdrawOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.WithdrawOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("maxWithdrawawls", [MinWalletAPI.BigInt]?.self),
+              .field("receivedAmounts", [MinWalletAPI.BigInt].self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var maxWithdrawawls: [MinWalletAPI.BigInt]? { __data["maxWithdrawawls"] }
+            public var receivedAmounts: [MinWalletAPI.BigInt] { __data["receivedAmounts"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsZapInOverSlippageDetail
+          ///
+          /// Parent Type: `ZapInOverSlippageDetail`
+          public struct AsZapInOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.ZapInOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedLPAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedLPAmount: MinWalletAPI.BigInt { __data["receivedLPAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
+          }
+
+          /// Orders.Order.OverSlippage.AsZapOutOverSlippageDetail
+          ///
+          /// Parent Type: `ZapOutOverSlippageDetail`
+          public struct AsZapOutOverSlippageDetail: MinWalletAPI.InlineFragment {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public typealias RootEntityType = OrderHistoryQuery.Data.Orders.Order.OverSlippage
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.ZapOutOverSlippageDetail }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("receivedAmount", MinWalletAPI.BigInt.self),
+              .field("type", GraphQLEnum<MinWalletAPI.OrderOverSlippage>.self),
+            ] }
+
+            public var receivedAmount: MinWalletAPI.BigInt { __data["receivedAmount"] }
+            public var type: GraphQLEnum<MinWalletAPI.OrderOverSlippage> { __data["type"] }
           }
         }
       }

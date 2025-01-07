@@ -58,15 +58,12 @@ struct OrderHistoryItemView: View {
                     }
                 }
             }
-            /*
-            if order?.order?.status.value == .created {
+            if let order = order, let warningContent = order.overSlippageWarning, order.order?.status.value == .created {
                 HStack(spacing: Spacing.md) {
                     Image(.icWarningYellow)
                         .resizable()
                         .frame(width: 16, height: 16)
-                    Text("Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”")
-                        .font(.paragraphXSmall)
-                        .foregroundStyle(.colorInteractiveToneWarning)
+                    Text(warningContent)
                         .lineLimit(nil)
                 }
                 .padding(.md)
@@ -74,6 +71,7 @@ struct OrderHistoryItemView: View {
                     RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
                 )
                 .frame(minHeight: 32)
+                /*
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
 
@@ -84,8 +82,8 @@ struct OrderHistoryItemView: View {
                     }
                     .frame(height: 36)
                 }
+                 */
             }
-             */
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }

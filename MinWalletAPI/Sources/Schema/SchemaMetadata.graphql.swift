@@ -27,20 +27,32 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
     case "AssetsResponse": return MinWalletAPI.Objects.AssetsResponse
+    case "DepositOverSlippageDetail": return MinWalletAPI.Objects.DepositOverSlippageDetail
+    case "DexV2WithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.DexV2WithdrawImbalanceOverSlippageDetail
+    case "OCOOverSlipageDetail": return MinWalletAPI.Objects.OCOOverSlipageDetail
     case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
     case "OrderHistoryResponse": return MinWalletAPI.Objects.OrderHistoryResponse
     case "OrderLinkedPool": return MinWalletAPI.Objects.OrderLinkedPool
     case "OrderPaginationCursor": return MinWalletAPI.Objects.OrderPaginationCursor
+    case "PartialFillOverSlippageDetail": return MinWalletAPI.Objects.PartialFillOverSlippageDetail
     case "PortfolioLPPosition": return MinWalletAPI.Objects.PortfolioLPPosition
     case "PortfolioNFTPosition": return MinWalletAPI.Objects.PortfolioNFTPosition
     case "PortfolioOverview": return MinWalletAPI.Objects.PortfolioOverview
     case "PortfolioTokenPosition": return MinWalletAPI.Objects.PortfolioTokenPosition
     case "Query": return MinWalletAPI.Objects.Query
+    case "RoutingOverSlipageDetail": return MinWalletAPI.Objects.RoutingOverSlipageDetail
     case "SimpleChart": return MinWalletAPI.Objects.SimpleChart
+    case "StableswapWithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.StableswapWithdrawImbalanceOverSlippageDetail
+    case "StopOverSlippageDetail": return MinWalletAPI.Objects.StopOverSlippageDetail
+    case "SwapExactInOverSlippageDetail": return MinWalletAPI.Objects.SwapExactInOverSlippageDetail
+    case "SwapExactOutOverSlippageDetail": return MinWalletAPI.Objects.SwapExactOutOverSlippageDetail
     case "TopAsset": return MinWalletAPI.Objects.TopAsset
     case "TopAssetsResponse": return MinWalletAPI.Objects.TopAssetsResponse
     case "TxIn": return MinWalletAPI.Objects.TxIn
     case "WalletAssetsPositions": return MinWalletAPI.Objects.WalletAssetsPositions
+    case "WithdrawOverSlippageDetail": return MinWalletAPI.Objects.WithdrawOverSlippageDetail
+    case "ZapInOverSlippageDetail": return MinWalletAPI.Objects.ZapInOverSlippageDetail
+    case "ZapOutOverSlippageDetail": return MinWalletAPI.Objects.ZapOutOverSlippageDetail
     default: return nil
     }
   }

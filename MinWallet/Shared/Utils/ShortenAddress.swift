@@ -229,3 +229,9 @@ extension NSAttributedString {
         return rect.size
     }
 }
+
+extension String {
+    func toExact(decimal: Double) -> Double {
+        return (Double(self) ?? 0) / pow(10.0, decimal)
+    }
+}
