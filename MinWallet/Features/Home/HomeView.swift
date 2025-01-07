@@ -119,7 +119,7 @@ struct HomeView: View {
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         let netValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.netAdaValue : (portfolioOverviewViewModel.netAdaValue * appSetting.currencyInADA)
-                        let netValueString: String = netValue.formatNumber
+                        let netValueString: String = netValue.formatSNumber(maximumFractionDigits: 2)
                         let components = netValueString.split(separator: ".")
                         Text(prefix + String(components.first ?? ""))
                             .font(.titleH3)
@@ -149,7 +149,7 @@ struct HomeView: View {
                                 .foregroundStyle(foregroundStyle)
                             Circle().frame(width: 4, height: 4)
                                 .foregroundStyle(.colorBaseTent)
-                            Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatNumber + "%")
+                            Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
                             Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)

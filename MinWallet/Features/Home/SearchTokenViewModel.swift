@@ -79,7 +79,7 @@ class SearchTokenViewModel: ObservableObject {
 
     func loadMoreData(item: TopAssetsQuery.Data.TopAssets.TopAsset) {
         guard hasLoadMore, !isFetching else { return }
-        let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
+        let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -2)
         if tokens.firstIndex(where: { ($0.asset.currencySymbol + $0.asset.tokenName) == (item.asset.currencySymbol + $0.asset.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }

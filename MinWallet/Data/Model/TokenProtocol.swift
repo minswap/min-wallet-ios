@@ -14,15 +14,25 @@ protocol TokenProtocol {
 
     var priceValue: Double { get }
     var subPriceValue: Double { get }
+    var amount: Double { get }
+    var uniqueID: String  { get }
 }
 
 extension TokenProtocol {
     var adaName: String {
         if ticker.isBlank {
-            return UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? tokenName.hexToText ?? ""
+            return UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? tokenName.adaName ?? ""
         } else {
             return ticker
         }
+    }
+    
+    var amount: Double {
+        0
+    }
+    
+    var uniqueID: String {
+        currencySymbol + "." + tokenName
     }
 }
 
@@ -88,6 +98,10 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
         return price
     }
 
+    var amount: Double {
+        priceValue
+    }
+    
     var percentChange: Double {
         Double(pnl24H) ?? 0
     }
@@ -128,6 +142,10 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
         return price
     }
 
+    var amount: Double {
+        priceValue
+    }
+    
     var subPriceValue: Double {
         Double(lpAdaValue) ?? 0
     }

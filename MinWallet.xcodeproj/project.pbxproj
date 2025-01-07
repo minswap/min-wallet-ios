@@ -84,6 +84,8 @@
 		96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A032CF4C60D0046A20E /* SideMenuView.swift */; };
 		96679BC82D2B853C00C9AE26 /* SwapTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BC72D2B853C00C9AE26 /* SwapTokenViewModel.swift */; };
 		96679BCA2D2B879D00C9AE26 /* SelectTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BC92D2B879D00C9AE26 /* SelectTokenViewModel.swift */; };
+		96679BCD2D2CE00A00C9AE26 /* SendTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BCC2D2CE00A00C9AE26 /* SendTokenViewModel.swift */; };
+		96679BCF2D2D22F700C9AE26 /* AmountTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */; };
 		966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966920FE2D100CCD00D503B7 /* HUDState.swift */; };
 		966921022D102B3D00D503B7 /* MinWallet+Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */; };
 		96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */; };
@@ -254,6 +256,8 @@
 		96679BC72D2B853C00C9AE26 /* SwapTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenViewModel.swift; sourceTree = "<group>"; };
 		96679BC92D2B879D00C9AE26 /* SelectTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTokenViewModel.swift; sourceTree = "<group>"; };
 		96679BCB2D2B87FB00C9AE26 /* AssetsQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AssetsQuery.graphql; sourceTree = "<group>"; };
+		96679BCC2D2CE00A00C9AE26 /* SendTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTokenViewModel.swift; sourceTree = "<group>"; };
+		96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountTextField.swift; sourceTree = "<group>"; };
 		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MinWallet+Mapper.swift"; sourceTree = "<group>"; };
 		967A8D022D26AEDA007146BE /* TopAsset.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAsset.graphql; sourceTree = "<group>"; };
@@ -419,6 +423,7 @@
 				96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */,
 				96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */,
 				965592152CF858E700301DDB /* SecurePasswordTextField.swift */,
+				96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */,
 				960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */,
 				960D6B282CFF194D0017AF29 /* CustomWebImage.swift */,
 				96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */,
@@ -747,6 +752,7 @@
 			children = (
 				9655924C2CFB38B500301DDB /* SignContractView.swift */,
 				9655924E2CFB39EE00301DDB /* SendTokenView.swift */,
+				96679BCC2D2CE00A00C9AE26 /* SendTokenViewModel.swift */,
 				965592522CFB3A2C00301DDB /* ToWalletAddressView.swift */,
 				965592542CFB3A3700301DDB /* ConfirmSendTokenView.swift */,
 			);
@@ -1084,6 +1090,7 @@
 				9600DED42CF2B757005D997C /* GettingStartedView.swift in Sources */,
 				96DC05492CF752B500A78356 /* MainCoordinator.swift in Sources */,
 				5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */,
+				96679BCF2D2D22F700C9AE26 /* AmountTextField.swift in Sources */,
 				965592432CFABBF900301DDB /* WalletAccountView.swift in Sources */,
 				96DC05382CF5AF9B00A78356 /* LanguageView.swift in Sources */,
 				96DC05232CF55C5400A78356 /* SettingView.swift in Sources */,
@@ -1164,6 +1171,7 @@
 				96F7FA0D2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift in Sources */,
 				965592062CF8224700301DDB /* ReInputSeedPhraseView.swift in Sources */,
 				965592012CF813BF00301DDB /* AppGeneralError.swift in Sources */,
+				96679BCD2D2CE00A00C9AE26 /* SendTokenViewModel.swift in Sources */,
 				96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */,
 				9655924D2CFB38B500301DDB /* SignContractView.swift in Sources */,
 				965592162CF858E700301DDB /* SecurePasswordTextField.swift in Sources */,

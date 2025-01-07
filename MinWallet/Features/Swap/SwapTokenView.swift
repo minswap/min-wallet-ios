@@ -56,9 +56,9 @@ struct SwapTokenView: View {
                     .onTapGesture {
                         navigator.presentSheet(
                             .selectToken(
-                                ignoreToken: nil,
+                                tokensSelected: [viewModel.tokenReceive],
                                 onSelectToken: { token in
-                                    self.viewModel.tokenPay = token
+                                    self.viewModel.tokenPay = token.first
                                 }))
                     }
                 }
@@ -129,9 +129,9 @@ struct SwapTokenView: View {
                     .onTapGesture {
                         navigator.presentSheet(
                             .selectToken(
-                                ignoreToken: nil,
+                                tokensSelected: [viewModel.tokenPay],
                                 onSelectToken: { token in
-                                    self.viewModel.tokenReceive = token
+                                    self.viewModel.tokenReceive = token.first
                                 }))
                     }
                 }

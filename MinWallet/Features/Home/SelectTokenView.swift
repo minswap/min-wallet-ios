@@ -9,7 +9,7 @@ struct SelectTokenView: View {
     @FocusState
     private var isFocus: Bool
 
-    init(viewModel: SelectTokenViewModel, onSelectToken: ((TokenProtocol) -> Void)?) {
+    init(viewModel: SelectTokenViewModel, onSelectToken: (([TokenProtocol]) -> Void)?) {
         self._viewModel = .init(wrappedValue: viewModel)
         self.onSelectToken = onSelectToken
     }
@@ -17,7 +17,7 @@ struct SelectTokenView: View {
     @StateObject
     private var viewModel: SelectTokenViewModel
 
-    var onSelectToken: ((TokenProtocol) -> Void)?
+    var onSelectToken: (([TokenProtocol]) -> Void)?
 
     var body: some View {
         VStack(spacing: .md) {
@@ -59,7 +59,7 @@ struct SelectTokenView: View {
                                 TokenListItemView(token: item)
                                     .onTapGesture {
                                         navigator.dismiss()
-                                        onSelectToken?(item)
+                                        onSelectToken?([item])
                                     }
                                     .onAppear() {
                                         viewModel.loadMoreData(item: item)
@@ -87,5 +87,5 @@ struct SelectTokenView: View {
 }
 
 #Preview {
-    SelectTokenView(viewModel: SelectTokenViewModel(ignoreToken: TokenProtocolDefault()), onSelectToken: { _ in })
+    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()]), onSelectToken: { _ in })
 }
