@@ -20,13 +20,16 @@ struct SwapTokenView: View {
             contentView
             Spacer()
             CustomButton(title: "Swap") {
-                switch appSetting.authenticationType {
-                case .biometric:
-                    break
-                case .password:
-                    break
-                }
-                viewModel.isShowRouting = true
+                viewModel.swapToken(
+                    appSetting: appSetting,
+                    signContract: {
+                        navigator.presentSheet(.sendToken(.signContract(onSuccess: {
+                            
+                        })))
+                    },
+                    signSuccess: {
+                        
+                    })
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

@@ -18,7 +18,15 @@ class SwapTokenViewModel: ObservableObject {
 
     }
 
-    func swapToken() {
-
+    func swapToken(appSetting: AppSetting, signContract: (() -> Void)?, signSuccess: (() -> Void)?) {
+        Task {
+            switch appSetting.authenticationType {
+            case .biometric:
+                try await appSetting.reAuthenticateUser()
+                signSuccess?()
+            case .password:
+                signSuccess?()
+            }
+        }
     }
 }

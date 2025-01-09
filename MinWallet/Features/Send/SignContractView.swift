@@ -39,7 +39,6 @@ struct SignContractView: View {
                     )
                     .padding(.horizontal, .xl)
             }
-
             Spacer()
             CustomButton(title: "Sign") {
                 guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
@@ -53,7 +52,6 @@ struct SignContractView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
                 Button("Done") {
                     isFocus = false
                 }
