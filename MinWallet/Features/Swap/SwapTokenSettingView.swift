@@ -32,7 +32,6 @@ struct SwapTokenSettingView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Spacer()
             VStack(spacing: 0) {
                 Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                     .padding(.vertical, .md)

@@ -23,8 +23,7 @@ extension TokenDetailView {
             let opacity = abs(max(0, min(1, (offset - heightOrders / 2) / (heightOrders / 2))))
 
             HStack(alignment: .center, spacing: 12) {
-                TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
-                    .frame(width: 24, height: 24)
+                TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified, size: .init(width: 24, height: 24))
                 VStack(alignment: .leading, spacing: 2) {
                     Text(viewModel.token.name)
                         .foregroundStyle(.colorBaseTent)
@@ -72,8 +71,7 @@ extension TokenDetailView {
             HStack(
                 alignment: .center,
                 content: {
-                    TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
-                        .frame(width: 24, height: 24)
+                    TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified, size: .init(width: 24, height: 24))
                     HStack(
                         alignment: .firstTextBaseline, spacing: 4,
                         content: {

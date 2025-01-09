@@ -92,8 +92,8 @@ struct MainCoordinator: View {
                             ToWalletAddressView().navigationBarHidden(true)
                         case .confirm:
                             ConfirmSendTokenView().navigationBarHidden(true)
-                        case .signContract:
-                            SignContractView()
+                        case let .signContract(onSuccess):
+                            SignContractView(onSignSuccess: onSuccess)
                                 .presentationDragIndicator(.visible)
                         }
 

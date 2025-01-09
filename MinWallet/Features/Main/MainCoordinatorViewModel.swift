@@ -63,11 +63,30 @@ enum WalletSettingScreen: Hashable {
     case changePasswordSuccess
 }
 
-enum SendTokenScreen: Hashable {
+enum SendTokenScreen: Hashable, Identifiable {
     case sendToken
     case toWallet
     case confirm
-    case signContract
+    case signContract(onSuccess: (() -> Void)?)
+
+    var id: UUID { UUID() }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: SendTokenScreen, rhs: SendTokenScreen) -> Bool {
+        switch (lhs, rhs) {
+        case (.sendToken, .sendToken),
+            (.toWallet, .toWallet),
+            (.confirm, .confirm):
+            return true
+        case (.signContract, .signContract):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum SwapTokenScreen: Hashable {

@@ -93,7 +93,6 @@ struct OrderHistoryDetailView: View {
                 let inputs = order?.detail.inputs ?? []
                 ForEach(inputs, id: \.self) { input in
                     TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified)
-                        .frame(width: 24, height: 24)
                 }
             }
             Image(.icBack)
@@ -104,8 +103,7 @@ struct OrderHistoryDetailView: View {
             HStack(spacing: -4) {
                 let outputs = order?.detail.outputs ?? []
                 ForEach(outputs, id: \.self) { output in
-                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified)
-                        .frame(width: 24, height: 24)
+                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
                 }
             }
             Text(order?.order?.type.value?.title)

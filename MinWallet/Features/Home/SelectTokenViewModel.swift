@@ -10,19 +10,19 @@ class SelectTokenViewModel: ObservableObject {
         case single
         case multiple
     }
-    
+
     enum TokenType {
         case yourToken
         case market
     }
-    
+
     @Published
     var tokens: [TokenProtocol] = []
     @Published
     var keyword: String = ""
     @Published
     var mode: Mode = .single
-    
+
     private var input: AssetsInput = .init()
     private var searchAfter: [String]? = nil
     private var hasLoadMore: Bool = true
@@ -30,10 +30,10 @@ class SelectTokenViewModel: ObservableObject {
     ////currencySymbol + . + tokenName
     private let tokensSelected: [TokenProtocol]
     private var tokenType: TokenType = .yourToken
-    
+
     private var cancellables: Set<AnyCancellable> = []
     var showSkeleton: Bool = true
-    
+
     init(
         tokensSelected: [TokenProtocol?],
         mode: Mode = .multiple,
@@ -42,7 +42,7 @@ class SelectTokenViewModel: ObservableObject {
         self.mode = mode
         self.tokensSelected = tokensSelected.compactMap({ $0 })
         self.tokenType = tokenType
-        
+
         $keyword
             .removeDuplicates()
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
@@ -57,15 +57,15 @@ class SelectTokenViewModel: ObservableObject {
     func getTokens(isLoadMore: Bool = false) {
         showSkeleton = !isLoadMore
         isFetching = true
-        
+
         switch tokenType {
         case .yourToken:
             Task {
                 let tokens = try? await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
                 let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
                 let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
-                
-                self.tokens = normalToken + lpToken
+
+                self.tokens = keyword.isEmpty ? (normalToken + lpToken) : (normalToken + lpToken).filter({ $0.adaName.lowercased().contains(keyword.lowercased()) })
                 self.hasLoadMore = false
                 self.showSkeleton = false
                 self.isFetching = false
@@ -84,7 +84,7 @@ class SelectTokenViewModel: ObservableObject {
                         $0.term = nil
                     }
                 })
-            
+
             Task {
                 let tokens = try? await MinWalletService.shared.fetch(query: AssetsQuery(input: .some(self.input)))
                 let _tokens = tokens?.assets.assets ?? []

@@ -5,37 +5,37 @@ extension String {
         if self.count <= 12 {
             return self
         }
-        
+
         let first6Characters = self.prefix(6)
         let last6Characters = self.suffix(6)
         return "\(first6Characters)...\(last6Characters)"
     }
-    
+
     var doubleValue: Double {
         Double(self) ?? 0
     }
-    
+
     var hexToText: String? {
         var hexStr = self
         var text = ""
-        
+
         while hexStr.count >= 2 {
             let hexChar = String(hexStr.prefix(2))
             hexStr = String(hexStr.dropFirst(2))
-            
+
             if let charCode = UInt8(hexChar, radix: 16) {
                 text.append(Character(UnicodeScalar(charCode)))
             } else {
                 return nil
             }
         }
-        
+
         return text
     }
-    
+
     var formattedDateGMT: String {
         let inputDateString = self
-        
+
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -43,51 +43,51 @@ extension String {
         guard let date = inputFormatter.date(from: inputDateString) else {
             return self
         }
-        
+
         let outputFormatter = DateFormatter()
         outputFormatter.dateFormat = "yyyy-MM-dd HH:mm 'GMT'XXX"
-        
+
         outputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return outputFormatter.string(from: date)
     }
-    
+
     var formatToDate: Date {
         let inputDateString = self
-        
+
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         inputFormatter.timeZone = .gmt
         return inputFormatter.date(from: inputDateString) ?? Date()
     }
-    
+
     var adaName: String? {
         let prefix = self.prefix(8)
         if prefix.first == "0" && prefix.last == "0" && self.count >= 8 {
             let hexToText = String(self.dropFirst(8)).hexToText
             return hexToText?.isHumanReadable == true ? hexToText : String(self.prefix(10))
         }
-        
+
         if self.count <= 6 || self.count == 10 {
             let hexToText = self.hexToText
             return hexToText?.isHumanReadable == true ? hexToText : self
         }
-        
+
         if self.count > 10 {
             return String(self.prefix(10) + "...")
         }
-        
+
         return self
     }
-    
+
     var isHumanReadable: Bool {
         do {
             let pattern = #"^[\w\s\[\].,-]*$"#
-            
+
             let regex = try NSRegularExpression(pattern: pattern)
             let range = NSRange(location: 0, length: self.utf16.count)
             let match = regex.firstMatch(in: self, options: [], range: range)
-            
+
             return match != nil
         } catch {
             return false
@@ -114,7 +114,7 @@ extension Double {
         formatter.minimumFractionDigits = 0
         return formatter.string(from: NSNumber(value: self)) ?? ""
     }
-    
+
     func formatNumber(
         prefix: String = "",
         suffix: String = "",

@@ -7,18 +7,18 @@ struct SendTokenView: View {
         case none
         case row(id: String)
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    
+
     @FocusState
     private var focusedField: Focusable?
-    
+
     @State
     private var amount: String = ""
     @StateObject
     private var viewModel = SendTokenViewModel()
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -39,7 +39,7 @@ struct SendTokenView: View {
                                 .font(.labelMediumSecondary)
                                 .foregroundStyle(.colorInteractiveToneHighlight)
                                 .onTapGesture {
-                                    
+
                                 }
                             Image(.ada)
                                 .resizable()
@@ -63,15 +63,14 @@ struct SendTokenView: View {
                             )
                             HStack(spacing: .md) {
                                 AmountTextField(value: amountBinding, maxValue: item.token.amount)
-                                    .focused($focusedField, equals: .row(id: item.token.uniqueID ))
+                                    .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
                                     .font(.labelMediumSecondary)
                                     .foregroundStyle(.colorInteractiveToneHighlight)
                                     .onTapGesture {
                                         viewModel.tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
                                     }
-                                TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false)
-                                    .frame(width: 24, height: 24)
+                                TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
                                 Text(item.token.adaName)
                                     .font(.labelSemiSecondary)
                                     .foregroundStyle(.colorBaseTent)
@@ -82,12 +81,15 @@ struct SendTokenView: View {
                             .padding(.horizontal, .xl)
                             .padding(.top, .lg)
                         }
-                        
+
                         Button(
                             action: {
-                                navigator.presentSheet(.selectToken(tokensSelected: viewModel.tokens.map({ $0.token }), onSelectToken: { tokens in
-                                    viewModel.addToken(tokens: tokens)
-                                }))
+                                navigator.presentSheet(
+                                    .selectToken(
+                                        tokensSelected: viewModel.tokens.map({ $0.token }),
+                                        onSelectToken: { tokens in
+                                            viewModel.addToken(tokens: tokens)
+                                        }))
                             },
                             label: {
                                 Text("Add Token")
@@ -115,7 +117,7 @@ struct SendTokenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     focusedField = nil
                 }

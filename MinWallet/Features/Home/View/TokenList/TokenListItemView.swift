@@ -18,7 +18,6 @@ struct TokenListItemView: View {
     var body: some View {
         HStack(spacing: .xl) {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
-                .frame(width: 28, height: 28)
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
                     Text(token?.adaName)
@@ -89,7 +88,6 @@ struct TokenListItemSkeletonView: View {
         HStack(spacing: .xl) {
             if showLogo {
                 TokenLogoView(currencySymbol: nil, tokenName: nil, isVerified: false)
-                    .frame(width: 28, height: 28)
                     .skeleton(with: true, size: .init(width: 28, height: 28))
             }
             VStack(spacing: 4) {

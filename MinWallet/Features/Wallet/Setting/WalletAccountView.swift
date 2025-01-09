@@ -101,7 +101,7 @@ struct WalletAccountView: View {
                     let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
                     let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.adaValue : (portfolioOverviewViewModel.adaValue * appSetting.currencyInADA)
-                    Text(prefix + adaValue.formatNumber + suffix)
+                    Text(prefix + adaValue.formatSNumber(maximumFractionDigits: 2) + suffix)
                         .font(.paragraphSemi)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                 }

@@ -86,6 +86,8 @@
 		96679BCA2D2B879D00C9AE26 /* SelectTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BC92D2B879D00C9AE26 /* SelectTokenViewModel.swift */; };
 		96679BCD2D2CE00A00C9AE26 /* SendTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BCC2D2CE00A00C9AE26 /* SendTokenViewModel.swift */; };
 		96679BCF2D2D22F700C9AE26 /* AmountTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */; };
+		96679BD32D2E765A00C9AE26 /* SwapTokenInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */; };
+		96679BD52D2E7FC700C9AE26 /* SwapTokenRoutingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */; };
 		966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966920FE2D100CCD00D503B7 /* HUDState.swift */; };
 		966921022D102B3D00D503B7 /* MinWallet+Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */; };
 		96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */; };
@@ -258,6 +260,8 @@
 		96679BCB2D2B87FB00C9AE26 /* AssetsQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AssetsQuery.graphql; sourceTree = "<group>"; };
 		96679BCC2D2CE00A00C9AE26 /* SendTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTokenViewModel.swift; sourceTree = "<group>"; };
 		96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountTextField.swift; sourceTree = "<group>"; };
+		96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenInfoView.swift; sourceTree = "<group>"; };
+		96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenRoutingView.swift; sourceTree = "<group>"; };
 		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MinWallet+Mapper.swift"; sourceTree = "<group>"; };
 		967A8D022D26AEDA007146BE /* TopAsset.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAsset.graphql; sourceTree = "<group>"; };
@@ -771,6 +775,8 @@
 			isa = PBXGroup;
 			children = (
 				96B467072CFC093400FA3211 /* SwapTokenView.swift */,
+				96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */,
+				96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */,
 				96679BC72D2B853C00C9AE26 /* SwapTokenViewModel.swift */,
 				96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */,
 			);
@@ -1103,6 +1109,7 @@
 				9655924F2CFB39EE00301DDB /* SendTokenView.swift in Sources */,
 				5718EB1D2CEDF72000CDE34D /* ShortenAddress.swift in Sources */,
 				96FEDC132D23A4A4006AD24F /* OrderHistoryItemView.swift in Sources */,
+				96679BD32D2E765A00C9AE26 /* SwapTokenInfoView.swift in Sources */,
 				965592462CFAC68200301DDB /* ReceiveTokenView.swift in Sources */,
 				965592412CFABBF900301DDB /* ChangePasswordView.swift in Sources */,
 				96DC05342CF5A87B00A78356 /* TimeZoneView.swift in Sources */,
@@ -1124,6 +1131,7 @@
 				96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */,
 				96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */,
 				96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */,
+				96679BD52D2E7FC700C9AE26 /* SwapTokenRoutingView.swift in Sources */,
 				964FCE7B2D1269AC003BF81F /* TokenEntity.swift in Sources */,
 				960D6B362D013ABD0017AF29 /* KeyboardObserver.swift in Sources */,
 				96FE0CFC2CF423D1008E4BFD /* SizeReader.swift in Sources */,

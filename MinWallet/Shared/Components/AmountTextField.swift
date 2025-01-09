@@ -4,7 +4,7 @@ import SwiftUI
 struct AmountTextField: View {
     @Binding var value: String
     @State var maxValue: Double?
-    
+
     var body: some View {
         TextField("", text: $value)
             .keyboardType(.decimalPad)
@@ -22,7 +22,7 @@ struct AmountTextField: View {
                 } else {
                     value = filtered
                 }
-                
+
                 if let maxValue = maxValue, (Decimal(string: value) ?? 0) > Decimal(maxValue) {
                     value = maxValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
                 }

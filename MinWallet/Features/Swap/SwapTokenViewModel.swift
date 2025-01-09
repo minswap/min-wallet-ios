@@ -7,6 +7,12 @@ class SwapTokenViewModel: ObservableObject {
     var tokenPay: TokenProtocol?
     @Published
     var tokenReceive: TokenProtocol?
+    @Published
+    var isShowInfo: Bool = false
+    @Published
+    var isShowRouting: Bool = false
+    @Published
+    var isShowSwapSetting: Bool = false
 
     init() {
 

@@ -9,6 +9,8 @@ struct TokenLogoView: View {
     var tokenName: String?
     @State
     var isVerified: Bool?
+    @State
+    var size: CGSize = .init(width: 28, height: 28)
 
     var body: some View {
         ZStack {
@@ -22,27 +24,28 @@ struct TokenLogoView: View {
                         .resizable()
                         .scaledToFit()
                 } else {
-                    CustomWebImage(url: buildImageURL(currencySymbol: currencySymbol ?? "", tokenName: tokenName ?? ""), frameSize: .init(width: 28, height: 28))
+                    CustomWebImage(url: buildImageURL(currencySymbol: currencySymbol ?? "", tokenName: tokenName ?? ""), frameSize: size)
                 }
             }
-            .frame(width: 28, height: 28)
+            .frame(width: size.width, height: size.height)
             .clipShape(Circle())
             if isVerified == true || UserInfo.TOKEN_IMAGE_DEFAULT[currencySymbol ?? ""] != nil || UserInfo.TOKEN_IMAGE_DEFAULT[tokenName ?? ""] != nil {
                 Circle()
                     .fill(.colorBaseBackground)
-                    .frame(width: 16, height: 16)
+                    .frame(width: size.width * 16 / 28, height: size.width * 16 / 28)
                     .overlay(
                         Image(.icVerifiedBadge)
                             .resizable()
-                            .frame(width: 12, height: 12)
+                            .frame(width: size.width * 12 / 28, height: size.width * 12 / 28)
                     )
                     .overlay(
                         Circle()
                             .stroke(.colorSurfacePrimarySub, lineWidth: 1)
                     )
-                    .position(x: 26, y: 26)
+                    .position(x: size.width - 2, y: size.width - 2)
             }
         }
+        .frame(width: size.width, height: size.height)
     }
 
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
@@ -50,4 +53,13 @@ struct TokenLogoView: View {
         let path = "\(currencySymbol)\(tokenName)"
         return "\(baseUrl)/\(path)"
     }
+}
+
+#Preview {
+    VStack {
+        TokenLogoView(currencySymbol: "", tokenName: "", isVerified: true, size: .init(width: 24, height: 24))
+        //            .frame(width: 28, height: 28)
+    }
+    .background(.pink)
+
 }
