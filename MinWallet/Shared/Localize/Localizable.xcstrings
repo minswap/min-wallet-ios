@@ -658,6 +658,9 @@
     "Transaction Id" : {
 
     },
+    "Transaction Submitted" : {
+
+    },
     "Tx Size" : {
 
     },
@@ -689,6 +692,9 @@
 
     },
     "Value" : {
+
+    },
+    "View on explorer" : {
 
     },
     "Volume (7D)" : {
@@ -752,6 +758,9 @@
 
     },
     "Your tokens" : {
+
+    },
+    "Your transaction has been submitted successfully" : {
 
     },
     "Zap in" : {

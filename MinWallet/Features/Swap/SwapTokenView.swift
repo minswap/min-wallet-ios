@@ -23,12 +23,14 @@ struct SwapTokenView: View {
                 viewModel.swapToken(
                     appSetting: appSetting,
                     signContract: {
-                        navigator.presentSheet(.sendToken(.signContract(onSuccess: {
-                            
-                        })))
+                        navigator.presentSheet(
+                            .sendToken(
+                                .signContract(onSuccess: {
+
+                                })))
                     },
                     signSuccess: {
-                        
+
                     })
             }
             .frame(height: 56)
@@ -61,6 +63,42 @@ struct SwapTokenView: View {
         .presentSheet(isPresented: $viewModel.isShowSwapSetting, height: 600) {
             SwapTokenSettingView(isShowSwapSetting: $viewModel.isShowSwapSetting)
                 .padding(.xl)
+        }
+        .banner(isShowing: $viewModel.isShowBannerTransaction) {
+            HStack(alignment: .top) {
+                Image(.icCheckSuccess)
+                    .fixSize(24)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Transaction Submitted")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorInteractiveToneSuccess)
+                    Text("Your transaction has been submitted successfully")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    HStack(spacing: 4) {
+                        Text("View on explorer")
+                            .underline()
+                            .baselineOffset(4)
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                            .onTapGesture {
+
+                            }
+                        Image(.icArrowUp)
+                            .fixSize(.xl)
+                            .onTapGesture {
+
+                            }
+                    }
+                    .padding(.top, 4)
+                }
+            }
+            .padding()
+            .background(.colorBaseBackground)
+            .clipped()
+            .cornerRadius(._3xl)
+            .overlay(RoundedRectangle(cornerRadius: ._3xl).stroke(.colorBaseSuccessSub, lineWidth: 1))
+            .shadow(radius: 5, x: 0, y: 5)
         }
     }
 

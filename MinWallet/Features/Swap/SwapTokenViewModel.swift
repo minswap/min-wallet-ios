@@ -13,6 +13,8 @@ class SwapTokenViewModel: ObservableObject {
     var isShowRouting: Bool = false
     @Published
     var isShowSwapSetting: Bool = false
+    @Published
+    var isShowBannerTransaction: Bool = false
 
     init() {
 

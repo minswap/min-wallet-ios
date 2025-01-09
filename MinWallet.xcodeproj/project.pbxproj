@@ -88,6 +88,7 @@
 		96679BCF2D2D22F700C9AE26 /* AmountTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */; };
 		96679BD32D2E765A00C9AE26 /* SwapTokenInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */; };
 		96679BD52D2E7FC700C9AE26 /* SwapTokenRoutingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */; };
+		96679BD72D2F6B7C00C9AE26 /* CustomBannerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96679BD62D2F6B7C00C9AE26 /* CustomBannerAlert.swift */; };
 		966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966920FE2D100CCD00D503B7 /* HUDState.swift */; };
 		966921022D102B3D00D503B7 /* MinWallet+Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */; };
 		96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */; };
@@ -262,6 +263,7 @@
 		96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountTextField.swift; sourceTree = "<group>"; };
 		96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenInfoView.swift; sourceTree = "<group>"; };
 		96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenRoutingView.swift; sourceTree = "<group>"; };
+		96679BD62D2F6B7C00C9AE26 /* CustomBannerAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBannerAlert.swift; sourceTree = "<group>"; };
 		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MinWallet+Mapper.swift"; sourceTree = "<group>"; };
 		967A8D022D26AEDA007146BE /* TopAsset.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAsset.graphql; sourceTree = "<group>"; };
@@ -429,6 +431,7 @@
 				965592152CF858E700301DDB /* SecurePasswordTextField.swift */,
 				96679BCE2D2D22F700C9AE26 /* AmountTextField.swift */,
 				960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */,
+				96679BD62D2F6B7C00C9AE26 /* CustomBannerAlert.swift */,
 				960D6B282CFF194D0017AF29 /* CustomWebImage.swift */,
 				96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */,
 				96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */,
@@ -1159,6 +1162,7 @@
 				96DC054D2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift in Sources */,
 				964FCE772D1268D7003BF81F /* PersistenceController.swift in Sources */,
 				96DC05272CF5685800A78356 /* SwitchToggleStyle.swift in Sources */,
+				96679BD72D2F6B7C00C9AE26 /* CustomBannerAlert.swift in Sources */,
 				96DC05292CF56EFA00A78356 /* AboutView.swift in Sources */,
 				7B0080B69E81CABECF03244F /* TokenLogo.swift in Sources */,
 				963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */,
