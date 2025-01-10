@@ -50,7 +50,3 @@ extension View {
         self.modifier(CustomBannerAlertModifier(isShowing: isShowing, infoContent: infoContent))
     }
 }
-
-#Preview {
-    ContentView()
-}

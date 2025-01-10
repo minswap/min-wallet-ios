@@ -9,6 +9,18 @@ query AssetsQuery($input: AssetsInput) {
         ticker
       }
       tokenName
+      details {
+        categories
+        project
+        socialLinks {
+          coinGecko
+          coinMarketCap
+          discord
+          telegram
+          twitter
+          website
+        }
+      }
     }
     searchAfter
   }

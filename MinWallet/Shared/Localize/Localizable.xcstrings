@@ -98,8 +98,15 @@
     "About" : {
 
     },
-    "About MIN (Minswap)" : {
-
+    "About %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "About %1$@ (%2$@)"
+          }
+        }
+      }
     },
     "About Minwallet" : {
 
@@ -156,9 +163,6 @@
 
     },
     "Best router" : {
-
-    },
-    "Beware of scam tokens and always verify the policy ID. This token has not been verified yet. Please ensure the correct policyId" : {
 
     },
     "Cancel" : {
@@ -278,6 +282,9 @@
     "Execution information" : {
 
     },
+    "External links" : {
+
+    },
     "Face ID" : {
 
     },
@@ -294,6 +301,9 @@
 
     },
     "Filter" : {
+
+    },
+    "For projects" : {
 
     },
     "Forgot password" : {
@@ -422,9 +432,6 @@
     "Minswap" : {
 
     },
-    "Minswap aims to bring an innovative multi-model liquidity pool decentralized exchange to the Cardano blockchain.\n\nThe combination of stable pools, multi-asset pools, and concentrated liquidity will benefit both traders and liquidity providers. MIN tokens are fairly distributed without any private or VC investment. This ensures the community is maximally rewarded, not speculators and insiders." : {
-
-    },
     "Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management." : {
 
     },
@@ -497,6 +504,9 @@
     "Please write down your 24 words seed phrase and store it in a secured place." : {
 
     },
+    "Policy ID" : {
+
+    },
     "policy_content" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -539,6 +549,9 @@
 
     },
     "Restore wallet" : {
+
+    },
+    "Rick score" : {
 
     },
     "Route" : {
@@ -631,6 +644,9 @@
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {
 
     },
+    "This token has not been verified yet. Please ensure the correct policyId" : {
+
+    },
     "Timezone" : {
 
     },
@@ -644,6 +660,9 @@
 
     },
     "togle" : {
+
+    },
+    "Token name" : {
 
     },
     "Touch ID" : {
@@ -668,6 +687,9 @@
 
     },
     "Unlock your wallet using Face ID recognition or a password." : {
+
+    },
+    "Update token supply" : {
 
     },
     "USD" : {

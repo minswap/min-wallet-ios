@@ -6,12 +6,16 @@ import Combine
 @MainActor
 class TokenDetailViewModel: ObservableObject {
 
+    private let suspiciousTokenURL = "https://raw.githubusercontent.com/cardano-galactic-police/suspicious-tokens/refs/heads/main/tokens.txt"
+    
     var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .oneYear]
 
     @Published
     var token: TokenProtocol!
     @Published
     var topAsset: TopAssetQuery.Data.TopAsset?
+    @Published
+    var riskCategory: RiskCategory?
     @Published
     var chartPeriod: ChartPeriod = .oneDay
     @Published
@@ -25,7 +29,9 @@ class TokenDetailViewModel: ObservableObject {
     var sizeOfLargeHeader: CGSize = .zero
     @Published
     var selectedIndex: Int?
-
+    @Published
+    var isSuspiciousToken: Bool = false
+    
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
         return chartDatas[selectedIndex]
@@ -47,6 +53,10 @@ class TokenDetailViewModel: ObservableObject {
             .store(in: &cancellables)
 
         isFav = AppSetting.shared.tokenFav.contains(token.currencySymbol + "." + token.tokenName)
+        
+        getTokenDetail()
+        getRickScore()
+        checkTokenValid()
     }
 
     private func getTokenDetail() {
@@ -77,7 +87,27 @@ class TokenDetailViewModel: ObservableObject {
             self.chartDatas = chartDatas ?? []
         }
     }
+    
+    private func getRickScore() {
+        Task {
+            let riskScore = try? await MinWalletService.shared.fetch(query: RiskScoreOfAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
+            self.riskCategory = riskScore?.riskScoreOfAsset?.riskCategory.value
+        }
+    }
 
+    private func checkTokenValid() {
+        guard let url = URL(string: suspiciousTokenURL) else { return }
+        Task {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                let tokensScam = String(decoding: data, as: UTF8.self).split(separator: "\n").map { String($0) }
+                isSuspiciousToken = tokensScam.contains(token.currencySymbol)
+            } catch {
+                isSuspiciousToken = false
+            }
+        }
+    }
+    
     func formatDate(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()

@@ -25,7 +25,9 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "AdaPrice": return MinWalletAPI.Objects.AdaPrice
     case "Asset": return MinWalletAPI.Objects.Asset
     case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
+    case "AssetDetails": return MinWalletAPI.Objects.AssetDetails
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
+    case "AssetSocialLinks": return MinWalletAPI.Objects.AssetSocialLinks
     case "AssetsResponse": return MinWalletAPI.Objects.AssetsResponse
     case "DepositOverSlippageDetail": return MinWalletAPI.Objects.DepositOverSlippageDetail
     case "DexV2WithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.DexV2WithdrawImbalanceOverSlippageDetail
@@ -40,6 +42,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "PortfolioOverview": return MinWalletAPI.Objects.PortfolioOverview
     case "PortfolioTokenPosition": return MinWalletAPI.Objects.PortfolioTokenPosition
     case "Query": return MinWalletAPI.Objects.Query
+    case "RiskScore": return MinWalletAPI.Objects.RiskScore
     case "RoutingOverSlipageDetail": return MinWalletAPI.Objects.RoutingOverSlipageDetail
     case "SimpleChart": return MinWalletAPI.Objects.SimpleChart
     case "StableswapWithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.StableswapWithdrawImbalanceOverSlippageDetail

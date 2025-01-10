@@ -10,8 +10,21 @@ query TopAssetsQuery($input: TopAssetsInput) {
           decimals
           ticker
           name
+          description
         }
         tokenName
+        details {
+          categories
+          project
+          socialLinks {
+            coinGecko
+            coinMarketCap
+            discord
+            telegram
+            twitter
+            website
+          }
+        }
       }
       priceChange24h
     }

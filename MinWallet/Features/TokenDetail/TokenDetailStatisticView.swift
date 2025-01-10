@@ -11,9 +11,52 @@ extension TokenDetailView {
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)
                 HStack {
-                    DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    DashedUnderlineText(text: "Avg. price", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
                     Text("$223.5B")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .frame(height: 40)
+                HStack(spacing: 2) {
+                    DashedUnderlineText(text: "Avg. price change (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text("5.7%")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseSuccess)
+                    Image(.icUp)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                }
+                .frame(height: 40)
+                HStack {
+                    DashedUnderlineText(text: "Volume (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text("4")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .frame(height: 40)
+                HStack {
+                    DashedUnderlineText(text: "Decimal", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text("\(viewModel.token.decimals)")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .frame(height: 40)
+                HStack {
+                    DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text("$4.70")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .frame(height: 40)
+                HStack {
+                    DashedUnderlineText(text: "Fd Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text("$4.70")
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
@@ -21,50 +64,13 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Circulating supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    Text("5B MIN")
+                    Text("$4.70")
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
-
                 HStack {
-                    DashedUnderlineText(text: "Volume (24H)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
-                    Spacer()
-                    VStack(spacing: 4) {
-                        Text("$9.5B")
-                            .font(.labelMediumSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                        HStack(spacing: 0) {
-                            Text("5.7%")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseSuccess)
-                            Image(.icUp)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                        }
-                    }
-                }
-                .frame(height: 60)
-                HStack {
-                    DashedUnderlineText(text: "Volume (7D)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
-                    Spacer()
-                    VStack(spacing: 4) {
-                        Text("$12.5B")
-                            .font(.labelMediumSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                        HStack(spacing: 0) {
-                            Text("5.7%")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseSuccess)
-                            Image(.icUp)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                        }
-                    }
-                }
-                .frame(height: 60)
-                HStack {
-                    DashedUnderlineText(text: "All time high", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    DashedUnderlineText(text: "Total supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
                     Text("$4.70")
                         .font(.labelMediumSecondary)
@@ -72,117 +78,175 @@ extension TokenDetailView {
                 }
                 .frame(height: 40)
                 .padding(.bottom, .xl)
-                Text("About MIN (Minswap)")
+                Text("About \(viewModel.token.adaName) (\(viewModel.token.name))")
                     .font(.titleH6)
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)
-                FlexibleView(
-                    data: datas,
-                    spacing: .xs,
-                    alignment: .leading
-                ) { item in
-                    Text(verbatim: item)
-                        .font(.paragraphXSmall)
+                if !viewModel.token.category.isEmpty {
+                    FlexibleView(
+                        data: viewModel.token.category,
+                        spacing: .xs,
+                        alignment: .leading
+                    ) { item in
+                        Text(verbatim: item)
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            .padding(.horizontal, .lg)
+                            .frame(height: 24)
+                            .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
+                    }
+                }
+                if viewModel.isSuspiciousToken {
+                    HStack(spacing: Spacing.md) {
+                        Image(.icWarning)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("Scam token")
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(.colorInteractiveToneDanger)
+                    }
+                    .padding(.md)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
+                    )
+                    .frame(height: 32)
+                    .padding(.top, .xl)
+                }
+                if !viewModel.token.isVerified {
+                    HStack(spacing: Spacing.md) {
+                        Image(.icWarningYellow)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("This token has not been verified yet. Please ensure the correct policyId")
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(.colorInteractiveToneWarning)
+                            .lineLimit(nil)
+                    }
+                    .padding(.md)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
+                    )
+                    .frame(minHeight: 32)
+                    .padding(.top, .xl)
+                }
+                Text(viewModel.topAsset?.asset.metadata?.description)
+                    .lineLimit(nil)
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorBaseTent)
+                    .padding(.vertical, .xl)
+                
+                HStack(spacing: 4) {
+                    DashedUnderlineText(text: "Token name", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text(viewModel.token.tokenName)
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .lineLimit(1)
+                    Image(.icCopySeedPhrase)
+                        .resizable()
+                        .renderingMode(.template)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        .padding(.horizontal, .lg)
-                        .frame(height: 24)
-                        .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
-                }
-
-                HStack(spacing: Spacing.md) {
-                    Image(.icWarning)
-                        .resizable()
                         .frame(width: 16, height: 16)
-                    Text("Scam token")
-                        .font(.paragraphXSmall)
-                        .foregroundStyle(.colorInteractiveToneDanger)
                 }
-                .padding(.md)
-                .background(
-                    RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
-                )
-                .frame(height: 32)
-                .padding(.top, .xl)
-
-                HStack(spacing: Spacing.md) {
-                    Image(.icWarningYellow)
+                .frame(height: 40)
+                .containerShape(.rect)
+                .onTapGesture {
+                    UIPasteboard.general.string = viewModel.token.tokenName
+                }
+                HStack(spacing: 4) {
+                    DashedUnderlineText(text: "Policy ID", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text(viewModel.token.currencySymbol)
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .lineLimit(1)
+                    Image(.icCopySeedPhrase)
                         .resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .frame(width: 16, height: 16)
-                    Text("Beware of scam tokens and always verify the policy ID. This token has not been verified yet. Please ensure the correct policyId")
-                        .font(.paragraphXSmall)
-                        .foregroundStyle(.colorInteractiveToneWarning)
-                        .lineLimit(nil)
                 }
-                .padding(.md)
-                .background(
-                    RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
-                )
-                .frame(minHeight: 32)
-                .padding(.top, .xl)
-
-                Text(
-                    """
-                    Minswap aims to bring an innovative multi-model liquidity pool decentralized exchange to the Cardano blockchain.
-
-                    The combination of stable pools, multi-asset pools, and concentrated liquidity will benefit both traders and liquidity providers. MIN tokens are fairly distributed without any private or VC investment. This ensures the community is maximally rewarded, not speculators and insiders.
-                    """
-                )
-                .lineLimit(nil)
-                .font(.paragraphSmall)
-                .foregroundStyle(.colorBaseTent)
-                .padding(.vertical, .xl)
-                Spacer()
+                .frame(height: 40)
+                .containerShape(.rect)
+                .onTapGesture {
+                    UIPasteboard.general.string = viewModel.token.currencySymbol
+                }
+                if let riskCategory = viewModel.riskCategory {
+                    HStack(spacing: 4) {
+                        DashedUnderlineText(text: "Rick score", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                        Spacer()
+                        Text(riskCategory.rawValue.uppercased())
+                            .font(.paragraphXSemiSmall)
+                            .foregroundStyle(riskCategory.textColor)
+                            .padding(.horizontal, .lg)
+                            .frame(height: 24)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(riskCategory.backgroundColor)
+                            )
+                    }
+                    .frame(height: 40)
+                }
+                
+                let socialLinks = viewModel.token.socialLinks
+                let keys = socialLinks.map { $0.key }
+                if !socialLinks.isEmpty {
+                    Text("External links")
+                        .font(.labelSemiSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .frame(height: 28)
+                        .padding(.top, .xl)
+                    FlexibleView(
+                        data: keys,
+                        spacing: 0,
+                        alignment: .leading
+                    ) { key in
+                        Image(key.image)
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .onTapGesture {
+                                guard let link = socialLinks[key],
+                                      let url = URL(string: link)
+                                else { return }
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
+                    }
+                    .padding(.top, .md)
+                    .padding(.bottom, .xl)
+                }
+                
+                HStack(alignment: .center, spacing: 4) {
+                    Text("For projects")
+                        .font(.labelSemiSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .frame(height: 28)
+                    Spacer()
+                    Text("Update token supply")
+                        .underline()
+                        .baselineOffset(4)
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+                        .onTapGesture {
+                            UIApplication.shared.open(URL(string: "https://github.com/minswap/minswap-tokens")!, options: [:], completionHandler: nil)
+                        }
+                        .offset(y: 2)
+                    Image(.icArrowUp)
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+                        .frame(width: 16, height: 16)
+                        .onTapGesture {
+                            UIApplication.shared.open(URL(string: "https://github.com/minswap/minswap-tokens")!, options: [:], completionHandler: nil)
+                        }
+                        .offset(y: 1)
+                }
+                .padding(.bottom, .xl)
             })
     }
 }
 
 #Preview {
     ScrollView {
-        TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault())).padding(.xl)
-    }
-}
-
-struct DashedUnderlineText: UIViewRepresentable {
-    let text: LocalizedStringKey
-    var textColor: UIColor = .white
-    var font: UIFont? = .systemFont(ofSize: 14)
-
-    func makeUIView(context: Context) -> UILabel {
-        let text = text.toString()
-        let label = UILabel()
-        label.numberOfLines = 0
-
-        let attributedString = NSMutableAttributedString(string: text)
-        let underlineStyle = NSUnderlineStyle.patternDash.rawValue | NSUnderlineStyle.single.rawValue
-
-        attributedString.addAttribute(
-            .underlineStyle,
-            value: underlineStyle,
-            range: NSRange(location: 0, length: attributedString.length)
-        )
-
-        attributedString.addAttributes(
-            [
-                NSAttributedString.Key.baselineOffset: 5,
-                NSAttributedString.Key.font: font ?? .systemFont(ofSize: 14),
-                NSAttributedString.Key.foregroundColor: textColor,
-
-            ], range: NSRange(location: 0, length: attributedString.length))
-        label.attributedText = attributedString
-        return label
-    }
-
-    func updateUIView(_ uiView: UILabel, context: Context) {}
-}
-
-extension LocalizedStringKey {
-    func toString() -> String {
-        let mirror = Mirror(reflecting: self)
-        for child in mirror.children {
-            if child.label == "key" {
-                return child.value as? String ?? ""
-            }
-        }
-        return ""
+        TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
+            .environmentObject(AppSetting.shared)
     }
 }
