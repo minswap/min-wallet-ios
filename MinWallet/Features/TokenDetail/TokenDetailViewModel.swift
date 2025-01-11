@@ -32,6 +32,8 @@ class TokenDetailViewModel: ObservableObject {
     @Published
     var isSuspiciousToken: Bool = false
     
+    private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
+    
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
         return chartDatas[selectedIndex]
@@ -66,16 +68,19 @@ class TokenDetailViewModel: ObservableObject {
         }
     }
 
-    private func getPoolsByPairs() {
-        Task {
-            let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
-            let asset = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
-        }
-    }
-
     private func getPriceChart() {
         Task {
-            let input = PriceChartInput(assetIn: InputAsset(currencySymbol: "", tokenName: ""), assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName), lpAsset: InputAsset(currencySymbol: "d6aae2059baee188f74917493cf7637e679cd219bdfbbf4dcbeb1d0b", tokenName: "12166ca33ba1e6b68102f2d778c074ca3b75c7567868f9789474a3e6ea52fd3a"), period: .case(chartPeriod))
+            if lpAsset == nil {
+                let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
+                let poolByPair = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
+                self.lpAsset = poolByPair?.poolsByPairs.first?.lpAsset
+            }
+            
+            let input = PriceChartInput(
+                assetIn: InputAsset(currencySymbol: "", tokenName: ""),
+                assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName),
+                lpAsset: InputAsset(currencySymbol: lpAsset?.currencySymbol ?? "", tokenName: lpAsset?.tokenName ?? ""),
+                period: .case(chartPeriod))
             let data = try? await MinWalletService.shared.fetch(query: PriceChartQuery(input: input))
             let chartDatas = data?.priceChart
                 .map({ priceChart in

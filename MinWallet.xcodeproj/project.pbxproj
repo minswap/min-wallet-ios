@@ -271,7 +271,7 @@
 		96679BD62D2F6B7C00C9AE26 /* CustomBannerAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBannerAlert.swift; sourceTree = "<group>"; };
 		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MinWallet+Mapper.swift"; sourceTree = "<group>"; };
-		967A8D022D26AEDA007146BE /* TopAsset.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAsset.graphql; sourceTree = "<group>"; };
+		967A8D022D26AEDA007146BE /* TopAssetQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAssetQuery.graphql; sourceTree = "<group>"; };
 		96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteModifier.swift; sourceTree = "<group>"; };
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
@@ -798,7 +798,7 @@
 			children = (
 				96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */,
 				96679BCB2D2B87FB00C9AE26 /* AssetsQuery.graphql */,
-				967A8D022D26AEDA007146BE /* TopAsset.graphql */,
+				967A8D022D26AEDA007146BE /* TopAssetQuery.graphql */,
 				96533DAA2D30B28600E8F3B8 /* RiskScoreOfAssetQuery.graphql */,
 				9640BBD52D27C88100B0DC42 /* PoolsByPairsQuery.graphql */,
 				9640BBD62D27C8CD00B0DC42 /* PriceChartQuery.graphql */,

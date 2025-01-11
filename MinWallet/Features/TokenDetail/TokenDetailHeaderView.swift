@@ -25,7 +25,8 @@ extension TokenDetailView {
             HStack(alignment: .center, spacing: 12) {
                 TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified, size: .init(width: 24, height: 24))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(viewModel.token.name)
+                    Text(viewModel.token.adaName)
+                        .lineLimit(1)
                         .foregroundStyle(.colorBaseTent)
                         .font(.labelMediumSecondary)
                     let chartSelected =
@@ -35,6 +36,7 @@ extension TokenDetailView {
                             suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
                             font: .paragraphXSmall,
                             fontColor: .colorInteractiveTentPrimarySub) ?? "-"
+                    /*
                     HStack(spacing: 4) {
                         Text(chartSelected)
                         Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
@@ -45,6 +47,7 @@ extension TokenDetailView {
                             .resizable()
                             .frame(width: 16, height: 16)
                     }
+                     */
                 }
             }
             .opacity((viewModel.sizeOfLargeHeader.height / 2 - offset) < 0 ? (opacity) : 0)
@@ -75,10 +78,10 @@ extension TokenDetailView {
                     HStack(
                         alignment: .firstTextBaseline, spacing: 4,
                         content: {
-                            Text(viewModel.token.name)
+                            Text(viewModel.token.adaName)
                                 .foregroundStyle(.colorBaseTent)
                                 .font(.labelMediumSecondary)
-                            Text("Minswap")
+                            Text(viewModel.token.name)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                                 .font(.labelMediumSecondary)
                         })
@@ -94,6 +97,7 @@ extension TokenDetailView {
             Text(chartSelected)
                 .padding(.top, .lg)
                 .padding(.bottom, .xs)
+            /*
             HStack(spacing: 4) {
                 Text("5.7%")
                     .font(.labelSmallSecondary)
@@ -102,6 +106,7 @@ extension TokenDetailView {
                     .resizable()
                     .frame(width: 16, height: 16)
             }
+             */
         }
         .padding(.horizontal, .xl)
     }

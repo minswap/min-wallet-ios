@@ -10,7 +10,7 @@ struct DashedUnderlineText: UIViewRepresentable {
         let text = text.toString()
         let label = UILabel()
         label.numberOfLines = 0
-        
+        label.setContentHuggingPriority(.required, for: .horizontal)
         let attributedString = NSMutableAttributedString(string: text)
         let underlineStyle = NSUnderlineStyle.patternDash.rawValue | NSUnderlineStyle.single.rawValue
         

@@ -26,7 +26,7 @@ struct LineChartData: Hashable {
 extension TokenDetailView {
     var tokenDetailChartView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            let maxY: Double = (viewModel.chartDatas.map { $0.value }.max() ?? 0) * 1.5
+            let maxY: Double = (viewModel.chartDatas.map { $0.value }.max() ?? 0) * 1.2
             let minDate: Date = viewModel.chartDatas.map { $0.date }.min() ?? Date()
             let maxDate: Date = viewModel.chartDatas.map { $0.date }.max() ?? Date()
             //            let strideValue = maxY / 6

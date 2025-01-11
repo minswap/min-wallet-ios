@@ -225,11 +225,11 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
 
 struct TokenProtocolDefault: TokenProtocol {
     var currencySymbol: String {
-        "0254a6ffa78edb03ea8933dbd4ca078758dbfc0fc6bb0d28b7a9c89f"
+        "d71432b5e54b92cde0748af0903b90cc3758a40e0283aabd7e734c99"
     }
 
     var tokenName: String {
-        "444a4544"
+        "0014df104d696e696f6e204368726973746d6173"
     }
 
     var isVerified: Bool {

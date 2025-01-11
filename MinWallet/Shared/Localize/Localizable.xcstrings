@@ -10,6 +10,9 @@
     " %@" : {
 
     },
+    "--" : {
+
+    },
     "%" : {
 
     },
@@ -26,22 +29,13 @@
     "%@%%" : {
 
     },
+    "%lld" : {
+
+    },
     "%lld tokens" : {
 
     },
     "$0.0" : {
-
-    },
-    "$4.70" : {
-
-    },
-    "$9.5B" : {
-
-    },
-    "$12.5B" : {
-
-    },
-    "$223.5B" : {
 
     },
     "0.3 ₳" : {
@@ -69,9 +63,6 @@
 
     },
     "5.7%" : {
-
-    },
-    "5B MIN" : {
 
     },
     "37,016.25" : {
@@ -126,9 +117,6 @@
     "All" : {
 
     },
-    "All time high" : {
-
-    },
     "Appearance" : {
 
     },
@@ -142,6 +130,12 @@
 
     },
     "Auto Router" : {
+
+    },
+    "Avg. price" : {
+
+    },
+    "Avg. price change (24h)" : {
 
     },
     "Bạn phải đăng nhập với mật khẩu thành công mới có thể sử dụng tính năng này" : {
@@ -240,6 +234,9 @@
     "Date" : {
 
     },
+    "Decimal" : {
+
+    },
     "Default" : {
 
     },
@@ -295,6 +292,9 @@
 
     },
     "Face ID/Touch ID không sẵn sàng" : {
+
+    },
+    "Fd Market cap" : {
 
     },
     "Fee" : {
@@ -665,6 +665,9 @@
     "Token name" : {
 
     },
+    "Total supply" : {
+
+    },
     "Touch ID" : {
 
     },
@@ -719,10 +722,7 @@
     "View on explorer" : {
 
     },
-    "Volume (7D)" : {
-
-    },
-    "Volume (24H)" : {
+    "Volume (24h)" : {
 
     },
     "Vui lòng cấp quyền sinh trắc học cho ứng dụng để kích hoạt đăng nhập bằng Face ID/Touch ID" : {

@@ -120,7 +120,8 @@ extension Double {
         suffix: String = "",
         roundingOffset: Int = 3,
         font: Font = .labelMediumSecondary,
-        fontColor: Color = .colorBaseTent
+        fontColor: Color = .colorBaseTent,
+        isFormatK: Bool = false
     ) -> AttributedString {
         var prefix: AttributedString = AttributedString(prefix)
         prefix.font = font
@@ -148,6 +149,29 @@ extension Double {
             return prefix
         }
 
+        if isFormatK && self >= 1_000_000 {
+            let millionNum = self / 1_000_000
+            let billionNum = self / 1_000_000_000
+            
+            formatter.maximumFractionDigits = 2
+            
+            let value: String = {
+                if self >= 1_000_000_000 {
+                    return (formatter.string(from: NSNumber(value: billionNum)) ?? "") + "B"
+                } else if self >= 1_000_000 {
+                    return (formatter.string(from: NSNumber(value: millionNum)) ?? "") + "M"
+                } else {
+                    return self.formatted()
+                }
+            }()
+            var result = AttributedString(value)
+            result.font = font
+            result.foregroundColor = fontColor
+            prefix.append(result)
+            prefix.append(suffix)
+            return prefix
+        }
+       
         result = AttributedString(formattedString)
         result.font = font
         result.foregroundColor = fontColor
@@ -249,5 +273,29 @@ extension NSAttributedString {
 extension String {
     func toExact(decimal: Double) -> Double {
         return (Double(self) ?? 0) / pow(10.0, decimal)
+    }
+}
+
+extension String {
+    func getPriceValue(appSetting: AppSetting, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
+        let price = Double(self) ?? 0
+        switch appSetting.currency {
+        case Currency.ada.rawValue:
+            return (price, price.formatNumber(suffix: Currency.ada.prefix))
+        default:
+            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
+        }
+    }
+}
+
+extension Double {
+    func getPriceValue(appSetting: AppSetting, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
+        let price = self
+        switch appSetting.currency {
+        case Currency.ada.rawValue:
+            return (price, price.formatNumber(suffix: Currency.ada.prefix))
+        default:
+            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
+        }
     }
 }
