@@ -7,9 +7,11 @@ struct TokenDetailView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
+    @EnvironmentObject
+    var portfolioOverviewViewModel: PortfolioOverviewViewModel
     @StateObject
     var viewModel: TokenDetailViewModel = .init()
-
+  
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -50,4 +52,5 @@ struct TokenDetailView: View {
 #Preview {
     TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
         .environmentObject(AppSetting.shared)
+        .environmentObject(PortfolioOverviewViewModel())
 }

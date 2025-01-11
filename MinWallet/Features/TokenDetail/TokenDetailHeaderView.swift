@@ -97,6 +97,7 @@ extension TokenDetailView {
             Text(chartSelected)
                 .padding(.top, .lg)
                 .padding(.bottom, .xs)
+                .frame(height: 55)
             /*
             HStack(spacing: 4) {
                 Text("5.7%")
@@ -116,4 +117,5 @@ extension TokenDetailView {
 #Preview {
     TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
         .environmentObject(AppSetting.shared)
+        .environmentObject(PortfolioOverviewViewModel())
 }

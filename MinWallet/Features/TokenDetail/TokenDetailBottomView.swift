@@ -23,12 +23,12 @@ extension TokenDetailView {
                         .padding(.bottom, .md)
                     HStack(alignment: .lastTextBaseline) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("37,016.25")
-                                .font(.titleH5)
-                                .foregroundStyle(.colorBaseTent)
-                            Text("37,016.25 ₳")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            Text(portfolioOverviewViewModel.netAdaValue.getPriceValue(appSetting: appSetting, font: .titleH5).attribute)
+                                .minimumScaleFactor(0.5)
+                                .lineLimit(1)
+                            Text(portfolioOverviewViewModel.adaValue.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
+                                .minimumScaleFactor(0.5)
+                                .lineLimit(1)
                         }
                         Spacer()
                         CustomButton(title: "Swap") {
@@ -42,8 +42,12 @@ extension TokenDetailView {
         }
         .foregroundStyle(.colorBaseBackground)
         .cornerRadius(BorderRadius._3xl)
-        .overlay(
-            RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1))
     }
 }
+
+#Preview {
+    TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
+        .environmentObject(AppSetting.shared)
+}
+

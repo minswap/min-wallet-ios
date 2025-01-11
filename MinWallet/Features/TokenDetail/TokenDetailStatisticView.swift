@@ -46,14 +46,16 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
-                HStack {
-                    DashedUnderlineText(text: "Decimal", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
-                    Spacer()
-                    Text("\(viewModel.token.decimals)")
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                if viewModel.token.decimals > 0 {
+                    HStack {
+                        DashedUnderlineText(text: "Decimal", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                        Spacer()
+                        Text("\(viewModel.token.decimals)")
+                            .font(.labelMediumSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    }
+                    .frame(height: 40)
                 }
-                .frame(height: 40)
                 HStack {
                     DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -142,12 +144,13 @@ extension TokenDetailView {
                     .frame(minHeight: 32)
                     .padding(.top, .xl)
                 }
-                Text(viewModel.topAsset?.asset.metadata?.description)
-                    .lineLimit(nil)
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorBaseTent)
-                    .padding(.vertical, .xl)
-                
+                if let description = viewModel.topAsset?.asset.metadata?.description, !description.isBlank {
+                    Text(description)
+                        .lineLimit(nil)
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorBaseTent)
+                        .padding(.top, .xl)
+                }
                 HStack(spacing: 4) {
                     DashedUnderlineText(text: "Token name", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -163,6 +166,7 @@ extension TokenDetailView {
                 }
                 .frame(height: 40)
                 .containerShape(.rect)
+                .padding(.top, .xl)
                 .onTapGesture {
                     UIPasteboard.general.string = viewModel.token.tokenName
                 }

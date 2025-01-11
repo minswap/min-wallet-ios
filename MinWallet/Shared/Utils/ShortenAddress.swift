@@ -68,7 +68,7 @@ extension String {
             return hexToText?.isHumanReadable == true ? hexToText : String(self.prefix(10))
         }
 
-        if self.count <= 6 || self.count == 10 {
+        if self.count <= 6 || self.count == 10 || self.count == 8 {
             let hexToText = self.hexToText
             return hexToText?.isHumanReadable == true ? hexToText : self
         }
@@ -289,13 +289,13 @@ extension String {
 }
 
 extension Double {
-    func getPriceValue(appSetting: AppSetting, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
+    func getPriceValue(appSetting: AppSetting, font: Font = .labelMediumSecondary, fontColor: Color = .colorBaseTent,isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
         let price = self
         switch appSetting.currency {
         case Currency.ada.rawValue:
-            return (price, price.formatNumber(suffix: Currency.ada.prefix))
+            return (price, price.formatNumber(suffix: Currency.ada.prefix, font: font))
         default:
-            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
+            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: font, fontColor: fontColor, isFormatK: isFormatK))
         }
     }
 }

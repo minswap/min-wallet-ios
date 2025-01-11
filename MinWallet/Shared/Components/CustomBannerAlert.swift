@@ -50,3 +50,30 @@ extension View {
         self.modifier(CustomBannerAlertModifier(isShowing: isShowing, infoContent: infoContent))
     }
 }
+
+
+
+private struct LoadingViewModifier: ViewModifier {
+    @Binding var isShowing: Bool
+    
+    init(isShowing: Binding<Bool>) {
+        _isShowing = isShowing
+    }
+    
+    func body(content: Content) -> some View {
+        ZStack {
+            content.opacity(isShowing ? 0 : 1)
+            if isShowing {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                    .scaleEffect(1.0, anchor: .center)
+            }
+        }
+    }
+}
+
+extension View {
+    func loading(isShowing: Binding<Bool>) -> some View {
+        self.modifier(LoadingViewModifier(isShowing: isShowing))
+    }
+}

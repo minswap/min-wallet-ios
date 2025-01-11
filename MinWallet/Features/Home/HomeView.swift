@@ -144,7 +144,7 @@ struct HomeView: View {
                         HStack(spacing: 4) {
                             let pnl24H: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.pnl24H : (portfolioOverviewViewModel.pnl24H * appSetting.currencyInADA)
                             let foregroundStyle: Color = portfolioOverviewViewModel.pnl24H > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
-                            Text("\(prefix)\(pnl24H.formatted())\(suffix)")
+                            Text("\(prefix)\(pnl24H.formatSNumber(maximumFractionDigits: 2))\(suffix)")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
                             Circle().frame(width: 4, height: 4)
@@ -152,9 +152,11 @@ struct HomeView: View {
                             Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
-                            Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)
-                                .resizable()
-                                .frame(width: 16, height: 16)
+                            if !portfolioOverviewViewModel.pnl24H.isZero {
+                                Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                            }
                         }
                     }
                 }

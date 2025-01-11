@@ -22,7 +22,6 @@ class TokenDetailViewModel: ObservableObject {
     var chartDatas: [LineChartData] = []
     @Published
     var isFav: Bool = false
-
     @Published
     var scrollOffset: CGPoint = .zero
     @Published
@@ -31,6 +30,8 @@ class TokenDetailViewModel: ObservableObject {
     var selectedIndex: Int?
     @Published
     var isSuspiciousToken: Bool = false
+    @Published
+    var isLoadingPriceChart: Bool = true
     
     private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
     
@@ -48,9 +49,13 @@ class TokenDetailViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] newData in
                 guard let self = self else { return }
-                self.chartPeriod = newData
-                self.chartDatas = []
-                self.getPriceChart()
+                Task {
+                    self.isLoadingPriceChart = true
+                    self.chartPeriod = newData
+                    self.chartDatas = []
+                    await self.getPriceChart()
+                    self.isLoadingPriceChart = false
+                }
             }
             .store(in: &cancellables)
 
@@ -67,30 +72,28 @@ class TokenDetailViewModel: ObservableObject {
             self.topAsset = asset?.topAsset
         }
     }
-
-    private func getPriceChart() {
-        Task {
-            if lpAsset == nil {
-                let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
-                let poolByPair = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
-                self.lpAsset = poolByPair?.poolsByPairs.first?.lpAsset
-            }
-            
-            let input = PriceChartInput(
-                assetIn: InputAsset(currencySymbol: "", tokenName: ""),
-                assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName),
-                lpAsset: InputAsset(currencySymbol: lpAsset?.currencySymbol ?? "", tokenName: lpAsset?.tokenName ?? ""),
-                period: .case(chartPeriod))
-            let data = try? await MinWalletService.shared.fetch(query: PriceChartQuery(input: input))
-            let chartDatas = data?.priceChart
-                .map({ priceChart in
-                    //2025-01-03T07:00:00.000Z
-                    let time = priceChart.time
-                    let value = priceChart.value
-                    return LineChartData(date: time.formatToDate, value: Double(value) ?? 0, type: .outside)
-                })
-            self.chartDatas = chartDatas ?? []
+    
+    private func getPriceChart()  async {
+        if lpAsset == nil {
+            let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
+            let poolByPair = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
+            self.lpAsset = poolByPair?.poolsByPairs.first?.lpAsset
         }
+        
+        let input = PriceChartInput(
+            assetIn: InputAsset(currencySymbol: "", tokenName: ""),
+            assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName),
+            lpAsset: InputAsset(currencySymbol: lpAsset?.currencySymbol ?? "", tokenName: lpAsset?.tokenName ?? ""),
+            period: .case(chartPeriod))
+        let data = try? await MinWalletService.shared.fetch(query: PriceChartQuery(input: input))
+        let chartDatas = data?.priceChart
+            .map({ priceChart in
+                //2025-01-03T07:00:00.000Z
+                let time = priceChart.time
+                let value = priceChart.value
+                return LineChartData(date: time.formatToDate, value: Double(value) ?? 0, type: .outside)
+            })
+        self.chartDatas = chartDatas ?? []
     }
     
     private func getRickScore() {
