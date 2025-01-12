@@ -35,11 +35,11 @@ extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
     var subPriceValue: Double {
         0
     }
-    
+
     var category: [String] {
         asset.details?.categories ?? []
     }
-    
+
     var socialLinks: [SocialLinks: String] {
         guard let socialLinks = asset.details?.socialLinks else { return [:] }
         var links: [SocialLinks: String] = [:]
@@ -66,7 +66,7 @@ extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
         }
         return links
     }
-    
+
     var decimals: Int {
         asset.metadata?.decimals ?? 0
     }
@@ -111,11 +111,11 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
     var subPriceValue: Double {
         Double(valueInAda) ?? 0
     }
-    
+
     var category: [String] {
         amountAsset.asset.details?.categories ?? []
     }
-    
+
     var socialLinks: [SocialLinks: String] {
         guard let socialLinks = amountAsset.asset.details?.socialLinks else { return [:] }
         var links: [SocialLinks: String] = [:]
@@ -142,7 +142,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
         }
         return links
     }
-    
+
     var decimals: Int {
         amountAsset.asset.metadata?.decimals ?? 0
     }
@@ -186,7 +186,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
     var subPriceValue: Double {
         Double(lpAdaValue) ?? 0
     }
-    
+
     var category: [String] {
         amountLPAsset.asset.details?.categories ?? []
     }
@@ -216,7 +216,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
         }
         return links
     }
-    
+
     var decimals: Int {
         amountLPAsset.asset.metadata?.decimals ?? 0
     }
@@ -259,14 +259,14 @@ struct TokenProtocolDefault: TokenProtocol {
     var category: [String] {
         ["DEX", "DeFi", "Smart contract", "Staking", "Staking", "Staking", "Staking"]
     }
-    
+
     var socialLinks: [SocialLinks: String] {
         return [.coinGecko: ""]
     }
     var decimals: Int {
         2
     }
-    
+
     init() {}
 }
 
@@ -300,11 +300,11 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
     var subPriceValue: Double {
         0
     }
-    
+
     var category: [String] {
         details?.categories ?? []
     }
-    
+
     var socialLinks: [SocialLinks: String] {
         guard let socialLinks = details?.socialLinks else { return [:] }
         var links: [SocialLinks: String] = [:]
@@ -331,7 +331,7 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
         }
         return links
     }
-    
+
     var decimals: Int {
         metadata?.decimals ?? 0
     }
@@ -342,7 +342,7 @@ extension RiskCategory: Identifiable {
     public var id: UUID {
         UUID()
     }
-    
+
     var textColor: Color {
         switch self {
         case .a, .aa, .aaa:
@@ -355,7 +355,7 @@ extension RiskCategory: Identifiable {
             return .colorBaseTent
         }
     }
-    
+
     var backgroundColor: Color {
         switch self {
         case .a, .aa, .aaa:
@@ -377,7 +377,7 @@ enum SocialLinks: String {
     case telegram
     case twitter
     case website
-    
+
     var image: ImageResource {
         switch self {
         case .coinGecko:

@@ -71,7 +71,7 @@ extension TokenDetailView {
                                 guard currentX >= 0, currentX < chart.plotAreaSize.width else {
                                     return
                                 }
-                                
+
                                 guard let index = chart.value(atX: currentX, as: Int.self) else { return }
                                 viewModel.selectedIndex = index
                             }

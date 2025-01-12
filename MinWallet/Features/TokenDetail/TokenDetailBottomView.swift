@@ -50,4 +50,3 @@ extension TokenDetailView {
     TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
         .environmentObject(AppSetting.shared)
 }
-

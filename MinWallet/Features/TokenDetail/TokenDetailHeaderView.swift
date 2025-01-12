@@ -36,9 +36,9 @@ extension TokenDetailView {
                             suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
                             font: .paragraphXSmall,
                             fontColor: .colorInteractiveTentPrimarySub) ?? "-"
-                    /*
                     HStack(spacing: 4) {
                         Text(chartSelected)
+                        /*
                         Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
                         Text("5.7%")
                             .font(.paragraphXSmall)
@@ -46,8 +46,8 @@ extension TokenDetailView {
                         Image(.icUp)
                             .resizable()
                             .frame(width: 16, height: 16)
+                         */
                     }
-                     */
                 }
             }
             .opacity((viewModel.sizeOfLargeHeader.height / 2 - offset) < 0 ? (opacity) : 0)

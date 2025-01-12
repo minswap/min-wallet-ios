@@ -14,7 +14,6 @@ struct SwapTokenView: View {
     @StateObject
     private var viewModel: SwapTokenViewModel = .init()
 
-
     var body: some View {
         VStack(spacing: 0) {
             contentView
@@ -36,6 +35,16 @@ struct SwapTokenView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+
+                Button("Done") {
+                    hideKeyboard()
+                }
+                .foregroundStyle(.colorLabelToolbarDone)
+            }
+        }
         .modifier(
             BaseContentView(
                 screenTitle: "Swap",
@@ -45,7 +54,7 @@ struct SwapTokenView: View {
                     navigator.pop()
                 },
                 actionRight: {
-                    viewModel.isShowSwapSetting = true
+                    $viewModel.isShowSwapSetting.showSheet()
                 })
         )
         .popupSheet(
@@ -60,8 +69,8 @@ struct SwapTokenView: View {
                 SwapTokenRoutingView(isShowRouting: $viewModel.isShowRouting)
             }
         )
-        .presentSheet(isPresented: $viewModel.isShowSwapSetting, height: 600) {
-            SwapTokenSettingView(isShowSwapSetting: $viewModel.isShowSwapSetting)
+        .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
+            SwapTokenSettingView()
                 .padding(.xl)
         }
         .banner(isShowing: $viewModel.isShowBannerTransaction) {

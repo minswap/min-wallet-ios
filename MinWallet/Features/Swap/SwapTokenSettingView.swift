@@ -11,9 +11,6 @@ struct SwapTokenSettingView: View {
         case _2 = 2
     }
 
-    @Binding
-    var isShowSwapSetting: Bool
-
     @State
     private var slippages: [Slippage] = Slippage.allCases
     @State
@@ -84,15 +81,36 @@ struct SwapTokenSettingView: View {
                 }
                 .padding(.top, .md)
                 HStack(spacing: .xl) {
-                    Text("Predict Swap Price")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                    DashedUnderlineText(text: "Predict Swap Price", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
                     Spacer()
                     Toggle("", isOn: $enablePredictSwapPrice)
                         .toggleStyle(SwitchToggleStyle())
                 }
                 .frame(height: 32)
                 .padding(.top, .lg)
+                .padding(.bottom, .lg)
+                DashedUnderlineText(text: "Route Sorting", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, .md)
+                HStack(spacing: .xs) {
+                    Text("Most liquidity")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorInteractiveToneTent)
+                        .frame(height: 36)
+                        .padding(.horizontal, .lg)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorInteractiveTentSecondaryDefault)
+                        )
+                    Text("High return")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .frame(height: 36)
+                        .padding(.horizontal, .lg)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+                        )
+                    Spacer()
+                }
                 .padding(.bottom, .xl)
                 Color.colorBorderPrimarySub.frame(height: 1)
                     .padding(.bottom, 20)
@@ -105,7 +123,12 @@ struct SwapTokenSettingView: View {
                         .foregroundStyle(.colorBaseTent)
                     Text("Recommended")
                         .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorBaseTent)
+                        .foregroundStyle(.colorInteractiveToneSuccess)
+                        .frame(height: 24)
+                        .padding(.horizontal, .lg)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
+                        )
                     Spacer()
                     Toggle("", isOn: $enablePredictSwapPrice)
                         .toggleStyle(SwitchToggleStyle())
@@ -115,13 +138,7 @@ struct SwapTokenSettingView: View {
                 HorizontalGeometryReader { width in
                     TextLearnMoreSendTokenView(text: "When available, uses multiple pools for better liquidity and prices. ", textClickAble: "Learn more", preferredMaxLayoutWidth: width)
                 }
-
-                Color.colorBorderPrimarySub.frame(height: 1)
-                    .padding(.vertical, .xl)
-                Text("To view risky options like Unlimited Slippage you must disable safe mode")
-                    .font(.paragraphXSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    .padding(.bottom, 24)
+                .padding(.bottom, 24)
             }
             .padding(.horizontal, .xl)
             .background(content: {
@@ -143,14 +160,14 @@ struct SwapTokenSettingView: View {
             )
             .frame(height: 56)
             .buttonStyle(.plain)
-            .padding(.bottom, .xl)
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
 #Preview {
     VStack {
-        SwapTokenSettingView(isShowSwapSetting: Binding<Bool>.constant(false))
+        SwapTokenSettingView()
             .padding(16)
         Spacer()
     }

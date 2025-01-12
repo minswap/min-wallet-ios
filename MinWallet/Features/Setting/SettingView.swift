@@ -58,7 +58,7 @@ struct SettingView: View {
                     .resizable()
                     .frame(width: 40, height: 40)
                     .onTapGesture {
-                        isShowAppearance = true
+                        $isShowAppearance.showSheet()
                     }
             }
             .frame(height: 64)
@@ -141,7 +141,7 @@ struct SettingView: View {
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    isShowCurrency = true
+                    $isShowCurrency.showSheet()
                 }
                 HStack(spacing: 12) {
                     Text("Timezone")
@@ -157,7 +157,7 @@ struct SettingView: View {
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    isShowTimeZone = true
+                    $isShowTimeZone.showSheet()
                 }
                 HStack(spacing: 12) {
                     Text("Audio")

@@ -203,7 +203,7 @@ extension TokenDetailView {
                     }
                     .frame(height: 40)
                 }
-                
+
                 let socialLinks = viewModel.token.socialLinks
                 let keys = socialLinks.map { $0.key }
                 if !socialLinks.isEmpty {
@@ -222,7 +222,7 @@ extension TokenDetailView {
                             .frame(width: 32, height: 32)
                             .onTapGesture {
                                 guard let link = socialLinks[key],
-                                      let url = URL(string: link)
+                                    let url = URL(string: link)
                                 else { return }
                                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                             }
@@ -230,7 +230,7 @@ extension TokenDetailView {
                     .padding(.top, .md)
                     .padding(.bottom, .xl)
                 }
-                
+
                 HStack(alignment: .center, spacing: 4) {
                     Text("For projects")
                         .font(.labelSemiSecondary)

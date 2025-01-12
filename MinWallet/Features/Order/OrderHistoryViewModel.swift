@@ -75,9 +75,9 @@ class OrderHistoryViewModel: ObservableObject {
     }
 
     var input: OrderV2Input {
-        //let address = UserInfo.shared.minWallet?.address ?? ""
-        let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
-        var input = OrderV2Input(
+        let address = UserInfo.shared.minWallet?.address ?? ""
+        //let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
+        return OrderV2Input(
             action: actionSelected != nil ? .some(.case(actionSelected!)) : nil,
             address: address,
             ammType: contractTypeSelected != nil ? .some(.case(contractTypeSelected!)) : nil,
@@ -87,8 +87,6 @@ class OrderHistoryViewModel: ObservableObject {
             status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
             toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil
         )
-
-        return input
     }
 }
 

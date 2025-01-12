@@ -52,14 +52,13 @@ extension View {
 }
 
 
-
 private struct LoadingViewModifier: ViewModifier {
     @Binding var isShowing: Bool
-    
+
     init(isShowing: Binding<Bool>) {
         _isShowing = isShowing
     }
-    
+
     func body(content: Content) -> some View {
         ZStack {
             content.opacity(isShowing ? 0 : 1)

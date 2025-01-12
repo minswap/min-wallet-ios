@@ -330,6 +330,9 @@
     "Hide" : {
 
     },
+    "High return" : {
+
+    },
     "I have written the seed phrase and stored it in a secured place." : {
 
     },
@@ -421,6 +424,9 @@
 
     },
     "Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management." : {
+
+    },
+    "Most liquidity" : {
 
     },
     "My balance" : {
@@ -545,6 +551,9 @@
     "Route" : {
 
     },
+    "Route Sorting" : {
+
+    },
     "Sample" : {
       "extractionState" : "manual"
     },
@@ -639,9 +648,6 @@
 
     },
     "To" : {
-
-    },
-    "To view risky options like Unlimited Slippage you must disable safe mode" : {
 
     },
     "To wallet address:" : {

@@ -212,16 +212,16 @@ struct HomeView: View {
         .sideMenu(isShowing: $showSideMenu) {
             SettingView(isShowAppearance: $isShowAppearance, isShowTimeZone: $isShowTimeZone, isShowCurrency: $isShowCurrency)
         }
-        .presentSheet(isPresented: $isShowAppearance, height: 600) {
-            AppearanceView(isShowAppearance: $isShowAppearance)
+        .presentSheet(isPresented: $isShowAppearance) {
+            AppearanceView()
                 .padding(.xl)
         }
-        .presentSheet(isPresented: $isShowCurrency, height: 400) {
-            CurrencyView(isShowCurrency: $isShowCurrency)
+        .presentSheet(isPresented: $isShowCurrency) {
+            CurrencyView()
                 .padding(.xl)
         }
-        .presentSheet(isPresented: $isShowTimeZone, height: 400) {
-            TimeZoneView(isShowTimeZone: $isShowTimeZone)
+        .presentSheet(isPresented: $isShowTimeZone) {
+            TimeZoneView()
                 .padding(.xl)
         }
         .task {

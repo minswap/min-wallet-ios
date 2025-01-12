@@ -152,9 +152,9 @@ extension Double {
         if isFormatK && self >= 1_000_000 {
             let millionNum = self / 1_000_000
             let billionNum = self / 1_000_000_000
-            
+
             formatter.maximumFractionDigits = 2
-            
+
             let value: String = {
                 if self >= 1_000_000_000 {
                     return (formatter.string(from: NSNumber(value: billionNum)) ?? "") + "B"
@@ -171,7 +171,7 @@ extension Double {
             prefix.append(suffix)
             return prefix
         }
-       
+
         result = AttributedString(formattedString)
         result.font = font
         result.foregroundColor = fontColor
@@ -289,7 +289,7 @@ extension String {
 }
 
 extension Double {
-    func getPriceValue(appSetting: AppSetting, font: Font = .labelMediumSecondary, fontColor: Color = .colorBaseTent,isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
+    func getPriceValue(appSetting: AppSetting, font: Font = .labelMediumSecondary, fontColor: Color = .colorBaseTent, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
         let price = self
         switch appSetting.currency {
         case Currency.ada.rawValue:

@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct TimeZoneView: View {
-    @Binding var isShowTimeZone: Bool
-
     @EnvironmentObject
     var appSetting: AppSetting
     @Environment(\.partialSheetDismiss)
@@ -10,7 +8,6 @@ struct TimeZoneView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Spacer()
             VStack(spacing: 0) {
                 Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                     .padding(.vertical, .md)
@@ -66,14 +63,14 @@ struct TimeZoneView: View {
             )
             .frame(height: 56)
             .buttonStyle(.plain)
-            .padding(.bottom, .xl)
         }
+        .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/ true /*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
     VStack {
-        TimeZoneView(isShowTimeZone: Binding<Bool>.constant(false))
+        TimeZoneView()
             .environmentObject(AppSetting.shared)
         Spacer()
     }

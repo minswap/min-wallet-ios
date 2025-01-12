@@ -12,7 +12,7 @@ struct TextLearnMoreSendTokenView: UIViewRepresentable {
         let label = UILabel()
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
-
+        label.font = .paragraphSmall
         label.setContentHuggingPriority(.required, for: .vertical)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -133,7 +133,7 @@ fileprivate struct WidthPreferenceKey: PreferenceKey, Equatable {
 
 #Preview {
     VStack {
-        SwapTokenSettingView(isShowSwapSetting: Binding<Bool>.constant(false))
+        SwapTokenSettingView()
             .padding(16)
         Spacer()
     }

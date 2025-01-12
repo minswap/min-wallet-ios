@@ -7,7 +7,7 @@ import Combine
 class TokenDetailViewModel: ObservableObject {
 
     private let suspiciousTokenURL = "https://raw.githubusercontent.com/cardano-galactic-police/suspicious-tokens/refs/heads/main/tokens.txt"
-    
+
     var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .oneYear]
 
     @Published
@@ -32,9 +32,9 @@ class TokenDetailViewModel: ObservableObject {
     var isSuspiciousToken: Bool = false
     @Published
     var isLoadingPriceChart: Bool = true
-    
+
     private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
-    
+
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
         return chartDatas[selectedIndex]
@@ -60,7 +60,7 @@ class TokenDetailViewModel: ObservableObject {
             .store(in: &cancellables)
 
         isFav = AppSetting.shared.tokenFav.contains(token.currencySymbol + "." + token.tokenName)
-        
+
         getTokenDetail()
         getRickScore()
         checkTokenValid()
@@ -72,14 +72,14 @@ class TokenDetailViewModel: ObservableObject {
             self.topAsset = asset?.topAsset
         }
     }
-    
-    private func getPriceChart()  async {
+
+    private func getPriceChart() async {
         if lpAsset == nil {
             let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
             let poolByPair = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
             self.lpAsset = poolByPair?.poolsByPairs.first?.lpAsset
         }
-        
+
         let input = PriceChartInput(
             assetIn: InputAsset(currencySymbol: "", tokenName: ""),
             assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName),
@@ -95,7 +95,7 @@ class TokenDetailViewModel: ObservableObject {
             })
         self.chartDatas = chartDatas ?? []
     }
-    
+
     private func getRickScore() {
         Task {
             let riskScore = try? await MinWalletService.shared.fetch(query: RiskScoreOfAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
@@ -115,7 +115,7 @@ class TokenDetailViewModel: ObservableObject {
             }
         }
     }
-    
+
     func formatDate(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()

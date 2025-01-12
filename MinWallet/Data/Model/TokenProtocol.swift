@@ -10,9 +10,9 @@ protocol TokenProtocol {
     var ticker: String { get }
     var name: String { get }
     var category: [String] { get }
-    
+
     var percentChange: Double { get }
-    
+
     var priceValue: Double { get }
     var subPriceValue: Double { get }
     var amount: Double { get }
@@ -29,12 +29,12 @@ extension TokenProtocol {
             return ticker
         }
     }
-    
-    //TODO: cuongnv check sau 
+
+    //TODO: cuongnv check sau
     var amount: Double {
         0
     }
-    
+
     var uniqueID: String {
         currencySymbol + "." + tokenName
     }

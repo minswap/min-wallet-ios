@@ -11,7 +11,7 @@ struct TokenDetailView: View {
     var portfolioOverviewViewModel: PortfolioOverviewViewModel
     @StateObject
     var viewModel: TokenDetailViewModel = .init()
-  
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
