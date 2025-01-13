@@ -1,0 +1,27 @@
+query TopAssetQuery($asset: InputAsset!) {
+  topAsset(asset: $asset) {
+    asset {
+      currencySymbol
+      metadata {
+        decimals
+        isVerified
+        name
+        ticker
+      }
+    }
+    marketCap
+    price
+    price24hAgo
+    price30dAgo
+    price7dAgo
+    priceChange24h
+    priceChange7d
+    totalSupply
+    tvl
+    volume24h
+    volume30d
+    volume7d
+    fdMarketCap
+    circulatingSupply
+  }
+}
