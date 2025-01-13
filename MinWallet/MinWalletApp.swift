@@ -89,7 +89,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         guard let userInfo = response.notification.request.content.userInfo as? [String: AnyObject] else { return }
-        //TODO: Handle notification
+        //TODO: Handle notification test
         completionHandler()
     }
 }
