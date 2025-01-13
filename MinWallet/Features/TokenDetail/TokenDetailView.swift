@@ -17,11 +17,11 @@ struct TokenDetailView: View {
     var data: [LineChartData] = []
 
     let viewModel: TokenDetailViewModel
-    
+
     init(viewModel: TokenDetailViewModel) {
         self.viewModel = viewModel
     }
-    
+
     var body: some View {
         ZStack {
             ScalingHeaderScrollView {
