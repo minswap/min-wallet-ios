@@ -3,6 +3,11 @@ import FlowStacks
 
 
 struct SwapTokenView: View {
+    enum FocusedField: Hashable {
+        case pay
+        case receive
+    }
+
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
@@ -13,11 +18,14 @@ struct SwapTokenView: View {
 
     @StateObject
     private var viewModel: SwapTokenViewModel = .init()
+    @FocusState
+    private var focusedField: FocusedField?
 
     var body: some View {
         VStack(spacing: 0) {
             contentView
             Spacer()
+            bottomView
             CustomButton(title: "Swap") {
                 viewModel.swapToken(
                     appSetting: appSetting,
@@ -34,6 +42,7 @@ struct SwapTokenView: View {
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
+            .padding(.top, 24)
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -130,6 +139,7 @@ struct SwapTokenView: View {
                 TextField("", text: $amountYouPay)
                     .placeholder("0.0", font: .titleH4, when: amountYouPay.isEmpty)
                     .font(.titleH4)
+                    .focused($focusedField, equals: .pay)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
@@ -174,17 +184,17 @@ struct SwapTokenView: View {
             }
         }
         .padding(.xl)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(focusedField == .pay ? .colorBorderPrimaryPressed : .colorBorderPrimarySub, lineWidth: focusedField == .pay ? 2 : 1)
+        )
         .padding(.horizontal, .xl)
         .padding(.top, .lg)
         Image(.icSwap)
             .resizable().frame(width: 36, height: 36)
-            .padding(.top, -18)
-            .padding(.bottom, -18)
+            .padding(.top, -16)
+            .padding(.bottom, -16)
             .zIndex(999)
-            .onTapGesture {
-                //TODOZ: cuongnv swap token
-            }
         VStack(alignment: .leading, spacing: 4) {
             Text("You receive")
                 .font(.paragraphSmall)
@@ -247,16 +257,91 @@ struct SwapTokenView: View {
             }
         }
         .padding(.xl)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
+        VStack(spacing: .lg) {
+            HStack(spacing: 4) {
+                Text("Select your route")
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Spacer()
+                Image(.icDown)
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 16, height: 16)
+                    .tint(.colorBaseTent)
+            }
+            HStack(spacing: 8) {
+                Text("Best route")
+                    .lineLimit(1)
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                Text("V1")
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorDecorativeLeafSub)
+                    .padding(.horizontal, .md)
+                    .frame(height: 20)
+                    .background(
+                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorDecorativeLeaf)
+                    )
+                Spacer()
+                Image(.icStartRouting)
+                    .padding(.trailing, 4)
+                ForEach(0..<3, id: \.self) { index in
+                    TokenLogoView(size: .init(width: 16, height: 16))
+                    if index != 2 {
+                        Image(.icBack)
+                            .resizable()
+                            .renderingMode(.template)
+                            .rotationEffect(.degrees(180))
+                            .frame(width: 14, height: 14)
+                            .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                    }
+                }
+            }
+        }
+        .padding(.xl)
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
+        .padding(.top, .md)
+        .padding(.horizontal, .xl)
+        .contentShape(.rect)
+        .onTapGesture {
+            $viewModel.isShowRouting.showSheet()
+        }
     }
 
+    @ViewBuilder
     private var bottomView: some View {
-        HStack {
-            Text("zz")
+        Color.colorBorderPrimarySub.frame(height: 1)
+        HStack(spacing: 8) {
+            Circle().frame(width: 6, height: 6)
+                .foregroundStyle(.colorBaseSuccess)
+            Text("1 ADA = 9.443 MIN")
+                .font(.paragraphSmall)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+            Image(.icExecutePrice)
+                .fixSize(.xl)
+            Spacer()
+            Text("0.3%")
+                .font(.paragraphXMediumSmall)
+                .foregroundStyle(.colorInteractiveToneSuccess)
+                .padding(.horizontal, .md)
+                .frame(height: 20)
+                .background(
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
+                )
+            Image(.icNext)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 10, height: 10)
+                .rotationEffect(.degrees(-90))
         }
-        .background(.pink)
+        .padding(.xl)
+        .containerShape(.rect)
+        .onTapGesture {
+            $viewModel.isShowInfo.showSheet()
+        }
     }
 }
 

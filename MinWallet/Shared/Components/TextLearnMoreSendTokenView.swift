@@ -84,8 +84,7 @@ struct TextLearnMoreSendTokenView: UIViewRepresentable {
                                 .font(UIFont.systemFont(ofSize: 15, weight: .regular)),
                                 .textColor(UIColor.colorInteractiveTentSecondaryDefault),
                                 .underlineStyle(.single),
-                                //                    .baselineOffset(0)
-
+                                //                                                    .baselineOffset(0)
                             ]))
                     $0.append(NSAttributedString(string: " "))
                 }

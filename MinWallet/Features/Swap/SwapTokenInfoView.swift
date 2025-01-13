@@ -61,6 +61,9 @@ struct SwapTokenInfoView: View {
             Text("Want a discount?")
                 .font(.paragraphXSmall)
                 .foregroundStyle(.colorInteractiveToneHighlight)
+                .onTapGesture {
+                    UIApplication.shared.open(URL(string: "https://docs.minswap.org/min-token/usdmin-tokenomics/trading-fee-discount")!, options: [:], completionHandler: nil)
+                }
             HStack {
                 DashedUnderlineText(text: "Deposit ADA", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()

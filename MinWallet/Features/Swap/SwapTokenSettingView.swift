@@ -80,6 +80,28 @@ struct SwapTokenSettingView: View {
                     .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                 }
                 .padding(.top, .md)
+                if (Double(percent) ?? 0) > 50 {
+                    HStack(spacing: Spacing.md) {
+                        Image(.icWarning)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Unsafe slippage tolerance.")
+                                .lineLimit(0)
+                                .font(.paragraphSemi)
+                                .foregroundStyle(.colorInteractiveToneDanger)
+                            Text("Beware that using over 50% slippage is risky. It means that you are willing to accept a price movement of over 50% once your order is executed.")
+                                .font(.paragraphXSmall)
+                                .foregroundStyle(.colorInteractiveToneDanger)
+
+                        }
+                    }
+                    .padding(.md)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
+                    )
+                    .padding(.top, .xl)
+                }
                 HStack(spacing: .xl) {
                     DashedUnderlineText(text: "Predict Swap Price", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
                     Spacer()

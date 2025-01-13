@@ -22,6 +22,7 @@ struct SwapTokenRoutingView: View {
                     }
                 }
             }
+            //TODO: calculate size
             .frame(maxHeight: UIScreen.main.bounds.height - 400)
             Spacer(minLength: 0)
             CustomButton(title: "Swap") {
