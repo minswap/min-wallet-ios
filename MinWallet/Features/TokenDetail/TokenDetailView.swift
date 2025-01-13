@@ -9,26 +9,34 @@ struct TokenDetailView: View {
     @EnvironmentObject
     var appSetting: AppSetting
 
-    @State var progress: CGFloat = 0
-    private var minHeight: CGFloat = TokenDetailHeaderView.smallLargeHeader
-    private var maxHeight: CGFloat = TokenDetailHeaderView.heightLargeHeader + TokenDetailHeaderView.smallLargeHeader
+    @State
+    var progress: CGFloat = 0
+    private var minHeight: CGFloat = Self.smallLargeHeader
+    private var maxHeight: CGFloat = Self.heightLargeHeader + Self.smallLargeHeader
+    let datas = ["DEX", "DeFi", "Smart contract", "Staking"]
+    var data: [LineChartData] = []
+
+    let viewModel: TokenDetailViewModel
+
+    init(viewModel: TokenDetailViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         ZStack {
             ScalingHeaderScrollView {
                 ZStack {
                     Color.colorBaseBackground.ignoresSafeArea()
-                    TokenDetailHeaderView(progress: $progress)
+                    tokenDetailHeaderView
                 }
             } content: {
                 VStack(spacing: 0) {
-                    TokenDetailChartView(data: chartData)
+                    tokenDetailChartView
                         .padding(.top, .xl)
                         .padding(.horizontal, .xl)
-                    TokenDetailStatisticView()
+                    tokenDetailStatisticView
                         .padding(.top, .xl)
                         .padding(.horizontal, .xl)
-
                 }
             }
             .height(min: minHeight + appSetting.safeArea + appSetting.extraSafeArea, max: maxHeight + appSetting.safeArea)
@@ -61,7 +69,7 @@ struct TokenDetailView: View {
             }
             VStack {
                 Spacer()
-                TokenDetailBottomView()
+                tokenDetailBottomView
                     .background(.colorBaseBackground)
                     .padding(.horizontal, .xl)
             }
@@ -72,6 +80,6 @@ struct TokenDetailView: View {
 }
 
 #Preview {
-    TokenDetailView()
+    TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
         .environmentObject(AppSetting.shared)
 }

@@ -4,6 +4,9 @@
     "" : {
 
     },
+    " " : {
+
+    },
     "%" : {
 
     },
@@ -44,16 +47,7 @@
     "0.0422 ₳" : {
 
     },
-    "1D" : {
-
-    },
-    "1M" : {
-
-    },
-    "1W" : {
-
-    },
-    "1Y" : {
+    "1 ADA = 22.612 MIN" : {
 
     },
     "5.7%" : {
@@ -89,7 +83,13 @@
     "About Minwallet" : {
 
     },
+    "Action" : {
+
+    },
     "ADA" : {
+
+    },
+    "ADA > MIN" : {
 
     },
     "Add Token" : {
@@ -98,10 +98,19 @@
     "addr1qxjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cq5svq4r" : {
 
     },
+    "All" : {
+
+    },
     "All time high" : {
 
     },
+    "Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”" : {
+
+    },
     "Appearance" : {
+
+    },
+    "Apply" : {
 
     },
     "Audio" : {
@@ -119,6 +128,9 @@
     "Basic" : {
 
     },
+    "Batched at" : {
+
+    },
     "Before you start, please read and keep the following security tips in mind." : {
 
     },
@@ -131,7 +143,16 @@
     "Cancel" : {
 
     },
+    "Cancelled" : {
+
+    },
+    "Cancelled at" : {
+
+    },
     "Change" : {
+
+    },
+    "Change amount" : {
 
     },
     "Change password" : {
@@ -149,6 +170,9 @@
     "close menu" : {
 
     },
+    "Completed" : {
+
+    },
     "Confirm" : {
 
     },
@@ -156,6 +180,9 @@
 
     },
     "Confirmation" : {
+
+    },
+    "Contract" : {
 
     },
     "Copied" : {
@@ -173,6 +200,9 @@
     "Create your password" : {
 
     },
+    "Created at" : {
+
+    },
     "Currency" : {
 
     },
@@ -185,10 +215,19 @@
     "Default" : {
 
     },
+    "Deposit" : {
+
+    },
+    "Deposit ADA" : {
+
+    },
     "Disconnect" : {
 
     },
     "Disconnect wallet" : {
+
+    },
+    "Donation" : {
 
     },
     "Done" : {
@@ -198,6 +237,18 @@
 
     },
     "Enter your password" : {
+
+    },
+    "Estimated batcher fee" : {
+
+    },
+    "Executed batcher fee" : {
+
+    },
+    "Executed price" : {
+
+    },
+    "Execution information" : {
 
     },
     "Face ID" : {
@@ -215,10 +266,16 @@
     "Fee" : {
 
     },
+    "Filter" : {
+
+    },
     "Forgot password" : {
 
     },
     "Forgot password?" : {
+
+    },
+    "From" : {
 
     },
     "Get help" : {
@@ -272,6 +329,9 @@
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
+    "Input information" : {
+
+    },
     "Item %lld" : {
 
     },
@@ -287,7 +347,13 @@
     "Learn more" : {
 
     },
+    "Let's swap now" : {
+
+    },
     "Light" : {
+
+    },
+    "Limit" : {
 
     },
     "LIQ" : {
@@ -309,6 +375,9 @@
 
     },
     "MIN" : {
+
+    },
+    "Minimum receive" : {
 
     },
     "minswap" : {
@@ -341,13 +410,31 @@
     "No data" : {
 
     },
+    "No results" : {
+
+    },
     "Notice" : {
+
+    },
+    "OCO" : {
 
     },
     "Old Password" : {
 
     },
     "Optic ID" : {
+
+    },
+    "Order type" : {
+
+    },
+    "Orders" : {
+
+    },
+    "Output information" : {
+
+    },
+    "Partial swap" : {
 
     },
     "Password" : {
@@ -366,6 +453,9 @@
 
     },
     "Paste" : {
+
+    },
+    "Pending" : {
 
     },
     "Please write down your 24 words seed phrase and store it in a secured place." : {
@@ -391,9 +481,6 @@
     "Privacy policy" : {
 
     },
-    "QR" : {
-
-    },
     "Re-input your seed phrase" : {
 
     },
@@ -406,6 +493,9 @@
     "Recommended" : {
 
     },
+    "Reset" : {
+
+    },
     "Restore" : {
 
     },
@@ -413,6 +503,9 @@
 
     },
     "Restore wallet" : {
+
+    },
+    "Route" : {
 
     },
     "Sample" : {
@@ -469,7 +562,16 @@
     "Something went wrong!" : {
 
     },
+    "Stableswap" : {
+
+    },
     "Statistics" : {
+
+    },
+    "Status" : {
+
+    },
+    "Stop loss" : {
 
     },
     "Swap" : {
@@ -508,6 +610,9 @@
     "Touch ID không sẵn sàng" : {
 
     },
+    "Trading fee" : {
+
+    },
     "Transaction Id" : {
 
     },
@@ -518,6 +623,9 @@
 
     },
     "Unlock your wallet using Face ID recognition or a password." : {
+
+    },
+    "Update" : {
 
     },
     "USD" : {
@@ -535,6 +643,12 @@
     "v%@" : {
 
     },
+    "V1" : {
+
+    },
+    "V2" : {
+
+    },
     "Value" : {
 
     },
@@ -550,12 +664,6 @@
     "Vui lòng chấp nhận đăng nhập bằng Face ID/Touch ID" : {
 
     },
-    "W01..." : {
-
-    },
-    "Wallet 1" : {
-
-    },
     "Weekday" : {
 
     },
@@ -565,16 +673,25 @@
     "When you set the appearance to default, theme app will be depended on device settings." : {
 
     },
+    "Withdraw" : {
+
+    },
     "Xác thực không hợp lệ, vui lòng thử lại sau" : {
 
     },
     "You are disconnecting your wallet?" : {
 
     },
+    "You have no order" : {
+
+    },
     "You have successfully create a wallet. Minwallet makes exploring Cardano feel better than ever." : {
 
     },
     "You have to re-enter your seed phrases when reconnecting your wallet." : {
+
+    },
+    "You paid" : {
 
     },
     "You pay" : {
@@ -596,6 +713,12 @@
 
     },
     "Your tokens" : {
+
+    },
+    "Zap in" : {
+
+    },
+    "Zap out" : {
 
     },
     "zzz" : {

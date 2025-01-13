@@ -16,7 +16,7 @@ protocol TokenProtocol {
     var subPriceValue: Double { get }
 }
 
-extension TopAssetQuery.Data.TopAssets.TopAsset: TokenProtocol {
+extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
     var currencySymbol: String {
         asset.currencySymbol
     }

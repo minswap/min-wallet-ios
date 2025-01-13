@@ -17,7 +17,7 @@ extension MainCoordinatorViewModel {
         case home
         case policy
         case gettingStarted
-        case tokenDetail(token: Token)
+        case tokenDetail(token: WrapTokenModel)
         case about
         case language
         case changePassword
@@ -32,6 +32,8 @@ extension MainCoordinatorViewModel {
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
         case securitySetting(_ screen: SecuritySetting)
+        case orderHistoryDetail(order: OrderHistoryQuery.Data.Orders.WrapOrder)
+        case orderHistory
     }
 }
 

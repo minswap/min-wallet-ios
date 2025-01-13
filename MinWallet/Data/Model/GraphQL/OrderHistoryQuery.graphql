@@ -1,0 +1,44 @@
+query OrderHistoryQuery($ordersInput2: OrderV2Input!) {
+  orders(input: $ordersInput2) {
+    orders {
+      action
+      createdAt
+      details
+      type
+      txIn {
+        txId
+      }
+      expiredAt
+      linkedPools {
+        assets {
+          currencySymbol
+          metadata {
+            decimals
+            isVerified
+            name
+            ticker
+          }
+          tokenName
+        }
+        lpAsset {
+          currencySymbol
+          metadata {
+            isVerified
+            decimals
+            ticker
+            name
+          }
+          tokenName
+        }
+      }
+      status
+      updatedAt
+      updatedTxId
+    }
+    cursor {
+      stableswap
+      v1
+      v2
+    }
+  }
+}

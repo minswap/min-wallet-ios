@@ -7,16 +7,16 @@ public class TopAssetQuery: GraphQLQuery {
   public static let operationName: String = "TopAssetQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query TopAssetQuery($input: TopAssetsInput) { topAssets(input: $input) { __typename searchAfter topAssets { __typename price asset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } priceChange24h } } }"#
+      #"query TopAssetQuery($asset: InputAsset!) { topAsset(asset: $asset) { __typename asset { __typename currencySymbol metadata { __typename decimals isVerified name ticker } } marketCap price price24hAgo price30dAgo price7dAgo priceChange24h priceChange7d totalSupply tvl volume24h volume30d volume7d fdMarketCap circulatingSupply } }"#
     ))
 
-  public var input: GraphQLNullable<TopAssetsInput>
+  public var asset: InputAsset
 
-  public init(input: GraphQLNullable<TopAssetsInput>) {
-    self.input = input
+  public init(asset: InputAsset) {
+    self.asset = asset
   }
 
-  public var __variables: Variables? { ["input": input] }
+  public var __variables: Variables? { ["asset": asset] }
 
   public struct Data: MinWalletAPI.SelectionSet {
     public let __data: DataDict
@@ -24,87 +24,91 @@ public class TopAssetQuery: GraphQLQuery {
 
     public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.Query }
     public static var __selections: [ApolloAPI.Selection] { [
-      .field("topAssets", TopAssets.self, arguments: ["input": .variable("input")]),
+      .field("topAsset", TopAsset?.self, arguments: ["asset": .variable("asset")]),
     ] }
 
-    public var topAssets: TopAssets { __data["topAssets"] }
+    public var topAsset: TopAsset? { __data["topAsset"] }
 
-    /// TopAssets
+    /// TopAsset
     ///
-    /// Parent Type: `TopAssetsResponse`
-    public struct TopAssets: MinWalletAPI.SelectionSet {
+    /// Parent Type: `TopAsset`
+    public struct TopAsset: MinWalletAPI.SelectionSet {
       public let __data: DataDict
       public init(_dataDict: DataDict) { __data = _dataDict }
 
-      public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.TopAssetsResponse }
+      public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.TopAsset }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("searchAfter", [String]?.self),
-        .field("topAssets", [TopAsset].self),
+        .field("asset", Asset.self),
+        .field("marketCap", MinWalletAPI.BigNumber.self),
+        .field("price", MinWalletAPI.BigNumber.self),
+        .field("price24hAgo", MinWalletAPI.BigNumber.self),
+        .field("price30dAgo", MinWalletAPI.BigNumber.self),
+        .field("price7dAgo", MinWalletAPI.BigNumber.self),
+        .field("priceChange24h", MinWalletAPI.BigNumber.self),
+        .field("priceChange7d", MinWalletAPI.BigNumber.self),
+        .field("totalSupply", MinWalletAPI.BigNumber.self),
+        .field("tvl", MinWalletAPI.BigInt.self),
+        .field("volume24h", MinWalletAPI.BigNumber.self),
+        .field("volume30d", MinWalletAPI.BigNumber.self),
+        .field("volume7d", MinWalletAPI.BigNumber.self),
+        .field("fdMarketCap", MinWalletAPI.BigNumber.self),
+        .field("circulatingSupply", MinWalletAPI.BigNumber.self),
       ] }
 
-      public var searchAfter: [String]? { __data["searchAfter"] }
-      public var topAssets: [TopAsset] { __data["topAssets"] }
+      public var asset: Asset { __data["asset"] }
+      public var marketCap: MinWalletAPI.BigNumber { __data["marketCap"] }
+      public var price: MinWalletAPI.BigNumber { __data["price"] }
+      public var price24hAgo: MinWalletAPI.BigNumber { __data["price24hAgo"] }
+      public var price30dAgo: MinWalletAPI.BigNumber { __data["price30dAgo"] }
+      public var price7dAgo: MinWalletAPI.BigNumber { __data["price7dAgo"] }
+      public var priceChange24h: MinWalletAPI.BigNumber { __data["priceChange24h"] }
+      public var priceChange7d: MinWalletAPI.BigNumber { __data["priceChange7d"] }
+      public var totalSupply: MinWalletAPI.BigNumber { __data["totalSupply"] }
+      public var tvl: MinWalletAPI.BigInt { __data["tvl"] }
+      public var volume24h: MinWalletAPI.BigNumber { __data["volume24h"] }
+      public var volume30d: MinWalletAPI.BigNumber { __data["volume30d"] }
+      public var volume7d: MinWalletAPI.BigNumber { __data["volume7d"] }
+      public var fdMarketCap: MinWalletAPI.BigNumber { __data["fdMarketCap"] }
+      public var circulatingSupply: MinWalletAPI.BigNumber { __data["circulatingSupply"] }
 
-      /// TopAssets.TopAsset
+      /// TopAsset.Asset
       ///
-      /// Parent Type: `TopAsset`
-      public struct TopAsset: MinWalletAPI.SelectionSet {
+      /// Parent Type: `Asset`
+      public struct Asset: MinWalletAPI.SelectionSet {
         public let __data: DataDict
         public init(_dataDict: DataDict) { __data = _dataDict }
 
-        public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.TopAsset }
+        public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.Asset }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
-          .field("price", MinWalletAPI.BigNumber.self),
-          .field("asset", Asset.self),
-          .field("priceChange24h", MinWalletAPI.BigNumber.self),
+          .field("currencySymbol", String.self),
+          .field("metadata", Metadata?.self),
         ] }
 
-        public var price: MinWalletAPI.BigNumber { __data["price"] }
-        public var asset: Asset { __data["asset"] }
-        public var priceChange24h: MinWalletAPI.BigNumber { __data["priceChange24h"] }
+        public var currencySymbol: String { __data["currencySymbol"] }
+        public var metadata: Metadata? { __data["metadata"] }
 
-        /// TopAssets.TopAsset.Asset
+        /// TopAsset.Asset.Metadata
         ///
-        /// Parent Type: `Asset`
-        public struct Asset: MinWalletAPI.SelectionSet {
+        /// Parent Type: `AssetMetadata`
+        public struct Metadata: MinWalletAPI.SelectionSet {
           public let __data: DataDict
           public init(_dataDict: DataDict) { __data = _dataDict }
 
-          public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.Asset }
+          public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.AssetMetadata }
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
-            .field("currencySymbol", String.self),
-            .field("metadata", Metadata?.self),
-            .field("tokenName", String.self),
+            .field("decimals", Int?.self),
+            .field("isVerified", Bool.self),
+            .field("name", String?.self),
+            .field("ticker", String?.self),
           ] }
 
-          public var currencySymbol: String { __data["currencySymbol"] }
-          public var metadata: Metadata? { __data["metadata"] }
-          public var tokenName: String { __data["tokenName"] }
-
-          /// TopAssets.TopAsset.Asset.Metadata
-          ///
-          /// Parent Type: `AssetMetadata`
-          public struct Metadata: MinWalletAPI.SelectionSet {
-            public let __data: DataDict
-            public init(_dataDict: DataDict) { __data = _dataDict }
-
-            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.AssetMetadata }
-            public static var __selections: [ApolloAPI.Selection] { [
-              .field("__typename", String.self),
-              .field("isVerified", Bool.self),
-              .field("decimals", Int?.self),
-              .field("ticker", String?.self),
-              .field("name", String?.self),
-            ] }
-
-            public var isVerified: Bool { __data["isVerified"] }
-            public var decimals: Int? { __data["decimals"] }
-            public var ticker: String? { __data["ticker"] }
-            public var name: String? { __data["name"] }
-          }
+          public var decimals: Int? { __data["decimals"] }
+          public var isVerified: Bool { __data["isVerified"] }
+          public var name: String? { __data["name"] }
+          public var ticker: String? { __data["ticker"] }
         }
       }
     }

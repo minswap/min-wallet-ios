@@ -52,7 +52,7 @@ class HomeViewModel: ObservableObject {
                         $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
                     })
 
-                let tokens = try? await MinWalletService.shared.fetch(query: TopAssetQuery(input: .some(input)))
+                let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
                 let _tokens = tokens?.topAssets.topAssets ?? []
                 var currentTokens = tokensDic[tabType] ?? []
                 if isLoadMore {

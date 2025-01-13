@@ -3,3 +3,4 @@
 //TODO: Change url production ?
 MIN_GRAPHQL_URL      = https:\/\/monorepo-testnet-preprod.minswap.org\/graphql
 MIN_PUBLIC_NETWORK_ID = mainnet
+MIN_TRANSACTION_URL = https:/\/\preprod.cardanoscan.io\/transaction

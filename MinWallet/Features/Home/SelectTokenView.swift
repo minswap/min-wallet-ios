@@ -6,7 +6,7 @@ struct SelectTokenView: View {
     @State
     private var keyword: String = ""
     @State
-    var tokens: [TopAssetQuery.Data.TopAssets.TopAsset] = []
+    var tokens: [TopAssetsQuery.Data.TopAssets.TopAsset] = []
     @FocusState
     private var isFocus: Bool
 

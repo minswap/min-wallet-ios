@@ -1,22 +1,18 @@
 import SwiftUI
 
 
-struct TokenDetailHeaderView: View {
+extension TokenDetailView {
     static let heightLargeHeader: CGFloat = 116
     static let smallLargeHeader: CGFloat = 48
 
-    @Binding
-    var progress: CGFloat
-
-    var body: some View {
+    var tokenDetailHeaderView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
             ZStack(alignment: .leading) {
                 HStack(alignment: .center, spacing: 12) {
-                    //TODO: cuongnv
-                    //TokenLogoView(token: .sampleData)
+                    TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("MIN")
+                        Text(viewModel.token.name)
                             .foregroundStyle(.colorBaseTent)
                             .font(.labelMediumSecondary)
                         HStack(spacing: 4) {
@@ -44,12 +40,11 @@ struct TokenDetailHeaderView: View {
                     HStack(
                         alignment: .center,
                         content: {
-                            //TODO: cuongnv
-                            //TokenLogoView(token: .sampleData)
+                            TokenLogoView(currencySymbol: viewModel.token.currencySymbol, tokenName: viewModel.token.tokenName, isVerified: viewModel.token.isVerified)
                             HStack(
                                 alignment: .firstTextBaseline, spacing: 4,
                                 content: {
-                                    Text("MIN")
+                                    Text(viewModel.token.name)
                                         .foregroundStyle(.colorBaseTent)
                                         .font(.labelMediumSecondary)
                                     Text("Minswap")
@@ -73,7 +68,6 @@ struct TokenDetailHeaderView: View {
                     }
                 }
                 .padding(.horizontal, .xl)
-                //                .background(.yellow)
                 .frame(height: Self.heightLargeHeader)
                 .opacity(1 - max(0, min(1, (progress - 0.75) * 4.0)))
             }
@@ -81,12 +75,8 @@ struct TokenDetailHeaderView: View {
     }
 }
 
+
 #Preview {
-    VStack(
-        alignment: .leading, spacing: 0,
-        content: {
-            TokenDetailHeaderView(progress: .constant(0))
-                .background(.red)
-            Spacer()
-        })
+    TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
+        .environmentObject(AppSetting.shared)
 }

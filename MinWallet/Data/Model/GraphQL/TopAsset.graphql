@@ -1,19 +1,27 @@
-query TopAssetQuery($input: TopAssetsInput) {
-  topAssets(input: $input) {
-    searchAfter
-    topAssets {
-      price
-      asset {
-        currencySymbol
-        metadata {
-          isVerified
-          decimals
-          ticker
-          name
-        }
-        tokenName
+query TopAssetQuery($asset: InputAsset!) {
+  topAsset(asset: $asset) {
+    asset {
+      currencySymbol
+      metadata {
+        decimals
+        isVerified
+        name
+        ticker
       }
-      priceChange24h
     }
+    marketCap
+    price
+    price24hAgo
+    price30dAgo
+    price7dAgo
+    priceChange24h
+    priceChange7d
+    totalSupply
+    tvl
+    volume24h
+    volume30d
+    volume7d
+    fdMarketCap
+    circulatingSupply
   }
 }

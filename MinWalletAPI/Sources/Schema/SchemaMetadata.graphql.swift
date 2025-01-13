@@ -20,16 +20,25 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
 
   public static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
     switch typename {
+    case "AMMPool": return MinWalletAPI.Objects.AMMPool
+    case "AMMUtxo": return MinWalletAPI.Objects.AMMUtxo
     case "AdaPrice": return MinWalletAPI.Objects.AdaPrice
     case "Asset": return MinWalletAPI.Objects.Asset
     case "AssetAmount": return MinWalletAPI.Objects.AssetAmount
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
+    case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
+    case "OrderHistoryResponse": return MinWalletAPI.Objects.OrderHistoryResponse
+    case "OrderLinkedPool": return MinWalletAPI.Objects.OrderLinkedPool
+    case "OrderPaginationCursor": return MinWalletAPI.Objects.OrderPaginationCursor
     case "PortfolioLPPosition": return MinWalletAPI.Objects.PortfolioLPPosition
+    case "PortfolioNFTPosition": return MinWalletAPI.Objects.PortfolioNFTPosition
     case "PortfolioOverview": return MinWalletAPI.Objects.PortfolioOverview
     case "PortfolioTokenPosition": return MinWalletAPI.Objects.PortfolioTokenPosition
     case "Query": return MinWalletAPI.Objects.Query
+    case "SimpleChart": return MinWalletAPI.Objects.SimpleChart
     case "TopAsset": return MinWalletAPI.Objects.TopAsset
     case "TopAssetsResponse": return MinWalletAPI.Objects.TopAssetsResponse
+    case "TxIn": return MinWalletAPI.Objects.TxIn
     case "WalletAssetsPositions": return MinWalletAPI.Objects.WalletAssetsPositions
     default: return nil
     }

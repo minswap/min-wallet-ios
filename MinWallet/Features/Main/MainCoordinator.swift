@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import MinWalletAPI
 
 
 struct MainCoordinator: View {
@@ -24,7 +25,7 @@ struct MainCoordinator: View {
                     case .gettingStarted:
                         GettingStartedView().navigationBarHidden(true)
                     case let .tokenDetail(token):
-                        TokenDetailView().navigationBarHidden(true)
+                        TokenDetailView(viewModel: TokenDetailViewModel(token: token.base)).navigationBarHidden(true)
                     case .about:
                         AboutView().navigationBarHidden(true)
                     case .language:
@@ -126,6 +127,10 @@ struct MainCoordinator: View {
                         case .forgotPassword:
                             ForgotPasswordView(screenType: .enterPassword).navigationBarHidden(true)
                         }
+                    case let .orderHistoryDetail(order):
+                        OrderHistoryDetailView(order: order).navigationBarHidden(true)
+                    case .orderHistory:
+                        OrderHistoryView().navigationBarHidden(true)
                     }
                 }
                 .navigationBarHidden(true)
