@@ -76,6 +76,7 @@ struct SwapTokenView: View {
             isPresented: $viewModel.isShowRouting,
             content: {
                 SwapTokenRoutingView(isShowRouting: $viewModel.isShowRouting)
+                    .environmentObject(viewModel)
             }
         )
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
@@ -166,7 +167,7 @@ struct SwapTokenView: View {
                         .selectToken(
                             tokensSelected: [viewModel.tokenReceive],
                             onSelectToken: { token in
-                                self.viewModel.tokenPay = token.first
+                                self.viewModel.action.send(.selectTokenReceive(token: token.first))
                             }))
                 }
             }
@@ -239,7 +240,7 @@ struct SwapTokenView: View {
                         .selectToken(
                             tokensSelected: [viewModel.tokenPay],
                             onSelectToken: { token in
-                                self.viewModel.tokenReceive = token.first
+                                self.viewModel.action.send(.selectTokenPay(token: token.first))
                             }))
                 }
             }
@@ -260,54 +261,59 @@ struct SwapTokenView: View {
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
-        VStack(spacing: .lg) {
-            HStack(spacing: 4) {
-                Text("Select your route")
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                Spacer()
-                Image(.icDown)
-                    .resizable()
-                    .renderingMode(.template)
-                    .frame(width: 16, height: 16)
-                    .tint(.colorBaseTent)
-            }
-            HStack(spacing: 8) {
-                Text("Best route")
-                    .lineLimit(1)
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorBaseTent)
-                Text("V1")
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(.colorDecorativeLeafSub)
-                    .padding(.horizontal, .md)
-                    .frame(height: 20)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorDecorativeLeaf)
-                    )
-                Spacer()
-                Image(.icStartRouting)
-                    .padding(.trailing, 4)
-                ForEach(0..<3, id: \.self) { index in
-                    TokenLogoView(size: .init(width: 16, height: 16))
-                    if index != 2 {
-                        Image(.icBack)
-                            .resizable()
-                            .renderingMode(.template)
-                            .rotationEffect(.degrees(180))
-                            .frame(width: 14, height: 14)
-                            .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+        if let routingSelected = viewModel.routingSelected {
+            VStack(spacing: .lg) {
+                HStack(spacing: 4) {
+                    Text("Select your route")
+                        .font(.paragraphXMediumSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Image(.icDown)
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 16, height: 16)
+                        .tint(.colorBaseTent)
+                }
+                HStack(spacing: 8) {
+                    Text(routingSelected.title)
+                        .lineLimit(1)
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Text(routingSelected.routing.type.value?.title)
+                        .font(.paragraphXMediumSmall)
+                        .foregroundStyle(routingSelected.routing.type.value?.foregroundColor ?? .clear)
+                        .padding(.horizontal, .md)
+                        .frame(height: 20)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(routingSelected.routing.type.value?.backgroundColor ?? .clear)
+                        )
+                    Spacer()
+                    Image(.icStartRouting)
+                        .padding(.trailing, 4)
+                    let assets = routingSelected.poolsAsset
+                    ForEach(0..<assets.count, id: \.self) { index in
+                        let asset = assets[index]
+                        TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
+                        if index != assets.count - 1 {
+                            Image(.icBack)
+                                .resizable()
+                                .renderingMode(.template)
+                                .rotationEffect(.degrees(180))
+                                .frame(width: 14, height: 14)
+                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                        }
                     }
                 }
             }
-        }
-        .padding(.xl)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
-        .padding(.top, .md)
-        .padding(.horizontal, .xl)
-        .contentShape(.rect)
-        .onTapGesture {
-            $viewModel.isShowRouting.showSheet()
+            .padding(.xl)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
+            .padding(.top, .md)
+            .padding(.horizontal, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                guard !viewModel.isLoadingRouting else { return }
+                $viewModel.isShowRouting.showSheet()
+            }
         }
     }
 

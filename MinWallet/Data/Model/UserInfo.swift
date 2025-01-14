@@ -8,11 +8,11 @@ class UserInfo: ObservableObject {
     static let TOKEN_NAME_DEFAULT: [String /*currency or token name*/: String] = [
         "lovelace": "ADA",
         "e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86": "LP",
-        "4d494e": "MIN",  //token name
+        MinWalletConstant.minCurrencySymbol: "MIN",  //token name
     ]
     static let TOKEN_IMAGE_DEFAULT: [String: ImageResource] = [
         "lovelace": .ada,
-        "4d494e": .min,
+        MinWalletConstant.minTokenName: .min,
     ]
 
     static let MIN_WALLET_KEY: String = "MIN_WALLET_KEY"

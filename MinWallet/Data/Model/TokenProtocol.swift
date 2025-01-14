@@ -36,6 +36,9 @@ extension TokenProtocol {
     }
 
     var uniqueID: String {
-        currencySymbol + "." + tokenName
+        if currencySymbol.isEmpty && tokenName.isEmpty {
+            return "lovelace"
+        }
+        return currencySymbol + "." + tokenName
     }
 }

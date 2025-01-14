@@ -15,14 +15,14 @@ struct SwapTokenSettingView: View {
     private var slippages: [Slippage] = Slippage.allCases
     @FocusState
     private var isFocus: Bool
-   
+
     let maxValue: Double = 100.0  // Define the maximum value
 
     @Environment(\.partialSheetDismiss)
     var onDismiss
     @ObservedObject
     var viewModel: SwapTokenViewModel
-    
+
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {

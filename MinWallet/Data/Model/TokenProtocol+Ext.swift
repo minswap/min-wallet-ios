@@ -395,3 +395,57 @@ enum SocialLinks: String {
         }
     }
 }
+
+extension RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Pool.PoolAsset {
+    var uniqueID: String {
+        if currencySymbol.isEmpty && tokenName.isEmpty {
+            return "lovelace"
+        }
+        return currencySymbol + "." + tokenName
+    }
+}
+
+extension RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Routing.Routing {
+    var uniqueID: String {
+        if currencySymbol.isEmpty && tokenName.isEmpty {
+            return "lovelace"
+        }
+        return currencySymbol + "." + tokenName
+    }
+}
+
+struct TokenDefault: TokenProtocol {
+    var currencySymbol: String {
+        symbol
+    }
+
+    var tokenName: String {
+        tName
+    }
+
+    var isVerified: Bool { false }
+
+    var ticker: String { "" }
+
+    var name: String { "" }
+
+    var category: [String] { [] }
+
+    var percentChange: Double { 0 }
+
+    var priceValue: Double { 0 }
+
+    var subPriceValue: Double { 0 }
+
+    var socialLinks: [SocialLinks: String] { [:] }
+
+    var decimals: Int { 0 }
+
+    var symbol: String = ""
+    var tName: String = ""
+
+    init(symbol: String, tName: String) {
+        self.symbol = symbol
+        self.tName = tName
+    }
+}
