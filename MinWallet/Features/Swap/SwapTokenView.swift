@@ -79,7 +79,7 @@ struct SwapTokenView: View {
             }
         )
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
-            SwapTokenSettingView()
+            SwapTokenSettingView(viewModel: viewModel)
                 .padding(.xl)
         }
         .banner(isShowing: $viewModel.isShowBannerTransaction) {

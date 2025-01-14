@@ -156,6 +156,9 @@
     "Best router" : {
 
     },
+    "Beware that using over 50% slippage is risky. It means that you are willing to accept a price movement of over 50% once your order is executed." : {
+
+    },
     "Cancel" : {
 
     },
@@ -690,6 +693,9 @@
 
     },
     "Unlock your wallet using Face ID recognition or a password." : {
+
+    },
+    "Unsafe slippage tolerance." : {
 
     },
     "Update token supply" : {

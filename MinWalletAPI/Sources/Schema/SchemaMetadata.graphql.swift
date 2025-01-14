@@ -43,6 +43,8 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "PortfolioTokenPosition": return MinWalletAPI.Objects.PortfolioTokenPosition
     case "Query": return MinWalletAPI.Objects.Query
     case "RiskScore": return MinWalletAPI.Objects.RiskScore
+    case "RoutedPools": return MinWalletAPI.Objects.RoutedPools
+    case "Routing": return MinWalletAPI.Objects.Routing
     case "RoutingOverSlipageDetail": return MinWalletAPI.Objects.RoutingOverSlipageDetail
     case "SimpleChart": return MinWalletAPI.Objects.SimpleChart
     case "StableswapWithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.StableswapWithdrawImbalanceOverSlippageDetail

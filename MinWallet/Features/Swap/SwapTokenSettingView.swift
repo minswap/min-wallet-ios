@@ -13,20 +13,16 @@ struct SwapTokenSettingView: View {
 
     @State
     private var slippages: [Slippage] = Slippage.allCases
-    @State
-    private var slippageSelected: Slippage? = ._01
-    @State
-    private var percent: String = ""
     @FocusState
     private var isFocus: Bool
-    @State
-    private var enablePredictSwapPrice: Bool = true
-
+   
     let maxValue: Double = 100.0  // Define the maximum value
 
     @Environment(\.partialSheetDismiss)
     var onDismiss
-
+    @ObservedObject
+    var viewModel: SwapTokenViewModel
+    
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {
@@ -40,26 +36,26 @@ struct SwapTokenSettingView: View {
                     ForEach(slippages) { splippage in
                         Text("\(splippage.rawValue.formatted())%")
                             .font(.labelSmallSecondary)
-                            .foregroundStyle(splippage == slippageSelected ? .colorBaseBackground : .colorBaseTent)
+                            .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
                             .fixedSize(horizontal: true, vertical: false)
                             .frame(height: 36)
                             .padding(.horizontal, .lg)
                             .background(content: {
-                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == viewModel.swapSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
                             })
                             .contentShape(.rect)
                             .onTapGesture {
-                                slippageSelected = splippage
+                                viewModel.swapSetting.slippageSelected = splippage
                             }
                         Spacer()
                     }
                     HStack(spacing: .md) {
-                        TextField("", text: $percent)
+                        TextField("", text: $viewModel.swapSetting.slippageTolerance)
                             .keyboardType(.decimalPad)
-                            .placeholder("Custom", when: percent.isEmpty)
+                            .placeholder("Custom", when: viewModel.swapSetting.slippageTolerance.isEmpty)
                             .focused($isFocus)
                             .lineLimit(1)
-                            .onChange(of: percent) { newValue in
+                            .onChange(of: viewModel.swapSetting.slippageTolerance) { newValue in
                                 let newValue = newValue.replacingOccurrences(of: ",", with: ".")
                                 let filtered: String = {
                                     if let number = Double(newValue), number > maxValue {
@@ -67,20 +63,19 @@ struct SwapTokenSettingView: View {
                                     }
                                     return newValue
                                 }()
-                                percent = filtered
+                                viewModel.swapSetting.slippageTolerance = filtered
                             }
                         Text("%")
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                             .fixedSize(horizontal: true, vertical: false)
-
                     }
                     .frame(height: 36)
                     .padding(.horizontal, .lg)
                     .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                 }
                 .padding(.top, .md)
-                if (Double(percent) ?? 0) > 50 {
+                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) > 50 && viewModel.swapSetting.slippageSelected == nil {
                     HStack(spacing: Spacing.md) {
                         Image(.icWarning)
                             .resizable()
@@ -105,8 +100,11 @@ struct SwapTokenSettingView: View {
                 HStack(spacing: .xl) {
                     DashedUnderlineText(text: "Predict Swap Price", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
                     Spacer()
-                    Toggle("", isOn: $enablePredictSwapPrice)
+                    Toggle("", isOn: $viewModel.swapSetting.predictSwapPrice)
                         .toggleStyle(SwitchToggleStyle())
+                        .onChange(of: viewModel.swapSetting.predictSwapPrice) { autoRouter in
+                            viewModel.action.send(.predictSwapPrice)
+                        }
                 }
                 .frame(height: 32)
                 .padding(.top, .lg)
@@ -117,20 +115,32 @@ struct SwapTokenSettingView: View {
                 HStack(spacing: .xs) {
                     Text("Most liquidity")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorInteractiveToneTent)
+                        .foregroundStyle(viewModel.swapSetting.routeSorting == .most ? .colorInteractiveToneTent : .colorBaseTent)
                         .frame(height: 36)
                         .padding(.horizontal, .lg)
                         .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorInteractiveTentSecondaryDefault)
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(viewModel.swapSetting.routeSorting == .most ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
                         )
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            guard viewModel.swapSetting.routeSorting != .most else { return }
+                            viewModel.swapSetting.routeSorting = .most
+                            viewModel.action.send(.routeSorting)
+                        }
                     Text("High return")
                         .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                        .foregroundStyle(viewModel.swapSetting.routeSorting == .high ? .colorInteractiveToneTent : .colorBaseTent)
                         .frame(height: 36)
                         .padding(.horizontal, .lg)
                         .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(viewModel.swapSetting.routeSorting == .high ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
                         )
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            guard viewModel.swapSetting.routeSorting != .high else { return }
+                            viewModel.swapSetting.routeSorting = .high
+                            viewModel.action.send(.routeSorting)
+                        }
                     Spacer()
                 }
                 .padding(.bottom, .xl)
@@ -152,8 +162,11 @@ struct SwapTokenSettingView: View {
                             RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
                         )
                     Spacer()
-                    Toggle("", isOn: $enablePredictSwapPrice)
+                    Toggle("", isOn: $viewModel.swapSetting.autoRouter)
                         .toggleStyle(SwitchToggleStyle())
+                        .onChange(of: viewModel.swapSetting.autoRouter) { autoRouter in
+                            viewModel.action.send(.autoRouter)
+                        }
                 }
                 .frame(height: 24)
                 .padding(.bottom, 4)
@@ -189,7 +202,7 @@ struct SwapTokenSettingView: View {
 
 #Preview {
     VStack {
-        SwapTokenSettingView()
+        SwapTokenSettingView(viewModel: SwapTokenViewModel())
             .padding(16)
         Spacer()
     }

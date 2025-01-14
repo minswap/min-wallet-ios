@@ -132,7 +132,7 @@ fileprivate struct WidthPreferenceKey: PreferenceKey, Equatable {
 
 #Preview {
     VStack {
-        SwapTokenSettingView()
+        SwapTokenSettingView(viewModel: SwapTokenViewModel())
             .padding(16)
         Spacer()
     }
