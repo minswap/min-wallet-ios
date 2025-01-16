@@ -30,13 +30,19 @@ struct CreateNewWalletSeedPhraseView: View {
                     .padding(.horizontal, .xl)
                     .padding(.bottom, UIApplication.safeArea.bottom > 0 ? UIApplication.safeArea.bottom : .xl)
             } else {
-                SeedPhraseRevealView(isRevealPhrase: $isRevealPhrase)
+                SeedPhraseRevealView()
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, .xl)
                     .padding(.bottom, UIApplication.safeArea.bottom > 0 ? UIApplication.safeArea.bottom : .md)
                     .background(.colorBaseBackground)
                     .cornerRadius(24, corners: [.topLeft, .topRight])
                     .shadow(color: .colorBorderPrimarySub, radius: 4, x: 0, y: 2)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        withAnimation {
+                            isRevealPhrase = true
+                        }
+                    }
             }
         }
         .modifier(
@@ -59,20 +65,13 @@ struct CreateNewWalletSeedPhraseView: View {
 }
 
 private struct SeedPhraseRevealView: View {
-    @Binding
-    var isRevealPhrase: Bool
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Image(.icReveal)
                 .resizable()
                 .frame(width: 60, height: 60)
                 .padding(.vertical, .xl)
-                .onTapGesture {
-                    withAnimation {
-                        isRevealPhrase = true
-                    }
-                }
             Text("Tap to reveal seed phrase")
                 .font(.titleH7)
                 .foregroundStyle(.colorInteractiveToneHighlight)
@@ -220,21 +219,5 @@ private struct SeedPhraseContentView: View {
                 .padding(.bottom, .xl)
             }
         }
-    }
-}
-
-
-extension CreateNewWalletSeedPhraseView {
-    static func generateRandomWords(count: Int, minLength: Int, maxLength: Int) -> [String] {
-        let letters = "abcdefghijklmnopqrstuvwxyz"
-        var words: [String] = []
-
-        for _ in 0..<count {
-            let length = Int.random(in: minLength...maxLength)
-            let word = String((0..<length).map { _ in letters.randomElement()! })
-            words.append(word)
-        }
-
-        return words
     }
 }
