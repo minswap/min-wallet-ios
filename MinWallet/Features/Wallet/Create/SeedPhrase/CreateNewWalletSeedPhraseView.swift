@@ -65,7 +65,7 @@ struct CreateNewWalletSeedPhraseView: View {
 }
 
 private struct SeedPhraseRevealView: View {
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Image(.icReveal)

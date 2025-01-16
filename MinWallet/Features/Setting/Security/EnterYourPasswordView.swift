@@ -16,6 +16,9 @@ struct EnterYourPasswordView: View {
     @FocusState
     var isFocus: Bool
 
+    @State
+    var authenticationType: AppSetting.AuthenticationType = .password
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Enter your password")
@@ -49,14 +52,18 @@ struct EnterYourPasswordView: View {
             )
             .padding(.top, .xl)
             .padding(.bottom, 40)
-            CustomButton(title: "Confirm") {
+            let combinedBinding = Binding<Bool>(
+                get: { !password.isBlank },
+                set: { _ in }
+            )
+            CustomButton(title: "Confirm", isEnable: combinedBinding) {
                 let currentPassword: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
                 guard currentPassword == password
                 else {
                     return
                 }
                 hideKeyboard()
-                appSetting.authenticationType = .password
+                appSetting.authenticationType = authenticationType
                 isShowEnterYourPassword = false
             }
             .frame(height: 56)

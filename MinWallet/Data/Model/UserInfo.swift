@@ -58,13 +58,13 @@ class UserInfo: ObservableObject {
     private func removeWallet() {
         UserDefaults.standard.removeObject(forKey: Self.MIN_WALLET_KEY)
     }
-    
+
     var walletName: String {
         guard let name = minWallet?.walletName else { return "" }
         if name.count <= 10 {
             return name
         }
-        
+
         let first5Characters = name.prefix(5)
         let last5Characters = name.suffix(5)
         return "\(first5Characters)...\(last5Characters)"

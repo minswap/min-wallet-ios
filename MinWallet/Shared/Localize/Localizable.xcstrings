@@ -126,6 +126,12 @@
     "Authentication" : {
 
     },
+    "Authentication cannot be initiated because a passcode has not been set up on the device." : {
+
+    },
+    "Authentication invalid, please try again later" : {
+
+    },
     "Auto Router" : {
 
     },
@@ -133,9 +139,6 @@
 
     },
     "Avg. price change (24h)" : {
-
-    },
-    "Bạn phải đăng nhập với mật khẩu thành công mới có thể sử dụng tính năng này" : {
 
     },
     "Basic" : {
@@ -210,6 +213,9 @@
     "Copy" : {
 
     },
+    "Create" : {
+
+    },
     "Create new wallet" : {
 
     },
@@ -264,6 +270,9 @@
     "Edit nickname" : {
 
     },
+    "Enter password to continue" : {
+
+    },
     "Enter your password" : {
 
     },
@@ -285,13 +294,13 @@
     "Face ID" : {
 
     },
-    "Face ID/Touch ID chưa được cài đặt" : {
+    "Face ID/Touch ID is locked" : {
 
     },
-    "Face ID/Touch ID đang bị khoá" : {
+    "Face ID/Touch ID not available" : {
 
     },
-    "Face ID/Touch ID không sẵn sàng" : {
+    "Face ID/Touch ID not installed" : {
 
     },
     "Fd Market cap" : {
@@ -354,6 +363,9 @@
     "If I share my seed phrase with others, my assets will be stolen." : {
 
     },
+    "If you forget your password, you can reset it by restoring your wallet. You can import your wallet again using the seed phrase or JSON file, and your assets will not be impacted." : {
+
+    },
     "Import" : {
 
     },
@@ -380,9 +392,6 @@
     },
     "Key" : {
       "extractionState" : "manual"
-    },
-    "Không thể bắt đầu xác thực vì mật mã chưa được cài đặt trên thiết bị" : {
-
     },
     "Language" : {
 
@@ -447,9 +456,6 @@
     "Next" : {
 
     },
-    "Nhập mật khẩu để tiếp tục" : {
-
-    },
     "Nickname" : {
 
     },
@@ -502,6 +508,12 @@
 
     },
     "Pending" : {
+
+    },
+    "Please accept with Face ID/Touch ID" : {
+
+    },
+    "Please grant biometric permission to the app to enable Face ID/Touch ID login" : {
 
     },
     "Please write down your 24 words seed phrase and store it in a secured place." : {
@@ -674,7 +686,7 @@
     "Touch ID" : {
 
     },
-    "Touch ID không sẵn sàng" : {
+    "Touch ID not available" : {
 
     },
     "Trading fee" : {
@@ -690,9 +702,6 @@
 
     },
     "Unlock your wallet using %@ recognition or a password." : {
-
-    },
-    "Unlock your wallet using Face ID recognition or a password." : {
 
     },
     "Unsafe slippage tolerance." : {
@@ -731,12 +740,6 @@
     "Volume (24h)" : {
 
     },
-    "Vui lòng cấp quyền sinh trắc học cho ứng dụng để kích hoạt đăng nhập bằng Face ID/Touch ID" : {
-
-    },
-    "Vui lòng chấp nhận đăng nhập bằng Face ID/Touch ID" : {
-
-    },
     "Want a discount?" : {
 
     },
@@ -749,9 +752,6 @@
     "Withdraw" : {
 
     },
-    "Xác thực không hợp lệ, vui lòng thử lại sau" : {
-
-    },
     "You are disconnecting your wallet?" : {
 
     },
@@ -762,6 +762,9 @@
 
     },
     "You have to re-enter your seed phrases when reconnecting your wallet." : {
+
+    },
+    "You must log in with a successful password to use this feature." : {
 
     },
     "You paid" : {

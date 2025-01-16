@@ -30,7 +30,7 @@ struct ForgotPasswordView: View {
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
-          
+
             VStack(alignment: .leading, spacing: .xl) {
                 HStack(spacing: .xl) {
                     Image(conditionOne ? .icChecked : .icUnchecked).resizable().frame(width: 20, height: 20)

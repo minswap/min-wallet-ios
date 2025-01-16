@@ -30,7 +30,7 @@ class AppSetting: ObservableObject {
             objectWillChange.send()
         }
     }
-    
+
     @UserDefault("enable_audio", defaultValue: false)
     var enableAudio: Bool {
         willSet {
@@ -124,7 +124,7 @@ class AppSetting: ObservableObject {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }
 
-        rootScreen = isLogin ? .home : (isFirstTimeRunApp ?  .policy(.splash) : .gettingStarted)
+        rootScreen = isLogin ? .home : (isFirstTimeRunApp ? .policy(.splash) : .gettingStarted)
 
         getAdaPrice()
     }

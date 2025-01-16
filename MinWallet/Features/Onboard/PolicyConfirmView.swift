@@ -7,13 +7,13 @@ struct PolicyConfirmView: View {
         case splash
         case about
     }
-    
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
     @State
     var screenType: ScreenType = .splash
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 5) {

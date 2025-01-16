@@ -13,6 +13,8 @@ struct AuthenticationSettingView: View {
     private var isShowEnterYourPassword: Bool = false
     @FocusState
     private var isFocus: Bool
+    @State
+    private var authenticationTypeSelected: AppSetting.AuthenticationType = .password
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -29,7 +31,6 @@ struct AuthenticationSettingView: View {
                 .padding(.horizontal, .xl)
                 .padding(.top, .lg)
                 .padding(.bottom, ._3xl)
-
             HStack {
                 Text(appSetting.biometricAuthentication.displayName)
                     .font(.paragraphSmall)
@@ -44,14 +45,8 @@ struct AuthenticationSettingView: View {
             .contentShape(.rect)
             .onTapGesture {
                 guard appSetting.authenticationType != .biometric else { return }
-                Task {
-                    do {
-                        try await appSetting.reAuthenticateUser()
-                        appSetting.authenticationType = .biometric
-                    } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
-                    }
-                }
+                authenticationTypeSelected = .biometric
+                isShowEnterYourPassword = true
             }
             HStack {
                 Text("Password")
@@ -67,19 +62,21 @@ struct AuthenticationSettingView: View {
             .contentShape(.rect)
             .onTapGesture {
                 guard appSetting.authenticationType != .password else { return }
-                let password: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
-                if password.isEmpty {
-                    let createPasswordSuccess: ((String) -> Void)? = { password in
-                        appSetting.authenticationType = .password
-                        do {
-                            try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
-                        } catch {
-                            hudState.showMsg(msg: error.localizedDescription)
+                Task {
+                    do {
+                        try await appSetting.reAuthenticateUser()
+                        let createPasswordSuccess: ((String) -> Void)? = { password in
+                            do {
+                                try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
+                                appSetting.authenticationType = .password
+                            } catch {
+                                hudState.showMsg(msg: error.localizedDescription)
+                            }
                         }
+                        navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))
+                    } catch {
+                        //TODO: print sau
                     }
-                    navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))
-                } else {
-                    isShowEnterYourPassword = true
                 }
             }
             Spacer()
@@ -94,7 +91,7 @@ struct AuthenticationSettingView: View {
         .popupSheet(
             isPresented: $isShowEnterYourPassword,
             content: {
-                EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword).padding(.top, .xl)
+                EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword, authenticationType: authenticationTypeSelected).padding(.top, .xl)
             }
         )
         .toolbar {
