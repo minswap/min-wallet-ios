@@ -54,7 +54,11 @@ struct SetupNickNameView: View {
                     "Change"
                 }
             }()
-            CustomButton(title: title) {
+            let combinedBinding = Binding<Bool>(
+                get: { !nickName.trimmingCharacters(in: .whitespacesAndNewlines).isBlank },
+                set: { _ in }
+            )
+            CustomButton(title: title, isEnable: combinedBinding) {
                 switch screenType {
                 case let .createWallet(seedPhrase):
                     navigator.push(.createWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines))))

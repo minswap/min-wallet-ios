@@ -42,7 +42,11 @@ struct EditNickNameView: View {
                     showEditNickName = false
                 }
                 .frame(height: 56)
-                CustomButton(title: "Confirm") {
+                let combinedBinding = Binding<Bool>(
+                    get: { !nickName.trimmingCharacters(in: .whitespacesAndNewlines).isBlank },
+                    set: { _ in }
+                )
+                CustomButton(title: "Confirm", isEnable: combinedBinding) {
                     let nickName = nickName.trimmingCharacters(in: .whitespacesAndNewlines)
                     guard let minWallet = userInfo.minWallet, !nickName.isBlank else { return }
                     guard let minWallet = changeWalletName(wallet: minWallet, password: appSetting.password, newWalletName: nickName.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
