@@ -12,7 +12,7 @@ struct CreateNewWalletSeedPhraseView: View {
     @State
     private var seedPhrase: [String] = []
     @State
-    private var isConfirm: Bool = true
+    private var isConfirm: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
