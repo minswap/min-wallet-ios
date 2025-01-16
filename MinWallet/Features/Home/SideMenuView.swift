@@ -42,7 +42,6 @@ public struct SideMenu<MenuContent: View>: ViewModifier {
                     }
                 }
 
-
                 menuContent()
                     .frame(width: geometry.size.width * 0.8)
                     .transition(.move(edge: .leading))
@@ -120,5 +119,7 @@ struct SideMenu_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
             .environmentObject(AppSetting.shared)
+            .environmentObject(UserInfo.shared)
+            .environmentObject(PortfolioOverviewViewModel())
     }
 }

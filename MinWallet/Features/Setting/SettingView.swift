@@ -37,7 +37,7 @@ struct SettingView: View {
                             .fill(.colorBaseBackground)
                             .frame(width: 16, height: 16)
                             .overlay(
-                                Image(.icVerifiedBadge)
+                                Image(.icSubAvatar)
                                     .resizable()
                                     .frame(width: 12, height: 12)
                             )
