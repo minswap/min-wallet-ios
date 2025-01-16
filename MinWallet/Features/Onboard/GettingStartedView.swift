@@ -21,6 +21,7 @@ struct GettingStartedView: View {
                 .padding(.top, .xl)
                 .foregroundStyle(.colorBaseTent)
             Text("Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management.")
+                .lineSpacing(4)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
                 .multilineTextAlignment(.center)
@@ -77,4 +78,5 @@ struct GettingStartedView: View {
 
 #Preview {
     GettingStartedView()
+        .environmentObject(AppSetting.shared)
 }
