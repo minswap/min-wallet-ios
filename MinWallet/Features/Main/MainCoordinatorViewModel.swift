@@ -15,7 +15,7 @@ class MainCoordinatorViewModel: ObservableObject {
 extension MainCoordinatorViewModel {
     enum Screen: Hashable {
         case home
-        case policy
+        case policy(PolicyConfirmView.ScreenType)
         case gettingStarted
         case tokenDetail(token: TokenProtocol)
         case about

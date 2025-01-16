@@ -3,9 +3,17 @@ import FlowStacks
 
 struct PolicyConfirmView: View {
 
+    enum ScreenType {
+        case splash
+        case about
+    }
+    
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
+    @State
+    var screenType: ScreenType = .splash
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 5) {
@@ -27,7 +35,12 @@ struct PolicyConfirmView: View {
                 title: "Confirm",
                 variant: .primary,
                 action: {
-                    navigator.push(.gettingStarted)
+                    switch screenType {
+                    case .splash:
+                        navigator.push(.gettingStarted)
+                    case .about:
+                        navigator.pop()
+                    }
                 }
             )
             .frame(height: 56)

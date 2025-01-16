@@ -20,8 +20,8 @@ struct MainCoordinator: View {
                     case .home:
                         HomeView().navigationBarHidden(true)
                             .environmentObject(portfolioOverviewViewModel)
-                    case .policy:
-                        PolicyConfirmView().navigationBarHidden(true)
+                    case let .policy(screenType):
+                        PolicyConfirmView(screenType: screenType).navigationBarHidden(true)
                     case .gettingStarted:
                         GettingStartedView().navigationBarHidden(true)
                     case let .tokenDetail(token):
