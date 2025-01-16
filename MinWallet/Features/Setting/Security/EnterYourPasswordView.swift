@@ -24,11 +24,11 @@ struct EnterYourPasswordView: View {
                 .frame(height: 60)
             VStack(spacing: 4) {
                 Text("Password")
-                    .font(.paragraphSmall)
+                    .font(.labelSmallSecondary)
                     .foregroundStyle(.colorBaseTent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, .lg)
-                SecurePasswordTextField(placeHolder: "Create new spending password", text: $password)
+                SecurePasswordTextField(placeHolder: "Enter your password", text: $password)
                     .focused($isFocus)
                     .frame(height: 44)
                     .overlay(

@@ -30,13 +30,7 @@ struct ForgotPasswordView: View {
                 .padding(.top, .lg)
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
-            Text("Unlock your wallet using Face ID recognition or a password.")
-                .font(.paragraphSmall)
-                .foregroundStyle(.colorBaseTent)
-                .padding(.horizontal, .xl)
-                .padding(.top, .lg)
-                .padding(.bottom, ._3xl)
-
+          
             VStack(alignment: .leading, spacing: .xl) {
                 HStack(spacing: .xl) {
                     Image(conditionOne ? .icChecked : .icUnchecked).resizable().frame(width: 20, height: 20)
@@ -49,11 +43,12 @@ struct ForgotPasswordView: View {
                 .onTapGesture {
                     conditionOne.toggle()
                 }
-                Color.colorBorderPrimarySub.frame(height: 1)
-                    .padding(.horizontal, .xl)
+                Color.colorBorderPrimaryTer.frame(height: 1)
+                    .padding(.trailing, .xl)
+                    .padding(.leading, 54)
                 HStack(spacing: .xl) {
                     Image(conditionTwo ? .icChecked : .icUnchecked).resizable().frame(width: 20, height: 20)
-                    Text("The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it")
+                    Text("If you forget your password, you can reset it by restoring your wallet. You can import your wallet again using the seed phrase or JSON file, and your assets will not be impacted.")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                 }
@@ -63,7 +58,7 @@ struct ForgotPasswordView: View {
                     conditionTwo.toggle()
                 }
             }
-
+            .padding(.top, .lg)
             Spacer()
             let combinedBinding = Binding<Bool>(
                 get: { conditionOne && conditionTwo },
