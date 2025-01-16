@@ -83,7 +83,11 @@ struct RestoreWalletImportFileView: View {
                 }
             }
             Spacer()
-            CustomButton(title: "Next") {
+            let combinedBinding = Binding<Bool>(
+                get: { !fileContent.isBlank },
+                set: { _ in }
+            )
+            CustomButton(title: "Next", isEnable: combinedBinding) {
                 guard !fileContent.isBlank else { return }
                 navigator.push(.restoreWallet(.biometricSetup(fileContent: fileContent, seedPhrase: [], nickName: "")))
             }
