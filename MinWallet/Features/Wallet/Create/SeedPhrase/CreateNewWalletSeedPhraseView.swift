@@ -194,14 +194,14 @@ private struct SeedPhraseContentView: View {
                                     label: {
                                         Text("Hide")
                                             .font(.labelSmallSecondary)
-                                            .foregroundStyle(.colorInteractiveTentSecondarySub)
+                                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                                     }
                                 )
                                 .frame(height: 28)
                                 .padding(.horizontal, .lg)
                                 .background(.colorBaseBackground)
                                 .overlay(content: {
-                                    RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimarySub, lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorInteractiveTentPrimarySub, lineWidth: 1)
                                 })
                                 .offset(x: -20, y: -14)
                             }
