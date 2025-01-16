@@ -157,7 +157,11 @@ struct ConfirmSendTokenView: View {
 
             Spacer()
             CustomButton(title: "Next") {
-                navigator.presentSheet(.sendToken(.signContract))
+                navigator.presentSheet(
+                    .sendToken(
+                        .signContract(onSuccess: {
+
+                        })))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

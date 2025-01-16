@@ -12,7 +12,7 @@ struct TextLearnMoreSendTokenView: UIViewRepresentable {
         let label = UILabel()
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
-
+        label.font = .paragraphSmall
         label.setContentHuggingPriority(.required, for: .vertical)
         label.setContentCompressionResistancePriority(.required, for: .vertical)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -84,8 +84,7 @@ struct TextLearnMoreSendTokenView: UIViewRepresentable {
                                 .font(UIFont.systemFont(ofSize: 15, weight: .regular)),
                                 .textColor(UIColor.colorInteractiveTentSecondaryDefault),
                                 .underlineStyle(.single),
-                                //                    .baselineOffset(0)
-
+                                //                                                    .baselineOffset(0)
                             ]))
                     $0.append(NSAttributedString(string: " "))
                 }
@@ -133,7 +132,7 @@ fileprivate struct WidthPreferenceKey: PreferenceKey, Equatable {
 
 #Preview {
     VStack {
-        SwapTokenSettingView(isShowSwapSetting: Binding<Bool>.constant(false))
+        SwapTokenSettingView(viewModel: SwapTokenViewModel())
             .padding(16)
         Spacer()
     }

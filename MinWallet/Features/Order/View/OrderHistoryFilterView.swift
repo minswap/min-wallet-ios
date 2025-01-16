@@ -1,6 +1,9 @@
 import SwiftUI
 import FlowStacks
 import MinWalletAPI
+import UIKit
+import Then
+import SwiftyAttributes
 
 
 struct OrderHistoryFilterView: View {
@@ -60,9 +63,11 @@ struct OrderHistoryFilterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
                     let actions: [String] = ["All"] + OrderV2Action.allCases.map({ $0.rawValue })
+                    let height = calculateHeightFlowLayout(actions: actions)
                     FlowLayout(
-                        mode: .scrollable,
-                        items: actions
+                        mode: .vstack,
+                        items: actions,
+                        itemSpacing: 0
                     ) { action in
                         let action = OrderV2Action(rawValue: action)
                         TextSelectable(content: action?.title ?? "All", selected: $actionSelected, value: action ?? nil)
@@ -70,7 +75,8 @@ struct OrderHistoryFilterView: View {
                                 actionSelected = action
                             }
                     }
-                    .padding(.bottom, .xl)
+                    .frame(height: height)
+                    .padding(.bottom, .md)
                     Text("Status")
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -108,15 +114,15 @@ struct OrderHistoryFilterView: View {
                                 .stroke(showSelectFromDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectFromDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            withAnimation {
-                                guard !showSelectFromDate else {
-                                    showSelectToDate = false
-                                    showSelectFromDate = false
-                                    return
-                                }
+                            //                            withAnimation {
+                            guard !showSelectFromDate else {
                                 showSelectToDate = false
-                                showSelectFromDate = true
+                                showSelectFromDate = false
+                                return
                             }
+                            showSelectToDate = false
+                            showSelectFromDate = true
+                            //                            }
                         }
                 }
 
@@ -133,15 +139,15 @@ struct OrderHistoryFilterView: View {
                                 .stroke(showSelectToDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectToDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            withAnimation {
-                                guard !showSelectToDate else {
-                                    showSelectToDate = false
-                                    showSelectFromDate = false
-                                    return
-                                }
-                                showSelectToDate = true
+                            //                            withAnimation {
+                            guard !showSelectToDate else {
+                                showSelectToDate = false
                                 showSelectFromDate = false
+                                return
                             }
+                            showSelectToDate = true
+                            showSelectFromDate = false
+                            //                            }
                         }
                 }
             }
@@ -192,10 +198,10 @@ struct OrderHistoryFilterView: View {
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
                     if showSelectToDate || showSelectFromDate {
-                        withAnimation {
-                            showSelectToDate = false
-                            showSelectFromDate = false
-                        }
+                        //                        withAnimation {
+                        showSelectToDate = false
+                        showSelectFromDate = false
+                        //                        }
                         return
                     }
                     isShowFilterView = false
@@ -235,5 +241,35 @@ private struct TextSelectable<T: Equatable>: View {
             .lineLimit(1)
             .minimumScaleFactor(0.1)
             .contentShape(.rect)
+            .padding(.trailing, .md)
+            .padding(.bottom, .md)
+    }
+}
+
+extension OrderHistoryFilterView {
+    private func calculateHeightFlowLayout(actions: [String]) -> CGFloat {
+        let actionsWidths = actions.map { action in
+            NSMutableAttributedString()
+                .then {
+                    $0.append(
+                        action
+                            .withAttributes([
+                                .font(.labelSmallSecondary ?? .systemFont(ofSize: 14, weight: .medium))
+                            ]))
+                }
+                .gkWidth(consideringHeight: 32) + .lg * 2 + .md
+        }
+        let maxWidth: CGFloat = UIScreen.main.bounds.width - .xl * 2
+        var currentWidth: CGFloat = 0
+        var row: CGFloat = 1
+        for width in actionsWidths {
+            if currentWidth + width <= maxWidth {
+                currentWidth += width
+            } else {
+                row += 1
+                currentWidth = 0
+            }
+        }
+        return row * 32 + row * .md
     }
 }

@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct CurrencyView: View {
-    @Binding var isShowCurrency: Bool
-
     @EnvironmentObject
     var appSetting: AppSetting
 
@@ -11,7 +9,6 @@ struct CurrencyView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Spacer()
             VStack(spacing: 0) {
                 Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
                     .padding(.vertical, .md)
@@ -67,14 +64,15 @@ struct CurrencyView: View {
             )
             .frame(height: 56)
             .buttonStyle(.plain)
-            .padding(.bottom, .xl)
         }
+        .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/ true /*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
     VStack {
-        CurrencyView(isShowCurrency: Binding<Bool>.constant(false)).environmentObject(AppSetting.shared)
+        CurrencyView()
+            .environmentObject(AppSetting.shared)
         Spacer()
     }
     .background(Color.black)

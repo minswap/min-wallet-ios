@@ -45,6 +45,12 @@ type AMMUtxo {
   value: String!
 }
 
+type ActiveLaunchEvent {
+  assets: [Asset!]!
+  id: String!
+  service: LaunchBowlService!
+}
+
 type AdaPrice {
   currency: SupportedCurrency!
   value: Float
@@ -681,6 +687,11 @@ type Fraction {
   numerator: BigInt!
 }
 
+input GetActiveLaunchEventsInput {
+  assetA: InputAsset!
+  assetB: InputAsset!
+}
+
 input HarvestPool {
   hasLBBonus: Boolean!
   lpAsset: String!
@@ -1203,6 +1214,47 @@ enum MigrationType {
   WALLET
 }
 
+input MinBarBuildLiquidDepositOptions {
+  additionalAmount: BigInt!
+  depositUtxoTxIn: String!
+  inputsToChoose: [String!]!
+}
+
+input MinBarBuildLiquidHarvestOptions {
+  harvestUtxoTxIn: String!
+  inputsToChoose: [String!]!
+}
+
+input MinBarBuildLiquidStakeOptions {
+  amount: BigInt!
+  asset: InputAsset!
+  inputsToChoose: [String!]!
+  owner: String!
+}
+
+input MinBarBuildLiquidUnstakeOptions {
+  inputsToChoose: [String!]!
+  unstakeUtxoTxIn: String!
+}
+
+input MinBarBuildLiquidWithdrawOptions {
+  inputsToChoose: [String!]!
+  withdrawUtxoTxIn: String!
+  withdrawalAmount: BigInt!
+}
+
+input MinBarBuildTieredStakeOptions {
+  amount: BigInt!
+  asset: InputAsset!
+  inputsToChoose: [String!]!
+  owner: String!
+}
+
+input MinBarBuildTieredUnstakeOptions {
+  inputsToChoose: [String!]!
+  unstakeUtxoTxIn: String!
+}
+
 type MinBarPositionStats {
   amount: BigInt!
   duration: BigInt!
@@ -1304,7 +1356,14 @@ type Mutation {
   idoDepositOrWithdrawOrder(input: IdoDepositOrWithdrawOrderInput!): String!
   lbeBuildDeposit(input: LBEBuildDepositInput!): String!
   logTx(input: PendingTxInput!): String!
+  minBarBuildLiquidDepositTx(options: MinBarBuildLiquidDepositOptions!): String!
+  minBarBuildLiquidHarvestTx(options: MinBarBuildLiquidHarvestOptions!): String!
+  minBarBuildLiquidStakeTx(options: MinBarBuildLiquidStakeOptions!): String!
+  minBarBuildLiquidUnstakeTx(options: MinBarBuildLiquidUnstakeOptions!): String!
+  minBarBuildLiquidWithdrawTx(options: MinBarBuildLiquidWithdrawOptions!): String!
   minBarBuildStakeTx(options: MINBarStakeOptions!): String!
+  minBarBuildTieredStakeTx(options: MinBarBuildTieredStakeOptions!): String!
+  minBarBuildTieredUnstakeTx(options: MinBarBuildTieredUnstakeOptions!): String!
   minBarBuildUnStakeTx(options: MINBarUnStakeOptions!): MinBarUnstakeResult!
   mintBuildUnstakingTx(options: MintBuildUnstakingOptions!): String!
   notificationGenerateAuthHash(identifier: String!): String!
@@ -1691,6 +1750,7 @@ type Query {
   farmConfiguration(address: String): FarmConfiguration!
   farmPoolInfo(address: String, input: FarmPoolInfoInput): [FarmPool!]!
   farmRebalance: [FarmRebalance!]!
+  getActiveLaunchEvents(input: GetActiveLaunchEventsInput!): [ActiveLaunchEvent!]!
   getAvailableFactory(pair: InputPair!): Factory
   getDetailedUtxos(txIns: [String!]!, type: UtxoTypeInput!): [DetailedUtxo!]
 

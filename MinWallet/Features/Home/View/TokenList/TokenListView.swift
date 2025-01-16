@@ -73,8 +73,7 @@ struct TokenListView: View {
                                         viewModel.loadMoreData(item: item)
                                     }
                                     .onTapGesture {
-                                        //TODO: Cuongnv
-                                        //navigator.push(.tokenDetail(token: tokens[index].token))
+                                        navigator.push(.tokenDetail(token: item))
                                     }
                             }
                         })

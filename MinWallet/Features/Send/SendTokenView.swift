@@ -3,61 +3,110 @@ import FlowStacks
 
 
 struct SendTokenView: View {
+    enum Focusable: Hashable {
+        case none
+        case row(id: String)
+    }
+
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
     @FocusState
-    private var focusedField: Bool
+    private var focusedField: Focusable?
 
     @State
     private var amount: String = ""
+    @StateObject
+    private var viewModel = SendTokenViewModel()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("You want to send:")
-                .font(.titleH5)
-                .foregroundStyle(.colorBaseTent)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, .lg)
-                .padding(.bottom, .xl)
-                .padding(.horizontal, .xl)
+            ScrollView {
+                LazyVStack(
+                    spacing: 0,
+                    content: {
+                        Text("You want to send:")
+                            .font(.titleH5)
+                            .foregroundStyle(.colorBaseTent)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, .lg)
+                            .padding(.bottom, .xl)
+                            .padding(.horizontal, .xl)
+                        HStack(spacing: .md) {
+                            AmountTextField(value: $viewModel.amountDefault)
+                                .focused($focusedField, equals: Focusable.row(id: "-1"))
+                            Text("Max")
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorInteractiveToneHighlight)
+                                .onTapGesture {
 
-            HStack(spacing: .md) {
-                TextField("", text: $amount)
-                    .placeholder("0.0", when: amount.isEmpty)
-                    .lineLimit(1)
-                    .focused($focusedField)
-                Text("Max")
-                Image(.ada)
-                    .resizable()
-                    .frame(width: 24, height: 24)
-                Text("ADA")
-                    .font(.labelSemiSecondary)
-                    .foregroundStyle(.colorBaseTent)
+                                }
+                            Image(.ada)
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                            Text("ADA")
+                                .font(.labelSemiSecondary)
+                                .foregroundStyle(.colorBaseTent)
+                        }
+                        .padding(.horizontal, .xl)
+                        .padding(.vertical, .lg)
+                        .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
+                        .padding(.horizontal, .xl)
+                        .padding(.top, .lg)
+                        ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                            let item = viewModel.tokens[index]
+                            let amountBinding = Binding<String>(
+                                get: { viewModel.tokens[index].amount },
+                                set: { newValue in
+                                    viewModel.tokens[index].amount = newValue
+                                }
+                            )
+                            HStack(spacing: .md) {
+                                AmountTextField(value: amountBinding, maxValue: item.token.amount)
+                                    .focused($focusedField, equals: .row(id: item.token.uniqueID))
+                                Text("Max")
+                                    .font(.labelMediumSecondary)
+                                    .foregroundStyle(.colorInteractiveToneHighlight)
+                                    .onTapGesture {
+                                        viewModel.tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+                                    }
+                                TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
+                                Text(item.token.adaName)
+                                    .font(.labelSemiSecondary)
+                                    .foregroundStyle(.colorBaseTent)
+                            }
+                            .padding(.horizontal, .xl)
+                            .padding(.vertical, .lg)
+                            .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
+                            .padding(.horizontal, .xl)
+                            .padding(.top, .lg)
+                        }
+
+                        Button(
+                            action: {
+                                navigator.presentSheet(
+                                    .selectToken(
+                                        tokensSelected: viewModel.tokens.map({ $0.token }),
+                                        onSelectToken: { tokens in
+                                            viewModel.addToken(tokens: tokens)
+                                        }))
+                            },
+                            label: {
+                                Text("Add Token")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(content: {
+                                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+                                    })
+                            }
+                        )
+                        .frame(height: 36)
+                        .padding(.horizontal, .xl)
+                        .padding(.top, .md)
+                        .buttonStyle(.plain)
+                    })
             }
-            .padding(.horizontal, .xl)
-            .padding(.vertical, .lg)
-            .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
-            .padding(.horizontal, .xl)
-            .padding(.top, .lg)
-            Button(
-                action: {
-                    navigator.presentSheet(.selectToken)
-                },
-                label: {
-                    Text("Add Token")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(content: {
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
-                        })
-                }
-            )
-            .frame(height: 36)
-            .padding(.horizontal, .xl)
-            .padding(.top, .md)
-            .buttonStyle(.plain)
             Spacer()
             CustomButton(title: "Next") {
                 navigator.push(.sendToken(.toWallet))
@@ -70,7 +119,7 @@ struct SendTokenView: View {
                 Spacer()
 
                 Button("Done") {
-                    focusedField = false
+                    focusedField = nil
                 }
                 .foregroundStyle(.colorLabelToolbarDone)
             }

@@ -7,7 +7,7 @@ public class TopAssetQuery: GraphQLQuery {
   public static let operationName: String = "TopAssetQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query TopAssetQuery($asset: InputAsset!) { topAsset(asset: $asset) { __typename asset { __typename currencySymbol metadata { __typename decimals isVerified name ticker } } marketCap price price24hAgo price30dAgo price7dAgo priceChange24h priceChange7d totalSupply tvl volume24h volume30d volume7d fdMarketCap circulatingSupply } }"#
+      #"query TopAssetQuery($asset: InputAsset!) { topAsset(asset: $asset) { __typename asset { __typename currencySymbol metadata { __typename decimals isVerified name ticker description url } details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } tokenName } marketCap price price24hAgo price30dAgo price7dAgo priceChange24h priceChange7d totalSupply tvl volume24h volume30d volume7d fdMarketCap circulatingSupply } }"#
     ))
 
   public var asset: InputAsset
@@ -84,10 +84,14 @@ public class TopAssetQuery: GraphQLQuery {
           .field("__typename", String.self),
           .field("currencySymbol", String.self),
           .field("metadata", Metadata?.self),
+          .field("details", Details?.self),
+          .field("tokenName", String.self),
         ] }
 
         public var currencySymbol: String { __data["currencySymbol"] }
         public var metadata: Metadata? { __data["metadata"] }
+        public var details: Details? { __data["details"] }
+        public var tokenName: String { __data["tokenName"] }
 
         /// TopAsset.Asset.Metadata
         ///
@@ -103,12 +107,62 @@ public class TopAssetQuery: GraphQLQuery {
             .field("isVerified", Bool.self),
             .field("name", String?.self),
             .field("ticker", String?.self),
+            .field("description", String?.self),
+            .field("url", String?.self),
           ] }
 
           public var decimals: Int? { __data["decimals"] }
           public var isVerified: Bool { __data["isVerified"] }
           public var name: String? { __data["name"] }
           public var ticker: String? { __data["ticker"] }
+          public var description: String? { __data["description"] }
+          public var url: String? { __data["url"] }
+        }
+
+        /// TopAsset.Asset.Details
+        ///
+        /// Parent Type: `AssetDetails`
+        public struct Details: MinWalletAPI.SelectionSet {
+          public let __data: DataDict
+          public init(_dataDict: DataDict) { __data = _dataDict }
+
+          public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.AssetDetails }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .field("categories", [String].self),
+            .field("project", String.self),
+            .field("socialLinks", SocialLinks?.self),
+          ] }
+
+          public var categories: [String] { __data["categories"] }
+          public var project: String { __data["project"] }
+          public var socialLinks: SocialLinks? { __data["socialLinks"] }
+
+          /// TopAsset.Asset.Details.SocialLinks
+          ///
+          /// Parent Type: `AssetSocialLinks`
+          public struct SocialLinks: MinWalletAPI.SelectionSet {
+            public let __data: DataDict
+            public init(_dataDict: DataDict) { __data = _dataDict }
+
+            public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.AssetSocialLinks }
+            public static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
+              .field("coinGecko", String?.self),
+              .field("coinMarketCap", String?.self),
+              .field("discord", String?.self),
+              .field("telegram", String?.self),
+              .field("twitter", String?.self),
+              .field("website", String?.self),
+            ] }
+
+            public var coinGecko: String? { __data["coinGecko"] }
+            public var coinMarketCap: String? { __data["coinMarketCap"] }
+            public var discord: String? { __data["discord"] }
+            public var telegram: String? { __data["telegram"] }
+            public var twitter: String? { __data["twitter"] }
+            public var website: String? { __data["website"] }
+          }
         }
       }
     }

@@ -21,6 +21,7 @@ class SearchTokenViewModel: ObservableObject {
     private var searchAfter: [String]? = nil
     private var hasLoadMore: Bool = true
     private let limit: Int = 20
+    private var isFetching: Bool = true
 
     private var cancellables: Set<AnyCancellable> = []
     var showSkeleton: Bool = true
@@ -30,7 +31,9 @@ class SearchTokenViewModel: ObservableObject {
             .removeDuplicates()
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink { [weak self] newData in
-                self?.getTokens()
+                guard let self = self else { return }
+                self.keyword = newData
+                self.getTokens()
             }
             .store(in: &cancellables)
 
@@ -39,6 +42,7 @@ class SearchTokenViewModel: ObservableObject {
 
     func getTokens(isLoadMore: Bool = false) {
         showSkeleton = !isLoadMore
+        isFetching = true
         input = TopAssetsInput()
             .with({
                 $0.limit = .some(limit)
@@ -69,12 +73,13 @@ class SearchTokenViewModel: ObservableObject {
             self.isDeleted = self.tokens.map({ _ in false })
             self.offsets = self.tokens.map({ _ in 0 })
             self.showSkeleton = false
+            self.isFetching = false
         }
     }
 
     func loadMoreData(item: TopAssetsQuery.Data.TopAssets.TopAsset) {
-        guard hasLoadMore else { return }
-        let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
+        guard hasLoadMore, !isFetching else { return }
+        let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -2)
         if tokens.firstIndex(where: { ($0.asset.currencySymbol + $0.asset.tokenName) == (item.asset.currencySymbol + $0.asset.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }

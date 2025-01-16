@@ -2,6 +2,25 @@ import UIKit
 import CoreImage
 
 
+extension Array {
+    subscript(safeIndex index: Int) -> Element? {
+        get {
+            guard 0 <= index && index < count else { return nil }
+            return self[index]
+        }
+        set {
+            guard 0 <= index && index < count,
+                let value = newValue
+            else { return }
+            self[index] = value
+        }
+    }
+
+    public subscript(gk_safeIndex index: Int) -> Element? {
+        self[safeIndex: index]
+    }
+}
+
 extension String {
     var isBlank: Bool {
         trimmingCharacters(in: .whitespacesAndNewlines) == ""

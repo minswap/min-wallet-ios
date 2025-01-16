@@ -7,7 +7,22 @@ query TopAssetQuery($asset: InputAsset!) {
         isVerified
         name
         ticker
+        description
+        url
       }
+      details {
+        categories
+        project
+        socialLinks {
+          coinGecko
+          coinMarketCap
+          discord
+          telegram
+          twitter
+          website
+        }
+      }
+      tokenName
     }
     marketCap
     price
