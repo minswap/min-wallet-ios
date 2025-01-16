@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 import FlowStacks
 
 
@@ -26,7 +27,7 @@ struct EditNickNameView: View {
                     .foregroundStyle(.colorBaseTent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, .lg)
-                TextField("", text: $nickName)
+                TextField("", text: $nickName.max(10))
                     .placeholder("Enter your wallet nickname", when: nickName.isEmpty)
                     .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     .focused($isFocus)
@@ -35,6 +36,11 @@ struct EditNickNameView: View {
                         RoundedRectangle(cornerRadius: BorderRadius.full)
                             .stroke(isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: isFocus ? 2 : 1)
                     )
+                    .onReceive(Just(nickName)) { _ in
+                        if nickName.count > 40 {
+                            nickName = String(nickName.prefix(40))
+                        }
+                    }
             }
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
@@ -43,7 +49,7 @@ struct EditNickNameView: View {
                 }
                 .frame(height: 56)
                 let combinedBinding = Binding<Bool>(
-                    get: { !nickName.trimmingCharacters(in: .whitespacesAndNewlines).isBlank },
+                    get: { nickName.trimmingCharacters(in: .whitespacesAndNewlines).count >= 3 },
                     set: { _ in }
                 )
                 CustomButton(title: "Confirm", isEnable: combinedBinding) {

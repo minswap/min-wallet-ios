@@ -57,7 +57,7 @@ struct WalletAccountView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                             .padding(.trailing, 4)
-                        Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                        Text(userInfo.walletName)
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             .padding(.horizontal, .lg)

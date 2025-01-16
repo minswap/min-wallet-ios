@@ -77,7 +77,7 @@ struct SettingView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                             .padding(.trailing, 4)
-                        Text(userInfo.minWallet?.walletName)
+                        Text(userInfo.walletName)
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             .padding(.horizontal, .lg)
