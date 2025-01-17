@@ -1,7 +1,7 @@
-//
-
 import SwiftUI
 
+
+//Similar CustomFlowLayout
 /// Facade of our view, its main responsibility is to get the available width
 /// and pass it down to the real implementation, `_FlexibleView`.
 struct FlexibleView<Data: Collection, Content: View>: View where Data.Element: Hashable {

@@ -20,12 +20,13 @@ struct MainCoordinator: View {
                     case .home:
                         HomeView().navigationBarHidden(true)
                             .environmentObject(portfolioOverviewViewModel)
-                    case .policy:
-                        PolicyConfirmView().navigationBarHidden(true)
+                    case let .policy(screenType):
+                        PolicyConfirmView(screenType: screenType).navigationBarHidden(true)
                     case .gettingStarted:
                         GettingStartedView().navigationBarHidden(true)
                     case let .tokenDetail(token):
-                        TokenDetailView(viewModel: TokenDetailViewModel(token: token.base)).navigationBarHidden(true)
+                        TokenDetailView(viewModel: TokenDetailViewModel(token: token)).navigationBarHidden(true)
+                            .environmentObject(portfolioOverviewViewModel)
                     case .about:
                         AboutView().navigationBarHidden(true)
                     case .language:
@@ -92,13 +93,13 @@ struct MainCoordinator: View {
                             ToWalletAddressView().navigationBarHidden(true)
                         case .confirm:
                             ConfirmSendTokenView().navigationBarHidden(true)
-                        case .signContract:
-                            SignContractView()
+                        case let .signContract(onSuccess):
+                            SignContractView(onSignSuccess: onSuccess)
                                 .presentationDragIndicator(.visible)
                         }
 
-                    case .selectToken:
-                        SelectTokenView().presentationDragIndicator(.visible)
+                    case let .selectToken(tokensSelected, onSelectToken):
+                        SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected), onSelectToken: onSelectToken).presentationDragIndicator(.visible)
 
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)

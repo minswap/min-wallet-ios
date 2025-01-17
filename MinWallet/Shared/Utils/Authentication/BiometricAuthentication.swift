@@ -98,15 +98,15 @@ class BiometricAuthentication {
 
 extension BiometricAuthentication {
     enum ErrorType: LocalizedStringKey, CaseIterable {
-        case userCancel = "Vui lòng chấp nhận đăng nhập bằng Face ID/Touch ID"
-        case userFallback = "Nhập mật khẩu để tiếp tục"
-        case passcodeNotSet = "Không thể bắt đầu xác thực vì mật mã chưa được cài đặt trên thiết bị"
-        case authenticationFailed = "Xác thực không hợp lệ, vui lòng thử lại sau"
-        case biometryNotAvailable = "Face ID/Touch ID không sẵn sàng"
-        case biometryNotEnrolled = "Face ID/Touch ID chưa được cài đặt"
-        case biometryLockout = "Face ID/Touch ID đang bị khoá"
-        case touchIDNotAvailable = "Touch ID không sẵn sàng"
-        case permissions = "Vui lòng cấp quyền sinh trắc học cho ứng dụng để kích hoạt đăng nhập bằng Face ID/Touch ID"
-        case requireLogin = "Bạn phải đăng nhập với mật khẩu thành công mới có thể sử dụng tính năng này"
+        case userCancel = "Please accept with Face ID/Touch ID"
+        case userFallback = "Enter password to continue"
+        case passcodeNotSet = "Authentication cannot be initiated because a passcode has not been set up on the device."
+        case authenticationFailed = "Authentication invalid, please try again later"
+        case biometryNotAvailable = "Face ID/Touch ID not available"
+        case biometryNotEnrolled = "Face ID/Touch ID not installed"
+        case biometryLockout = "Face ID/Touch ID is locked"
+        case touchIDNotAvailable = "Touch ID not available"
+        case permissions = "Please grant biometric permission to the app to enable Face ID/Touch ID login"
+        case requireLogin = "You must log in with a successful password to use this feature."
     }
 }

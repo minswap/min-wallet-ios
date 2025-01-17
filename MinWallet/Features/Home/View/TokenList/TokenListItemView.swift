@@ -18,10 +18,9 @@ struct TokenListItemView: View {
     var body: some View {
         HStack(spacing: .xl) {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
-                .frame(width: 28, height: 28)
             VStack(spacing: 4) {
                 HStack(spacing: 0) {
-                    Text(token?.ticker)
+                    Text(token?.adaName)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
@@ -54,7 +53,7 @@ struct TokenListItemView: View {
                                 guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
                                 return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
                             }()
-                            Text("\(percentChange.formatNumber)%")
+                            Text("\(percentChange.formatSNumber(maximumFractionDigits: 2))%")
                                 .font(.labelSmallSecondary)
                                 .foregroundStyle(foregroundStyle)
                             if !percentChange.isZero {
@@ -89,7 +88,6 @@ struct TokenListItemSkeletonView: View {
         HStack(spacing: .xl) {
             if showLogo {
                 TokenLogoView(currencySymbol: nil, tokenName: nil, isVerified: false)
-                    .frame(width: 28, height: 28)
                     .skeleton(with: true, size: .init(width: 28, height: 28))
             }
             VStack(spacing: 4) {

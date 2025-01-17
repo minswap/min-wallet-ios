@@ -27,6 +27,10 @@ struct AboutView: View {
             }
             .frame(height: 52)
             .padding(.horizontal, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                navigator.push(.policy(.about))
+            }
             HStack(spacing: 12) {
                 Text("Terms of service")
                     .font(.labelSmallSecondary)

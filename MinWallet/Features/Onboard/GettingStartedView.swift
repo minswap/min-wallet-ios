@@ -4,10 +4,10 @@ import FlowStacks
 struct GettingStartedView: View {
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
 
     @EnvironmentObject
-    var appSetting: AppSetting
+    private var appSetting: AppSetting
 
     var body: some View {
         VStack(spacing: 0) {
@@ -21,6 +21,7 @@ struct GettingStartedView: View {
                 .padding(.top, .xl)
                 .foregroundStyle(.colorBaseTent)
             Text("Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management.")
+                .lineSpacing(4)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
                 .multilineTextAlignment(.center)
@@ -69,9 +70,13 @@ struct GettingStartedView: View {
             Color.clear.frame(height: 0)  // Adds 20 points of spacing at the bottom
         }
         .background(Color.colorBaseBackground)
+        .onAppear {
+            appSetting.isFirstTimeRunApp = false
+        }
     }
 }
 
 #Preview {
     GettingStartedView()
+        .environmentObject(AppSetting.shared)
 }

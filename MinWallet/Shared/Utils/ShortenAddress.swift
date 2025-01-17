@@ -39,7 +39,7 @@ extension String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
-
+        inputFormatter.timeZone = .gmt
         guard let date = inputFormatter.date(from: inputDateString) else {
             return self
         }
@@ -51,18 +51,49 @@ extension String {
         return outputFormatter.string(from: date)
     }
 
+    var formatToDate: Date {
+        let inputDateString = self
+
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        inputFormatter.timeZone = .gmt
+        return inputFormatter.date(from: inputDateString) ?? Date()
+    }
+
     var adaName: String? {
-        if self.count < 6 {
-            return self
-        }
-        if self.count == 6 {
-            return self.hexToText
+        let prefix = self.prefix(8)
+        if prefix.first == "0" && prefix.last == "0" && self.count >= 8 {
+            let hexToText = String(self.dropFirst(8)).hexToText
+            return hexToText?.isHumanReadable == true ? hexToText : String(self.prefix(10))
         }
 
-        return self.shortenAddress
+        if self.count <= 6 || self.count == 10 || self.count == 8 {
+            let hexToText = self.hexToText
+            return hexToText?.isHumanReadable == true ? hexToText : self
+        }
+
+        if self.count > 10 {
+            return String(self.prefix(10) + "...")
+        }
+
+        return self
+    }
+
+    var isHumanReadable: Bool {
+        do {
+            let pattern = #"^[\w\s\[\].,-]*$"#
+
+            let regex = try NSRegularExpression(pattern: pattern)
+            let range = NSRange(location: 0, length: self.utf16.count)
+            let match = regex.firstMatch(in: self, options: [], range: range)
+
+            return match != nil
+        } catch {
+            return false
+        }
     }
 }
-
 
 extension Data {
     var hexString: String {
@@ -73,13 +104,13 @@ extension Data {
 
 
 extension Double {
-    var formatNumber: String {
+    func formatSNumber(usesGroupingSeparator: Bool = true, maximumFractionDigits: Int) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = ","
-        formatter.usesGroupingSeparator = true
+        formatter.usesGroupingSeparator = usesGroupingSeparator
         formatter.decimalSeparator = "."
-        formatter.maximumFractionDigits = 2
+        formatter.maximumFractionDigits = maximumFractionDigits
         formatter.minimumFractionDigits = 0
         return formatter.string(from: NSNumber(value: self)) ?? ""
     }
@@ -89,7 +120,8 @@ extension Double {
         suffix: String = "",
         roundingOffset: Int = 3,
         font: Font = .labelMediumSecondary,
-        fontColor: Color = .colorBaseTent
+        fontColor: Color = .colorBaseTent,
+        isFormatK: Bool = false
     ) -> AttributedString {
         var prefix: AttributedString = AttributedString(prefix)
         prefix.font = font
@@ -112,6 +144,29 @@ extension Double {
 
         guard let formattedString = formatter.string(from: NSNumber(value: self))
         else {
+            prefix.append(result)
+            prefix.append(suffix)
+            return prefix
+        }
+
+        if isFormatK && self >= 1_000_000 {
+            let millionNum = self / 1_000_000
+            let billionNum = self / 1_000_000_000
+
+            formatter.maximumFractionDigits = 2
+
+            let value: String = {
+                if self >= 1_000_000_000 {
+                    return (formatter.string(from: NSNumber(value: billionNum)) ?? "") + "B"
+                } else if self >= 1_000_000 {
+                    return (formatter.string(from: NSNumber(value: millionNum)) ?? "") + "M"
+                } else {
+                    return self.formatted()
+                }
+            }()
+            var result = AttributedString(value)
+            result.font = font
+            result.foregroundColor = fontColor
             prefix.append(result)
             prefix.append(suffix)
             return prefix
@@ -177,5 +232,70 @@ extension Double {
         prefix.append(result)
         prefix.append(suffix)
         return prefix
+    }
+}
+
+
+extension NSAttributedString {
+
+    func gkWidth(consideringHeight height: CGFloat) -> CGFloat {
+        let size = self.gkSize(consideringHeight: height)
+        return size.width
+    }
+
+    func gkHeight(consideringWidth width: CGFloat) -> CGFloat {
+        let size = self.gkSize(consideringWidth: width)
+        return size.height
+    }
+
+    func gkSize(consideringHeight height: CGFloat) -> CGSize {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        return self.gkSize(consideringRect: constraintRect)
+    }
+
+    func gkSize(consideringWidth width: CGFloat) -> CGSize {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        return self.gkSize(consideringRect: constraintRect)
+    }
+
+    func gkSize(consideringRect size: CGSize) -> CGSize {
+        let rect =
+            self.boundingRect(
+                with: size,
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                context: nil
+            )
+            .integral
+        return rect.size
+    }
+}
+
+extension String {
+    func toExact(decimal: Double) -> Double {
+        return (Double(self) ?? 0) / pow(10.0, decimal)
+    }
+}
+
+extension String {
+    func getPriceValue(appSetting: AppSetting, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
+        let price = Double(self) ?? 0
+        switch appSetting.currency {
+        case Currency.ada.rawValue:
+            return (price, price.formatNumber(suffix: Currency.ada.prefix))
+        default:
+            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
+        }
+    }
+}
+
+extension Double {
+    func getPriceValue(appSetting: AppSetting, font: Font = .labelMediumSecondary, fontColor: Color = .colorBaseTent, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
+        let price = self
+        switch appSetting.currency {
+        case Currency.ada.rawValue:
+            return (price, price.formatNumber(suffix: Currency.ada.prefix, font: font))
+        default:
+            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: font, fontColor: fontColor, isFormatK: isFormatK))
+        }
     }
 }

@@ -37,7 +37,7 @@ struct SettingView: View {
                             .fill(.colorBaseBackground)
                             .frame(width: 16, height: 16)
                             .overlay(
-                                Image(.icVerifiedBadge)
+                                Image(.icSubAvatar)
                                     .resizable()
                                     .frame(width: 12, height: 12)
                             )
@@ -58,7 +58,7 @@ struct SettingView: View {
                     .resizable()
                     .frame(width: 40, height: 40)
                     .onTapGesture {
-                        isShowAppearance = true
+                        $isShowAppearance.showSheet()
                     }
             }
             .frame(height: 64)
@@ -77,7 +77,7 @@ struct SettingView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                             .padding(.trailing, 4)
-                        Text(userInfo.minWallet?.walletName)
+                        Text(userInfo.walletName)
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             .padding(.horizontal, .lg)
@@ -141,7 +141,7 @@ struct SettingView: View {
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    isShowCurrency = true
+                    $isShowCurrency.showSheet()
                 }
                 HStack(spacing: 12) {
                     Text("Timezone")
@@ -157,7 +157,7 @@ struct SettingView: View {
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    isShowTimeZone = true
+                    $isShowTimeZone.showSheet()
                 }
                 HStack(spacing: 12) {
                     Text("Audio")

@@ -12,6 +12,8 @@ struct SignContractView: View {
     @FocusState
     private var isFocus: Bool
 
+    var onSignSuccess: (() -> Void)?
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Sign the contract")
@@ -37,12 +39,12 @@ struct SignContractView: View {
                     )
                     .padding(.horizontal, .xl)
             }
-
             Spacer()
             CustomButton(title: "Sign") {
                 guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
                 let _ = signTx(wallet: minWallet, password: password, accountIndex: minWallet.accountIndex, txRaw: "")
                 navigator.dismiss()
+                onSignSuccess?()
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -50,7 +52,6 @@ struct SignContractView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
                 Button("Done") {
                     isFocus = false
                 }

@@ -1,37 +1,95 @@
 query WalletAssetsQuery($address: String!) {
   getWalletAssetsPositions(address: $address) {
     lpTokens {
-      pnl24H
+      ammType
       amountLPAsset {
+        amount
         asset {
           currencySymbol
-          tokenName
           metadata {
+            decimals
+            description
             isVerified
             name
             ticker
-            decimals
+            url
+          }
+          tokenName
+          details {
+            categories
+            project
+            socialLinks {
+              coinGecko
+              coinMarketCap
+              discord
+              telegram
+              twitter
+              website
+            }
           }
         }
-        amount
       }
       lpAdaValue
+      pnl24H
+      poolShare
+      amountAssets {
+        amount
+        asset {
+          currencySymbol
+          metadata {
+            decimals
+            description
+            isVerified
+            name
+            ticker
+            url
+          }
+          tokenName
+          details {
+            categories
+            project
+            socialLinks {
+              coinGecko
+              coinMarketCap
+              discord
+              telegram
+              twitter
+              website
+            }
+          }
+        }
+      }
     }
     assets {
       amountAsset {
+        amount
         asset {
           currencySymbol
+          tokenName
           metadata {
+            decimals
+            description
             isVerified
             name
             ticker
-            decimals
+            url
           }
-          tokenName
+          details {
+            categories
+            project
+            socialLinks {
+              coinGecko
+              coinMarketCap
+              discord
+              telegram
+              twitter
+              website
+            }
+          }
         }
-        amount
       }
       pnl24H
+      priceInAda
       valueInAda
     }
   }

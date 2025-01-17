@@ -39,6 +39,7 @@ struct HomeView: View {
                     .overlay(
                         Circle().stroke(.colorBorderPrimarySub, lineWidth: 1)
                     )
+                    /*
                     .shadow(
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.1),
                         radius: 3, x: 0, y: 4
@@ -47,6 +48,7 @@ struct HomeView: View {
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.06),
                         radius: 2, x: 0, y: 2
                     )
+                     */
                     .onTapGesture {
                         withAnimation {
                             showSideMenu = true
@@ -63,7 +65,7 @@ struct HomeView: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
                                 .padding(.trailing, 4)
-                            Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                            Text(userInfo.walletName)
                                 .font(.paragraphXMediumSmall)
                                 .foregroundStyle(.colorInteractiveToneHighlight)
                                 .padding(.horizontal, .lg)
@@ -119,7 +121,7 @@ struct HomeView: View {
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         let netValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.netAdaValue : (portfolioOverviewViewModel.netAdaValue * appSetting.currencyInADA)
-                        let netValueString: String = netValue.formatNumber
+                        let netValueString: String = netValue.formatSNumber(maximumFractionDigits: 2)
                         let components = netValueString.split(separator: ".")
                         Text(prefix + String(components.first ?? ""))
                             .font(.titleH3)
@@ -144,17 +146,19 @@ struct HomeView: View {
                         HStack(spacing: 4) {
                             let pnl24H: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.pnl24H : (portfolioOverviewViewModel.pnl24H * appSetting.currencyInADA)
                             let foregroundStyle: Color = portfolioOverviewViewModel.pnl24H > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
-                            Text("\(prefix)\(pnl24H.formatted())\(suffix)")
+                            Text("\(prefix)\(pnl24H.formatSNumber(maximumFractionDigits: 2))\(suffix)")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
                             Circle().frame(width: 4, height: 4)
                                 .foregroundStyle(.colorBaseTent)
-                            Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatNumber + "%")
+                            Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
-                            Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)
-                                .resizable()
-                                .frame(width: 16, height: 16)
+                            if !portfolioOverviewViewModel.pnl24H.isZero {
+                                Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                            }
                         }
                     }
                 }
@@ -210,16 +214,16 @@ struct HomeView: View {
         .sideMenu(isShowing: $showSideMenu) {
             SettingView(isShowAppearance: $isShowAppearance, isShowTimeZone: $isShowTimeZone, isShowCurrency: $isShowCurrency)
         }
-        .presentSheet(isPresented: $isShowAppearance, height: 600) {
-            AppearanceView(isShowAppearance: $isShowAppearance)
+        .presentSheet(isPresented: $isShowAppearance) {
+            AppearanceView()
                 .padding(.xl)
         }
-        .presentSheet(isPresented: $isShowCurrency, height: 400) {
-            CurrencyView(isShowCurrency: $isShowCurrency)
+        .presentSheet(isPresented: $isShowCurrency) {
+            CurrencyView()
                 .padding(.xl)
         }
-        .presentSheet(isPresented: $isShowTimeZone, height: 400) {
-            TimeZoneView(isShowTimeZone: $isShowTimeZone)
+        .presentSheet(isPresented: $isShowTimeZone) {
+            TimeZoneView()
                 .padding(.xl)
         }
         .task {

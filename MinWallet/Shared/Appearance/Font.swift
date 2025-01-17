@@ -17,6 +17,8 @@ extension Font {
     static let paragraphXSmall: Font = .custom("InterDisplay-Regular", size: 13)
     ///12 medium
     static let paragraphXMediumSmall: Font = .custom("InterDisplay-Medium", size: 13)
+    ///12 semibold
+    static let paragraphXSemiSmall: Font = .custom("InterDisplay-SemiBold", size: 13)
     ///24 semibold
     static let titleH5: Font = .custom("InterDisplay-SemiBold", size: 24)
     ///40 semibold

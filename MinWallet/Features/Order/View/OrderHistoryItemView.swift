@@ -58,14 +58,12 @@ struct OrderHistoryItemView: View {
                     }
                 }
             }
-            if order?.order?.status.value == .created {
+            if let order = order, let warningContent = order.overSlippageWarning, order.order?.status.value == .created {
                 HStack(spacing: Spacing.md) {
                     Image(.icWarningYellow)
                         .resizable()
                         .frame(width: 16, height: 16)
-                    Text("Although this order has been labeled as \"Expired,\" in order to completely cancel the order, you should click on \"Cancel.\" You have the option to update the order as well by clicking “Update.”")
-                        .font(.paragraphXSmall)
-                        .foregroundStyle(.colorInteractiveToneWarning)
+                    Text(warningContent)
                         .lineLimit(nil)
                 }
                 .padding(.md)
@@ -73,6 +71,7 @@ struct OrderHistoryItemView: View {
                     RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
                 )
                 .frame(minHeight: 32)
+                /*
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
 
@@ -83,6 +82,7 @@ struct OrderHistoryItemView: View {
                     }
                     .frame(height: 36)
                 }
+                 */
             }
             Color.colorBorderPrimarySub.frame(height: 1)
         }
@@ -93,8 +93,7 @@ struct OrderHistoryItemView: View {
             HStack(spacing: -4) {
                 let inputs = order?.detail.inputs ?? []
                 ForEach(inputs, id: \.self) { input in
-                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified)
-                        .frame(width: 24, height: 24)
+                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified, size: .init(width: 24, height: 24))
                 }
             }
             Image(.icBack)
@@ -105,8 +104,7 @@ struct OrderHistoryItemView: View {
             HStack(spacing: -4) {
                 let outputs = order?.detail.outputs ?? []
                 ForEach(outputs, id: \.self) { output in
-                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified)
-                        .frame(width: 24, height: 24)
+                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
                 }
             }
             Text(order?.order?.type.value?.title)

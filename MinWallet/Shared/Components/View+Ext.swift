@@ -73,3 +73,13 @@ extension UIApplication {
         return scene?.windows.first?.safeAreaInsets ?? .zero
     }
 }
+
+extension Binding where Value == String {
+    func max(_ limit: Int) -> Self {
+        if self.wrappedValue.count > limit {
+            self.wrappedValue = String(self.wrappedValue.prefix(limit))
+
+        }
+        return self
+    }
+}
