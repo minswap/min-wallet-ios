@@ -46,7 +46,6 @@ struct BiometricSetupView: View {
                         switch screenType {
                         case .createWallet(let seedPhrase, let nickName):
                             let seedPhrase = seedPhrase.joined(separator: " ")
-                            let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
                             guard let wallet = createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                             else {
                                 throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
@@ -57,7 +56,6 @@ struct BiometricSetupView: View {
                             appSetting.isLogin = true
 
                         case let .restoreWallet(fileContent, seedPhrase, nickName):
-                            let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
                             let wallet: MinWallet? = {
                                 if !fileContent.isBlank {
                                     return importWallet(data: fileContent, password: MinWalletConstant.passDefaultForFaceID, walletName: nickName)

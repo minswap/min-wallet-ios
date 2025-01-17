@@ -69,7 +69,7 @@ struct WalletAccountView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                     } else {
-                        Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                        Text(userInfo.minWallet?.walletName)
                             .font(.titleH7)
                             .foregroundStyle(.colorBaseTent)
                             .lineLimit(1)

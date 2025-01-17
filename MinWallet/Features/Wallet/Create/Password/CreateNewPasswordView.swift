@@ -149,7 +149,6 @@ struct CreateNewPasswordView: View {
                         appSetting.authenticationType = .password
                         appSetting.isLogin = true
 
-                        let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
                         let wallet: MinWallet? = {
                             if !fileContent.isBlank {
                                 importWallet(data: fileContent, password: password, walletName: nickName)

@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MIN_MIN_TOKEN_NAME</key>
-	<string>${MIN_MIN_TOKEN_NAME}</string>
-	<key>MIN_MIN_CURRENCY_SYMBOL</key>
-	<string>${MIN_MIN_CURRENCY_SYMBOL}</string>
+	<key>MIN_MIN_TOKEN</key>
+	<string>${MIN_MIN_TOKEN}</string>
+	<key>MIN_ADA_TOKEN</key>
+	<string>${MIN_ADA_TOKEN}</string>
+	<key>MIN_LP_TOKEN</key>
+	<string>${MIN_LP_TOKEN}</string>
 	<key>MIN_PUBLIC_NETWORK_ID</key>
 	<string>${MIN_PUBLIC_NETWORK_ID}</string>
 	<key>MIN_TRANSACTION_URL</key>

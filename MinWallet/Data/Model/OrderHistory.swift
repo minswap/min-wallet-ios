@@ -130,6 +130,21 @@ extension OrderHistoryQuery.Data.Orders {
             let json = JSON(parseJSON: order?.details ?? "")
             let linkedPools = order?.linkedPools ?? []
 
+            func uniqueID(symbol: String?, name: String?) -> String {
+                let symbol = symbol ?? ""
+                let name = name ?? ""
+                if symbol.isEmpty && name.isEmpty {
+                    return ""
+                }
+                if symbol.isEmpty {
+                    return name
+                }
+                if name.isEmpty {
+                    return symbol
+                }
+                return symbol + "." + name
+            }
+
             detail.isKillable = json["isKillable"].int
             detail.inputs = json["inputs"].arrayValue
                 .map({ input in
@@ -139,10 +154,9 @@ extension OrderHistoryQuery.Data.Orders {
                     let currencySymbol = String(assetSplit.first ?? "")
                     let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
 
-                    let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
-
+                    let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                     let isVerified: Bool? = metaData?.isVerified
-                    let name: String = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? ""
+                    let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
                     let decimals: Int? = metaData?.decimals ?? 6
 
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
@@ -150,7 +164,7 @@ extension OrderHistoryQuery.Data.Orders {
                         tokenName: tokenName,
                         isVerified: isVerified,
                         amount: amount / pow(10.0, Double(decimals ?? 0)),
-                        currency: UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? name)
+                        currency: name)
                 })
             detail.outputs = json["outputs"].arrayValue
                 .map({ input in
@@ -163,10 +177,9 @@ extension OrderHistoryQuery.Data.Orders {
                     let currencySymbol = String(assetSplit.first ?? "")
                     let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
 
-                    let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
-
+                    let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                     let isVerified: Bool? = metaData?.isVerified
-                    let name: String = metaData?.ticker ?? tokenName?.adaName ?? tokenName ?? ""
+                    let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
                     let decimals: Int? = metaData?.decimals ?? 6
 
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
@@ -176,9 +189,9 @@ extension OrderHistoryQuery.Data.Orders {
                         decimals: decimals,
                         amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
                         satisfiedAmount: satisfiedAmount / pow(10.0, Double(decimals ?? 0)),
-                        currency: UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? name,
-                        limitAmount: limitAmount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
-                        stopAmount: stopAmount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0)))
+                        currency: name,
+                        limitAmount: limitAmount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
+                        stopAmount: stopAmount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0)))
                     )
                 })
             detail.tradingFee = json["lpFees"].arrayValue
@@ -193,9 +206,12 @@ extension OrderHistoryQuery.Data.Orders {
                     let isVerified: Bool? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.isVerified
-                    let name: String =
-                        assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? tokenName?.adaName ?? tokenName
-                        ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.ticker ?? ""
+
+                    let metaData = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
+                    let lpMetaData = lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
+
+                    let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? lpMetaData?.ticker ?? ""
+
                     let decimals: Int? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
@@ -204,8 +220,8 @@ extension OrderHistoryQuery.Data.Orders {
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
                         isVerified: isVerified,
-                        amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
-                        currency: UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? name)
+                        amount: amount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
+                        currency: name)
                 })
 
             detail.changeAmount = json["change_amount"].arrayValue
@@ -231,8 +247,8 @@ extension OrderHistoryQuery.Data.Orders {
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
                         isVerified: isVerified,
-                        amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
-                        currency: UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? name)
+                        amount: amount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
+                        currency: name)
                 })
 
             let name = detail.inputs.map { $0.currency }.joined(separator: ", ") + " - " + detail.outputs.map({ $0.currency }).joined(separator: ",")

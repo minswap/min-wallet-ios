@@ -8,8 +8,9 @@ struct MinWalletConstant {
     static let keyChainAccessGroup = GetInfoDictionaryString(for: "MIN_KEYCHAIN_ACCESS_GROUP")
     static let passDefaultForFaceID = GetInfoDictionaryString(for: "MIN_PASS_DEFAULT_FOR_FACE_ID")
     static let networkID = GetInfoDictionaryString(for: "MIN_PUBLIC_NETWORK_ID")
-    static let minCurrencySymbol = GetInfoDictionaryString(for: "MIN_MIN_CURRENCY_SYMBOL")
-    static let minTokenName = GetInfoDictionaryString(for: "MIN_MIN_TOKEN_NAME")
+    static let minToken = GetInfoDictionaryString(for: "MIN_MIN_TOKEN")
+    static let lpToken = GetInfoDictionaryString(for: "MIN_LP_TOKEN")
+    static let adaToken = GetInfoDictionaryString(for: "MIN_ADA_TOKEN")
 
     private init() {
 
