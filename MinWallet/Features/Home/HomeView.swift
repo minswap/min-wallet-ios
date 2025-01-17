@@ -39,6 +39,7 @@ struct HomeView: View {
                     .overlay(
                         Circle().stroke(.colorBorderPrimarySub, lineWidth: 1)
                     )
+                    /*
                     .shadow(
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.1),
                         radius: 3, x: 0, y: 4
@@ -47,6 +48,7 @@ struct HomeView: View {
                         color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.06),
                         radius: 2, x: 0, y: 2
                     )
+                     */
                     .onTapGesture {
                         withAnimation {
                             showSideMenu = true
@@ -63,7 +65,7 @@ struct HomeView: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
                                 .padding(.trailing, 4)
-                            Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                            Text(userInfo.walletName)
                                 .font(.paragraphXMediumSmall)
                                 .foregroundStyle(.colorInteractiveToneHighlight)
                                 .padding(.horizontal, .lg)

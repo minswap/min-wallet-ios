@@ -21,29 +21,29 @@ struct WalletAccountView: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Image(.icAvatar)
+                Image(.icAvatarDefault)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 64, height: 64)
+                    .frame(width: 96, height: 96)
                     .clipShape(Circle())
 
                 if isVerified {
                     Circle()
                         .fill(.colorBaseBackground)
-                        .frame(width: 16, height: 16)
+                        .frame(width: 24, height: 24)
                         .overlay(
-                            Image(.icVerifiedBadge)
+                            Image(.icSubAvatar)
                                 .resizable()
-                                .frame(width: 12, height: 12)
+                                .frame(width: 16, height: 16)
                         )
                         .overlay(
                             Circle()
                                 .stroke(.colorSurfacePrimarySub, lineWidth: 1)
                         )
-                        .position(x: 54, y: 54)
+                        .position(x: 84, y: 84)
                 }
             }
-            .frame(width: 64, height: 64)
+            .frame(width: 96, height: 96)
             .padding(.vertical, .lg)
             VStack(alignment: .center, spacing: 4) {
                 HStack(spacing: 4) {
@@ -57,7 +57,7 @@ struct WalletAccountView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                             .padding(.trailing, 4)
-                        Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                        Text(userInfo.walletName)
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             .padding(.horizontal, .lg)

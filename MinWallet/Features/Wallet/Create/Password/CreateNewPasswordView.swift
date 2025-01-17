@@ -49,7 +49,7 @@ struct CreateNewPasswordView: View {
                 VStack(spacing: 0) {
                     VStack(spacing: 4) {
                         Text("Password")
-                            .font(.paragraphSmall)
+                            .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, .xl)
@@ -89,7 +89,7 @@ struct CreateNewPasswordView: View {
                     }
                     VStack(spacing: 4) {
                         Text("Confirm")
-                            .font(.paragraphSmall)
+                            .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, .xl)
@@ -123,7 +123,7 @@ struct CreateNewPasswordView: View {
                 get: { (passwordValidationMatched.count == PasswordValidation.allCases.count) && (password == rePassword) },
                 set: { newValue in }
             )
-            CustomButton(title: "Confirm", isEnable: combinedBinding) {
+            CustomButton(title: "Create", isEnable: combinedBinding) {
                 switch screenType {
                 case .authenticationSetting:
                     onCreatePasswordSuccess?(password)

@@ -30,6 +30,7 @@ struct CreateNewWalletSuccessView: View {
                 .foregroundStyle(.colorBaseTent)
             Text("You have successfully create a wallet. Minwallet makes exploring Cardano feel better than ever.")
                 .font(.labelMediumSecondary)
+                .lineSpacing(4)
                 .foregroundStyle(.colorBaseTent)
                 .multilineTextAlignment(.center)
                 .padding(.top, .xl)

@@ -75,11 +75,11 @@ struct ReInputSeedPhraseView: View {
             CustomButton(title: "Next", isEnable: enableNext) {
                 switch screenType {
                 case let .createWallet(seedPhrase):
-                    guard inputSeedPhrase == seedPhrase.joined(separator: " ") else { return }
+                    guard inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) == seedPhrase.joined(separator: " ") else { return }
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
                 case .restoreWallet:
                     guard !inputSeedPhrase.isBlank else { return }
-                    navigator.push(.restoreWallet(.biometricSetup(fileContent: "", seedPhrase: inputSeedPhrase.split(separator: " ").map({ String($0) }), nickName: "")))
+                    navigator.push(.restoreWallet(.biometricSetup(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }), nickName: "")))
                 }
             }
             .frame(height: 56)

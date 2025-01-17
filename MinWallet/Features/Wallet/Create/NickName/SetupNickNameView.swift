@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import Combine
 
 
 struct SetupNickNameView: View {
@@ -45,6 +46,11 @@ struct SetupNickNameView: View {
                         .foregroundStyle(.colorLabelToolbarDone)
                     }
                 }
+                .onReceive(Just(nickName)) { _ in
+                    if nickName.count > 40 {
+                        nickName = String(nickName.prefix(40))
+                    }
+                }
             Spacer()
             let title: LocalizedStringKey = {
                 switch screenType {
@@ -54,7 +60,11 @@ struct SetupNickNameView: View {
                     "Change"
                 }
             }()
-            CustomButton(title: title) {
+            let combinedBinding = Binding<Bool>(
+                get: { nickName.trimmingCharacters(in: .whitespacesAndNewlines).count >= 3 },
+                set: { _ in }
+            )
+            CustomButton(title: title, isEnable: combinedBinding) {
                 switch screenType {
                 case let .createWallet(seedPhrase):
                     navigator.push(.createWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines))))

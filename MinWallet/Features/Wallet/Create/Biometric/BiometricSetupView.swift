@@ -51,10 +51,10 @@ struct BiometricSetupView: View {
                             else {
                                 throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
                             }
-                            userInfo.saveWalletInfo(walletInfo: wallet)
-                            appSetting.isLogin = true
 
                             try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
+                            userInfo.saveWalletInfo(walletInfo: wallet)
+                            appSetting.isLogin = true
 
                         case let .restoreWallet(fileContent, seedPhrase, nickName):
                             let nickName: String = nickName.isBlank ? UserInfo.nickNameDefault : nickName
@@ -66,11 +66,11 @@ struct BiometricSetupView: View {
                                 }
                             }()
                             guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
-                            userInfo.saveWalletInfo(walletInfo: wallet)
 
-                            appSetting.isLogin = true
                             try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
 
+                            userInfo.saveWalletInfo(walletInfo: wallet)
+                            appSetting.isLogin = true
                         }
                         navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch {

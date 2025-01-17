@@ -17,8 +17,15 @@ class AppSetting: ObservableObject {
 
     var safeArea: CGFloat = UIApplication.safeArea.top
 
-    var rootScreen: MainCoordinatorViewModel.Screen = .policy
+    var rootScreen: MainCoordinatorViewModel.Screen = .policy(.splash)
     {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    @UserDefault("first_time", defaultValue: true)
+    var isFirstTimeRunApp: Bool {
         willSet {
             objectWillChange.send()
         }
@@ -117,7 +124,7 @@ class AppSetting: ObservableObject {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }
 
-        rootScreen = isLogin ? .home : .policy
+        rootScreen = isLogin ? .home : (isFirstTimeRunApp ? .policy(.splash) : .gettingStarted)
 
         getAdaPrice()
     }
