@@ -89,9 +89,9 @@ struct SettingView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                     } else {
-                        Text(userInfo.minWallet?.walletName)
+                        Text(userInfo.walletName)
                             .font(.labelSemiSecondary)
-                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            .foregroundStyle(.colorBaseTent)
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                     }
