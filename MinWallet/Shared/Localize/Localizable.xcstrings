@@ -183,6 +183,9 @@
     "Change your password" : {
 
     },
+    "Check" : {
+
+    },
     "Choose your best way to log-in" : {
 
     },
@@ -367,6 +370,9 @@
 
     },
     "If I share my seed phrase with others, my assets will be stolen." : {
+
+    },
+    "If this ADA Handle has a typo or belongs to a different person your fund will be lost" : {
 
     },
     "If you forget your password, you can reset it by restoring your wallet. You can import your wallet again using the seed phrase or JSON file, and your assets will not be impacted." : {

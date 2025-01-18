@@ -25,12 +25,12 @@ struct SignContractView: View {
                 .padding(.horizontal, .xl)
             VStack(spacing: 4) {
                 Text("Password")
-                    .font(.paragraphSmall)
+                    .font(.labelSmallSecondary)
                     .foregroundStyle(.colorBaseTent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, .xl)
                     .padding(.top, .lg)
-                SecurePasswordTextField(placeHolder: "Sign password", text: $password)
+                SecurePasswordTextField(placeHolder: "Enter your password", text: $password)
                     .focused($isFocus)
                     .frame(height: 44)
                     .overlay(
@@ -40,13 +40,19 @@ struct SignContractView: View {
                     .padding(.horizontal, .xl)
             }
             Spacer()
-            CustomButton(title: "Sign") {
-                guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
-                let _ = signTx(wallet: minWallet, password: password, accountIndex: minWallet.accountIndex, txRaw: "")
-                navigator.dismiss()
-                onSignSuccess?()
+            HStack(spacing: .xl) {
+                CustomButton(title: "Cancel", variant: .secondary) {
+                    
+                }
+                .frame(height: 56)
+                CustomButton(title: "Confirm") {
+                    guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
+                    let _ = signTx(wallet: minWallet, password: password, accountIndex: minWallet.accountIndex, txRaw: "")
+                    navigator.dismiss()
+                    onSignSuccess?()
+                }
+                .frame(height: 56)
             }
-            .frame(height: 56)
             .padding(.horizontal, .xl)
         }
         .toolbar {
