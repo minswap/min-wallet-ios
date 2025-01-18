@@ -85,6 +85,20 @@ struct HomeView: View {
                         }
                     }
                     Spacer()
+                    Image(.icQrCode)
+                        .resizable()
+                        .scaledToFill()
+                        .padding(8)
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.colorBorderPrimaryTer, lineWidth: 1)
+                        )
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            //navigator.push(.searchToken)
+                        }
                     Image(.icSearch)
                         .resizable()
                         .scaledToFill()
@@ -204,7 +218,7 @@ struct HomeView: View {
                 CustomButton(title: "Swap") {
                     navigator.push(.swapToken(.swapToken))
                 }
-                .frame(height: 44)
+                .frame(height: 56)
                 .padding(.horizontal, .xl)
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 0)

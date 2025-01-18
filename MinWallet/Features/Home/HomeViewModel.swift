@@ -12,7 +12,9 @@ class HomeViewModel: ObservableObject {
     private var tokensDic: [TokenListView.TabType: [TokenProtocol]] = [:]
     @Published
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
-
+    @Published
+    var isHasYourToken: Bool = false
+    
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
     private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
@@ -24,6 +26,7 @@ class HomeViewModel: ObservableObject {
     init() {
         $tabType
             .removeDuplicates()
+            .dropFirst()
             .sink { [weak self] newValue in
                 guard let self = self else { return }
                 self.tabType = newValue
@@ -32,8 +35,17 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
 
         Task {
+            let tokens = try? await getYourToken()
+            self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
+            getTokens()
+            
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
+                if tabType != .yourToken {
+                    let tokens = try? await getYourToken()
+                    self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
+                }
+                
                 self.getTokens()
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
@@ -71,18 +83,17 @@ class HomeViewModel: ObservableObject {
                 self.isFetching[tabType] = false
 
             case .yourToken:
-                let tokens = try? await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-                let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
-                let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
-
-                self.tokensDic[tabType] = normalToken + lpToken
+                let tokens = try? await self.getYourToken()
+                let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
+                self.isHasYourToken = !_tokens.isEmpty
+                self.tokensDic[tabType] = _tokens
                 self.hasLoadMoreDic[tabType] = false
                 self.showSkeletonDic[tabType] = false
                 self.isFetching[tabType] = false
             }
         }
     }
-
+    
     func loadMoreData(item: TokenProtocol) {
         guard (hasLoadMoreDic[tabType] ?? true), !(isFetching[tabType] ?? true) else { return }
         let tokens = tokensDic[tabType] ?? []
@@ -90,6 +101,13 @@ class HomeViewModel: ObservableObject {
         if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
+    }
+    
+    func getYourToken() async throws -> ([TokenProtocol], [TokenProtocol]) {
+        let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
+        let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
+        let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
+        return (normalToken, lpToken)
     }
 }
 
