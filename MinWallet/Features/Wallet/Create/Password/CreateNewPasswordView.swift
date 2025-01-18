@@ -130,6 +130,7 @@ struct CreateNewPasswordView: View {
                     navigator.pop()
                 case let .createWallet(seedPhrase, nickName):
                     do {
+                        let nickName = nickName.isBlank ? "My MinWallet" : nickName
                         let seedPhrase = seedPhrase.joined(separator: " ")
                         guard let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                         else {
@@ -145,6 +146,7 @@ struct CreateNewPasswordView: View {
                     navigator.push(.createWallet(.createNewWalletSuccess))
                 case let .restoreWallet(fileContent, seedPhrase, nickName):
                     do {
+                        let nickName = nickName.isBlank ? "My MinWallet" : nickName
                         let wallet: MinWallet? = {
                             if !fileContent.isBlank {
                                 importWallet(data: fileContent, password: password, walletName: nickName)

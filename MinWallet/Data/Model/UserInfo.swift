@@ -55,7 +55,7 @@ class UserInfo: ObservableObject {
 
     var walletName: String {
         guard let name = minWallet?.walletName else { return "" }
-        if name.count <= 10 {
+        if name.count <= 12 {
             return name
         }
 

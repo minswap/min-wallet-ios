@@ -23,7 +23,7 @@ struct HomeView: View {
     private var showSideMenu: Bool = false
     @State
     private var isCopyAddress: Bool = false
-    
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -142,11 +142,13 @@ struct HomeView: View {
                         withAnimation {
                             isCopyAddress = true
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-                            withAnimation {
-                                self.isCopyAddress = false
-                            }
-                        })
+                        DispatchQueue.main.asyncAfter(
+                            deadline: .now() + .seconds(2),
+                            execute: {
+                                withAnimation {
+                                    self.isCopyAddress = false
+                                }
+                            })
                     }
                     let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""

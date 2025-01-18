@@ -64,6 +64,7 @@ struct MainCoordinator: View {
                             ReInputSeedPhraseView(screenType: .restoreWallet).navigationBarHidden(true)
                         case .createNewWalletSuccess:
                             CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true)
+                                .environmentObject(portfolioOverviewViewModel)
                         case let .createNewPassword(fileContent, seedPhrase, nickName):
                             CreateNewPasswordView(screenType: .restoreWallet(fileContent: fileContent, seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .importFile:

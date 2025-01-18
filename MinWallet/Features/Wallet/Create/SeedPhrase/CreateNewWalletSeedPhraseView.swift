@@ -37,7 +37,7 @@ struct CreateNewWalletSeedPhraseView: View {
                     .background(content: {
                         PartialRoundedBorder(cornerRadius: 24, lineWidth: 1)
                             .stroke(Color.colorBorderPrimarySub, lineWidth: 1)
-                        
+
                     })
                     .contentShape(.rect)
                     .onTapGesture {

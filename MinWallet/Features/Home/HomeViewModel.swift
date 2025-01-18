@@ -14,7 +14,10 @@ class HomeViewModel: ObservableObject {
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
     var isHasYourToken: Bool = false
-    
+    ///Cached your token, include normal + lp tokens
+    @Published
+    var yourTokens: ([TokenProtocol], [TokenProtocol]) = ([], [])
+
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
     private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
@@ -36,16 +39,17 @@ class HomeViewModel: ObservableObject {
 
         Task {
             let tokens = try? await getYourToken()
+            self.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
             self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
             getTokens()
-            
+
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
                 if tabType != .yourToken {
                     let tokens = try? await getYourToken()
                     self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
                 }
-                
+
                 self.getTokens()
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
@@ -85,6 +89,7 @@ class HomeViewModel: ObservableObject {
             case .yourToken:
                 let tokens = try? await self.getYourToken()
                 let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
+                self.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
                 self.isHasYourToken = !_tokens.isEmpty
                 self.tokensDic[tabType] = _tokens
                 self.hasLoadMoreDic[tabType] = false
@@ -93,7 +98,7 @@ class HomeViewModel: ObservableObject {
             }
         }
     }
-    
+
     func loadMoreData(item: TokenProtocol) {
         guard (hasLoadMoreDic[tabType] ?? true), !(isFetching[tabType] ?? true) else { return }
         let tokens = tokensDic[tabType] ?? []
@@ -102,7 +107,7 @@ class HomeViewModel: ObservableObject {
             getTokens(isLoadMore: true)
         }
     }
-    
+
     func getYourToken() async throws -> ([TokenProtocol], [TokenProtocol]) {
         let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
         let normalToken = tokens?.getWalletAssetsPositions.assets ?? []

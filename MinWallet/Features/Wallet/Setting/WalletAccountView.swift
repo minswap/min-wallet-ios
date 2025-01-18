@@ -19,7 +19,7 @@ struct WalletAccountView: View {
     private var showDisconnectWallet: Bool = false
     @State
     private var isCopyAddress: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -103,11 +103,13 @@ struct WalletAccountView: View {
                     withAnimation {
                         isCopyAddress = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-                        withAnimation {
-                            self.isCopyAddress = false
-                        }
-                    })
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + .seconds(2),
+                        execute: {
+                            withAnimation {
+                                self.isCopyAddress = false
+                            }
+                        })
                 }
             }
             .padding(.horizontal, .xl)

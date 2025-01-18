@@ -121,11 +121,13 @@ struct SettingView: View {
                     withAnimation {
                         isCopyAddress = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-                        withAnimation {
-                            self.isCopyAddress = false
-                        }
-                    })
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + .seconds(2),
+                        execute: {
+                            withAnimation {
+                                self.isCopyAddress = false
+                            }
+                        })
                 }
             }
             .padding(.horizontal, .xl)
