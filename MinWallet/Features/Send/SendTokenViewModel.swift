@@ -1,14 +1,19 @@
 import SwiftUI
 
 
+@MainActor
 class SendTokenViewModel: ObservableObject {
 
     @Published
     var tokens: [WrapTokenSend] = []
-    @Published
-    var amountDefault: String = ""
 
-    init() {}
+    init() {
+        Task {
+            var adaToken = TokenDefault(symbol: "", tName: "")
+            adaToken.netValue = TokenManager.shared.adaValue
+            tokens.append(WrapTokenSend(token: adaToken))
+        }
+    }
 
     func addToken(tokens: [TokenProtocol]) {
         //TODO: cuongnv single mode

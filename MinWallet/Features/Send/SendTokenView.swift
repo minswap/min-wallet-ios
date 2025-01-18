@@ -19,6 +19,9 @@ struct SendTokenView: View {
     @StateObject
     private var viewModel = SendTokenViewModel()
 
+    @EnvironmentObject
+    var tokenManager: TokenManager
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -32,6 +35,7 @@ struct SendTokenView: View {
                             .padding(.top, .lg)
                             .padding(.bottom, .xl)
                             .padding(.horizontal, .xl)
+                        /*
                         HStack(spacing: .md) {
                             AmountTextField(value: $viewModel.amountDefault)
                                 .focused($focusedField, equals: Focusable.row(id: "-1"))
@@ -53,6 +57,7 @@ struct SendTokenView: View {
                         .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
+                         */
                         ForEach(0..<viewModel.tokens.count, id: \.self) { index in
                             let item = viewModel.tokens[index]
                             let amountBinding = Binding<String>(
@@ -108,7 +113,11 @@ struct SendTokenView: View {
                     })
             }
             Spacer()
-            CustomButton(title: "Next") {
+            let combinedBinding = Binding<Bool>(
+                get: { viewModel.tokens.allSatisfy { !$0.amount.isBlank } },
+                set: { _ in }
+            )
+            CustomButton(title: "Next", isEnable: combinedBinding) {
                 navigator.push(.sendToken(.toWallet))
             }
             .frame(height: 56)
@@ -135,4 +144,5 @@ struct SendTokenView: View {
 
 #Preview {
     SendTokenView()
+        .environmentObject(TokenManager.shared)
 }

@@ -443,7 +443,12 @@ struct TokenDefault: TokenProtocol {
 
     var symbol: String = ""
     var tName: String = ""
-
+    var netValue: Double  = 0
+    
+    var amount: Double {
+        netValue
+    }
+    
     init(symbol: String, tName: String) {
         self.symbol = symbol
         self.tName = tName
