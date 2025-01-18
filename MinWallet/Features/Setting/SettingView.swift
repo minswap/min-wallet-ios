@@ -235,7 +235,8 @@ struct SettingView: View {
                 navigator.push(.about)
             }
         }
-        .background(Color.colorBaseBackground)
+        .background(.colorBaseBackground)
+        .compositingGroup()
     }
 }
 
