@@ -76,10 +76,21 @@ struct WalletAccountView: View {
                             .minimumScaleFactor(0.1)
                     }
                 }
-                Text(userInfo.minWallet?.address.shortenAddress)
-                    .font(.paragraphXSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                HStack(spacing: 4) {
+                    Spacer()
+                    Text(userInfo.minWallet?.address.shortenAddress)
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Image(.icCopy)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 16, height: 16)
+                    Spacer()
+                }
+                .contentShape(.rect)
+                .onTapGesture {
+                    UIPasteboard.general.string = userInfo.minWallet?.address
+                }
             }
             .padding(.horizontal, .xl)
             /*
