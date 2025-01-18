@@ -19,8 +19,10 @@ struct TokenListItemView: View {
         HStack(spacing: .xl) {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
             VStack(spacing: 4) {
+                let adaName = token?.adaName
+                let name = token?.name ?? ""
                 HStack(spacing: 0) {
-                    Text(token?.adaName)
+                    Text(adaName)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
@@ -37,7 +39,7 @@ struct TokenListItemView: View {
                         .foregroundStyle(.colorBaseTent)
                 }
                 HStack(spacing: 0) {
-                    Text(token?.name)
+                    Text(name.isBlank ? adaName : name)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
