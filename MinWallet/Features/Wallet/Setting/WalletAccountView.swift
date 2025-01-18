@@ -11,8 +11,8 @@ struct WalletAccountView: View {
     private var appSetting: AppSetting
     @State
     private var isVerified: Bool = true
-    @EnvironmentObject
-    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
+    @StateObject
+    private var tokenManager: TokenManager = TokenManager.shared
     @State
     private var showEditNickName: Bool = false
     @State
@@ -131,7 +131,7 @@ struct WalletAccountView: View {
                     Spacer()
                     let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
-                    let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.adaValue : (portfolioOverviewViewModel.adaValue * appSetting.currencyInADA)
+                    let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? tokenManager.adaValue : (tokenManager.adaValue * appSetting.currencyInADA)
                     Text(prefix + adaValue.formatSNumber(maximumFractionDigits: 2) + suffix)
                         .font(.paragraphSemi)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -208,6 +208,5 @@ struct WalletAccountView: View {
 #Preview {
     WalletAccountView()
         .environmentObject(UserInfo.shared)
-        .environmentObject(PortfolioOverviewViewModel())
         .environmentObject(AppSetting.shared)
 }

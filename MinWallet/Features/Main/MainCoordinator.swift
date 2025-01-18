@@ -6,27 +6,22 @@ import MinWalletAPI
 struct MainCoordinator: View {
     @StateObject
     private var viewModel = MainCoordinatorViewModel()
-    @StateObject
-    private var portfolioOverviewViewModel = PortfolioOverviewViewModel()
     @EnvironmentObject
     private var appSetting: AppSetting
 
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
             SplashView()
-                .environmentObject(portfolioOverviewViewModel)
                 .flowDestination(for: MainCoordinatorViewModel.Screen.self) { screen in
                     switch screen {
                     case .home:
                         HomeView().navigationBarHidden(true)
-                            .environmentObject(portfolioOverviewViewModel)
                     case let .policy(screenType):
                         PolicyConfirmView(screenType: screenType).navigationBarHidden(true)
                     case .gettingStarted:
                         GettingStartedView().navigationBarHidden(true)
                     case let .tokenDetail(token):
                         TokenDetailView(viewModel: TokenDetailViewModel(token: token)).navigationBarHidden(true)
-                            .environmentObject(portfolioOverviewViewModel)
                     case .about:
                         AboutView().navigationBarHidden(true)
                     case .language:
@@ -53,7 +48,6 @@ struct MainCoordinator: View {
                             CreateNewPasswordView(screenType: .createWallet(seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .createNewWalletSuccess:
                             CreateNewWalletSuccessView(screenType: .newWallet).navigationBarHidden(true)
-                                .environmentObject(portfolioOverviewViewModel)
                         }
 
                     case let .restoreWallet(screen):
@@ -64,7 +58,6 @@ struct MainCoordinator: View {
                             ReInputSeedPhraseView(screenType: .restoreWallet).navigationBarHidden(true)
                         case .createNewWalletSuccess:
                             CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true)
-                                .environmentObject(portfolioOverviewViewModel)
                         case let .createNewPassword(fileContent, seedPhrase, nickName):
                             CreateNewPasswordView(screenType: .restoreWallet(fileContent: fileContent, seedPhrase: seedPhrase, nickName: nickName)).navigationBarHidden(true)
                         case .importFile:
@@ -77,7 +70,6 @@ struct MainCoordinator: View {
                         switch screen {
                         case .walletAccount:
                             WalletAccountView().navigationBarHidden(true)
-                                .environmentObject(portfolioOverviewViewModel)
                         case .changePassword:
                             ChangePasswordView(screenType: .walletSetting).navigationBarHidden(true)
                         case .changePasswordSuccess:

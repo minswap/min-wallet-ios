@@ -70,13 +70,16 @@ extension String {
             )
 
             if let backgroundColor = centerBackgroundColor {
-                // Draw the background color with padding
+                // Draw the circular background color
+                let circlePath = UIBezierPath(ovalIn: paddedRect)
                 backgroundColor.setFill()
-                UIRectFill(paddedRect)
+                circlePath.fill()
             }
-
-            // Draw the center image
+            
+            // Clip the center image to a circle and draw it
+            let circlePath = UIBezierPath(ovalIn: imageRect)
             centerImage.draw(in: imageRect)
+
         }
         let finalImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

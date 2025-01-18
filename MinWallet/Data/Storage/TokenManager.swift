@@ -1,0 +1,74 @@
+import Foundation
+import MinWalletAPI
+
+
+@MainActor
+class TokenManager: ObservableObject {
+    
+    static var shared: TokenManager = .init()
+    
+    var isHasYourToken: Bool = false {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    ///Cached your token, include normal + lp tokens
+    var yourTokens: ([TokenProtocol], [TokenProtocol]) = ([], []) {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    var netAdaValue: Double = 0 {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    var pnl24H: Double = 0 {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    var adaValue: Double = 0 {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    private init() {}
+    
+    func getPortfolioOverview() async -> Void {
+        guard AppSetting.shared.isLogin else { return }
+        guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
+        let portfolioOverview = try? await MinWalletService.shared.fetch(query: PortfolioOverviewQuery(address: UserInfo.shared.minWallet?.address ?? ""))
+        netAdaValue = (portfolioOverview?.portfolioOverview.netAdaValue.doubleValue ?? 0) / 1_000_000
+        pnl24H = (portfolioOverview?.portfolioOverview.pnl24H.doubleValue ?? 0) / 1_000_000
+        adaValue = (portfolioOverview?.portfolioOverview.adaValue.doubleValue ?? 0) / 1_000_000
+    }
+}
+
+extension TokenManager {
+    static func reset() {
+        TokenManager.shared = .init()
+    }
+    
+    static func getYourToken() async throws -> ([TokenProtocol], [TokenProtocol]) {
+        let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
+        let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
+        let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
+        return (normalToken, lpToken)
+    }
+    
+    static func fetchAdaHandleName() async -> String {
+        guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return "" }
+        
+        let adaHandleNameQuery = try? await MinWalletService.shared.fetch(query: ADAHandleNameQuery(address: address))
+        let tokenName = adaHandleNameQuery?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName ?? ""
+        
+        let adaName: String? = tokenName.adaName
+        return adaName ?? ""
+    }
+}

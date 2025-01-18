@@ -97,7 +97,6 @@ struct TokenListView: View {
     HomeView()
         .environmentObject(AppSetting.shared)
         .environmentObject(UserInfo.shared)
-        .environmentObject(PortfolioOverviewViewModel())
 }
 
 

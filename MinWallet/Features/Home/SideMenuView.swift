@@ -120,6 +120,5 @@ struct SideMenu_Previews: PreviewProvider {
         HomeView()
             .environmentObject(AppSetting.shared)
             .environmentObject(UserInfo.shared)
-            .environmentObject(PortfolioOverviewViewModel())
     }
 }

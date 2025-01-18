@@ -137,5 +137,4 @@ extension Date {
 #Preview {
     TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
         .environmentObject(AppSetting.shared)
-        .environmentObject(PortfolioOverviewViewModel())
 }

@@ -6,6 +6,8 @@ import MinWalletAPI
 @MainActor
 class HomeViewModel: ObservableObject {
 
+    static var shared: HomeViewModel = .init()
+    
     @Published
     var tabType: TokenListView.TabType = .market
     @Published
@@ -14,10 +16,7 @@ class HomeViewModel: ObservableObject {
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
     var isHasYourToken: Bool = false
-    ///Cached your token, include normal + lp tokens
-    @Published
-    var yourTokens: ([TokenProtocol], [TokenProtocol]) = ([], [])
-
+    
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
     private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
@@ -27,6 +26,8 @@ class HomeViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
+        guard AppSetting.shared.isLogin else { return }
+        
         $tabType
             .removeDuplicates()
             .dropFirst()
@@ -38,19 +39,27 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
 
         Task {
-            let tokens = try? await getYourToken()
-            self.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            let tokens = try? await TokenManager.getYourToken()
+            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
             self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
             getTokens()
 
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
                 if tabType != .yourToken {
-                    let tokens = try? await getYourToken()
+                    let tokens = try? await TokenManager.getYourToken()
+                    TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
                     self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
                 }
-
                 self.getTokens()
+                try? await Task.sleep(for: .seconds(5 * 60))
+            } while (!Task.isCancelled)
+        }
+        
+        //MARK: Get balance
+        Task {
+            repeat {
+                await TokenManager.shared.getPortfolioOverview()
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
         }
@@ -87,9 +96,9 @@ class HomeViewModel: ObservableObject {
                 self.isFetching[tabType] = false
 
             case .yourToken:
-                let tokens = try? await self.getYourToken()
+                let tokens = try? await TokenManager.getYourToken()
                 let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
-                self.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+                TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
                 self.isHasYourToken = !_tokens.isEmpty
                 self.tokensDic[tabType] = _tokens
                 self.hasLoadMoreDic[tabType] = false
@@ -106,13 +115,6 @@ class HomeViewModel: ObservableObject {
         if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
-    }
-
-    func getYourToken() async throws -> ([TokenProtocol], [TokenProtocol]) {
-        let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-        let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
-        let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
-        return (normalToken, lpToken)
     }
 }
 
