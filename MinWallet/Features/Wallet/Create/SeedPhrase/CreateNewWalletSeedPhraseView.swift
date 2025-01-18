@@ -34,9 +34,11 @@ struct CreateNewWalletSeedPhraseView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, .xl)
                     .padding(.bottom, UIApplication.safeArea.bottom > 0 ? UIApplication.safeArea.bottom : .md)
-                    .background(.colorBaseBackground)
-                    .cornerRadius(24, corners: [.topLeft, .topRight])
-                    .shadow(color: .colorBorderPrimarySub, radius: 4, x: 0, y: 2)
+                    .background(content: {
+                        PartialRoundedBorder(cornerRadius: 24, lineWidth: 1)
+                            .stroke(Color.colorBorderPrimarySub, lineWidth: 1)
+                        
+                    })
                     .contentShape(.rect)
                     .onTapGesture {
                         withAnimation {
@@ -71,7 +73,8 @@ private struct SeedPhraseRevealView: View {
             Image(.icReveal)
                 .resizable()
                 .frame(width: 60, height: 60)
-                .padding(.vertical, .xl)
+                .padding(.top, 24)
+                .padding(.bottom, .xl)
             Text("Tap to reveal seed phrase")
                 .font(.titleH7)
                 .foregroundStyle(.colorInteractiveToneHighlight)
