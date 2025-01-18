@@ -44,7 +44,7 @@ struct CustomButton: View {
                 }
                 Text(title)
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(variant.textColor)
+                    .foregroundStyle(isEnable ? variant.textColor : .colorInteractiveTentSecondaryDisable)
                     .lineLimit(1)
                     .layoutPriority(1)
                 if let iconRight = iconRight {
@@ -55,7 +55,7 @@ struct CustomButton: View {
             }
             .frame(maxWidth: frameType == .matchParent ? .infinity : nil, maxHeight: .infinity)
             .padding(.horizontal, 10)
-            .background(isEnable ? variant.backgroundColor : .colorSurfacePrimaryDefault)
+            .background(isEnable ? variant.backgroundColor : .colorSurfacePrimaryDisable)
             .shadow(radius: 50).cornerRadius(BorderRadius.full)
             .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(variant.borderColor, lineWidth: 1))
             .contentShape(.rect)
