@@ -17,7 +17,9 @@ struct WalletAccountView: View {
     private var showEditNickName: Bool = false
     @State
     private var showDisconnectWallet: Bool = false
-
+    @State
+    private var isCopyAddress: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -80,16 +82,32 @@ struct WalletAccountView: View {
                     Spacer()
                     Text(userInfo.minWallet?.address.shortenAddress)
                         .font(.paragraphXSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    Image(.icCopy)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 16, height: 16)
+                        .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                    if isCopyAddress {
+                        Image(.icCheckMark)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorBaseSuccess)
+                            .frame(width: 16, height: 16)
+                    } else {
+                        Image(.icCopy)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
+                    }
                     Spacer()
                 }
                 .contentShape(.rect)
                 .onTapGesture {
                     UIPasteboard.general.string = userInfo.minWallet?.address
+                    withAnimation {
+                        isCopyAddress = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                        withAnimation {
+                            self.isCopyAddress = false
+                        }
+                    })
                 }
             }
             .padding(.horizontal, .xl)

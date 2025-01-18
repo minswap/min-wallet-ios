@@ -21,7 +21,9 @@ struct HomeView: View {
     private var isShowCurrency: Bool = false
     @State
     private var showSideMenu: Bool = false
-
+    @State
+    private var isCopyAddress: Bool = false
+    
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -117,19 +119,34 @@ struct HomeView: View {
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
                 VStack(alignment: .leading, spacing: 4) {
-                    Button(action: {
-                        UIPasteboard.general.string = userInfo.minWallet?.address
-                    }) {
-                        HStack(spacing: 4) {
-                            Text(userInfo.minWallet?.address.shortenAddress)
-                                .font(.paragraphXSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    HStack(spacing: 4) {
+                        Text(userInfo.minWallet?.address.shortenAddress)
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                        if isCopyAddress {
+                            Image(.icCheckMark)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundStyle(.colorBaseSuccess)
+                                .frame(width: 16, height: 16)
+                        } else {
                             Image(.icCopy)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 16, height: 16)
                         }
-                        .buttonStyle(.plain)
+                    }
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        UIPasteboard.general.string = userInfo.minWallet?.address
+                        withAnimation {
+                            isCopyAddress = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                            withAnimation {
+                                self.isCopyAddress = false
+                            }
+                        })
                     }
                     let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""

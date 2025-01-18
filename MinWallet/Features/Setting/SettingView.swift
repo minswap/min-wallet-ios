@@ -19,6 +19,8 @@ struct SettingView: View {
     var isShowTimeZone: Bool
     @Binding
     var isShowCurrency: Bool
+    @State
+    private var isCopyAddress: Bool = false
 
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
@@ -96,9 +98,35 @@ struct SettingView: View {
                             .minimumScaleFactor(0.1)
                     }
                 }
-                Text(userInfo.minWallet?.address.shortenAddress)
-                    .font(.paragraphXSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                HStack(spacing: 4) {
+                    Text(userInfo.minWallet?.address.shortenAddress)
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                    if isCopyAddress {
+                        Image(.icCheckMark)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorBaseSuccess)
+                            .frame(width: 16, height: 16)
+                    } else {
+                        Image(.icCopy)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
+                    }
+                }
+                .contentShape(.rect)
+                .onTapGesture {
+                    UIPasteboard.general.string = userInfo.minWallet?.address
+                    withAnimation {
+                        isCopyAddress = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                        withAnimation {
+                            self.isCopyAddress = false
+                        }
+                    })
+                }
             }
             .padding(.horizontal, .xl)
             .padding(.vertical, .xl)
