@@ -11,7 +11,7 @@ struct ReceiveTokenView: View {
     private var qrImage: UIImage?
     @State
     private var copied: Bool = false
-    @State 
+    @State
     private var showShareSheet = false
 
     var body: some View {
@@ -92,13 +92,13 @@ struct ReceiveTokenView: View {
 private struct ShareSheet: UIViewControllerRepresentable {
     var items: [Any]
     var excludedActivityTypes: [UIActivity.ActivityType]? = nil
-    
+
     func makeUIViewController(context: Context) -> UIActivityViewController {
         let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
         controller.excludedActivityTypes = excludedActivityTypes
         return controller
     }
-    
+
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 

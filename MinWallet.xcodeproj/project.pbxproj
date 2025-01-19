@@ -97,6 +97,7 @@
 		96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */; };
 		968C06FA2D3B3EB300D81A33 /* PartialRoundedBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */; };
 		968C06FC2D3BDB3A00D81A33 /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FB2D3BDB3A00D81A33 /* TokenManager.swift */; };
+		968C06FE2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */; };
 		96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */; };
 		96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 96A285092D17B9FC00F3CCEF /* CoreDataRepository */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
@@ -279,6 +280,7 @@
 		96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteModifier.swift; sourceTree = "<group>"; };
 		968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialRoundedBorder.swift; sourceTree = "<group>"; };
 		968C06FB2D3BDB3A00D81A33 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
+		968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToWalletAddressViewModel.swift; sourceTree = "<group>"; };
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
 		96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSettingView.swift; sourceTree = "<group>"; };
@@ -775,6 +777,7 @@
 				9655924E2CFB39EE00301DDB /* SendTokenView.swift */,
 				96679BCC2D2CE00A00C9AE26 /* SendTokenViewModel.swift */,
 				965592522CFB3A2C00301DDB /* ToWalletAddressView.swift */,
+				968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */,
 				965592542CFB3A3700301DDB /* ConfirmSendTokenView.swift */,
 			);
 			path = Send;
@@ -1176,6 +1179,7 @@
 				96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */,
 				968C06FA2D3B3EB300D81A33 /* PartialRoundedBorder.swift in Sources */,
 				96DC05472CF74EBD00A78356 /* CreateNewWalletView.swift in Sources */,
+				968C06FE2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift in Sources */,
 				960D6B2E2CFF53670017AF29 /* ForgotPasswordView.swift in Sources */,
 				966921022D102B3D00D503B7 /* MinWallet+Mapper.swift in Sources */,
 				96DC054D2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift in Sources */,

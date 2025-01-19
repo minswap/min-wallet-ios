@@ -21,7 +21,7 @@ struct SendTokenView: View {
 
     @EnvironmentObject
     var tokenManager: TokenManager
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {

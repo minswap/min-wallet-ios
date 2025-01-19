@@ -7,7 +7,7 @@ import MinWalletAPI
 class HomeViewModel: ObservableObject {
 
     static var shared: HomeViewModel = .init()
-    
+
     @Published
     var tabType: TokenListView.TabType = .market
     @Published
@@ -16,7 +16,7 @@ class HomeViewModel: ObservableObject {
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
     var isHasYourToken: Bool = false
-    
+
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
     private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
@@ -27,7 +27,7 @@ class HomeViewModel: ObservableObject {
 
     init() {
         guard AppSetting.shared.isLogin else { return }
-        
+
         $tabType
             .removeDuplicates()
             .dropFirst()
@@ -55,7 +55,7 @@ class HomeViewModel: ObservableObject {
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
         }
-        
+
         //MARK: Get balance
         Task {
             repeat {

@@ -42,7 +42,7 @@ struct SignContractView: View {
             Spacer()
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
-                    
+
                 }
                 .frame(height: 56)
                 CustomButton(title: "Confirm") {
