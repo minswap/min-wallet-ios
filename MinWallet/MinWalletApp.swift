@@ -14,6 +14,7 @@ struct MinWalletApp: App {
     @StateObject var appSetting: AppSetting = AppSetting.shared
     @StateObject var userInfo: UserInfo = UserInfo.shared
     @StateObject var hudState: HUDState = .init()
+    @StateObject var bannerState: BannerState = .init()
 
     var body: some Scene {
         WindowGroup {
@@ -21,6 +22,7 @@ struct MinWalletApp: App {
                 .environmentObject(appSetting)
                 .environmentObject(userInfo)
                 .environmentObject(hudState)
+                .environmentObject(bannerState)
                 .environment(\.locale, .init(identifier: appSetting.language))
                 .alert(isPresented: $hudState.isPresented) {
                     Alert(
@@ -31,6 +33,16 @@ struct MinWalletApp: App {
                                 hudState.onAction?()
                             }))
                 }
+                .banner(
+                    isShowing: $bannerState.isShowingBanner,
+                    infoContent: {
+                        if let infoContent = bannerState.infoContent {
+                            infoContent()
+                        } else {
+                            EmptyView()
+                        }
+                    }
+                )
                 .onAppear {
                     appSetting.initAppearanceStyle()
                 }

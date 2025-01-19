@@ -98,6 +98,7 @@
 		968C06FA2D3B3EB300D81A33 /* PartialRoundedBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */; };
 		968C06FC2D3BDB3A00D81A33 /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FB2D3BDB3A00D81A33 /* TokenManager.swift */; };
 		968C06FE2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */; };
+		968C07002D3C914B00D81A33 /* BannerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FF2D3C914B00D81A33 /* BannerState.swift */; };
 		96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */; };
 		96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 96A285092D17B9FC00F3CCEF /* CoreDataRepository */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
@@ -281,6 +282,7 @@
 		968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialRoundedBorder.swift; sourceTree = "<group>"; };
 		968C06FB2D3BDB3A00D81A33 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToWalletAddressViewModel.swift; sourceTree = "<group>"; };
+		968C06FF2D3C914B00D81A33 /* BannerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerState.swift; sourceTree = "<group>"; };
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
 		96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSettingView.swift; sourceTree = "<group>"; };
@@ -787,6 +789,7 @@
 			isa = PBXGroup;
 			children = (
 				966920FE2D100CCD00D503B7 /* HUDState.swift */,
+				968C06FF2D3C914B00D81A33 /* BannerState.swift */,
 			);
 			path = Hub;
 			sourceTree = "<group>";
@@ -1135,6 +1138,7 @@
 				96679BD32D2E765A00C9AE26 /* SwapTokenInfoView.swift in Sources */,
 				965592462CFAC68200301DDB /* ReceiveTokenView.swift in Sources */,
 				965592412CFABBF900301DDB /* ChangePasswordView.swift in Sources */,
+				968C07002D3C914B00D81A33 /* BannerState.swift in Sources */,
 				96DC05342CF5A87B00A78356 /* TimeZoneView.swift in Sources */,
 				965592482CFAEFD800301DDB /* Other.swift in Sources */,
 				965592532CFB3A2C00301DDB /* ToWalletAddressView.swift in Sources */,

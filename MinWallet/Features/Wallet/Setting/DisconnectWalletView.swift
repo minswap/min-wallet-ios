@@ -72,7 +72,13 @@ struct DisconnectWalletView: View {
                 .frame(height: 56)
                 CustomButton(
                     title: "Disconnect",
-                    variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
+                    variant: .other(
+                        textColor: .colorBaseTent,
+                        backgroundColor: .colorInteractiveDangerDefault,
+                        borderColor: .clear,
+                        textColorDisable: .colorSurfaceDangerPressed,
+                        backgroundColorDisable: .colorSurfaceDanger
+                    ),
                     isEnable: combinedBinding
                 ) {
                     showDisconnectWallet = false

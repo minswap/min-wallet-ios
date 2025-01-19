@@ -67,7 +67,6 @@ enum SendTokenScreen: Hashable, Identifiable {
     case sendToken
     case toWallet
     case confirm
-    case signContract(onSuccess: (() -> Void)?)
 
     var id: UUID { UUID() }
 
@@ -80,8 +79,6 @@ enum SendTokenScreen: Hashable, Identifiable {
         case (.sendToken, .sendToken),
             (.toWallet, .toWallet),
             (.confirm, .confirm):
-            return true
-        case (.signContract, .signContract):
             return true
         default:
             return false

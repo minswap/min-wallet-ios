@@ -175,7 +175,7 @@ struct WalletAccountView: View {
             Spacer()
             CustomButton(
                 title: "Disconnect",
-                variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
+                variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear, textColorDisable: nil, backgroundColorDisable: nil),
                 action: {
                     showDisconnectWallet = true
                 }

@@ -4,7 +4,11 @@ import FlowStacks
 
 struct ConfirmSendTokenView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var appSetting: AppSetting
+    @State
+    private var isShowSignContract: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -154,14 +158,21 @@ struct ConfirmSendTokenView: View {
                     .padding(.xl)
                 }
             }
-
             Spacer()
             CustomButton(title: "Next") {
-                navigator.presentSheet(
-                    .sendToken(
-                        .signContract(onSuccess: {
-
-                        })))
+                Task {
+                    do {
+                        switch appSetting.authenticationType {
+                        case .biometric:
+                            try await appSetting.reAuthenticateUser()
+                            sendTokenSuccess()
+                        case .password:
+                            isShowSignContract = true
+                        }
+                    } catch {
+                        //TODO: show hud or not?
+                    }
+                }
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -171,10 +182,37 @@ struct ConfirmSendTokenView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.pop()
-                }))
+                })
+        )
+        .popupSheet(
+            isPresented: $isShowSignContract,
+            content: {
+                SignContractView(
+                    isShowSignContract: $isShowSignContract,
+                    onSignSuccess: {
+                        sendTokenSuccess()
+                    }
+                )
+                .padding(.top, .xl)
+            }
+        )
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    hideKeyboard()
+                }
+                .foregroundStyle(.colorLabelToolbarDone)
+            }
+        }
+    }
+
+    private func sendTokenSuccess() {
+        navigator.popToRoot()
     }
 }
 
 #Preview {
     ConfirmSendTokenView()
+        .environmentObject(AppSetting.shared)
 }
