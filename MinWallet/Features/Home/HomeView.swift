@@ -11,8 +11,8 @@ struct HomeView: View {
     private var userInfo: UserInfo
     @EnvironmentObject
     private var appSetting: AppSetting
-    @EnvironmentObject
-    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
+    @StateObject
+    private var tokenManager: TokenManager = TokenManager.shared
     @State
     private var isShowAppearance: Bool = false
     @State
@@ -21,6 +21,8 @@ struct HomeView: View {
     private var isShowCurrency: Bool = false
     @State
     private var showSideMenu: Bool = false
+    @State
+    private var isCopyAddress: Bool = false
 
     var body: some View {
         ZStack {
@@ -77,7 +79,7 @@ struct HomeView: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
                         } else {
-                            Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                            Text(userInfo.walletName)
                                 .font(.titleH7)
                                 .foregroundStyle(.colorBaseTent)
                                 .lineLimit(1)
@@ -85,6 +87,20 @@ struct HomeView: View {
                         }
                     }
                     Spacer()
+                    Image(.icQrCode)
+                        .resizable()
+                        .scaledToFill()
+                        .padding(8)
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.colorBorderPrimaryTer, lineWidth: 1)
+                        )
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            //navigator.push(.searchToken)
+                        }
                     Image(.icSearch)
                         .resizable()
                         .scaledToFill()
@@ -103,24 +119,41 @@ struct HomeView: View {
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xs)
                 VStack(alignment: .leading, spacing: 4) {
-                    Button(action: {
-                        UIPasteboard.general.string = userInfo.minWallet?.address
-                    }) {
-                        HStack(spacing: 4) {
-                            Text(userInfo.minWallet?.address.shortenAddress)
-                                .font(.paragraphXSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    HStack(spacing: 4) {
+                        Text(userInfo.minWallet?.address.shortenAddress)
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                        if isCopyAddress {
+                            Image(.icCheckMark)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundStyle(.colorBaseSuccess)
+                                .frame(width: 16, height: 16)
+                        } else {
                             Image(.icCopy)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 16, height: 16)
                         }
-                        .buttonStyle(.plain)
+                    }
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        UIPasteboard.general.string = userInfo.minWallet?.address
+                        withAnimation {
+                            isCopyAddress = true
+                        }
+                        DispatchQueue.main.asyncAfter(
+                            deadline: .now() + .seconds(2),
+                            execute: {
+                                withAnimation {
+                                    self.isCopyAddress = false
+                                }
+                            })
                     }
                     let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
-                        let netValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.netAdaValue : (portfolioOverviewViewModel.netAdaValue * appSetting.currencyInADA)
+                        let netValue: Double = appSetting.currency == Currency.ada.rawValue ? tokenManager.netAdaValue : (tokenManager.netAdaValue * appSetting.currencyInADA)
                         let netValueString: String = netValue.formatSNumber(maximumFractionDigits: 2)
                         let components = netValueString.split(separator: ".")
                         Text(prefix + String(components.first ?? ""))
@@ -142,20 +175,20 @@ struct HomeView: View {
                                 .minimumScaleFactor(0.01)
                         }
                     }
-                    if !portfolioOverviewViewModel.pnl24H.isZero {
+                    if !tokenManager.pnl24H.isZero {
                         HStack(spacing: 4) {
-                            let pnl24H: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.pnl24H : (portfolioOverviewViewModel.pnl24H * appSetting.currencyInADA)
-                            let foregroundStyle: Color = portfolioOverviewViewModel.pnl24H > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
+                            let pnl24H: Double = appSetting.currency == Currency.ada.rawValue ? tokenManager.pnl24H : (tokenManager.pnl24H * appSetting.currencyInADA)
+                            let foregroundStyle: Color = tokenManager.pnl24H > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
                             Text("\(prefix)\(pnl24H.formatSNumber(maximumFractionDigits: 2))\(suffix)")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
                             Circle().frame(width: 4, height: 4)
                                 .foregroundStyle(.colorBaseTent)
-                            Text((portfolioOverviewViewModel.pnl24H * 100 / portfolioOverviewViewModel.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
+                            Text((tokenManager.pnl24H * 100 / tokenManager.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
-                            if !portfolioOverviewViewModel.pnl24H.isZero {
-                                Image(portfolioOverviewViewModel.pnl24H > 0 ? .icUp : .icDown)
+                            if !tokenManager.pnl24H.isZero {
+                                Image(tokenManager.pnl24H > 0 ? .icUp : .icDown)
                                     .resizable()
                                     .frame(width: 16, height: 16)
                             }
@@ -204,7 +237,7 @@ struct HomeView: View {
                 CustomButton(title: "Swap") {
                     navigator.push(.swapToken(.swapToken))
                 }
-                .frame(height: 44)
+                .frame(height: 56)
                 .padding(.horizontal, .xl)
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 0)
@@ -226,12 +259,9 @@ struct HomeView: View {
             TimeZoneView()
                 .padding(.xl)
         }
-        .task {
-            portfolioOverviewViewModel.initPortfolioOverview()
-        }
         .onFirstAppear {
             Task {
-                userInfo.adaHandleName = await portfolioOverviewViewModel.fetchAdaHandleName()
+                userInfo.adaHandleName = await TokenManager.fetchAdaHandleName()
             }
         }
     }
@@ -241,5 +271,4 @@ struct HomeView: View {
     HomeView()
         .environmentObject(AppSetting.shared)
         .environmentObject(UserInfo.shared)
-        .environmentObject(PortfolioOverviewViewModel())
 }

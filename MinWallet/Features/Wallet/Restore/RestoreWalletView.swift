@@ -43,7 +43,6 @@ struct RestoreWalletView: View {
                         if restoreType == .seedPhrase {
                             Image(.icChecked)
                         }
-
                     }
                     Text("Seedphrase")
                         .font(.titleH7)

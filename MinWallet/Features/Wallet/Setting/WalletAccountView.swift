@@ -11,12 +11,14 @@ struct WalletAccountView: View {
     private var appSetting: AppSetting
     @State
     private var isVerified: Bool = true
-    @EnvironmentObject
-    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
+    @StateObject
+    private var tokenManager: TokenManager = TokenManager.shared
     @State
     private var showEditNickName: Bool = false
     @State
     private var showDisconnectWallet: Bool = false
+    @State
+    private var isCopyAddress: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -69,17 +71,46 @@ struct WalletAccountView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                     } else {
-                        Text(userInfo.minWallet?.walletName ?? UserInfo.nickNameDefault)
+                        Text(userInfo.walletName)
                             .font(.titleH7)
                             .foregroundStyle(.colorBaseTent)
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                     }
                 }
-                Text(userInfo.minWallet?.address.shortenAddress)
-                    .font(.paragraphXSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                HStack(spacing: 4) {
+                    Spacer()
+                    Text(userInfo.minWallet?.address.shortenAddress)
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                    if isCopyAddress {
+                        Image(.icCheckMark)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorBaseSuccess)
+                            .frame(width: 16, height: 16)
+                    } else {
+                        Image(.icCopy)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
+                    }
+                    Spacer()
+                }
+                .contentShape(.rect)
+                .onTapGesture {
+                    UIPasteboard.general.string = userInfo.minWallet?.address
+                    withAnimation {
+                        isCopyAddress = true
+                    }
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + .seconds(2),
+                        execute: {
+                            withAnimation {
+                                self.isCopyAddress = false
+                            }
+                        })
+                }
             }
             .padding(.horizontal, .xl)
             /*
@@ -100,7 +131,7 @@ struct WalletAccountView: View {
                     Spacer()
                     let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
                     let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
-                    let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? portfolioOverviewViewModel.adaValue : (portfolioOverviewViewModel.adaValue * appSetting.currencyInADA)
+                    let adaValue: Double = appSetting.currency == Currency.ada.rawValue ? tokenManager.adaValue : (tokenManager.adaValue * appSetting.currencyInADA)
                     Text(prefix + adaValue.formatSNumber(maximumFractionDigits: 2) + suffix)
                         .font(.paragraphSemi)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -144,7 +175,7 @@ struct WalletAccountView: View {
             Spacer()
             CustomButton(
                 title: "Disconnect",
-                variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear),
+                variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear, textColorDisable: nil, backgroundColorDisable: nil),
                 action: {
                     showDisconnectWallet = true
                 }
@@ -177,6 +208,5 @@ struct WalletAccountView: View {
 #Preview {
     WalletAccountView()
         .environmentObject(UserInfo.shared)
-        .environmentObject(PortfolioOverviewViewModel())
         .environmentObject(AppSetting.shared)
 }

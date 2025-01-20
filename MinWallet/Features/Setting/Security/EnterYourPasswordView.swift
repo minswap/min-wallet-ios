@@ -16,8 +16,8 @@ struct EnterYourPasswordView: View {
     @FocusState
     var isFocus: Bool
 
-    @State
-    var authenticationType: AppSetting.AuthenticationType = .password
+    @Binding
+    var authenticationType: AppSetting.AuthenticationType
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -63,8 +63,20 @@ struct EnterYourPasswordView: View {
                     return
                 }
                 hideKeyboard()
-                appSetting.authenticationType = authenticationType
-                isShowEnterYourPassword = false
+                Task {
+                    do {
+                        switch authenticationType {
+                        case .biometric:
+                            try await appSetting.reAuthenticateUser()
+                        case .password:
+                            break
+                        }
+                        isShowEnterYourPassword = false
+                        appSetting.authenticationType = authenticationType
+                    } catch {
+                        hudState.showMsg(msg: error.localizedDescription)
+                    }
+                }
             }
             .frame(height: 56)
             .padding(.bottom, .md)
@@ -76,7 +88,7 @@ struct EnterYourPasswordView: View {
 
 #Preview {
     VStack {
-        EnterYourPasswordView(isShowEnterYourPassword: .constant(false))
+        EnterYourPasswordView(isShowEnterYourPassword: .constant(false), authenticationType: .constant(.password))
         Spacer()
     }
 }

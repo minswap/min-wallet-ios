@@ -18,11 +18,10 @@ private struct CustomBannerAlertModifier<InfoContent: View>: ViewModifier {
         ZStack {
             content
             if isShowing {
-                VStack {
+                VStack(alignment: .center) {
                     infoContent()
                     Spacer()
                 }
-                .padding()
                 .animation(.easeInOut)
                 .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
                 .onTapGesture {

@@ -7,8 +7,8 @@ struct TokenDetailView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
-    @EnvironmentObject
-    var portfolioOverviewViewModel: PortfolioOverviewViewModel
+    @StateObject
+    var tokenManager: TokenManager = TokenManager.shared
     @StateObject
     var viewModel: TokenDetailViewModel = .init()
 
@@ -52,5 +52,4 @@ struct TokenDetailView: View {
 #Preview {
     TokenDetailView(viewModel: TokenDetailViewModel(token: TokenProtocolDefault()))
         .environmentObject(AppSetting.shared)
-        .environmentObject(PortfolioOverviewViewModel())
 }

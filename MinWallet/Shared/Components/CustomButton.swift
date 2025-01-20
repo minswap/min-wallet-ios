@@ -44,7 +44,7 @@ struct CustomButton: View {
                 }
                 Text(title)
                     .font(.labelMediumSecondary)
-                    .foregroundStyle(variant.textColor)
+                    .foregroundStyle(isEnable ? variant.textColor : variant.textColorDisable)
                     .lineLimit(1)
                     .layoutPriority(1)
                 if let iconRight = iconRight {
@@ -55,7 +55,7 @@ struct CustomButton: View {
             }
             .frame(maxWidth: frameType == .matchParent ? .infinity : nil, maxHeight: .infinity)
             .padding(.horizontal, 10)
-            .background(isEnable ? variant.backgroundColor : .colorSurfacePrimaryDefault)
+            .background(isEnable ? variant.backgroundColor : variant.backgroundColorDisable)
             .shadow(radius: 50).cornerRadius(BorderRadius.full)
             .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(variant.borderColor, lineWidth: 1))
             .contentShape(.rect)
@@ -88,7 +88,12 @@ extension CustomButton {
     enum Varriant {
         case primary
         case secondary
-        case other(textColor: Color, backgroundColor: Color, borderColor: Color)
+        case other(
+            textColor: Color,
+            backgroundColor: Color,
+            borderColor: Color,
+            textColorDisable: Color?,
+            backgroundColorDisable: Color?)
 
         var textColor: Color {
             switch self {
@@ -96,8 +101,19 @@ extension CustomButton {
                 return .colorBaseTentNoDarkMode
             case .secondary:
                 return .colorInteractiveTentSecondaryDefault
-            case .other(let textColor, _, _):
+            case .other(let textColor, _, _, _, _):
                 return textColor
+            }
+        }
+
+        var textColorDisable: Color {
+            switch self {
+            case .primary:
+                return .colorInteractiveTentSecondaryDisable
+            case .secondary:
+                return .colorInteractiveTentSecondaryDisable
+            case let .other(_, _, _, textColor, _):
+                return textColor ?? .colorInteractiveTentSecondaryDisable
             }
         }
 
@@ -107,8 +123,19 @@ extension CustomButton {
                 return .colorInteractiveTonePrimary
             case .secondary:
                 return .clear
-            case .other(_, let backgroundColor, _):
+            case .other(_, let backgroundColor, _, _, _):
                 return backgroundColor
+            }
+        }
+
+        var backgroundColorDisable: Color {
+            switch self {
+            case .primary:
+                return .colorSurfacePrimaryDisable
+            case .secondary:
+                return .colorSurfacePrimaryDisable
+            case let .other(_, _, _, _, backgroundColor):
+                return backgroundColor ?? .colorSurfacePrimaryDisable
             }
         }
 
@@ -118,7 +145,7 @@ extension CustomButton {
                 return .clear
             case .secondary:
                 return .colorInteractiveTentSecondarySub
-            case .other(_, _, let borderColor):
+            case .other(_, _, let borderColor, _, _):
                 return borderColor
             }
         }

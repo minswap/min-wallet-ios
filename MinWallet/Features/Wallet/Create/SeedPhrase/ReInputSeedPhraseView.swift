@@ -55,14 +55,14 @@ struct ReInputSeedPhraseView: View {
                     label: {
                         Text("Paste")
                             .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorInteractiveTentSecondarySub)
+                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     }
                 )
-                .frame(height: 28)
-                .padding(.horizontal, .lg)
+                .padding(.horizontal, 20)
+                .frame(height: 36)
                 .background(.colorBaseBackground)
                 .overlay(content: {
-                    RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimarySub, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorInteractiveTentSecondarySub, lineWidth: 1)
                 })
             }
             .padding(.bottom, 34)

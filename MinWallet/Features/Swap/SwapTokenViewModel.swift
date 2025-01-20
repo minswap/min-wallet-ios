@@ -15,8 +15,6 @@ class SwapTokenViewModel: ObservableObject {
     var isShowRouting: Bool = false
     @Published
     var isShowSwapSetting: Bool = false
-    @Published
-    var isShowBannerTransaction: Bool = false
 
     @Published
     var wrapRoutings: [WrapRouting] = []
@@ -50,7 +48,7 @@ class SwapTokenViewModel: ObservableObject {
                 try await appSetting.reAuthenticateUser()
                 signSuccess?()
             case .password:
-                signSuccess?()
+                signContract?()
             }
         }
     }
@@ -60,7 +58,7 @@ class SwapTokenViewModel: ObservableObject {
         case .initSwapToken:
             Task {
                 tokenPay = TokenDefault(symbol: "", tName: "")
-                tokenReceive = TokenDefault(symbol: MinWalletConstant.minCurrencySymbol, tName: MinWalletConstant.minTokenName)
+                tokenReceive = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
                 await getRouting()
                 routingSelected = wrapRoutings.first
             }

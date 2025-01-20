@@ -35,7 +35,7 @@ struct ChangePasswordView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Change password")
+            Text("Change your password")
                 .font(.titleH5)
                 .foregroundStyle(.colorBaseTent)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -46,7 +46,7 @@ struct ChangePasswordView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     VStack(spacing: 4) {
                         Text("Old Password")
-                            .font(.paragraphSmall)
+                            .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, .xl)
@@ -75,7 +75,7 @@ struct ChangePasswordView: View {
                     }
                     VStack(spacing: 4) {
                         Text("New Password")
-                            .font(.paragraphSmall)
+                            .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, .xl)
@@ -115,7 +115,7 @@ struct ChangePasswordView: View {
                     }
                     VStack(spacing: 4) {
                         Text("Confirm new password")
-                            .font(.paragraphSmall)
+                            .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, .xl)

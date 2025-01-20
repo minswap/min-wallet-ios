@@ -65,6 +65,8 @@ struct OrderHistoryItemView: View {
                         .frame(width: 16, height: 16)
                     Text(warningContent)
                         .lineLimit(nil)
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveToneWarning)
                 }
                 .padding(.md)
                 .background(

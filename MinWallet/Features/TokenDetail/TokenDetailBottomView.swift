@@ -23,10 +23,10 @@ extension TokenDetailView {
                         .padding(.bottom, .md)
                     HStack(alignment: .lastTextBaseline) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(portfolioOverviewViewModel.netAdaValue.getPriceValue(appSetting: appSetting, font: .titleH5).attribute)
+                            Text(tokenManager.netAdaValue.getPriceValue(appSetting: appSetting, font: .titleH5).attribute)
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(1)
-                            Text(portfolioOverviewViewModel.adaValue.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
+                            Text(tokenManager.adaValue.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(1)
                         }

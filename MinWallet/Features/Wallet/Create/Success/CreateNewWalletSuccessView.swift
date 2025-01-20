@@ -12,8 +12,6 @@ struct CreateNewWalletSuccessView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
-    @EnvironmentObject
-    private var portfolioOverviewViewModel: PortfolioOverviewViewModel
     @State
     var screenType: ScreenType = .newWallet
 
@@ -57,13 +55,7 @@ struct CreateNewWalletSuccessView: View {
                 title: "Got it",
                 variant: .primary,
                 action: {
-                    Task {
-                        async let adaHandleName = portfolioOverviewViewModel.fetchAdaHandleName()
-                        async let overView: Void = portfolioOverviewViewModel.getPortfolioOverview()
-
-                        let (name, _) = await (adaHandleName, overView)
-                        userInfo.adaHandleName = name
-                    }
+                    TokenManager.reset()
                     navigator.push(.home)
                 }
             )
@@ -79,5 +71,4 @@ struct CreateNewWalletSuccessView: View {
 
 #Preview {
     CreateNewWalletSuccessView()
-        .environmentObject(PortfolioOverviewViewModel())
 }

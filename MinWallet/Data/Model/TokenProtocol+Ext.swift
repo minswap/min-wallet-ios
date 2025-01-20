@@ -17,7 +17,7 @@ extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
     }
 
     var ticker: String {
-        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? asset.metadata?.ticker ?? ""
+        asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
     var name: String {
@@ -87,7 +87,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
     }
 
     var ticker: String {
-        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? amountAsset.asset.metadata?.ticker ?? ""
+        amountAsset.asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
     var name: String {
@@ -162,7 +162,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
     }
 
     var ticker: String {
-        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? amountLPAsset.asset.metadata?.ticker ?? ""
+        amountLPAsset.asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
     var name: String {
@@ -277,7 +277,7 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
     }
 
     var ticker: String {
-        UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? metadata?.ticker ?? ""
+        metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
     var name: String {
@@ -443,6 +443,11 @@ struct TokenDefault: TokenProtocol {
 
     var symbol: String = ""
     var tName: String = ""
+    var netValue: Double = 0
+
+    var amount: Double {
+        netValue
+    }
 
     init(symbol: String, tName: String) {
         self.symbol = symbol

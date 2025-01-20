@@ -64,13 +64,16 @@ extension String {
     var adaName: String? {
         let prefix = self.prefix(8)
         if prefix.first == "0" && prefix.last == "0" && self.count >= 8 {
-            let hexToText = String(self.dropFirst(8)).hexToText
-            return hexToText?.isHumanReadable == true ? hexToText : String(self.prefix(10))
+            if let hexToText = String(self.dropFirst(8)).hexToText, hexToText.isHumanReadable {
+                return hexToText
+            }
+        }
+        if let hexToText = self.hexToText, hexToText.isHumanReadable {
+            return hexToText
         }
 
-        if self.count <= 6 || self.count == 10 || self.count == 8 {
-            let hexToText = self.hexToText
-            return hexToText?.isHumanReadable == true ? hexToText : self
+        if self.count <= 10 {
+            return self
         }
 
         if self.count > 10 {

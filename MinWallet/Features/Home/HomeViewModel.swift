@@ -6,12 +6,16 @@ import MinWalletAPI
 @MainActor
 class HomeViewModel: ObservableObject {
 
+    static var shared: HomeViewModel = .init()
+
     @Published
     var tabType: TokenListView.TabType = .market
     @Published
     private var tokensDic: [TokenListView.TabType: [TokenProtocol]] = [:]
     @Published
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
+    @Published
+    var isHasYourToken: Bool = false
 
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
@@ -22,8 +26,11 @@ class HomeViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
+        guard AppSetting.shared.isLogin else { return }
+
         $tabType
             .removeDuplicates()
+            .dropFirst()
             .sink { [weak self] newValue in
                 guard let self = self else { return }
                 self.tabType = newValue
@@ -32,9 +39,27 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
 
         Task {
+            let tokens = try? await TokenManager.getYourToken()
+            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
+            getTokens()
+
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
+                if tabType != .yourToken {
+                    let tokens = try? await TokenManager.getYourToken()
+                    TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+                    self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
+                }
                 self.getTokens()
+                try? await Task.sleep(for: .seconds(5 * 60))
+            } while (!Task.isCancelled)
+        }
+
+        //MARK: Get balance
+        Task {
+            repeat {
+                await TokenManager.shared.getPortfolioOverview()
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
         }
@@ -71,11 +96,11 @@ class HomeViewModel: ObservableObject {
                 self.isFetching[tabType] = false
 
             case .yourToken:
-                let tokens = try? await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-                let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
-                let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
-
-                self.tokensDic[tabType] = normalToken + lpToken
+                let tokens = try? await TokenManager.getYourToken()
+                let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
+                TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+                self.isHasYourToken = !_tokens.isEmpty
+                self.tokensDic[tabType] = _tokens
                 self.hasLoadMoreDic[tabType] = false
                 self.showSkeletonDic[tabType] = false
                 self.isFetching[tabType] = false

@@ -129,10 +129,11 @@ class AppSetting: ObservableObject {
         getAdaPrice()
     }
 
-    func deleteAccount() {
+    @MainActor func deleteAccount() {
         isLogin = false
         tokenFav = []
         authenticationType = .biometric
+        TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
     }
 }

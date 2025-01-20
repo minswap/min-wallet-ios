@@ -1,8 +1,12 @@
 import SwiftUI
-import MinWalletAPI
 
 
 struct TokenLogoView: View {
+    private static let TOKEN_IMAGE_DEFAULT: [String: ImageResource] = [
+        MinWalletConstant.adaToken: .ada,
+        MinWalletConstant.minToken: .min,
+    ]
+
     @State
     var currencySymbol: String?
     @State
@@ -12,14 +16,31 @@ struct TokenLogoView: View {
     @State
     var size: CGSize = .init(width: 28, height: 28)
 
+    private var uniqueID: String {
+        let currencySymbol = currencySymbol ?? ""
+        let tokenName = tokenName ?? ""
+        if currencySymbol.isEmpty && tokenName.isEmpty {
+            return ""
+        }
+
+        if currencySymbol.isEmpty {
+            return tokenName
+        }
+
+        if tokenName.isEmpty {
+            return currencySymbol
+        }
+        return currencySymbol + "." + tokenName
+    }
+
     var body: some View {
         ZStack {
             Group {
-                if let image = UserInfo.TOKEN_IMAGE_DEFAULT[currencySymbol ?? ""] ?? UserInfo.TOKEN_IMAGE_DEFAULT[tokenName ?? ""] {
+                if let image = Self.TOKEN_IMAGE_DEFAULT[uniqueID] {
                     Image(image)
                         .resizable()
                         .scaledToFit()
-                } else if currencySymbol?.isEmpty == true && (tokenName?.isEmpty) == true {
+                } else if uniqueID.isEmpty {
                     Image(.ada)
                         .resizable()
                         .scaledToFit()
@@ -29,7 +50,7 @@ struct TokenLogoView: View {
             }
             .frame(width: size.width, height: size.height)
             .clipShape(Circle())
-            if isVerified == true || UserInfo.TOKEN_IMAGE_DEFAULT[currencySymbol ?? ""] != nil || UserInfo.TOKEN_IMAGE_DEFAULT[tokenName ?? ""] != nil {
+            if isVerified == true || Self.TOKEN_IMAGE_DEFAULT[uniqueID] != nil {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: size.width * 16 / 28, height: size.width * 16 / 28)

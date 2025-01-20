@@ -46,11 +46,11 @@ class BiometricAuthentication {
     @discardableResult
     func canEvaluatePolicy() -> Bool {
         var error: NSError?
-        return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        return context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
     }
 
     private func authenticateUser(completion: @escaping ((_ error: LAError?) -> Void)) {
-        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.loginReason.toString()) { (success, error) in
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.loginReason.toString()) { (success, error) in
             DispatchQueue.main.async {
                 guard !success, let laError = error as? LAError else {
                     completion(nil)

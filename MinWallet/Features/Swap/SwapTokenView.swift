@@ -12,6 +12,8 @@ struct SwapTokenView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var bannerState: BannerState
 
     @State
     private var amountYouPay: String = ""
@@ -20,6 +22,8 @@ struct SwapTokenView: View {
     private var viewModel: SwapTokenViewModel = .init()
     @FocusState
     private var focusedField: FocusedField?
+    @State
+    private var isShowSignContract: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,14 +34,10 @@ struct SwapTokenView: View {
                 viewModel.swapToken(
                     appSetting: appSetting,
                     signContract: {
-                        navigator.presentSheet(
-                            .sendToken(
-                                .signContract(onSuccess: {
-
-                                })))
+                        isShowSignContract = true
                     },
                     signSuccess: {
-
+                        swapTokenSuccess()
                     })
             }
             .frame(height: 56)
@@ -83,42 +83,18 @@ struct SwapTokenView: View {
             SwapTokenSettingView(viewModel: viewModel)
                 .padding(.xl)
         }
-        .banner(isShowing: $viewModel.isShowBannerTransaction) {
-            HStack(alignment: .top) {
-                Image(.icCheckSuccess)
-                    .fixSize(24)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Transaction Submitted")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorInteractiveToneSuccess)
-                    Text("Your transaction has been submitted successfully")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    HStack(spacing: 4) {
-                        Text("View on explorer")
-                            .underline()
-                            .baselineOffset(4)
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                            .onTapGesture {
-
-                            }
-                        Image(.icArrowUp)
-                            .fixSize(.xl)
-                            .onTapGesture {
-
-                            }
+        .popupSheet(
+            isPresented: $isShowSignContract,
+            content: {
+                SignContractView(
+                    isShowSignContract: $isShowSignContract,
+                    onSignSuccess: {
+                        swapTokenSuccess()
                     }
-                    .padding(.top, 4)
-                }
+                )
+                .padding(.top, .xl)
             }
-            .padding()
-            .background(.colorBaseBackground)
-            .clipped()
-            .cornerRadius(._3xl)
-            .overlay(RoundedRectangle(cornerRadius: ._3xl).stroke(.colorBaseSuccessSub, lineWidth: 1))
-            .shadow(radius: 5, x: 0, y: 5)
-        }
+        )
     }
 
     @ViewBuilder
@@ -348,6 +324,51 @@ struct SwapTokenView: View {
         .onTapGesture {
             $viewModel.isShowInfo.showSheet()
         }
+    }
+
+    private func swapTokenSuccess() {
+        bannerState.infoContent = {
+            AnyView(
+                HStack(alignment: .top) {
+                    Image(.icCheckSuccess)
+                        .fixSize(24)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Transaction Submitted")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorInteractiveToneSuccess)
+                        Text("Your transaction has been submitted successfully")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        HStack(spacing: 4) {
+                            Text("View on explorer")
+                                .underline()
+                                .baselineOffset(4)
+                                .font(.labelSmallSecondary)
+                                .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                                .onTapGesture {
+                                    //TODO: view transaction
+                                }
+                            Image(.icArrowUp)
+                                .fixSize(.xl)
+                                .onTapGesture {
+                                    //TODO: view transaction
+                                }
+                        }
+                        .padding(.top, 4)
+                    }
+                }
+                .padding()
+                .background(.colorBaseBackground)
+                .clipped()
+                .cornerRadius(._3xl)
+                .overlay(RoundedRectangle(cornerRadius: ._3xl).stroke(.colorBaseSuccessSub, lineWidth: 1))
+                .shadow(radius: 5, x: 0, y: 5)
+                .frame(minWidth: UIScreen.main.bounds.width - 32, maxWidth: UIScreen.main.bounds.width - 32)
+                .fixedSize(horizontal: true, vertical: false)
+            )
+        }
+        bannerState.isShowingBanner = true
+        navigator.popToRoot()
     }
 }
 

@@ -23,11 +23,9 @@ protocol TokenProtocol {
 
 extension TokenProtocol {
     var adaName: String {
-        if ticker.isBlank {
-            return UserInfo.TOKEN_NAME_DEFAULT[currencySymbol] ?? tokenName.adaName ?? ""
-        } else {
-            return ticker
-        }
+        guard ticker.isBlank else { return ticker }
+        if currencySymbol == MinWalletConstant.lpToken { return "LP" }
+        return UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? tokenName.adaName ?? ""
     }
 
     //TODO: cuongnv check sau
@@ -39,6 +37,14 @@ extension TokenProtocol {
         if currencySymbol.isEmpty && tokenName.isEmpty {
             return "lovelace"
         }
+
+        if currencySymbol.isEmpty {
+            return tokenName
+        }
+        if tokenName.isEmpty {
+            return currencySymbol
+        }
+
         return currencySymbol + "." + tokenName
     }
 }

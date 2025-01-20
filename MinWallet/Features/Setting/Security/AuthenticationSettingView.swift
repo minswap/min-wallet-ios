@@ -91,7 +91,7 @@ struct AuthenticationSettingView: View {
         .popupSheet(
             isPresented: $isShowEnterYourPassword,
             content: {
-                EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword, authenticationType: authenticationTypeSelected).padding(.top, .xl)
+                EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword, authenticationType: $authenticationTypeSelected).padding(.top, .xl)
             }
         )
         .toolbar {

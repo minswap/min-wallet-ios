@@ -9,6 +9,10 @@ struct ReceiveTokenView: View {
     private var userInfo: UserInfo
     @State
     private var qrImage: UIImage?
+    @State
+    private var copied: Bool = false
+    @State
+    private var showShareSheet = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -31,8 +35,10 @@ struct ReceiveTokenView: View {
                     .frame(width: 180, height: 180)
                 Text(userInfo.minWallet?.address)
                     .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    .lineSpacing(2)
+                    .foregroundStyle(.colorBaseTent)
                     .multilineTextAlignment(.center)
+                    .padding(.top, .md)
             }
             .padding(.xl)
             .padding(.top, 24)
@@ -42,12 +48,23 @@ struct ReceiveTokenView: View {
             Spacer()
             HStack(spacing: .xl) {
                 CustomButton(title: "Share", variant: .secondary) {
-
+                    showShareSheet = true
                 }
                 .frame(height: 44)
-
-                CustomButton(title: "Copy", variant: .secondary) {
-
+                CustomButton(
+                    title: copied ? "Copied" : "Copy",
+                    variant: .secondary,
+                    iconRight: copied ? .icCheckMark : nil
+                ) {
+                    withAnimation {
+                        copied = true
+                    }
+                    UIPasteboard.general.string = userInfo.minWallet?.address
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        withAnimation {
+                            copied = false
+                        }
+                    }
                 }
                 .frame(height: 44)
             }
@@ -62,9 +79,27 @@ struct ReceiveTokenView: View {
         )
         .task {
             guard qrImage == nil else { return }
-            qrImage = userInfo.minWallet?.address.generateQRCode(centerImage: UIImage(resource: .icLogoQr), size: .init(width: 200, height: 200))
+            qrImage = userInfo.minWallet?.address.generateQRCode(centerImage: UIImage(resource: .icLogoQr), size: .init(width: 200, height: 200), centerBackgroundColor: .white)
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let qrImage = qrImage {
+                ShareSheet(items: [qrImage])
+            }
         }
     }
+}
+
+private struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    var excludedActivityTypes: [UIActivity.ActivityType]? = nil
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        controller.excludedActivityTypes = excludedActivityTypes
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 #Preview {
