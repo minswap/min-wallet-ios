@@ -10,6 +10,8 @@
 	<string>${MIN_LP_TOKEN}</string>
 	<key>MIN_PUBLIC_NETWORK_ID</key>
 	<string>${MIN_PUBLIC_NETWORK_ID}</string>
+	<key>MIN_ADA_CURRENCY</key>
+	<string>${MIN_ADA_CURRENCY}</string>
 	<key>MIN_TRANSACTION_URL</key>
 	<string>${MIN_TRANSACTION_URL}</string>
 	<key>NSFaceIDUsageDescription</key>

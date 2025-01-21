@@ -137,14 +137,14 @@ struct ConfirmSendTokenView: View {
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
-                            Text("0.3 ₳")
+                            Text("0.3 \(Currency.ada.prefix)")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
                         }
                         .padding(.horizontal, .xl)
                         .padding(.bottom, .xl)
 
-                        Text("A small fee (max 0.3₳) may be deducted from your batcher fee for automatically cancellation.")
+                        Text("A small fee (max 0.3\(Currency.ada.prefix) may be deducted from your batcher fee for automatically cancellation.")
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(.colorInteractiveToneWarning)
                             .multilineTextAlignment(.leading)
