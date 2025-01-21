@@ -28,7 +28,7 @@ struct OrderHistoryView: View {
                     CustomButton(title: "Swap") {
                         navigator.push(.swapToken(.swapToken))
                     }
-                    .frame(height: 44)
+                    .frame(height: 56)
                     .padding(.horizontal, .xl)
                     .transition(.opacity)
                 }
