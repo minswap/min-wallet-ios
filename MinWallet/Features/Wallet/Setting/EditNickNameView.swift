@@ -43,11 +43,15 @@ struct EditNickNameView: View {
                     }
             }
             if !nickName.isEmpty && nickName.count < 3 {
-                Text("A wallet name must be 3-40 characters")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.red)
-                    .padding(.top, .md)
-                    .padding(.horizontal, .xl)
+                HStack(spacing: 4) {
+                    Image(.icWarning)
+                        .fixSize(16)
+                    Text("A wallet name must be 3-40 characters")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveDangerTent)
+                }
+                .padding(.top, .xl)
+                .padding(.horizontal, .xl)
             }
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {

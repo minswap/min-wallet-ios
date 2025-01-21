@@ -110,6 +110,7 @@ extension TokenDetailView {
                             .frame(height: 24)
                             .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
                     }
+                    .padding(.bottom, .xl)
                 }
                 if viewModel.isSuspiciousToken {
                     HStack(spacing: Spacing.md) {
@@ -125,7 +126,7 @@ extension TokenDetailView {
                         RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
                     )
                     .frame(height: 32)
-                    .padding(.top, .xl)
+                    .padding(.bottom, .xl)
                 }
                 if !viewModel.token.isVerified {
                     HStack(spacing: Spacing.md) {
@@ -139,17 +140,17 @@ extension TokenDetailView {
                     }
                     .padding(.md)
                     .background(
-                        RoundedRectangle(cornerRadius: 8).fill(.colorInteractiveToneDanger8)
+                        RoundedRectangle(cornerRadius: 8).fill(.colorSurfaceWarningDefault)
                     )
                     .frame(minHeight: 32)
-                    .padding(.top, .xl)
+                    .padding(.bottom, .xl)
                 }
                 if let description = viewModel.topAsset?.asset.metadata?.description, !description.isBlank {
                     Text(description)
                         .lineLimit(nil)
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorBaseTent)
-                        .padding(.top, .xl)
+                        .padding(.bottom, .xl)
                 }
                 HStack(spacing: 4) {
                     DashedUnderlineText(text: "Token name", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -166,7 +167,6 @@ extension TokenDetailView {
                 }
                 .frame(height: 40)
                 .containerShape(.rect)
-                .padding(.top, .xl)
                 .onTapGesture {
                     UIPasteboard.general.string = viewModel.token.tokenName
                 }

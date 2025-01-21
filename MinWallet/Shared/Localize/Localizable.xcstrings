@@ -83,6 +83,9 @@
     "A small fee (max 0.3₳) may be deducted from your batcher fee for automatically cancellation." : {
 
     },
+    "A wallet name must be 3-40 characters" : {
+
+    },
     "About" : {
 
     },
