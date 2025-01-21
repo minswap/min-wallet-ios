@@ -52,11 +52,11 @@ extension TokenDetailView {
             }
             .opacity((viewModel.sizeOfLargeHeader.height / 2 - offset) < 0 ? (opacity) : 0)
             Spacer()
-            Image(.icFavourite)
+            Image(viewModel.isFav ? .icSavedFav : .icFavourite)
                 .fixSize(40)
                 .onTapGesture {
                     viewModel.isFav.toggle()
-                    let key = viewModel.token.currencySymbol + "." + viewModel.token.tokenName
+                    let key = viewModel.token.uniqueID
                     if viewModel.isFav {
                         appSetting.tokenFav.append(key)
                     } else {
