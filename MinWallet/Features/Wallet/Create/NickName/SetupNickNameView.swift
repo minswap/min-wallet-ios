@@ -51,6 +51,13 @@ struct SetupNickNameView: View {
                         nickName = String(nickName.prefix(40))
                     }
                 }
+            if !nickName.isEmpty && nickName.count < 3 {
+                Text("A wallet name must be 3-40 characters")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.red)
+                    .padding(.top, .md)
+                    .padding(.horizontal, .xl)
+            }
             Spacer()
             let title: LocalizedStringKey = {
                 switch screenType {
