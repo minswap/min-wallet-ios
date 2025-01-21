@@ -249,15 +249,18 @@ struct HomeView: View {
         }
         .presentSheet(isPresented: $isShowAppearance) {
             AppearanceView()
-                .padding(.xl)
+                .padding(.horizontal, .md)
+                .padding(.vertical, .md)
         }
         .presentSheet(isPresented: $isShowCurrency) {
             CurrencyView()
-                .padding(.xl)
+                .padding(.horizontal, .md)
+                .padding(.vertical, .md)
         }
         .presentSheet(isPresented: $isShowTimeZone) {
             TimeZoneView()
-                .padding(.xl)
+                .padding(.horizontal, .md)
+                .padding(.vertical, .md)
         }
         .onFirstAppear {
             Task {

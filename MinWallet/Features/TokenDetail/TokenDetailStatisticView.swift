@@ -190,7 +190,7 @@ extension TokenDetailView {
                 }
                 if let riskCategory = viewModel.riskCategory {
                     HStack(spacing: 4) {
-                        DashedUnderlineText(text: "Rick score", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                        DashedUnderlineText(text: "Risk score", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                         Spacer()
                         Text(riskCategory.rawValue.uppercased())
                             .font(.paragraphXSemiSmall)

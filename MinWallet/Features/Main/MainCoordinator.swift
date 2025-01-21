@@ -25,7 +25,7 @@ struct MainCoordinator: View {
                     case .about:
                         AboutView().navigationBarHidden(true)
                     case .language:
-                        LanguageView().interactiveDismissDisabled(false)
+                        LanguageView().interactiveDismissDisabled(false).presentationDragIndicator(.visible)
                     case .changePassword:
                         ChangePasswordView(screenType: .setting).navigationBarHidden(true)
                     case let .changePasswordSuccess(screenType):

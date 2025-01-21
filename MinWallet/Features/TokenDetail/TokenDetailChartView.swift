@@ -97,8 +97,9 @@ extension TokenDetailView {
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .shadow(radius: 50).cornerRadius(BorderRadius.full)
                             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorBaseBackground))
+                            .compositingGroup()
+                            .shadow(color: .colorBaseTent.opacity(0.1), radius: 2, x: 0, y: 2)
                             .padding(.vertical, .xs)
                             .contentShape(.rect)
                             .onTapGesture {
@@ -116,6 +117,7 @@ extension TokenDetailView {
                     }
                 }
             }
+            .padding(.horizontal, 4)
             .frame(height: 36)
             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
             .padding(.top, .xl)
