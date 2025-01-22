@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OneSignalFramework
 
 @main
 struct MinWalletApp: App {
@@ -53,27 +54,21 @@ struct MinWalletApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        /*
-        if appSetting.enableNotification {
-            let center  = UNUserNotificationCenter.current()
-            center.delegate = self
-            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
-                if error == nil {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                }
-            }
+        // Remove this method to stop OneSignal Debugging
+        OneSignal.Debug.setLogLevel(.LL_VERBOSE)
 
-            /*
-            if
-                let launchDict = launchOptions as NSDictionary?,
-                let urlSchema = launchDict[UIApplication.LaunchOptionsKey.url] as? URL {
-                UIApplication.shared.open(urlSchema, options: [:], completionHandler: nil)
-            }
-             */
-        }
-        */
+        // OneSignal initialization
+        OneSignal.initialize("e7da5418-cbc0-4725-80d3-6400e3d09123", withLaunchOptions: launchOptions)
+
+        // requestPermission will show the native iOS notification permission prompt.
+        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+        OneSignal.Notifications.requestPermission(
+            { accepted in
+                print("User accepted notifications: \(accepted)")
+            }, fallbackToSettings: true)
+
+        // Login your customer with externalId
+        // OneSignal.login("EXTERNAL_ID")
         return true
     }
 

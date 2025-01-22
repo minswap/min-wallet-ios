@@ -17,15 +17,16 @@ default_platform(:ios)
 
 lane :beta do
   setup_ci if ENV['CI']
-  match(type: "appstore", force_for_new_devices: true, readonly: is_ci)
+  match(type: "appstore", readonly: is_ci, app_identifier: ["org.minswap.MinWallet", "org.minswap.MinWallet.OneSignalNotificationServiceExtension"])
   increment_build_number({
-    build_number: latest_testflight_build_number + 1
+    build_number: latest_testflight_build_number + 1,
   })
   build_app(
     export_method: "app-store",
     export_options: {
       provisioningProfiles: { 
         "org.minswap.MinWallet" => "match AppStore org.minswap.MinWallet",
+        "org.minswap.MinWallet.OneSignalNotificationServiceExtension" => "match AppStore org.minswap.MinWallet.OneSignalNotificationServiceExtension"
       }
     },
     xcconfig: "MinWallet/Environment/AppConfig.xcconfig"
