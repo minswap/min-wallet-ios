@@ -3,6 +3,8 @@ import SwiftUI
 extension Font {
     ///20 semibold
     static let titleH6: Font = .custom("InterDisplay-SemiBold", size: 20)
+    ///16 regular
+    static let labelRegular: Font = .custom("InterDisplay-Regular", size: 17)
     ///16 medium
     static let labelMediumSecondary: Font = .custom("InterDisplay-Medium", size: 17)
     ///16 semibold

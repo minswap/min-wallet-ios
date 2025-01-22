@@ -19,6 +19,12 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Avg. price"
+                    content = "The Weighted Arithmetic Mean of all ADA-\(viewModel.token.adaName) pools."
+                    $isShowToolTip.showSheet()
+                }
                 HStack(spacing: 2) {
                     let priceChange24h: Double = (Double(viewModel.topAsset?.priceChange24h ?? "") ?? 0)
                     DashedUnderlineText(text: "Avg. price change (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -37,6 +43,12 @@ extension TokenDetailView {
                     }
                 }
                 .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Avg. price change (24h)"
+                    content = "The price from Weighted Arithmetic Mean of all ADA-\(viewModel.token.adaName) pools."
+                    $isShowToolTip.showSheet()
+                }
                 HStack {
                     DashedUnderlineText(text: "Volume (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -46,6 +58,12 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Volume (24h)"
+                    content = "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours."
+                    $isShowToolTip.showSheet()
+                }
                 if viewModel.token.decimals > 0 {
                     HStack {
                         DashedUnderlineText(text: "Decimal", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -55,6 +73,12 @@ extension TokenDetailView {
                             .foregroundStyle(.colorBaseTent)
                     }
                     .frame(height: 40)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        title = "Decimal"
+                        content = "It refers to the number of digits used after the decimal point for a specific token. It essentially dictates the smallest indivisible unit of that token."
+                        $isShowToolTip.showSheet()
+                    }
                 }
                 HStack {
                     DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -65,6 +89,12 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Market cap"
+                    content = "Market Cap = Current Price x Circulating Supply."
+                    $isShowToolTip.showSheet()
+                }
                 HStack {
                     DashedUnderlineText(text: "Fd Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -74,6 +104,12 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Fd Market cap"
+                    content = "The market cap if the total supply was in circulation. Fully Diluted Market Cap = Current Price x Total Supply."
+                    $isShowToolTip.showSheet()
+                }
                 HStack {
                     DashedUnderlineText(text: "Circulating supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -83,6 +119,12 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Circulating supply"
+                    content = "The number of coins circulating in the market and available to the public for trading, similar to publicly traded shares on the stock market."
+                    $isShowToolTip.showSheet()
+                }
                 HStack {
                     DashedUnderlineText(text: "Total supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -93,6 +135,12 @@ extension TokenDetailView {
                 }
                 .frame(height: 40)
                 .padding(.bottom, .xl)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Total supply"
+                    content = "Total supply = Total coins created - coins that have been burned (if any) It is comparable to outstanding shares in the market."
+                    $isShowToolTip.showSheet()
+                }
                 Text("About \(viewModel.token.adaName) (\(viewModel.token.name))")
                     .font(.titleH6)
                     .foregroundStyle(.colorBaseTent)

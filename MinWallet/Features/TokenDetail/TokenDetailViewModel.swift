@@ -32,7 +32,7 @@ class TokenDetailViewModel: ObservableObject {
     var isSuspiciousToken: Bool = false
     @Published
     var isLoadingPriceChart: Bool = true
-
+    
     private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
 
     var chartDataSelected: LineChartData? {
