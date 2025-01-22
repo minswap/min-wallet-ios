@@ -2,12 +2,12 @@ import SwiftUI
 
 
 struct TokenDetailToolTipView: View {
-    
+
     @Binding
     var title: LocalizedStringKey
     @Binding
     var content: LocalizedStringKey
-    
+
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {
@@ -29,7 +29,7 @@ struct TokenDetailToolTipView: View {
             }
             .padding(.horizontal, .xl)
         }
-        
+
         .fixedSize(horizontal: false, vertical: true)
     }
 }

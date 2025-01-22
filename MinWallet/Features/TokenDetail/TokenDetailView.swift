@@ -17,7 +17,7 @@ struct TokenDetailView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
-    
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -54,13 +54,13 @@ struct TokenDetailView: View {
                         RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
                             .fill(.colorBaseBackground)
                             .ignoresSafeArea()
-                        
+
                     })
             }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 0)
             }
-            
+
         }
     }
 }

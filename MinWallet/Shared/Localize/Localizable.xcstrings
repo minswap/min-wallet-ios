@@ -13,6 +13,9 @@
     " %@" : {
 
     },
+    "--" : {
+
+    },
     "%" : {
 
     },
@@ -65,9 +68,6 @@
     "2 %@" : {
 
     },
-    "90%" : {
-
-    },
     "124.64 A" : {
 
     },
@@ -78,9 +78,6 @@
 
     },
     "11817" : {
-
-    },
-    "1234567890999999" : {
 
     },
     "A small fee (max 0.3%@ may be deducted from your batcher fee for automatically cancellation." : {
@@ -359,9 +356,6 @@
     },
     "Hello" : {
       "extractionState" : "manual"
-    },
-    "Hello, SwiftUI!" : {
-
     },
     "Hide" : {
 
@@ -689,7 +683,7 @@
     "The price from Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
-    "The seed phrase is only stored on my computer, and Minswap has no access to it." : {
+    "The seed phrase is only stored on my phone, and Minswap has no access to it." : {
 
     },
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {

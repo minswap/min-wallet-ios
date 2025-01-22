@@ -46,7 +46,7 @@ struct CreateNewWalletView: View {
                 .padding(.vertical, .xl)
             HStack(spacing: .xl) {
                 Image(.icChecked)
-                Text("The seed phrase is only stored on my computer, and Minswap has no access to it.")
+                Text("The seed phrase is only stored on my phone, and Minswap has no access to it.")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
             }

@@ -29,28 +29,28 @@ struct HomeView: View {
             Color.colorBaseBackground.ignoresSafeArea()
             VStack(alignment: .leading, spacing: .zero) {
                 HStack(spacing: .md) {
-                    HStack {
-                        Image(.icAvatar)
+                    ZStack {
+                        Image(.icAvatarDefault)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 40, height: 36)
+                            .frame(width: 40, height: 40)
                             .clipShape(Circle())
+
+                        Circle()
+                            .fill(.colorBaseBackground)
+                            .frame(width: 14, height: 14)
+                            .overlay(
+                                Image(.icSubAvatar)
+                                    .resizable()
+                                    .frame(width: 10, height: 10)
+                            )
+                            .overlay(
+                                Circle()
+                                    .stroke(.colorSurfacePrimarySub, lineWidth: 1)
+                            )
+                            .position(x: 35, y: 35)
                     }
-                    .padding(2)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle().stroke(.colorBorderPrimarySub, lineWidth: 1)
-                    )
-                    /*
-                    .shadow(
-                        color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.1),
-                        radius: 3, x: 0, y: 4
-                    )
-                    .shadow(
-                        color: Color(red: 0, green: 0.1, blue: 0.28).opacity(0.06),
-                        radius: 2, x: 0, y: 2
-                    )
-                     */
+                    .frame(width: 40, height: 40)
                     .onTapGesture {
                         withAnimation {
                             showSideMenu = true

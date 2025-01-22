@@ -184,33 +184,46 @@ extension AppSetting {
 
 extension AppSetting {
     static func getPasswordFromKeychain(username: String) throws -> String {
-        let passwordItem = GKeychainStore(
-            service: MinWalletConstant.keyChainService,
-            key: username,
-            accessGroup: MinWalletConstant.keyChainAccessGroup
-        )
-        let keychainPassword = try passwordItem.read()
-        return keychainPassword
+        do {
+            let passwordItem = GKeychainStore(
+                service: MinWalletConstant.keyChainService,
+                key: username,
+                accessGroup: MinWalletConstant.keyChainAccessGroup
+            )
+            let keychainPassword = try passwordItem.read()
+            return keychainPassword.isBlank ? (UserDefaults.standard.string(forKey: username) ?? "") : keychainPassword
+        } catch {
+            return UserDefaults.standard.string(forKey: username) ?? ""
+        }
     }
 
     static func savePasswordToKeychain(username: String, password: String) throws {
-        let passwordItem = GKeychainStore(
-            service: MinWalletConstant.keyChainService,
-            key: username,
-            accessGroup: MinWalletConstant.keyChainAccessGroup
-        )
+        do {
+            let passwordItem = GKeychainStore(
+                service: MinWalletConstant.keyChainService,
+                key: username,
+                accessGroup: MinWalletConstant.keyChainAccessGroup
+            )
 
-        try passwordItem.save(password)
+            try passwordItem.save(password)
+        } catch {
+            UserDefaults.standard.set(password, forKey: username)
+        }
     }
 
     static func deletePasswordToKeychain(username: String) throws {
-        let passwordItem = GKeychainStore(
-            service: MinWalletConstant.keyChainService,
-            key: username,
-            accessGroup: MinWalletConstant.keyChainAccessGroup
-        )
+        do {
+            let passwordItem = GKeychainStore(
+                service: MinWalletConstant.keyChainService,
+                key: username,
+                accessGroup: MinWalletConstant.keyChainAccessGroup
+            )
 
-        try passwordItem.deleteItem()
+            try passwordItem.deleteItem()
+            UserDefaults.standard.removeObject(forKey: username)
+        } catch {
+            UserDefaults.standard.removeObject(forKey: username)
+        }
     }
 
     func reAuthenticateUser() async throws {
