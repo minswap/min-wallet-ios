@@ -5,6 +5,7 @@ struct TokenLogoView: View {
     private static let TOKEN_IMAGE_DEFAULT: [String: ImageResource] = [
         MinWalletConstant.adaToken: .ada,
         MinWalletConstant.minToken: .min,
+        MinWalletConstant.mintToken: .mint,
     ]
 
     @State
