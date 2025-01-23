@@ -41,7 +41,7 @@ struct BiometricSetupView: View {
             CustomButton(title: appSetting.biometricAuthentication.biometricType == .faceID ? "Use FaceID" : "Use TouchID") {
                 Task {
                     do {
-                        try await appSetting.biometricAuthentication.authenticateUser()
+                        try await appSetting.reAuthenticateUser()
                         appSetting.authenticationType = .biometric
                         switch screenType {
                         case .createWallet(let seedPhrase, let nickName):

@@ -2,30 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MIN_MIN_TOKEN</key>
-	<string>${MIN_MIN_TOKEN}</string>
-	<key>MIN_ADA_TOKEN</key>
-	<string>${MIN_ADA_TOKEN}</string>
-	<key>MIN_LP_TOKEN</key>
-	<string>${MIN_LP_TOKEN}</string>
-	<key>MIN_PUBLIC_NETWORK_ID</key>
-	<string>${MIN_PUBLIC_NETWORK_ID}</string>
-	<key>MIN_ADA_CURRENCY</key>
-	<string>${MIN_ADA_CURRENCY}</string>
-	<key>MIN_TRANSACTION_URL</key>
-	<string>${MIN_TRANSACTION_URL}</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Using Face ID to login</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>MIN_ADA_TOKEN</key>
+	<string>${MIN_ADA_TOKEN}</string>
 	<key>MIN_GRAPHQL_URL</key>
 	<string>${MIN_GRAPHQL_URL}</string>
 	<key>MIN_KEYCHAIN_ACCESS_GROUP</key>
 	<string>${MIN_KEYCHAIN_ACCESS_GROUP}</string>
 	<key>MIN_KEYCHAIN_SERVICE_NAME</key>
 	<string>${MIN_KEYCHAIN_SERVICE_NAME}</string>
+	<key>MIN_LP_TOKEN</key>
+	<string>${MIN_LP_TOKEN}</string>
+	<key>MIN_MIN_TOKEN</key>
+	<string>${MIN_MIN_TOKEN}</string>
 	<key>MIN_PASS_DEFAULT_FOR_FACE_ID</key>
 	<string>${MIN_PASS_DEFAULT_FOR_FACE_ID}</string>
+	<key>MIN_PUBLIC_NETWORK_ID</key>
+	<string>${MIN_PUBLIC_NETWORK_ID}</string>
+	<key>MIN_TRANSACTION_URL</key>
+	<string>${MIN_TRANSACTION_URL}</string>
+	<key>MIN_ADA_CURRENCY</key>
+	<string>${MIN_ADA_CURRENCY}</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Using Face ID to login</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>
@@ -36,6 +36,10 @@
 		<string>Inter-Medium.ttf</string>
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Bold.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
 	</array>
 </dict>
 </plist>

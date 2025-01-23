@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,6 +24,10 @@
 		5761D7162D0ADFE800D2809A /* Mobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5761D7152D0ADFE800D2809A /* Mobile.xcframework */; };
 		5761D7182D0ADFF400D2809A /* mwrust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5761D7172D0ADFF400D2809A /* mwrust.swift */; };
 		5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5774769A2CED9A220066CFB6 /* Carousel.swift */; };
+		57D403D42D408BFA009DFAA7 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 57D403CD2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		57D403DD2D408D18009DFAA7 /* OneSignalExtension in Frameworks */ = {isa = PBXBuildFile; productRef = 57D403DC2D408D18009DFAA7 /* OneSignalExtension */; };
+		57D403DF2D408D18009DFAA7 /* OneSignalFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 57D403DE2D408D18009DFAA7 /* OneSignalFramework */; };
+		57D403E12D408D18009DFAA7 /* OneSignalInAppMessages in Frameworks */ = {isa = PBXBuildFile; productRef = 57D403E02D408D18009DFAA7 /* OneSignalInAppMessages */; };
 		57F102962C64CCA0000B3544 /* MinWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102952C64CCA0000B3544 /* MinWalletApp.swift */; };
 		57F1029A2C64CCA1000B3544 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F102992C64CCA1000B3544 /* Assets.xcassets */; };
 		57F1029D2C64CCA1000B3544 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57F1029C2C64CCA1000B3544 /* Preview Assets.xcassets */; };
@@ -163,6 +167,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		57D403D22D408BFA009DFAA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57F1028A2C64CCA0000B3544 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 57D403CC2D408BFA009DFAA7;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
 		57F102A32C64CCA1000B3544 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 57F1028A2C64CCA0000B3544 /* Project object */;
@@ -178,6 +189,20 @@
 			remoteInfo = MinWallet;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		57D403D92D408BFA009DFAA7 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				57D403D42D408BFA009DFAA7 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenListItemView.swift; sourceTree = "<group>"; };
@@ -200,6 +225,7 @@
 		5761D7172D0ADFF400D2809A /* mwrust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = mwrust.swift; path = rust/bindings/mwrust.swift; sourceTree = "<group>"; };
 		5774769A2CED9A220066CFB6 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		57A6F7C6490456E5F226DC7F /* TokenLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenLogo.swift; sourceTree = "<group>"; };
+		57D403CD2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102922C64CCA0000B3544 /* MinWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102952C64CCA0000B3544 /* MinWalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletApp.swift; sourceTree = "<group>"; };
 		57F102992C64CCA1000B3544 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -341,7 +367,29 @@
 		96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		57D403D52D408BFA009DFAA7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 57D403CC2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		57D403CE2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (57D403D52D408BFA009DFAA7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = OneSignalNotificationServiceExtension; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		57D403CA2D408BFA009DFAA7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57D403DD2D408D18009DFAA7 /* OneSignalExtension in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57F1028F2C64CCA0000B3544 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -352,9 +400,11 @@
 				5761D7162D0ADFE800D2809A /* Mobile.xcframework in Frameworks */,
 				96FEDC232D253DCB006AD24F /* SwiftyJSON in Frameworks */,
 				96BD2A592D0D758700D81277 /* MinWalletAPI in Frameworks */,
+				57D403E12D408D18009DFAA7 /* OneSignalInAppMessages in Frameworks */,
 				9651CAA92D0677A3006C46DB /* Then in Frameworks */,
 				9651CAA62D067793006C46DB /* FlowStacks in Frameworks */,
 				96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */,
+				57D403DF2D408D18009DFAA7 /* OneSignalFramework in Frameworks */,
 				9651CAB22D0677DA006C46DB /* SwiftyAttributes in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,6 +569,7 @@
 				57F102942C64CCA0000B3544 /* MinWallet */,
 				57F102A52C64CCA1000B3544 /* MinWalletTests */,
 				57F102AF2C64CCA1000B3544 /* MinWalletUITests */,
+				57D403CE2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */,
 				57F102932C64CCA0000B3544 /* Products */,
 				5761D7152D0ADFE800D2809A /* Mobile.xcframework */,
 				5761D7172D0ADFF400D2809A /* mwrust.swift */,
@@ -531,6 +582,7 @@
 				57F102922C64CCA0000B3544 /* MinWallet.app */,
 				57F102A22C64CCA1000B3544 /* MinWalletTests.xctest */,
 				57F102AC2C64CCA1000B3544 /* MinWalletUITests.xctest */,
+				57D403CD2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -936,6 +988,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		57D403CC2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57D403D62D408BFA009DFAA7 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildPhases = (
+				57D403C92D408BFA009DFAA7 /* Sources */,
+				57D403CA2D408BFA009DFAA7 /* Frameworks */,
+				57D403CB2D408BFA009DFAA7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				57D403CE2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */,
+			);
+			name = OneSignalNotificationServiceExtension;
+			packageProductDependencies = (
+				57D403DC2D408D18009DFAA7 /* OneSignalExtension */,
+			);
+			productName = OneSignalNotificationServiceExtension;
+			productReference = 57D403CD2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		57F102912C64CCA0000B3544 /* MinWallet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57F102B62C64CCA1000B3544 /* Build configuration list for PBXNativeTarget "MinWallet" */;
@@ -943,10 +1018,12 @@
 				57F1028E2C64CCA0000B3544 /* Sources */,
 				57F1028F2C64CCA0000B3544 /* Frameworks */,
 				57F102902C64CCA0000B3544 /* Resources */,
+				57D403D92D408BFA009DFAA7 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				57D403D32D408BFA009DFAA7 /* PBXTargetDependency */,
 			);
 			name = MinWallet;
 			packageProductDependencies = (
@@ -959,6 +1036,8 @@
 				96BD2A582D0D758700D81277 /* MinWalletAPI */,
 				96A285092D17B9FC00F3CCEF /* CoreDataRepository */,
 				96FEDC222D253DCB006AD24F /* SwiftyJSON */,
+				57D403DE2D408D18009DFAA7 /* OneSignalFramework */,
+				57D403E02D408D18009DFAA7 /* OneSignalInAppMessages */,
 			);
 			productName = MinWallet;
 			productReference = 57F102922C64CCA0000B3544 /* MinWallet.app */;
@@ -1007,9 +1086,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1540;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					57D403CC2D408BFA009DFAA7 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					57F102912C64CCA0000B3544 = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -1042,6 +1124,7 @@
 				96BD2A572D0D758700D81277 /* XCLocalSwiftPackageReference "MinWalletAPI" */,
 				96A285082D17B9FC00F3CCEF /* XCLocalSwiftPackageReference "CoreDataRepository" */,
 				96FEDC212D253DCB006AD24F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */,
 			);
 			productRefGroup = 57F102932C64CCA0000B3544 /* Products */;
 			projectDirPath = "";
@@ -1050,11 +1133,19 @@
 				57F102912C64CCA0000B3544 /* MinWallet */,
 				57F102A12C64CCA1000B3544 /* MinWalletTests */,
 				57F102AB2C64CCA1000B3544 /* MinWalletUITests */,
+				57D403CC2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		57D403CB2D408BFA009DFAA7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57F102902C64CCA0000B3544 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1094,6 +1185,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		57D403C92D408BFA009DFAA7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57F1028E2C64CCA0000B3544 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1246,6 +1344,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		57D403D32D408BFA009DFAA7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 57D403CC2D408BFA009DFAA7 /* OneSignalNotificationServiceExtension */;
+			targetProxy = 57D403D22D408BFA009DFAA7 /* PBXContainerItemProxy */;
+		};
 		57F102A42C64CCA1000B3544 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 57F102912C64CCA0000B3544 /* MinWallet */;
@@ -1259,6 +1362,72 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		57D403D72D408BFA009DFAA7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 25;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.minswap.MinWallet.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.minswap.MinWallet.OneSignalNotificationServiceExtension";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		57D403D82D408BFA009DFAA7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 25;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.minswap.MinWallet.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.minswap.MinWallet.OneSignalNotificationServiceExtension";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		57F102B42C64CCA1000B3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 963D218D2D1D3A2E002E258E /* Development.xcconfig */;
@@ -1388,9 +1557,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "${MIN_CODE_SIGN_ENTITLEMENTS}";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
@@ -1414,7 +1584,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "${MIN_PRODUCT_BUNDLE_ID}";
 				PRODUCT_NAME = "${MIN_PRODUCT_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development org.minswap.MinWallet";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore org.minswap.MinWallet";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1433,9 +1603,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = "${MIN_CODE_SIGN_ENTITLEMENTS}";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
@@ -1476,7 +1647,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -1497,7 +1668,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -1517,7 +1688,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1536,7 +1707,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1552,6 +1723,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		57D403D62D408BFA009DFAA7 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57D403D72D408BFA009DFAA7 /* Debug */,
+				57D403D82D408BFA009DFAA7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		57F1028D2C64CCA0000B3544 /* Build configuration list for PBXProject "MinWallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1602,6 +1782,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OneSignal/OneSignal-XCFramework";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.9;
+			};
+		};
 		9651CAA12D067760006C46DB /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -1661,6 +1849,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		57D403DC2D408D18009DFAA7 /* OneSignalExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalExtension;
+		};
+		57D403DE2D408D18009DFAA7 /* OneSignalFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalFramework;
+		};
+		57D403E02D408D18009DFAA7 /* OneSignalInAppMessages */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalInAppMessages;
+		};
 		9651CAA22D067760006C46DB /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9651CAA12D067760006C46DB /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
