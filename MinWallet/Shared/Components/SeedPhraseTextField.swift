@@ -1,18 +1,53 @@
 import SwiftUI
 import UIKit
 
-
-struct SeedPhraseTextField: UIViewRepresentable {
+struct SeedPhraseTextField: View {
     @Binding var text: String
     let typingColor: UIColor  // Color for text currently being typed
     let completedColor: UIColor  // Color for text after a space
+
+    @State private var dynamicHeight: CGFloat = 50
+    private var onCommit: (() -> Void)?
+
+    init(
+        text: Binding<String>,
+        typingColor: UIColor,
+        completedColor: UIColor,
+        onCommit: (() -> Void)? = nil
+    ) {
+        self._text = text
+        self.typingColor = typingColor
+        self.completedColor = completedColor
+        self.onCommit = onCommit
+    }
+
+    var body: some View {
+        UITextViewWrapper(
+            text: $text,
+            typingColor: typingColor,
+            completedColor: completedColor,
+            calculatedHeight: $dynamicHeight,
+            onDone: onCommit
+        )
+        .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
+    }
+
+}
+
+private struct UITextViewWrapper: UIViewRepresentable {
+    @Binding var text: String
+    let typingColor: UIColor  // Color for text currently being typed
+    let completedColor: UIColor  // Color for text after a space
+
+    @Binding var calculatedHeight: CGFloat
+    var onDone: (() -> Void)?
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
         textView.isScrollEnabled = true
         textView.backgroundColor = .clear
-        textView.font = .systemFont(ofSize: 14)
+        textView.font = .paragraphSmall
 
         // Configure the placeholder label
         let placeholderLabel = UILabel()
@@ -31,23 +66,41 @@ struct SeedPhraseTextField: UIViewRepresentable {
         placeholderLabel.tag = 999  // Use a tag to identify the placeholder
         placeholderLabel.isHidden = !text.isEmpty  // Show or hide based on the initial text
 
+        textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
         return textView
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.attributedText = context.coordinator.getAttributedText(from: text, typingColor: typingColor, completedColor: completedColor)
         updatePlaceholder(uiView)
+
+        UITextViewWrapper.recalculateHeight(view: uiView, result: $calculatedHeight)
+
+    }
+
+    fileprivate static func recalculateHeight(view: UIView, result: Binding<CGFloat>) {
+        let newSize = view.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        if result.wrappedValue != newSize.height {
+            DispatchQueue.main.async {
+                result.wrappedValue = newSize.height
+            }
+        }
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(self, height: $calculatedHeight, onDone: onDone)
     }
 
     class Coordinator: NSObject, UITextViewDelegate {
-        var parent: SeedPhraseTextField
+        var parent: UITextViewWrapper
+        var calculatedHeight: Binding<CGFloat>
+        var onDone: (() -> Void)?
 
-        init(_ parent: SeedPhraseTextField) {
+        init(_ parent: UITextViewWrapper, height: Binding<CGFloat>, onDone: (() -> Void)?) {
             self.parent = parent
+            self.calculatedHeight = height
+            self.onDone = onDone
         }
 
         func textViewDidChange(_ textView: UITextView) {
@@ -59,6 +112,16 @@ struct SeedPhraseTextField: UIViewRepresentable {
             }
 
             parent.updatePlaceholder(textView)
+            UITextViewWrapper.recalculateHeight(view: textView, result: calculatedHeight)
+        }
+
+        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            if text == "\n" {
+                onDone?()
+                textView.resignFirstResponder()
+                return false
+            }
+            return true
         }
 
         // Sanitize input to remove extra spaces
@@ -94,4 +157,9 @@ struct SeedPhraseTextField: UIViewRepresentable {
             placeholderLabel.isHidden = !text.isEmpty
         }
     }
+}
+
+
+#Preview {
+    ReInputSeedPhraseView(screenType: .restoreWallet)
 }

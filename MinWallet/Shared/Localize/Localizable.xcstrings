@@ -402,6 +402,9 @@
     "Input information" : {
 
     },
+    "Invalid seed phrase" : {
+
+    },
     "It refers to the number of digits used after the decimal point for a specific token. It essentially dictates the smallest indivisible unit of that token." : {
 
     },
@@ -612,6 +615,9 @@
 
     },
     "Security" : {
+
+    },
+    "Seed phrase does not match" : {
 
     },
     "Seedphrase" : {

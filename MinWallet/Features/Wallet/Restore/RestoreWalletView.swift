@@ -56,9 +56,7 @@ struct RestoreWalletView: View {
                 }
                 .padding(16)
                 .frame(maxHeight: .infinity)
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(.colorBorderPrimaryTer, lineWidth: 2))
-                .padding(2)
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(restoreType == .seedPhrase ? .colorInteractiveToneHighlight : .clear, lineWidth: 2))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(restoreType == .seedPhrase ? .colorInteractiveToneHighlight : .colorBorderPrimaryTer, lineWidth: restoreType == .seedPhrase ? 3 : 2))
                 .contentShape(.rect)
                 .onTapGesture {
                     restoreType = .seedPhrase
@@ -86,11 +84,9 @@ struct RestoreWalletView: View {
                         .foregroundStyle(restoreType == .importJson ? .colorInteractiveToneHighlight : .colorInteractiveTentPrimarySub)
                     Spacer()
                 }
-                .frame(maxHeight: .infinity)
                 .padding(16)
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(.colorBorderPrimaryTer, lineWidth: 2))
-                .padding(2)
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(restoreType == .importJson ? .colorInteractiveToneHighlight : .clear, lineWidth: 2))
+                .frame(maxHeight: .infinity)
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(restoreType == .importJson ? .colorInteractiveToneHighlight : .colorBorderPrimaryTer, lineWidth: restoreType == .importJson ? 3 : 2))
                 .contentShape(.rect)
                 .onTapGesture {
                     restoreType = .importJson
