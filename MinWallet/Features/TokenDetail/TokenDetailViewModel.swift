@@ -32,12 +32,20 @@ class TokenDetailViewModel: ObservableObject {
     var isSuspiciousToken: Bool = false
     @Published
     var isLoadingPriceChart: Bool = true
+    @Published
+    var isInteracting = false
 
     private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
 
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
         return chartDatas[selectedIndex]
+    }
+
+    var percent: Double {
+        guard let selectedIndex = selectedIndex, !chartDatas.isEmpty else { return 0 }
+        guard let current = chartDatas[gk_safeIndex: selectedIndex]?.value, let previous = chartDatas[gk_safeIndex: selectedIndex - 1]?.value else { return 0 }
+        return (current - previous) / previous * 100
     }
 
     private var cancellables: Set<AnyCancellable> = []
@@ -52,6 +60,7 @@ class TokenDetailViewModel: ObservableObject {
                 Task {
                     self.isLoadingPriceChart = true
                     self.chartPeriod = newData
+                    self.selectedIndex = nil
                     self.chartDatas = []
                     await self.getPriceChart()
                     self.isLoadingPriceChart = false
@@ -94,6 +103,7 @@ class TokenDetailViewModel: ObservableObject {
                 return LineChartData(date: time.formatToDate, value: Double(value) ?? 0, type: .outside)
             })
         self.chartDatas = chartDatas ?? []
+        self.selectedIndex = max(0, self.chartDatas.count - 1)
     }
 
     private func getRickScore() {

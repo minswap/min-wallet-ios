@@ -396,9 +396,6 @@
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
-    "Index" : {
-
-    },
     "Input information" : {
 
     },
@@ -738,6 +735,9 @@
 
     },
     "Tx Size" : {
+
+    },
+    "Type" : {
 
     },
     "Unlock your wallet using %@ recognition or a password." : {
