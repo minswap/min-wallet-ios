@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import OneSignalFramework
 
 
 class AppSetting: ObservableObject {
@@ -135,6 +136,8 @@ class AppSetting: ObservableObject {
         authenticationType = .biometric
         TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
+        UserDataManager.shared.notificationGenerateAuthHash = nil
+        OneSignal.logout()
     }
 }
 

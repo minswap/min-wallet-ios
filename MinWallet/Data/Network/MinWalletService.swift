@@ -29,4 +29,22 @@ class MinWalletService {
             }
         }
     }
+
+    func mutation<Mutation: GraphQLMutation>(mutation: Mutation) async throws -> Mutation.Data? {
+        try await withCheckedThrowingContinuation { continuation in
+            apolloClient.perform(mutation: mutation) { result in
+                switch result {
+                case let .success(response):
+                    if let errors = response.errors, !errors.isEmpty {
+                        let msgError = errors.map({ $0.message ?? $0.description }).joined(separator: "\n")
+                        continuation.resume(throwing: AppGeneralError.serverError(message: msgError))
+                    } else {
+                        continuation.resume(returning: response.data)
+                    }
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }

@@ -31,6 +31,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "AssetsResponse": return MinWalletAPI.Objects.AssetsResponse
     case "DepositOverSlippageDetail": return MinWalletAPI.Objects.DepositOverSlippageDetail
     case "DexV2WithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.DexV2WithdrawImbalanceOverSlippageDetail
+    case "Mutation": return MinWalletAPI.Objects.Mutation
     case "OCOOverSlipageDetail": return MinWalletAPI.Objects.OCOOverSlipageDetail
     case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
     case "OrderHistoryResponse": return MinWalletAPI.Objects.OrderHistoryResponse

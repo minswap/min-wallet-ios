@@ -4,6 +4,7 @@ import Foundation
 class UserDataManager {
     static let DEVICE_TOKEN = "DEVICE_TOKEN"
     static let TOKEN_RECENT_SEARCH = "TOKEN_RECENT_SEARCH"
+    static let ONE_SIGNAL_HASH_TOKEN = "ONE_SIGNAL_HASH_TOKEN"
 
     static let shared = UserDataManager()
 
@@ -28,6 +29,15 @@ class UserDataManager {
         }
         set(newValue) {
             defaults!.set(newValue, forKey: Self.TOKEN_RECENT_SEARCH)
+        }
+    }
+
+    var notificationGenerateAuthHash: String? {
+        get {
+            return defaults!.string(forKey: Self.ONE_SIGNAL_HASH_TOKEN)
+        }
+        set(newValue) {
+            defaults!.set(newValue, forKey: Self.ONE_SIGNAL_HASH_TOKEN)
         }
     }
 }
