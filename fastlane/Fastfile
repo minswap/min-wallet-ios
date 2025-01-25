@@ -1,25 +1,19 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 lane :beta do
   setup_ci if ENV['CI']
+  api_key = app_store_connect_api_key(
+    key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+    issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+    key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+    is_key_content_base64: true,
+    duration: 1200,
+    in_house: false
+  )
   match(type: "appstore", readonly: is_ci, app_identifier: ["org.minswap.MinWallet", "org.minswap.MinWallet.OneSignalNotificationServiceExtension"])
+  latest_build_number = latest_testflight_build_number
   increment_build_number({
-    build_number: latest_testflight_build_number + 1,
+    build_number: latest_build_number + 1,
   })
   build_app(
     export_method: "app-store",
