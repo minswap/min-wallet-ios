@@ -15,7 +15,7 @@ enum Currency: String {
         case .usd:
             return "$"
         case .ada:
-            return "₳"
+            return MinWalletConstant.adaCurrency
         }
     }
 }

@@ -11,6 +11,12 @@ struct TokenDetailView: View {
     var tokenManager: TokenManager = TokenManager.shared
     @StateObject
     var viewModel: TokenDetailViewModel = .init()
+    @State
+    var isShowToolTip: Bool = false
+    @State
+    var content: LocalizedStringKey = ""
+    @State
+    var title: LocalizedStringKey = ""
 
     var body: some View {
         ZStack {
@@ -42,9 +48,19 @@ struct TokenDetailView: View {
                     .background(.colorBaseBackground)
                     .padding(.horizontal, .xl)
             }
+            .presentSheet(isPresented: $isShowToolTip) {
+                TokenDetailToolTipView(title: $title, content: $content)
+                    .background(content: {
+                        RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
+                            .fill(.colorBaseBackground)
+                            .ignoresSafeArea()
+
+                    })
+            }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 0)
             }
+
         }
     }
 }

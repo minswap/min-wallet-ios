@@ -1,6 +1,7 @@
 import SwiftUI
 
 
+/*
 struct DashedUnderlineText: UIViewRepresentable {
     let text: LocalizedStringKey
     var textColor: UIColor = .white
@@ -34,6 +35,7 @@ struct DashedUnderlineText: UIViewRepresentable {
 
     func updateUIView(_ uiView: UILabel, context: Context) {}
 }
+*/
 
 extension LocalizedStringKey {
     func toString() -> String {
@@ -44,5 +46,52 @@ extension LocalizedStringKey {
             }
         }
         return ""
+    }
+}
+
+
+struct DashedUnderlineText: View {
+    let text: LocalizedStringKey
+    @State var textColor: Color = .white
+    @State var font: Font = .paragraphSmall
+    @State
+    private var width: CGFloat = 0
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Text(text)
+                .font(font)
+                .foregroundStyle(textColor)
+                .padding(.bottom, 4)
+                .padding(.top, 4)
+                .background(
+                    GeometryReader { geometry in
+                        VStack {
+                            Spacer()
+                            DashedLine(lineWidth: 1, dash: [6, 2], color: textColor)
+                                .frame(height: 1)
+                        }
+                    }
+                )
+        }
+    }
+}
+
+
+private struct DashedLine: View {
+    var lineWidth: CGFloat = 2
+    var dash: [CGFloat] = [6, 3]  // Dash length and gap
+    var color: Color = .black
+
+    var body: some View {
+        GeometryReader { geometry in
+            Path { path in
+                path.move(to: CGPoint(x: 0, y: geometry.size.height / 2))
+                path.addLine(to: CGPoint(x: geometry.size.width, y: geometry.size.height / 2))
+            }
+            .stroke(style: StrokeStyle(lineWidth: lineWidth, dash: dash))
+            .foregroundColor(color)
+
+        }
     }
 }

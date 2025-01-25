@@ -9,7 +9,7 @@ struct TimeZoneView: View {
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {
-                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
+                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
                     .padding(.vertical, .md)
                 Text("Timezone")
                     .font(.titleH5)

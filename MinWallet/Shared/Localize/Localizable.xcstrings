@@ -7,6 +7,9 @@
     " " : {
 
     },
+    " / 40" : {
+
+    },
     " %@" : {
 
     },
@@ -38,10 +41,7 @@
     "$0.0" : {
 
     },
-    "0.3 ₳" : {
-
-    },
-    "0.3 A" : {
+    "0.3 %@" : {
 
     },
     "0.3%" : {
@@ -62,10 +62,10 @@
     "1,486.35 MIN" : {
 
     },
-    "1.5 A" : {
+    "1.5 %@" : {
 
     },
-    "2 A" : {
+    "2 %@" : {
 
     },
     "124.64 A" : {
@@ -80,7 +80,10 @@
     "11817" : {
 
     },
-    "A small fee (max 0.3₳) may be deducted from your batcher fee for automatically cancellation." : {
+    "A small fee (max 0.3%@ may be deducted from your batcher fee for automatically cancellation." : {
+
+    },
+    "A wallet name must be 3-40 characters" : {
 
     },
     "About" : {
@@ -393,10 +396,13 @@
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
-    "Index" : {
+    "Input information" : {
 
     },
-    "Input information" : {
+    "Invalid seed phrase" : {
+
+    },
+    "It refers to the number of digits used after the decimal point for a specific token. It essentially dictates the smallest indivisible unit of that token." : {
 
     },
     "Item %lld" : {
@@ -436,6 +442,9 @@
 
     },
     "Market cap" : {
+
+    },
+    "Market Cap = Current Price x Circulating Supply." : {
 
     },
     "Max" : {
@@ -578,7 +587,7 @@
     "Restore wallet" : {
 
     },
-    "Rick score" : {
+    "Risk score" : {
 
     },
     "Route" : {
@@ -603,6 +612,9 @@
 
     },
     "Security" : {
+
+    },
+    "Seed phrase does not match" : {
 
     },
     "Seedphrase" : {
@@ -665,10 +677,22 @@
     "Terms of service" : {
 
     },
-    "The seed phrase is only stored on my computer, and Minswap has no access to it." : {
+    "The market cap if the total supply was in circulation. Fully Diluted Market Cap = Current Price x Total Supply." : {
+
+    },
+    "The number of coins circulating in the market and available to the public for trading, similar to publicly traded shares on the stock market." : {
+
+    },
+    "The price from Weighted Arithmetic Mean of all ADA-%@ pools." : {
+
+    },
+    "The seed phrase is only stored on my phone, and Minswap has no access to it." : {
 
     },
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {
+
+    },
+    "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
     "This token has not been verified yet. Please ensure the correct policyId" : {
@@ -692,6 +716,9 @@
     "Total supply" : {
 
     },
+    "Total supply = Total coins created - coins that have been burned (if any) It is comparable to outstanding shares in the market." : {
+
+    },
     "Touch ID" : {
 
     },
@@ -708,6 +735,9 @@
 
     },
     "Tx Size" : {
+
+    },
+    "Type" : {
 
     },
     "Unlock your wallet using %@ recognition or a password." : {
@@ -747,6 +777,9 @@
 
     },
     "Volume (24h)" : {
+
+    },
+    "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours." : {
 
     },
     "Want a discount?" : {

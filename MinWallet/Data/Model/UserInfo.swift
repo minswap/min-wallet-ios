@@ -9,6 +9,7 @@ class UserInfo: ObservableObject {
         MinWalletConstant.adaToken: "ADA",
         MinWalletConstant.lpToken: "LP",
         MinWalletConstant.minToken: "MIN",
+        MinWalletConstant.mintToken: "MINt",
     ]
 
     static let MIN_WALLET_KEY: String = "MIN_WALLET_KEY"

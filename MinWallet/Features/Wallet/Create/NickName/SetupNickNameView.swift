@@ -51,6 +51,17 @@ struct SetupNickNameView: View {
                         nickName = String(nickName.prefix(40))
                     }
                 }
+            if !nickName.isEmpty && nickName.count < 3 {
+                HStack(spacing: 4) {
+                    Image(.icWarning)
+                        .fixSize(16)
+                    Text("A wallet name must be 3-40 characters")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveDangerTent)
+                }
+                .padding(.top, .xl)
+                .padding(.horizontal, .xl)
+            }
             Spacer()
             let title: LocalizedStringKey = {
                 switch screenType {
@@ -64,6 +75,12 @@ struct SetupNickNameView: View {
                 get: { nickName.trimmingCharacters(in: .whitespacesAndNewlines).count >= 3 },
                 set: { _ in }
             )
+            HStack {
+                Text("\(nickName.count)")
+                    .font(.paragraphSmall)
+                    .foregroundColor(.colorInteractiveToneHighlight) + Text(" / 40").font(.paragraphSmall).foregroundColor(.colorInteractiveTentPrimarySub)
+            }
+            .padding(.xl)
             CustomButton(title: title, isEnable: combinedBinding) {
                 switch screenType {
                 case let .createWallet(seedPhrase):
@@ -77,6 +94,7 @@ struct SetupNickNameView: View {
                 }
             }
             .frame(height: 56)
+            .padding(.top, .xl)
             .padding(.horizontal, .xl)
         }
         .modifier(

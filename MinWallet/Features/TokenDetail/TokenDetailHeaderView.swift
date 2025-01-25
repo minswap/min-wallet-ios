@@ -36,27 +36,29 @@ extension TokenDetailView {
                             suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
                             font: .paragraphXSmall,
                             fontColor: .colorInteractiveTentPrimarySub) ?? "-"
-                    HStack(spacing: 4) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(chartSelected)
-                        /*
-                        Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
-                        Text("5.7%")
-                            .font(.paragraphXSmall)
-                            .foregroundStyle(.colorBaseSuccess)
-                        Image(.icUp)
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                         */
+                        HStack(alignment: .center, spacing: 4) {
+                            if !viewModel.percent.isZero {
+                                Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
+                                Text("\(viewModel.percent.formatSNumber(maximumFractionDigits: 2))%")
+                                    .font(.paragraphXSmall)
+                                    .foregroundStyle(viewModel.percent > 0 ? .colorBaseSuccess : .colorBorderDangerDefault)
+                                Image(viewModel.percent > 0 ? .icUp : .icDown)
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                            }
+                        }
                     }
                 }
             }
             .opacity((viewModel.sizeOfLargeHeader.height / 2 - offset) < 0 ? (opacity) : 0)
             Spacer()
-            Image(.icFavourite)
+            Image(viewModel.isFav ? .icSavedFav : .icFavourite)
                 .fixSize(40)
                 .onTapGesture {
                     viewModel.isFav.toggle()
-                    let key = viewModel.token.currencySymbol + "." + viewModel.token.tokenName
+                    let key = viewModel.token.uniqueID
                     if viewModel.isFav {
                         appSetting.tokenFav.append(key)
                     } else {
@@ -94,20 +96,22 @@ extension TokenDetailView {
                     suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
                     font: .titleH4,
                     fontColor: .colorBaseTent) ?? "-"
+
             Text(chartSelected)
                 .padding(.top, .lg)
                 .padding(.bottom, .xs)
                 .frame(height: 55)
-            /*
             HStack(spacing: 4) {
-                Text("5.7%")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorBaseSuccess)
-                Image(.icUp)
-                    .resizable()
-                    .frame(width: 16, height: 16)
+                if !viewModel.percent.isZero {
+                    Text("\(viewModel.percent.formatSNumber(maximumFractionDigits: 2))%")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(viewModel.percent > 0 ? .colorBaseSuccess : .colorBorderDangerDefault)
+                    Image(viewModel.percent > 0 ? .icUp : .icDown)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                }
             }
-             */
+            .frame(height: 20)
         }
         .padding(.horizontal, .xl)
     }

@@ -9,7 +9,7 @@ struct AppearanceView: View {
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {
-                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4)
+                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
                     .padding(.vertical, .md)
                 Text("Appearance")
                     .font(.titleH5)
@@ -21,8 +21,11 @@ struct AppearanceView: View {
                         Image(.icAppearanceDefault)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .system ? 2 : 0))
-                        HStack(spacing: 4) {
+                        HStack(spacing: 6) {
                             Image(appSetting.appearance == .system ? .icRadioCheck : .icRadioUncheck)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 16, height: 16)
                             Text("Default")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
@@ -38,8 +41,11 @@ struct AppearanceView: View {
                         Image(.icAppearanceDark)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .dark ? 2 : 0))
-                        HStack(spacing: 4) {
+                        HStack(spacing: 6) {
                             Image(appSetting.appearance == .dark ? .icRadioCheck : .icRadioUncheck)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 16, height: 16)
                             Text("Dark")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
@@ -55,8 +61,11 @@ struct AppearanceView: View {
                         Image(.icAppearanceLight)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .light ? 2 : 0))
-                        HStack(spacing: 4) {
+                        HStack(spacing: 6) {
                             Image(appSetting.appearance == .light ? .icRadioCheck : .icRadioUncheck)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 16, height: 16)
                             Text("Light")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)

@@ -77,8 +77,12 @@ class HomeViewModel: ObservableObject {
                 input = TopAssetsInput()
                     .with({
                         $0.limit = .some(limit)
-                        //$0.onlyVerified = .some(false)
+                        $0.onlyVerified = .some(false)
+                        $0.favoriteAssets = nil
                         $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
+                        if isLoadMore, let searchAfter = searchAfter {
+                            $0.searchAfter = .some(searchAfter)
+                        }
                     })
 
                 let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
@@ -112,7 +116,7 @@ class HomeViewModel: ObservableObject {
         guard (hasLoadMoreDic[tabType] ?? true), !(isFetching[tabType] ?? true) else { return }
         let tokens = tokensDic[tabType] ?? []
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
-        if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {
+        if tokens.firstIndex(where: { $0.uniqueID == item.uniqueID }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
     }

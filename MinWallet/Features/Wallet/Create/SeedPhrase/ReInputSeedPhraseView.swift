@@ -17,6 +17,33 @@ struct ReInputSeedPhraseView: View {
     @State
     var screenType: ScreenType
 
+    private var isValidSeedPhase: Bool {
+        let seedPhraseCount = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").count
+        switch screenType {
+        case let .createWallet(seedPhrase):
+            return seedPhraseCount >= 12 && inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) == seedPhrase.joined(separator: " ")
+        case .restoreWallet:
+            return seedPhraseCount >= 12
+        }
+    }
+
+    private var textWarning: LocalizedStringKey {
+        let seedPhraseCount = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").count
+        if seedPhraseCount == 0 { return "" }
+        switch screenType {
+        case let .createWallet(seedPhrase):
+            if seedPhraseCount < 12 {
+                return "Invalid seed phrase"
+            } else if inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) != seedPhrase.joined(separator: " ") {
+                return "Seed phrase does not match"
+            } else {
+                return ""
+            }
+        case .restoreWallet:
+            return seedPhraseCount < 12 ? "" : "Invalid seed phrase"
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Re-input your seed phrase")
@@ -29,7 +56,12 @@ struct ReInputSeedPhraseView: View {
             SeedPhraseTextField(
                 text: $inputSeedPhrase,
                 typingColor: .colorBaseTent,
-                completedColor: .colorInteractiveToneHighlight
+                completedColor: .colorInteractiveToneHighlight,
+                onCommit: {
+                    if inputSeedPhrase.last != " " {
+                        inputSeedPhrase += " "
+                    }
+                }
             )
             .focused($isFocus)
             .padding(.horizontal, .xl)
@@ -42,6 +74,17 @@ struct ReInputSeedPhraseView: View {
                     }
                     .foregroundStyle(.colorLabelToolbarDone)
                 }
+            }
+            if !textWarning.toString().isEmpty {
+                HStack(alignment: .center, spacing: 4) {
+                    Image(.icWarning)
+                        .fixSize(16)
+                    Text(textWarning)
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveDangerTent)
+                    Spacer()
+                }
+                .padding(.horizontal, .xl)
             }
             Spacer()
             HStack {
@@ -69,7 +112,7 @@ struct ReInputSeedPhraseView: View {
             .padding(.top, .xl)
             .padding(.horizontal, .xl)
             let enableNext = Binding<Bool>(
-                get: { !inputSeedPhrase.isBlank },
+                get: { isValidSeedPhase },
                 set: { newValue in }
             )
             CustomButton(title: "Next", isEnable: enableNext) {

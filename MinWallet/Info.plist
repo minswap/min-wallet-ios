@@ -4,6 +4,8 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>MIN_ADA_CURRENCY</key>
+	<string>${MIN_ADA_CURRENCY}</string>
 	<key>MIN_ADA_TOKEN</key>
 	<string>${MIN_ADA_TOKEN}</string>
 	<key>MIN_GRAPHQL_URL</key>
@@ -22,6 +24,10 @@
 	<string>${MIN_PUBLIC_NETWORK_ID}</string>
 	<key>MIN_TRANSACTION_URL</key>
 	<string>${MIN_TRANSACTION_URL}</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Using Face ID to login</string>
+	<key>MIN_MINT_TOKEN</key>
+	<string>${MIN_MINT_TOKEN}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>

@@ -40,7 +40,7 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.3 A")
+                Text("0.3 \(Currency.ada.prefix)")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseTent)
             }
@@ -48,11 +48,11 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Batcher Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("2 A")
+                Text("2 \(Currency.ada.prefix)")
                     .strikethrough()
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
-                Text("1.5 A")
+                Text("1.5 \(Currency.ada.prefix)")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorInteractiveToneHighlight)
             }
@@ -67,7 +67,7 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Deposit ADA", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.3 A")
+                Text("0.3 \(Currency.ada.prefix)")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseTent)
             }

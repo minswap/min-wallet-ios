@@ -31,6 +31,41 @@ extension TokenDetailView {
             let maxDate: Date = viewModel.chartDatas.map { $0.date }.max() ?? Date()
             VStack(alignment: .leading, spacing: 0) {
                 Chart {
+                    if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
+                        ForEach(0..<selectedIndex + 1, id: \.self) { index in
+                            LineMark(
+                                x: .value("Date", index),
+                                y: .value("Value", viewModel.chartDatas[index].value)
+                            )
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            //.interpolationMethod(.catmullRom)
+                            //.lineStyle(.init(lineWidth: 1))
+                            .lineStyle(by: .value("Type", "PM2.5"))
+                        }
+                    }
+                    if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
+                        ForEach(selectedIndex..<viewModel.chartDatas.count, id: \.self) { index in
+                            LineMark(
+                                x: .value("Date", index),
+                                y: .value("Value", viewModel.chartDatas[index].value)
+                            )
+                            //.interpolationMethod(.catmullRom)
+                            .foregroundStyle(viewModel.isInteracting ? .colorBorderPrimarySub : .colorInteractiveToneHighlight)
+                        }
+                    }
+                    if let selectedIndex = viewModel.selectedIndex, viewModel.isInteracting {
+                        PointMark(
+                            x: .value("Date", selectedIndex),
+                            y: .value("Value", viewModel.chartDatas[selectedIndex].value)
+                        )
+                        .symbolSize(60)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+
+                        RuleMark(x: .value("Date", selectedIndex))
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                    }
+                    /*
                     ForEach(Array(zip(viewModel.chartDatas, viewModel.chartDatas.indices)), id: \.0) { item, index in
                         if let selectedIndex = viewModel.selectedIndex, selectedIndex == index {
                             RectangleMark(
@@ -49,6 +84,7 @@ extension TokenDetailView {
                         //.interpolationMethod(.catmullRom)
                         .lineStyle(.init(lineWidth: 1))
                     }
+                     */
                 }
                 .chartYAxis {
                     AxisMarks(preset: .extended, position: .leading) {
@@ -62,6 +98,7 @@ extension TokenDetailView {
                 .chartXAxis(.hidden)
                 .chartLegend(.hidden)
                 .chartOverlay { chart in
+                    /*
                     GeometryReader { geometry in
                         Rectangle()
                             .fill(Color.clear)
@@ -75,6 +112,38 @@ extension TokenDetailView {
                                 guard let index = chart.value(atX: currentX, as: Int.self) else { return }
                                 viewModel.selectedIndex = index
                             }
+                    }
+                     */
+                    GeometryReader { geometry in
+                        Rectangle()
+                            .fill(Color.clear)
+                            .contentShape(Rectangle())
+                            .gesture(
+                                LongPressGesture(minimumDuration: 2)
+                                    .onChanged { _ in
+                                        guard !self.viewModel.isInteracting else { return }
+                                        self.viewModel.isInteracting = true
+                                        self.triggerVibration()
+                                    }
+                                    .onEnded { _ in
+                                        // When the long press ends, set interaction flag to false
+                                        self.viewModel.isInteracting = false
+                                        self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                                    }
+                                    .simultaneously(
+                                        with: DragGesture(minimumDistance: 0)
+                                            .onChanged { value in
+                                                guard viewModel.isInteracting else { return }
+                                                guard let index = chart.value(atX: value.location.x, as: Int.self) else { return }
+                                                let closestIndex = viewModel.chartDatas.indices.min(by: { abs($0 - index) < abs($1 - index) })
+                                                viewModel.selectedIndex = closestIndex
+                                            }
+                                            .onEnded { _ in
+                                                self.viewModel.isInteracting = false
+                                                self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                                            }
+                                    )
+                            )
                     }
                 }
                 .frame(height: 200)
@@ -97,8 +166,9 @@ extension TokenDetailView {
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .shadow(radius: 50).cornerRadius(BorderRadius.full)
                             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorBaseBackground))
+                            .compositingGroup()
+                            .shadow(color: .colorBaseTent.opacity(0.1), radius: 2, x: 0, y: 2)
                             .padding(.vertical, .xs)
                             .contentShape(.rect)
                             .onTapGesture {
@@ -116,10 +186,18 @@ extension TokenDetailView {
                     }
                 }
             }
+            .padding(.horizontal, 4)
             .frame(height: 36)
             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
             .padding(.top, .xl)
         }
+    }
+
+    private func triggerVibration() {
+        // Trigger a haptic feedback when the long press begins
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
     }
 }
 
