@@ -9,21 +9,23 @@ struct SelectTokenView: View {
         case sendToken
         case swapToken
     }
-    
+
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
 
-    init(viewModel: SelectTokenViewModel,
-         onSelectToken: (([TokenProtocol]) -> Void)?) {
+    init(
+        viewModel: SelectTokenViewModel,
+        onSelectToken: (([TokenProtocol]) -> Void)?
+    ) {
         self._viewModel = .init(wrappedValue: viewModel)
         self.onSelectToken = onSelectToken
     }
 
     @StateObject
     private var viewModel: SelectTokenViewModel
-   
+
     var onSelectToken: (([TokenProtocol]) -> Void)?
 
     var body: some View {
@@ -41,6 +43,7 @@ struct SelectTokenView: View {
                             let tokenSelected = viewModel.tokenCallBack
                             switch viewModel.screenType {
                             case .initSelectedToken:
+                                guard !tokenSelected.isEmpty else { return }
                                 onSelectToken?(tokenSelected)
                                 navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected)))
                             case .sendToken:
@@ -70,9 +73,9 @@ struct SelectTokenView: View {
         }
         .background(.colorBaseBackground)
     }
-    
+
     @ViewBuilder
-    private var headerView: some  View {
+    private var headerView: some View {
         HStack(spacing: .lg) {
             Button(
                 action: {
@@ -97,7 +100,7 @@ struct SelectTokenView: View {
             .frame(height: 60)
             .padding(.horizontal, .xl)
     }
-    
+
     private var contentView: some View {
         VStack(spacing: .md) {
             HStack(spacing: .md) {

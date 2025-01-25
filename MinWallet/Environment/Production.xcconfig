@@ -3,7 +3,7 @@
 //TODO: Change url production ?
 MIN_URL      = https:\/\/monorepo-testnet-preprod.minswap.org
 MIN_PUBLIC_NETWORK_ID = mainnet
-MIN_TRANSACTION_URL = https:/\/\preprod.cardanoscan.io\/transaction
+MIN_TRANSACTION_URL = https:/\/\preprod.cardanoscan.io
 MIN_HANDLE_ADA_NAME_URL = https:/\/\api.handle.me\/handles
 
 MIN_MIN_TOKEN = 29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c6.4d494e

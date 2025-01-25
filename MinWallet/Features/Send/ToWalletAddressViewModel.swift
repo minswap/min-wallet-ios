@@ -15,9 +15,12 @@ class ToWalletAddressViewModel: ObservableObject {
     @Published
     var errorType: ErrorType?
 
+    let tokens: [WrapTokenSend]
+
     private var cancellables: Set<AnyCancellable> = []
 
-    init() {
+    init(tokens: [WrapTokenSend]) {
+        self.tokens = tokens
         $address
             .map({ $0.replacingOccurrences(of: " ", with: "") })
             .removeDuplicates()
@@ -45,7 +48,7 @@ class ToWalletAddressViewModel: ObservableObject {
         adaAddress = nil
         address = ""
     }
-    
+
     private func validateAddress(newAddress: String) {
         errorType = nil
         guard address.count > 1 else { return }

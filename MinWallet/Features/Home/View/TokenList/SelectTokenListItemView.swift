@@ -5,12 +5,12 @@ struct SelectTokenListItemView: View {
     private let token: TokenProtocol?
     @Binding
     private var isSelected: Bool
-    
+
     init(token: TokenProtocol?, isSelected: Binding<Bool>) {
         self.token = token
         self._isSelected = isSelected
     }
-    
+
     var body: some View {
         HStack(spacing: .md) {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)

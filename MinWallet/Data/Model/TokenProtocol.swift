@@ -51,7 +51,7 @@ extension TokenProtocol {
 struct WrapTokenProtocol: Identifiable {
     let id: UUID = UUID()
     let token: TokenProtocol
-    
+
     init(token: TokenProtocol) {
         self.token = token
     }

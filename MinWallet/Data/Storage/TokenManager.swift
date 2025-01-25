@@ -39,7 +39,7 @@ class TokenManager: ObservableObject {
     }
 
     var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: MinWalletConstant.adaToken, minName: "Cardano")
-    
+
     private init() {}
 
     func getPortfolioOverview() async -> Void {

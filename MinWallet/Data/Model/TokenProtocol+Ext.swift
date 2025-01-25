@@ -449,7 +449,7 @@ struct TokenDefault: TokenProtocol {
     var amount: Double {
         netValue
     }
-    
+
     init(
         symbol: String,
         tName: String,

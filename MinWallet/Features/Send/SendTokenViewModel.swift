@@ -22,11 +22,15 @@ class SendTokenViewModel: ObservableObject {
         guard let index = tokens.firstIndex(where: { $0.id == item.id }) else { return }
         tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
     }
+
+    var tokensToSend: [WrapTokenSend] {
+        tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 }
+    }
 }
 
 
 struct WrapTokenSend: Identifiable {
-    let id: UUID  = UUID()
+    let id: UUID = UUID()
     var token: TokenProtocol
 
     var amount: String = ""
@@ -35,7 +39,7 @@ struct WrapTokenSend: Identifiable {
         self.token = token
         self.amount = amount
     }
-    
+
     var uniqueID: String {
         token.uniqueID
     }

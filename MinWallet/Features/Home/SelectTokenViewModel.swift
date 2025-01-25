@@ -16,28 +16,34 @@ class SelectTokenViewModel: ObservableObject {
     var tokensSelected: [String: TokenProtocol] = [:]
     @Published
     var screenType: SelectTokenView.ScreenType = .initSelectedToken
-    
+
     private var hasLoadMore: Bool = true
     private var isFetching: Bool = true
     ////currencySymbol + . + tokenName
 
     private var cancellables: Set<AnyCancellable> = []
-    private var cachedIndex:[String: Int] = [:]
-    
+    private var cachedIndex: [String: Int] = [:]
+
     private var rawTokens: [TokenProtocol] {
         [TokenManager.shared.tokenAda] + TokenManager.shared.yourTokens.0 + TokenManager.shared.yourTokens.1
     }
 
-    init(tokensSelected: [TokenProtocol?],
-         screenType: SelectTokenView.ScreenType) {
+    init(
+        tokensSelected: [TokenProtocol?],
+        screenType: SelectTokenView.ScreenType
+    ) {
         self.screenType = screenType
-        self.tokensSelected = tokensSelected.compactMap({ $0 }).reduce([:], { result, token in
-            result.appending([token.uniqueID: token])
-        })
-        
-        tokensSelected.enumerated().forEach { idx, token in
-            self.cachedIndex[token?.uniqueID ?? ""] = idx
-        }
+        self.tokensSelected = tokensSelected.compactMap({ $0 })
+            .reduce(
+                [:],
+                { result, token in
+                    result.appending([token.uniqueID: token])
+                })
+
+        tokensSelected.enumerated()
+            .forEach { idx, token in
+                self.cachedIndex[token?.uniqueID ?? ""] = idx
+            }
         self.cachedIndex[TokenManager.shared.tokenAda.uniqueID] = -1
         switch screenType {
         case .initSelectedToken:
@@ -57,7 +63,7 @@ class SelectTokenViewModel: ObservableObject {
                 self.tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
             }
             .store(in: &cancellables)
-        
+
         self.tokens = rawTokens
         if self.tokens.count < 2 {
             self.getTokens()
@@ -69,7 +75,7 @@ class SelectTokenViewModel: ObservableObject {
         isFetching = true
         Task {
             let tokens = try? await TokenManager.getYourToken()
-            TokenManager.shared.yourTokens =  ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
             self.tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
             switch screenType {
             case .initSelectedToken:
@@ -90,7 +96,7 @@ class SelectTokenViewModel: ObservableObject {
             getTokens(isLoadMore: true)
         }
     }
-    
+
     func toggleSelected(token: TokenProtocol) {
         guard token.uniqueID != MinWalletConstant.adaToken else { return }
         if tokensSelected[token.uniqueID] != nil {
@@ -104,14 +110,9 @@ class SelectTokenViewModel: ObservableObject {
 
 extension SelectTokenViewModel {
     var tokenCallBack: [TokenProtocol] {
-        var tokens = tokensSelected.map { key, value in value }
-        tokens =  tokens.sorted { left, right in
+        let tokens = tokensSelected.map { key, value in value }
+        return tokens.sorted { left, right in
             (cachedIndex[left.uniqueID] ?? 999) < (cachedIndex[right.uniqueID] ?? 999)
         }
-        
-        tokens.enumerated().forEach { idx, item in
-            print("wtf zzz \(idx) \(item.adaName)")
-        }
-        return tokens
     }
 }

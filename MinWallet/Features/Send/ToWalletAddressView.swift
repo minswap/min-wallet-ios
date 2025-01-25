@@ -7,9 +7,13 @@ struct ToWalletAddressView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @StateObject
-    private var viewModel: ToWalletAddressViewModel = .init()
+    private var viewModel: ToWalletAddressViewModel
     @State
     private var rotateDegree: CGFloat = 0
+
+    init(viewModel: ToWalletAddressViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -106,7 +110,9 @@ struct ToWalletAddressView: View {
             )
             CustomButton(title: "Next", isEnable: combinedBinding) {
                 guard viewModel.isChecking != true else { return }
-                navigator.push(.sendToken(.confirm))
+                let address = viewModel.adaAddress?.address ?? viewModel.address
+                guard !address.isEmpty else { return }
+                navigator.push(.sendToken(.confirm(tokens: viewModel.tokens, address: address)))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -205,5 +211,5 @@ struct ToWalletAddressView: View {
 }
 
 #Preview {
-    ToWalletAddressView()
+    ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: []))
 }

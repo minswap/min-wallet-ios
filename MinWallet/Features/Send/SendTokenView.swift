@@ -25,7 +25,7 @@ struct SendTokenView: View {
     init(viewModel: SendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -93,7 +93,7 @@ struct SendTokenView: View {
                                         onSelectToken: { tokens in
                                             DispatchQueue.main.async {
                                                 viewModel.addToken(tokens: tokens)
-                                                
+
                                             }
                                         }))
                             },
@@ -119,7 +119,9 @@ struct SendTokenView: View {
                 set: { _ in }
             )
             CustomButton(title: "Next", isEnable: combinedBinding) {
-                navigator.push(.sendToken(.toWallet))
+                let tokens = viewModel.tokensToSend
+                guard !tokens.isEmpty else { return }
+                navigator.push(.sendToken(.toWallet(tokens: tokens)))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
