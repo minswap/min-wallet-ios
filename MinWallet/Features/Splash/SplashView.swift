@@ -5,10 +5,12 @@ import UIKit
 
 struct SplashView: View {
     @State private var scale = 0.7
-    @State var isActive: Bool = false
+    @State private var isActive: Bool = false
 
     @EnvironmentObject
-    var appSetting: AppSetting
+    private var appSetting: AppSetting
+    @EnvironmentObject
+    private var hudState: HUDState
 
     var body: some View {
         GeometryReader { geo in
@@ -36,6 +38,14 @@ struct SplashView: View {
                     default:
                         EmptyView()
                     }
+                }
+
+                if hudState.isShowLoading {
+                    Color.black.opacity(0.2).ignoresSafeArea().transition(.fade)
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .scaleEffect(2, anchor: .center)
+                        .transition(.fade)
                 }
             }
             .onAppear(perform: {

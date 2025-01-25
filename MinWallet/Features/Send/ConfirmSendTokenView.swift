@@ -176,7 +176,9 @@ struct ConfirmSendTokenView: View {
             CustomButton(title: "Next") {
                 Task {
                     do {
+                        hudState.showLoading(isShow: true)
                         try await viewModel.sendTokens()
+                        hudState.showLoading(isShow: false)
 
                         switch appSetting.authenticationType {
                         case .biometric:
@@ -186,6 +188,7 @@ struct ConfirmSendTokenView: View {
                             isShowSignContract = true
                         }
                     } catch {
+                        hudState.showLoading(isShow: false)
                         hudState.showMsg(msg: error.localizedDescription)
                     }
                 }
@@ -226,7 +229,9 @@ struct ConfirmSendTokenView: View {
     private func authenticationSuccess() {
         Task {
             do {
+                hudState.showLoading(isShow: true)
                 let finalID = try await viewModel.finalizeAndSubmit()
+                hudState.showLoading(isShow: false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
                         finalID?.viewTransaction()
@@ -236,6 +241,7 @@ struct ConfirmSendTokenView: View {
                 TokenManager.shared.reloadPortfolioOverview()
                 navigator.popToRoot()
             } catch {
+                hudState.showLoading(isShow: false)
                 hudState.showMsg(msg: error.localizedDescription)
             }
         }
