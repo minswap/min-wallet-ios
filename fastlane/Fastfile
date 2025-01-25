@@ -18,9 +18,10 @@ default_platform(:ios)
 lane :beta do
   setup_ci if ENV['CI']
   api_key = app_store_connect_api_key(
-    key_id: "U3WM28A5F7",
-    issuer_id: "2ca285a6-e7fe-454e-a90d-654a38d8e753",
-    key_filepath: "./AuthKey_U3WM28A5F7.p8",
+    key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+    issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+    key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+    is_key_content_base64: true,
     duration: 1200, # optional (maximum 1200)
     in_house: false # optional but may be required if using match/sigh
   )
