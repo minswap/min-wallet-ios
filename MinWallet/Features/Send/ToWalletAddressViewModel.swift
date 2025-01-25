@@ -23,7 +23,9 @@ class ToWalletAddressViewModel: ObservableObject {
             .removeDuplicates()
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
             .sink(receiveValue: { [weak self] newAddress in
-                self?.validateAddress(newAddress: newAddress)
+                guard let self = self else { return }
+                self.address = newAddress
+                self.validateAddress(newAddress: newAddress)
             })
             .store(in: &cancellables)
     }

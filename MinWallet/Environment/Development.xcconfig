@@ -1,6 +1,6 @@
 #include "AppConfig.xcconfig"
 
-MIN_URL      = https:\/\/monorepo-testnet-preprod.minswap.org
+MIN_URL      = https:\/\/dev-2.minswap.org
 MIN_PUBLIC_NETWORK_ID = preprod
 MIN_TRANSACTION_URL = https:/\/\preprod.cardanoscan.io\/transaction
 MIN_HANDLE_ADA_NAME_URL = https:/\/\preprod.api.handle.me\/handles

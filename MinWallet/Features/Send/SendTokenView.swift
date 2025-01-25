@@ -17,15 +17,19 @@ struct SendTokenView: View {
     @State
     private var amount: String = ""
     @StateObject
-    private var viewModel = SendTokenViewModel()
+    private var viewModel: SendTokenViewModel
 
     @EnvironmentObject
     var tokenManager: TokenManager
 
+    init(viewModel: SendTokenViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                LazyVStack(
+                VStack(
                     spacing: 0,
                     content: {
                         Text("You want to send:")
@@ -58,22 +62,16 @@ struct SendTokenView: View {
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
                          */
-                        ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                            let item = viewModel.tokens[index]
-                            let amountBinding = Binding<String>(
-                                get: { viewModel.tokens[index].amount },
-                                set: { newValue in
-                                    viewModel.tokens[index].amount = newValue
-                                }
-                            )
+                        ForEach($viewModel.tokens) { $item in
+                            let item = $item.wrappedValue
                             HStack(spacing: .md) {
-                                AmountTextField(value: amountBinding, maxValue: item.token.amount)
+                                AmountTextField(value: $item.amount, maxValue: item.token.amount)
                                     .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
                                     .font(.labelMediumSecondary)
                                     .foregroundStyle(.colorInteractiveToneHighlight)
                                     .onTapGesture {
-                                        viewModel.tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+                                        viewModel.setMaxAmount(item: item)
                                     }
                                 TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
                                 Text(item.token.adaName)
@@ -93,7 +91,10 @@ struct SendTokenView: View {
                                     .selectToken(
                                         tokensSelected: viewModel.tokens.map({ $0.token }),
                                         onSelectToken: { tokens in
-                                            viewModel.addToken(tokens: tokens)
+                                            DispatchQueue.main.async {
+                                                viewModel.addToken(tokens: tokens)
+                                                
+                                            }
                                         }))
                             },
                             label: {
@@ -137,12 +138,12 @@ struct SendTokenView: View {
             BaseContentView(
                 screenTitle: " ",
                 actionLeft: {
-                    navigator.pop()
+                    navigator.popToRoot()
                 }))
     }
 }
 
 #Preview {
-    SendTokenView()
+    SendTokenView(viewModel: SendTokenViewModel(tokens: [TokenManager.shared.tokenAda]))
         .environmentObject(TokenManager.shared)
 }

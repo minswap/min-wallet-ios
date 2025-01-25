@@ -790,6 +790,16 @@ input InputAsset {
   tokenName: String!
 }
 
+input InputAssetAmount {
+  amount: BigInt!
+  asset: InputAsset!
+}
+
+input InputFinalizeAndSubmit {
+  tx: String!
+  witnessSet: String!
+}
+
 input InputPair {
   assetA: InputAsset!
   assetB: InputAsset!
@@ -800,6 +810,12 @@ input InputProjectDetails {
   eventName: String!
   socialLinks: InputSocialLinks
   tokenomics: [InputTokenomics!]
+}
+
+input InputSendTokens {
+  assetAmounts: [InputAssetAmount!]!
+  receiver: String!
+  sender: String!
 }
 
 input InputSocialLinks {
@@ -821,6 +837,19 @@ type InvalidOrder {
   txIn: TxIn!
   type: AMMType!
   value: String!
+}
+
+type IosPool {
+  lpAsset: Asset!
+  poolAssets: [Asset!]!
+  poolInfo: String!
+  tvlInAda: BigInt
+  type: AMMType!
+}
+
+type IosRoutedPools {
+  pools: [IosPool!]!
+  routings: [Routing!]!
 }
 
 type KupoAsset {
@@ -1351,6 +1380,7 @@ type Mutation {
   createLbeV2Event(input: CreateLbeV2EventInput!): String!
   createLbeV2Order(input: CreateLbeV2OrderInput!): String!
   cziBuildZapIn(input: CZIBuildZapInInput!): String!
+  finalizeAndSubmit(input: InputFinalizeAndSubmit!): String!
   hello: Void
   idoCreateEvent(input: IdoCreateEventInput!): String!
   idoDepositOrWithdrawOrder(input: IdoDepositOrWithdrawOrderInput!): String!
@@ -1367,6 +1397,7 @@ type Mutation {
   minBarBuildUnStakeTx(options: MINBarUnStakeOptions!): MinBarUnstakeResult!
   mintBuildUnstakingTx(options: MintBuildUnstakingOptions!): String!
   notificationGenerateAuthHash(identifier: String!): String!
+  sendTokens(input: InputSendTokens!): String!
   submitTx(tx: String!): String!
   updateLbeV2Event(input: CreateLbeV2EventInput!): String!
   updateLbeV2Order(input: UpdateLbeV2OrderInput!): String!
@@ -1766,6 +1797,7 @@ type Query {
   idoFeaturingEvents: [IdoEvent!]!
   idoVerifyWhitelistAddress(address: String!): Boolean!
   invalidOrders(address: String!): [InvalidOrder!]!
+  iosRoutedPoolsByPair(isApplied: Boolean!, pair: InputPair!): IosRoutedPools!
   launchBowlAnalytic: LaunchBowlAnalytic!
   launchBowlJoinedProject(input: LaunchBowlJoinedProjectsInput!): Events!
   launchBowlLiveProjectCount: Int!
@@ -2317,6 +2349,7 @@ type Vote {
 
 type WalletAssetsPositions {
   assets: [PortfolioTokenPosition!]!
+  lovelace: BigInt!
   lpTokens: [PortfolioLPPosition!]!
   nfts: [PortfolioNFTPosition!]!
 }

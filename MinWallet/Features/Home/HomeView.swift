@@ -212,7 +212,7 @@ struct HomeView: View {
                         variant: .secondary,
                         icon: .icSend
                     ) {
-                        navigator.push(.sendToken(.sendToken))
+                        navigator.push(.sendToken(.selectToken(tokensSelected: [], screenType: .initSelectedToken, onSelectToken: nil)))
                     }
                     .frame(height: 44)
                     CustomButton(

@@ -41,16 +41,15 @@ extension OrderHistoryView {
                 .transition(.opacity)
             } else {
                 LazyVStack(spacing: 0) {
-                    ForEach(0..<viewModel.orders.count, id: \.self) { index in
-                        let item = viewModel.orders[index]
-                        OrderHistoryItemView(order: item)
+                    ForEach(viewModel.orders) { order in
+                        OrderHistoryItemView(order: order)
                             .padding(.horizontal, .xl)
                             .contentShape(.rect)
                             .onAppear {
-                                viewModel.loadMoreData(order: item)
+                                viewModel.loadMoreData(order: order)
                             }
                             .onTapGesture {
-                                navigator.push(.orderHistoryDetail(order: item))
+                                navigator.push(.orderHistoryDetail(order: order))
                             }
                     }
                 }
