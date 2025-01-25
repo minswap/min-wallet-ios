@@ -1,12 +1,11 @@
 import SwiftUI
 import FlowStacks
+import Combine
 
 
 struct ToWalletAddressView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-    @FocusState
-    private var focusedField: Bool
     @StateObject
     private var viewModel: ToWalletAddressViewModel = .init()
     @State
@@ -22,15 +21,23 @@ struct ToWalletAddressView: View {
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
             if viewModel.adaAddress == nil {
-                TextField("", text: $viewModel.address)
-                    .placeholder("Enter address or ADAHandle", when: viewModel.address.isEmpty)
-                    .lineLimit(10)
-                    .focused($focusedField)
-                    .padding(.vertical, .lg)
-                    .padding(.horizontal, .xl)
-                    .onChange(of: viewModel.address) { newValue in
-                        viewModel.validateAddress(newAddress: newValue)
-                    }
+                let combinedBinding = Binding<Bool>(
+                    get: { viewModel.isChecking != true },
+                    set: { _ in }
+                )
+                CustomTextField(
+                    text: $viewModel.address,
+                    enableTextView: combinedBinding,
+                    font: .labelSmallSecondary ?? .systemFont(ofSize: 14),
+                    textColor: .colorBaseTent,
+                    placeHolderTextColor: .colorInteractiveTentPrimarySub,
+                    placeHolderText: "Enter address or ADAHandle",
+                    onCommit: {}
+                )
+                .padding(.horizontal, .xl)
+                .onChange(of: viewModel.address) { newValue in
+                    viewModel.address = newValue.replacingOccurrences(of: " ", with: "")
+                }
             }
             errorTypeView
             itemAddressAda
@@ -63,6 +70,7 @@ struct ToWalletAddressView: View {
                     .contentShape(.rect)
                     .onTapGesture {
                         guard viewModel.isChecking != true else { return }
+                        hideKeyboard()
                         viewModel.checkAddress()
                     }
                 }
@@ -78,7 +86,8 @@ struct ToWalletAddressView: View {
                     .contentShape(.rect)
                     .onTapGesture {
                         if let copied = UIPasteboard.general.string, !copied.isEmpty {
-                            viewModel.address = copied
+                            viewModel.reset()
+                            viewModel.address = copied.trimmingCharacters(in: .whitespacesAndNewlines)
                         }
                     }
                     .disabled(viewModel.isChecking == true)
@@ -87,7 +96,12 @@ struct ToWalletAddressView: View {
             .padding(.horizontal, .xl)
 
             let combinedBinding = Binding<Bool>(
-                get: { viewModel.adaAddress != nil },
+                get: {
+                    if viewModel.isChecking == true {
+                        return false
+                    }
+                    return viewModel.adaAddress != nil || !viewModel.address.isEmpty && viewModel.errorType == nil
+                },
                 set: { _ in }
             )
             CustomButton(title: "Next", isEnable: combinedBinding) {
@@ -97,17 +111,7 @@ struct ToWalletAddressView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .allowsHitTesting(!(viewModel.isChecking == true))
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("Done") {
-                    focusedField = false
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
+        //.allowsHitTesting(!(viewModel.isChecking == true))
         .modifier(
             BaseContentView(
                 screenTitle: " ",
@@ -141,8 +145,7 @@ struct ToWalletAddressView: View {
                         .fixSize(24)
                         .contentShape(.rect)
                         .onTapGesture {
-                            viewModel.isChecking = nil
-                            viewModel.adaAddress = nil
+                            viewModel.reset()
                         }
                 }
                 .padding(.horizontal, .xl)

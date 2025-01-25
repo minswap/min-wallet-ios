@@ -1,5 +1,6 @@
 import SwiftUI
 import Then
+import Combine
 
 
 @MainActor
@@ -9,33 +10,41 @@ class ToWalletAddressViewModel: ObservableObject {
     var adaAddress: AdaAddress?
     @Published
     var isChecking: Bool?
-
     @Published
     var address: String = ""
     @Published
     var errorType: ErrorType?
-    //    = .handleNotResolved(adaName: "$huhu")
 
-    init() {}
+    private var cancellables: Set<AnyCancellable> = []
+
+    init() {
+        $address
+            .map({ $0.replacingOccurrences(of: " ", with: "") })
+            .removeDuplicates()
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] newAddress in
+                self?.validateAddress(newAddress: newAddress)
+            })
+            .store(in: &cancellables)
+    }
 
     func checkAddress() {
         guard case .handleNotResolved = errorType else { return }
         Task {
-            withAnimation {
-                isChecking = true
-            }
-            try? await Task.sleep(for: .seconds(10))
+            isChecking = true
             await resolveAdaName()
-
-            withAnimation {
-                isChecking = false
-
-            }
+            isChecking = false
         }
     }
 
-    func validateAddress(newAddress: String) {
-        address = newAddress.replacingOccurrences(of: " ", with: "")
+    func reset() {
+        errorType = nil
+        isChecking = nil
+        adaAddress = nil
+        address = ""
+    }
+    
+    private func validateAddress(newAddress: String) {
         errorType = nil
         guard address.count > 1 else { return }
 
@@ -87,6 +96,7 @@ class ToWalletAddressViewModel: ObservableObject {
                         $0.name = name
                         $0.address = adaAddress
                     })
+                address = ""
                 errorType = nil
             } else if let error = jsonData["message"] as? String {
                 errorType = .handleResolvedError(msg: LocalizedStringKey(error))
