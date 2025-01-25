@@ -108,6 +108,9 @@
     "ADA" : {
 
     },
+    "ADA Handle (%@): not resolved yet." : {
+
+    },
     "Add Token" : {
 
     },
@@ -354,6 +357,9 @@
     "Half" : {
 
     },
+    "Handle not found" : {
+
+    },
     "Hello" : {
       "extractionState" : "manual"
     },
@@ -397,6 +403,12 @@
 
     },
     "Input information" : {
+
+    },
+    "Invalid address" : {
+
+    },
+    "Invalid handle. Only a-z, 0-9, dash (-), underscore (_), and period (.) are allowed." : {
 
     },
     "Invalid seed phrase" : {

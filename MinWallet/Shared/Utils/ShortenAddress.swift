@@ -96,6 +96,10 @@ extension String {
             return false
         }
     }
+
+    var isAdaHandleName: Bool {
+        self.range(of: MinWalletConstant.adaHandleRegex, options: .regularExpression) != nil
+    }
 }
 
 extension Data {
