@@ -9,6 +9,8 @@ struct ConfirmSendTokenView: View {
     private var appSetting: AppSetting
     @EnvironmentObject
     private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     private var isShowSignContract: Bool = false
     @State
@@ -225,8 +227,14 @@ struct ConfirmSendTokenView: View {
         Task {
             do {
                 let finalID = try await viewModel.finalizeAndSubmit()
-
-                self.navigator.popToRoot()
+                bannerState.infoContent = {
+                    bannerState.infoContentDefault(onViewTransaction: {
+                        finalID?.viewTransaction()
+                    })
+                }
+                bannerState.isShowingBanner = true
+                TokenManager.shared.reloadPortfolioOverview()
+                navigator.popToRoot()
             } catch {
                 hudState.showMsg(msg: error.localizedDescription)
             }

@@ -100,6 +100,11 @@ extension String {
     var isAdaHandleName: Bool {
         self.range(of: MinWalletConstant.adaHandleRegex, options: .regularExpression) != nil
     }
+
+    func viewTransaction() {
+        guard let url = URL(string: MinWalletConstant.transactionURL + "/transaction/" + self) else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
 }
 
 extension Data {

@@ -38,7 +38,7 @@ class TokenManager: ObservableObject {
         }
     }
 
-    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: MinWalletConstant.adaToken, minName: "Cardano")
+    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano")
 
     private init() {}
 
@@ -50,6 +50,12 @@ class TokenManager: ObservableObject {
         pnl24H = (portfolioOverview?.portfolioOverview.pnl24H.doubleValue ?? 0) / 1_000_000
         adaValue = (portfolioOverview?.portfolioOverview.adaValue.doubleValue ?? 0) / 1_000_000
         tokenAda.netValue = adaValue
+    }
+
+    func reloadPortfolioOverview() {
+        Task {
+            await getPortfolioOverview()
+        }
     }
 }
 
