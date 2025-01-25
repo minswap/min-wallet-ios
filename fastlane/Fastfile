@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 lane :beta do
@@ -22,8 +7,8 @@ lane :beta do
     issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
     key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
     is_key_content_base64: true,
-    duration: 1200, # optional (maximum 1200)
-    in_house: false # optional but may be required if using match/sigh
+    duration: 1200,
+    in_house: false
   )
   match(type: "appstore", readonly: is_ci, app_identifier: ["org.minswap.MinWallet", "org.minswap.MinWallet.OneSignalNotificationServiceExtension"])
   latest_build_number = latest_testflight_build_number
@@ -42,7 +27,7 @@ lane :beta do
   )
   upload_to_testflight(skip_waiting_for_build_processing: true)
   clean_build_artifacts
-  # commit_version_bump(message: "[skip ci] Version Bump", xcodeproj: "MinWallet.xcodeproj")
-  # add_git_tag
-  # push_to_git_remote
+  commit_version_bump(message: "[skip ci] Version Bump", xcodeproj: "MinWallet.xcodeproj")
+  add_git_tag
+  push_to_git_remote
 end
