@@ -7,7 +7,7 @@ import Combine
 @MainActor
 class SelectTokenViewModel: ObservableObject {
     @Published
-    var tokens: [TokenProtocol] = []
+    var tokens: [WrapTokenProtocol] = []
     @Published
     var keyword: String = ""
     @Published
@@ -39,7 +39,6 @@ class SelectTokenViewModel: ObservableObject {
                 { result, token in
                     result.appending([token.uniqueID: token])
                 })
-
         tokensSelected.enumerated()
             .forEach { idx, token in
                 self.cachedIndex[token?.uniqueID ?? ""] = idx
@@ -60,11 +59,12 @@ class SelectTokenViewModel: ObservableObject {
                 self.keyword = newData
                 //self.getTokens()
                 let rawTokens = self.rawTokens
-                self.tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
+                let _tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
+                self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
             }
             .store(in: &cancellables)
 
-        self.tokens = rawTokens
+        self.tokens = rawTokens.map({ WrapTokenProtocol(token: $0) })
         if self.tokens.count < 2 {
             self.getTokens()
         }
@@ -76,7 +76,8 @@ class SelectTokenViewModel: ObservableObject {
         Task {
             let tokens = try? await TokenManager.getYourToken()
             TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
-            self.tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
+            let _tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
+            self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
             switch screenType {
             case .initSelectedToken:
                 self.tokensSelected[TokenManager.shared.tokenAda.uniqueID] = TokenManager.shared.tokenAda
@@ -90,11 +91,13 @@ class SelectTokenViewModel: ObservableObject {
     }
 
     func loadMoreData(item: TokenProtocol) {
+        /*
         guard hasLoadMore, !isFetching else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
         if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
+         */
     }
 
     func toggleSelected(token: TokenProtocol) {

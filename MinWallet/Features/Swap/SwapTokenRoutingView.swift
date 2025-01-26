@@ -3,15 +3,11 @@ import FlowStacks
 
 
 struct SwapTokenRoutingView: View {
-    @Binding
-    var isShowRouting: Bool
     @EnvironmentObject
-    var viewModel: SwapTokenViewModel
+    private var viewModel: SwapTokenViewModel
 
     @Environment(\.partialSheetDismiss)
-    var onDismiss
-
-    var onRoutingSelected: ((WrapRouting) -> Void)?
+    private var onDismiss
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -27,36 +23,42 @@ struct SwapTokenRoutingView: View {
                         let routing = viewModel.wrapRoutings[index]
                         let isSelectedBinding = Binding<Bool>(
                             get: { routing.uniqueID == viewModel.routingSelected?.uniqueID },
-                            set: { newValue in }
+                            set: { _ in }
                         )
-                        SwapTokenRoutingItemView(wrapRouting: routing, title: routing.title, titleColor: index == 0 ? .colorInteractiveToneHighlight : .colorBaseTent, showRecommend: index == 0, isSelected: isSelectedBinding)
-                            .frame(height: 85)
-                            .padding(.top, .lg)
-                            .padding(.horizontal, .xl)
-                            .contentShape(.rect)
-                            .onTapGesture {
-                                onRoutingSelected?(viewModel.wrapRoutings[index])
-                                onDismiss?()
-                            }
+                        Color.clear.frame(height: .lg)
+                        SwapTokenRoutingItemView(
+                            wrapRouting: .constant(routing),
+                            title: routing.title,
+                            titleColor: index == 0 ? .colorInteractiveToneHighlight : .colorBaseTent,
+                            showRecommend: index == 0,
+                            isSelected: isSelectedBinding
+                        )
+                        .padding(.horizontal, .xl)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            viewModel.routingSelected = viewModel.wrapRoutings[index]
+                            viewModel.action.send(.routeSelected)
+                            onDismiss?()
+                        }
                     }
                 }
             }
-            .frame(maxHeight: min(CGFloat(85 * viewModel.wrapRoutings.count), UIScreen.main.bounds.height - 250))
             Spacer(minLength: 0)
             CustomButton(title: "Swap") {
-                isShowRouting = false
+                onDismiss?()
             }
             .frame(height: 56)
             .padding(.top, 40)
             .padding(.horizontal, .xl)
         }
-        .fixedSize(horizontal: false, vertical: true)
+        .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+        .presentSheetModifier()
     }
 }
 
 
 private struct SwapTokenRoutingItemView: View {
-    let wrapRouting: WrapRouting
+    @Binding var wrapRouting: WrapRouting
     let title: LocalizedStringKey?
     let titleColor: Color
     let showRecommend: Bool
@@ -118,6 +120,6 @@ private struct SwapTokenRoutingItemView: View {
 }
 
 #Preview {
-    SwapTokenRoutingView(isShowRouting: .constant(false))
+    SwapTokenRoutingView()
         .environmentObject(SwapTokenViewModel())
 }

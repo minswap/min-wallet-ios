@@ -88,7 +88,7 @@ struct MainCoordinator: View {
                             SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: screenType), onSelectToken: onSelectToken)
                                 .navigationBarHidden(true)
                         }
-                        
+
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)
 

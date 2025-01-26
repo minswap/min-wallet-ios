@@ -7,11 +7,11 @@ struct SelectTokenListItemView: View {
     private var isSelected: Bool
     @State
     private var isShowSelected: Bool = false
-    
-    init(token: TokenProtocol?, isSelected: Binding<Bool>, isShowSelected: Bool = true) {
+
+    init(token: TokenProtocol?, isSelected: Binding<Bool>, isShowSelected: Bool) {
         self.token = token
         self._isSelected = isSelected
-        self._isShowSelected = State(wrappedValue: isShowSelected)
+        self.isShowSelected = isShowSelected
     }
 
     var body: some View {
@@ -49,10 +49,17 @@ struct SelectTokenListItemView: View {
             Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
         )
         .padding(.horizontal, 16)
+        .background {
+            if isShowSelected {
+                return Color.clear
+            }
+
+            return isSelected ? Color.colorBorderPrimaryTer : Color.clear
+        }
     }
 }
 
 #Preview {
-    SelectTokenListItemView(token: TokenManager.shared.tokenAda, isSelected: .constant(true))
+    SelectTokenListItemView(token: TokenManager.shared.tokenAda, isSelected: .constant(true), isShowSelected: false)
         .environmentObject(AppSetting.shared)
 }

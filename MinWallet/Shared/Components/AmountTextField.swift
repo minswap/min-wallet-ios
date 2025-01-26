@@ -4,11 +4,12 @@ import SwiftUI
 struct AmountTextField: View {
     @Binding var value: String
     @State var maxValue: Double?
+    @State var fontPlaceHolder: Font = .paragraphSmall
 
     var body: some View {
         TextField("", text: $value)
             .keyboardType(.decimalPad)
-            .placeholder("0.0", when: value.isEmpty)
+            .placeholder("0.0", font: fontPlaceHolder, when: value.isEmpty)
             .lineLimit(1)
             .onChange(of: value) { newValue in
                 let filtered = newValue.replacingOccurrences(of: ",", with: ".").filter { "0123456789.".contains($0) }

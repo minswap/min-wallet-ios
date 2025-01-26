@@ -16,7 +16,7 @@ struct SelectTokenView: View {
     private var isFocus: Bool
     @Environment(\.partialSheetDismiss)
     var onDismiss
-    
+
     init(
         viewModel: SelectTokenViewModel,
         onSelectToken: (([TokenProtocol]) -> Void)?
@@ -25,7 +25,7 @@ struct SelectTokenView: View {
         self.onSelectToken = onSelectToken
     }
 
-    @StateObject
+    @ObservedObject
     private var viewModel: SelectTokenViewModel
 
     var onSelectToken: (([TokenProtocol]) -> Void)?
@@ -62,16 +62,6 @@ struct SelectTokenView: View {
                         }
                     }
                 })
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("Done") {
-                    self.isFocus = false
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
         }
         .background(.colorBaseBackground)
     }
@@ -138,23 +128,24 @@ struct SelectTokenView: View {
                     LazyVStack(
                         spacing: 0,
                         content: {
-                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                                let item = viewModel.tokens[index]
+                            ForEach($viewModel.tokens) { $item in
+                                let item = $item.wrappedValue.token
                                 if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
                                     let combinedBinding = Binding<Bool>(
                                         get: { viewModel.tokensSelected[item.uniqueID] != nil || item.uniqueID == MinWalletConstant.adaToken },
                                         set: { _ in }
                                     )
-                                    SelectTokenListItemView(token: item, isSelected: combinedBinding)
+                                    SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: true)
                                         .contentShape(.rect)
                                         .onTapGesture {
                                             viewModel.toggleSelected(token: item)
                                         }
                                 } else {
-                                    SelectTokenListItemView(token: item, isSelected: .constant(false), isShowSelected: false)
-                                        .background {
-                                            viewModel.tokensSelected[item.uniqueID] != nil ? Color.colorBorderPrimaryTer : Color.clear
-                                        }
+                                    let combinedBinding = Binding<Bool>(
+                                        get: { viewModel.tokensSelected[item.uniqueID] != nil },
+                                        set: { _ in }
+                                    )
+                                    SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: false)
                                         .contentShape(.rect)
                                         .onTapGesture {
                                             viewModel.toggleSelected(token: item)
@@ -162,11 +153,6 @@ struct SelectTokenView: View {
                                             let tokenSelected = viewModel.tokenCallBack
                                             onSelectToken?(tokenSelected)
                                         }
-                                    /*
-                                        .onAppear() {
-                                            viewModel.loadMoreData(item: item)
-                                        }
-                                     */
                                 }
                             }
                         })

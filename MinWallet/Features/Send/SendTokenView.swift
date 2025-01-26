@@ -87,7 +87,7 @@ struct SendTokenView: View {
                         Button(
                             action: {
                                 $isShowSelectToken.showSheet()
-                                
+
                             },
                             label: {
                                 Text("Add Token")
@@ -133,13 +133,15 @@ struct SendTokenView: View {
                 screenTitle: " ",
                 actionLeft: {
                     navigator.popToRoot()
-                }))
+                })
+        )
         .presentSheet(isPresented: $isShowSelectToken) {
             SelectTokenView(
                 viewModel: SelectTokenViewModel(tokensSelected: viewModel.tokens.map({ $0.token }), screenType: .sendToken),
                 onSelectToken: { tokens in
                     viewModel.addToken(tokens: tokens)
-                })
+                }
+            )
             .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.85)
             .presentSheetModifier()
         }

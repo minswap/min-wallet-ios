@@ -41,7 +41,7 @@ extension View {
     func presentSheet<Modal: View>(
         isPresented: Binding<Bool>,
         height: CGFloat? = nil,
-        content: @escaping () -> Modal
+        @ViewBuilder content: @escaping () -> Modal
     ) -> some View {
         modifier(
             ModalTypeView(

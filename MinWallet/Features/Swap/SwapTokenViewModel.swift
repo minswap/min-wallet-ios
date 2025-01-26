@@ -6,15 +6,19 @@ import MinWalletAPI
 class SwapTokenViewModel: ObservableObject {
 
     @Published
-    var tokenPay: TokenProtocol?
+    var tokenPay: WrapTokenSend
     @Published
-    var tokenReceive: TokenProtocol?
+    var tokenReceive: WrapTokenSend
     @Published
     var isShowInfo: Bool = false
     @Published
     var isShowRouting: Bool = false
     @Published
     var isShowSwapSetting: Bool = false
+    @Published
+    var isShowSelectReceiveToken: Bool = false
+    @Published
+    var isShowSelectPayToken: Bool = false
 
     @Published
     var wrapRoutings: [WrapRouting] = []
@@ -32,6 +36,9 @@ class SwapTokenViewModel: ObservableObject {
     var isLoadingRouting: Bool = true
 
     init() {
+        tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
+        tokenReceive = WrapTokenSend(token: TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? "")))
+
         action
             .sink { [weak self] action in
                 self?.handleAction(action)
@@ -57,23 +64,22 @@ class SwapTokenViewModel: ObservableObject {
         switch action {
         case .initSwapToken:
             Task {
-                tokenPay = TokenManager.shared.tokenAda
-                tokenReceive = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
                 await getRouting()
                 routingSelected = wrapRoutings.first
             }
 
         case let .selectTokenPay(token):
             Task {
-                tokenPay = token
+                guard let token = token, token.uniqueID != tokenReceive.uniqueID, token.uniqueID != tokenPay.uniqueID else { return }
+                tokenPay = WrapTokenSend(token: token)
                 routingSelected = nil
                 await getRouting()
                 routingSelected = wrapRoutings.first
             }
-
         case let .selectTokenReceive(token):
             Task {
-                tokenReceive = token
+                guard let token = token, token.uniqueID != tokenPay.uniqueID, token.uniqueID != tokenReceive.uniqueID else { return }
+                tokenReceive = WrapTokenSend(token: token)
                 routingSelected = nil
                 await getRouting()
                 routingSelected = wrapRoutings.first
@@ -85,6 +91,10 @@ class SwapTokenViewModel: ObservableObject {
                 await getRouting()
                 routingSelected = wrapRoutings.first(where: { $0.uniqueID == routingSelected?.uniqueID })
             }
+
+        case .routeSelected:
+            //TODO: calculate fee
+            break
         }
     }
 
@@ -93,8 +103,8 @@ class SwapTokenViewModel: ObservableObject {
         let query = RoutedPoolsByPairQuery(
             isApplied: swapSetting.predictSwapPrice,
             pair: InputPair(
-                assetA: InputAsset(currencySymbol: tokenPay?.currencySymbol ?? "", tokenName: tokenPay?.tokenName ?? ""),
-                assetB: InputAsset(currencySymbol: tokenReceive?.currencySymbol ?? "", tokenName: tokenReceive?.tokenName ?? "")))
+                assetA: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
+                assetB: InputAsset(currencySymbol: tokenReceive.token.currencySymbol, tokenName: tokenReceive.token.tokenName)))
 
         let routing = try? await MinWalletService.shared.fetch(query: query)
         let pools = routing?.routedPoolsByPair.pools ?? []
@@ -105,7 +115,7 @@ class SwapTokenViewModel: ObservableObject {
             let uniqueIDLPAsset = routing.routing.routing.map { $0.currencySymbol + "." + $0.tokenName }
             let poolsInRouting = pools.filter { uniqueIDLPAsset.contains($0.lpAsset.currencySymbol + "." + $0.lpAsset.tokenName) }
             wrapRoutings[idx].pools = poolsInRouting
-            wrapRoutings[idx].calculateRoute(tokenX: self.tokenPay, tokenZ: self.tokenReceive, isAutoRoute: swapSetting.autoRouter)
+            wrapRoutings[idx].calculateRoute(tokenX: self.tokenPay.token, tokenZ: self.tokenReceive.token, isAutoRoute: swapSetting.autoRouter)
         }
 
         switch swapSetting.routeSorting {
@@ -133,7 +143,7 @@ class SwapTokenViewModel: ObservableObject {
         }
 
         self.wrapRoutings = wrapRoutings
-        isLoadingRouting = true
+        isLoadingRouting = false
     }
 }
 
@@ -146,5 +156,6 @@ extension SwapTokenViewModel {
         case routeSorting
         case selectTokenPay(token: TokenProtocol?)
         case selectTokenReceive(token: TokenProtocol?)
+        case routeSelected
     }
 }
