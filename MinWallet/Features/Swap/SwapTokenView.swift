@@ -22,25 +22,29 @@ struct SwapTokenView: View {
     private var isShowSignContract: Bool = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                contentView
-                Spacer()
-                bottomView
-                CustomButton(title: "Swap") {
-                    viewModel.swapToken(
-                        appSetting: appSetting,
-                        signContract: {
-                            isShowSignContract = true
-                        },
-                        signSuccess: {
-                            swapTokenSuccess()
-                        })
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 0) {
+                    contentView
+                    Spacer()
+                    bottomView
                 }
-                .frame(height: 56)
-                .padding(.horizontal, .xl)
-                .padding(.top, 24)
             }
+            Spacer()
+            CustomButton(title: "Swap") {
+                hideKeyboard()
+                viewModel.swapToken(
+                    appSetting: appSetting,
+                    signContract: {
+                        isShowSignContract = true
+                    },
+                    signSuccess: {
+                        swapTokenSuccess()
+                    })
+            }
+            .frame(height: 56)
+            .padding(.horizontal, .xl)
+            .padding(.top, 24)
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -61,6 +65,7 @@ struct SwapTokenView: View {
                     navigator.pop()
                 },
                 actionRight: {
+                    hideKeyboard()
                     $viewModel.isShowSwapSetting.showSheet()
                 })
         )
@@ -128,9 +133,15 @@ struct SwapTokenView: View {
                 Text("Half")
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorInteractiveToneHighlight)
+                    .onTapGesture {
+                        viewModel.action.send(.setHalfAmount)
+                    }
                 Text("Max")
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorInteractiveToneHighlight)
+                    .onTapGesture {
+                        viewModel.action.send(.setMaxAmount)
+                    }
             }
             HStack(alignment: .center, spacing: 6) {
                 AmountTextField(
@@ -139,7 +150,7 @@ struct SwapTokenView: View {
                     fontPlaceHolder: .titleH4
                 )
                 .font(.titleH4)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                .foregroundStyle(.colorBaseTent)
                 .focused($focusedField, equals: .pay)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
@@ -163,6 +174,7 @@ struct SwapTokenView: View {
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .contentShape(.rect)
                 .onTapGesture {
+                    hideKeyboard()
                     $viewModel.isShowSelectPayToken.showSheet()
                 }
             }
@@ -200,8 +212,9 @@ struct SwapTokenView: View {
                     fontPlaceHolder: .titleH4
                 )
                 .font(.titleH4)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                .foregroundStyle(.colorBaseTent)
                 .focused($focusedField, equals: .receive)
+                .disabled(true)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
@@ -223,6 +236,7 @@ struct SwapTokenView: View {
                 .padding(.md)
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .onTapGesture {
+                    hideKeyboard()
                     $viewModel.isShowSelectReceiveToken.showSheet()
                 }
             }
@@ -298,6 +312,7 @@ struct SwapTokenView: View {
             .contentShape(.rect)
             .onTapGesture {
                 guard !viewModel.isLoadingRouting else { return }
+                hideKeyboard()
                 $viewModel.isShowRouting.showSheet()
             }
         }
@@ -332,6 +347,7 @@ struct SwapTokenView: View {
         .padding(.xl)
         .containerShape(.rect)
         .onTapGesture {
+            hideKeyboard()
             $viewModel.isShowInfo.showSheet()
         }
     }

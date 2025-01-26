@@ -45,6 +45,15 @@ class SwapTokenViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        $tokenPay
+            .map({ Double($0.amount) ?? 0 })
+            .removeDuplicates()
+            .debounce(for: .milliseconds(400), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] amount in
+                self?.action.send(.amountPayChanged(amount: amount))
+            })
+            .store(in: &cancellables)
+
         action.send(.initSwapToken)
     }
 
@@ -93,6 +102,14 @@ class SwapTokenViewModel: ObservableObject {
             }
 
         case .routeSelected:
+            //TODO: calculate fee
+            break
+
+        case .setMaxAmount:
+            tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+        case .setHalfAmount:
+            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+        case let .amountPayChanged(amount):
             //TODO: calculate fee
             break
         }
@@ -157,5 +174,8 @@ extension SwapTokenViewModel {
         case selectTokenPay(token: TokenProtocol?)
         case selectTokenReceive(token: TokenProtocol?)
         case routeSelected
+        case setMaxAmount
+        case setHalfAmount
+        case amountPayChanged(amount: Double)
     }
 }
