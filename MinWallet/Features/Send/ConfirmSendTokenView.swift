@@ -203,18 +203,13 @@ struct ConfirmSendTokenView: View {
                     navigator.pop()
                 })
         )
-        .popupSheet(
-            isPresented: $isShowSignContract,
-            content: {
-                SignContractView(
-                    isShowSignContract: $isShowSignContract,
-                    onSignSuccess: {
-                        authenticationSuccess()
-                    }
-                )
-                .padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    authenticationSuccess()
+                }
+            )
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()

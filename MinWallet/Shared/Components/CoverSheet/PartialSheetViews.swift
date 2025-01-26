@@ -15,6 +15,7 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                 .opacity(isPresented ? 1 : 0)
                 .onTapGesture {
                     withAnimation {
+                        content.hideKeyboard()
                         isPresented.toggle()
                     }
                 }
@@ -29,6 +30,7 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
             \.partialSheetDismiss,
             {
                 withAnimation {
+                    content.hideKeyboard()
                     isPresented = false
                 }
             })
@@ -48,6 +50,10 @@ extension View {
                 modal: content)
         )
     }
+
+    func presentSheetModifier() -> some View {
+        modifier(PresentSheetModifier())
+    }
 }
 
 struct PartialSheetDismissKey: EnvironmentKey {
@@ -66,6 +72,22 @@ extension Binding where Value == Bool {
     func showSheet() {
         withAnimation {
             self.wrappedValue = true
+        }
+    }
+}
+
+struct PresentSheetModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        VStack(spacing: 0) {
+            Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
+                .padding(.vertical, .md)
+            content
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .background {
+            RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
+                .fill(.colorBaseBackground)
+                .ignoresSafeArea()
         }
     }
 }

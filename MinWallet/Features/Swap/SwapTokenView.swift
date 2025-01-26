@@ -83,18 +83,13 @@ struct SwapTokenView: View {
             SwapTokenSettingView(viewModel: viewModel)
                 .padding(.xl)
         }
-        .popupSheet(
-            isPresented: $isShowSignContract,
-            content: {
-                SignContractView(
-                    isShowSignContract: $isShowSignContract,
-                    onSignSuccess: {
-                        swapTokenSuccess()
-                    }
-                )
-                .padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    swapTokenSuccess()
+                }
+            )
+        }
     }
 
     @ViewBuilder
