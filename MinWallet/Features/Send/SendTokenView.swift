@@ -9,18 +9,17 @@ struct SendTokenView: View {
     }
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var tokenManager: TokenManager
     @FocusState
     private var focusedField: Focusable?
-
     @State
     private var amount: String = ""
     @StateObject
     private var viewModel: SendTokenViewModel
-
-    @EnvironmentObject
-    var tokenManager: TokenManager
+    @State
+    private var isShowSelectToken: Bool = false
 
     init(viewModel: SendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -87,15 +86,8 @@ struct SendTokenView: View {
 
                         Button(
                             action: {
-                                navigator.presentSheet(
-                                    .selectToken(
-                                        tokensSelected: viewModel.tokens.map({ $0.token }),
-                                        onSelectToken: { tokens in
-                                            DispatchQueue.main.async {
-                                                viewModel.addToken(tokens: tokens)
-
-                                            }
-                                        }))
+                                $isShowSelectToken.showSheet()
+                                
                             },
                             label: {
                                 Text("Add Token")
@@ -142,6 +134,15 @@ struct SendTokenView: View {
                 actionLeft: {
                     navigator.popToRoot()
                 }))
+        .presentSheet(isPresented: $isShowSelectToken) {
+            SelectTokenView(
+                viewModel: SelectTokenViewModel(tokensSelected: viewModel.tokens.map({ $0.token }), screenType: .sendToken),
+                onSelectToken: { tokens in
+                    viewModel.addToken(tokens: tokens)
+                })
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.85)
+            .presentSheetModifier()
+        }
     }
 }
 

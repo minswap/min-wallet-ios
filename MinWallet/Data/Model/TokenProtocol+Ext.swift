@@ -433,7 +433,9 @@ struct TokenDefault: TokenProtocol {
 
     var percentChange: Double { 0 }
 
-    var priceValue: Double { 0 }
+    var priceValue: Double {
+        netValue
+    }
 
     var subPriceValue: Double { 0 }
 

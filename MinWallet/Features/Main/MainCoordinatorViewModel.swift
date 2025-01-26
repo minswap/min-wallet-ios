@@ -26,7 +26,6 @@ extension MainCoordinatorViewModel {
         case restoreWallet(_ screen: RestoreWalletScreen)
         case walletSetting(_ screen: WalletSettingScreen)
         case sendToken(_ screen: SendTokenScreen)
-        case selectToken(tokensSelected: [TokenProtocol?], onSelectToken: (([TokenProtocol]) -> Void)?)
         case receiveToken
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
@@ -131,7 +130,6 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.gettingStarted, .gettingStarted),
             (.about, .about),
             (.changePassword, .changePassword),
-            (.selectToken, .selectToken),
             (.receiveToken, .receiveToken),
             (.searchToken, .searchToken),
             (.orderHistory, .orderHistory):

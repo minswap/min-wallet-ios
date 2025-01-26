@@ -98,10 +98,16 @@ class SelectTokenViewModel: ObservableObject {
     }
 
     func toggleSelected(token: TokenProtocol) {
-        guard token.uniqueID != MinWalletConstant.adaToken else { return }
-        if tokensSelected[token.uniqueID] != nil {
-            tokensSelected.removeValue(forKey: token.uniqueID)
-        } else {
+        switch screenType {
+        case .initSelectedToken, .sendToken:
+            guard token.uniqueID != MinWalletConstant.adaToken else { return }
+            if tokensSelected[token.uniqueID] != nil {
+                tokensSelected.removeValue(forKey: token.uniqueID)
+            } else {
+                tokensSelected[token.uniqueID] = token
+            }
+        case .swapToken:
+            tokensSelected.removeAll()
             tokensSelected[token.uniqueID] = token
         }
     }

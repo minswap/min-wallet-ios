@@ -14,7 +14,9 @@ struct SelectTokenView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
-
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
+    
     init(
         viewModel: SelectTokenViewModel,
         onSelectToken: (([TokenProtocol]) -> Void)?
@@ -48,7 +50,7 @@ struct SelectTokenView: View {
                                 navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected)))
                             case .sendToken:
                                 onSelectToken?(tokenSelected)
-                                navigator.dismiss()
+                                onDismiss?()
                             case .swapToken:
                                 break
                             }
@@ -149,14 +151,22 @@ struct SelectTokenView: View {
                                             viewModel.toggleSelected(token: item)
                                         }
                                 } else {
-                                    TokenListItemView(token: item)
-                                        .onTapGesture {
-                                            navigator.dismiss()
-                                            onSelectToken?([item])
+                                    SelectTokenListItemView(token: item, isSelected: .constant(false), isShowSelected: false)
+                                        .background {
+                                            viewModel.tokensSelected[item.uniqueID] != nil ? Color.colorBorderPrimaryTer : Color.clear
                                         }
+                                        .contentShape(.rect)
+                                        .onTapGesture {
+                                            viewModel.toggleSelected(token: item)
+                                            onDismiss?()
+                                            let tokenSelected = viewModel.tokenCallBack
+                                            onSelectToken?(tokenSelected)
+                                        }
+                                    /*
                                         .onAppear() {
                                             viewModel.loadMoreData(item: item)
                                         }
+                                     */
                                 }
                             }
                         })
@@ -171,5 +181,6 @@ struct SelectTokenView: View {
 }
 
 #Preview {
-    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .initSelectedToken), onSelectToken: { _ in })
+    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .swapToken), onSelectToken: { _ in })
+        .environmentObject(AppSetting.shared)
 }

@@ -57,7 +57,7 @@ class SwapTokenViewModel: ObservableObject {
         switch action {
         case .initSwapToken:
             Task {
-                tokenPay = TokenDefault(symbol: "", tName: "")
+                tokenPay = TokenManager.shared.tokenAda
                 tokenReceive = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
                 await getRouting()
                 routingSelected = wrapRoutings.first

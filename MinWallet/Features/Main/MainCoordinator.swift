@@ -88,12 +88,7 @@ struct MainCoordinator: View {
                             SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: screenType), onSelectToken: onSelectToken)
                                 .navigationBarHidden(true)
                         }
-
-                    //TODO: Cuongnv chuyen sang present bt
-                    case let .selectToken(tokensSelected, onSelectToken):
-                        SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: .sendToken), onSelectToken: onSelectToken)
-                    //                            .presentationDragIndicator(.visible)
-
+                        
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)
 

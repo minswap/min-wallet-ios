@@ -25,6 +25,11 @@ struct SwapTokenView: View {
     @State
     private var isShowSignContract: Bool = false
 
+    @State
+    private var isShowSelectReceiveToken: Bool = false
+    @State
+    private var isShowSelectPayToken: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             contentView
@@ -90,10 +95,40 @@ struct SwapTokenView: View {
                 }
             )
         }
+        .presentSheet(isPresented: $isShowSelectPayToken) {
+            SelectTokenView(
+                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenPay], screenType: .swapToken),
+                onSelectToken: { tokens in
+                    self.viewModel.action.send(.selectTokenPay(token: tokens.first))
+                })
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .presentSheetModifier()
+        }
+        .presentSheet(isPresented: $isShowSelectReceiveToken) {
+            SelectTokenView(
+                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenReceive], screenType: .swapToken),
+                onSelectToken: { tokens in
+                    self.viewModel.action.send(.selectTokenReceive(token: tokens.first))
+                })
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .presentSheetModifier()
+        }
     }
 
     @ViewBuilder
     private var contentView: some View {
+        tokenPayView
+        Image(.icSwap)
+            .resizable().frame(width: 36, height: 36)
+            .padding(.top, -16)
+            .padding(.bottom, -16)
+            .zIndex(999)
+        tokenReceiveView
+        routingView
+    }
+
+    @ViewBuilder
+    private var tokenPayView: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .lastTextBaseline, spacing: 6) {
                 Text("You pay")
@@ -121,7 +156,8 @@ struct SwapTokenView: View {
                         isVerified: viewModel.tokenPay?.isVerified,
                         size: .init(width: 24, height: 24)
                     )
-                    Text(viewModel.tokenPay?.name)
+                    Text(viewModel.tokenPay?.adaName)
+                        .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Image(.icDown)
@@ -134,12 +170,7 @@ struct SwapTokenView: View {
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .contentShape(.rect)
                 .onTapGesture {
-                    navigator.presentSheet(
-                        .selectToken(
-                            tokensSelected: [viewModel.tokenReceive],
-                            onSelectToken: { token in
-                                self.viewModel.action.send(.selectTokenReceive(token: token.first))
-                            }))
+                    $isShowSelectPayToken.showSheet()
                 }
             }
             HStack(alignment: .center, spacing: 4) {
@@ -162,11 +193,9 @@ struct SwapTokenView: View {
         )
         .padding(.horizontal, .xl)
         .padding(.top, .lg)
-        Image(.icSwap)
-            .resizable().frame(width: 36, height: 36)
-            .padding(.top, -16)
-            .padding(.bottom, -16)
-            .zIndex(999)
+    }
+    @ViewBuilder
+    private var tokenReceiveView: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("You receive")
                 .font(.paragraphSmall)
@@ -185,7 +214,8 @@ struct SwapTokenView: View {
                             isVerified: tokenReceive.isVerified,
                             size: .init(width: 24, height: 24)
                         )
-                        Text(tokenReceive.name)
+                        Text(tokenReceive.adaName)
+                            .lineLimit(1)
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
                     } else {
@@ -207,12 +237,7 @@ struct SwapTokenView: View {
                 .padding(.md)
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .onTapGesture {
-                    navigator.presentSheet(
-                        .selectToken(
-                            tokensSelected: [viewModel.tokenPay],
-                            onSelectToken: { token in
-                                self.viewModel.action.send(.selectTokenPay(token: token.first))
-                            }))
+                    $isShowSelectReceiveToken.showSheet()
                 }
             }
             HStack(alignment: .center, spacing: 4) {
@@ -232,6 +257,10 @@ struct SwapTokenView: View {
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
+    }
+    
+    @ViewBuilder
+    private var routingView: some View {
         if let routingSelected = viewModel.routingSelected {
             VStack(spacing: .lg) {
                 HStack(spacing: 4) {
@@ -287,7 +316,7 @@ struct SwapTokenView: View {
             }
         }
     }
-
+    
     @ViewBuilder
     private var bottomView: some View {
         Color.colorBorderPrimarySub.frame(height: 1)

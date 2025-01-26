@@ -5,10 +5,13 @@ struct SelectTokenListItemView: View {
     private let token: TokenProtocol?
     @Binding
     private var isSelected: Bool
-
-    init(token: TokenProtocol?, isSelected: Binding<Bool>) {
+    @State
+    private var isShowSelected: Bool = false
+    
+    init(token: TokenProtocol?, isSelected: Binding<Bool>, isShowSelected: Bool = true) {
         self.token = token
         self._isSelected = isSelected
+        self._isShowSelected = State(wrappedValue: isShowSelected)
     }
 
     var body: some View {
@@ -36,9 +39,11 @@ struct SelectTokenListItemView: View {
                 .foregroundStyle(.colorBaseTent)
                 .minimumScaleFactor(0.5)
                 .layoutPriority(999)
-            Image(isSelected ? .icChecked : .icUnchecked)
-                .fixSize(20)
-                .padding(.leading, 4)
+            if isShowSelected {
+                Image(isSelected ? .icChecked : .icUnchecked)
+                    .fixSize(20)
+                    .padding(.leading, 4)
+            }
         }
         .overlay(
             Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
