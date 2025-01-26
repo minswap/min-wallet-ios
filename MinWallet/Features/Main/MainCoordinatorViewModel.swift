@@ -19,7 +19,6 @@ extension MainCoordinatorViewModel {
         case gettingStarted
         case tokenDetail(token: TokenProtocol)
         case about
-        case language
         case changePassword
         case changePasswordSuccess(_ screenType: ChangePasswordSuccessView.ScreenType)
         case forgotPassword(_ screenType: ChangePasswordView.ScreenType)
@@ -131,7 +130,6 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.policy, .policy),
             (.gettingStarted, .gettingStarted),
             (.about, .about),
-            (.language, .language),
             (.changePassword, .changePassword),
             (.selectToken, .selectToken),
             (.receiveToken, .receiveToken),

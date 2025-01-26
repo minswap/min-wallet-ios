@@ -24,8 +24,6 @@ struct MainCoordinator: View {
                         TokenDetailView(viewModel: TokenDetailViewModel(token: token)).navigationBarHidden(true)
                     case .about:
                         AboutView().navigationBarHidden(true)
-                    case .language:
-                        LanguageView().interactiveDismissDisabled(false)
                     case .changePassword:
                         ChangePasswordView(screenType: .setting).navigationBarHidden(true)
                     case let .changePasswordSuccess(screenType):
