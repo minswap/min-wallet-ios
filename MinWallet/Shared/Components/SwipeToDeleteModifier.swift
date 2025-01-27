@@ -4,6 +4,7 @@ import SwiftUI
 struct SwipeToDeleteModifier: ViewModifier {
     @Binding var offset: CGFloat
     @Binding var isDeleted: Bool
+    @GestureState private var isDragging = false
 
     @State var height: CGFloat = 68
 
@@ -19,6 +20,9 @@ struct SwipeToDeleteModifier: ViewModifier {
                         .resizable()
                         .frame(width: 20, height: 20)
                         .padding(.trailing, ._3xl)
+                        .onTapGesture {
+                            onDelete()
+                        }
                 }
                 .frame(height: geometry.size.height - 4)
                 .background(Color.colorInteractiveDangerDefault)
@@ -31,29 +35,21 @@ struct SwipeToDeleteModifier: ViewModifier {
                     .offset(x: offset)
                     .gesture(
                         DragGesture()
-                            .onChanged { gesture in
-                                guard gesture.translation.width < 0 else { return }
-                                offset = gesture.translation.width
+                            .updating($isDragging) { value, state, _ in
+                                state = true
                             }
-                            .onEnded { _ in
-                                if offset < -100 {
-                                    withAnimation {
-                                        isDeleted = true
-
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-                                            onDelete()
-                                        }
-                                    }
-                                } else {
-                                    withAnimation {
-                                        offset = 0
-                                    }
+                            .onChanged { gesture in
+                                offset = max(min(gesture.translation.width, 0), -68)
+                            }
+                            .onEnded { gesture in
+                                withAnimation {
+                                    offset = gesture.translation.width < -30 ? -68 : 0
                                 }
                             }
                     )
             }
             .opacity(isDeleted ? 0 : 1)
-            //            .animation(.easeInOut(duration: 0.2), value: offset)
+            //.animation(.easeInOut(duration: 0.2), value: offset)
         }
         .frame(height: height)
     }

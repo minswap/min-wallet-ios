@@ -9,10 +9,12 @@ struct TokenListItemView: View {
 
     let token: TokenProtocol?
     let showSubPrice: Bool
+    let showBottomLine: Bool
 
-    init(token: TokenProtocol?, showSubPrice: Bool = false) {
+    init(token: TokenProtocol?, showSubPrice: Bool = false, showBottomLine: Bool = true) {
         self.token = token
         self.showSubPrice = showSubPrice
+        self.showBottomLine = showBottomLine
     }
 
     var body: some View {
@@ -75,7 +77,7 @@ struct TokenListItemView: View {
             }
             .padding(.vertical, 14)
             .overlay(
-                Rectangle().frame(height: 1).foregroundColor(.colorBorderItem), alignment: .bottom
+                Rectangle().frame(height: 1).foregroundColor(showBottomLine ? .colorBorderItem : .clear), alignment: .bottom
             )
         }
         .padding(.horizontal, 16)

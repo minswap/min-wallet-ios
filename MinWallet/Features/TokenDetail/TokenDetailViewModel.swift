@@ -68,7 +68,7 @@ class TokenDetailViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
-        isFav = AppSetting.shared.tokenFav.contains(token.currencySymbol + "." + token.tokenName)
+        isFav = UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == token.uniqueID })
 
         getTokenDetail()
         getRickScore()

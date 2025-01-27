@@ -75,6 +75,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         let deviceTokenString = deviceToken.hexString
         UserDataManager.shared.deviceToken = deviceTokenString
     }
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return .portrait
+    }
 }
 
 

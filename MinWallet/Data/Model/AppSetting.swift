@@ -96,15 +96,7 @@ class AppSetting: ObservableObject {
             objectWillChange.send()
         }
     }
-
-    ///symbol + . +  token name
-    @UserDefault("token_fav", defaultValue: [])
-    var tokenFav: [String] {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-
+    
     var authenticationType: AuthenticationType {
         get { AuthenticationType(rawValue: securityType) ?? .biometric }
         set { securityType = newValue.rawValue }
@@ -132,7 +124,6 @@ class AppSetting: ObservableObject {
 
     @MainActor func deleteAccount() {
         isLogin = false
-        tokenFav = []
         authenticationType = .biometric
         TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)

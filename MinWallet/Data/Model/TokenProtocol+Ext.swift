@@ -3,6 +3,75 @@ import Then
 import MinWalletAPI
 
 
+extension TopAssetQuery.Data.TopAsset: TokenProtocol {
+    var currencySymbol: String {
+        asset.currencySymbol
+    }
+    
+    var tokenName: String {
+        asset.tokenName
+    }
+    
+    var isVerified: Bool {
+        asset.metadata?.isVerified ?? false
+    }
+    
+    var ticker: String {
+        asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
+    }
+    
+    var name: String {
+        asset.metadata?.name ?? ""
+    }
+    
+    var percentChange: Double {
+        Double(priceChange24h) ?? 0
+    }
+    
+    var priceValue: Double {
+        Double(price) ?? 0
+    }
+    
+    var subPriceValue: Double {
+        0
+    }
+    
+    var category: [String] {
+        asset.details?.categories ?? []
+    }
+    
+    var socialLinks: [SocialLinks: String] {
+        guard let socialLinks = asset.details?.socialLinks else { return [:] }
+        var links: [SocialLinks: String] = [:]
+        if let coinGecko = socialLinks.coinGecko {
+            links[.coinGecko] = coinGecko
+        }
+        if let coinMarketCap = socialLinks.coinMarketCap {
+            links[.coinMarketCap] = coinMarketCap
+        }
+        if let discord = socialLinks.discord {
+            links[.discord] = discord
+        }
+        if let telegram = socialLinks.telegram {
+            links[.telegram] = telegram
+        }
+        if let telegram = socialLinks.telegram {
+            links[.telegram] = telegram
+        }
+        if let twitter = socialLinks.twitter {
+            links[.twitter] = twitter
+        }
+        if let website = socialLinks.website {
+            links[.website] = website
+        }
+        return links
+    }
+    
+    var decimals: Int {
+        asset.metadata?.decimals ?? 0
+    }
+}
+
 extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
     var currencySymbol: String {
         asset.currencySymbol

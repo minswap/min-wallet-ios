@@ -7,6 +7,8 @@ struct TokenDetailView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var appSetting: AppSetting
+    @EnvironmentObject
+    var userInfo: UserInfo
     @StateObject
     var tokenManager: TokenManager = TokenManager.shared
     @StateObject

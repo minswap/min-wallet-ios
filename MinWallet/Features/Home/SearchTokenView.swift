@@ -21,6 +21,14 @@ struct SearchTokenView: View {
                         .placeholder("Search", when: viewModel.keyword.isEmpty)
                         .focused($isFocus)
                         .lineLimit(1)
+                    if !viewModel.keyword.isBlank {
+                        Image(.icCloseFill)
+                            .fixSize(16)
+                            .onTapGesture {
+                                viewModel.keyword = ""
+                            }
+                            .padding(.horizontal, .md)
+                    }
                 }
                 .padding(.md)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
@@ -34,47 +42,13 @@ struct SearchTokenView: View {
             }
             .padding(.leading, .xl)
             .padding(.top, .lg)
-            if !viewModel.recentSearch.isEmpty {
-                VStack(alignment: .leading, spacing: .md) {
-                    HStack {
-                        Text("Recent searches")
-                            .font(.paragraphXSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        Spacer()
-                        Image(.icDelete)
-                            .resizable()
-                            .frame(width: .xl, height: .xl)
-                            .onTapGesture {
-                                viewModel.clearRecentSearch()
-                            }
-                    }
-                    .frame(height: 32)
-                    .padding(.top, .lg)
-                    .padding(.horizontal, .xl)
-                    HStack {
-                        ForEach(viewModel.recentSearch, id: \.self) { token in
-                            Text(token)
-                                .font(.paragraphXMediumSmall)
-                                .foregroundStyle(.colorBaseTent)
-                                .padding(.horizontal, .md)
-                                .frame(height: 40)
-                                .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
-                                .onTapGesture {
-                                    viewModel.keyword = token
-                                }
-                        }
-                    }
-                    .padding(.horizontal, .xl)
-                    .padding(.bottom, .md)
-                }
-            }
             ScrollView {
                 if viewModel.showSkeleton {
                     ForEach(0..<20, id: \.self) { index in
                         TokenListItemSkeletonView()
                     }
-                    .padding(.top, .xl)
-                } else if viewModel.tokens.isEmpty {
+                    .padding(.top, .lg)
+                } else if viewModel.tokens.isEmpty && viewModel.tokensFav.isEmpty {
                     HStack {
                         Spacer()
                         Text("No data")
@@ -86,44 +60,136 @@ struct SearchTokenView: View {
                     .padding(.top, .xl)
                 } else {
                     LazyVStack(
+                        alignment: .leading,
                         spacing: 0,
                         content: {
-                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                                let item = viewModel.tokens[index]
-                                TokenListItemView(token: item)
-                                    .swipeToDelete(
-                                        offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
-                                        onDelete: {
-                                            viewModel.offsets.remove(at: index)
-                                            viewModel.isDeleted.remove(at: index)
-                                            viewModel.tokens.remove(at: index)
-                                        }
-                                    )
-                                    .onAppear() {
-                                        viewModel.loadMoreData(item: item)
-                                    }
-                            }
+                            recentSearchView
+                            favouriteView
+                            tokensView
                         })
+                    .padding(.top, .lg)
                 }
             }
+            /*
             .refreshable {
                 viewModel.getTokens()
             }
+             */
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("Done") {
                     self.isFocus = false
-                    viewModel.addRecentSearch()
                 }
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
         .background(.colorBaseBackground)
+        .onAppear {
+            viewModel.getTokens()
+        }
+    }
+    
+    @ViewBuilder
+    private var recentSearchView: some View {
+        if !viewModel.recentSearch.isEmpty && viewModel.keyword.isBlank {
+            VStack(alignment: .leading, spacing: .md) {
+                HStack {
+                    Text("Recent searches")
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    Spacer()
+                    Image(.icDelete)
+                        .resizable()
+                        .frame(width: .xl, height: .xl)
+                        .onTapGesture {
+                            viewModel.clearRecentSearch()
+                        }
+                }
+                .frame(height: 32)
+                .padding(.horizontal, .xl)
+                HStack {
+                    let recentSearch = viewModel.recentSearch.prefix(5)
+                    ForEach(recentSearch, id: \.self) { token in
+                        Text(token)
+                            .font(.paragraphXMediumSmall)
+                            .foregroundStyle(.colorBaseTent)
+                            .padding(.horizontal, .md)
+                            .frame(height: 40)
+                            .background(RoundedRectangle(cornerRadius: 12).fill(.colorSurfacePrimaryDefault))
+                            .onTapGesture {
+                                viewModel.keyword = token
+                            }
+                    }
+                }
+                .padding(.horizontal, .xl)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var favouriteView: some View {
+        if !viewModel.tokensFav.isEmpty && viewModel.keyword.isBlank {
+            Text("Favorites")
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                .frame(height: 32)
+                .padding(.horizontal, .xl)
+            ForEach(0..<viewModel.tokensFav.count, id: \.self) { index in
+                let item = viewModel.tokensFav[index]
+                TokenListItemView(token: item, showBottomLine: index != viewModel.tokensFav.count - 1)
+                    .contentShape(.rect)
+                    .swipeToDelete(
+                        offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
+                        onDelete: {
+                            viewModel.deleteTokenFav(at: index)
+                        }
+                    )
+                    .onTapGesture {
+                        navigator.push(.tokenDetail(token: item))
+                    }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var tokensView: some View {
+        if viewModel.keyword.isBlank {
+            let spacing: CGFloat = {
+                var spacing: CGFloat = 0
+                if viewModel.tokensFav.isEmpty && viewModel.recentSearch.isEmpty {
+                    spacing = 0
+                } else if viewModel.tokensFav.isEmpty {
+                    spacing = .md
+                } else {
+                    spacing = .md
+                }
+                return spacing
+            }()
+            Text("Top Vol 24h Tokens")
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                .frame(height: 32)
+                .padding(.horizontal, .xl)
+                .padding(.top, spacing)
+        }
+        ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+            let item = viewModel.tokens[index]
+            TokenListItemView(token: item)
+                .contentShape(.rect)
+                .onTapGesture {
+                    viewModel.addRecentSearch(keyword: item.adaName)
+                    navigator.push(.tokenDetail(token: item))
+                }
+                .onAppear() {
+                    viewModel.loadMoreData(item: item)
+                }
+        }
     }
 }
 
 #Preview {
     SearchTokenView()
+        .environmentObject(AppSetting.shared)
 }
