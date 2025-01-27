@@ -26,12 +26,13 @@ extension MainCoordinatorViewModel {
         case restoreWallet(_ screen: RestoreWalletScreen)
         case walletSetting(_ screen: WalletSettingScreen)
         case sendToken(_ screen: SendTokenScreen)
-        case receiveToken
+        case receiveToken(_ screen: ReceiveTokenView.ScreenType)
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
         case securitySetting(_ screen: SecuritySetting)
         case orderHistoryDetail(order: OrderHistoryQuery.Data.Orders.WrapOrder)
         case orderHistory
+        case scanQR
     }
 }
 
@@ -132,7 +133,8 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.changePassword, .changePassword),
             (.receiveToken, .receiveToken),
             (.searchToken, .searchToken),
-            (.orderHistory, .orderHistory):
+            (.orderHistory, .orderHistory),
+            (.scanQR, .scanQR):
             return true
 
         case (.tokenDetail, .tokenDetail):

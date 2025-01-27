@@ -459,6 +459,9 @@
     "My balance" : {
 
     },
+    "My QR" : {
+
+    },
     "New Password" : {
 
     },
@@ -599,6 +602,12 @@
     "Scam token" : {
 
     },
+    "Scan QR" : {
+
+    },
+    "Scan QR code" : {
+
+    },
     "Security" : {
 
     },
@@ -627,6 +636,9 @@
 
     },
     "Share this wallet address to receive payments." : {
+
+    },
+    "Show my QR" : {
 
     },
     "Sign the contract" : {

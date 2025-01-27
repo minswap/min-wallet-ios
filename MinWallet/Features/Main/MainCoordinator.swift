@@ -89,8 +89,8 @@ struct MainCoordinator: View {
                                 .navigationBarHidden(true)
                         }
 
-                    case .receiveToken:
-                        ReceiveTokenView().navigationBarHidden(true)
+                    case let .receiveToken(screenType):
+                        ReceiveTokenView(screenType: screenType).navigationBarHidden(true)
 
                     case let .swapToken(screen):
                         switch screen {
@@ -120,6 +120,8 @@ struct MainCoordinator: View {
                         OrderHistoryDetailView(order: order).navigationBarHidden(true)
                     case .orderHistory:
                         OrderHistoryView().navigationBarHidden(true)
+                    case .scanQR:
+                        ScanQRView().navigationBarHidden(true)
                     }
                 }
                 .navigationBarHidden(true)

@@ -3,6 +3,11 @@ import FlowStacks
 
 
 struct ReceiveTokenView: View {
+    enum ScreenType {
+        case home
+        case qrCode
+    }
+    
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
@@ -13,22 +18,22 @@ struct ReceiveTokenView: View {
     private var copied: Bool = false
     @State
     private var showShareSheet = false
-
+    @State
+    var screenType: ScreenType = .home
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Receive")
+            Text(screenType == .home ? "Receive" : "My QR")
                 .font(.titleH5)
                 .foregroundStyle(.colorBaseTent)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, .lg)
+                .frame(maxWidth: .infinity, minHeight: 60,  alignment: .leading)
                 .padding(.horizontal, .xl)
             Text("Share this wallet address to receive payments.")
                 .font(.paragraphSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 10)
+                .padding(.top, .lg)
                 .padding(.horizontal, .xl)
-                .padding(.bottom, .lg)
             VStack(spacing: 8) {
                 Image(uiImage: qrImage ?? UIImage())
                     .resizable()
@@ -41,40 +46,53 @@ struct ReceiveTokenView: View {
                     .padding(.top, .md)
             }
             .padding(.xl)
-            .padding(.top, 24)
             .padding(.bottom, .xl)
             .overlay(RoundedRectangle(cornerRadius: .xl).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
-            .padding(.xl)
+            .padding(.horizontal, .xl)
+            .padding(.top, ._3xl)
             Spacer()
-            HStack(spacing: .xl) {
-                CustomButton(title: "Share", variant: .secondary) {
-                    showShareSheet = true
-                }
-                .frame(height: 44)
-                CustomButton(
-                    title: copied ? "Copied" : "Copy",
-                    variant: .secondary,
-                    iconRight: copied ? .icCheckMark : nil
-                ) {
-                    withAnimation {
-                        copied = true
+            if screenType == .home {
+                HStack(spacing: .xl) {
+                    CustomButton(title: "Share", variant: .secondary) {
+                        showShareSheet = true
                     }
-                    UIPasteboard.general.string = userInfo.minWallet?.address
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    .frame(height: 44)
+                    CustomButton(
+                        title: copied ? "Copied" : "Copy",
+                        variant: .secondary,
+                        iconRight: copied ? .icCheckMark : nil
+                    ) {
                         withAnimation {
-                            copied = false
+                            copied = true
+                        }
+                        UIPasteboard.general.string = userInfo.minWallet?.address
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                            withAnimation {
+                                copied = false
+                            }
                         }
                     }
+                    .frame(height: 44)
                 }
-                .frame(height: 44)
+                .padding(.horizontal, .xl)
+            } else {
+                CustomButton(title: "Scan QR") {
+                    navigator.pop()
+                }
+                .frame(height: 56)
+                .padding(.horizontal, .xl)
             }
-            .padding(.horizontal, .xl)
         }
         .modifier(
             BaseContentView(
                 screenTitle: " ",
                 actionLeft: {
-                    navigator.pop()
+                    switch screenType {
+                    case .home:
+                        navigator.pop()
+                    case .qrCode:
+                        navigator.popToRoot()
+                    }
                 })
         )
         .task {
