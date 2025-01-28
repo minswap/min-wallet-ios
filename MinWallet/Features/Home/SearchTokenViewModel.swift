@@ -48,7 +48,7 @@ class SearchTokenViewModel: ObservableObject {
                 self?.showSkeleton = true
             }
             .store(in: &cancellables)
-        
+
         recentSearch = UserDataManager.shared.tokenRecentSearch
     }
 
@@ -116,36 +116,36 @@ class SearchTokenViewModel: ObservableObject {
         self.recentSearch = recentSearch.reversed()
         UserDataManager.shared.tokenRecentSearch = self.recentSearch
     }
-    
+
     func deleteTokenFav(at index: Int) {
         guard let item = tokensFav[gk_safeIndex: index] else { return }
         offsets.remove(at: index)
         isDeleted.remove(at: index)
         tokensFav.remove(at: index)
-        
+
         UserInfo.shared.tokenFavSelected(token: item, isAdd: false)
     }
-    
+
     private func getTokenFav() async -> [TokenProtocol] {
         let tokens = await withTaskGroup(of: TokenProtocol?.self) { taskGroup in
             let tokens = UserInfo.shared.tokensFav
             var results: [TokenProtocol?] = []
-            
-            for item in  tokens {
+
+            for item in tokens {
                 taskGroup.addTask {
                     await self.fetchToken(for: item)
                 }
             }
-            
+
             for await result in taskGroup {
                 results.append(result)
             }
-            
+
             return results
         }
         return tokens.compactMap { $0 }
     }
-    
+
     private func fetchToken(for token: TokenFavourite) async -> TopAssetQuery.Data.TopAsset? {
         do {
             let asset = try await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))

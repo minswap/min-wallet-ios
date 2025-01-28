@@ -153,6 +153,12 @@
     "Beware that using over 50% slippage is risky. It means that you are willing to accept a price movement of over 50% once your order is executed." : {
 
     },
+    "Camera access is denied.\n Please allow camera access in Settings." : {
+
+    },
+    "Camera Permission Denied" : {
+
+    },
     "Cancel" : {
 
     },
@@ -336,9 +342,6 @@
     "Got it" : {
 
     },
-    "Got it!" : {
-
-    },
     "Half" : {
 
     },
@@ -394,6 +397,9 @@
 
     },
     "Invalid handle. Only a-z, 0-9, dash (-), underscore (_), and period (.) are allowed." : {
+
+    },
+    "Invalid QR code" : {
 
     },
     "Invalid seed phrase" : {
@@ -486,7 +492,13 @@
     "OCO" : {
 
     },
+    "OK" : {
+
+    },
     "Old Password" : {
+
+    },
+    "Open Settings" : {
 
     },
     "Optic ID" : {
@@ -529,6 +541,9 @@
 
     },
     "Please grant biometric permission to the app to enable Face ID/Touch ID login" : {
+
+    },
+    "Please grant camera access in Settings to use this feature." : {
 
     },
     "Please write down your 24 words seed phrase and store it in a secured place." : {
@@ -729,6 +744,9 @@
 
     },
     "Transaction Submitted" : {
+
+    },
+    "Try again" : {
 
     },
     "Type" : {

@@ -66,28 +66,30 @@ class UserInfo: ObservableObject {
         let last5Characters = name.suffix(5)
         return "\(first5Characters)...\(last5Characters)"
     }
-    
+
     func tokenFavSelected(token: TokenProtocol, isAdd: Bool) {
         if isAdd {
-            self.tokensFav.insert(TokenFavourite().with({
-                $0.currencySymbol = token.currencySymbol
-                $0.tokenName      = token.tokenName
-                $0.adaName        = token.adaName
-                $0.dateAdded      = Date().timeIntervalSince1970
-            }), at: 0)
+            self.tokensFav.insert(
+                TokenFavourite()
+                    .with({
+                        $0.currencySymbol = token.currencySymbol
+                        $0.tokenName = token.tokenName
+                        $0.adaName = token.adaName
+                        $0.dateAdded = Date().timeIntervalSince1970
+                    }), at: 0)
         } else {
             self.tokensFav.removeAll { $0.uniqueID == token.uniqueID }
         }
         saveTokenFav()
     }
-    
+
     private func readTokenFav() {
         guard let savedData = UserDefaults.standard.object(forKey: UserDataManager.TOKEN_FAVORITE) as? Data,
-              let tokens = try? JSONDecoder().decode([TokenFavourite].self, from: savedData)
+            let tokens = try? JSONDecoder().decode([TokenFavourite].self, from: savedData)
         else { return }
         self.tokensFav = tokens.sorted(by: { $0.dateAdded > $1.dateAdded })
     }
-    
+
     private func saveTokenFav() {
         guard let encoded = try? JSONEncoder().encode(tokensFav) else { return }
         UserDefaults.standard.set(encoded, forKey: UserDataManager.TOKEN_FAVORITE)

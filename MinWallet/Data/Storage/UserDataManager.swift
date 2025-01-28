@@ -11,7 +11,7 @@ class UserDataManager {
     static let shared = UserDataManager()
 
     private var defaults: UserDefaults!
-    
+
     private init() {
         defaults = UserDefaults.standard
     }
@@ -42,7 +42,7 @@ class UserDataManager {
             defaults!.set(newValue, forKey: Self.ONE_SIGNAL_HASH_TOKEN)
         }
     }
-    
+
     var tokenFav: [String] {
         get {
             return (defaults!.array(forKey: Self.TOKEN_FAVORITE) as? [String]) ?? []

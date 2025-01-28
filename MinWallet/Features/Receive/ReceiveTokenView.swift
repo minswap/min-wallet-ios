@@ -7,7 +7,7 @@ struct ReceiveTokenView: View {
         case home
         case qrCode
     }
-    
+
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
@@ -20,13 +20,13 @@ struct ReceiveTokenView: View {
     private var showShareSheet = false
     @State
     var screenType: ScreenType = .home
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(screenType == .home ? "Receive" : "My QR")
                 .font(.titleH5)
                 .foregroundStyle(.colorBaseTent)
-                .frame(maxWidth: .infinity, minHeight: 60,  alignment: .leading)
+                .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
                 .padding(.horizontal, .xl)
             Text("Share this wallet address to receive payments.")
                 .font(.paragraphSmall)

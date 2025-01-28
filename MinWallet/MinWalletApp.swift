@@ -27,9 +27,9 @@ struct MinWalletApp: App {
                 .environment(\.locale, .init(identifier: appSetting.language))
                 .alert(isPresented: $hudState.isPresented) {
                     Alert(
-                        title: Text("Notice"), message: Text(hudState.msg),
+                        title: Text(hudState.title), message: Text(hudState.msg),
                         dismissButton: .default(
-                            Text("Got it!"),
+                            Text(hudState.okTitle),
                             action: {
                                 hudState.onAction?()
                             }))

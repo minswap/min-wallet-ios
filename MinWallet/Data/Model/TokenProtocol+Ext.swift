@@ -7,39 +7,39 @@ extension TopAssetQuery.Data.TopAsset: TokenProtocol {
     var currencySymbol: String {
         asset.currencySymbol
     }
-    
+
     var tokenName: String {
         asset.tokenName
     }
-    
+
     var isVerified: Bool {
         asset.metadata?.isVerified ?? false
     }
-    
+
     var ticker: String {
         asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
-    
+
     var name: String {
         asset.metadata?.name ?? ""
     }
-    
+
     var percentChange: Double {
         Double(priceChange24h) ?? 0
     }
-    
+
     var priceValue: Double {
         Double(price) ?? 0
     }
-    
+
     var subPriceValue: Double {
         0
     }
-    
+
     var category: [String] {
         asset.details?.categories ?? []
     }
-    
+
     var socialLinks: [SocialLinks: String] {
         guard let socialLinks = asset.details?.socialLinks else { return [:] }
         var links: [SocialLinks: String] = [:]
@@ -66,7 +66,7 @@ extension TopAssetQuery.Data.TopAsset: TokenProtocol {
         }
         return links
     }
-    
+
     var decimals: Int {
         asset.metadata?.decimals ?? 0
     }

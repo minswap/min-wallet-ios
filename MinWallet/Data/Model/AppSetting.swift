@@ -96,7 +96,7 @@ class AppSetting: ObservableObject {
             objectWillChange.send()
         }
     }
-    
+
     var authenticationType: AuthenticationType {
         get { AuthenticationType(rawValue: securityType) ?? .biometric }
         set { securityType = newValue.rawValue }

@@ -39,7 +39,6 @@ struct SplashView: View {
                         EmptyView()
                     }
                 }
-
                 if hudState.isShowLoading {
                     Color.black.opacity(0.2).ignoresSafeArea().transition(.fade)
                     ProgressView()

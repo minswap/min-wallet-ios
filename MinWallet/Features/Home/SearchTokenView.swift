@@ -66,7 +66,8 @@ struct SearchTokenView: View {
                             recentSearchView
                             favouriteView
                             tokensView
-                        })
+                        }
+                    )
                     .padding(.top, .lg)
                 }
             }
@@ -90,7 +91,7 @@ struct SearchTokenView: View {
             viewModel.getTokens()
         }
     }
-    
+
     @ViewBuilder
     private var recentSearchView: some View {
         if !viewModel.recentSearch.isEmpty && viewModel.keyword.isBlank {
@@ -127,7 +128,7 @@ struct SearchTokenView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private var favouriteView: some View {
         if !viewModel.tokensFav.isEmpty && viewModel.keyword.isBlank {
@@ -152,7 +153,7 @@ struct SearchTokenView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private var tokensView: some View {
         if viewModel.keyword.isBlank {

@@ -102,3 +102,13 @@ extension UIScreen {
         UIWindow.current?.screen
     }
 }
+
+extension MinWalletApp {
+    static func openAppSettings() {
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(settingsURL) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }
+    }
+}
