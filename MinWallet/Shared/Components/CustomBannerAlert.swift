@@ -15,15 +15,19 @@ private struct CustomBannerAlertModifier<InfoContent: View>: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        ZStack {
+        ZStack(alignment: .top) {
             content
             if isShowing {
                 VStack(alignment: .center) {
                     infoContent()
-                    Spacer()
                 }
-                .animation(.easeInOut)
-                .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
+                .frame(width: UIScreen.main.bounds.width - .xl)
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .top),
+                        removal: .move(edge: .top)
+                    )
+                )
                 .onTapGesture {
                     withAnimation {
                         self.isShowing = false

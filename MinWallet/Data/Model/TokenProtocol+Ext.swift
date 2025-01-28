@@ -407,7 +407,7 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
 }
 
 
-extension RiskCategory: Identifiable {
+extension RiskCategory: @retroactive Identifiable {
     public var id: UUID {
         UUID()
     }

@@ -34,16 +34,6 @@ struct MinWalletApp: App {
                                 hudState.onAction?()
                             }))
                 }
-                .banner(
-                    isShowing: $bannerState.isShowingBanner,
-                    infoContent: {
-                        if let infoContent = bannerState.infoContent {
-                            infoContent()
-                        } else {
-                            EmptyView()
-                        }
-                    }
-                )
                 .onAppear {
                     appSetting.initAppearanceStyle()
                 }
@@ -68,6 +58,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 print("User accepted notifications: \(accepted)")
             }, fallbackToSettings: true)
 
+        UNUserNotificationCenter.current().delegate = self
+
         return true
     }
 
@@ -89,9 +81,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([.alert, .badge, .sound])
-        guard let userInfo = notification.request.content.userInfo as? [String: AnyObject] else { return }
+        completionHandler(.banner)
     }
+    /*
 
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -133,4 +125,5 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             return .newData
         }
     #endif
+     */
 }

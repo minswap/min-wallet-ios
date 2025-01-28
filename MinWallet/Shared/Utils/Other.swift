@@ -77,7 +77,7 @@ extension String {
             }
 
             // Clip the center image to a circle and draw it
-            let circlePath = UIBezierPath(ovalIn: imageRect)
+            _ = UIBezierPath(ovalIn: imageRect)
             centerImage.draw(in: imageRect)
 
         }

@@ -11,6 +11,7 @@ struct SplashView: View {
     private var appSetting: AppSetting
     @EnvironmentObject
     private var hudState: HUDState
+    @EnvironmentObject var bannerState: BannerState
 
     var body: some View {
         GeometryReader { geo in
@@ -51,6 +52,16 @@ struct SplashView: View {
                 appSetting.safeArea = UIApplication.safeArea.top
             })
         }
+        .banner(
+            isShowing: $bannerState.isShowingBanner,
+            infoContent: {
+                if let infoContent = bannerState.infoContent {
+                    infoContent()
+                } else {
+                    EmptyView()
+                }
+            }
+        )
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 withAnimation {
@@ -64,4 +75,6 @@ struct SplashView: View {
 #Preview {
     SplashView()
         .environmentObject(AppSetting.shared)
+        .environmentObject(HUDState())
+        .environmentObject(BannerState())
 }

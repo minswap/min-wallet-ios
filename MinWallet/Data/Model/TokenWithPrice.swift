@@ -19,6 +19,6 @@ extension Token {
 }
 
 
-extension TopAssetsInput: Then {}
-extension TopAssetsSortInput: Then {}
-extension AssetsInput: Then {}
+extension TopAssetsInput: @retroactive Then {}
+extension TopAssetsSortInput: @retroactive Then {}
+extension AssetsInput: @retroactive Then {}

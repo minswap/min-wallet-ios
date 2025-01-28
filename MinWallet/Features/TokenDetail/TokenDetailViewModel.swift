@@ -146,7 +146,7 @@ class TokenDetailViewModel: ObservableObject {
     }
 }
 
-extension ChartPeriod: Identifiable {
+extension ChartPeriod: @retroactive Identifiable {
     public var id: UUID {
         UUID()
     }
