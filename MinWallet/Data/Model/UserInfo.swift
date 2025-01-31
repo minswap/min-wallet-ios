@@ -53,12 +53,9 @@ class UserInfo: ObservableObject {
         self.minWallet = minWallet
     }
 
-    private func removeWallet() {
-    }
-
     var walletName: String {
         guard let name = minWallet?.walletName else { return "" }
-        if name.count <= 12 {
+        if name.count <= 16 {
             return name
         }
 

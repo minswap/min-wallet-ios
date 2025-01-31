@@ -35,7 +35,7 @@ extension TokenDetailView {
                         ForEach(0..<selectedIndex + 1, id: \.self) { index in
                             LineMark(
                                 x: .value("Date", index),
-                                y: .value("Value", viewModel.chartDatas[index].value)
+                                y: .value("Value", viewModel.chartDatas[gk_safeIndex: index]?.value ?? 0)
                             )
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             //.interpolationMethod(.catmullRom)
@@ -47,7 +47,7 @@ extension TokenDetailView {
                         ForEach(selectedIndex..<viewModel.chartDatas.count, id: \.self) { index in
                             LineMark(
                                 x: .value("Date", index),
-                                y: .value("Value", viewModel.chartDatas[index].value)
+                                y: .value("Value", viewModel.chartDatas[gk_safeIndex: index]?.value ?? 0)
                             )
                             //.interpolationMethod(.catmullRom)
                             .foregroundStyle(viewModel.isInteracting ? .colorBorderPrimarySub : .colorInteractiveToneHighlight)
@@ -56,7 +56,7 @@ extension TokenDetailView {
                     if let selectedIndex = viewModel.selectedIndex, viewModel.isInteracting {
                         PointMark(
                             x: .value("Date", selectedIndex),
-                            y: .value("Value", viewModel.chartDatas[selectedIndex].value)
+                            y: .value("Value", viewModel.chartDatas[gk_safeIndex: selectedIndex]?.value ?? 0)
                         )
                         .symbolSize(60)
                         .foregroundStyle(.colorInteractiveToneHighlight)

@@ -26,6 +26,7 @@ struct TokenListItemView: View {
                 HStack(spacing: 0) {
                     Text(adaName)
                         .font(.labelMediumSecondary)
+                        .lineLimit(1)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
                     let priceValue: AttributedString = {

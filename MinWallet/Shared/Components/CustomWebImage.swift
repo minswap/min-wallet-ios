@@ -11,7 +11,7 @@ struct CustomWebImage<Placeholder: View>: View {
         url: String?,
         frameSize: CGSize,
         @ViewBuilder placeholder: @escaping () -> Placeholder = {
-            Image(.icAppearanceDark)
+            Image(.ada)
                 .resizable()
                 .scaledToFill()
                 .background(.pink)

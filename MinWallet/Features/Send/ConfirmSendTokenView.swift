@@ -17,6 +17,8 @@ struct ConfirmSendTokenView: View {
     private var isCopyAddress: Bool = false
     @StateObject
     private var viewModel: ConfirmSendTokenViewModel
+    @State
+    private var isShowLoading: Bool = false
 
     init(viewModel: ConfirmSendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -176,19 +178,14 @@ struct ConfirmSendTokenView: View {
             CustomButton(title: "Next") {
                 Task {
                     do {
-                        hudState.showLoading(isShow: true)
-                        try await viewModel.sendTokens()
-                        hudState.showLoading(isShow: false)
-
                         switch appSetting.authenticationType {
                         case .biometric:
                             try await appSetting.reAuthenticateUser()
                             authenticationSuccess()
                         case .password:
-                            isShowSignContract = true
+                            $isShowSignContract.showSheet()
                         }
                     } catch {
-                        hudState.showLoading(isShow: false)
                         hudState.showMsg(msg: error.localizedDescription)
                     }
                 }
@@ -219,24 +216,32 @@ struct ConfirmSendTokenView: View {
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
+        .progressView(isShowing: $isShowLoading)
     }
 
     private func authenticationSuccess() {
         Task {
             do {
-                hudState.showLoading(isShow: true)
+                withAnimation {
+                    isShowLoading = true
+                }
+                try await viewModel.sendTokens()
                 let finalID = try await viewModel.finalizeAndSubmit()
-                hudState.showLoading(isShow: false)
+                withAnimation {
+                    isShowLoading = false
+                }
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
                         finalID?.viewTransaction()
                     })
                 }
-                bannerState.isShowingBanner = true
+                bannerState.showBanner(isShow: true)
                 TokenManager.shared.reloadPortfolioOverview()
                 navigator.popToRoot()
             } catch {
-                hudState.showLoading(isShow: false)
+                withAnimation {
+                    isShowLoading = false
+                }
                 hudState.showMsg(msg: error.localizedDescription)
             }
         }
@@ -246,4 +251,5 @@ struct ConfirmSendTokenView: View {
 #Preview {
     ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: [.init(token: TokenManager.shared.tokenAda)], address: "addr_test1qrckpdddp4weyhv72de83y72sth4pwfu6xmy3ugcurtqe76kp8zluvc7mydvp9snyrfsnexfkw89uukajky80js83rzqufn9cj"))
         .environmentObject(AppSetting.shared)
+        .environmentObject(HUDState())
 }

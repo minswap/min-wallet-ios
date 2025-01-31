@@ -86,6 +86,7 @@ struct SendTokenView: View {
 
                         Button(
                             action: {
+                                hideKeyboard()
                                 $isShowSelectToken.showSheet()
 
                             },

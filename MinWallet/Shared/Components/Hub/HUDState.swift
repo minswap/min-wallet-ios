@@ -2,6 +2,7 @@ import SwiftUI
 
 
 //TODO: Hub for error, loading success... etc
+@MainActor
 class HUDState: ObservableObject {
     @Published
     private(set) var msg: String = ""
@@ -16,9 +17,6 @@ class HUDState: ObservableObject {
 
     init() {}
 
-    @Published
-    var isShowLoading: Bool = false
-
     func showMsg(
         title: LocalizedStringKey = "Notice",
         msg: String,
@@ -30,11 +28,5 @@ class HUDState: ObservableObject {
         self.okTitle = okTitle
         self.onAction = onAction
         self.isPresented = true
-    }
-
-    func showLoading(isShow: Bool) {
-        withAnimation {
-            isShowLoading = isShow
-        }
     }
 }

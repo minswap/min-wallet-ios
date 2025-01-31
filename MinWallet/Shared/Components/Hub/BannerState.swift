@@ -49,4 +49,10 @@ class BannerState: ObservableObject {
             .shadow(radius: 5, x: 0, y: 5)
         )
     }
+
+    func showBanner(isShow: Bool) {
+        withAnimation {
+            isShowingBanner = isShow
+        }
+    }
 }

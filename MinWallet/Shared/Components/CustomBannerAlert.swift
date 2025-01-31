@@ -75,7 +75,39 @@ private struct LoadingViewModifier: ViewModifier {
 }
 
 extension View {
+    ///Using inside view
     func loading(isShowing: Binding<Bool>) -> some View {
         self.modifier(LoadingViewModifier(isShowing: isShowing))
+    }
+}
+
+
+private struct ProgressViewModifier: ViewModifier {
+    @Binding var isShowing: Bool
+
+    init(isShowing: Binding<Bool>) {
+        _isShowing = isShowing
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isShowing {
+                    Color.black.opacity(0.2).ignoresSafeArea().transition(.fade)
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .scaleEffect(2, anchor: .center)
+                        .transition(.fade)
+                        .zIndex(1000)
+                }
+            }
+    }
+}
+
+
+extension View {
+    ///Using overlay view
+    func progressView(isShowing: Binding<Bool>) -> some View {
+        self.modifier(ProgressViewModifier(isShowing: isShowing))
     }
 }
