@@ -17,6 +17,7 @@ class UserInfo: ObservableObject {
     static let shared: UserInfo = .init()
 
     @Published var minWallet: MinWallet?
+    @Published var tokensFav: [TokenFavourite] = []
 
     @UserDefault("adaHandleName", defaultValue: "")
     var adaHandleName: String {
@@ -27,6 +28,7 @@ class UserInfo: ObservableObject {
 
     private init() {
         self.readMinWallet()
+        self.readTokenFav()
     }
 
     func saveWalletInfo(walletInfo: MinWallet) {
@@ -39,7 +41,8 @@ class UserInfo: ObservableObject {
     func deleteAccount() {
         minWallet = nil
         adaHandleName = ""
-        removeWallet()
+        UserDefaults.standard.removeObject(forKey: Self.MIN_WALLET_KEY)
+        UserDefaults.standard.removeObject(forKey: UserDataManager.TOKEN_FAVORITE)
     }
 
     private func readMinWallet() {
@@ -50,18 +53,42 @@ class UserInfo: ObservableObject {
         self.minWallet = minWallet
     }
 
-    private func removeWallet() {
-        UserDefaults.standard.removeObject(forKey: Self.MIN_WALLET_KEY)
-    }
-
     var walletName: String {
         guard let name = minWallet?.walletName else { return "" }
-        if name.count <= 12 {
+        if name.count <= 16 {
             return name
         }
 
         let first5Characters = name.prefix(5)
         let last5Characters = name.suffix(5)
         return "\(first5Characters)...\(last5Characters)"
+    }
+
+    func tokenFavSelected(token: TokenProtocol, isAdd: Bool) {
+        if isAdd {
+            self.tokensFav.insert(
+                TokenFavourite()
+                    .with({
+                        $0.currencySymbol = token.currencySymbol
+                        $0.tokenName = token.tokenName
+                        $0.adaName = token.adaName
+                        $0.dateAdded = Date().timeIntervalSince1970
+                    }), at: 0)
+        } else {
+            self.tokensFav.removeAll { $0.uniqueID == token.uniqueID }
+        }
+        saveTokenFav()
+    }
+
+    private func readTokenFav() {
+        guard let savedData = UserDefaults.standard.object(forKey: UserDataManager.TOKEN_FAVORITE) as? Data,
+            let tokens = try? JSONDecoder().decode([TokenFavourite].self, from: savedData)
+        else { return }
+        self.tokensFav = tokens.sorted(by: { $0.dateAdded > $1.dateAdded })
+    }
+
+    private func saveTokenFav() {
+        guard let encoded = try? JSONEncoder().encode(tokensFav) else { return }
+        UserDefaults.standard.set(encoded, forKey: UserDataManager.TOKEN_FAVORITE)
     }
 }

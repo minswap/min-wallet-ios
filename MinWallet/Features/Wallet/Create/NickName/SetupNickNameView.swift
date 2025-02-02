@@ -33,7 +33,7 @@ struct SetupNickNameView: View {
                 .padding(.bottom, .xl)
                 .padding(.horizontal, .xl)
             TextField("Give your wallet a nickname ...", text: $nickName)
-                .font(.paragraphSmall)
+                .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
                 .focused($isInputActive)
                 .padding(.horizontal, .xl)

@@ -111,7 +111,7 @@ struct ToWalletAddressView: View {
             CustomButton(title: "Next", isEnable: combinedBinding) {
                 guard viewModel.isChecking != true else { return }
                 let address = viewModel.adaAddress?.address ?? viewModel.address
-                guard !address.isEmpty else { return }
+                guard address.count > 1 else { return }
                 navigator.push(.sendToken(.confirm(tokens: viewModel.tokens, address: address)))
             }
             .frame(height: 56)

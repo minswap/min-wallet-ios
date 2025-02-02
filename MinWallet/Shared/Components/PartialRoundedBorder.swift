@@ -10,7 +10,7 @@ struct PartialRoundedBorder: Shape {
 
         // Top edge with rounded corners
         let topLeft = CGPoint(x: rect.minX, y: rect.minY + cornerRadius)
-        let topRight = CGPoint(x: rect.maxX, y: rect.minY + cornerRadius)
+        _ = CGPoint(x: rect.maxX, y: rect.minY + cornerRadius)
 
         path.move(to: topLeft)
         path.addArc(

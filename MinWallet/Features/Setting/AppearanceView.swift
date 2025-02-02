@@ -2,9 +2,11 @@ import SwiftUI
 
 struct AppearanceView: View {
     @EnvironmentObject
-    var appSetting: AppSetting
+    private var appSetting: AppSetting
     @Environment(\.partialSheetDismiss)
-    var onDismiss
+    private var onDismiss
+    @Environment(\.colorScheme)
+    private var colorScheme: ColorScheme
 
     var body: some View {
         VStack(spacing: 8) {
@@ -17,19 +19,29 @@ struct AppearanceView: View {
                     .frame(height: 60)
                     .padding(.horizontal, .xl)
                 HStack(spacing: 0) {
-                    VStack(spacing: 10) {
+                    VStack(alignment: .center, spacing: 10) {
                         Image(.icAppearanceDefault)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .system ? 2 : 0))
-                        HStack(spacing: 6) {
-                            Image(appSetting.appearance == .system ? .icRadioCheck : .icRadioUncheck)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 16, height: 16)
+                        HStack(spacing: colorScheme == .light && appSetting.appearance != .system ? 4 : 6) {
+                            if colorScheme == .light && appSetting.appearance != .system {
+                                Image(.icRadioUncheckRadius)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 22, height: 22)
+                                    .padding(.top, 2)
+                            } else {
+                                Image(appSetting.appearance == .system ? .icRadioCheck : .icRadioUncheck)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 16, height: 16)
+                            }
                             Text("Default")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
                         }
+                        .frame(height: 20)
+                        .padding(.leading, colorScheme == .light && appSetting.appearance != .system ? -4 : 0)
                     }
                     .frame(maxWidth: .infinity)
                     .contentShape(.rect)
@@ -37,19 +49,29 @@ struct AppearanceView: View {
                         appSetting.applyAppearanceStyle(.system)
                     }
                     Spacer()
-                    VStack(spacing: 10) {
+                    VStack(alignment: .center, spacing: 10) {
                         Image(.icAppearanceDark)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .dark ? 2 : 0))
-                        HStack(spacing: 6) {
-                            Image(appSetting.appearance == .dark ? .icRadioCheck : .icRadioUncheck)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 16, height: 16)
+                        HStack(spacing: colorScheme == .light && appSetting.appearance != .dark ? 4 : 6) {
+                            if colorScheme == .light && appSetting.appearance != .dark {
+                                Image(.icRadioUncheckRadius)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 22, height: 22)
+                                    .padding(.top, 2)
+                            } else {
+                                Image(appSetting.appearance == .dark ? .icRadioCheck : .icRadioUncheck)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 16, height: 16)
+                            }
                             Text("Dark")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
                         }
+                        .frame(height: 20)
+                        .padding(.leading, colorScheme == .light && appSetting.appearance != .dark ? -4 : 0)
                     }
                     .frame(maxWidth: .infinity)
                     .contentShape(.rect)
@@ -57,19 +79,30 @@ struct AppearanceView: View {
                         appSetting.applyAppearanceStyle(.dark)
                     }
                     Spacer()
-                    VStack(spacing: 10) {
+                    VStack(alignment: .center, spacing: 10) {
                         Image(.icAppearanceLight)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.colorInteractiveToneHighlight, lineWidth: appSetting.appearance == .light ? 2 : 0))
-                        HStack(spacing: 6) {
-                            Image(appSetting.appearance == .light ? .icRadioCheck : .icRadioUncheck)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 16, height: 16)
+                        HStack(spacing: colorScheme == .light && appSetting.appearance != .light ? 4 : 6) {
+                            if colorScheme == .light && appSetting.appearance != .light {
+                                Image(.icRadioUncheckRadius)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 22, height: 22)
+                                    .padding(.top, 2)
+                            } else {
+                                Image(appSetting.appearance == .light ? .icRadioCheck : .icRadioUncheck)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 16, height: 16)
+                            }
+
                             Text("Light")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorBaseTent)
                         }
+                        .frame(height: 20)
+                        .padding(.leading, colorScheme == .light && appSetting.appearance != .light ? -4 : 0)
                     }
                     .frame(maxWidth: .infinity)
                     .contentShape(.rect)

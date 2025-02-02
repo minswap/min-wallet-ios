@@ -58,12 +58,7 @@ extension TokenDetailView {
                 .fixSize(40)
                 .onTapGesture {
                     viewModel.isFav.toggle()
-                    let key = viewModel.token.uniqueID
-                    if viewModel.isFav {
-                        appSetting.tokenFav.append(key)
-                    } else {
-                        appSetting.tokenFav.removeAll { $0 == key }
-                    }
+                    userInfo.tokenFavSelected(token: viewModel.token, isAdd: viewModel.isFav)
                 }
         }
         .background(.colorBaseBackground)
