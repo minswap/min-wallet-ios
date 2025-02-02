@@ -102,7 +102,6 @@
 		966AFC012D44A2FE00E733A1 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC002D44A2FE00E733A1 /* CustomTextField.swift */; };
 		966AFC032D44E27400E733A1 /* SelectTokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC022D44E27400E733A1 /* SelectTokenListItemView.swift */; };
 		966AFC052D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC042D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift */; };
-		966AFC402D472C8F00E733A1 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 966AFC3F2D472C8F00E733A1 /* CodeScanner */; };
 		966AFC432D47361400E733A1 /* ScanQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC412D47361400E733A1 /* ScanQRView.swift */; };
 		966AFC452D473AF100E733A1 /* TokenFavourite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC442D473AF100E733A1 /* TokenFavourite.swift */; };
 		9674CE472D36122400892636 /* SwapTokenSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9674CE462D36122400892636 /* SwapTokenSetting.swift */; };
@@ -124,6 +123,7 @@
 		96BD2A662D0E8F4C00D81277 /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */; };
 		96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BD2A692D0ED06400D81277 /* Constant.swift */; };
 		96C139712D0AC61B00766399 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C139702D0AC61B00766399 /* UserInfo.swift */; };
+		96C62D002D4F12B500851649 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 96C62CFF2D4F12B500851649 /* CodeScanner */; };
 		96D6884E2D08501300D8C060 /* SearchTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D6884D2D08501300D8C060 /* SearchTokenViewModel.swift */; };
 		96D75EC92D02AFA100036AB1 /* CustomVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */; };
 		96DC05232CF55C5400A78356 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05222CF55C5400A78356 /* SettingView.swift */; };
@@ -421,7 +421,7 @@
 				96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */,
 				57D403DF2D408D18009DFAA7 /* OneSignalFramework in Frameworks */,
 				9651CAB22D0677DA006C46DB /* SwiftyAttributes in Frameworks */,
-				966AFC402D472C8F00E733A1 /* CodeScanner in Frameworks */,
+				96C62D002D4F12B500851649 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1062,7 +1062,7 @@
 				96FEDC222D253DCB006AD24F /* SwiftyJSON */,
 				57D403DE2D408D18009DFAA7 /* OneSignalFramework */,
 				57D403E02D408D18009DFAA7 /* OneSignalInAppMessages */,
-				966AFC3F2D472C8F00E733A1 /* CodeScanner */,
+				96C62CFF2D4F12B500851649 /* CodeScanner */,
 			);
 			productName = MinWallet;
 			productReference = 57F102922C64CCA0000B3544 /* MinWallet.app */;
@@ -1150,7 +1150,7 @@
 				96A285082D17B9FC00F3CCEF /* XCLocalSwiftPackageReference "CoreDataRepository" */,
 				96FEDC212D253DCB006AD24F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */,
-				966AFC3E2D472BE400E733A1 /* XCLocalSwiftPackageReference "CodeScanner" */,
+				96C62CFE2D4F12B500851649 /* XCLocalSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = 57F102932C64CCA0000B3544 /* Products */;
 			projectDirPath = "";
@@ -1599,7 +1599,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				EXCLUDED_ARCHS = "";
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MinWallet/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Using Face ID to login";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1644,7 +1644,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GENERATE_INFOPLIST_FILE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MinWallet/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Using Face ID to login";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1803,10 +1803,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		966AFC3E2D472BE400E733A1 /* XCLocalSwiftPackageReference "CodeScanner" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = CodeScanner;
-		};
 		96A285082D17B9FC00F3CCEF /* XCLocalSwiftPackageReference "CoreDataRepository" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = CoreDataRepository;
@@ -1814,6 +1810,10 @@
 		96BD2A572D0D758700D81277 /* XCLocalSwiftPackageReference "MinWalletAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = MinWalletAPI;
+		};
+		96C62CFE2D4F12B500851649 /* XCLocalSwiftPackageReference "CodeScanner" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = CodeScanner;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -1925,10 +1925,6 @@
 			package = 9651CAB02D0677DA006C46DB /* XCRemoteSwiftPackageReference "SwiftyAttributes" */;
 			productName = SwiftyAttributes;
 		};
-		966AFC3F2D472C8F00E733A1 /* CodeScanner */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CodeScanner;
-		};
 		96A285092D17B9FC00F3CCEF /* CoreDataRepository */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreDataRepository;
@@ -1941,6 +1937,10 @@
 		96BD2A582D0D758700D81277 /* MinWalletAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MinWalletAPI;
+		};
+		96C62CFF2D4F12B500851649 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CodeScanner;
 		};
 		96FEDC222D253DCB006AD24F /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
