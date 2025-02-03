@@ -510,7 +510,7 @@ struct TokenDefault: TokenProtocol {
 
     var socialLinks: [SocialLinks: String] { [:] }
 
-    var decimals: Int { 0 }
+    var decimals: Int { 6 }
 
     var symbol: String = ""
     var tName: String = ""

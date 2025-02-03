@@ -3,6 +3,7 @@ import SwiftUI
 
 struct AmountTextField: View {
     @Binding var value: String
+    @State var minValue: Double = 0
     @State var maxValue: Double?
     @State var fontPlaceHolder: Font = .paragraphSmall
 
@@ -24,7 +25,10 @@ struct AmountTextField: View {
                     value = filtered
                 }
 
-                if let maxValue = maxValue, (Decimal(string: value) ?? 0) > Decimal(maxValue) {
+                let currentValue = Decimal(string: value) ?? 0
+                if !value.isBlank && currentValue < Decimal(minValue) && currentValue > 0 {
+                    value = minValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+                } else if let maxValue = maxValue, currentValue > Decimal(maxValue) {
                     value = maxValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
                 }
             }

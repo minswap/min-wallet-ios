@@ -46,6 +46,10 @@ extension TokenProtocol {
 
         return currencySymbol + "." + tokenName
     }
+
+    var isTokenADA: Bool {
+        uniqueID == "lovelace"
+    }
 }
 
 struct WrapTokenProtocol: Identifiable {
