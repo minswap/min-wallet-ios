@@ -1,6 +1,7 @@
 import SwiftUI
 import FlowStacks
 import MinWalletAPI
+import OneSignalFramework
 
 
 struct HomeView: View {
@@ -265,6 +266,11 @@ struct HomeView: View {
         }
         .onFirstAppear {
             Task {
+                OneSignal.Notifications.requestPermission(
+                    { accepted in
+                        print("User accepted notifications: \(accepted)")
+                    }, fallbackToSettings: true)
+
                 userInfo.adaHandleName = await TokenManager.fetchAdaHandleName()
             }
         }
