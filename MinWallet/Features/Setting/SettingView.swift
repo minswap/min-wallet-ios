@@ -37,18 +37,9 @@ struct SettingView: View {
                         .clipShape(Circle())
 
                     if isVerified {
-                        Circle()
-                            .fill(.colorBaseBackground)
+                        Image(.icSubAvatar)
+                            .resizable()
                             .frame(width: 16, height: 16)
-                            .overlay(
-                                Image(.icSubAvatar)
-                                    .resizable()
-                                    .frame(width: 12, height: 12)
-                            )
-                            .overlay(
-                                Circle()
-                                    .stroke(.colorSurfacePrimarySub, lineWidth: 1)
-                            )
                             .position(x: 54, y: 54)
                     }
                 }

@@ -40,18 +40,9 @@ struct HomeView: View {
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
 
-                        Circle()
-                            .fill(.colorBaseBackground)
+                        Image(.icSubAvatar)
+                            .resizable()
                             .frame(width: 14, height: 14)
-                            .overlay(
-                                Image(.icSubAvatar)
-                                    .resizable()
-                                    .frame(width: 10, height: 10)
-                            )
-                            .overlay(
-                                Circle()
-                                    .stroke(.colorSurfacePrimarySub, lineWidth: 1)
-                            )
                             .position(x: 35, y: 35)
                     }
                     .frame(width: 40, height: 40)
