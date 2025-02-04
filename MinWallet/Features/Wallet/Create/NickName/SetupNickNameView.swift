@@ -6,6 +6,7 @@ import Combine
 struct SetupNickNameView: View {
     enum ScreenType {
         case createWallet(seedPhrase: [String])
+        case restoreWallet(fileContent: String, seedPhrase: [String])
         case walletSetting
     }
 
@@ -65,7 +66,8 @@ struct SetupNickNameView: View {
             Spacer()
             let title: LocalizedStringKey = {
                 switch screenType {
-                case .createWallet:
+                case .createWallet,
+                    .restoreWallet:
                     "Next"
                 case .walletSetting:
                     "Change"
@@ -85,6 +87,13 @@ struct SetupNickNameView: View {
                 switch screenType {
                 case let .createWallet(seedPhrase):
                     navigator.push(.createWallet(.biometricSetup(seedPhrase: seedPhrase, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines))))
+                case let .restoreWallet(fileContent, seedPhrase):
+                    navigator.push(
+                        .restoreWallet(
+                            .biometricSetup(
+                                fileContent: fileContent,
+                                seedPhrase: seedPhrase,
+                                nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines))))
                 case .walletSetting:
                     guard let minWallet = userInfo.minWallet, !nickName.isBlank else { return }
                     guard let minWallet = changeWalletName(wallet: minWallet, password: appSetting.password, newWalletName: nickName.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }

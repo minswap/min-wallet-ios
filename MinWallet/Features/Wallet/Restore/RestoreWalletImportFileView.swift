@@ -89,7 +89,7 @@ struct RestoreWalletImportFileView: View {
             )
             CustomButton(title: "Next", isEnable: combinedBinding) {
                 guard !fileContent.isBlank else { return }
-                navigator.push(.restoreWallet(.biometricSetup(fileContent: fileContent, seedPhrase: [], nickName: "")))
+                navigator.push(.restoreWallet(.setupNickName(fileContent: fileContent, seedPhrase: [])))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)

@@ -50,6 +50,7 @@ enum RestoreWalletScreen: Hashable {
     case restoreWallet
     case importFile
     case seedPhrase
+    case setupNickName(fileContent: String, seedPhrase: [String])
     case biometricSetup(fileContent: String, seedPhrase: [String], nickName: String)
     case createNewPassword(fileContent: String, seedPhrase: [String], nickName: String)
     case createNewWalletSuccess

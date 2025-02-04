@@ -122,7 +122,7 @@ struct ReInputSeedPhraseView: View {
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
                 case .restoreWallet:
                     guard !inputSeedPhrase.isBlank else { return }
-                    navigator.push(.restoreWallet(.biometricSetup(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }), nickName: "")))
+                    navigator.push(.restoreWallet(.setupNickName(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }))))
                 }
             }
             .frame(height: 56)
