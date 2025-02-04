@@ -111,6 +111,7 @@
 		968C06FE2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */; };
 		968C07002D3C914B00D81A33 /* BannerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06FF2D3C914B00D81A33 /* BannerState.swift */; };
 		96942AB92CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */; };
+		9695528C2D51C9F400FAC352 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 9695528B2D51C9F400FAC352 /* CodeScanner */; };
 		96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 96A285092D17B9FC00F3CCEF /* CoreDataRepository */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
 		96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */; };
@@ -123,7 +124,6 @@
 		96BD2A662D0E8F4C00D81277 /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */; };
 		96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BD2A692D0ED06400D81277 /* Constant.swift */; };
 		96C139712D0AC61B00766399 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C139702D0AC61B00766399 /* UserInfo.swift */; };
-		96C62D002D4F12B500851649 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 96C62CFF2D4F12B500851649 /* CodeScanner */; };
 		96D6884E2D08501300D8C060 /* SearchTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D6884D2D08501300D8C060 /* SearchTokenViewModel.swift */; };
 		96D75EC92D02AFA100036AB1 /* CustomVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */; };
 		96DC05232CF55C5400A78356 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05222CF55C5400A78356 /* SettingView.swift */; };
@@ -421,7 +421,7 @@
 				96A2850A2D17B9FC00F3CCEF /* CoreDataRepository in Frameworks */,
 				57D403DF2D408D18009DFAA7 /* OneSignalFramework in Frameworks */,
 				9651CAB22D0677DA006C46DB /* SwiftyAttributes in Frameworks */,
-				96C62D002D4F12B500851649 /* CodeScanner in Frameworks */,
+				9695528C2D51C9F400FAC352 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1062,7 +1062,7 @@
 				96FEDC222D253DCB006AD24F /* SwiftyJSON */,
 				57D403DE2D408D18009DFAA7 /* OneSignalFramework */,
 				57D403E02D408D18009DFAA7 /* OneSignalInAppMessages */,
-				96C62CFF2D4F12B500851649 /* CodeScanner */,
+				9695528B2D51C9F400FAC352 /* CodeScanner */,
 			);
 			productName = MinWallet;
 			productReference = 57F102922C64CCA0000B3544 /* MinWallet.app */;
@@ -1150,7 +1150,7 @@
 				96A285082D17B9FC00F3CCEF /* XCLocalSwiftPackageReference "CoreDataRepository" */,
 				96FEDC212D253DCB006AD24F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				57D403DB2D408D18009DFAA7 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */,
-				96C62CFE2D4F12B500851649 /* XCLocalSwiftPackageReference "CodeScanner" */,
+				9695528A2D51C9F400FAC352 /* XCLocalSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = 57F102932C64CCA0000B3544 /* Products */;
 			projectDirPath = "";
@@ -1401,7 +1401,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1434,7 +1434,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1594,7 +1594,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
@@ -1640,7 +1640,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				DEVELOPMENT_ASSET_PATHS = "\"MinWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3FM7JRXRKW;
@@ -1681,7 +1681,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -1702,7 +1702,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
@@ -1722,7 +1722,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1741,7 +1741,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 30;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1805,6 +1805,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		9695528A2D51C9F400FAC352 /* XCLocalSwiftPackageReference "CodeScanner" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = CodeScanner;
+		};
 		96A285082D17B9FC00F3CCEF /* XCLocalSwiftPackageReference "CoreDataRepository" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = CoreDataRepository;
@@ -1812,10 +1816,6 @@
 		96BD2A572D0D758700D81277 /* XCLocalSwiftPackageReference "MinWalletAPI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = MinWalletAPI;
-		};
-		96C62CFE2D4F12B500851649 /* XCLocalSwiftPackageReference "CodeScanner" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = CodeScanner;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -1927,6 +1927,10 @@
 			package = 9651CAB02D0677DA006C46DB /* XCRemoteSwiftPackageReference "SwiftyAttributes" */;
 			productName = SwiftyAttributes;
 		};
+		9695528B2D51C9F400FAC352 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CodeScanner;
+		};
 		96A285092D17B9FC00F3CCEF /* CoreDataRepository */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreDataRepository;
@@ -1939,10 +1943,6 @@
 		96BD2A582D0D758700D81277 /* MinWalletAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MinWalletAPI;
-		};
-		96C62CFF2D4F12B500851649 /* CodeScanner */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CodeScanner;
 		};
 		96FEDC222D253DCB006AD24F /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;

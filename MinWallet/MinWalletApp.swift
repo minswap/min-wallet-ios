@@ -50,16 +50,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         #endif
         // OneSignal initialization
         OneSignal.initialize(MinWalletConstant.minOneSignalAppID, withLaunchOptions: launchOptions)
-
-        // requestPermission will show the native iOS notification permission prompt.
-        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-        OneSignal.Notifications.requestPermission(
-            { accepted in
-                print("User accepted notifications: \(accepted)")
-            }, fallbackToSettings: true)
-
         UNUserNotificationCenter.current().delegate = self
-
         return true
     }
 
