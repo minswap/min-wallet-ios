@@ -202,6 +202,7 @@ struct ToWalletAddressView: View {
                     Text(errorType.errorDesc)
                         .font(.paragraphXSmall)
                         .foregroundStyle(.colorInteractiveDangerTent)
+                    Spacer()
                 }
                 .padding(.top, .lg)
                 .padding(.horizontal, .xl)

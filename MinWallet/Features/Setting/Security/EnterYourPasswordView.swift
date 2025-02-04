@@ -11,13 +11,14 @@ struct EnterYourPasswordView: View {
     private var hudState: HUDState
     @State
     private var password: String = ""
-    @Binding
-    var isShowEnterYourPassword: Bool
     @FocusState
     var isFocus: Bool
-
     @Binding
     var authenticationType: AppSetting.AuthenticationType
+    @State
+    private var isShowIncorrectPassword: Bool = false
+    @Environment(\.partialSheetDismiss)
+    private var onDismiss
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,10 +39,26 @@ struct EnterYourPasswordView: View {
                         RoundedRectangle(cornerRadius: BorderRadius.full)
                             .stroke(isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: isFocus ? 2 : 1)
                     )
+                    .onChange(
+                        of: password,
+                        perform: { newValue in
+                            isShowIncorrectPassword = false
+                        })
+                if isShowIncorrectPassword {
+                    HStack(spacing: 4) {
+                        Image(.icWarning)
+                            .fixSize(16)
+                        Text("Incorrect password")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveDangerTent)
+                        Spacer()
+                    }
+                    .padding(.top, .md)
+                }
             }
             Button(
                 action: {
-                    isShowEnterYourPassword = false
+                    onDismiss?()
                     navigator.push(.securitySetting(.forgotPassword))
                 },
                 label: {
@@ -60,6 +77,7 @@ struct EnterYourPasswordView: View {
                 let currentPassword: String = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
                 guard currentPassword == password
                 else {
+                    isShowIncorrectPassword = true
                     return
                 }
                 hideKeyboard()
@@ -71,7 +89,7 @@ struct EnterYourPasswordView: View {
                         case .password:
                             break
                         }
-                        isShowEnterYourPassword = false
+                        onDismiss?()
                         appSetting.authenticationType = authenticationType
                     } catch {
                         hudState.showMsg(msg: error.localizedDescription)
@@ -82,13 +100,13 @@ struct EnterYourPasswordView: View {
             .padding(.bottom, .md)
         }
         .padding(.horizontal, .xl)
-        .fixedSize(horizontal: false, vertical: true)
+        .presentSheetModifier()
     }
 }
 
 #Preview {
     VStack {
-        EnterYourPasswordView(isShowEnterYourPassword: .constant(false), authenticationType: .constant(.password))
+        EnterYourPasswordView(authenticationType: .constant(.password))
         Spacer()
     }
 }

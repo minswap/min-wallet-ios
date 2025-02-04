@@ -393,6 +393,9 @@
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
+    "Incorrect password" : {
+
+    },
     "Input information" : {
 
     },
