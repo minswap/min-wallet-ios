@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import MinWalletAPI
+import OneSignalFramework
 
 
 @MainActor
@@ -27,6 +28,7 @@ class HomeViewModel: ObservableObject {
 
     init() {
         guard AppSetting.shared.isLogin else { return }
+        generateTokenHash()
 
         $tabType
             .removeDuplicates()
@@ -119,6 +121,24 @@ class HomeViewModel: ObservableObject {
         if tokens.firstIndex(where: { $0.uniqueID == item.uniqueID }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
+    }
+
+    private func generateTokenHash() {
+        guard AppSetting.shared.isLogin else { return }
+        guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
+        guard let hash = UserDataManager.shared.notificationGenerateAuthHash, !hash.isBlank
+        else {
+            Task {
+                let mutation = try? await MinWalletService.shared.mutation(mutation: NotificationGenerateAuthHashMutation(identifier: address))
+                if let token = mutation?.notificationGenerateAuthHash, !token.isBlank {
+                    UserDataManager.shared.notificationGenerateAuthHash = token
+                    OneSignal.login(externalId: address, token: token)
+                }
+            }
+            return
+        }
+
+        OneSignal.login(externalId: address, token: hash)
     }
 }
 

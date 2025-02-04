@@ -1,5 +1,7 @@
 import SwiftUI
 import FlowStacks
+import MinWalletAPI
+import OneSignalFramework
 
 
 struct HomeView: View {
@@ -264,11 +266,46 @@ struct HomeView: View {
         }
         .onFirstAppear {
             Task {
+                OneSignal.Notifications.requestPermission(
+                    { accepted in
+                        print("User accepted notifications: \(accepted)")
+                    }, fallbackToSettings: true)
+
                 userInfo.adaHandleName = await TokenManager.fetchAdaHandleName()
             }
         }
+        .onOpenURL { incomingURL in
+            //minswap://testnet-preprod.minswap.org/orders?s= 83ada93f2ecadf5bbff265d36ae14303b5e19303f5ae107629ebf1961a7e7f98
+            handleIncomingURL(incomingURL)
+        }
+
+    }
+
+    private func handleIncomingURL(_ url: URL) {
+        guard url.scheme == MinWalletConstant.minswapScheme else { return }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
+
+        guard components.path == "/orders", let orderID = components.queryItems?.first(where: { $0.name == "s" })?.value else { return }
+        fetchOrderDetail(order: orderID)
     }
 }
+
+extension HomeView {
+    private func fetchOrderDetail(order: String) {
+        guard let address = userInfo.minWallet?.address, !address.isEmpty else { return }
+        Task {
+            let input = OrderV2Input(
+                address: address,
+                txId: .some(order)
+            )
+
+            let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
+            guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
+            navigator.push(.orderHistoryDetail(order: order))
+        }
+    }
+}
+
 
 #Preview {
     HomeView()

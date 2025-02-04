@@ -13,6 +13,8 @@ struct MinWalletConstant {
     static let adaToken = GetInfoDictionaryString(for: "MIN_ADA_TOKEN")
     static let mintToken = GetInfoDictionaryString(for: "MIN_MINT_TOKEN")
     static let adaCurrency = GetInfoDictionaryString(for: "MIN_ADA_CURRENCY")
+    static let minOneSignalAppID = GetInfoDictionaryString(for: "MIN_ONE_SIGNAL_APP_ID")
+    static let minswapScheme = "minswap"
 
     private init() {
 
