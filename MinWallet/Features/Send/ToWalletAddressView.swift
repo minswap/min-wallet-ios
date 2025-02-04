@@ -89,9 +89,9 @@ struct ToWalletAddressView: View {
                     })
                     .contentShape(.rect)
                     .onTapGesture {
-                        if let copied = UIPasteboard.general.string, !copied.isEmpty {
+                        if let copied = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines), !copied.isEmpty {
                             viewModel.reset()
-                            viewModel.address = copied.trimmingCharacters(in: .whitespacesAndNewlines)
+                            viewModel.address = copied
                         }
                     }
                     .disabled(viewModel.isChecking == true)
@@ -111,7 +111,7 @@ struct ToWalletAddressView: View {
             CustomButton(title: "Next", isEnable: combinedBinding) {
                 guard viewModel.isChecking != true else { return }
                 let address = viewModel.adaAddress?.address ?? viewModel.address
-                guard !address.isEmpty else { return }
+                guard address.count > 1 else { return }
                 navigator.push(.sendToken(.confirm(tokens: viewModel.tokens, address: address)))
             }
             .frame(height: 56)
@@ -202,6 +202,7 @@ struct ToWalletAddressView: View {
                     Text(errorType.errorDesc)
                         .font(.paragraphXSmall)
                         .foregroundStyle(.colorInteractiveDangerTent)
+                    Spacer()
                 }
                 .padding(.top, .lg)
                 .padding(.horizontal, .xl)

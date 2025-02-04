@@ -134,16 +134,16 @@ struct CreateNewPasswordView: View {
                         let seedPhrase = seedPhrase.joined(separator: " ")
                         guard let wallet = createWallet(phrase: seedPhrase, password: password, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                         else {
-                            throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                            throw AppGeneralError.localErrorLocalized(message: "Error creating wallet")
                         }
                         try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                         appSetting.authenticationType = .password
                         appSetting.isLogin = true
                         userInfo.saveWalletInfo(walletInfo: wallet)
+                        navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch {
                         hudState.showMsg(msg: error.localizedDescription)
                     }
-                    navigator.push(.createWallet(.createNewWalletSuccess))
                 case let .restoreWallet(fileContent, seedPhrase, nickName):
                     do {
                         let nickName = nickName.isBlank ? "My MinWallet" : nickName
@@ -154,16 +154,16 @@ struct CreateNewPasswordView: View {
                                 createWallet(phrase: seedPhrase.joined(separator: " "), password: password, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                             }
                         }()
-                        guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
+                        guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Error creating wallet") }
                         try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                         appSetting.authenticationType = .password
                         appSetting.isLogin = true
 
                         userInfo.saveWalletInfo(walletInfo: wallet)
+                        navigator.push(.restoreWallet(.createNewWalletSuccess))
                     } catch {
                         hudState.showMsg(msg: error.localizedDescription)
                     }
-                    navigator.push(.restoreWallet(.createNewWalletSuccess))
                 }
             }
             .frame(height: 56)

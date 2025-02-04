@@ -17,6 +17,8 @@ class BiometricAuthentication {
         #endif
         case .none:
             return ""
+        @unknown default:
+            return ""
         }
     }
 
@@ -31,6 +33,8 @@ class BiometricAuthentication {
                 return "Optic ID"
         #endif
         case .none:
+            return ""
+        @unknown default:
             return ""
         }
     }

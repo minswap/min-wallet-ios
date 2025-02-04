@@ -10,7 +10,9 @@ struct SplashView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @EnvironmentObject
-    private var hudState: HUDState
+    var hudState: HUDState
+    @EnvironmentObject
+    var bannerState: BannerState
 
     var body: some View {
         GeometryReader { geo in
@@ -39,19 +41,21 @@ struct SplashView: View {
                         EmptyView()
                     }
                 }
-
-                if hudState.isShowLoading {
-                    Color.black.opacity(0.2).ignoresSafeArea().transition(.fade)
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                        .scaleEffect(2, anchor: .center)
-                        .transition(.fade)
-                }
             }
             .onAppear(perform: {
                 appSetting.safeArea = UIApplication.safeArea.top
             })
         }
+        .banner(
+            isShowing: $bannerState.isShowingBanner,
+            infoContent: {
+                if let infoContent = bannerState.infoContent {
+                    infoContent()
+                } else {
+                    EmptyView()
+                }
+            }
+        )
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 withAnimation {
@@ -65,4 +69,6 @@ struct SplashView: View {
 #Preview {
     SplashView()
         .environmentObject(AppSetting.shared)
+        .environmentObject(HUDState())
+        .environmentObject(BannerState())
 }

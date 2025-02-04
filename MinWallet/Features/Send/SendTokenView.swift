@@ -64,7 +64,7 @@ struct SendTokenView: View {
                         ForEach($viewModel.tokens) { $item in
                             let item = $item.wrappedValue
                             HStack(spacing: .md) {
-                                AmountTextField(value: $item.amount, maxValue: item.token.amount)
+                                AmountTextField(value: $item.amount, minValue: pow(10, Double(item.token.decimals) * -1), maxValue: item.token.isTokenADA ? (item.token.amount - 10) : item.token.amount)
                                     .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
                                     .font(.labelMediumSecondary)
@@ -86,8 +86,8 @@ struct SendTokenView: View {
 
                         Button(
                             action: {
+                                hideKeyboard()
                                 $isShowSelectToken.showSheet()
-
                             },
                             label: {
                                 Text("Add Token")

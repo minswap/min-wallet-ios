@@ -11,7 +11,7 @@ struct SelectTokenListItemView: View {
     init(token: TokenProtocol?, isSelected: Binding<Bool>, isShowSelected: Bool) {
         self.token = token
         self._isSelected = isSelected
-        self.isShowSelected = isShowSelected
+        self._isShowSelected = .init(wrappedValue: isShowSelected)
     }
 
     var body: some View {
@@ -60,6 +60,10 @@ struct SelectTokenListItemView: View {
 }
 
 #Preview {
-    SelectTokenListItemView(token: TokenManager.shared.tokenAda, isSelected: .constant(true), isShowSelected: false)
-        .environmentObject(AppSetting.shared)
+    SelectTokenListItemView(
+        token: TokenManager.shared.tokenAda,
+        isSelected: .constant(true),
+        isShowSelected: true
+    )
+    .environmentObject(AppSetting.shared)
 }

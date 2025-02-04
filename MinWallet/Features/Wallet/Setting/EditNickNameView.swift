@@ -51,6 +51,7 @@ struct EditNickNameView: View {
                         Text("A wallet name must be 3-40 characters")
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveDangerTent)
+                        Spacer()
                     }
                 }
             }

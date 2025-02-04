@@ -22,10 +22,10 @@ class ConfirmSendTokenViewModel: ObservableObject {
         let receiver = address
         let sender = UserInfo.shared.minWallet?.address ?? ""
         let assetAmounts: [InputAssetAmount] = tokens.map { token in
-            InputAssetAmount(amount: token.amount, asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
+            let amount = token.amount.doubleValue * pow(10, Double(token.token.decimals))
+            return InputAssetAmount(amount: String(Int(amount)), asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
         }
         let sendTokensMutation = SendTokensMutation(input: InputSendTokens(assetAmounts: assetAmounts, receiver: receiver, sender: sender))
-
         let sendTokens = try await MinWalletService.shared.mutation(mutation: sendTokensMutation)
         tx = sendTokens?.sendTokens
         if tx == nil {

@@ -110,6 +110,7 @@ class SwapTokenViewModel: ObservableObject {
         case .setHalfAmount:
             tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
         case let .amountPayChanged(amount):
+            print("\(amount)")
             //TODO: calculate fee
             break
         }

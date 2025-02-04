@@ -54,6 +54,8 @@ struct MainCoordinator: View {
                             RestoreWalletView().navigationBarHidden(true)
                         case .seedPhrase:
                             ReInputSeedPhraseView(screenType: .restoreWallet).navigationBarHidden(true)
+                        case let .setupNickName(fileContent, seedPhrase):
+                            SetupNickNameView(screenType: .restoreWallet(fileContent: fileContent, seedPhrase: seedPhrase)).navigationBarHidden(true)
                         case .createNewWalletSuccess:
                             CreateNewWalletSuccessView(screenType: .restoreWallet).navigationBarHidden(true)
                         case let .createNewPassword(fileContent, seedPhrase, nickName):
@@ -89,8 +91,8 @@ struct MainCoordinator: View {
                                 .navigationBarHidden(true)
                         }
 
-                    case .receiveToken:
-                        ReceiveTokenView().navigationBarHidden(true)
+                    case let .receiveToken(screenType):
+                        ReceiveTokenView(screenType: screenType).navigationBarHidden(true)
 
                     case let .swapToken(screen):
                         switch screen {
@@ -120,6 +122,8 @@ struct MainCoordinator: View {
                         OrderHistoryDetailView(order: order).navigationBarHidden(true)
                     case .orderHistory:
                         OrderHistoryView().navigationBarHidden(true)
+                    case .scanQR:
+                        ScanQRView().navigationBarHidden(true)
                     }
                 }
                 .navigationBarHidden(true)

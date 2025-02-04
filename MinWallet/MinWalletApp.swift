@@ -27,23 +27,13 @@ struct MinWalletApp: App {
                 .environment(\.locale, .init(identifier: appSetting.language))
                 .alert(isPresented: $hudState.isPresented) {
                     Alert(
-                        title: Text("Notice"), message: Text(hudState.msg),
+                        title: Text(hudState.title), message: Text(hudState.msg),
                         dismissButton: .default(
-                            Text("Got it!"),
+                            Text(hudState.okTitle),
                             action: {
                                 hudState.onAction?()
                             }))
                 }
-                .banner(
-                    isShowing: $bannerState.isShowingBanner,
-                    infoContent: {
-                        if let infoContent = bannerState.infoContent {
-                            infoContent()
-                        } else {
-                            EmptyView()
-                        }
-                    }
-                )
                 .onAppear {
                     appSetting.initAppearanceStyle()
                 }
@@ -60,12 +50,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         #endif
         // OneSignal initialization
         OneSignal.initialize(MinWalletConstant.minOneSignalAppID, withLaunchOptions: launchOptions)
+        UNUserNotificationCenter.current().delegate = self
         return true
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let deviceTokenString = deviceToken.hexString
         UserDataManager.shared.deviceToken = deviceTokenString
+    }
+
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return .portrait
     }
 }
 
@@ -77,9 +72,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([.alert, .badge, .sound])
-        guard let userInfo = notification.request.content.userInfo as? [String: AnyObject] else { return }
+        completionHandler(.banner)
     }
+    /*
 
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -121,4 +116,5 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             return .newData
         }
     #endif
+     */
 }

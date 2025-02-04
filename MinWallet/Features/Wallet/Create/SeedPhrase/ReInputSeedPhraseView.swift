@@ -32,7 +32,7 @@ struct ReInputSeedPhraseView: View {
         if seedPhraseCount == 0 { return "" }
         switch screenType {
         case let .createWallet(seedPhrase):
-            if seedPhraseCount < 12 {
+            if seedPhraseCount < 24 {
                 return "Invalid seed phrase"
             } else if inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) != seedPhrase.joined(separator: " ") {
                 return "Seed phrase does not match"
@@ -40,7 +40,7 @@ struct ReInputSeedPhraseView: View {
                 return ""
             }
         case .restoreWallet:
-            return seedPhraseCount >= 12 ? "" : "Invalid seed phrase"
+            return seedPhraseCount >= 24 ? "" : "Invalid seed phrase"
         }
     }
 
@@ -91,7 +91,7 @@ struct ReInputSeedPhraseView: View {
                 Spacer()
                 Button(
                     action: {
-                        if let clipBoardText = UIPasteboard.general.string {
+                        if let clipBoardText = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines) {
                             inputSeedPhrase = clipBoardText + " "
                         }
                     },
@@ -122,7 +122,7 @@ struct ReInputSeedPhraseView: View {
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
                 case .restoreWallet:
                     guard !inputSeedPhrase.isBlank else { return }
-                    navigator.push(.restoreWallet(.biometricSetup(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }), nickName: "")))
+                    navigator.push(.restoreWallet(.setupNickName(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }))))
                 }
             }
             .frame(height: 56)

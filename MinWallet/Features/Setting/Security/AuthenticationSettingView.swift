@@ -46,7 +46,7 @@ struct AuthenticationSettingView: View {
             .onTapGesture {
                 guard appSetting.authenticationType != .biometric else { return }
                 authenticationTypeSelected = .biometric
-                isShowEnterYourPassword = true
+                $isShowEnterYourPassword.showSheet()
             }
             HStack {
                 Text("Password")
@@ -88,12 +88,9 @@ struct AuthenticationSettingView: View {
                     navigator.pop()
                 })
         )
-        .popupSheet(
-            isPresented: $isShowEnterYourPassword,
-            content: {
-                EnterYourPasswordView(isShowEnterYourPassword: $isShowEnterYourPassword, authenticationType: $authenticationTypeSelected).padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $isShowEnterYourPassword) {
+            EnterYourPasswordView(authenticationType: $authenticationTypeSelected)
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()

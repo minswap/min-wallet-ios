@@ -126,19 +126,13 @@ class HomeViewModel: ObservableObject {
     private func generateTokenHash() {
         guard AppSetting.shared.isLogin else { return }
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
-        guard let hash = UserDataManager.shared.notificationGenerateAuthHash, !hash.isBlank
-        else {
-            Task {
-                let mutation = try? await MinWalletService.shared.mutation(mutation: NotificationGenerateAuthHashMutation(identifier: address))
-                if let token = mutation?.notificationGenerateAuthHash, !token.isBlank {
-                    UserDataManager.shared.notificationGenerateAuthHash = token
-                    OneSignal.login(externalId: address, token: token)
-                }
+        Task {
+            let mutation = try? await MinWalletService.shared.mutation(mutation: NotificationGenerateAuthHashMutation(identifier: address))
+            if let token = mutation?.notificationGenerateAuthHash, !token.isBlank {
+                UserDataManager.shared.notificationGenerateAuthHash = token
+                OneSignal.login(externalId: address, token: token)
             }
-            return
         }
-
-        OneSignal.login(externalId: address, token: hash)
     }
 }
 

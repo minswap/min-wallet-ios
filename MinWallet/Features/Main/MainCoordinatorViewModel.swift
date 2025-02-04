@@ -26,12 +26,13 @@ extension MainCoordinatorViewModel {
         case restoreWallet(_ screen: RestoreWalletScreen)
         case walletSetting(_ screen: WalletSettingScreen)
         case sendToken(_ screen: SendTokenScreen)
-        case receiveToken
+        case receiveToken(_ screen: ReceiveTokenView.ScreenType)
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
         case securitySetting(_ screen: SecuritySetting)
         case orderHistoryDetail(order: OrderHistoryQuery.Data.Orders.WrapOrder)
         case orderHistory
+        case scanQR
     }
 }
 
@@ -49,6 +50,7 @@ enum RestoreWalletScreen: Hashable {
     case restoreWallet
     case importFile
     case seedPhrase
+    case setupNickName(fileContent: String, seedPhrase: [String])
     case biometricSetup(fileContent: String, seedPhrase: [String], nickName: String)
     case createNewPassword(fileContent: String, seedPhrase: [String], nickName: String)
     case createNewWalletSuccess
@@ -132,7 +134,8 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.changePassword, .changePassword),
             (.receiveToken, .receiveToken),
             (.searchToken, .searchToken),
-            (.orderHistory, .orderHistory):
+            (.orderHistory, .orderHistory),
+            (.scanQR, .scanQR):
             return true
 
         case (.tokenDetail, .tokenDetail):

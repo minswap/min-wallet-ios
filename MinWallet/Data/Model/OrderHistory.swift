@@ -6,7 +6,7 @@ import SwiftyJSON
 
 typealias ContractType = AMMType
 
-extension OrderV2Action: Identifiable {
+extension OrderV2Action: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
 
     var title: LocalizedStringKey {
@@ -35,7 +35,7 @@ extension OrderV2Action: Identifiable {
     }
 }
 
-extension OrderV2Status: Identifiable {
+extension OrderV2Status: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
 
     var title: LocalizedStringKey {
@@ -83,7 +83,7 @@ extension OrderV2Status: Identifiable {
     }
 }
 
-extension ContractType: Identifiable {
+extension ContractType: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
 
     var title: LocalizedStringKey {

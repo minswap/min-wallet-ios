@@ -103,7 +103,7 @@ struct HomeView: View {
                         )
                         .contentShape(.rect)
                         .onTapGesture {
-                            //navigator.push(.searchToken)
+                            navigator.push(.scanQR)
                         }
                     Image(.icSearch)
                         .resizable()
@@ -207,7 +207,7 @@ struct HomeView: View {
                         title: "Receive",
                         icon: .icReceive
                     ) {
-                        navigator.push(.receiveToken)
+                        navigator.push(.receiveToken(.home))
                     }
                     .frame(height: 44)
                     CustomButton(

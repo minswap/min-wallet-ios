@@ -47,4 +47,5 @@ vendor
 
 MinWalletAPI/.build
 CoreDataRepository/.build
+CodeScanner/.build
 apollo-ios-cli
