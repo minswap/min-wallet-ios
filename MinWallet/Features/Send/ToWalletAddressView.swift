@@ -89,9 +89,9 @@ struct ToWalletAddressView: View {
                     })
                     .contentShape(.rect)
                     .onTapGesture {
-                        if let copied = UIPasteboard.general.string, !copied.isEmpty {
+                        if let copied = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines), !copied.isEmpty {
                             viewModel.reset()
-                            viewModel.address = copied.trimmingCharacters(in: .whitespacesAndNewlines)
+                            viewModel.address = copied
                         }
                     }
                     .disabled(viewModel.isChecking == true)

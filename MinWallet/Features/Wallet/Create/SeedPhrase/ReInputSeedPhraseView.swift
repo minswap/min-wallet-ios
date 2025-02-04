@@ -91,7 +91,7 @@ struct ReInputSeedPhraseView: View {
                 Spacer()
                 Button(
                     action: {
-                        if let clipBoardText = UIPasteboard.general.string {
+                        if let clipBoardText = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines) {
                             inputSeedPhrase = clipBoardText + " "
                         }
                     },
