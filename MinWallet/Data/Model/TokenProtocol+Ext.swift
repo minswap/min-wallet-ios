@@ -427,13 +427,15 @@ struct TokenDefault: TokenProtocol {
 
     var ticker: String { "" }
 
-    var name: String { "" }
+    var name: String { minName }
 
     var category: [String] { [] }
 
     var percentChange: Double { 0 }
 
-    var priceValue: Double { 0 }
+    var priceValue: Double {
+        netValue
+    }
 
     var subPriceValue: Double { 0 }
 
@@ -443,14 +445,22 @@ struct TokenDefault: TokenProtocol {
 
     var symbol: String = ""
     var tName: String = ""
+    var minName: String = ""
     var netValue: Double = 0
 
     var amount: Double {
         netValue
     }
 
-    init(symbol: String, tName: String) {
+    init(
+        symbol: String,
+        tName: String,
+        minName: String = "",
+        netValue: Double = 0
+    ) {
         self.symbol = symbol
         self.tName = tName
+        self.minName = minName
+        self.netValue = netValue
     }
 }

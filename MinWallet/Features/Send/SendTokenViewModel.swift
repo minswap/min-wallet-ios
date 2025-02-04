@@ -7,23 +7,30 @@ class SendTokenViewModel: ObservableObject {
     @Published
     var tokens: [WrapTokenSend] = []
 
-    init() {
-        Task {
-            var adaToken = TokenDefault(symbol: "", tName: "")
-            adaToken.netValue = TokenManager.shared.adaValue
-            tokens.append(WrapTokenSend(token: adaToken))
-        }
+    init(tokens: [TokenProtocol]) {
+        self.tokens = tokens.map({ WrapTokenSend(token: $0) })
     }
 
     func addToken(tokens: [TokenProtocol]) {
-        //TODO: cuongnv single mode
-        guard let tokenUpdate = tokens.first, !self.tokens.contains(where: { $0.token.uniqueID == tokenUpdate.uniqueID }) else { return }
-        self.tokens.append(WrapTokenSend(token: tokenUpdate))
+        let currentAmountWithToken = self.tokens.reduce([:]) { result, wrapToken in
+            result.appending([wrapToken.uniqueID: wrapToken.amount])
+        }
+        self.tokens = tokens.map { WrapTokenSend(token: $0, amount: currentAmountWithToken[$0.uniqueID] ?? "") }
+    }
+
+    func setMaxAmount(item: WrapTokenSend) {
+        guard let index = tokens.firstIndex(where: { $0.id == item.id }) else { return }
+        tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+    }
+
+    var tokensToSend: [WrapTokenSend] {
+        tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 }
     }
 }
 
 
-struct WrapTokenSend {
+struct WrapTokenSend: Identifiable {
+    let id: UUID = UUID()
     var token: TokenProtocol
 
     var amount: String = ""
@@ -31,5 +38,9 @@ struct WrapTokenSend {
     init(token: TokenProtocol, amount: String = "") {
         self.token = token
         self.amount = amount
+    }
+
+    var uniqueID: String {
+        token.uniqueID
     }
 }

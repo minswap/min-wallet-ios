@@ -19,6 +19,8 @@ struct SettingView: View {
     var isShowTimeZone: Bool
     @Binding
     var isShowCurrency: Bool
+    @Binding
+    var isShowLanguage: Bool
     @State
     private var isCopyAddress: Bool = false
 
@@ -155,7 +157,7 @@ struct SettingView: View {
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    navigator.presentSheet(.language)
+                    $isShowLanguage.showSheet()
                 }
                 HStack(spacing: 12) {
                     Text("Currency")
@@ -272,7 +274,7 @@ struct SettingView: View {
 
 #Preview {
     VStack {
-        SettingView(isShowAppearance: .constant(false), isShowTimeZone: .constant(false), isShowCurrency: .constant(false))
+        SettingView(isShowAppearance: .constant(false), isShowTimeZone: .constant(false), isShowCurrency: .constant(false), isShowLanguage: .constant(false))
             .environmentObject(AppSetting.shared)
             .environmentObject(UserInfo.shared)
     }

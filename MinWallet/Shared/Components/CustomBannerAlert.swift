@@ -30,7 +30,7 @@ private struct CustomBannerAlertModifier<InfoContent: View>: ViewModifier {
                     }
                 }
                 .onAppear(perform: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                         withAnimation {
                             self.isShowing = false
                         }

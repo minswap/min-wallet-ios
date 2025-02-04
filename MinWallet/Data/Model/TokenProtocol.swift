@@ -28,7 +28,6 @@ extension TokenProtocol {
         return UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? tokenName.adaName ?? ""
     }
 
-    //TODO: cuongnv check sau
     var amount: Double {
         0
     }
@@ -46,5 +45,14 @@ extension TokenProtocol {
         }
 
         return currencySymbol + "." + tokenName
+    }
+}
+
+struct WrapTokenProtocol: Identifiable {
+    let id: UUID = UUID()
+    let token: TokenProtocol
+
+    init(token: TokenProtocol) {
+        self.token = token
     }
 }

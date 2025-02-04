@@ -17,6 +17,7 @@ struct AboutView: View {
                 .font(.paragraphXMediumSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                 .padding(.horizontal, .xl)
+                .padding(.top, .xl)
             HStack(spacing: 12) {
                 Text("Privacy policy")
                     .font(.labelSmallSecondary)
@@ -41,6 +42,7 @@ struct AboutView: View {
             }
             .frame(height: 52)
             .padding(.horizontal, .xl)
+            /*
             Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .xl)
@@ -68,6 +70,7 @@ struct AboutView: View {
             }
             .frame(height: 52)
             .padding(.horizontal, .xl)
+             */
             Spacer()
         }
         .modifier(

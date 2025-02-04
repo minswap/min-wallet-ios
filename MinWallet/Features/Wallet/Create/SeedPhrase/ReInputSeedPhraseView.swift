@@ -40,7 +40,7 @@ struct ReInputSeedPhraseView: View {
                 return ""
             }
         case .restoreWallet:
-            return seedPhraseCount < 12 ? "" : "Invalid seed phrase"
+            return seedPhraseCount >= 12 ? "" : "Invalid seed phrase"
         }
     }
 

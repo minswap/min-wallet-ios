@@ -205,18 +205,12 @@ struct OrderHistoryDetailView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .onTapGesture {
-                            guard let link = order?.order?.txIn.txId,
-                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
-                            else { return }
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            order?.order?.txIn.txId.viewTransaction()
                         }
                     Image(.icArrowUp)
                         .fixSize(.xl)
                         .onTapGesture {
-                            guard let link = order?.order?.txIn.txId,
-                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
-                            else { return }
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            order?.order?.txIn.txId.viewTransaction()
                         }
                 }
                 .padding(.top, .md)
@@ -404,18 +398,12 @@ struct OrderHistoryDetailView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .onTapGesture {
-                            guard let link = order?.order?.updatedTxId,
-                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
-                            else { return }
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            order?.order?.updatedTxId?.viewTransaction()
                         }
                     Image(.icArrowUp)
                         .fixSize(.xl)
                         .onTapGesture {
-                            guard let link = order?.order?.updatedTxId,
-                                let url = URL(string: MinWalletConstant.transactionURL + "/" + link)
-                            else { return }
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            order?.order?.updatedTxId?.viewTransaction()
                         }
                 }
                 .padding(.top, .md)

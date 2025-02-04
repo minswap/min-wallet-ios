@@ -22,6 +22,8 @@ struct HomeView: View {
     @State
     private var isShowCurrency: Bool = false
     @State
+    private var isShowLanguage: Bool = false
+    @State
     private var showSideMenu: Bool = false
     @State
     private var isCopyAddress: Bool = false
@@ -213,7 +215,7 @@ struct HomeView: View {
                         variant: .secondary,
                         icon: .icSend
                     ) {
-                        navigator.push(.sendToken(.sendToken))
+                        navigator.push(.sendToken(.selectToken(tokensSelected: [], screenType: .initSelectedToken, onSelectToken: nil)))
                     }
                     .frame(height: 44)
                     CustomButton(
@@ -247,7 +249,7 @@ struct HomeView: View {
             }
         }
         .sideMenu(isShowing: $showSideMenu) {
-            SettingView(isShowAppearance: $isShowAppearance, isShowTimeZone: $isShowTimeZone, isShowCurrency: $isShowCurrency)
+            SettingView(isShowAppearance: $isShowAppearance, isShowTimeZone: $isShowTimeZone, isShowCurrency: $isShowCurrency, isShowLanguage: $isShowLanguage)
         }
         .presentSheet(isPresented: $isShowAppearance) {
             AppearanceView()
@@ -258,6 +260,9 @@ struct HomeView: View {
             CurrencyView()
                 .padding(.horizontal, .md)
                 .padding(.vertical, .md)
+        }
+        .presentSheet(isPresented: $isShowLanguage) {
+            LanguageView()
         }
         .presentSheet(isPresented: $isShowTimeZone) {
             TimeZoneView()

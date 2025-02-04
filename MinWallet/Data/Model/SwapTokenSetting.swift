@@ -19,7 +19,9 @@ extension SwapTokenSetting {
     }
 }
 
-struct WrapRouting {
+struct WrapRouting: Identifiable {
+    var id: UUID = UUID()
+
     var title: LocalizedStringKey?
     let routing: RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Routing
     var pools: [RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Pool] = []

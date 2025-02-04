@@ -19,7 +19,6 @@ extension MainCoordinatorViewModel {
         case gettingStarted
         case tokenDetail(token: TokenProtocol)
         case about
-        case language
         case changePassword
         case changePasswordSuccess(_ screenType: ChangePasswordSuccessView.ScreenType)
         case forgotPassword(_ screenType: ChangePasswordView.ScreenType)
@@ -27,7 +26,6 @@ extension MainCoordinatorViewModel {
         case restoreWallet(_ screen: RestoreWalletScreen)
         case walletSetting(_ screen: WalletSettingScreen)
         case sendToken(_ screen: SendTokenScreen)
-        case selectToken(tokensSelected: [TokenProtocol?], onSelectToken: (([TokenProtocol]) -> Void)?)
         case receiveToken
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
@@ -64,9 +62,10 @@ enum WalletSettingScreen: Hashable {
 }
 
 enum SendTokenScreen: Hashable, Identifiable {
-    case sendToken
-    case toWallet
-    case confirm
+    case sendToken(tokensSelected: [TokenProtocol])
+    case toWallet(tokens: [WrapTokenSend])
+    case confirm(tokens: [WrapTokenSend], address: String)
+    case selectToken(tokensSelected: [TokenProtocol?], screenType: SelectTokenView.ScreenType, onSelectToken: (([TokenProtocol]) -> Void)?)
 
     var id: UUID { UUID() }
 
@@ -78,7 +77,8 @@ enum SendTokenScreen: Hashable, Identifiable {
         switch (lhs, rhs) {
         case (.sendToken, .sendToken),
             (.toWallet, .toWallet),
-            (.confirm, .confirm):
+            (.confirm, .confirm),
+            (.selectToken, .selectToken):
             return true
         default:
             return false
@@ -129,9 +129,7 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.policy, .policy),
             (.gettingStarted, .gettingStarted),
             (.about, .about),
-            (.language, .language),
             (.changePassword, .changePassword),
-            (.selectToken, .selectToken),
             (.receiveToken, .receiveToken),
             (.searchToken, .searchToken),
             (.orderHistory, .orderHistory):

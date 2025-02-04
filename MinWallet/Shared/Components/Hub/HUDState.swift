@@ -12,9 +12,18 @@ class HUDState: ObservableObject {
 
     init() {}
 
+    @Published
+    var isShowLoading: Bool = false
+
     func showMsg(msg: String, onAction: (() -> Void)? = nil) {
         self.msg = msg
         self.onAction = onAction
         self.isPresented = true
+    }
+
+    func showLoading(isShow: Bool) {
+        withAnimation {
+            isShowLoading = isShow
+        }
     }
 }

@@ -24,8 +24,6 @@ struct MainCoordinator: View {
                         TokenDetailView(viewModel: TokenDetailViewModel(token: token)).navigationBarHidden(true)
                     case .about:
                         AboutView().navigationBarHidden(true)
-                    case .language:
-                        LanguageView().interactiveDismissDisabled(false)
                     case .changePassword:
                         ChangePasswordView(screenType: .setting).navigationBarHidden(true)
                     case let .changePasswordSuccess(screenType):
@@ -80,16 +78,16 @@ struct MainCoordinator: View {
 
                     case let .sendToken(screen):
                         switch screen {
-                        case .sendToken:
-                            SendTokenView().navigationBarHidden(true)
-                        case .toWallet:
-                            ToWalletAddressView().navigationBarHidden(true)
-                        case .confirm:
-                            ConfirmSendTokenView().navigationBarHidden(true)
+                        case let .sendToken(tokenSelected):
+                            SendTokenView(viewModel: .init(tokens: tokenSelected)).navigationBarHidden(true)
+                        case let .toWallet(tokens):
+                            ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: tokens)).navigationBarHidden(true)
+                        case let .confirm(tokens, address):
+                            ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: tokens, address: address)).navigationBarHidden(true)
+                        case let .selectToken(tokensSelected, screenType, onSelectToken):
+                            SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: screenType), onSelectToken: onSelectToken)
+                                .navigationBarHidden(true)
                         }
-
-                    case let .selectToken(tokensSelected, onSelectToken):
-                        SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected), onSelectToken: onSelectToken).presentationDragIndicator(.visible)
 
                     case .receiveToken:
                         ReceiveTokenView().navigationBarHidden(true)

@@ -14,10 +14,6 @@ struct SwapTokenView: View {
     private var appSetting: AppSetting
     @EnvironmentObject
     private var bannerState: BannerState
-
-    @State
-    private var amountYouPay: String = ""
-
     @StateObject
     private var viewModel: SwapTokenViewModel = .init()
     @FocusState
@@ -27,10 +23,16 @@ struct SwapTokenView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            contentView
+            ScrollView {
+                VStack(spacing: 0) {
+                    contentView
+                    Spacer()
+                    bottomView
+                }
+            }
             Spacer()
-            bottomView
             CustomButton(title: "Swap") {
+                hideKeyboard()
                 viewModel.swapToken(
                     appSetting: appSetting,
                     signContract: {
@@ -63,42 +65,65 @@ struct SwapTokenView: View {
                     navigator.pop()
                 },
                 actionRight: {
+                    hideKeyboard()
                     $viewModel.isShowSwapSetting.showSheet()
                 })
         )
-        .popupSheet(
-            isPresented: $viewModel.isShowInfo,
-            content: {
-                SwapTokenInfoView(isShowInfo: $viewModel.isShowInfo)
-            }
-        )
-        .popupSheet(
-            isPresented: $viewModel.isShowRouting,
-            content: {
-                SwapTokenRoutingView(isShowRouting: $viewModel.isShowRouting)
-                    .environmentObject(viewModel)
-            }
-        )
+        .presentSheet(isPresented: $viewModel.isShowInfo) {
+            SwapTokenInfoView()
+                .environmentObject(viewModel)
+        }
+        .presentSheet(isPresented: $viewModel.isShowRouting) {
+            SwapTokenRoutingView()
+                .environmentObject(viewModel)
+        }
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
             SwapTokenSettingView(viewModel: viewModel)
                 .padding(.xl)
         }
-        .popupSheet(
-            isPresented: $isShowSignContract,
-            content: {
-                SignContractView(
-                    isShowSignContract: $isShowSignContract,
-                    onSignSuccess: {
-                        swapTokenSuccess()
-                    }
-                )
-                .padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    swapTokenSuccess()
+                }
+            )
+        }
+        .presentSheet(isPresented: $viewModel.isShowSelectPayToken) {
+            SelectTokenView(
+                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenPay.token], screenType: .swapToken),
+                onSelectToken: { tokens in
+                    self.viewModel.action.send(.selectTokenPay(token: tokens.first))
+                }
+            )
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .presentSheetModifier()
+        }
+        .presentSheet(isPresented: $viewModel.isShowSelectReceiveToken) {
+            SelectTokenView(
+                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenReceive.token], screenType: .swapToken),
+                onSelectToken: { tokens in
+                    self.viewModel.action.send(.selectTokenReceive(token: tokens.first))
+                }
+            )
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .presentSheetModifier()
+        }
     }
 
     @ViewBuilder
     private var contentView: some View {
+        tokenPayView
+        Image(.icSwap)
+            .resizable().frame(width: 36, height: 36)
+            .padding(.top, -16)
+            .padding(.bottom, -16)
+            .zIndex(999)
+        tokenReceiveView
+        routingView
+    }
+
+    @ViewBuilder
+    private var tokenPayView: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .lastTextBaseline, spacing: 6) {
                 Text("You pay")
@@ -108,25 +133,35 @@ struct SwapTokenView: View {
                 Text("Half")
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorInteractiveToneHighlight)
+                    .onTapGesture {
+                        viewModel.action.send(.setHalfAmount)
+                    }
                 Text("Max")
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorInteractiveToneHighlight)
+                    .onTapGesture {
+                        viewModel.action.send(.setMaxAmount)
+                    }
             }
             HStack(alignment: .center, spacing: 6) {
-                TextField("", text: $amountYouPay)
-                    .placeholder("0.0", font: .titleH4, when: amountYouPay.isEmpty)
-                    .font(.titleH4)
-                    .focused($focusedField, equals: .pay)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                AmountTextField(
+                    value: $viewModel.tokenPay.amount,
+                    maxValue: viewModel.tokenPay.token.amount,
+                    fontPlaceHolder: .titleH4
+                )
+                .font(.titleH4)
+                .foregroundStyle(.colorBaseTent)
+                .focused($focusedField, equals: .pay)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
-                        currencySymbol: viewModel.tokenPay?.currencySymbol,
-                        tokenName: viewModel.tokenPay?.tokenName,
-                        isVerified: viewModel.tokenPay?.isVerified,
+                        currencySymbol: viewModel.tokenPay.token.currencySymbol,
+                        tokenName: viewModel.tokenPay.token.tokenName,
+                        isVerified: viewModel.tokenPay.token.isVerified,
                         size: .init(width: 24, height: 24)
                     )
-                    Text(viewModel.tokenPay?.name)
+                    Text(viewModel.tokenPay.token.adaName)
+                        .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Image(.icDown)
@@ -139,12 +174,8 @@ struct SwapTokenView: View {
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .contentShape(.rect)
                 .onTapGesture {
-                    navigator.presentSheet(
-                        .selectToken(
-                            tokensSelected: [viewModel.tokenReceive],
-                            onSelectToken: { token in
-                                self.viewModel.action.send(.selectTokenReceive(token: token.first))
-                            }))
+                    hideKeyboard()
+                    $viewModel.isShowSelectPayToken.showSheet()
                 }
             }
             HStack(alignment: .center, spacing: 4) {
@@ -167,42 +198,35 @@ struct SwapTokenView: View {
         )
         .padding(.horizontal, .xl)
         .padding(.top, .lg)
-        Image(.icSwap)
-            .resizable().frame(width: 36, height: 36)
-            .padding(.top, -16)
-            .padding(.bottom, -16)
-            .zIndex(999)
+    }
+    @ViewBuilder
+    private var tokenReceiveView: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("You receive")
                 .font(.paragraphSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
             HStack(alignment: .center, spacing: 6) {
-                TextField("", text: $amountYouPay)
-                    .placeholder("0.0", font: .titleH4, when: amountYouPay.isEmpty)
-                    .font(.titleH4)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                AmountTextField(
+                    value: $viewModel.tokenReceive.amount,
+                    maxValue: viewModel.tokenReceive.token.amount,
+                    fontPlaceHolder: .titleH4
+                )
+                .font(.titleH4)
+                .foregroundStyle(.colorBaseTent)
+                .focused($focusedField, equals: .receive)
+                .disabled(true)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
-                    if let tokenReceive = viewModel.tokenReceive {
-                        TokenLogoView(
-                            currencySymbol: tokenReceive.currencySymbol,
-                            tokenName: tokenReceive.tokenName,
-                            isVerified: tokenReceive.isVerified,
-                            size: .init(width: 24, height: 24)
-                        )
-                        Text(tokenReceive.name)
-                            .font(.labelMediumSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    } else {
-                        Image(.icAdd)
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                        Text("Select token")
-                            .font(.labelMediumSecondary)
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: false)
-                            .foregroundStyle(.colorBaseTent)
-                    }
+                    TokenLogoView(
+                        currencySymbol: viewModel.tokenReceive.token.currencySymbol,
+                        tokenName: viewModel.tokenReceive.token.tokenName,
+                        isVerified: viewModel.tokenReceive.token.isVerified,
+                        size: .init(width: 24, height: 24)
+                    )
+                    Text(viewModel.tokenReceive.token.adaName)
+                        .lineLimit(1)
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
                     Image(.icDown)
                         .resizable()
                         .renderingMode(.template)
@@ -212,12 +236,8 @@ struct SwapTokenView: View {
                 .padding(.md)
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .onTapGesture {
-                    navigator.presentSheet(
-                        .selectToken(
-                            tokensSelected: [viewModel.tokenPay],
-                            onSelectToken: { token in
-                                self.viewModel.action.send(.selectTokenPay(token: token.first))
-                            }))
+                    hideKeyboard()
+                    $viewModel.isShowSelectReceiveToken.showSheet()
                 }
             }
             HStack(alignment: .center, spacing: 4) {
@@ -237,6 +257,10 @@ struct SwapTokenView: View {
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
+    }
+
+    @ViewBuilder
+    private var routingView: some View {
         if let routingSelected = viewModel.routingSelected {
             VStack(spacing: .lg) {
                 HStack(spacing: 4) {
@@ -288,6 +312,7 @@ struct SwapTokenView: View {
             .contentShape(.rect)
             .onTapGesture {
                 guard !viewModel.isLoadingRouting else { return }
+                hideKeyboard()
                 $viewModel.isShowRouting.showSheet()
             }
         }
@@ -322,50 +347,16 @@ struct SwapTokenView: View {
         .padding(.xl)
         .containerShape(.rect)
         .onTapGesture {
+            hideKeyboard()
             $viewModel.isShowInfo.showSheet()
         }
     }
 
     private func swapTokenSuccess() {
         bannerState.infoContent = {
-            AnyView(
-                HStack(alignment: .top) {
-                    Image(.icCheckSuccess)
-                        .fixSize(24)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Transaction Submitted")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorInteractiveToneSuccess)
-                        Text("Your transaction has been submitted successfully")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        HStack(spacing: 4) {
-                            Text("View on explorer")
-                                .underline()
-                                .baselineOffset(4)
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                                .onTapGesture {
-                                    //TODO: view transaction
-                                }
-                            Image(.icArrowUp)
-                                .fixSize(.xl)
-                                .onTapGesture {
-                                    //TODO: view transaction
-                                }
-                        }
-                        .padding(.top, 4)
-                    }
-                }
-                .padding()
-                .background(.colorBaseBackground)
-                .clipped()
-                .cornerRadius(._3xl)
-                .overlay(RoundedRectangle(cornerRadius: ._3xl).stroke(.colorBaseSuccessSub, lineWidth: 1))
-                .shadow(radius: 5, x: 0, y: 5)
-                .frame(minWidth: UIScreen.main.bounds.width - 32, maxWidth: UIScreen.main.bounds.width - 32)
-                .fixedSize(horizontal: true, vertical: false)
-            )
+            bannerState.infoContentDefault(onViewTransaction: {
+
+            })
         }
         bannerState.isShowingBanner = true
         navigator.popToRoot()

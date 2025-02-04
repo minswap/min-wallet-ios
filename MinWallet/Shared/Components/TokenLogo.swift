@@ -8,14 +8,26 @@ struct TokenLogoView: View {
         MinWalletConstant.mintToken: .mint,
     ]
 
+    @Binding
+    private var currencySymbol: String?
+    @Binding
+    private var tokenName: String?
     @State
-    var currencySymbol: String?
+    private var isVerified: Bool?
     @State
-    var tokenName: String?
-    @State
-    var isVerified: Bool?
-    @State
-    var size: CGSize = .init(width: 28, height: 28)
+    private var size: CGSize = .init(width: 28, height: 28)
+
+    init(
+        currencySymbol: String? = nil,
+        tokenName: String? = nil,
+        isVerified: Bool? = nil,
+        size: CGSize = .init(width: 28, height: 28)
+    ) {
+        self._currencySymbol = .constant(currencySymbol)
+        self._tokenName = .constant(tokenName)
+        self.isVerified = isVerified
+        self.size = size
+    }
 
     private var uniqueID: String {
         let currencySymbol = currencySymbol ?? ""

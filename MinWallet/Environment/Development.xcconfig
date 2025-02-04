@@ -1,11 +1,13 @@
 #include "AppConfig.xcconfig"
 
-MIN_GRAPHQL_URL      = https:\/\/monorepo-testnet-preprod.minswap.org\/graphql
+MIN_URL      = https:\/\/dev-2.minswap.org
 MIN_PUBLIC_NETWORK_ID = preprod
-MIN_TRANSACTION_URL = https:/\/\preprod.cardanoscan.io\/transaction
+MIN_TRANSACTION_URL = https:/\/\preprod.cardanoscan.io
+MIN_HANDLE_ADA_NAME_URL = https:/\/\preprod.api.handle.me\/handles
 
 MIN_MIN_TOKEN = e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72.4d494e
 MIN_MINT_TOKEN = e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72.4d494e74
 MIN_LP_TOKEN = e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86
 MIN_ADA_TOKEN = lovelace
 MIN_ADA_CURRENCY = t₳
+MIN_ADDRESS_PREFIX = addr_test1

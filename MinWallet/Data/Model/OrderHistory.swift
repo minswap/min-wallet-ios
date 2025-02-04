@@ -121,7 +121,8 @@ extension ContractType: Identifiable {
 }
 
 extension OrderHistoryQuery.Data.Orders {
-    struct WrapOrder: Hashable {
+    struct WrapOrder: Hashable, Identifiable {
+        let id: UUID = UUID()
         var order: OrderHistoryQuery.Data.Orders.Order?
         var detail: Detail = .init()
 

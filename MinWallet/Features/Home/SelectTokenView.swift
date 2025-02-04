@@ -4,22 +4,96 @@ import FlowStacks
 
 
 struct SelectTokenView: View {
+    enum ScreenType {
+        case initSelectedToken
+        case sendToken
+        case swapToken
+    }
+
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
 
-    init(viewModel: SelectTokenViewModel, onSelectToken: (([TokenProtocol]) -> Void)?) {
+    init(
+        viewModel: SelectTokenViewModel,
+        onSelectToken: (([TokenProtocol]) -> Void)?
+    ) {
         self._viewModel = .init(wrappedValue: viewModel)
         self.onSelectToken = onSelectToken
     }
 
-    @StateObject
+    @ObservedObject
     private var viewModel: SelectTokenViewModel
 
     var onSelectToken: (([TokenProtocol]) -> Void)?
 
     var body: some View {
+        ZStack {
+            Color.colorBaseBackground.ignoresSafeArea()
+            VStack(
+                spacing: 0,
+                content: {
+                    if viewModel.screenType == .initSelectedToken {
+                        headerView
+                    }
+                    contentView
+                    if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
+                        CustomButton(title: viewModel.screenType == .initSelectedToken ? "Next" : "Confirm") {
+                            let tokenSelected = viewModel.tokenCallBack
+                            switch viewModel.screenType {
+                            case .initSelectedToken:
+                                guard !tokenSelected.isEmpty else { return }
+                                onSelectToken?(tokenSelected)
+                                navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected)))
+                            case .sendToken:
+                                onSelectToken?(tokenSelected)
+                                onDismiss?()
+                            case .swapToken:
+                                break
+                            }
+                        }
+                        .frame(height: 56)
+                        .padding(.horizontal, .xl)
+                        .safeAreaInset(edge: .bottom) {
+                            Color.clear.frame(height: 0)
+                        }
+                    }
+                })
+        }
+        .background(.colorBaseBackground)
+    }
+
+    @ViewBuilder
+    private var headerView: some View {
+        HStack(spacing: .lg) {
+            Button(
+                action: {
+                    navigator.pop()
+                },
+                label: {
+                    Image(.icBack)
+                        .resizable()
+                        .frame(width: ._3xl, height: ._3xl)
+                        .padding(.md)
+                        .background(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryTer, lineWidth: 1))
+                }
+            )
+            .buttonStyle(.plain)
+            Spacer()
+        }
+        .frame(height: 48)
+        .padding(.horizontal, .xl)
+        Text("You want to send")
+            .font(.titleH5)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(height: 60)
+            .padding(.horizontal, .xl)
+    }
+
+    private var contentView: some View {
         VStack(spacing: .md) {
             HStack(spacing: .md) {
                 Image(.icSearch)
@@ -33,7 +107,7 @@ struct SelectTokenView: View {
             .padding(.md)
             .overlay(RoundedRectangle(cornerRadius: 20).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
             .padding(.horizontal, .xl)
-            .padding(.top, 30)
+            .padding(.top, .lg)
             ScrollView {
                 if viewModel.showSkeleton {
                     ForEach(0..<20, id: \.self) { index in
@@ -54,16 +128,32 @@ struct SelectTokenView: View {
                     LazyVStack(
                         spacing: 0,
                         content: {
-                            ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                                let item = viewModel.tokens[index]
-                                TokenListItemView(token: item)
-                                    .onTapGesture {
-                                        navigator.dismiss()
-                                        onSelectToken?([item])
-                                    }
-                                    .onAppear() {
-                                        viewModel.loadMoreData(item: item)
-                                    }
+                            ForEach($viewModel.tokens) { $item in
+                                let item = $item.wrappedValue.token
+                                if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
+                                    let combinedBinding = Binding<Bool>(
+                                        get: { viewModel.tokensSelected[item.uniqueID] != nil || item.uniqueID == MinWalletConstant.adaToken },
+                                        set: { _ in }
+                                    )
+                                    SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: true)
+                                        .contentShape(.rect)
+                                        .onTapGesture {
+                                            viewModel.toggleSelected(token: item)
+                                        }
+                                } else {
+                                    let combinedBinding = Binding<Bool>(
+                                        get: { viewModel.tokensSelected[item.uniqueID] != nil },
+                                        set: { _ in }
+                                    )
+                                    SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: false)
+                                        .contentShape(.rect)
+                                        .onTapGesture {
+                                            viewModel.toggleSelected(token: item)
+                                            onDismiss?()
+                                            let tokenSelected = viewModel.tokenCallBack
+                                            onSelectToken?(tokenSelected)
+                                        }
+                                }
                             }
                         })
                 }
@@ -72,20 +162,11 @@ struct SelectTokenView: View {
                 viewModel.getTokens()
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("Done") {
-                    self.isFocus = false
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
-        .background(.colorBaseBackground)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 #Preview {
-    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()]), onSelectToken: { _ in })
+    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .swapToken), onSelectToken: { _ in })
+        .environmentObject(AppSetting.shared)
 }

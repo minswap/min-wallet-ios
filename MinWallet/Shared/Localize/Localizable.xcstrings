@@ -71,16 +71,7 @@
     "124.64 A" : {
 
     },
-    "178b...ac17" : {
-
-    },
     "235.789" : {
-
-    },
-    "11817" : {
-
-    },
-    "A small fee (max 0.3%@ may be deducted from your batcher fee for automatically cancellation." : {
 
     },
     "A wallet name must be 3-40 characters" : {
@@ -108,10 +99,10 @@
     "ADA" : {
 
     },
-    "Add Token" : {
+    "ADA Handle (%@): not resolved yet." : {
 
     },
-    "addr1qxjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cq5svq4r" : {
+    "Add Token" : {
 
     },
     "All" : {
@@ -157,9 +148,6 @@
 
     },
     "Best route" : {
-
-    },
-    "Best router" : {
 
     },
     "Beware that using over 50% slippage is risky. It means that you are willing to accept a price movement of over 50% once your order is executed." : {
@@ -282,6 +270,9 @@
     "Edit nickname" : {
 
     },
+    "Enter address or ADAHandle" : {
+
+    },
     "Enter password to continue" : {
 
     },
@@ -318,9 +309,6 @@
     "Fd Market cap" : {
 
     },
-    "Fee" : {
-
-    },
     "Filter" : {
 
     },
@@ -336,9 +324,6 @@
     "From" : {
 
     },
-    "Get help" : {
-
-    },
     "Getting started now" : {
 
     },
@@ -352,6 +337,9 @@
 
     },
     "Half" : {
+
+    },
+    "Handle not found" : {
 
     },
     "Hello" : {
@@ -399,6 +387,12 @@
     "Input information" : {
 
     },
+    "Invalid address" : {
+
+    },
+    "Invalid handle. Only a-z, 0-9, dash (-), underscore (_), and period (.) are allowed." : {
+
+    },
     "Invalid seed phrase" : {
 
     },
@@ -426,9 +420,6 @@
     "Limit" : {
 
     },
-    "LIQ" : {
-
-    },
     "Liquidity Provider Fee" : {
 
     },
@@ -448,9 +439,6 @@
 
     },
     "Max" : {
-
-    },
-    "MIN" : {
 
     },
     "Minimum receive" : {
@@ -626,9 +614,6 @@
     "Select route" : {
 
     },
-    "Select token" : {
-
-    },
     "Select your route" : {
 
     },
@@ -639,9 +624,6 @@
 
     },
     "Share" : {
-
-    },
-    "Share feedback" : {
 
     },
     "Share this wallet address to receive payments." : {
@@ -728,13 +710,7 @@
     "Trading fee" : {
 
     },
-    "Transaction Id" : {
-
-    },
     "Transaction Submitted" : {
-
-    },
-    "Tx Size" : {
 
     },
     "Type" : {
@@ -816,6 +792,9 @@
 
     },
     "You receive" : {
+
+    },
+    "You want to send" : {
 
     },
     "You want to send:" : {

@@ -2,8 +2,9 @@ import Foundation
 
 
 struct MinWalletConstant {
-    static let minGraphQLURL = GetInfoDictionaryString(for: "MIN_GRAPHQL_URL", true)
+    static let minURL = GetInfoDictionaryString(for: "MIN_URL", true)
     static let transactionURL = GetInfoDictionaryString(for: "MIN_TRANSACTION_URL", true)
+    static let handleAdaNameURL = GetInfoDictionaryString(for: "MIN_HANDLE_ADA_NAME_URL", true)
     static let keyChainService = GetInfoDictionaryString(for: "MIN_KEYCHAIN_SERVICE_NAME")
     static let keyChainAccessGroup = GetInfoDictionaryString(for: "MIN_KEYCHAIN_ACCESS_GROUP")
     static let passDefaultForFaceID = GetInfoDictionaryString(for: "MIN_PASS_DEFAULT_FOR_FACE_ID")
@@ -15,6 +16,8 @@ struct MinWalletConstant {
     static let adaCurrency = GetInfoDictionaryString(for: "MIN_ADA_CURRENCY")
     static let minOneSignalAppID = GetInfoDictionaryString(for: "MIN_ONE_SIGNAL_APP_ID")
     static let minswapScheme = "minswap"
+    static let addressPrefix = GetInfoDictionaryString(for: "MIN_ADDRESS_PREFIX")
+    static let adaHandleRegex = #"^\$[a-z0-9._-]+$"#
 
     private init() {
 

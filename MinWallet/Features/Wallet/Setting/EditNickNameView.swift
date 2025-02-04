@@ -10,10 +10,10 @@ struct EditNickNameView: View {
     private var appSetting: AppSetting
     @State
     private var nickName: String = ""
-    @Binding
-    var showEditNickName: Bool
     @FocusState
-    var isFocus: Bool
+    private var isFocus: Bool
+    @Environment(\.partialSheetDismiss)
+    private var onDismiss
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,42 +21,45 @@ struct EditNickNameView: View {
                 .font(.titleH5)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 60)
-            VStack(spacing: 4) {
-                Text("Nickname")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorBaseTent)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, .lg)
+            VStack(alignment: .leading, spacing: 4) {
+                if !isFocus {
+                    Text("Nickname")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorBaseTent)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, .lg)
+                }
                 TextField("", text: $nickName.max(10))
-                    .placeholder("Enter your wallet nickname", when: nickName.isEmpty)
-                    .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    .placeholder("Give your wallet a nickname", when: nickName.isEmpty)
+                    .padding(EdgeInsets(top: 0, leading: isFocus ? 0 : 16, bottom: 0, trailing: 16))
                     .focused($isFocus)
                     .frame(height: 44)
                     .overlay(
                         RoundedRectangle(cornerRadius: BorderRadius.full)
-                            .stroke(isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: isFocus ? 2 : 1)
+                            .stroke(isFocus ? .clear : .colorBorderPrimaryDefault, lineWidth: isFocus ? 0 : 1)
                     )
                     .onReceive(Just(nickName)) { _ in
                         if nickName.count > 40 {
                             nickName = String(nickName.prefix(40))
                         }
                     }
-            }
-            if !nickName.isEmpty && nickName.count < 3 {
-                HStack(spacing: 4) {
-                    Image(.icWarning)
-                        .fixSize(16)
-                    Text("A wallet name must be 3-40 characters")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveDangerTent)
+                Spacer()
+                if !nickName.isEmpty && nickName.count < 3 {
+                    HStack(spacing: 4) {
+                        Image(.icWarning)
+                            .fixSize(16)
+                        Text("A wallet name must be 3-40 characters")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveDangerTent)
+                    }
                 }
-                .padding(.top, .xl)
-                .padding(.horizontal, .xl)
             }
+            .frame(height: isFocus ? 150 : nil)
+
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
                     hideKeyboard()
-                    showEditNickName = false
+                    onDismiss?()
                 }
                 .frame(height: 56)
                 let combinedBinding = Binding<Bool>(
@@ -68,7 +71,7 @@ struct EditNickNameView: View {
                     guard let minWallet = userInfo.minWallet, !nickName.isBlank else { return }
                     guard let minWallet = changeWalletName(wallet: minWallet, password: appSetting.password, newWalletName: nickName.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
                     userInfo.saveWalletInfo(walletInfo: minWallet)
-                    showEditNickName = false
+                    onDismiss?()
                 }
                 .frame(height: 56)
             }
@@ -76,13 +79,13 @@ struct EditNickNameView: View {
             .padding(.top, 40)
         }
         .padding(.horizontal, .xl)
-        .fixedSize(horizontal: false, vertical: true)
+        .presentSheetModifier()
     }
 }
 
 #Preview {
     VStack {
-        EditNickNameView(showEditNickName: .constant(false))
+        EditNickNameView()
         Spacer()
     }
 }

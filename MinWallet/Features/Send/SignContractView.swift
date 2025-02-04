@@ -11,15 +11,17 @@ struct SignContractView: View {
     private var password: String = ""
     @FocusState
     private var isFocus: Bool
-    @Binding
-    var isShowSignContract: Bool
     @State
     private var currentPassword: String = ""
 
     var onSignSuccess: (() -> Void)?
 
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+
+        VStack(spacing: 0) {
             Text("Sign the contract")
                 .font(.titleH5)
                 .foregroundStyle(.colorBaseTent)
@@ -43,7 +45,7 @@ struct SignContractView: View {
 
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
-                    isShowSignContract = false
+                    onDismiss?()
                 }
                 .frame(height: 56)
                 let combinedBinding = Binding<Bool>(
@@ -52,10 +54,10 @@ struct SignContractView: View {
                 )
                 CustomButton(title: "Confirm", isEnable: combinedBinding) {
                     /*
-                    guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
-                    let _ = signTx(wallet: minWallet, password: password, accountIndex: minWallet.accountIndex, txRaw: "")
+                     guard let minWallet = userInfo.minWallet, !password.isBlank else { return }
+                     let _ = signTx(wallet: minWallet, password: password, accountIndex: minWallet.accountIndex, txRaw: "")
                      */
-                    isShowSignContract = false
+                    onDismiss?()
                     onSignSuccess?()
                 }
                 .frame(height: 56)
@@ -63,14 +65,17 @@ struct SignContractView: View {
             .padding(.bottom, .md)
         }
         .padding(.horizontal, .xl)
-        .fixedSize(horizontal: false, vertical: true)
         .task {
             guard currentPassword.isEmpty else { return }
             currentPassword = (try? AppSetting.getPasswordFromKeychain(username: AppSetting.USER_NAME)) ?? ""
         }
+        .presentSheetModifier()
     }
 }
 
 #Preview {
-    SignContractView(isShowSignContract: .constant(false))
+    VStack {
+        SignContractView()
+        Spacer()
+    }
 }

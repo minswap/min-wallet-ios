@@ -96,6 +96,15 @@ extension String {
             return false
         }
     }
+
+    var isAdaHandleName: Bool {
+        self.range(of: MinWalletConstant.adaHandleRegex, options: .regularExpression) != nil
+    }
+
+    func viewTransaction() {
+        guard let url = URL(string: MinWalletConstant.transactionURL + "/transaction/" + self) else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
 }
 
 extension Data {
@@ -300,5 +309,19 @@ extension Double {
         default:
             return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: font, fontColor: fontColor, isFormatK: isFormatK))
         }
+    }
+}
+
+extension Dictionary {
+    @inlinable mutating func append(_ other: [Key: Value]) {
+        return self.merge(other, uniquingKeysWith: { $1 })
+    }
+
+    @inlinable func appending(_ other: [Key: Value]) -> [Key: Value] {
+        return self.merging(other, uniquingKeysWith: { $1 })
+    }
+
+    static func + (lhs: [Key: Value], rhs: [Key: Value]) -> [Key: Value] {
+        return lhs.appending(rhs)
     }
 }

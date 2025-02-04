@@ -88,7 +88,6 @@ struct SwapTokenSettingView: View {
                             Text("Beware that using over 50% slippage is risky. It means that you are willing to accept a price movement of over 50% once your order is executed.")
                                 .font(.paragraphXSmall)
                                 .foregroundStyle(.colorInteractiveToneDanger)
-
                         }
                     }
                     .padding(.md)

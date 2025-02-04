@@ -13,8 +13,8 @@ struct DisconnectWalletView: View {
     private var conditionOne: Bool = false
     @State
     private var conditionTwo: Bool = false
-    @Binding
-    var showDisconnectWallet: Bool
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -67,7 +67,7 @@ struct DisconnectWalletView: View {
             )
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
-                    showDisconnectWallet = false
+                    onDismiss?()
                 }
                 .frame(height: 56)
                 CustomButton(
@@ -81,7 +81,7 @@ struct DisconnectWalletView: View {
                     ),
                     isEnable: combinedBinding
                 ) {
-                    showDisconnectWallet = false
+                    onDismiss?()
                     appSetting.rootScreen = .gettingStarted
                     navigator.popToRoot()
 
@@ -99,13 +99,13 @@ struct DisconnectWalletView: View {
             .padding(.bottom, .md)
         }
         .padding(.horizontal, .xl)
-        .fixedSize(horizontal: false, vertical: true)
+        .presentSheetModifier()
     }
 }
 
 #Preview {
     VStack {
-        DisconnectWalletView(showDisconnectWallet: .constant(false))
+        DisconnectWalletView()
         Spacer()
     }
 }

@@ -3,8 +3,8 @@ import FlowStacks
 
 
 struct SwapTokenInfoView: View {
-    @Binding
-    var isShowInfo: Bool
+    @Environment(\.partialSheetDismiss)
+    private var onDismiss
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -75,12 +75,12 @@ struct SwapTokenInfoView: View {
             .padding(.bottom, 40)
 
             CustomButton(title: "Swap") {
-                isShowInfo = false
+                onDismiss?()
             }
             .frame(height: 56)
         }
         .padding(.horizontal, .xl)
-        .fixedSize(horizontal: false, vertical: true)
+        .presentSheetModifier()
     }
 }
 
@@ -88,6 +88,6 @@ struct SwapTokenInfoView: View {
 #Preview {
     VStack {
         Spacer()
-        SwapTokenInfoView(isShowInfo: .constant(false))
+        SwapTokenInfoView()
     }
 }

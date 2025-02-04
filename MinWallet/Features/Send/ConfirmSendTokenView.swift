@@ -7,8 +7,20 @@ struct ConfirmSendTokenView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     private var isShowSignContract: Bool = false
+    @State
+    private var isCopyAddress: Bool = false
+    @StateObject
+    private var viewModel: ConfirmSendTokenViewModel
+
+    init(viewModel: ConfirmSendTokenViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,72 +33,73 @@ struct ConfirmSendTokenView: View {
                         .padding(.top, .lg)
                         .padding(.bottom, .xl)
                         .padding(.horizontal, .xl)
-                    HStack(spacing: 8) {
-                        Text("235.789")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-
-                        Spacer()
-                        Image(.ada)
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                        Text("ADA")
-                            .font(.labelSemiSecondary)
-                            .foregroundStyle(.colorBaseTent)
+                    ForEach(viewModel.tokens) { item in
+                        HStack(spacing: 8) {
+                            let amount = Double(item.amount) ?? 0
+                            Text(amount.formatSNumber(maximumFractionDigits: 15))
+                                .font(.labelSmallSecondary)
+                                .foregroundStyle(.colorBaseTent)
+                            Spacer(minLength: 0)
+                            TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
+                            Text(item.token.adaName)
+                                .font(.labelSemiSecondary)
+                                .foregroundStyle(.colorBaseTent)
+                        }
+                        .padding(.horizontal, .xl)
+                        .padding(.top, .lg)
                     }
-                    .padding(.horizontal, .xl)
-                    .padding(.top, .lg)
-                    HStack(spacing: 8) {
-                        Text("235.789")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-
-                        Spacer()
-                        Image(.ada)
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                        Text("MIN")
-                            .font(.labelSemiSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    }
-                    .padding(.horizontal, .xl)
-                    .padding(.top, .lg)
-                    HStack(spacing: 8) {
-                        Text("235.789")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-
-                        Spacer()
-                        Image(.ada)
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                        Text("LIQ")
-                            .font(.labelSemiSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    }
-                    .padding(.horizontal, .xl)
-                    .padding(.top, .lg)
 
                     Color.colorBorderPrimarySub
                         .frame(height: 1)
                         .padding(.horizontal, .xl)
                         .padding(.vertical, .xl)
-                    HStack {
+                    HStack(spacing: 4) {
                         Text("To")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        Image(.icCopy)
+                        if isCopyAddress {
+                            Image(.icCheckMark)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundStyle(.colorBaseSuccess)
+                                .frame(width: 16, height: 16)
+                        } else {
+                            Image(.icCopy)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 16, height: 16)
+                                .onTapGesture {
+                                    UIPasteboard.general.string = viewModel.address
+                                    withAnimation {
+                                        isCopyAddress = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(
+                                        deadline: .now() + .seconds(2),
+                                        execute: {
+                                            withAnimation {
+                                                self.isCopyAddress = false
+                                            }
+                                        })
+                                }
+                        }
+                        Image(.icShareAddress)
                             .resizable()
                             .frame(width: 16, height: 16)
+                            .onTapGesture {
+                                guard let url = URL(string: MinWalletConstant.transactionURL + "/address/\(viewModel.address)")
+                                else { return }
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
                         Spacer()
                     }
                     .padding(.horizontal, .xl)
-                    Text("addr1qxjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cq5svq4r")
+                    Text(viewModel.address)
+                        .lineSpacing(3)
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
-
+                    /*
                     VStack(alignment: .leading, spacing: 0) {
                         HStack {
                             Text("Select your route")
@@ -156,21 +169,27 @@ struct ConfirmSendTokenView: View {
                     }
                     .overlay(RoundedRectangle(cornerRadius: 20).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                     .padding(.xl)
+                     */
                 }
             }
             Spacer()
             CustomButton(title: "Next") {
                 Task {
                     do {
+                        hudState.showLoading(isShow: true)
+                        try await viewModel.sendTokens()
+                        hudState.showLoading(isShow: false)
+
                         switch appSetting.authenticationType {
                         case .biometric:
                             try await appSetting.reAuthenticateUser()
-                            sendTokenSuccess()
+                            authenticationSuccess()
                         case .password:
                             isShowSignContract = true
                         }
                     } catch {
-                        //TODO: show hud or not?
+                        hudState.showLoading(isShow: false)
+                        hudState.showMsg(msg: error.localizedDescription)
                     }
                 }
             }
@@ -184,18 +203,13 @@ struct ConfirmSendTokenView: View {
                     navigator.pop()
                 })
         )
-        .popupSheet(
-            isPresented: $isShowSignContract,
-            content: {
-                SignContractView(
-                    isShowSignContract: $isShowSignContract,
-                    onSignSuccess: {
-                        sendTokenSuccess()
-                    }
-                )
-                .padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    authenticationSuccess()
+                }
+            )
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -207,12 +221,29 @@ struct ConfirmSendTokenView: View {
         }
     }
 
-    private func sendTokenSuccess() {
-        navigator.popToRoot()
+    private func authenticationSuccess() {
+        Task {
+            do {
+                hudState.showLoading(isShow: true)
+                let finalID = try await viewModel.finalizeAndSubmit()
+                hudState.showLoading(isShow: false)
+                bannerState.infoContent = {
+                    bannerState.infoContentDefault(onViewTransaction: {
+                        finalID?.viewTransaction()
+                    })
+                }
+                bannerState.isShowingBanner = true
+                TokenManager.shared.reloadPortfolioOverview()
+                navigator.popToRoot()
+            } catch {
+                hudState.showLoading(isShow: false)
+                hudState.showMsg(msg: error.localizedDescription)
+            }
+        }
     }
 }
 
 #Preview {
-    ConfirmSendTokenView()
+    ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: [.init(token: TokenManager.shared.tokenAda)], address: "addr_test1qrckpdddp4weyhv72de83y72sth4pwfu6xmy3ugcurtqe76kp8zluvc7mydvp9snyrfsnexfkw89uukajky80js83rzqufn9cj"))
         .environmentObject(AppSetting.shared)
 }

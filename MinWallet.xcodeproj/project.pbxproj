@@ -99,6 +99,9 @@
 		966920FF2D100CCD00D503B7 /* HUDState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966920FE2D100CCD00D503B7 /* HUDState.swift */; };
 		966921022D102B3D00D503B7 /* MinWallet+Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */; };
 		966AFBF02D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 966AFBEF2D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql */; };
+		966AFC012D44A2FE00E733A1 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC002D44A2FE00E733A1 /* CustomTextField.swift */; };
+		966AFC032D44E27400E733A1 /* SelectTokenListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC022D44E27400E733A1 /* SelectTokenListItemView.swift */; };
+		966AFC052D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966AFC042D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift */; };
 		9674CE472D36122400892636 /* SwapTokenSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9674CE462D36122400892636 /* SwapTokenSetting.swift */; };
 		96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96813C812D094BDF00E5781E /* SwipeToDeleteModifier.swift */; };
 		968C06FA2D3B3EB300D81A33 /* PartialRoundedBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */; };
@@ -305,6 +308,11 @@
 		966920FE2D100CCD00D503B7 /* HUDState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDState.swift; sourceTree = "<group>"; };
 		966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MinWallet+Mapper.swift"; sourceTree = "<group>"; };
 		966AFBEF2D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationGenerateAuthHashMutation.graphql; sourceTree = "<group>"; };
+		966AFC002D44A2FE00E733A1 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		966AFC022D44E27400E733A1 /* SelectTokenListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTokenListItemView.swift; sourceTree = "<group>"; };
+		966AFC042D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmSendTokenViewModel.swift; sourceTree = "<group>"; };
+		966AFC062D4517B300E733A1 /* SendTokensMutation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = SendTokensMutation.graphql; sourceTree = "<group>"; };
+		966AFC072D451C6800E733A1 /* FinalizeAndSubmitMutation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = FinalizeAndSubmitMutation.graphql; sourceTree = "<group>"; };
 		9674CE462D36122400892636 /* SwapTokenSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSetting.swift; sourceTree = "<group>"; };
 		9674CE492D3622E700892636 /* RoutedPoolsByPairQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = RoutedPoolsByPairQuery.graphql; sourceTree = "<group>"; };
 		967A8D022D26AEDA007146BE /* TopAssetQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = TopAssetQuery.graphql; sourceTree = "<group>"; };
@@ -433,6 +441,7 @@
 			children = (
 				96FE0CEC2CF36032008E4BFD /* TokenListView.swift */,
 				2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */,
+				966AFC022D44E27400E733A1 /* SelectTokenListItemView.swift */,
 			);
 			path = TokenList;
 			sourceTree = "<group>";
@@ -504,6 +513,7 @@
 				968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */,
 				96FEDC1F2D24F96F006AD24F /* OffsetObservingScrollView.swift */,
 				96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */,
+				966AFC002D44A2FE00E733A1 /* CustomTextField.swift */,
 				96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */,
 				96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */,
 			);
@@ -837,6 +847,7 @@
 				965592522CFB3A2C00301DDB /* ToWalletAddressView.swift */,
 				968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */,
 				965592542CFB3A3700301DDB /* ConfirmSendTokenView.swift */,
+				966AFC042D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift */,
 			);
 			path = Send;
 			sourceTree = "<group>";
@@ -865,6 +876,8 @@
 		96BD2A532D0D65B900D81277 /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
+				966AFC072D451C6800E733A1 /* FinalizeAndSubmitMutation.graphql */,
+				966AFC062D4517B300E733A1 /* SendTokensMutation.graphql */,
 				966AFBEF2D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql */,
 				96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */,
 				96679BCB2D2B87FB00C9AE26 /* AssetsQuery.graphql */,
@@ -1225,6 +1238,7 @@
 				5718EB1A2CEDE5BA00CDE34D /* View+Ext.swift in Sources */,
 				9600DED42CF2B757005D997C /* GettingStartedView.swift in Sources */,
 				96DC05492CF752B500A78356 /* MainCoordinator.swift in Sources */,
+				966AFC032D44E27400E733A1 /* SelectTokenListItemView.swift in Sources */,
 				96533DAE2D30DAE500E8F3B8 /* TokenProtocol+Ext.swift in Sources */,
 				5774769B2CED9A280066CFB6 /* Carousel.swift in Sources */,
 				96679BCF2D2D22F700C9AE26 /* AmountTextField.swift in Sources */,
@@ -1257,6 +1271,7 @@
 				965592092CF8228E00301DDB /* SetupNickNameView.swift in Sources */,
 				96679BC82D2B853C00C9AE26 /* SwapTokenViewModel.swift in Sources */,
 				96DC05252CF5668400A78356 /* SettingViewModel.swift in Sources */,
+				966AFC012D44A2FE00E733A1 /* CustomTextField.swift in Sources */,
 				962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */,
 				96FEDC112D23A463006AD24F /* OrderHistoryView+Content.swift in Sources */,
 				96FE0CFA2CF423C2008E4BFD /* _FlexibleView.swift in Sources */,
@@ -1271,6 +1286,7 @@
 				9674CE472D36122400892636 /* SwapTokenSetting.swift in Sources */,
 				960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */,
 				96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */,
+				966AFC052D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift in Sources */,
 				96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */,
 				96FEDC082D238C7C006AD24F /* OrderHistoryView.swift in Sources */,
 				960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */,

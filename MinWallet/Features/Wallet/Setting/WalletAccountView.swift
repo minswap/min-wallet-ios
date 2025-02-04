@@ -148,7 +148,7 @@ struct WalletAccountView: View {
                 variant: .secondary,
                 action: {
                     //navigator.push(.walletSetting(.editNickName))
-                    showEditNickName = true
+                    $showEditNickName.showSheet()
                 }
             )
             .frame(height: 36)
@@ -177,7 +177,7 @@ struct WalletAccountView: View {
                 title: "Disconnect",
                 variant: .other(textColor: .colorBaseTent, backgroundColor: .colorInteractiveDangerDefault, borderColor: .clear, textColorDisable: nil, backgroundColorDisable: nil),
                 action: {
-                    showDisconnectWallet = true
+                    $showDisconnectWallet.showSheet()
                 }
             )
             .frame(height: 56)
@@ -190,18 +190,12 @@ struct WalletAccountView: View {
                     navigator.pop()
                 })
         )
-        .popupSheet(
-            isPresented: $showEditNickName,
-            content: {
-                EditNickNameView(showEditNickName: $showEditNickName).padding(.top, .xl)
-            }
-        )
-        .popupSheet(
-            isPresented: $showDisconnectWallet,
-            content: {
-                DisconnectWalletView(showDisconnectWallet: $showDisconnectWallet).padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $showEditNickName) {
+            EditNickNameView()
+        }
+        .presentSheet(isPresented: $showDisconnectWallet) {
+            DisconnectWalletView()
+        }
     }
 }
 

@@ -9,7 +9,7 @@ class MinWalletService {
     private let apolloClient: ApolloClient
 
     private init() {
-        apolloClient = ApolloClient(url: URL(string: MinWalletConstant.minGraphQLURL)!)
+        apolloClient = ApolloClient(url: URL(string: MinWalletConstant.minURL + "/graphql")!)
     }
 
     func fetch<Query: GraphQLQuery>(query: Query) async throws -> Query.Data? {
