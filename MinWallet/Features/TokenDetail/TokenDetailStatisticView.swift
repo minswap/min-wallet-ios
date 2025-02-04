@@ -201,7 +201,9 @@ extension TokenDetailView {
                         .padding(.bottom, .xl)
                 }
                 HStack(spacing: 4) {
-                    DashedUnderlineText(text: "Token name", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Text("Token name")
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        .font(.paragraphSmall)
                     Spacer()
                     Text(viewModel.token.tokenName)
                         .font(.labelMediumSecondary)
@@ -219,7 +221,9 @@ extension TokenDetailView {
                     UIPasteboard.general.string = viewModel.token.tokenName
                 }
                 HStack(spacing: 4) {
-                    DashedUnderlineText(text: "Policy ID", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Text("Policy ID")
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        .font(.paragraphSmall)
                     Spacer()
                     Text(viewModel.token.currencySymbol)
                         .font(.labelMediumSecondary)
