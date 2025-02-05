@@ -67,25 +67,29 @@ extension TokenDetailView {
                             RuleMark(x: .value("Date", data.date))
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                                .annotation(position: .automatic, alignment: .top, spacing: 0, overflowResolution: .init(x: .fit, y: .fit), content: {
-                                    VStack {
-                                        Text("\(viewModel.formatDateAnnotation(value: data.date))")
-                                            .font(.paragraphXSmall)
-                                            .foregroundStyle(.colorBaseTent)
-                                    }
-                                    .background(.colorBaseBackground)
-                                })
+                                .annotation(
+                                    position: .automatic, alignment: .top, spacing: 0, overflowResolution: .init(x: .fit, y: .fit),
+                                    content: {
+                                        VStack {
+                                            Text("\(viewModel.formatDateAnnotation(value: data.date))")
+                                                .font(.paragraphXSmall)
+                                                .foregroundStyle(.colorBaseTent)
+                                        }
+                                        .background(.colorBaseBackground)
+                                    })
                         } else {
                             RuleMark(x: .value("Date", data.date))
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                                .annotation(position: .automatic, alignment: .top, content: {
-                                    VStack {
-                                        Text("\(viewModel.formatDateAnnotation(value: data.date))")
-                                            .font(.paragraphXSmall)
-                                            .foregroundStyle(.colorBaseTent)
-                                    }
-                                })
+                                .annotation(
+                                    position: .automatic, alignment: .top,
+                                    content: {
+                                        VStack {
+                                            Text("\(viewModel.formatDateAnnotation(value: data.date))")
+                                                .font(.paragraphXSmall)
+                                                .foregroundStyle(.colorBaseTent)
+                                        }
+                                    })
                         }
                     }
                 }
@@ -105,15 +109,16 @@ extension TokenDetailView {
                         Rectangle()
                             .fill(Color.clear)
                             .contentShape(Rectangle())
-                            .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                                .onChanged { value in
-                                    self.viewModel.isInteracting = true
-                                    updateSelectedIndex(using: chart, at: value.location, in: geometry)
-                                }
-                                .onEnded { _ in
-                                    self.viewModel.isInteracting = false
-                                    self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
-                                })
+                            .gesture(
+                                DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                                    .onChanged { value in
+                                        self.viewModel.isInteracting = true
+                                        updateSelectedIndex(using: chart, at: value.location, in: geometry)
+                                    }
+                                    .onEnded { _ in
+                                        self.viewModel.isInteracting = false
+                                        self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                                    })
                         /*
                             .gesture(
                                 LongPressGesture(minimumDuration: 2)
@@ -189,19 +194,18 @@ extension TokenDetailView {
             .padding(.top, .xl)
         }
     }
-    
+
     private func updateSelectedIndex(using proxy: ChartProxy, at location: CGPoint, in geometry: GeometryProxy) {
         let xPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
         guard let date: Date = proxy.value(atX: xPosition) else { return }
-        
+
         let closestIndex = viewModel.chartDatas.indices.min(by: {
-            abs(viewModel.chartDatas[$0].date.timeIntervalSince1970 - date.timeIntervalSince1970) <
-                abs(viewModel.chartDatas[$1].date.timeIntervalSince1970 - date.timeIntervalSince1970)
+            abs(viewModel.chartDatas[$0].date.timeIntervalSince1970 - date.timeIntervalSince1970) < abs(viewModel.chartDatas[$1].date.timeIntervalSince1970 - date.timeIntervalSince1970)
         })
-        
+
         viewModel.selectedIndex = closestIndex
     }
-    
+
     private func triggerVibration() {
         // Trigger a haptic feedback when the long press begins
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)

@@ -68,8 +68,8 @@ struct DashedUnderlineText: View {
                     GeometryReader { geometry in
                         VStack {
                             Spacer()
-                            DashedLine(lineWidth: 1, dash: [6, 2], color: textColor)
-                                .frame(height: 1)
+                            DashedLine(lineWidth: 0.7, dash: [4, 3], color: textColor)
+                                .frame(height: 0.7)
                         }
                     }
                 )
@@ -79,7 +79,7 @@ struct DashedUnderlineText: View {
 
 
 private struct DashedLine: View {
-    var lineWidth: CGFloat = 2
+    var lineWidth: CGFloat = 0.7
     var dash: [CGFloat] = [6, 3]  // Dash length and gap
     var color: Color = .black
 
@@ -95,3 +95,13 @@ private struct DashedLine: View {
         }
     }
 }
+
+struct SampleView: View {
+    var body: some View {
+        DashedUnderlineText(text: "Minimum Received", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+    }
+}
+
+#Preview(body: {
+    SampleView()
+})

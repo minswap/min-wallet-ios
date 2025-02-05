@@ -145,7 +145,7 @@ class TokenDetailViewModel: ObservableObject {
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
     }
-    
+
     func formatDateAnnotation(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()
