@@ -47,14 +47,17 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.delegate = context.coordinator
         textView.isScrollEnabled = true
         textView.backgroundColor = .clear
-        textView.font = .paragraphSmall
-
+        textView.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: .paragraphSmall ?? .systemFont(ofSize: 14))
+        textView.adjustsFontForContentSizeCategory = true
+        textView.bounces = false
         // Configure the placeholder label
         let placeholderLabel = UILabel()
         placeholderLabel.text = "Please write down your seed phrase ..."
         placeholderLabel.textColor = .colorInteractiveTentPrimarySub
-        placeholderLabel.font = textView.font
+        placeholderLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: .paragraphSmall ?? .systemFont(ofSize: 14))
+        placeholderLabel.adjustsFontForContentSizeCategory = true
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+        placeholderLabel.numberOfLines = 2
         textView.addSubview(placeholderLabel)
 
         NSLayoutConstraint.activate([
@@ -143,7 +146,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 let wordRange = NSRange(location: startIndex, length: word.count)
                 let color = (index == words.count - 1 && !text.hasSuffix(" ")) ? typingColor : completedColor
                 attributedString.addAttribute(.foregroundColor, value: color, range: wordRange)
-
+                attributedString.addAttribute(.font, value: UIFontMetrics(forTextStyle: .body).scaledFont(for: .paragraphSmall ?? .systemFont(ofSize: 14)), range: wordRange)
                 // Update the start index for the next word
                 startIndex += word.count + 1  // Account for the space
             }
