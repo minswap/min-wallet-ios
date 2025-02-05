@@ -69,13 +69,11 @@ extension TokenDetailView {
                                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
                                 .annotation(position: .automatic, alignment: .top, spacing: 0, overflowResolution: .init(x: .fit, y: .fit), content: {
                                     VStack {
-                                        Text("")
-                                    }
-                                    .overlay {
                                         Text("\(viewModel.formatDateAnnotation(value: data.date))")
                                             .font(.paragraphXSmall)
                                             .foregroundStyle(.colorBaseTent)
                                     }
+                                    .background(.colorBaseBackground)
                                 })
                         } else {
                             RuleMark(x: .value("Date", data.date))
@@ -107,6 +105,16 @@ extension TokenDetailView {
                         Rectangle()
                             .fill(Color.clear)
                             .contentShape(Rectangle())
+                            .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                                .onChanged { value in
+                                    self.viewModel.isInteracting = true
+                                    updateSelectedIndex(using: chart, at: value.location, in: geometry)
+                                }
+                                .onEnded { _ in
+                                    self.viewModel.isInteracting = false
+                                    self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                                })
+                        /*
                             .gesture(
                                 LongPressGesture(minimumDuration: 2)
                                     .onChanged { _ in
@@ -131,6 +139,7 @@ extension TokenDetailView {
                                             }
                                     )
                             )
+                         */
                     }
                 }
                 .frame(height: 200)
@@ -146,6 +155,7 @@ extension TokenDetailView {
                 .padding(.top, .md)
             }
             .loading(isShowing: $viewModel.isLoadingPriceChart)
+            .animation(.default, value: viewModel.chartDatas)
             HStack(spacing: 0) {
                 ForEach(viewModel.chartPeriods, id: \.self) { period in
                     if viewModel.chartPeriod == period {

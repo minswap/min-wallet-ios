@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 import MinWalletAPI
 import Combine
 
@@ -62,6 +62,7 @@ class TokenDetailViewModel: ObservableObject {
                     self.chartPeriod = newData
                     self.selectedIndex = nil
                     self.chartDatas = []
+                    try? await Task.sleep(for: .milliseconds(800))
                     await self.getPriceChart()
                     self.isLoadingPriceChart = false
                 }
