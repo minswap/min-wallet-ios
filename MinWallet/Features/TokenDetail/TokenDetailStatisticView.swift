@@ -141,7 +141,7 @@ extension TokenDetailView {
                     content = "Total supply = Total coins created - coins that have been burned (if any) It is comparable to outstanding shares in the market."
                     $isShowToolTip.showSheet()
                 }
-                Text("About \(viewModel.token.adaName) (\(viewModel.token.name))")
+                Text(!viewModel.token.name.isBlank ? "About \(viewModel.token.adaName) (\(viewModel.token.name))" : "About \(viewModel.token.adaName)")
                     .font(.titleH6)
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)
@@ -207,18 +207,36 @@ extension TokenDetailView {
                     Spacer()
                     Text(viewModel.token.tokenName)
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                        .foregroundStyle(isCopiedTokenName ? .colorBaseSuccess : .colorBaseTent)
                         .lineLimit(1)
-                    Image(.icCopySeedPhrase)
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        .frame(width: 16, height: 16)
+                    if isCopiedTokenName {
+                        Image(.icCheckMark)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorBaseSuccess)
+                            .frame(width: 16, height: 16)
+                    } else {
+                        Image(.icCopySeedPhrase)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            .frame(width: 16, height: 16)
+                    }
                 }
                 .frame(height: 40)
                 .containerShape(.rect)
                 .onTapGesture {
                     UIPasteboard.general.string = viewModel.token.tokenName
+                    withAnimation {
+                        isCopiedTokenName = true
+                    }
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + .seconds(2),
+                        execute: {
+                            withAnimation {
+                                self.isCopiedTokenName = false
+                            }
+                        })
                 }
                 HStack(spacing: 4) {
                     Text("Policy ID")
@@ -227,18 +245,36 @@ extension TokenDetailView {
                     Spacer()
                     Text(viewModel.token.currencySymbol)
                         .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                        .foregroundStyle(isCopiedPolicy ? .colorBaseSuccess : .colorBaseTent)
                         .lineLimit(1)
-                    Image(.icCopySeedPhrase)
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        .frame(width: 16, height: 16)
+                    if isCopiedPolicy {
+                        Image(.icCheckMark)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorBaseSuccess)
+                            .frame(width: 16, height: 16)
+                    } else {
+                        Image(.icCopySeedPhrase)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            .frame(width: 16, height: 16)
+                    }
                 }
                 .frame(height: 40)
                 .containerShape(.rect)
                 .onTapGesture {
                     UIPasteboard.general.string = viewModel.token.currencySymbol
+                    withAnimation {
+                        isCopiedPolicy = true
+                    }
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + .seconds(2),
+                        execute: {
+                            withAnimation {
+                                self.isCopiedPolicy = false
+                            }
+                        })
                 }
                 if let riskCategory = viewModel.riskCategory {
                     HStack(spacing: 4) {

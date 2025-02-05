@@ -90,7 +90,7 @@ struct SwapTokenView: View {
         }
         .presentSheet(isPresented: $viewModel.isShowSelectPayToken) {
             SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenPay.token], screenType: .swapToken),
+                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenPay.token], screenType: .swapToken, sourceScreenType: .normal),
                 onSelectToken: { tokens in
                     self.viewModel.action.send(.selectTokenPay(token: tokens.first))
                 }
@@ -100,7 +100,7 @@ struct SwapTokenView: View {
         }
         .presentSheet(isPresented: $viewModel.isShowSelectReceiveToken) {
             SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenReceive.token], screenType: .swapToken),
+                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenReceive.token], screenType: .swapToken, sourceScreenType: .normal),
                 onSelectToken: { tokens in
                     self.viewModel.action.send(.selectTokenReceive(token: tokens.first))
                 }

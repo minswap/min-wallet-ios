@@ -6,9 +6,12 @@ class SendTokenViewModel: ObservableObject {
 
     @Published
     var tokens: [WrapTokenSend] = []
+    @Published
+    var screenType: SendTokenView.ScreenType = .normal
 
-    init(tokens: [TokenProtocol]) {
+    init(tokens: [TokenProtocol], screenType: SendTokenView.ScreenType) {
         self.tokens = tokens.map({ WrapTokenSend(token: $0) })
+        self.screenType = screenType
     }
 
     func addToken(tokens: [TokenProtocol]) {
