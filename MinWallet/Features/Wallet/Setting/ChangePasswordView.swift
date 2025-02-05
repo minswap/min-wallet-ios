@@ -154,6 +154,7 @@ struct ChangePasswordView: View {
                                 .foregroundStyle(.colorInteractiveToneHighlight)
                         }
                     )
+                    .buttonStyle(.plain)
                     .padding(.horizontal, .xl)
                     .padding(.bottom, 40)
                 }

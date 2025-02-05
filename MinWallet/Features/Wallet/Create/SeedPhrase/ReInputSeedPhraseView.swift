@@ -99,6 +99,7 @@ struct ReInputSeedPhraseView: View {
                             .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     }
                 )
+                .buttonStyle(.plain)
                 .padding(.horizontal, 20)
                 .frame(height: 36)
                 .background(.colorBaseBackground)

@@ -144,6 +144,25 @@ class TokenDetailViewModel: ObservableObject {
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
     }
+    
+    func formatDateAnnotation(value: Date) -> String {
+        guard !chartDatas.isEmpty else { return " " }
+        let inputFormatter = DateFormatter()
+        switch chartPeriod {
+        case .oneDay:
+            inputFormatter.dateFormat = "HH:mm"
+        case .oneMonth:
+            inputFormatter.dateFormat = "HH:mm, MMM dd"
+        case .oneWeek:
+            inputFormatter.dateFormat = "HH:mm, MMM dd"
+        case .oneYear:
+            inputFormatter.dateFormat = "MMM dd, yyyy"
+        case .sixMonths:
+            inputFormatter.dateFormat = "HH:mm, MMM dd"
+        }
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        return inputFormatter.string(from: value)
+    }
 }
 
 extension ChartPeriod: @retroactive Identifiable {

@@ -68,6 +68,7 @@ struct EnterYourPasswordView: View {
                         .foregroundStyle(.colorInteractiveToneHighlight)
                 }
             )
+            .buttonStyle(.plain)
             .padding(.top, .xl)
             .padding(.bottom, 40)
             let combinedBinding = Binding<Bool>(

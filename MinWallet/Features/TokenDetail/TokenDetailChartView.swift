@@ -1,6 +1,7 @@
 import SwiftUI
 import Charts
 
+
 ///https://blog.stackademic.com/line-chart-using-swift-charts-swiftui-cd1abeac9e44
 enum LineChartType: String, CaseIterable, Plottable {
     case optimal = "Optimal"
@@ -33,9 +34,10 @@ extension TokenDetailView {
                 Chart {
                     if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
                         ForEach(0..<selectedIndex + 1, id: \.self) { index in
+                            let data = viewModel.chartDatas[gk_safeIndex: index]
                             LineMark(
-                                x: .value("Date", index),
-                                y: .value("Value", viewModel.chartDatas[gk_safeIndex: index]?.value ?? 0)
+                                x: .value("Date", data?.date ?? Date()),
+                                y: .value("Value", data?.value ?? 0)
                             )
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             //.interpolationMethod(.catmullRom)
@@ -45,46 +47,49 @@ extension TokenDetailView {
                     }
                     if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
                         ForEach(selectedIndex..<viewModel.chartDatas.count, id: \.self) { index in
+                            let data = viewModel.chartDatas[gk_safeIndex: index]
                             LineMark(
-                                x: .value("Date", index),
-                                y: .value("Value", viewModel.chartDatas[gk_safeIndex: index]?.value ?? 0)
+                                x: .value("Date", data?.date ?? Date()),
+                                y: .value("Value", data?.value ?? 0)
                             )
                             //.interpolationMethod(.catmullRom)
                             .foregroundStyle(viewModel.isInteracting ? .colorBorderPrimarySub : .colorInteractiveToneHighlight)
                         }
                     }
-                    if let selectedIndex = viewModel.selectedIndex, viewModel.isInteracting {
+                    if let selectedIndex = viewModel.selectedIndex, viewModel.isInteracting, let data = viewModel.chartDatas[gk_safeIndex: selectedIndex] {
                         PointMark(
-                            x: .value("Date", selectedIndex),
-                            y: .value("Value", viewModel.chartDatas[gk_safeIndex: selectedIndex]?.value ?? 0)
+                            x: .value("Date", data.date),
+                            y: .value("Value", data.value)
                         )
                         .symbolSize(60)
                         .foregroundStyle(.colorInteractiveToneHighlight)
-
-                        RuleMark(x: .value("Date", selectedIndex))
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                    }
-                    /*
-                    ForEach(Array(zip(viewModel.chartDatas, viewModel.chartDatas.indices)), id: \.0) { item, index in
-                        if let selectedIndex = viewModel.selectedIndex, selectedIndex == index {
-                            RectangleMark(
-                                x: .value("Index", index),
-                                yStart: .value("Value", 0),
-                                yEnd: .value("Value", item.value),
-                                width: 2
-                            )
-                            .opacity(0.4)
+                        if #available(iOS 17.0, *) {
+                            RuleMark(x: .value("Date", data.date))
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                                .annotation(position: .automatic, alignment: .top, spacing: 0, overflowResolution: .init(x: .fit, y: .fit), content: {
+                                    VStack {
+                                        Text("")
+                                    }
+                                    .overlay {
+                                        Text("\(viewModel.formatDateAnnotation(value: data.date))")
+                                            .font(.paragraphXSmall)
+                                            .foregroundStyle(.colorBaseTent)
+                                    }
+                                })
+                        } else {
+                            RuleMark(x: .value("Date", data.date))
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                                .annotation(position: .automatic, alignment: .top, content: {
+                                    VStack {
+                                        Text("\(viewModel.formatDateAnnotation(value: data.date))")
+                                            .font(.paragraphXSmall)
+                                            .foregroundStyle(.colorBaseTent)
+                                    }
+                                })
                         }
-                        LineMark(
-                            x: .value("Date", index),
-                            y: .value("Value", item.value)
-                        )
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        //.interpolationMethod(.catmullRom)
-                        .lineStyle(.init(lineWidth: 1))
                     }
-                     */
                 }
                 .chartYAxis {
                     AxisMarks(preset: .extended, position: .leading) {
@@ -98,22 +103,6 @@ extension TokenDetailView {
                 .chartXAxis(.hidden)
                 .chartLegend(.hidden)
                 .chartOverlay { chart in
-                    /*
-                    GeometryReader { geometry in
-                        Rectangle()
-                            .fill(Color.clear)
-                            .contentShape(Rectangle())
-                            .onTapGesture { location in
-                                let currentX = location.x - geometry[chart.plotAreaFrame].origin.x
-                                guard currentX >= 0, currentX < chart.plotAreaSize.width else {
-                                    return
-                                }
-
-                                guard let index = chart.value(atX: currentX, as: Int.self) else { return }
-                                viewModel.selectedIndex = index
-                            }
-                    }
-                     */
                     GeometryReader { geometry in
                         Rectangle()
                             .fill(Color.clear)
@@ -134,9 +123,7 @@ extension TokenDetailView {
                                         with: DragGesture(minimumDistance: 0)
                                             .onChanged { value in
                                                 guard viewModel.isInteracting else { return }
-                                                guard let index = chart.value(atX: value.location.x, as: Int.self) else { return }
-                                                let closestIndex = viewModel.chartDatas.indices.min(by: { abs($0 - index) < abs($1 - index) })
-                                                viewModel.selectedIndex = closestIndex
+                                                updateSelectedIndex(using: chart, at: value.location, in: geometry)
                                             }
                                             .onEnded { _ in
                                                 self.viewModel.isInteracting = false
@@ -192,7 +179,19 @@ extension TokenDetailView {
             .padding(.top, .xl)
         }
     }
-
+    
+    private func updateSelectedIndex(using proxy: ChartProxy, at location: CGPoint, in geometry: GeometryProxy) {
+        let xPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
+        guard let date: Date = proxy.value(atX: xPosition) else { return }
+        
+        let closestIndex = viewModel.chartDatas.indices.min(by: {
+            abs(viewModel.chartDatas[$0].date.timeIntervalSince1970 - date.timeIntervalSince1970) <
+                abs(viewModel.chartDatas[$1].date.timeIntervalSince1970 - date.timeIntervalSince1970)
+        })
+        
+        viewModel.selectedIndex = closestIndex
+    }
+    
     private func triggerVibration() {
         // Trigger a haptic feedback when the long press begins
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
