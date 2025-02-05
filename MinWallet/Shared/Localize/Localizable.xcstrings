@@ -19,6 +19,9 @@
     "%" : {
 
     },
+    "%@" : {
+
+    },
     "%@%@%@" : {
       "localizations" : {
         "en" : {
@@ -633,9 +636,6 @@
 
     },
     "Security" : {
-
-    },
-    "Seed phrase does not match" : {
 
     },
     "Seedphrase" : {

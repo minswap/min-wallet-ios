@@ -66,13 +66,16 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.delegate = context.coordinator
         textView.isScrollEnabled = true
         textView.backgroundColor = .clear
-        textView.font = font
+        textView.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
         textView.textColor = textColor
         textView.isUserInteractionEnabled = enableTextView
+        textView.bounces = false
+        textView.adjustsFontForContentSizeCategory = true
         let placeholderLabel = UILabel()
         placeholderLabel.text = placeHolderText.toString()
         placeholderLabel.textColor = placeHolderTextColor
-        placeholderLabel.font = .paragraphSmall
+        placeholderLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: .paragraphSmall ?? .systemFont(ofSize: 14))
+        placeholderLabel.adjustsFontForContentSizeCategory = true
         placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
         textView.addSubview(placeholderLabel)
 

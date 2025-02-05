@@ -19,6 +19,8 @@ struct WalletAccountView: View {
     private var showDisconnectWallet: Bool = false
     @State
     private var isCopyAddress: Bool = false
+    @Environment(\.colorScheme)
+    private var colorScheme: ColorScheme
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,18 +32,9 @@ struct WalletAccountView: View {
                     .clipShape(Circle())
 
                 if isVerified {
-                    Circle()
-                        .fill(.colorBaseBackground)
+                    Image(.icSubAvatar)
+                        .resizable()
                         .frame(width: 24, height: 24)
-                        .overlay(
-                            Image(.icSubAvatar)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                        )
-                        .overlay(
-                            Circle()
-                                .stroke(.colorSurfacePrimarySub, lineWidth: 1)
-                        )
                         .position(x: 84, y: 84)
                 }
             }

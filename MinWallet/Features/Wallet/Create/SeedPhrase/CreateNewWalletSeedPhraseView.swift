@@ -200,6 +200,7 @@ private struct SeedPhraseContentView: View {
                                             .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                                     }
                                 )
+                                .buttonStyle(.plain)
                                 .frame(height: 28)
                                 .padding(.horizontal, .lg)
                                 .background(.colorBaseBackground)

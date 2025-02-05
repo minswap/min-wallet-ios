@@ -35,7 +35,7 @@ extension TokenDetailView {
                             prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
                             suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
                             font: .paragraphXSmall,
-                            fontColor: .colorInteractiveTentPrimarySub) ?? "-"
+                            fontColor: .colorInteractiveTentPrimarySub) ?? "--"
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(chartSelected)
                         HStack(alignment: .center, spacing: 4) {
@@ -51,6 +51,7 @@ extension TokenDetailView {
                         }
                     }
                 }
+                .animation(.default, value: viewModel.chartDatas)
             }
             .opacity((viewModel.sizeOfLargeHeader.height / 2 - offset) < 0 ? (opacity) : 0)
             Spacer()
@@ -109,6 +110,7 @@ extension TokenDetailView {
             .frame(height: 20)
         }
         .padding(.horizontal, .xl)
+        .animation(.default, value: viewModel.chartDatas)
     }
 }
 

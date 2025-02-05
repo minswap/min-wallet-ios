@@ -32,10 +32,8 @@ struct ReInputSeedPhraseView: View {
         if seedPhraseCount == 0 { return "" }
         switch screenType {
         case let .createWallet(seedPhrase):
-            if seedPhraseCount < 24 {
+            if seedPhraseCount < 24 || inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) != seedPhrase.joined(separator: " ") {
                 return "Invalid seed phrase"
-            } else if inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) != seedPhrase.joined(separator: " ") {
-                return "Seed phrase does not match"
             } else {
                 return ""
             }
@@ -101,6 +99,7 @@ struct ReInputSeedPhraseView: View {
                             .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                     }
                 )
+                .buttonStyle(.plain)
                 .padding(.horizontal, 20)
                 .frame(height: 36)
                 .background(.colorBaseBackground)

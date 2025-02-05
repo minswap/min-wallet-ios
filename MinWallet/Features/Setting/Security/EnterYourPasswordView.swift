@@ -32,12 +32,13 @@ struct EnterYourPasswordView: View {
                     .foregroundStyle(.colorBaseTent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, .lg)
+                let strokeColor: Color = isShowIncorrectPassword ? Color.colorBorderDangerDefault : (isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault)
                 SecurePasswordTextField(placeHolder: "Enter your password", text: $password)
                     .focused($isFocus)
                     .frame(height: 44)
                     .overlay(
                         RoundedRectangle(cornerRadius: BorderRadius.full)
-                            .stroke(isFocus ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: isFocus ? 2 : 1)
+                            .stroke(strokeColor, lineWidth: isFocus ? 2 : 1)
                     )
                     .onChange(
                         of: password,
@@ -67,6 +68,7 @@ struct EnterYourPasswordView: View {
                         .foregroundStyle(.colorInteractiveToneHighlight)
                 }
             )
+            .buttonStyle(.plain)
             .padding(.top, .xl)
             .padding(.bottom, 40)
             let combinedBinding = Binding<Bool>(
