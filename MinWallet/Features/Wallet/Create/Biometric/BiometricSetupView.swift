@@ -65,7 +65,9 @@ struct BiometricSetupView: View {
                                     return createWallet(phrase: seedPhrase.joined(separator: " "), password: MinWalletConstant.passDefaultForFaceID, networkEnv: MinWalletConstant.networkID, walletName: nickName)
                                 }
                             }()
-                            guard let wallet = wallet else { throw AppGeneralError.localErrorLocalized(message: "Something went wrong!") }
+                            guard let wallet = wallet else {
+                                throw AppGeneralError.localErrorLocalized(message: "Error while restoring wallet")
+                            }
 
                             try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: MinWalletConstant.passDefaultForFaceID)
                             userInfo.saveWalletInfo(walletInfo: wallet)

@@ -41,7 +41,7 @@ extension TokenDetailView {
                         HStack(alignment: .center, spacing: 4) {
                             if !viewModel.percent.isZero {
                                 Circle().frame(width: 2, height: 2).background(.colorInteractiveTentPrimarySub)
-                                Text("\(viewModel.percent.formatSNumber(maximumFractionDigits: 2))%")
+                                Text("\(abs(viewModel.percent).formatSNumber(maximumFractionDigits: 2))%")
                                     .font(.paragraphXSmall)
                                     .foregroundStyle(viewModel.percent > 0 ? .colorBaseSuccess : .colorBorderDangerDefault)
                                 Image(viewModel.percent > 0 ? .icUp : .icDown)
@@ -79,9 +79,11 @@ extension TokenDetailView {
                         content: {
                             Text(viewModel.token.adaName)
                                 .foregroundStyle(.colorBaseTent)
+                                .lineLimit(1)
                                 .font(.labelMediumSecondary)
                             Text(viewModel.token.projectName.isBlank ? viewModel.token.adaName : viewModel.token.projectName)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .lineLimit(1)
                                 .font(.labelMediumSecondary)
                         })
                     Spacer()
@@ -100,7 +102,7 @@ extension TokenDetailView {
                 .frame(height: 55)
             HStack(spacing: 4) {
                 if !viewModel.percent.isZero {
-                    Text("\(viewModel.percent.formatSNumber(maximumFractionDigits: 2))%")
+                    Text("\(abs(viewModel.percent).formatSNumber(maximumFractionDigits: 2))%")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(viewModel.percent > 0 ? .colorBaseSuccess : .colorBorderDangerDefault)
                     Image(viewModel.percent > 0 ? .icUp : .icDown)
