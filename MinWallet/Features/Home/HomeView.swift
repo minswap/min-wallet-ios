@@ -179,7 +179,7 @@ struct HomeView: View {
                                 .foregroundStyle(foregroundStyle)
                             Circle().frame(width: 4, height: 4)
                                 .foregroundStyle(.colorBaseTent)
-                            Text((tokenManager.pnl24H * 100 / tokenManager.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
+                            Text(abs(tokenManager.pnl24H * 100 / tokenManager.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
                             if !tokenManager.pnl24H.isZero {
