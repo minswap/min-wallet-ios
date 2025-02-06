@@ -19,6 +19,10 @@ struct TokenDetailView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
+    @State
+    var isCopiedTokenName: Bool = false
+    @State
+    var isCopiedPolicy: Bool = false
 
     var body: some View {
         ZStack {

@@ -47,7 +47,7 @@ struct SelectTokenView: View {
                             case .initSelectedToken:
                                 guard !tokenSelected.isEmpty else { return }
                                 onSelectToken?(tokenSelected)
-                                navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected)))
+                                navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected, screenType: viewModel.sourceScreenType)))
                             case .sendToken:
                                 onSelectToken?(tokenSelected)
                                 onDismiss?()
@@ -167,6 +167,6 @@ struct SelectTokenView: View {
 }
 
 #Preview {
-    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .swapToken), onSelectToken: { _ in })
+    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .swapToken, sourceScreenType: .normal), onSelectToken: { _ in })
         .environmentObject(AppSetting.shared)
 }

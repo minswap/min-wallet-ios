@@ -29,19 +29,29 @@ struct ScanQRView: View {
                     Task {
                         if case let .success(result) = response, !isValidatingQR {
                             qrCode = result.string
+
+                            guard let qrCode = qrCode else { return }
                             isValidatingQR = true
-                            //TODO: validate qr code
-                            /*
-                             if true {
 
-                             } else {
-
-                             }
-                             */
-                            hud.showMsg(
-                                title: "Invalid QR code",
-                                msg: "Not a valid address. Make sure it's an address for current network and it is either a valid Shelley or Byron(legacy) address",
-                                okTitle: "Try again")
+                            var isValidAddress = false
+                            if !qrCode.hasPrefix(MinWalletConstant.addressPrefix) {
+                                isValidAddress = false
+                            } else {
+                                let suffixAddress = qrCode.trimmingPrefix(MinWalletConstant.addressPrefix)
+                                if suffixAddress.count == 98 {
+                                    isValidAddress = true
+                                } else {
+                                    isValidAddress = false
+                                }
+                            }
+                            if !isValidAddress {
+                                hud.showMsg(
+                                    title: "Invalid QR code",
+                                    msg: "Not a valid address. Make sure it's an address for current network and it is either a valid Shelley or Byron(legacy) address",
+                                    okTitle: "Try again")
+                            } else {
+                                navigator.push(.sendToken(.selectToken(tokensSelected: [], screenType: .initSelectedToken, sourceScreenType: .scanQRCode(address: qrCode), onSelectToken: nil)))
+                            }
                             isValidatingQR = false
                         }
                     }

@@ -83,6 +83,9 @@
     "About" : {
 
     },
+    "About %@" : {
+
+    },
     "About %@ (%@)" : {
       "localizations" : {
         "en" : {

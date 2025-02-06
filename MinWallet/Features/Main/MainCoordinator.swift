@@ -80,14 +80,14 @@ struct MainCoordinator: View {
 
                     case let .sendToken(screen):
                         switch screen {
-                        case let .sendToken(tokenSelected):
-                            SendTokenView(viewModel: .init(tokens: tokenSelected)).navigationBarHidden(true)
+                        case let .sendToken(tokenSelected, screenType):
+                            SendTokenView(viewModel: .init(tokens: tokenSelected, screenType: screenType)).navigationBarHidden(true)
                         case let .toWallet(tokens):
                             ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: tokens)).navigationBarHidden(true)
                         case let .confirm(tokens, address):
                             ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: tokens, address: address)).navigationBarHidden(true)
-                        case let .selectToken(tokensSelected, screenType, onSelectToken):
-                            SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: screenType), onSelectToken: onSelectToken)
+                        case let .selectToken(tokensSelected, screenType, sourceScreenType, onSelectToken):
+                            SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: screenType, sourceScreenType: sourceScreenType), onSelectToken: onSelectToken)
                                 .navigationBarHidden(true)
                         }
 

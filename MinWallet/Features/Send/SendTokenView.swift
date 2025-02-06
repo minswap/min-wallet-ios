@@ -3,6 +3,11 @@ import FlowStacks
 
 
 struct SendTokenView: View {
+    enum ScreenType {
+        case scanQRCode(address: String)
+        case normal
+    }
+
     enum Focusable: Hashable {
         case none
         case row(id: String)
@@ -113,7 +118,12 @@ struct SendTokenView: View {
             CustomButton(title: "Next", isEnable: combinedBinding) {
                 let tokens = viewModel.tokensToSend
                 guard !tokens.isEmpty else { return }
-                navigator.push(.sendToken(.toWallet(tokens: tokens)))
+                switch viewModel.screenType {
+                case .scanQRCode(let address):
+                    navigator.push(.sendToken(.confirm(tokens: tokens, address: address)))
+                case .normal:
+                    navigator.push(.sendToken(.toWallet(tokens: tokens)))
+                }
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -137,7 +147,7 @@ struct SendTokenView: View {
         )
         .presentSheet(isPresented: $isShowSelectToken) {
             SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: viewModel.tokens.map({ $0.token }), screenType: .sendToken),
+                viewModel: SelectTokenViewModel(tokensSelected: viewModel.tokens.map({ $0.token }), screenType: .sendToken, sourceScreenType: viewModel.screenType),
                 onSelectToken: { tokens in
                     viewModel.addToken(tokens: tokens)
                 }
@@ -149,6 +159,6 @@ struct SendTokenView: View {
 }
 
 #Preview {
-    SendTokenView(viewModel: SendTokenViewModel(tokens: [TokenManager.shared.tokenAda]))
+    SendTokenView(viewModel: SendTokenViewModel(tokens: [TokenManager.shared.tokenAda], screenType: .normal))
         .environmentObject(TokenManager.shared)
 }

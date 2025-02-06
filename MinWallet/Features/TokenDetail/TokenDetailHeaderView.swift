@@ -50,6 +50,7 @@ extension TokenDetailView {
                             }
                         }
                     }
+                    .frame(height: 22)
                 }
                 .animation(.default, value: viewModel.chartDatas)
             }

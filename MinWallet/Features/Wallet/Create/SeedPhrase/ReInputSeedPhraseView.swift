@@ -23,7 +23,7 @@ struct ReInputSeedPhraseView: View {
         case let .createWallet(seedPhrase):
             return seedPhraseCount >= 12 && inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) == seedPhrase.joined(separator: " ")
         case .restoreWallet:
-            return seedPhraseCount >= 12
+            return seedPhraseCount >= 24
         }
     }
 

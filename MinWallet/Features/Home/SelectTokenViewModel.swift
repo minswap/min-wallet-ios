@@ -16,6 +16,8 @@ class SelectTokenViewModel: ObservableObject {
     var tokensSelected: [String: TokenProtocol] = [:]
     @Published
     var screenType: SelectTokenView.ScreenType = .initSelectedToken
+    @Published
+    var sourceScreenType: SendTokenView.ScreenType = .normal
 
     private var hasLoadMore: Bool = true
     private var isFetching: Bool = true
@@ -30,9 +32,11 @@ class SelectTokenViewModel: ObservableObject {
 
     init(
         tokensSelected: [TokenProtocol?],
-        screenType: SelectTokenView.ScreenType
+        screenType: SelectTokenView.ScreenType,
+        sourceScreenType: SendTokenView.ScreenType
     ) {
         self.screenType = screenType
+        self.sourceScreenType = sourceScreenType
         self.tokensSelected = tokensSelected.compactMap({ $0 })
             .reduce(
                 [:],
