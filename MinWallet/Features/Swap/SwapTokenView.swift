@@ -26,11 +26,10 @@ struct SwapTokenView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     contentView
-                    Spacer()
-                    bottomView
                 }
             }
             Spacer()
+            bottomView
             CustomButton(title: "Swap") {
                 hideKeyboard()
                 viewModel.swapToken(
@@ -60,7 +59,7 @@ struct SwapTokenView: View {
             BaseContentView(
                 screenTitle: "Swap",
                 iconRight: .icSwapTokenSetting,
-                alignmentTitle: .center,
+                alignmentTitle: .leading,
                 actionLeft: {
                     navigator.pop()
                 },
@@ -118,6 +117,10 @@ struct SwapTokenView: View {
             .padding(.top, -16)
             .padding(.bottom, -16)
             .zIndex(999)
+            .containerShape(.rect)
+            .onTapGesture {
+                viewModel.action.send(.swapToken)
+            }
         tokenReceiveView
         routingView
     }

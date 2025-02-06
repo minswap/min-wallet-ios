@@ -78,6 +78,7 @@ struct SwapTokenInfoView: View {
                 onDismiss?()
             }
             .frame(height: 56)
+            .padding(.bottom, .md)
         }
         .padding(.horizontal, .xl)
         .presentSheetModifier()
