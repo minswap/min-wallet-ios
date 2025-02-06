@@ -291,6 +291,9 @@
     "Error creating wallet" : {
 
     },
+    "Error while restoring wallet" : {
+
+    },
     "Estimated batcher fee" : {
 
     },

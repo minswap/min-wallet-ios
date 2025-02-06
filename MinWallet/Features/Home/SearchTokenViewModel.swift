@@ -119,10 +119,10 @@ class SearchTokenViewModel: ObservableObject {
 
     func deleteTokenFav(at index: Int) {
         guard let item = tokensFav[gk_safeIndex: index] else { return }
-        offsets.remove(at: index)
-        isDeleted.remove(at: index)
-        tokensFav.remove(at: index)
-
+        let tokensFav = tokensFav.filter { $0.uniqueID != item.uniqueID }
+        self.tokensFav = tokensFav
+        self.isDeleted = self.tokensFav.map({ _ in false })
+        self.offsets = self.tokensFav.map({ _ in 0 })
         UserInfo.shared.tokenFavSelected(token: item, isAdd: false)
     }
 
