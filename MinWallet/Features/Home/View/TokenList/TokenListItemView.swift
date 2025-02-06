@@ -50,8 +50,8 @@ struct TokenListItemView: View {
                     if !showSubPrice {
                         Spacer()
                     }
+                    /*
                     let percentChange: Double = token?.percentChange ?? 0
-
                     if !(showSubPrice && percentChange.isZero) {
                         HStack(spacing: 0) {
                             let foregroundStyle: Color = {
@@ -68,11 +68,13 @@ struct TokenListItemView: View {
                             }
                         }
                     }
+                     */
                     if showSubPrice {
                         Spacer()
                         let subPrice: Double = token?.subPriceValue ?? 0
                         Text(subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
                             .font(.paragraphSmall)
+                            .layoutPriority(999)
                     }
                 }
             }
