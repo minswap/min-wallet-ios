@@ -243,7 +243,7 @@ extension TokenDetailView {
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .font(.paragraphSmall)
                     Spacer()
-                    Text(viewModel.token.currencySymbol)
+                    Text(viewModel.token.currencySymbol.shortenAddress)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(isCopiedPolicy ? .colorBaseSuccess : .colorBaseTent)
                         .lineLimit(1)
@@ -276,10 +276,12 @@ extension TokenDetailView {
                             }
                         })
                 }
-                if let riskCategory = viewModel.riskCategory {
-                    HStack(spacing: 4) {
-                        DashedUnderlineText(text: "Risk score", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
-                        Spacer()
+                HStack(spacing: 4) {
+                    DashedUnderlineText(text: "Risk score", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    if let riskScoreOfAsset = viewModel.riskCategory,
+                        let riskCategory = riskScoreOfAsset.riskCategory.value
+                    {
                         Text(riskCategory.rawValue.uppercased())
                             .font(.paragraphXSemiSmall)
                             .foregroundStyle(riskCategory.textColor)
@@ -288,18 +290,32 @@ extension TokenDetailView {
                             .background(
                                 RoundedRectangle(cornerRadius: BorderRadius.full).fill(riskCategory.backgroundColor)
                             )
+                            .containerShape(.rect)
+                            .onTapGesture {
+                                let url = "https://app.xerberus.io/cardano/stats?token=\(riskScoreOfAsset.assetName)"
+                                url.openURL()
+                            }
+                    } else {
+                        Text("Uncalibrated")
+                            .font(.paragraphXSemiSmall)
+                            .foregroundStyle(.colorBaseTent)
+                            .padding(.horizontal, .lg)
+                            .frame(height: 24)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub)
+                            )
                     }
-                    .frame(height: 40)
                 }
+                .frame(height: 40)
 
+                Text("External links")
+                    .font(.labelSemiSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                    .frame(height: 28)
+                    .padding(.top, .xl)
                 let socialLinks = viewModel.token.socialLinks
                 let keys = socialLinks.map { $0.key }
-                if !socialLinks.isEmpty {
-                    Text("External links")
-                        .font(.labelSemiSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                        .frame(height: 28)
-                        .padding(.top, .xl)
+                if socialLinks.isEmpty {
                     FlexibleView(
                         data: keys,
                         spacing: 0,
@@ -317,8 +333,18 @@ extension TokenDetailView {
                     }
                     .padding(.top, .md)
                     .padding(.bottom, .xl)
+                } else {
+                    Image(.icCardano)
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                        .padding(.top, .md)
+                        .padding(.bottom, .xl)
+                        .onTapGesture {
+                            guard let url = URL(string: MinWalletConstant.transactionURL + "/\(viewModel.token.currencySymbol)" + "\(viewModel.token.tokenName)")
+                            else { return }
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        }
                 }
-
                 HStack(alignment: .center, spacing: 4) {
                     Text("For projects")
                         .font(.labelSemiSecondary)
