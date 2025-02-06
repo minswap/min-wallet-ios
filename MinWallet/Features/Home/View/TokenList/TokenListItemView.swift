@@ -22,7 +22,7 @@ struct TokenListItemView: View {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
             VStack(spacing: 4) {
                 let adaName = token?.adaName
-                let name = token?.name ?? ""
+                let name = token?.projectName ?? ""
                 HStack(spacing: 0) {
                     Text(adaName)
                         .font(.labelMediumSecondary)

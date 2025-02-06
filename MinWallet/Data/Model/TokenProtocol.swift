@@ -8,7 +8,7 @@ protocol TokenProtocol {
     var tokenName: String { get }
     var isVerified: Bool { get }
     var ticker: String { get }
-    var name: String { get }
+    var projectName: String { get }
     var category: [String] { get }
 
     var percentChange: Double { get }

@@ -20,7 +20,7 @@ extension TopAssetQuery.Data.TopAsset: TokenProtocol {
         asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
-    var name: String {
+    var projectName: String {
         asset.metadata?.name ?? ""
     }
 
@@ -89,7 +89,7 @@ extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
         asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
-    var name: String {
+    var projectName: String {
         asset.metadata?.name ?? ""
     }
 
@@ -159,7 +159,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
         amountAsset.asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
-    var name: String {
+    var projectName: String {
         amountAsset.asset.metadata?.name ?? ""
     }
 
@@ -234,7 +234,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
         amountLPAsset.asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
-    var name: String {
+    var projectName: String {
         amountLPAsset.asset.metadata?.name ?? ""
     }
 
@@ -294,11 +294,11 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
 
 struct TokenProtocolDefault: TokenProtocol {
     var currencySymbol: String {
-        "d71432b5e54b92cde0748af0903b90cc3758a40e0283aabd7e734c99"
+        "0c787a604cc2ec986455f289013fae122f7a808a23e07ca09e16a2b0"
     }
 
     var tokenName: String {
-        "0014df104d696e696f6e204368726973746d6173"
+        "0014df1061647366"
     }
 
     var isVerified: Bool {
@@ -309,7 +309,7 @@ struct TokenProtocolDefault: TokenProtocol {
         "Ticker"
     }
 
-    var name: String {
+    var projectName: String {
         "Name"
     }
 
@@ -349,7 +349,7 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
         metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
     }
 
-    var name: String {
+    var projectName: String {
         metadata?.name ?? ""
     }
 
@@ -496,7 +496,7 @@ struct TokenDefault: TokenProtocol {
 
     var ticker: String { "" }
 
-    var name: String { minName }
+    var projectName: String { minName }
 
     var category: [String] { [] }
 

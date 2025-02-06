@@ -80,7 +80,7 @@ extension TokenDetailView {
                             Text(viewModel.token.adaName)
                                 .foregroundStyle(.colorBaseTent)
                                 .font(.labelMediumSecondary)
-                            Text(viewModel.token.name)
+                            Text(viewModel.token.projectName.isBlank ? viewModel.token.adaName : viewModel.token.projectName)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                                 .font(.labelMediumSecondary)
                         })

@@ -141,7 +141,7 @@ extension TokenDetailView {
                     content = "Total supply = Total coins created - coins that have been burned (if any) It is comparable to outstanding shares in the market."
                     $isShowToolTip.showSheet()
                 }
-                Text(!viewModel.token.name.isBlank ? "About \(viewModel.token.adaName) (\(viewModel.token.name))" : "About \(viewModel.token.adaName)")
+                Text("About \(viewModel.token.adaName) (\(viewModel.token.projectName.isBlank ? viewModel.token.adaName :  viewModel.token.projectName))")
                     .font(.titleH6)
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)
@@ -315,7 +315,7 @@ extension TokenDetailView {
                     .padding(.top, .xl)
                 let socialLinks = viewModel.token.socialLinks
                 let keys = socialLinks.map { $0.key }
-                if socialLinks.isEmpty {
+                if !socialLinks.isEmpty {
                     FlexibleView(
                         data: keys,
                         spacing: 0,
