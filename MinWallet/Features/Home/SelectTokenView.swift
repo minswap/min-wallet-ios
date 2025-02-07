@@ -115,15 +115,14 @@ struct SelectTokenView: View {
                     }
                     .padding(.top, .xl)
                 } else if viewModel.tokens.isEmpty {
-                    HStack {
-                        Spacer()
-                        Text("No data")
-                            .padding(.horizontal, .xl)
-                            .font(.paragraphSmall)
+                    VStack(alignment: .center, spacing: 16) {
+                        Image(.icEmptyResult)
+                            .fixSize(120)
+                        Text("No results")
+                            .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        Spacer()
                     }
-                    .padding(.top, .xl)
+                    .padding(.top, 50)
                 } else {
                     LazyVStack(
                         spacing: 0,
