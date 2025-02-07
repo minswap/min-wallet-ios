@@ -33,11 +33,12 @@ struct ReInputSeedPhraseView: View {
         if seedPhraseCount == 0 { return "" }
         switch screenType {
         case let .createWallet(seedPhrase):
-            if inputSeedPhraseString != seedPhrase.joined(separator: " ") {
+
+            if seedPhraseCount != 24 && seedPhraseCount != 15 && seedPhraseCount != 12 {
                 return "Invalid seed phrase"
             }
 
-            if seedPhraseCount != 24 && seedPhraseCount != 15 && seedPhraseCount != 12 {
+            if inputSeedPhraseString != seedPhrase.joined(separator: " ") {
                 return "Invalid seed phrase"
             }
 

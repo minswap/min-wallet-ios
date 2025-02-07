@@ -167,6 +167,7 @@ private struct QRScanOverlay: View {
                             .padding(2)
                     )
             }
+            .compositingGroup()
         }
     }
 }
