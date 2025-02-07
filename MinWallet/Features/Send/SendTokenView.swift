@@ -71,7 +71,7 @@ struct SendTokenView: View {
                         ForEach($viewModel.tokens) { $item in
                             let item = $item.wrappedValue
                             HStack(spacing: .md) {
-                                AmountTextField(value: $item.amount, minValue: pow(10, Double(item.token.decimals) * -1), maxValue: item.token.isTokenADA ? (item.token.amount - 10) : item.token.amount)
+                                AmountTextField(value: $item.amount, minValue: pow(10, Double(item.token.decimals) * -1), maxValue: item.token.isTokenADA ? (max(item.token.amount - 10, 0)) : item.token.amount)
                                     .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
                                     .font(.labelMediumSecondary)
@@ -114,7 +114,7 @@ struct SendTokenView: View {
             }
             Spacer()
             let combinedBinding = Binding<Bool>(
-                get: { viewModel.tokens.allSatisfy { !$0.amount.isBlank } },
+                get: { viewModel.isValidTokenToSend },
                 set: { _ in }
             )
             CustomButton(title: "Next", isEnable: combinedBinding) {
