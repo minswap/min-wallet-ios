@@ -39,7 +39,7 @@ class TokenDetailViewModel: ObservableObject {
 
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
-        return chartDatas[selectedIndex]
+        return chartDatas[gk_safeIndex: selectedIndex]
     }
 
     var percent: Double {

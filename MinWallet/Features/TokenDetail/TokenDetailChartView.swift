@@ -112,10 +112,12 @@ extension TokenDetailView {
                             .gesture(
                                 DragGesture(minimumDistance: 0, coordinateSpace: .global)
                                     .onChanged { value in
+                                        guard !viewModel.chartDatas.isEmpty else { return }
                                         self.viewModel.isInteracting = true
                                         updateSelectedIndex(using: chart, at: value.location, in: geometry)
                                     }
                                     .onEnded { _ in
+                                        guard !viewModel.chartDatas.isEmpty else { return }
                                         self.viewModel.isInteracting = false
                                         self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
                                     })
