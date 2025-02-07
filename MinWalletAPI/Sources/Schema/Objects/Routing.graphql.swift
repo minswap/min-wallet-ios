@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let Routing = ApolloAPI.Object(
     typename: "Routing",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let WithdrawOverSlippageDetail = ApolloAPI.Object(
     typename: "WithdrawOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

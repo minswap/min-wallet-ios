@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let SwapExactInOverSlippageDetail = ApolloAPI.Object(
     typename: "SwapExactInOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

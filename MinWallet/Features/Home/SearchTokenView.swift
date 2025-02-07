@@ -65,6 +65,7 @@ struct SearchTokenView: View {
                             recentSearchView
                             favouriteView
                             tokensView
+                            Spacer()
                         }
                     )
                     .padding(.top, .lg)

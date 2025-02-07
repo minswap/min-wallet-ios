@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let PortfolioNFTPosition = ApolloAPI.Object(
     typename: "PortfolioNFTPosition",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

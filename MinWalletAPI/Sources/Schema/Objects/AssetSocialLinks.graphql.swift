@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let AssetSocialLinks = ApolloAPI.Object(
     typename: "AssetSocialLinks",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

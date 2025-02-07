@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let TopAsset = ApolloAPI.Object(
     typename: "TopAsset",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

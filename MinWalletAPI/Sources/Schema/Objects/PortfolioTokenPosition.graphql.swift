@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let PortfolioTokenPosition = ApolloAPI.Object(
     typename: "PortfolioTokenPosition",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

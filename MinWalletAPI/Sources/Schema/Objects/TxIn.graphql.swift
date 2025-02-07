@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let TxIn = ApolloAPI.Object(
     typename: "TxIn",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

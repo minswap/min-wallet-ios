@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let AssetMetadata = ApolloAPI.Object(
     typename: "AssetMetadata",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

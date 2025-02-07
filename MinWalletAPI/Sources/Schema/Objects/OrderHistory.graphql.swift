@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let OrderHistory = ApolloAPI.Object(
     typename: "OrderHistory",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }
