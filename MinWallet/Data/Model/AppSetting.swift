@@ -112,6 +112,15 @@ class AppSetting: ObservableObject {
         }
     }
 
+    lazy var bip0039: [String] = {
+        guard let fileURL = Bundle.main.url(forResource: "bip0039", withExtension: "txt") else { return [] }
+        do {
+            return try String(contentsOf: fileURL, encoding: .utf8).split(separator: "\n").map { String($0) }
+        } catch {
+            return []
+        }
+    }()
+
     private init() {
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
