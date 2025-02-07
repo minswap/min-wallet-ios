@@ -362,6 +362,9 @@ struct SwapTokenView: View {
             })
         }
         bannerState.isShowingBanner = true
+        if appSetting.rootScreen != .home {
+            appSetting.rootScreen = .home
+        }
         navigator.popToRoot()
     }
 }

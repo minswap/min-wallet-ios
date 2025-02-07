@@ -71,7 +71,9 @@ struct ForgotPasswordView: View {
             CustomButton(title: "Restore", isEnable: combinedBinding) {
                 userInfo.deleteAccount()
                 appSetting.deleteAccount()
-                appSetting.rootScreen = .gettingStarted
+                if appSetting.rootScreen != .gettingStarted {
+                    appSetting.rootScreen = .gettingStarted
+                }
                 navigator.popToRoot()
                 /*
                 switch screenType {

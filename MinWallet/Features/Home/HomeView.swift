@@ -280,7 +280,6 @@ struct HomeView: View {
                 isViewAppear = true
                 return
             }
-            print("WTF get token")
             await viewModel.getTokens()
         }
         .onOpenURL { incomingURL in

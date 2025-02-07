@@ -171,7 +171,7 @@ struct ChangePasswordView: View {
                         guard verifyPassword(wallet: minWallet, password: currentPassword) else { return }
                         guard let newWallet = changePassword(wallet: minWallet, currentPassword: currentPassword, newPassword: password)
                         else {
-                            throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                            throw AppGeneralError.localErrorLocalized(message: "Change password failed")
                         }
 
                         userInfo.saveWalletInfo(walletInfo: newWallet)

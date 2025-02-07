@@ -16,6 +16,8 @@ struct SendTokenView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
+    private var appSetting: AppSetting
+    @EnvironmentObject
     private var tokenManager: TokenManager
     @FocusState
     private var focusedField: Focusable?
@@ -142,6 +144,9 @@ struct SendTokenView: View {
             BaseContentView(
                 screenTitle: " ",
                 actionLeft: {
+                    if appSetting.rootScreen != .home {
+                        appSetting.rootScreen = .home
+                    }
                     navigator.popToRoot()
                 })
         )

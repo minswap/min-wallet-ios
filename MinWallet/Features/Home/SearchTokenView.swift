@@ -43,10 +43,14 @@ struct SearchTokenView: View {
             .padding(.leading, .xl)
             .padding(.top, .lg)
             if viewModel.showSkeleton {
-                ForEach(0..<20, id: \.self) { index in
-                    TokenListItemSkeletonView()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(0..<20, id: \.self) { index in
+                            TokenListItemSkeletonView()
+                        }
+                    }
+                    .padding(.top, .lg)
                 }
-                .padding(.top, .lg)
             } else if viewModel.tokens.isEmpty && viewModel.tokensFav.isEmpty {
                 VStack(alignment: .center, spacing: 16) {
                     Image(.icEmptyResult)
