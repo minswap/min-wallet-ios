@@ -11,18 +11,16 @@ struct TokenListView: View {
     @ObservedObject
     var viewModel: HomeViewModel
 
+    private let columns = [
+        GridItem(.flexible(), spacing: .xl),
+        GridItem(.flexible(), spacing: .xl),
+    ]
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if viewModel.isHasYourToken {
-                /*
-                 Text(label)
-                 .padding(.horizontal, .xl)
-                 .font(.titleH6)
-                 .foregroundStyle(.colorBaseTent)
-                 .padding(.bottom, .xl)
-                 */
                 HStack(spacing: 0) {
-                    ForEach(TabType.allCases) { type in
+                    ForEach(viewModel.tabTypes) { type in
                         Text(type.title)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(viewModel.tabType == type ? .colorInteractiveTentSecondaryDefault : .colorInteractiveTentPrimarySub)
@@ -35,10 +33,11 @@ struct TokenListView: View {
                                 viewModel.tabType = type
                             }
                     }
-                    if viewModel.tabType == .yourToken, !viewModel.tokens.isEmpty {
+                    if viewModel.tabType == .yourToken || viewModel.tabType == .nft, !viewModel.tokens.isEmpty {
+                        let suffix = viewModel.tabType == .yourToken ? "tokens" : "NFTs"
                         Spacer()
                         Color.colorBorderPrimarySub.frame(width: 1, height: 20)
-                        Text("\(viewModel.tokens.count) tokens")
+                        Text("\(viewModel.tokens.count) \(suffix)")
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                             .padding(.leading, .md)
@@ -69,22 +68,67 @@ struct TokenListView: View {
                         Spacer()
                     }
                 } else {
-                    LazyVStack(
-                        spacing: 0,
-                        content: {
+                    if viewModel.tabType == .nft {
+                        LazyVGrid(columns: columns, spacing: .xl) {
                             ForEach(0..<viewModel.tokens.count, id: \.self) { index in
                                 let item = viewModel.tokens[index]
-                                TokenListItemView(token: item, showSubPrice: viewModel.tabType == .yourToken)
-                                    .contentShape(.rect)
-                                    .onAppear() {
-                                        viewModel.loadMoreData(item: item)
+                                VStack(alignment: .leading, spacing: .md) {
+                                    if item.isAdaHandleName {
+                                        ZStack(alignment: .center) {
+                                            Image(.icNftAdaHandle)
+                                                .resizable()
+                                                .aspectRatio(1, contentMode: .fit)
+                                                .frame(maxWidth: .infinity)
+                                                .cornerRadius(.xl)
+                                            Text(item.tokenName.adaName)
+                                                .font(.labelMediumSecondary)
+                                                .foregroundStyle(.white)
+                                        }
+                                    } else {
+                                        CustomWebImage(
+                                            url: item.buildNFTURL(),
+                                            placeholder: {
+                                                Image(nil)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .background(.colorSurfacePrimaryDefault)
+                                                    .clipped()
+                                                    .overlay {
+                                                        Image(.icNftPlaceholder)
+                                                            .fixSize(44)
+                                                    }
+                                            }
+                                        )
+                                        .cornerRadius(.xl)
                                     }
-                                    .onTapGesture {
-                                        guard !item.isTokenADA else { return }
-                                        navigator.push(.tokenDetail(token: item))
-                                    }
+
+                                    let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
+                                    Text(name)
+                                        .lineLimit(1)
+                                        .font(.paragraphXMediumSmall)
+                                        .foregroundStyle(.colorBaseTent)
+                                }
                             }
-                        })
+                        }
+                        .padding(.horizontal, 16)
+                    } else {
+                        LazyVStack(
+                            spacing: 0,
+                            content: {
+                                ForEach(0..<viewModel.tokens.count, id: \.self) { index in
+                                    let item = viewModel.tokens[index]
+                                    TokenListItemView(token: item, showSubPrice: viewModel.tabType == .yourToken)
+                                        .contentShape(.rect)
+                                        .onAppear() {
+                                            viewModel.loadMoreData(item: item)
+                                        }
+                                        .onTapGesture {
+                                            guard !item.isTokenADA else { return }
+                                            navigator.push(.tokenDetail(token: item))
+                                        }
+                                }
+                            })
+                    }
                 }
             }
             .refreshable {
@@ -115,16 +159,14 @@ extension TokenListView {
                 return marketUUID
             case .yourToken:
                 return yourTokenUUID
-            /*
             case .nft:
                 return nftUUID
-                 */
             }
         }
 
         case market
         case yourToken
-        //case nft
+        case nft
 
         var title: LocalizedStringKey {
             switch self {
@@ -132,10 +174,8 @@ extension TokenListView {
                 "Market"
             case .yourToken:
                 "Your tokens"
-            /*
             case .nft:
                 "Your NFTs"
-                 */
             }
         }
     }

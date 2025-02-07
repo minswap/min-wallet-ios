@@ -38,8 +38,15 @@
     "%lld" : {
 
     },
-    "%lld tokens" : {
-
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
     },
     "$0.0" : {
 
@@ -852,6 +859,9 @@
 
     },
     "You’re all set!" : {
+
+    },
+    "Your NFTs" : {
 
     },
     "Your password has been successfully changed." : {

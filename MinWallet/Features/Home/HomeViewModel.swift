@@ -16,6 +16,8 @@ class HomeViewModel: ObservableObject {
     @Published
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
+    var tabTypes: [TokenListView.TabType] = []
+    @Published
     var isHasYourToken: Bool = false
 
     private var input: TopAssetsInput = .init()
@@ -44,17 +46,20 @@ class HomeViewModel: ObservableObject {
 
         Task {
             let tokens = try? await TokenManager.getYourToken()
-            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            TokenManager.shared.yourTokens = tokens
             await TokenManager.shared.getPortfolioOverview()
             await getTokens()
-            self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
+            let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
+            self.isHasYourToken = !_tokens.isEmpty
+            self.tabTypes = (tokens?.nfts ?? []).isEmpty ? [.market, .yourToken] : [.market, .yourToken, .nft]
 
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
                 if tabType != .yourToken {
                     let tokens = try? await TokenManager.getYourToken()
-                    TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
-                    self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
+                    TokenManager.shared.yourTokens = tokens
+                    let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
+                    self.isHasYourToken = !_tokens.isEmpty
                 }
                 await TokenManager.shared.getPortfolioOverview()
                 await self.getTokens()
@@ -98,10 +103,19 @@ class HomeViewModel: ObservableObject {
 
         case .yourToken:
             let tokens = try? await TokenManager.getYourToken()
-            let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
-            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
+            TokenManager.shared.yourTokens = tokens
             self.isHasYourToken = !_tokens.isEmpty
             self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + _tokens
+            self.hasLoadMoreDic[tabType] = false
+            self.showSkeletonDic[tabType] = false
+            self.isFetching[tabType] = false
+        case .nft:
+            let tokens = try? await TokenManager.getYourToken()
+            let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
+            TokenManager.shared.yourTokens = tokens
+            self.isHasYourToken = !_tokens.isEmpty
+            self.tokensDic[tabType] = tokens?.nfts ?? []
             self.hasLoadMoreDic[tabType] = false
             self.showSkeletonDic[tabType] = false
             self.isFetching[tabType] = false

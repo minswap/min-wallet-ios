@@ -7,7 +7,7 @@ public class WalletAssetsQuery: GraphQLQuery {
   public static let operationName: String = "WalletAssetsQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query WalletAssetsQuery($address: String!) { getWalletAssetsPositions(address: $address) { __typename lovelace lpTokens { __typename ammType amountLPAsset { __typename amount asset { __typename currencySymbol metadata { __typename decimals description isVerified name ticker url } tokenName details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } } } lpAdaValue pnl24H poolShare amountAssets { __typename amount asset { __typename currencySymbol metadata { __typename decimals description isVerified name ticker url } tokenName details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } } } } assets { __typename amountAsset { __typename amount asset { __typename currencySymbol tokenName metadata { __typename decimals description isVerified name ticker url } details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } } } pnl24H priceInAda valueInAda } } }"#
+      #"query WalletAssetsQuery($address: String!) { getWalletAssetsPositions(address: $address) { __typename nfts { __typename asset { __typename currencySymbol tokenName } displayName image } lovelace lpTokens { __typename ammType amountLPAsset { __typename amount asset { __typename currencySymbol metadata { __typename decimals description isVerified name ticker url } tokenName details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } } } lpAdaValue pnl24H poolShare amountAssets { __typename amount asset { __typename currencySymbol metadata { __typename decimals description isVerified name ticker url } tokenName details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } } } } assets { __typename amountAsset { __typename amount asset { __typename currencySymbol tokenName metadata { __typename decimals description isVerified name ticker url } details { __typename categories project socialLinks { __typename coinGecko coinMarketCap discord telegram twitter website } } } } pnl24H priceInAda valueInAda } } }"#
     ))
 
   public var address: String
@@ -39,14 +39,54 @@ public class WalletAssetsQuery: GraphQLQuery {
       public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.WalletAssetsPositions }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
+        .field("nfts", [Nft].self),
         .field("lovelace", MinWalletAPI.BigInt.self),
         .field("lpTokens", [LpToken].self),
         .field("assets", [Asset].self),
       ] }
 
+      public var nfts: [Nft] { __data["nfts"] }
       public var lovelace: MinWalletAPI.BigInt { __data["lovelace"] }
       public var lpTokens: [LpToken] { __data["lpTokens"] }
       public var assets: [Asset] { __data["assets"] }
+
+      /// GetWalletAssetsPositions.Nft
+      ///
+      /// Parent Type: `PortfolioNFTPosition`
+      public struct Nft: MinWalletAPI.SelectionSet {
+        public let __data: DataDict
+        public init(_dataDict: DataDict) { __data = _dataDict }
+
+        public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.PortfolioNFTPosition }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("asset", Asset.self),
+          .field("displayName", String?.self),
+          .field("image", String?.self),
+        ] }
+
+        public var asset: Asset { __data["asset"] }
+        public var displayName: String? { __data["displayName"] }
+        public var image: String? { __data["image"] }
+
+        /// GetWalletAssetsPositions.Nft.Asset
+        ///
+        /// Parent Type: `Asset`
+        public struct Asset: MinWalletAPI.SelectionSet {
+          public let __data: DataDict
+          public init(_dataDict: DataDict) { __data = _dataDict }
+
+          public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.Asset }
+          public static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .field("currencySymbol", String.self),
+            .field("tokenName", String.self),
+          ] }
+
+          public var currencySymbol: String { __data["currencySymbol"] }
+          public var tokenName: String { __data["tokenName"] }
+        }
+      }
 
       /// GetWalletAssetsPositions.LpToken
       ///

@@ -13,8 +13,8 @@ class TokenManager: ObservableObject {
         }
     }
 
-    ///Cached your token, include normal + lp tokens
-    var yourTokens: ([TokenProtocol], [TokenProtocol]) = ([], []) {
+    ///Cached your token, include normal + lp tokens + nft
+    var yourTokens: WalletAssetsQuery.Data.GetWalletAssetsPositions? {
         willSet {
             objectWillChange.send()
         }
@@ -65,11 +65,9 @@ extension TokenManager {
         TokenManager.shared = .init()
     }
 
-    static func getYourToken() async throws -> ([TokenProtocol], [TokenProtocol]) {
+    static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
         let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-        let normalToken = tokens?.getWalletAssetsPositions.assets ?? []
-        let lpToken = tokens?.getWalletAssetsPositions.lpTokens ?? []
-        return (normalToken, lpToken)
+        return tokens?.getWalletAssetsPositions
     }
 
     static func fetchAdaHandleName() async -> String {

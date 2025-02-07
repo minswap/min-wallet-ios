@@ -1,5 +1,13 @@
 query WalletAssetsQuery($address: String!) {
   getWalletAssetsPositions(address: $address) {
+    nfts {
+      asset {
+        currencySymbol
+        tokenName
+      }
+      displayName
+      image
+    }
     lovelace
     lpTokens {
       ammType

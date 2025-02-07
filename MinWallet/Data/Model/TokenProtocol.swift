@@ -19,6 +19,9 @@ protocol TokenProtocol {
     var uniqueID: String { get }
     var socialLinks: [SocialLinks: String] { get }
     var decimals: Int { get }
+
+    var nftDisplayName: String { get }
+    var nftImage: String { get }
 }
 
 extension TokenProtocol {
@@ -50,6 +53,9 @@ extension TokenProtocol {
     var isTokenADA: Bool {
         uniqueID == "lovelace"
     }
+
+    var nftDisplayName: String { "" }
+    var nftImage: String { "" }
 }
 
 struct WrapTokenProtocol: Identifiable {
