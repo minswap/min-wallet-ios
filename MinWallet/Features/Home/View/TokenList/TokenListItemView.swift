@@ -47,34 +47,31 @@ struct TokenListItemView: View {
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .lineLimit(1)
                         .padding(.trailing, .md)
-                    if !showSubPrice {
-                        Spacer()
-                    }
-                    /*
-                    let percentChange: Double = token?.percentChange ?? 0
-                    if !(showSubPrice && percentChange.isZero) {
-                        HStack(spacing: 0) {
-                            let foregroundStyle: Color = {
-                                guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
-                                return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
-                            }()
-                            Text("\(percentChange.formatSNumber(maximumFractionDigits: 2))%")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(foregroundStyle)
-                            if !percentChange.isZero {
-                                Image(percentChange > 0 ? .icUp : .icDown)
-                                    .resizable()
-                                    .frame(width: 16, height: 16)
-                            }
-                        }
-                    }
-                     */
+                    Spacer()
+
                     if showSubPrice {
-                        Spacer()
                         let subPrice: Double = token?.subPriceValue ?? 0
                         Text(subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
                             .font(.paragraphSmall)
                             .layoutPriority(999)
+                    } else {
+                        let percentChange: Double = token?.percentChange ?? 0
+                        if !percentChange.isZero {
+                            HStack(spacing: 0) {
+                                let foregroundStyle: Color = {
+                                    guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
+                                    return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
+                                }()
+                                Text("\(percentChange.formatSNumber(maximumFractionDigits: 2))%")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(foregroundStyle)
+                                if !percentChange.isZero {
+                                    Image(percentChange > 0 ? .icUp : .icDown)
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
+                                }
+                            }
+                        }
                     }
                 }
             }

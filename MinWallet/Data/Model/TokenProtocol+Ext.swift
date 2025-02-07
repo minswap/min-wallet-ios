@@ -506,7 +506,9 @@ struct TokenDefault: TokenProtocol {
         netValue
     }
 
-    var subPriceValue: Double { 0 }
+    var subPriceValue: Double {
+        netSubValue
+    }
 
     var socialLinks: [SocialLinks: String] { [:] }
 
@@ -516,6 +518,7 @@ struct TokenDefault: TokenProtocol {
     var tName: String = ""
     var minName: String = ""
     var netValue: Double = 0
+    var netSubValue: Double = 0
 
     var amount: Double {
         netValue
@@ -525,11 +528,13 @@ struct TokenDefault: TokenProtocol {
         symbol: String,
         tName: String,
         minName: String = "",
-        netValue: Double = 0
+        netValue: Double = 0,
+        netSubValue: Double = 0
     ) {
         self.symbol = symbol
         self.tName = tName
         self.minName = minName
         self.netValue = netValue
+        self.netSubValue = netSubValue
     }
 }

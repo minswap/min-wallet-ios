@@ -80,6 +80,7 @@ struct TokenListView: View {
                                         viewModel.loadMoreData(item: item)
                                     }
                                     .onTapGesture {
+                                        guard !item.isTokenADA else { return }
                                         navigator.push(.tokenDetail(token: item))
                                     }
                             }
@@ -87,7 +88,9 @@ struct TokenListView: View {
                 }
             }
             .refreshable {
-                viewModel.getTokens()
+                Task {
+                    await viewModel.getTokens()
+                }
             }
         }
     }

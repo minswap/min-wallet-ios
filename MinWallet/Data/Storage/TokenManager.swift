@@ -50,6 +50,7 @@ class TokenManager: ObservableObject {
         pnl24H = (portfolioOverview?.portfolioOverview.pnl24H.doubleValue ?? 0) / 1_000_000
         adaValue = (portfolioOverview?.portfolioOverview.adaValue.doubleValue ?? 0) / 1_000_000
         tokenAda.netValue = adaValue
+        tokenAda.netSubValue = adaValue
     }
 
     func reloadPortfolioOverview() {

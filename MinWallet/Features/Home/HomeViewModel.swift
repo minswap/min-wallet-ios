@@ -35,16 +35,19 @@ class HomeViewModel: ObservableObject {
             .dropFirst()
             .sink { [weak self] newValue in
                 guard let self = self else { return }
-                self.tabType = newValue
-                self.getTokens()
+                Task {
+                    self.tabType = newValue
+                    await self.getTokens()
+                }
             }
             .store(in: &cancellables)
 
         Task {
             let tokens = try? await TokenManager.getYourToken()
             TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            await TokenManager.shared.getPortfolioOverview()
+            await getTokens()
             self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
-            getTokens()
 
             try? await Task.sleep(for: .seconds(5 * 60))
             repeat {
@@ -53,64 +56,55 @@ class HomeViewModel: ObservableObject {
                     TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
                     self.isHasYourToken = !((tokens?.0 ?? []) + (tokens?.1 ?? [])).isEmpty
                 }
-                self.getTokens()
-                try? await Task.sleep(for: .seconds(5 * 60))
-            } while (!Task.isCancelled)
-        }
-
-        //MARK: Get balance
-        Task {
-            repeat {
                 await TokenManager.shared.getPortfolioOverview()
+                await self.getTokens()
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
         }
     }
 
-    func getTokens(isLoadMore: Bool = false) {
-        Task {
-            if showSkeletonDic[tabType] == nil {
-                showSkeletonDic[tabType] = !isLoadMore
+    func getTokens(isLoadMore: Bool = false) async {
+        if showSkeletonDic[tabType] == nil {
+            showSkeletonDic[tabType] = !isLoadMore
+        }
+        self.isFetching[tabType] = true
+
+        switch tabType {
+        case .market:
+            input = TopAssetsInput()
+                .with({
+                    $0.limit = .some(limit)
+                    $0.onlyVerified = .some(false)
+                    $0.favoriteAssets = nil
+                    $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
+                    if isLoadMore, let searchAfter = searchAfter {
+                        $0.searchAfter = .some(searchAfter)
+                    }
+                })
+
+            let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
+            let _tokens = tokens?.topAssets.topAssets ?? []
+            var currentTokens = tokensDic[tabType] ?? []
+            if isLoadMore {
+                currentTokens += _tokens
+            } else {
+                currentTokens = _tokens
             }
-            self.isFetching[tabType] = true
+            self.tokensDic[tabType] = currentTokens
+            self.searchAfter = tokens?.topAssets.searchAfter
+            self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit
+            self.showSkeletonDic[tabType] = false
+            self.isFetching[tabType] = false
 
-            switch tabType {
-            case .market:
-                input = TopAssetsInput()
-                    .with({
-                        $0.limit = .some(limit)
-                        $0.onlyVerified = .some(false)
-                        $0.favoriteAssets = nil
-                        $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
-                        if isLoadMore, let searchAfter = searchAfter {
-                            $0.searchAfter = .some(searchAfter)
-                        }
-                    })
-
-                let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
-                let _tokens = tokens?.topAssets.topAssets ?? []
-                var currentTokens = tokensDic[tabType] ?? []
-                if isLoadMore {
-                    currentTokens += _tokens
-                } else {
-                    currentTokens = _tokens
-                }
-                self.tokensDic[tabType] = currentTokens
-                self.searchAfter = tokens?.topAssets.searchAfter
-                self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit
-                self.showSkeletonDic[tabType] = false
-                self.isFetching[tabType] = false
-
-            case .yourToken:
-                let tokens = try? await TokenManager.getYourToken()
-                let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
-                TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
-                self.isHasYourToken = !_tokens.isEmpty
-                self.tokensDic[tabType] = _tokens
-                self.hasLoadMoreDic[tabType] = false
-                self.showSkeletonDic[tabType] = false
-                self.isFetching[tabType] = false
-            }
+        case .yourToken:
+            let tokens = try? await TokenManager.getYourToken()
+            let _tokens = (tokens?.0 ?? []) + (tokens?.1 ?? [])
+            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
+            self.isHasYourToken = !_tokens.isEmpty
+            self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + _tokens
+            self.hasLoadMoreDic[tabType] = false
+            self.showSkeletonDic[tabType] = false
+            self.isFetching[tabType] = false
         }
     }
 
@@ -119,7 +113,9 @@ class HomeViewModel: ObservableObject {
         let tokens = tokensDic[tabType] ?? []
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
         if tokens.firstIndex(where: { $0.uniqueID == item.uniqueID }) == thresholdIndex {
-            getTokens(isLoadMore: true)
+            Task {
+                await getTokens(isLoadMore: true)
+            }
         }
     }
 
