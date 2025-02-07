@@ -39,6 +39,13 @@ class AppSetting: ObservableObject {
         }
     }
 
+    @UserDefault("enable_notification", defaultValue: true)
+    var enableNotification: Bool {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
     @UserDefault("language", defaultValue: Language.english.rawValue)
     var language: String {
         willSet {

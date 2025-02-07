@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import OneSignalFramework
 
 
 struct SettingView: View {
@@ -189,6 +190,34 @@ struct SettingView: View {
                     Spacer()
                     Toggle("", isOn: $appSetting.enableAudio)
                         .toggleStyle(SwitchToggleStyle())
+                }
+                .frame(height: 52)
+                HStack(spacing: 12) {
+                    Text("Nofification")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                    Spacer()
+                    Toggle("", isOn: $appSetting.enableNotification)
+                        .toggleStyle(SwitchToggleStyle())
+                        .onChange(of: appSetting.enableNotification) { newValue in
+                            Task {
+                                if newValue {
+                                    OneSignal.Notifications.requestPermission(
+                                        { accepted in
+                                            appSetting.enableNotification = accepted
+                                            if accepted {
+                                                if UserDataManager.shared.notificationGenerateAuthHash?.isBlank == true {
+                                                    HomeViewModel.generateTokenHash()
+                                                }
+                                            } else {
+                                                OneSignal.logout()
+                                            }
+                                        }, fallbackToSettings: true)
+                                } else {
+                                    OneSignal.logout()
+                                }
+                            }
+                        }
                 }
                 .frame(height: 52)
             }

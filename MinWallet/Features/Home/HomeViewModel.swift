@@ -28,7 +28,7 @@ class HomeViewModel: ObservableObject {
 
     init() {
         guard AppSetting.shared.isLogin else { return }
-        generateTokenHash()
+        Self.generateTokenHash()
 
         $tabType
             .removeDuplicates()
@@ -123,8 +123,8 @@ class HomeViewModel: ObservableObject {
         }
     }
 
-    private func generateTokenHash() {
-        guard AppSetting.shared.isLogin else { return }
+    static func generateTokenHash() {
+        guard AppSetting.shared.isLogin, AppSetting.shared.enableNotification else { return }
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
         Task {
             let mutation = try? await MinWalletService.shared.mutation(mutation: NotificationGenerateAuthHashMutation(identifier: address))
