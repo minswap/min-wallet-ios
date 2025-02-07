@@ -104,6 +104,7 @@ extension TokenDetailView {
                 .chartYScale(domain: 0...maxY)
                 .chartXAxis(.hidden)
                 .chartLegend(.hidden)
+                .padding(.horizontal, .xl)
                 .chartOverlay { chart in
                     GeometryReader { geometry in
                         Rectangle()
@@ -160,6 +161,7 @@ extension TokenDetailView {
                         .foregroundStyle(.colorInteractiveTentPrimaryDisable)
                 }
                 .padding(.top, .md)
+                .padding(.horizontal, .xl)
             }
             .loading(isShowing: $viewModel.isLoadingPriceChart)
             .animation(.default, value: viewModel.chartDatas)

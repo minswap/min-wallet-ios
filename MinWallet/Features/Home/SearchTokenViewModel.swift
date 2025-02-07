@@ -63,7 +63,7 @@ class SearchTokenViewModel: ObservableObject {
                     $0.searchAfter = nil
                 }
                 if !keyword.isBlank {
-                    $0.term = .some(keyword)
+                    $0.term = .some(keyword.trimmingCharacters(in: .whitespacesAndNewlines))
                     $0.limit = .some(limit)
                 } else {
                     $0.term = nil
