@@ -42,23 +42,23 @@ struct SearchTokenView: View {
             }
             .padding(.leading, .xl)
             .padding(.top, .lg)
-            ScrollView {
-                if viewModel.showSkeleton {
-                    ForEach(0..<20, id: \.self) { index in
-                        TokenListItemSkeletonView()
-                    }
-                    .padding(.top, .lg)
-                } else if viewModel.tokens.isEmpty && viewModel.tokensFav.isEmpty {
-                    HStack {
-                        Spacer()
-                        Text("No data")
-                            .padding(.horizontal, .xl)
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorBaseTent)
-                        Spacer()
-                    }
-                    .padding(.top, .xl)
-                } else {
+            if viewModel.showSkeleton {
+                ForEach(0..<20, id: \.self) { index in
+                    TokenListItemSkeletonView()
+                }
+                .padding(.top, .lg)
+            } else if viewModel.tokens.isEmpty && viewModel.tokensFav.isEmpty {
+                VStack(alignment: .center, spacing: 16) {
+                    Image(.icEmptyResult)
+                        .fixSize(120)
+                    Text("No results")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.top, 100)
+                Spacer()
+            } else {
+                ScrollView {
                     VStack(
                         alignment: .leading, spacing: 0,
                         content: {
@@ -68,8 +68,9 @@ struct SearchTokenView: View {
                             Spacer()
                         }
                     )
-                    .padding(.top, .lg)
                 }
+                .padding(.top, .lg)
+                Spacer(minLength: 0)
             }
         }
         .toolbar {

@@ -12,6 +12,8 @@ struct ReInputSeedPhraseView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var hudState: HUDState
     @FocusState
     private var isFocus: Bool
     @State
@@ -136,8 +138,18 @@ struct ReInputSeedPhraseView: View {
                     guard inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) == seedPhrase.joined(separator: " ") else { return }
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
                 case .restoreWallet:
-                    guard !inputSeedPhrase.isBlank else { return }
-                    navigator.push(.restoreWallet(.setupNickName(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }))))
+                    guard !inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).isBlank else { return }
+
+                    let seedPhrase = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    //TODO: Call func validate seed phrase
+                    guard createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: MinWalletConstant.networkID, walletName: "MyMinWallet") != nil
+                    else {
+                        hudState.showMsg(msg: "Invalid seed phrase")
+                        return
+                    }
+
+                    navigator.push(.restoreWallet(.setupNickName(fileContent: "", seedPhrase: seedPhrase.split(separator: " ").map({ String($0) }))))
                 }
             }
             .frame(height: 56)
