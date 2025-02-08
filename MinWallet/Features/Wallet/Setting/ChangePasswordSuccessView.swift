@@ -9,7 +9,9 @@ struct ChangePasswordSuccessView: View {
     }
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var appSetting: AppSetting
 
     var screenType: ScreenType
 
@@ -37,9 +39,10 @@ struct ChangePasswordSuccessView: View {
                 action: {
                     switch screenType {
                     case .setting:
-                        if !navigator.popTo(.home) {
-                            navigator.popToRoot()
+                        if appSetting.rootScreen != .home {
+                            appSetting.rootScreen = .home
                         }
+                        navigator.popToRoot()
                     case .walletSetting:
                         break
                     }

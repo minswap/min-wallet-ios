@@ -38,8 +38,15 @@
     "%lld" : {
 
     },
-    "%lld tokens" : {
-
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
     },
     "$0.0" : {
 
@@ -81,9 +88,6 @@
 
     },
     "About" : {
-
-    },
-    "About %@" : {
 
     },
     "About %@ (%@)" : {
@@ -181,6 +185,9 @@
 
     },
     "Change password" : {
+
+    },
+    "Change password failed" : {
 
     },
     "Change your password" : {
@@ -292,6 +299,9 @@
 
     },
     "Error creating wallet" : {
+
+    },
+    "Error while restoring wallet" : {
 
     },
     "Estimated batcher fee" : {
@@ -496,6 +506,9 @@
 
     },
     "No results" : {
+
+    },
+    "Nofification" : {
 
     },
     "Notice" : {
@@ -761,6 +774,9 @@
     "Type" : {
 
     },
+    "Uncalibrated" : {
+
+    },
     "Unlock your wallet using %@ recognition or a password." : {
 
     },
@@ -846,6 +862,9 @@
 
     },
     "You’re all set!" : {
+
+    },
+    "Your NFTs" : {
 
     },
     "Your password has been successfully changed." : {

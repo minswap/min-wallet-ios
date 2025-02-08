@@ -104,6 +104,12 @@ class SwapTokenViewModel: ObservableObject {
         case .routeSelected:
             //TODO: calculate fee
             break
+        case .swapToken:
+            let tempToken = tokenPay
+            tokenPay = tokenReceive
+            tokenReceive = tempToken
+            //TODO: calculate route
+            self.action.send(.routeSorting)
 
         case .setMaxAmount:
             tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
@@ -178,5 +184,6 @@ extension SwapTokenViewModel {
         case setMaxAmount
         case setHalfAmount
         case amountPayChanged(amount: Double)
+        case swapToken
     }
 }

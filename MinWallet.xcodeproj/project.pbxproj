@@ -51,6 +51,7 @@
 		960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B372D0144150017AF29 /* PasswordValidation.swift */; };
 		960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
+		963456642D55AB0600C720AE /* bip0039.txt in Resources */ = {isa = PBXBuildFile; fileRef = 963456632D55AB0100C720AE /* bip0039.txt */; };
 		963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */; };
 		963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21932D1FAC40002E258E /* TokenProtocol.swift */; };
 		9640BBD22D27C14900B0DC42 /* TokenDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640BBD12D27C14900B0DC42 /* TokenDetailViewModel.swift */; };
@@ -259,6 +260,7 @@
 		960D6B372D0144150017AF29 /* PasswordValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidation.swift; sourceTree = "<group>"; };
 		960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSheetModifier.swift; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
+		963456632D55AB0100C720AE /* bip0039.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = bip0039.txt; sourceTree = "<group>"; };
 		963D218D2D1D3A2E002E258E /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		963D218E2D1D3A34002E258E /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		963D218F2D1E5DE7002E258E /* AdaPrice.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AdaPrice.graphql; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 			isa = PBXGroup;
 			children = (
 				57F102992C64CCA1000B3544 /* Assets.xcassets */,
+				963456632D55AB0100C720AE /* bip0039.txt */,
 				9600DEB02CF17E52005D997C /* Localize */,
 				5718EB1B2CEDF71000CDE34D /* Utils */,
 				575157942CEB4407004CD647 /* Components */,
@@ -1177,6 +1180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				575157CA2CEB4526004CD647 /* InterDisplay-Bold.ttf in Resources */,
+				963456642D55AB0600C720AE /* bip0039.txt in Resources */,
 				966AFBF02D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql in Resources */,
 				575157CD2CEB4526004CD647 /* InterDisplay-SemiBold.ttf in Resources */,
 				575157D02CEB4526004CD647 /* Inter-SemiBold.ttf in Resources */,

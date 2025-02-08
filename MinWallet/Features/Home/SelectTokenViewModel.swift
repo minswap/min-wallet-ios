@@ -27,7 +27,7 @@ class SelectTokenViewModel: ObservableObject {
     private var cachedIndex: [String: Int] = [:]
 
     private var rawTokens: [TokenProtocol] {
-        [TokenManager.shared.tokenAda] + TokenManager.shared.yourTokens.0 + TokenManager.shared.yourTokens.1
+        [TokenManager.shared.tokenAda] + (TokenManager.shared.yourTokens?.assets ?? []) + (TokenManager.shared.yourTokens?.lpTokens ?? [])
     }
 
     init(
@@ -63,7 +63,21 @@ class SelectTokenViewModel: ObservableObject {
                 self.keyword = newData
                 //self.getTokens()
                 let rawTokens = self.rawTokens
-                let _tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
+
+                let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                let _tokens =
+                    keyword.isEmpty
+                    ? rawTokens
+                    : rawTokens.filter({
+                        let stringToCompare: [String] = [
+                            $0.adaName.lowercased(),
+                            $0.currencySymbol,
+                            $0.tokenName.lowercased(),
+                            $0.projectName.lowercased(),
+                            $0.ticker.lowercased(),
+                        ]
+                        return stringToCompare.first { $0.contains(keyword) } != nil
+                    })
                 self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
             }
             .store(in: &cancellables)
@@ -79,8 +93,21 @@ class SelectTokenViewModel: ObservableObject {
         isFetching = true
         Task {
             let tokens = try? await TokenManager.getYourToken()
-            TokenManager.shared.yourTokens = ((tokens?.0 ?? []), (tokens?.1 ?? []))
-            let _tokens = self.keyword.isEmpty ? rawTokens : rawTokens.filter({ $0.adaName.lowercased().contains(self.keyword.lowercased()) })
+            TokenManager.shared.yourTokens = tokens
+            let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            let _tokens =
+                keyword.isEmpty
+                ? rawTokens
+                : rawTokens.filter({
+                    let stringToCompare: [String] = [
+                        $0.adaName.lowercased(),
+                        $0.currencySymbol,
+                        $0.tokenName.lowercased(),
+                        $0.projectName.lowercased(),
+                        $0.ticker.lowercased(),
+                    ]
+                    return stringToCompare.first { $0.contains(keyword) } != nil
+                })
             self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
             switch screenType {
             case .initSelectedToken:

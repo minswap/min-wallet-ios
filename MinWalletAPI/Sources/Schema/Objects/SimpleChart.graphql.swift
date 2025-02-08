@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let SimpleChart = ApolloAPI.Object(
     typename: "SimpleChart",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

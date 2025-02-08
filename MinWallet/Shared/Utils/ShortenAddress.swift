@@ -105,6 +105,11 @@ extension String {
         guard let url = URL(string: MinWalletConstant.transactionURL + "/transaction/" + self) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
+
+    func openURL() {
+        guard let url = URL(string: self) else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
 }
 
 extension Data {

@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let DexV2WithdrawImbalanceOverSlippageDetail = ApolloAPI.Object(
     typename: "DexV2WithdrawImbalanceOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

@@ -29,6 +29,13 @@ class SendTokenViewModel: ObservableObject {
     var tokensToSend: [WrapTokenSend] {
         tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 }
     }
+
+    var isValidTokenToSend: Bool {
+        if tokens.count == 1 && tokens.first?.amount.isBlank == true {
+            return false
+        }
+        return tokens.filter({ !$0.token.isTokenADA }).allSatisfy({ !$0.amount.isBlank })
+    }
 }
 
 

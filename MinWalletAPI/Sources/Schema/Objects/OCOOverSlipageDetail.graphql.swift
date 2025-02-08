@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let OCOOverSlipageDetail = ApolloAPI.Object(
     typename: "OCOOverSlipageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

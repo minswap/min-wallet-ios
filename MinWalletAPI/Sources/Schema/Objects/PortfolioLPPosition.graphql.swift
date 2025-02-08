@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let PortfolioLPPosition = ApolloAPI.Object(
     typename: "PortfolioLPPosition",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

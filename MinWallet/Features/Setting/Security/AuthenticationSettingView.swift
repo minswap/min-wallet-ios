@@ -8,6 +8,8 @@ struct AuthenticationSettingView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @EnvironmentObject
+    private var userInfo: UserInfo
+    @EnvironmentObject
     private var hudState: HUDState
     @State
     private var isShowEnterYourPassword: Bool = false
@@ -67,6 +69,13 @@ struct AuthenticationSettingView: View {
                         try await appSetting.reAuthenticateUser()
                         let createPasswordSuccess: ((String) -> Void)? = { password in
                             do {
+                                guard let minWallet = userInfo.minWallet else { return }
+                                guard verifyPassword(wallet: minWallet, password: MinWalletConstant.passDefaultForFaceID) else { return }
+                                guard let newWallet = changePassword(wallet: minWallet, currentPassword: MinWalletConstant.passDefaultForFaceID, newPassword: password)
+                                else {
+                                    throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                                }
+                                userInfo.saveWalletInfo(walletInfo: newWallet)
                                 try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                                 appSetting.authenticationType = .password
                             } catch {

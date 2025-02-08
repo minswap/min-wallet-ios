@@ -8,6 +8,8 @@ struct EnterYourPasswordView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @EnvironmentObject
+    private var userInfo: UserInfo
+    @EnvironmentObject
     private var hudState: HUDState
     @State
     private var password: String = ""
@@ -88,6 +90,13 @@ struct EnterYourPasswordView: View {
                         switch authenticationType {
                         case .biometric:
                             try await appSetting.reAuthenticateUser()
+                            guard let minWallet = userInfo.minWallet else { return }
+                            guard verifyPassword(wallet: minWallet, password: currentPassword) else { return }
+                            guard let newWallet = changePassword(wallet: minWallet, currentPassword: currentPassword, newPassword: MinWalletConstant.passDefaultForFaceID)
+                            else {
+                                throw AppGeneralError.localErrorLocalized(message: "Something went wrong!")
+                            }
+                            userInfo.saveWalletInfo(walletInfo: newWallet)
                         case .password:
                             break
                         }

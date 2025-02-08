@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let AMMPool = ApolloAPI.Object(
     typename: "AMMPool",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

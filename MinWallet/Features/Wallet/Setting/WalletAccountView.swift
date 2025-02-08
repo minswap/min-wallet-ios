@@ -144,7 +144,7 @@ struct WalletAccountView: View {
                     $showEditNickName.showSheet()
                 }
             )
-            .frame(height: 36)
+            .frame(height: 44)
             .padding(.xl)
             /*
             HStack(spacing: .lg) {

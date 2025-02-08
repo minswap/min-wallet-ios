@@ -18,7 +18,7 @@ struct SelectTokenListItemView: View {
         HStack(spacing: .md) {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
             let adaName = token?.adaName
-            let name = token?.name ?? ""
+            let name = token?.projectName ?? ""
             let amount = token?.amount ?? 0
             VStack(alignment: .leading, spacing: 4) {
                 Text(adaName)

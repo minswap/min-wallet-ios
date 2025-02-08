@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let RoutedPools = ApolloAPI.Object(
     typename: "RoutedPools",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

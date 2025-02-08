@@ -15,7 +15,7 @@ class TokenDetailViewModel: ObservableObject {
     @Published
     var topAsset: TopAssetQuery.Data.TopAsset?
     @Published
-    var riskCategory: RiskCategory?
+    var riskCategory: RiskScoreOfAssetQuery.Data.RiskScoreOfAsset?
     @Published
     var chartPeriod: ChartPeriod = .oneDay
     @Published
@@ -39,7 +39,7 @@ class TokenDetailViewModel: ObservableObject {
 
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
-        return chartDatas[selectedIndex]
+        return chartDatas[gk_safeIndex: selectedIndex]
     }
 
     var percent: Double {
@@ -110,7 +110,7 @@ class TokenDetailViewModel: ObservableObject {
     private func getRickScore() {
         Task {
             let riskScore = try? await MinWalletService.shared.fetch(query: RiskScoreOfAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
-            self.riskCategory = riskScore?.riskScoreOfAsset?.riskCategory.value
+            self.riskCategory = riskScore?.riskScoreOfAsset
         }
     }
 

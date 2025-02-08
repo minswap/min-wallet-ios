@@ -237,6 +237,9 @@ struct ConfirmSendTokenView: View {
                 }
                 bannerState.showBanner(isShow: true)
                 TokenManager.shared.reloadPortfolioOverview()
+                if appSetting.rootScreen != .home {
+                    appSetting.rootScreen = .home
+                }
                 navigator.popToRoot()
             } catch {
                 withAnimation {

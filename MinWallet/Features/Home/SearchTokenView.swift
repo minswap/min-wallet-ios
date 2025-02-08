@@ -42,40 +42,40 @@ struct SearchTokenView: View {
             }
             .padding(.leading, .xl)
             .padding(.top, .lg)
-            ScrollView {
-                if viewModel.showSkeleton {
-                    ForEach(0..<20, id: \.self) { index in
-                        TokenListItemSkeletonView()
+            if viewModel.showSkeleton {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(0..<20, id: \.self) { index in
+                            TokenListItemSkeletonView()
+                        }
                     }
                     .padding(.top, .lg)
-                } else if viewModel.tokens.isEmpty && viewModel.tokensFav.isEmpty {
-                    HStack {
-                        Spacer()
-                        Text("No data")
-                            .padding(.horizontal, .xl)
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorBaseTent)
-                        Spacer()
-                    }
-                    .padding(.top, .xl)
-                } else {
-                    LazyVStack(
-                        alignment: .leading,
-                        spacing: 0,
+                }
+            } else if viewModel.tokens.isEmpty && viewModel.tokensFav.isEmpty {
+                VStack(alignment: .center, spacing: 16) {
+                    Image(.icEmptyResult)
+                        .fixSize(120)
+                    Text("No results")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                }
+                .padding(.top, 100)
+                Spacer()
+            } else {
+                ScrollView {
+                    VStack(
+                        alignment: .leading, spacing: 0,
                         content: {
                             recentSearchView
                             favouriteView
                             tokensView
+                            Spacer()
                         }
                     )
-                    .padding(.top, .lg)
                 }
+                .padding(.top, .lg)
+                Spacer(minLength: 0)
             }
-            /*
-            .refreshable {
-                viewModel.getTokens()
-            }
-             */
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -139,10 +139,29 @@ struct SearchTokenView: View {
                 .padding(.horizontal, .xl)
             ForEach(0..<viewModel.tokensFav.count, id: \.self) { index in
                 let item = viewModel.tokensFav[index]
+                let offsetBinding = Binding<CGFloat>(
+                    get: {
+                        viewModel.offsets[gk_safeIndex: index] ?? 0
+                    },
+                    set: { value in
+                        guard index >= 0, index < viewModel.offsets.count else { return }
+                        viewModel.offsets[index] = value
+                    }
+                )
+                let deleteBinding = Binding<Bool>(
+                    get: {
+                        viewModel.isDeleted[gk_safeIndex: index] ?? false
+                    },
+                    set: { value in
+                        guard index >= 0, index < viewModel.isDeleted.count else { return }
+                        viewModel.isDeleted[index] = value
+                    }
+                )
+
                 TokenListItemView(token: item, showBottomLine: index != viewModel.tokensFav.count - 1)
                     .contentShape(.rect)
                     .swipeToDelete(
-                        offset: $viewModel.offsets[index], isDeleted: $viewModel.isDeleted[index], height: 68,
+                        offset: offsetBinding, isDeleted: deleteBinding, height: 68,
                         onDelete: {
                             viewModel.deleteTokenFav(at: index)
                         }

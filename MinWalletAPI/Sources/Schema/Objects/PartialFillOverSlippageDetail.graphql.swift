@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let PartialFillOverSlippageDetail = ApolloAPI.Object(
     typename: "PartialFillOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

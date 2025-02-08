@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let AdaPrice = ApolloAPI.Object(
     typename: "AdaPrice",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

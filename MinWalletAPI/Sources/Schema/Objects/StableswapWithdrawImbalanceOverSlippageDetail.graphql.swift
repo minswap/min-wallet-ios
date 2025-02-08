@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let StableswapWithdrawImbalanceOverSlippageDetail = ApolloAPI.Object(
     typename: "StableswapWithdrawImbalanceOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

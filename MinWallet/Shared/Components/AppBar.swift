@@ -51,6 +51,8 @@ struct BaseContentView: ViewModifier {
                             }
                             Text(screenTitle)
                                 .lineLimit(1)
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorBaseTent)
                             if alignmentTitle != .trailing {
                                 Spacer()
                             }

@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let OrderPaginationCursor = ApolloAPI.Object(
     typename: "OrderPaginationCursor",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

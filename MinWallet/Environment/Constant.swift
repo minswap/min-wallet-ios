@@ -18,6 +18,8 @@ struct MinWalletConstant {
     static let minswapScheme = "minswap"
     static let addressPrefix = GetInfoDictionaryString(for: "MIN_ADDRESS_PREFIX")
     static let adaHandleRegex = #"^\$[a-z0-9._-]+$"#
+    static let IPFS_PREFIX = "ipfs://"
+    static let IPFS_GATEWAY = "https://ipfs.minswap.org/ipfs/"
 
     private init() {
 

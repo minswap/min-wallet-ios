@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let RiskScore = ApolloAPI.Object(
     typename: "RiskScore",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

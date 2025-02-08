@@ -27,6 +27,8 @@ struct HomeView: View {
     private var showSideMenu: Bool = false
     @State
     private var isCopyAddress: Bool = false
+    @State
+    private var isViewAppear: Bool = false
 
     var body: some View {
         ZStack {
@@ -179,7 +181,7 @@ struct HomeView: View {
                                 .foregroundStyle(foregroundStyle)
                             Circle().frame(width: 4, height: 4)
                                 .foregroundStyle(.colorBaseTent)
-                            Text((tokenManager.pnl24H * 100 / tokenManager.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
+                            Text(abs(tokenManager.pnl24H * 100 / tokenManager.netAdaValue).formatSNumber(maximumFractionDigits: 2) + "%")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(foregroundStyle)
                             if !tokenManager.pnl24H.isZero {
@@ -261,14 +263,24 @@ struct HomeView: View {
                 .padding(.vertical, .md)
         }
         .onFirstAppear {
+            print("WTF first appear")
             Task {
-                OneSignal.Notifications.requestPermission(
-                    { accepted in
-                        print("User accepted notifications: \(accepted)")
-                    }, fallbackToSettings: true)
+                if appSetting.enableNotification {
+                    OneSignal.Notifications.requestPermission(
+                        { accepted in
+                            print("User accepted notifications: \(accepted)")
+                        }, fallbackToSettings: true)
+                }
 
                 userInfo.adaHandleName = await TokenManager.fetchAdaHandleName()
             }
+        }
+        .task {
+            guard isViewAppear else {
+                isViewAppear = true
+                return
+            }
+            await viewModel.getTokens()
         }
         .onOpenURL { incomingURL in
             //minswap://testnet-preprod.minswap.org/orders?s= 83ada93f2ecadf5bbff265d36ae14303b5e19303f5ae107629ebf1961a7e7f98

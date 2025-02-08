@@ -7,6 +7,8 @@
 
 import SwiftUI
 import OneSignalFramework
+import SDWebImage
+
 
 @main
 struct MinWalletApp: App {

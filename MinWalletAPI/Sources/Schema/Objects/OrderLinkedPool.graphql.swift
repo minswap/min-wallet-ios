@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let OrderLinkedPool = ApolloAPI.Object(
     typename: "OrderLinkedPool",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

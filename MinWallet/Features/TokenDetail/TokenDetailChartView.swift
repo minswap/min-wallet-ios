@@ -104,6 +104,7 @@ extension TokenDetailView {
                 .chartYScale(domain: 0...maxY)
                 .chartXAxis(.hidden)
                 .chartLegend(.hidden)
+                .padding(.horizontal, .xl)
                 .chartOverlay { chart in
                     GeometryReader { geometry in
                         Rectangle()
@@ -112,10 +113,12 @@ extension TokenDetailView {
                             .gesture(
                                 DragGesture(minimumDistance: 0, coordinateSpace: .global)
                                     .onChanged { value in
+                                        guard !viewModel.chartDatas.isEmpty else { return }
                                         self.viewModel.isInteracting = true
                                         updateSelectedIndex(using: chart, at: value.location, in: geometry)
                                     }
                                     .onEnded { _ in
+                                        guard !viewModel.chartDatas.isEmpty else { return }
                                         self.viewModel.isInteracting = false
                                         self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
                                     })
@@ -158,6 +161,7 @@ extension TokenDetailView {
                         .foregroundStyle(.colorInteractiveTentPrimaryDisable)
                 }
                 .padding(.top, .md)
+                .padding(.horizontal, .xl)
             }
             .loading(isShowing: $viewModel.isLoadingPriceChart)
             .animation(.default, value: viewModel.chartDatas)

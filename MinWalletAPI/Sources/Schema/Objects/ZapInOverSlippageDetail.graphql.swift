@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let ZapInOverSlippageDetail = ApolloAPI.Object(
     typename: "ZapInOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

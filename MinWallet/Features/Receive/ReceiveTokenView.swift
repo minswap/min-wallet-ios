@@ -12,6 +12,8 @@ struct ReceiveTokenView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     private var qrImage: UIImage?
     @State
@@ -91,6 +93,9 @@ struct ReceiveTokenView: View {
                     case .home:
                         navigator.pop()
                     case .qrCode:
+                        if appSetting.rootScreen != .home {
+                            appSetting.rootScreen = .home
+                        }
                         navigator.popToRoot()
                     }
                 })

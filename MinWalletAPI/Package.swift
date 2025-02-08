@@ -14,7 +14,7 @@ let package = Package(
     .library(name: "MinWalletAPI", targets: ["MinWalletAPI"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apollographql/apollo-ios.git", from: "1.0.0"),
+    .package(url: "https://github.com/apollographql/apollo-ios", exact: "1.17.0"),
   ],
   targets: [
     .target(

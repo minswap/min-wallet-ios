@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let DepositOverSlippageDetail = ApolloAPI.Object(
     typename: "DepositOverSlippageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

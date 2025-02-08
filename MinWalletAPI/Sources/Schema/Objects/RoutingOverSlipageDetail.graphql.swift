@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let RoutingOverSlipageDetail = ApolloAPI.Object(
     typename: "RoutingOverSlipageDetail",
-    implementedInterfaces: []
+    implementedInterfaces: [],
+    keyFields: nil
   )
 }

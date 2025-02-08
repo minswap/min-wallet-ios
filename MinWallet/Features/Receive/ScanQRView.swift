@@ -9,6 +9,8 @@ struct ScanQRView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var hud: HUDState
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     private var qrCode: String?
     @State
@@ -59,7 +61,6 @@ struct ScanQRView: View {
                 .overlay(
                     QRScanOverlay()
                 )
-                .ignoresSafeArea()
             }
             VStack {
                 HStack(spacing: .lg) {
@@ -78,6 +79,7 @@ struct ScanQRView: View {
                 }
                 .padding(.horizontal, .xl)
                 .frame(height: 48)
+                .padding(.top, appSetting.safeArea)
                 if isPermissionDenied {
                     Spacer()
                     Text("Camera access is denied.\n Please allow camera access in Settings.")
@@ -99,6 +101,7 @@ struct ScanQRView: View {
                 }
                 .frame(height: 56)
                 .padding(.horizontal, .xl)
+                .padding(.bottom, UIApplication.safeArea.bottom)
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 0)
                 }
@@ -115,6 +118,7 @@ struct ScanQRView: View {
             )
         }
         .background(isPermissionDenied ? .colorBaseBackground : .clear)
+        .ignoresSafeArea()
     }
 
     private func checkCameraPermission() {
@@ -163,6 +167,7 @@ private struct QRScanOverlay: View {
                             .padding(2)
                     )
             }
+            .compositingGroup()
         }
     }
 }

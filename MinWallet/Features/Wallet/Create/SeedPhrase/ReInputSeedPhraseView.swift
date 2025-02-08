@@ -9,7 +9,11 @@ struct ReInputSeedPhraseView: View {
     }
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var appSetting: AppSetting
+    @EnvironmentObject
+    private var hudState: HUDState
     @FocusState
     private var isFocus: Bool
     @State
@@ -18,27 +22,42 @@ struct ReInputSeedPhraseView: View {
     var screenType: ScreenType
 
     private var isValidSeedPhase: Bool {
-        let seedPhraseCount = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").count
-        switch screenType {
-        case let .createWallet(seedPhrase):
-            return seedPhraseCount >= 12 && inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) == seedPhrase.joined(separator: " ")
-        case .restoreWallet:
-            return seedPhraseCount >= 24
-        }
+        guard !inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).isBlank else { return false }
+        return textWarning.toString().isBlank
     }
 
     private var textWarning: LocalizedStringKey {
-        let seedPhraseCount = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").count
+        let inputSeedPhraseString = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines)
+        let inputSeedPhrase: [String] = inputSeedPhraseString.split(separator: " ").map { String($0) }
+        let seedPhraseCount = inputSeedPhrase.count
         if seedPhraseCount == 0 { return "" }
         switch screenType {
         case let .createWallet(seedPhrase):
-            if seedPhraseCount < 24 || inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) != seedPhrase.joined(separator: " ") {
+
+            if seedPhraseCount != 24 && seedPhraseCount != 15 && seedPhraseCount != 12 {
                 return "Invalid seed phrase"
-            } else {
-                return ""
             }
+
+            if inputSeedPhraseString != seedPhrase.joined(separator: " ") {
+                return "Invalid seed phrase"
+            }
+
+            if !inputSeedPhrase.allSatisfy({ appSetting.bip0039.contains($0) }) {
+                return "Invalid seed phrase"
+            }
+
+            return ""
+
         case .restoreWallet:
-            return seedPhraseCount >= 24 ? "" : "Invalid seed phrase"
+            if seedPhraseCount != 24 && seedPhraseCount != 15 && seedPhraseCount != 12 {
+                return "Invalid seed phrase"
+            }
+
+            if !inputSeedPhrase.allSatisfy({ appSetting.bip0039.contains($0) }) {
+                return "Invalid seed phrase"
+            }
+
+            return ""
         }
     }
 
@@ -120,8 +139,18 @@ struct ReInputSeedPhraseView: View {
                     guard inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines) == seedPhrase.joined(separator: " ") else { return }
                     navigator.push(.createWallet(.setupNickName(seedPhrase: seedPhrase)))
                 case .restoreWallet:
-                    guard !inputSeedPhrase.isBlank else { return }
-                    navigator.push(.restoreWallet(.setupNickName(fileContent: "", seedPhrase: inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: " ").map({ String($0) }))))
+                    guard !inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines).isBlank else { return }
+
+                    let seedPhrase = inputSeedPhrase.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    //TODO: Call func validate seed phrase
+                    guard createWallet(phrase: seedPhrase, password: MinWalletConstant.passDefaultForFaceID, networkEnv: MinWalletConstant.networkID, walletName: "MyMinWallet") != nil
+                    else {
+                        hudState.showMsg(msg: "Invalid seed phrase")
+                        return
+                    }
+
+                    navigator.push(.restoreWallet(.setupNickName(fileContent: "", seedPhrase: seedPhrase.split(separator: " ").map({ String($0) }))))
                 }
             }
             .frame(height: 56)

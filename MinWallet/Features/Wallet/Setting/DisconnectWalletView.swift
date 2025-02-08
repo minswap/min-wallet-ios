@@ -82,7 +82,9 @@ struct DisconnectWalletView: View {
                     isEnable: combinedBinding
                 ) {
                     onDismiss?()
-                    appSetting.rootScreen = .gettingStarted
+                    if appSetting.rootScreen != .gettingStarted {
+                        appSetting.rootScreen = .gettingStarted
+                    }
                     navigator.popToRoot()
 
                     DispatchQueue.main.asyncAfter(
