@@ -49,19 +49,27 @@ struct OrderHistoryItemView: View {
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
-                let outputs = order?.detail.outputs ?? []
-                VStack(alignment: .trailing, spacing: 4) {
-                    ForEach(outputs, id: \.self) { output in
-                        if output.amount == .zero {
-                            Text("--")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseTent)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
-                        } else {
-                            Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                if order?.order?.status == .cancelled {
+                    Text("--")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
+                } else {
+                    let outputs = order?.detail.outputs ?? []
+                    VStack(alignment: .trailing, spacing: 4) {
+                        ForEach(outputs, id: \.self) { output in
+                            if output.amount == .zero {
+                                Text("--")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorBaseTent)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            } else {
+                                Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            }
                         }
                     }
                 }
@@ -78,7 +86,7 @@ struct OrderHistoryItemView: View {
                 }
                 .padding(.md)
                 .background(
-                    RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
+                    RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
                 )
                 .frame(minHeight: 32)
                 /*
