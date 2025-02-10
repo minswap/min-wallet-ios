@@ -123,6 +123,7 @@ struct SwapTokenView: View {
             }
         tokenReceiveView
         routingView
+        warningView
     }
 
     @ViewBuilder
@@ -355,13 +356,35 @@ struct SwapTokenView: View {
         }
     }
 
+    @ViewBuilder
+    private var warningView: some View {
+        if !viewModel.warningInfo.isEmpty {
+            VStack(spacing: 0) {
+                ForEach(Array(viewModel.warningInfo.enumerated()), id: \.offset) { index, warningInfo in
+                    let isExpand = Binding<Bool>(
+                        get: { (self.viewModel.isExpand[warningInfo] ?? false) == true },
+                        set: { isExpand in
+                            self.viewModel.isExpand[warningInfo] = isExpand
+                        }
+                    )
+                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand, showBottomLine: index != viewModel.wrapRoutings.count - 1)
+                }
+            }
+            .background(.colorSurfaceWarningDefault)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderWarningSub, lineWidth: 1))
+            .padding(.horizontal, .xl)
+            .padding(.bottom, .xl)
+            .padding(.top, .md)
+        }
+    }
+
     private func swapTokenSuccess() {
         bannerState.infoContent = {
             bannerState.infoContentDefault(onViewTransaction: {
 
             })
         }
-        bannerState.isShowingBanner = true
+        bannerState.showBanner(isShow: true)
         if appSetting.rootScreen != .home {
             appSetting.rootScreen = .home
         }
@@ -371,4 +394,56 @@ struct SwapTokenView: View {
 
 #Preview {
     SwapTokenView()
+}
+
+
+struct WarningItemView: View {
+    @State
+    var waringInfo: SwapTokenViewModel.WarningInfo = .indivisibleTokenPay
+    @Binding
+    var isExpand: Bool
+    @State
+    var showBottomLine: Bool = true
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: Spacing.md) {
+                Image(.icWarningYellow)
+                    .resizable()
+                    .rotationEffect(.degrees(180))
+                    .frame(width: 16, height: 16)
+                Text(waringInfo.title)
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveToneWarning)
+                Spacer()
+                Image(.icArrowDown)
+                    .resizable()
+                    .rotationEffect(.degrees(isExpand ? 0 : -180))
+                    .frame(width: 16, height: 16)
+            }
+            .padding(.top, .md)
+            if isExpand {
+                Text(waringInfo.content)
+                    .font(.paragraphXSmall)
+                    .lineSpacing(2)
+                    .foregroundStyle(.colorBaseTent)
+                    .padding(.top, .xs)
+            }
+
+            if showBottomLine {
+                Color.colorBorderPrimarySub.frame(height: 1)
+                    .padding(.top, .md)
+            } else {
+                Color.clear.frame(height: 1)
+                    .padding(.top, .md)
+            }
+        }
+        .padding(.horizontal, .md)
+        .contentShape(.rect)
+        .onTapGesture {
+            withAnimation {
+                isExpand.toggle()
+            }
+        }
+    }
 }

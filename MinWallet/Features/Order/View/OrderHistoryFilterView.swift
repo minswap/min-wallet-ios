@@ -7,8 +7,6 @@ import SwiftyAttributes
 
 
 struct OrderHistoryFilterView: View {
-    @Binding
-    var isShowFilterView: Bool
     @State
     var contractTypeSelected: ContractType?
     @State
@@ -23,6 +21,9 @@ struct OrderHistoryFilterView: View {
     private var showSelectFromDate: Bool = false
     @State
     private var showSelectToDate: Bool = false
+
+    @Environment(\.partialSheetDismiss)
+    var onDismiss
 
     var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
 
@@ -62,7 +63,8 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    let actions: [String] = ["All"] + OrderV2Action.allCases.map({ $0.rawValue })
+                    let rawAction: [OrderV2Action] = [.market, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
+                    let actions: [String] = ["All"] + rawAction.map({ $0.titleFilter.toString() })
                     let height = calculateHeightFlowLayout(actions: actions)
                     FlowLayout(
                         mode: .vstack,
@@ -153,10 +155,10 @@ struct OrderHistoryFilterView: View {
             }
             .padding(.top, (showSelectToDate || showSelectFromDate) ? .lg : 0)
             if !showSelectToDate && !showSelectFromDate {
-                Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
+                Color.clear.frame(height: 1).padding(.vertical, .xl)
             }
             if showSelectFromDate || showSelectToDate {
-                ZStack {
+                VStack(alignment: .center) {
                     if showSelectFromDate {
                         let fromDateBinding = Binding<Date>(
                             get: { fromDate ?? Date() },
@@ -170,7 +172,9 @@ struct OrderHistoryFilterView: View {
                             in: (toDate ?? Date()).adding(.year, value: -20)!...(toDate ?? Date()),
                             displayedComponents: [.date]
                         )
+                        .labelsHidden()
                         .datePickerStyle(.wheel)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                     }
                     if showSelectToDate {
                         let toDateBinding = Binding<Date>(
@@ -185,15 +189,22 @@ struct OrderHistoryFilterView: View {
                             in: (fromDate ?? Date())...(fromDate ?? Date()).adding(.year, value: 20)!,
                             displayedComponents: [.date]
                         )
+                        .labelsHidden()
                         .datePickerStyle(.wheel)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                     }
                 }
             }
 
             HStack(spacing: .xl) {
                 CustomButton(title: "Reset", variant: .secondary) {
-                    isShowFilterView = false
+                    onDismiss?()
                     onFilterSelected?(nil, nil, nil, nil, nil)
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
+                        self.showSelectToDate = false
+                        self.showSelectFromDate = false
+                    }
                 }
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
@@ -204,7 +215,7 @@ struct OrderHistoryFilterView: View {
                         //                        }
                         return
                     }
-                    isShowFilterView = false
+                    onDismiss?()
                     onFilterSelected?(contractTypeSelected, statusSelected, actionSelected, fromDate, toDate)
                 }
                 .frame(height: 56)
@@ -212,13 +223,13 @@ struct OrderHistoryFilterView: View {
             .padding(.vertical, .md)
         }
         .padding(.horizontal, .xl)
-        .fixedSize(horizontal: false, vertical: true)
+        .presentSheetModifier()
     }
 }
 
 #Preview {
     VStack {
-        OrderHistoryFilterView(isShowFilterView: .constant(false))
+        OrderHistoryFilterView()
         Spacer()
     }
 }

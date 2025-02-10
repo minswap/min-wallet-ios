@@ -20,6 +20,7 @@ struct MinWalletConstant {
     static let adaHandleRegex = #"^\$[a-z0-9._-]+$"#
     static let IPFS_PREFIX = "ipfs://"
     static let IPFS_GATEWAY = "https://ipfs.minswap.org/ipfs/"
+    static let suspiciousTokenURL = "https://raw.githubusercontent.com/cardano-galactic-police/suspicious-tokens/refs/heads/main/tokens.txt"
 
     private init() {
 

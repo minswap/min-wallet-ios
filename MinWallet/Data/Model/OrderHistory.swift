@@ -33,6 +33,31 @@ extension OrderV2Action: @retroactive Identifiable {
             "Zap out"
         }
     }
+
+    var titleFilter: LocalizedStringKey {
+        switch self {
+        case .deposit:
+            "Deposit"
+        case .limit:
+            "Limit"
+        case .market:
+            "Market"
+        case .oco:
+            "OCO"
+        case .partialSwap:
+            "Partial Fill"
+        case .stopLoss:
+            "Stop"
+        case .withdraw:
+            "Withdraw"
+        case .zapIn:
+            "Zap in"
+        case .zapOut:
+            "Zap out"
+        default:
+            ""
+        }
+    }
 }
 
 extension OrderV2Status: @retroactive Identifiable {
@@ -111,9 +136,9 @@ extension ContractType: @retroactive Identifiable {
     var foregroundColor: Color {
         switch self {
         case .dex:
-            .colorDecorativeBrandSub
-        case .dexV2:
             .colorDecorativeYellowSub
+        case .dexV2:
+            .colorDecorativeBrandSub
         case .stableswap:
             .colorDecorativeLeafSub
         }

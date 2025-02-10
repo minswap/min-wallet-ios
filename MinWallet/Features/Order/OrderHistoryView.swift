@@ -37,29 +37,24 @@ struct OrderHistoryView: View {
                 Color.clear.frame(height: 0)
             }
         }
-        .popupSheet(
-            isPresented: $viewModel.showFilterView,
-            content: {
-                let input = viewModel.input
-                OrderHistoryFilterView(
-                    isShowFilterView: $viewModel.showFilterView,
-                    contractTypeSelected: input.ammType.unwrapped?.value,
-                    statusSelected: input.status.unwrapped?.value,
-                    actionSelected: input.action.unwrapped?.value,
-                    fromDate: input.fromDateTimeInterval,
-                    toDate: input.toDateTimeInterval,
-                    onFilterSelected: { contractType, status, action, fromDate, toDate in
-                        viewModel.contractTypeSelected = contractType
-                        viewModel.statusSelected = status
-                        viewModel.actionSelected = action
-                        viewModel.fromDate = fromDate
-                        viewModel.toDate = toDate
-                        viewModel.fetchData()
-                    }
-                )
-                .padding(.top, .xl)
-            }
-        )
+        .presentSheet(isPresented: $viewModel.showFilterView) {
+            let input = viewModel.input
+            OrderHistoryFilterView(
+                contractTypeSelected: input.ammType.unwrapped?.value,
+                statusSelected: input.status.unwrapped?.value,
+                actionSelected: input.action.unwrapped?.value,
+                fromDate: input.fromDateTimeInterval,
+                toDate: input.toDateTimeInterval,
+                onFilterSelected: { contractType, status, action, fromDate, toDate in
+                    viewModel.contractTypeSelected = contractType
+                    viewModel.statusSelected = status
+                    viewModel.actionSelected = action
+                    viewModel.fromDate = fromDate
+                    viewModel.toDate = toDate
+                    viewModel.fetchData()
+                }
+            )
+        }
     }
 }
 
