@@ -48,6 +48,11 @@ extension String {
         outputFormatter.dateFormat = "yyyy-MM-dd HH:mm 'GMT'XXX"
 
         outputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        if AppSetting.shared.timeZone == TimeZone.utc.rawValue {
+            outputFormatter.timeZone = .gmt
+            return outputFormatter.string(from: date).replacingOccurrences(of: "Z", with: "")
+        }
+
         return outputFormatter.string(from: date)
     }
 
