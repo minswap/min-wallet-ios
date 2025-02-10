@@ -52,9 +52,17 @@ struct OrderHistoryItemView: View {
                 let outputs = order?.detail.outputs ?? []
                 VStack(alignment: .trailing, spacing: 4) {
                     ForEach(outputs, id: \.self) { output in
-                        Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.1)
+                        if output.amount == .zero {
+                            Text("--")
+                                .font(.labelSmallSecondary)
+                                .foregroundStyle(.colorBaseTent)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
+                        } else {
+                            Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
+                        }
                     }
                 }
             }
