@@ -77,15 +77,19 @@ class OrderHistoryViewModel: ObservableObject {
     var input: OrderV2Input {
         let address = UserInfo.shared.minWallet?.address ?? ""
         //let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
+        let keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        //ce7c194517fc3d82569a2abff6b9ad93ea83b079016577cd5ac436ed6c6edeb2
+        let isTxID = keyword.count == 64
         return OrderV2Input(
             action: actionSelected != nil ? .some(.case(actionSelected!)) : nil,
             address: address,
             ammType: contractTypeSelected != nil ? .some(.case(contractTypeSelected!)) : nil,
-            asset: !keyword.isBlank ? .some(keyword) : nil,
+            asset: !keyword.isBlank && !isTxID ? .some(keyword) : nil,
             fromDate: fromDate != nil ? .some(String(Int(fromDate!.timeIntervalSince1970 * 1000))) : nil,
             pagination: pagination != nil ? .some(pagination!) : nil,
             status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
-            toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil
+            toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil,
+            txId: !keyword.isBlank && isTxID ? .some(keyword) : nil
         )
     }
 }
