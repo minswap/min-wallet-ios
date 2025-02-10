@@ -566,6 +566,9 @@
     "Output information" : {
 
     },
+    "Partial Fill" : {
+
+    },
     "Partial swap" : {
 
     },
@@ -734,6 +737,9 @@
 
     },
     "Status" : {
+
+    },
+    "Stop" : {
 
     },
     "Stop loss" : {

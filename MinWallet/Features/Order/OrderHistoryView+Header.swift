@@ -34,6 +34,7 @@ extension OrderHistoryView {
                         .padding(.vertical, 6)
                         .contentShape(.rect)
                         .onTapGesture {
+                            hideKeyboard()
                             withAnimation {
                                 viewModel.keyword = ""
                                 viewModel.showSearch = false
@@ -75,7 +76,9 @@ extension OrderHistoryView {
                     Image(.icFilter)
                         .fixSize(40)
                         .onTapGesture {
-                            viewModel.showFilterView = true
+                            withAnimation {
+                                viewModel.showFilterView = true
+                            }
                         }
                 }
                 .transition(.scale.combined(with: .opacity))
