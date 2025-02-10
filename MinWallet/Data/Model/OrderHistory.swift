@@ -111,9 +111,9 @@ extension ContractType: @retroactive Identifiable {
     var foregroundColor: Color {
         switch self {
         case .dex:
-            .colorDecorativeBrandSub
-        case .dexV2:
             .colorDecorativeYellowSub
+        case .dexV2:
+            .colorDecorativeBrandSub
         case .stableswap:
             .colorDecorativeLeafSub
         }

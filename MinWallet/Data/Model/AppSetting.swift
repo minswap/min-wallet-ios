@@ -128,6 +128,8 @@ class AppSetting: ObservableObject {
         }
     }()
 
+    private lazy var suspiciousToken: [String] = []
+
     private init() {
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
@@ -145,6 +147,19 @@ class AppSetting: ObservableObject {
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
         UserDataManager.shared.notificationGenerateAuthHash = nil
         OneSignal.logout()
+    }
+
+    func isSuspiciousToken(currencySymbol: String) async -> Bool {
+        guard suspiciousToken.isEmpty else { return true }
+        guard let url = URL(string: MinWalletConstant.suspiciousTokenURL) else { return true }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let tokensScam = String(decoding: data, as: UTF8.self).split(separator: "\n").map { String($0) }
+            AppSetting.shared.suspiciousToken = tokensScam
+            return tokensScam.contains(currencySymbol)
+        } catch {
+            return true
+        }
     }
 }
 

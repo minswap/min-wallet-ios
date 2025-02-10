@@ -13,6 +13,19 @@
     " %@" : {
 
     },
+    " The order will get executed with any available price and unlimited slippage. This could lead to an undesirable price due to price changes from previous orders and loss of virtually all funds. You can turn it off in Safe Mode settings." : {
+
+    },
+    " Trading %@ token on Minswap may lead to a loss of underlying assets on %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : " Trading %1$@ token on Minswap may lead to a loss of underlying assets on %2$@."
+          }
+        }
+      }
+    },
     "--" : {
 
     },
@@ -176,6 +189,9 @@
 
     },
     "Cancelled at" : {
+
+    },
+    "Certain tokens on the Cardano blockchain are designed as indivisible. This means each token must be used, transferred, or traded as a whole unit." : {
 
     },
     "Change" : {
@@ -352,6 +368,9 @@
     "From" : {
 
     },
+    "Functional token" : {
+
+    },
     "Getting started now" : {
 
     },
@@ -371,6 +390,9 @@
       "extractionState" : "manual"
     },
     "Hide" : {
+
+    },
+    "High price impact" : {
 
     },
     "High return" : {
@@ -410,6 +432,9 @@
 
     },
     "Incorrect password" : {
+
+    },
+    "Indivisible Token" : {
 
     },
     "Input information" : {
@@ -458,6 +483,9 @@
 
     },
     "Make sure no one is looking at your screen" : {
+
+    },
+    "Make sure to double-check the policy Id: %@." : {
 
     },
     "Market" : {
@@ -594,6 +622,12 @@
     "Price Impact" : {
 
     },
+    "Price impact is more than %@%%, make sure to check the price " : {
+
+    },
+    "Price impact is more than %@%%, make sure to check the price before submitting the transaction." : {
+
+    },
     "Privacy policy" : {
 
     },
@@ -687,6 +721,9 @@
     "Slippage Tolerance" : {
 
     },
+    "Slippage tolerance is over %@%%. You can adjust it in trade " : {
+
+    },
     "Something went wrong!" : {
 
     },
@@ -700,6 +737,9 @@
 
     },
     "Stop loss" : {
+
+    },
+    "Suspicious token" : {
 
     },
     "Swap" : {
@@ -729,6 +769,16 @@
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
+    "This project token is migrated to a new token, you can exchange your old token on %@ app. The new token has policyID %@ and tokenName %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This project token is migrated to a new token, you can exchange your old token on %1$@ app. The new token has policyID %2$@ and tokenName %3$@."
+          }
+        }
+      }
+    },
     "This token has not been verified yet. Please ensure the correct policyId" : {
 
     },
@@ -742,6 +792,9 @@
 
     },
     "togle" : {
+
+    },
+    "Token migration" : {
 
     },
     "Token name" : {
@@ -777,7 +830,16 @@
     "Uncalibrated" : {
 
     },
+    "Unlimited slippage is activated" : {
+
+    },
     "Unlock your wallet using %@ recognition or a password." : {
+
+    },
+    "Unregistered token" : {
+
+    },
+    "Unsafe slippage tolerance" : {
 
     },
     "Unsafe slippage tolerance." : {

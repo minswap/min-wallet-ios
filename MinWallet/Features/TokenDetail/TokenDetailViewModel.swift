@@ -6,8 +6,6 @@ import Combine
 @MainActor
 class TokenDetailViewModel: ObservableObject {
 
-    private let suspiciousTokenURL = "https://raw.githubusercontent.com/cardano-galactic-police/suspicious-tokens/refs/heads/main/tokens.txt"
-
     var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .oneYear]
 
     @Published
@@ -115,15 +113,8 @@ class TokenDetailViewModel: ObservableObject {
     }
 
     private func checkTokenValid() {
-        guard let url = URL(string: suspiciousTokenURL) else { return }
         Task {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let tokensScam = String(decoding: data, as: UTF8.self).split(separator: "\n").map { String($0) }
-                isSuspiciousToken = tokensScam.contains(token.currencySymbol)
-            } catch {
-                isSuspiciousToken = false
-            }
+            isSuspiciousToken = await AppSetting.shared.isSuspiciousToken(currencySymbol: token.currencySymbol)
         }
     }
 

@@ -1,6 +1,8 @@
 import SwiftUI
 import Combine
 import MinWalletAPI
+import Then
+
 
 @MainActor
 class SwapTokenViewModel: ObservableObject {
@@ -24,8 +26,10 @@ class SwapTokenViewModel: ObservableObject {
     var wrapRoutings: [WrapRouting] = []
     @Published
     var routingSelected: WrapRouting? = nil
-
-    private var cancellables: Set<AnyCancellable> = []
+    @Published
+    var warningInfo: [WarningInfo] = []
+    @Published
+    var isExpand: [WarningInfo: Bool] = [:]
 
     @Published
     var swapSetting: SwapTokenSetting = .init()
@@ -34,6 +38,8 @@ class SwapTokenViewModel: ObservableObject {
 
     @Published
     var isLoadingRouting: Bool = true
+
+    private var cancellables: Set<AnyCancellable> = []
 
     init() {
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
@@ -75,6 +81,7 @@ class SwapTokenViewModel: ObservableObject {
             Task {
                 await getRouting()
                 routingSelected = wrapRoutings.first
+                await generateWarningInfo()
             }
 
         case let .selectTokenPay(token):
@@ -84,6 +91,7 @@ class SwapTokenViewModel: ObservableObject {
                 routingSelected = nil
                 await getRouting()
                 routingSelected = wrapRoutings.first
+                await generateWarningInfo()
             }
         case let .selectTokenReceive(token):
             Task {
@@ -92,6 +100,7 @@ class SwapTokenViewModel: ObservableObject {
                 routingSelected = nil
                 await getRouting()
                 routingSelected = wrapRoutings.first
+                await generateWarningInfo()
             }
         case .routeSorting,
             .predictSwapPrice,
@@ -99,11 +108,14 @@ class SwapTokenViewModel: ObservableObject {
             Task {
                 await getRouting()
                 routingSelected = wrapRoutings.first(where: { $0.uniqueID == routingSelected?.uniqueID })
+                await generateWarningInfo()
             }
 
         case .routeSelected:
             //TODO: calculate fee
-            break
+            Task {
+                await generateWarningInfo()
+            }
         case .swapToken:
             let tempToken = tokenPay
             tokenPay = tokenReceive
@@ -112,13 +124,24 @@ class SwapTokenViewModel: ObservableObject {
             self.action.send(.routeSorting)
 
         case .setMaxAmount:
-            tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+            Task {
+                tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+                await generateWarningInfo()
+            }
+
         case .setHalfAmount:
-            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+            Task {
+                tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+                await generateWarningInfo()
+            }
+
         case let .amountPayChanged(amount):
-            print("\(amount)")
-            //TODO: calculate fee
-            break
+            Task {
+                print("\(amount)")
+                //TODO: calculate fee
+
+                await generateWarningInfo()
+            }
         }
     }
 
@@ -169,6 +192,24 @@ class SwapTokenViewModel: ObservableObject {
         self.wrapRoutings = wrapRoutings
         isLoadingRouting = false
     }
+
+    private func generateWarningInfo() async {
+        //TODO: Warning info
+        warningInfo = []
+
+        if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenPay.token.currencySymbol) {
+            warningInfo.append(.suspiciousTokenPay(policyId: tokenPay.token.currencySymbol))
+        }
+        if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenReceive.token.currencySymbol) {
+            warningInfo.append(.suspiciousTokenReceive(policyId: tokenReceive.token.currencySymbol))
+        }
+        if tokenPay.token.decimals == 0 {
+            warningInfo.append(.indivisibleTokenPay)
+        }
+        if tokenReceive.token.decimals == 0 {
+            warningInfo.append(.indivisibleTokenReceive)
+        }
+    }
 }
 
 
@@ -185,5 +226,80 @@ extension SwapTokenViewModel {
         case setHalfAmount
         case amountPayChanged(amount: Double)
         case swapToken
+    }
+}
+
+
+extension SwapTokenViewModel {
+    enum WarningInfo: Hashable {
+        ///priceImpact >= IMPACT_TIERS[0] and settings.safeMode and hasExchange
+        case highPriceImpact(percent: String)
+        ///useUnlimitedSlippage == true
+        case unlimitedSlippageIsActivated
+        ///slippage >= UNSAFE_SLIPPAGE_TOLERANCE and safeMode
+        case unsafeSlippageTolerance(percent: String)
+        ///Token exists in FUNCTIONAL_ASSETS
+        case functionalTokenPay(ticker: String, project: String)
+        case functionalTokenReceive(ticker: String, project: String)
+        ///Token exists in blacklistPolicyIds
+        case suspiciousTokenPay(policyId: String)
+        case suspiciousTokenReceive(policyId: String)
+        ///priceImpact >= IMPACT_TIERS[0] and settings.safeMode and hasExchange
+        case tokenPayMigration(projectName: String, tokenName: String, policyId: String)
+        case tokenReceiveMigration(projectName: String, tokenName: String, policyId: String)
+        ///Token exists in MIGRATED_TOKENS
+        case unregisteredToken(percent: String)
+        ///decimals == 0
+        case indivisibleTokenPay
+        case indivisibleTokenReceive
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .highPriceImpact:
+                "High price impact"
+            case .unlimitedSlippageIsActivated:
+                "Unlimited slippage is activated"
+            case .unsafeSlippageTolerance:
+                "Unsafe slippage tolerance"
+            case .functionalTokenPay, .functionalTokenReceive:
+                "Functional token"
+            case .suspiciousTokenPay,
+                .suspiciousTokenReceive:
+                "Suspicious token"
+            case .tokenPayMigration,
+                .tokenReceiveMigration:
+                "Token migration"
+            case .unregisteredToken:
+                "Unregistered token"
+            case .indivisibleTokenPay,
+                .indivisibleTokenReceive:
+                "Indivisible Token"
+            }
+        }
+
+        var content: LocalizedStringKey {
+            switch self {
+            case let .highPriceImpact(percent):
+                "Price impact is more than \(percent)%, make sure to check the price before submitting the transaction."
+            case .unlimitedSlippageIsActivated:
+                " The order will get executed with any available price and unlimited slippage. This could lead to an undesirable price due to price changes from previous orders and loss of virtually all funds. You can turn it off in Safe Mode settings."
+            case let .unsafeSlippageTolerance(percent):
+                "Slippage tolerance is over \(percent)%. You can adjust it in trade "
+            case let .functionalTokenPay(ticker, project),
+                let .functionalTokenReceive(ticker, project):
+                " Trading \(ticker) token on Minswap may lead to a loss of underlying assets on \(project)."
+            case let .suspiciousTokenPay(policyId),
+                let .suspiciousTokenReceive(policyId):
+                "Make sure to double-check the policy Id: \(policyId)."
+            case let .tokenPayMigration(projectName, policyId, tokenName),
+                let .tokenReceiveMigration(projectName, policyId, tokenName):
+                "This project token is migrated to a new token, you can exchange your old token on \(projectName) app. The new token has policyID \(policyId) and tokenName \(tokenName)."
+            case let .unregisteredToken(percent):
+                "Price impact is more than \(percent)%, make sure to check the price "
+            case .indivisibleTokenPay,
+                .indivisibleTokenReceive:
+                "Certain tokens on the Cardano blockchain are designed as indivisible. This means each token must be used, transferred, or traded as a whole unit."
+            }
+        }
     }
 }
