@@ -9,6 +9,17 @@ import SwiftUI
 import OneSignalFramework
 import SDWebImage
 
+#if canImport(FLEX) && DEBUG
+    import FLEX
+
+    extension UIWindow {
+        open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+            if motion == .motionShake {
+                FLEXManager.shared.showExplorer()
+            }
+        }
+    }
+#endif
 
 @main
 struct MinWalletApp: App {

@@ -183,7 +183,8 @@ extension OrderHistoryQuery.Data.Orders {
                     let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                     let isVerified: Bool? = metaData?.isVerified
                     let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
-                    let decimals: Int? = metaData?.decimals ?? 6
+                    let uniqueIDzz = uniqueID(symbol: currencySymbol, name: tokenName)
+                    let decimals: Int? = (uniqueIDzz == "lovelace" || uniqueIDzz.isEmpty) ? 6 : metaData?.decimals
 
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                         currencySymbol: currencySymbol,
@@ -206,7 +207,9 @@ extension OrderHistoryQuery.Data.Orders {
                     let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                     let isVerified: Bool? = metaData?.isVerified
                     let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
-                    let decimals: Int? = metaData?.decimals ?? 6
+
+                    let uniqueIDzz = uniqueID(symbol: currencySymbol, name: tokenName)
+                    let decimals: Int? = (uniqueIDzz == "lovelace" || uniqueIDzz.isEmpty) ? 6 : metaData?.decimals
 
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                         currencySymbol: currencySymbol,
