@@ -7,28 +7,22 @@ extension TokenDetailView {
         ZStack {
             VStack(
                 alignment: .leading,
+                spacing: .md,
                 content: {
-                    HStack {
-                        Spacer()
-                        Color.colorInteractiveTentPrimarySub.frame(width: 36, height: 4)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                        Spacer()
-                    }
-                    .padding(.vertical, 8)
                     Text("My balance")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .padding(.horizontal, .xl)
                         .padding(.top, .xl)
-                        .padding(.bottom, .md)
-                    HStack(alignment: .lastTextBaseline) {
+                    HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(tokenManager.netAdaValue.getPriceValue(appSetting: appSetting, font: .titleH5).attribute)
-                                .minimumScaleFactor(0.5)
+                                .minimumScaleFactor(0.8)
                                 .lineLimit(1)
                             Text(tokenManager.adaValue.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
-                                .minimumScaleFactor(0.5)
+                                .minimumScaleFactor(0.8)
                                 .lineLimit(1)
+                                .padding(.bottom, 2)
                         }
                         Spacer()
                         CustomButton(title: "Swap") {
@@ -40,9 +34,14 @@ extension TokenDetailView {
                     .padding(.bottom, .xl)
                 })
         }
-        .foregroundStyle(.colorBaseBackground)
+        .background(.colorBaseBackground)
         .cornerRadius(BorderRadius._3xl)
-        .overlay(RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1))
+        .overlay(
+            RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+        )
+        .shadow(color: colorScheme == .light ? .colorBaseTent.opacity(0.18) : .clear, radius: 10, x: 10, y: 10)
+        .zIndex(999)
+        .compositingGroup()
     }
 }
 

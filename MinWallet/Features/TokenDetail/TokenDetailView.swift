@@ -9,6 +9,8 @@ struct TokenDetailView: View {
     var appSetting: AppSetting
     @EnvironmentObject
     var userInfo: UserInfo
+    @Environment(\.colorScheme)
+    var colorScheme: ColorScheme
     @StateObject
     var tokenManager: TokenManager = TokenManager.shared
     @StateObject
@@ -49,9 +51,18 @@ struct TokenDetailView: View {
                     }
                 }
                 Spacer()
-                tokenDetailBottomView
-                    .background(.colorBaseBackground)
+                Spacer()
+                if tokenManager.isHasYourToken {
+                    tokenDetailBottomView
+                        .background(.colorBaseBackground)
+                        .padding(.horizontal, .md)
+                } else {
+                    CustomButton(title: "Swap") {
+                        navigator.push(.swapToken(.swapToken))
+                    }
+                    .frame(height: 56)
                     .padding(.horizontal, .xl)
+                }
             }
             .presentSheet(isPresented: $isShowToolTip) {
                 TokenDetailToolTipView(title: $title, content: $content)

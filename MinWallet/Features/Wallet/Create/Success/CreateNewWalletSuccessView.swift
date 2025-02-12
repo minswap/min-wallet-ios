@@ -12,6 +12,8 @@ struct CreateNewWalletSuccessView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     var screenType: ScreenType = .newWallet
 
@@ -66,6 +68,9 @@ struct CreateNewWalletSuccessView: View {
             }
         }
         .background(.colorBaseBackground)
+        .onAppear {
+            appSetting.swipeEnabled = false
+        }
     }
 }
 

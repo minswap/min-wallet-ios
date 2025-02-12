@@ -190,6 +190,7 @@ extension OrderHistoryQuery.Data.Orders {
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
                         isVerified: isVerified,
+                        decimals: decimals,
                         amount: amount / pow(10.0, Double(decimals ?? 0)),
                         currency: currencySymbol == MinWalletConstant.lpToken ? "LP" : name)
                 })
@@ -289,7 +290,8 @@ extension OrderHistoryQuery.Data.Orders {
                 detail.routes = routeA + " > " + routeB
             }
             detail.minimumAmountPerSwap = json["minimumAmountPerSwap"]["$bigint"].doubleValue
-            detail.maxSwapTime = json["maxSwapTime"]["$bigint"].doubleValue
+            //TODO: maxHops or maxSwapTime
+            detail.maxSwapTime = json["maxHops"].intValue
         }
     }
 }
@@ -310,7 +312,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
         var isKillable: Int?
         var routes: String = ""
         var minimumAmountPerSwap: Double = 0
-        var maxSwapTime: Double = 0
+        var maxSwapTime: Int = 0
     }
 }
 
@@ -356,48 +358,53 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
             let currentAmount = (Double(overSlippage.asSwapExactInOverSlippageDetail?.receivedAmount ?? "0") ?? 0) / pow(10.0, decimalsOut)
             let maxReceivableOutAmount = (Double(overSlippage.asSwapExactInOverSlippageDetail?.maxReceivableOut ?? "0") ?? 0) / pow(10.0, decimalsOut)
             attr = [
-                AttributedString("Your attempt to swap ").build(),
-                detail.inputs.first?.amount.formatNumberOrder(suffix: inputTicker),
-                AttributedString(" could not be completed because the amount of ").build(),
-                AttributedString(inputTicker).build(font: .paragraphXSemiSmall),
-                AttributedString(" for ").build(),
-                AttributedString(outputTicker).build(),
-                AttributedString(" could not be completed because the amount of ").build(),
-                AttributedString(outputTicker).build(),
-                AttributedString(" available at the current rate ").build(),
+                AttributedString(key: "Your attempt to swap ").build(),
+                detail.inputs.first?.amount.formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " for ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " could not be completed because the amount of ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " available at the current rate ").build(),
                 AttributedString("(").build(font: .paragraphXSemiSmall),
-                currentAmount.formatNumberOrder(suffix: outputTicker + ")"),
-                AttributedString(" is higher than the maximum amount the pool can offer ").build(),
+                currentAmount.formatNumberOrder(suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: " is higher than the maximum amount the pool can offer ").build(),
                 AttributedString("(").build(font: .paragraphXSemiSmall),
-                maxReceivableOutAmount.formatNumberOrder(suffix: outputTicker + ")"),
-                AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                maxReceivableOutAmount.formatNumberOrder(suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
         case "SwapExactOutOverSlippageDetail":
             guard order.action.value != .oco else { return nil }
+            /*Your attempt to receive exactly 100 MIN for ADA could not be completed because the current rate (11 ADA) requires more than the 10 ADA you intended to swap. This can occur due to changes in market prices or liquidity.
+              */
             if let maxReceivableOut = overSlippage.asSwapExactOutOverSlippageDetail?.maxReceivableOut?.toExact(decimal: decimalsOut), maxReceivableOut.isZero {
                 attr = [
-                    AttributedString("Your attempt to receive exactly ").build(),
-                    detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker),
-                    AttributedString(" for ").build(),
-                    AttributedString(inputTicker).build(),
-                    AttributedString(" could not be completed because the maximum amount the pool can offer at the current rate is ").build(),
-                    maxReceivableOut.formatNumberOrder(suffix: outputTicker + "."),
-                    AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                    AttributedString(key: "Your attempt to receive exactly ").build(),
+                    detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                    AttributedString(key: " for ").build(),
+                    AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                    AttributedString(key: " could not be completed because the maximum amount the pool can offer at the current rate is ").build(),
+                    maxReceivableOut.formatNumberOrder(suffix: outputTicker + ".", roundingOffset: Int(decimalsOut)),
+                    AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
                 ]
             } else if let necessarySwapAmount = overSlippage.asSwapExactOutOverSlippageDetail?.necessarySwapAmount.toExact(decimal: decimalsOut) {
                 if necessarySwapAmount < 0 {
                     attr = [
-                        AttributedString("You're set to get more \(outputTicker) than what's currently in the pool's reserve.").build()
+                        AttributedString(key: "You're set to get more ").build(),
+                        AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                        AttributedString(key: " than what's currently in the pool's reserve.").build(),
                     ]
                 } else {
                     attr = [
-                        AttributedString("Your attempt to receive exactly ").build(),
-                        detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker),
-                        AttributedString(" for \(inputTicker) could not be completed because the current rate ").build(),
-                        necessarySwapAmount.formatNumberOrder(prefix: "(", suffix: inputTicker + ")"),
-                        AttributedString(" requires more than the ").build(),
-                        detail.inputs.first?.amount.formatNumberOrder(suffix: inputTicker),
-                        AttributedString(" you intended to swap. This can occur due to changes in market prices or liquidity.").build(),
+                        AttributedString(key: "Your attempt to receive exactly ").build(),
+                        detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                        AttributedString(key: " for ").build(),
+                        AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                        AttributedString(key: "  could not be completed because the current rate ").build(),
+                        necessarySwapAmount.formatNumberOrder(prefix: "(", suffix: inputTicker + ")", roundingOffset: Int(decimalsOut)),
+                        AttributedString(key: " requires more than the ").build(),
+                        detail.inputs.first?.amount.formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                        AttributedString(key: " you intended to swap. This can occur due to changes in market prices or liquidity.").build(),
                     ]
                 }
             }
@@ -406,92 +413,168 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
             guard order.action.value != .oco else { return nil }
             let currentAmount = overSlippage.asRoutingOverSlipageDetail?.receivedAmount.toExact(decimal: decimalsOut)
             attr = [
-                AttributedString("Your swap of ").build(),
-                inputAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(" for \(outputTicker) could not be completed because the amount of \(outputTicker) available at the current rate ").build(),
-                currentAmount?.formatNumberOrder(suffix: outputTicker),
-                AttributedString(" is less than your minimum expected amount ").build(),
-                detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(". This can happen due to changes in market prices or liquidity.").build(),
+                AttributedString(key: "Your swap of ").build(),
+                inputAmount.formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                AttributedString(key: " for ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " could not be completed because the amount of ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " available at the current rate ").build(),
+                AttributedString(key: "(").build(),
+                currentAmount?.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ")").build(),
+                AttributedString(key: " is less than your minimum expected amount ").build(),
+                detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can happen due to changes in market prices or liquidity.").build(),
             ]
         case "StopOverSlippageDetail":
             guard order.action.value != .oco else { return nil }
             let currentAmount = overSlippage.asStopOverSlippageDetail?.receivedAmount.toExact(decimal: decimalsOut)
             attr = [
-                AttributedString("Your attempt to swap ").build(),
-                inputAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(" for \(outputTicker) could not be completed because the amount of \(outputTicker) available at the current rate ").build(),
-                currentAmount?.formatNumberOrder(suffix: outputTicker),
-                AttributedString(" is greater than your stop amount ").build(),
-                detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(". This can happen due to changes in market prices or liquidity.").build(),
+                AttributedString(key: "Your attempt to swap ").build(),
+                inputAmount.formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                AttributedString(key: " for ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " could not be completed because the amount of ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " available at the current rate ").build(),
+                AttributedString("(").build(),
+                currentAmount?.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(")").build(),
+                AttributedString(key: " is greater than your stop amount ").build(),
+                detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can happen due to changes in market prices or liquidity.").build(),
             ]
         case "OCOOverSlipageDetail":
             guard order.action.value == .oco else { return nil }
             let currentAmount = (Double(overSlippage.asOCOOverSlipageDetail?.receivedAmount ?? "0") ?? 0) / pow(10.0, Double(detail.outputs.first?.decimals ?? 0))
             let inputAmount = detail.inputs.first?.amount ?? 0
             attr = [
-                AttributedString("Your attempt to swap ").build(),
-                inputAmount.formatNumberOrder(suffix: inputTicker),
-                AttributedString(" could not be completed because the amount of ").build(),
+                AttributedString(key: "Your attempt to swap ").build(),
+                inputAmount.formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                AttributedString(key: " could not be completed because the amount of ").build(),
                 AttributedString(outputTicker).build(font: .paragraphXSemiSmall),
-                AttributedString(" available at the current rate ").build(),
-                currentAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(" is greater than your stop amount ").build(),
-                detail.outputs.first?.stopAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(" and less than your limit amount ").build(),
-                detail.outputs.first?.limitAmount.formatNumberOrder(suffix: outputTicker),
-                AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                AttributedString(key: " available at the current rate ").build(),
+                currentAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(key: " is greater than your stop amount ").build(),
+                detail.outputs.first?.stopAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(key: " and less than your limit amount ").build(),
+                detail.outputs.first?.limitAmount.formatNumberOrder(suffix: outputTicker, roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
 
         case "PartialFillOverSlippageDetail":
             guard order.action.value == .partialSwap else { return nil }
             let swapableAmount = overSlippage.asPartialFillOverSlippageDetail?.swapableAmount.toExact(decimal: decimalsIn)
             attr = [
-                AttributedString("Your attempt to partial swap at least ").build(),
-                (detail.minimumAmountPerSwap / 1_000_000).formatNumberOrder(suffix: inputTicker),
-                inputAmount.formatNumberOrder(suffix: inputTicker + "/ \(detail.maxSwapTime) times"),
-                AttributedString(" for \(outputTicker) could not be completed because the executable amount of \(inputTicker) in the current rate ").build(),
-                swapableAmount?.formatNumberOrder(prefix: "(", suffix: inputTicker),
-                AttributedString(" is less than your minimum \(inputTicker) per swap ").build(),
-                (detail.minimumAmountPerSwap / 1_000_000).formatNumberOrder(prefix: "(", suffix: inputTicker + ")"),
-                AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                AttributedString(key: "Your attempt to partial swap at least ").build(),
+                detail.minimumAmountPerSwap.toExact(decimal: decimalsIn).formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                AttributedString(" ").build(),
+                AttributedString("(").build(font: .paragraphXSemiSmall),
+                inputAmount.formatNumberOrder(suffix: inputTicker + "/ \(detail.maxSwapTime) times", roundingOffset: Int(decimalsIn)),
+                AttributedString(")").build(font: .paragraphXSemiSmall),
+                AttributedString(key: " for ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " could not be completed because the executable amount of ").build(),
+                AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " in the current rate ").build(),
+                swapableAmount?.formatNumberOrder(prefix: "(", suffix: inputTicker, roundingOffset: Int(decimalsIn)),
+                AttributedString(")").build(font: .paragraphXSemiSmall),
+                AttributedString(key: " is less than your minimum ").build(),
+                AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " per swap ").build(),
+                detail.minimumAmountPerSwap.toExact(decimal: decimalsIn).formatNumberOrder(prefix: "(", suffix: inputTicker + ")", roundingOffset: Int(decimalsIn)),
+                AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
 
         case "DepositOverSlippageDetail":
-            guard order.action.value == .oco else { return nil }
+            guard order.action.value != .oco else { return nil }
 
             let currentAmount = overSlippage.asDepositOverSlippageDetail?.receivedLPAmount.toExact(decimal: decimalsOut)
             let inputATicker: String = detail.inputs.prefix(detail.inputs.count - 1).map { $0.currency }.joined(separator: ", ")
             let inputBTicker: String = detail.inputs.last?.currency ?? ""
 
             attr = [
-                AttributedString("Your attempt to deposit \(inputATicker) and \(inputBTicker) to receive LP tokens could not be completed because the amount of LP tokens generated by the deposit, based on current rates ").build(),
-                currentAmount?.formatNumberOrder(prefix: "(", suffix: "LP)"),
-                AttributedString(" is less than your minimum expected amount ").build(),
-                detail.outputs.first?.satisfiedAmount.formatNumberOrder(prefix: "(", suffix: "LP"),
-                AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                AttributedString(key: "Your attempt to deposit ").build(),
+                AttributedString(inputATicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " and ").build(),
+                AttributedString(inputBTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " to receive LP tokens could not be completed because the amount of LP tokens generated by the deposit, based on current rates ").build(),
+                currentAmount?.formatNumberOrder(prefix: "(", suffix: "LP)", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: " is less than your minimum expected amount ").build(),
+                detail.outputs.first?.satisfiedAmount.formatNumberOrder(prefix: "(", suffix: "LP", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
         case "ZapInOverSlippageDetail":
             guard order.action.value != .oco else { return nil }
             let currentAmount = overSlippage.asZapInOverSlippageDetail?.receivedLPAmount.toExact(decimal: decimalsOut)
             attr = [
-                AttributedString("Your attempt to zap in \(inputTicker) to receive LP tokens could not be completed because the amount of LP tokens generated by the deposit based on current rates ").build(),
-                currentAmount?.formatNumberOrder(prefix: "(", suffix: "LP)"),
-                AttributedString(" is less than your minimum expected amount ").build(),
-                detail.outputs.first?.satisfiedAmount.formatNumberOrder(prefix: "(", suffix: "LP"),
-                AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                AttributedString("Your attempt to zap in ").build(),
+                AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " to receive LP tokens could not be completed because the amount of LP tokens generated by the deposit based on current rates ").build(),
+                currentAmount?.formatNumberOrder(prefix: "(", suffix: "LP)", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: " is less than your minimum expected amount ").build(),
+                detail.outputs.first?.satisfiedAmount.formatNumberOrder(prefix: "(", suffix: "LP)", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
         case "ZapOutOverSlippageDetail":
             guard order.action.value != .oco else { return nil }
             let currentAmount = overSlippage.asZapOutOverSlippageDetail?.receivedAmount.toExact(decimal: decimalsOut)
             attr = [
-                AttributedString("Your attempt to zap out LP tokens to receive \(outputTicker) could not be completed because the amount of \(outputTicker) available based on current rates ").build(),
-                currentAmount?.formatNumberOrder(prefix: "(", suffix: outputTicker + ")"),
-                AttributedString(" is less than your minimum expected amount ").build(),
-                detail.outputs.first?.satisfiedAmount.formatNumberOrder(prefix: "(", suffix: outputTicker + ")"),
-                AttributedString(". This can occur due to changes in market prices or liquidity.").build(),
+                AttributedString(key: "Your attempt to zap out LP tokens to receive ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " could not be completed because the amount of ").build(),
+                AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
+                AttributedString(key: " available based on current rates ").build(),
+                currentAmount?.formatNumberOrder(prefix: "(", suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: " is less than your minimum expected amount ").build(),
+                detail.outputs.first?.satisfiedAmount.formatNumberOrder(prefix: "(", suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
+                AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
+        case "WithdrawOverSlippageDetail":
+            let outputTickers: [AttributedString] = detail.outputs.enumerated()
+                .compactMap({ (index, token) in
+                    if detail.outputs.count > 1 && index != detail.outputs.count - 1 {
+                        return AttributedString(token.currency).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning) + AttributedString(key: " and ").build()
+                    } else {
+                        return AttributedString(token.currency).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning)
+                    }
+                })
+
+            let receivedAmounts = order.overSlippage?.asWithdrawOverSlippageDetail?.receivedAmounts ?? []
+
+            let rates: [AttributedString] = receivedAmounts.enumerated()
+                .compactMap({ (index, amount) in
+                    guard let output = detail.outputs[gk_safeIndex: index] else { return nil }
+                    if receivedAmounts.count > 1 && index != receivedAmounts.count - 1 {
+                        return amount.toExact(decimal: Double(output.decimals ?? 0)).formatNumberOrder(suffix: output.currency, roundingOffset: output.decimals ?? 0) + AttributedString(key: " and ").build()
+                    } else {
+                        return amount.toExact(decimal: Double(output.decimals ?? 0)).formatNumberOrder(suffix: output.currency, roundingOffset: output.decimals ?? 0)
+                    }
+                })
+
+            attr = [
+                AttributedString(key: "Your attempt to withdraw LP tokens to receive ").build()
+            ]
+            attr.append(contentsOf: outputTickers)
+            attr.append(AttributedString(" could not be completed because the amounts of ").build())
+            attr.append(contentsOf: outputTickers)
+            attr.append(AttributedString(" available based on current rates ").build())
+            attr.append(contentsOf: rates)
+            attr.append(AttributedString(")").build())
+            attr.append(AttributedString(key: " are less than your minimum expected amounts ").build())
+            attr.append(AttributedString("(").build())
+            let satisfiedAmount: [AttributedString] = detail.outputs.enumerated()
+                .compactMap({ (index, token) in
+                    if detail.outputs.count > 1 && index != detail.outputs.count - 1 {
+                        return token.satisfiedAmount.toExact(decimal: Double(token.decimals ?? 0)).formatNumberOrder(suffix: token.currency, roundingOffset: token.decimals ?? 0) + AttributedString(key: " and ").build()
+                    } else {
+                        return token.satisfiedAmount.toExact(decimal: Double(token.decimals ?? 0)).formatNumberOrder(suffix: token.currency, roundingOffset: token.decimals ?? 0)
+                    }
+                })
+            attr.append(contentsOf: satisfiedAmount)
+            attr.append(AttributedString(")").build())
+            attr.append(AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build())
         default:
             return nil
         }
@@ -520,8 +603,14 @@ fileprivate extension Double {
     func formatNumberOrder(
         prefix: String = "",
         suffix: String = "",
-        roundingOffset: Int = 3
+        roundingOffset: Int
     ) -> AttributedString {
         self.formatNumber(prefix: prefix, suffix: suffix, roundingOffset: roundingOffset, font: .paragraphXSemiSmall, fontColor: .colorInteractiveToneWarning)
+    }
+}
+
+extension AttributedString {
+    init(key: LocalizedStringKey) {
+        self.init(key.toString())
     }
 }

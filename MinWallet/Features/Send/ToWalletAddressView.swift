@@ -11,6 +11,8 @@ struct ToWalletAddressView: View {
     @State
     private var rotateDegree: CGFloat = 0
 
+    private let maxLength = 300
+
     init(viewModel: ToWalletAddressViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
@@ -29,21 +31,30 @@ struct ToWalletAddressView: View {
                     get: { viewModel.isChecking != true },
                     set: { _ in }
                 )
-                CustomTextField(
-                    text: $viewModel.address,
-                    enableTextView: combinedBinding,
-                    font: .labelSmallSecondary ?? .systemFont(ofSize: 14),
-                    textColor: .colorBaseTent,
-                    placeHolderTextColor: .colorInteractiveTentPrimarySub,
-                    placeHolderText: "Enter address or ADAHandle",
-                    onCommit: {}
-                )
-                .padding(.horizontal, .xl)
-                .onChange(of: viewModel.address) { newValue in
-                    viewModel.address = newValue.replacingOccurrences(of: " ", with: "")
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        CustomTextField(
+                            text: $viewModel.address,
+                            enableTextView: combinedBinding,
+                            font: .labelSmallSecondary ?? .systemFont(ofSize: 14),
+                            textColor: .colorBaseTent,
+                            placeHolderTextColor: .colorInteractiveTentPrimarySub,
+                            placeHolderText: "Enter address or ADAHandle",
+                            onCommit: {}
+                        )
+                        .padding(.horizontal, .xl)
+                        .onChange(of: viewModel.address) { newValue in
+                            var newValue = newValue.replacingOccurrences(of: " ", with: "")
+                            if newValue.count > maxLength {
+                                newValue = String(newValue.prefix(maxLength))
+                            }
+                            viewModel.address = newValue
+                        }
+                        errorTypeView
+                    }
                 }
+                .disableBounces()
             }
-            errorTypeView
             itemAddressAda
 
             Spacer()
@@ -89,9 +100,9 @@ struct ToWalletAddressView: View {
                     })
                     .contentShape(.rect)
                     .onTapGesture {
-                        if let copied = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines), !copied.isEmpty {
+                        if let copied = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: ""), !copied.isEmpty {
                             viewModel.reset()
-                            viewModel.address = copied
+                            viewModel.address = String(copied.prefix(maxLength))
                         }
                     }
                     .disabled(viewModel.isChecking == true)
@@ -117,7 +128,6 @@ struct ToWalletAddressView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        //.allowsHitTesting(!(viewModel.isChecking == true))
         .modifier(
             BaseContentView(
                 screenTitle: " ",

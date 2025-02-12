@@ -297,6 +297,11 @@ extension String {
         return (Double(self) ?? 0) / pow(10.0, decimal)
     }
 }
+extension Double {
+    func toExact(decimal: Double?) -> Double {
+        return self / pow(10.0, decimal ?? 0)
+    }
+}
 
 extension String {
     func getPriceValue(appSetting: AppSetting, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {

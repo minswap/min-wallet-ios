@@ -55,6 +55,9 @@ struct ChangePasswordSuccessView: View {
             }
         }
         .background(.colorBaseBackground)
+        .onAppear {
+            appSetting.swipeEnabled = false
+        }
     }
 }
 
