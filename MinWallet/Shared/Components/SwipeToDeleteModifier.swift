@@ -24,7 +24,7 @@ struct SwipeToDeleteModifier: ViewModifier {
                             onDelete()
                         }
                 }
-                .frame(height: geometry.size.height + 4)
+                .frame(height: geometry.size.height - 4)
                 .background(Color.colorInteractiveDangerDefault)
                 // Foreground (Content)
                 content
