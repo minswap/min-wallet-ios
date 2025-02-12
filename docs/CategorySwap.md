@@ -69,14 +69,6 @@
 
               * Slippage Tolerance: Set predefined (0.1%, 0.5%, 1%, 2%) or custom slippage percentages up to 300%.
 
-              * Predict Swap Price: Enable/disable swap price estimation with processing orders.
-
-              * Auto Router: Enable/disable automatic routing for optimal liquidity and prices.
-
-              * Route Sorting: Enable when Auto Router is enabled. Choose priority of routing: Most liquidity/High return.
-
-              * Safe Mode: Toggle safe mode to prevent high-price impact trades.
-
 * **Non-Functional Requirements**
 
     - **Performance:** Ensure fast response times for token selection and swap execution.
