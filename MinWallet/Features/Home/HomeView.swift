@@ -286,7 +286,12 @@ struct HomeView: View {
             //minswap://testnet-preprod.minswap.org/orders?s= 83ada93f2ecadf5bbff265d36ae14303b5e19303f5ae107629ebf1961a7e7f98
             handleIncomingURL(incomingURL)
         }
-
+        .onAppear {
+            appSetting.swipeEnabled = false
+        }
+        .onDisappear {
+            appSetting.swipeEnabled = true
+        }
     }
 
     private func handleIncomingURL(_ url: URL) {
@@ -319,4 +324,18 @@ extension HomeView {
     HomeView()
         .environmentObject(AppSetting.shared)
         .environmentObject(UserInfo.shared)
+}
+
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if AppSetting.shared.swipeEnabled {
+            return viewControllers.count > 1
+        }
+        return false
+    }
 }

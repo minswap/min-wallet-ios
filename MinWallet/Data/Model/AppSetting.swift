@@ -17,7 +17,8 @@ class AppSetting: ObservableObject {
     let objectWillChange = PassthroughSubject<Void, Never>()
 
     var safeArea: CGFloat = UIApplication.safeArea.top
-
+    var swipeEnabled = true
+    
     var rootScreen: MainCoordinatorViewModel.Screen = .policy(.splash)
     {
         willSet {
