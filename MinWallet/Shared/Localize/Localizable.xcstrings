@@ -619,6 +619,12 @@
         }
       }
     },
+    "Powered by Xerberus. This is for informational purposes only and is not intended to be used as financial advice." : {
+
+    },
+    "Powered by Xerberus. This is for informational purposes only and is not intended to be used as financial advice. User Agreement" : {
+
+    },
     "Predict Swap Price" : {
 
     },
@@ -861,6 +867,9 @@
 
     },
     "Use TouchID" : {
+
+    },
+    "User Agreement." : {
 
     },
     "UTC" : {

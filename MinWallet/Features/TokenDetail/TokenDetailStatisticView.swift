@@ -307,7 +307,12 @@ extension TokenDetailView {
                     }
                 }
                 .frame(height: 40)
-
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Risk score"
+                    content = "Powered by Xerberus. This is for informational purposes only and is not intended to be used as financial advice. User Agreement"
+                    $isShowToolTip.showSheet()
+                }
                 Text("External links")
                     .font(.labelSemiSecondary)
                     .foregroundStyle(.colorBaseTent)

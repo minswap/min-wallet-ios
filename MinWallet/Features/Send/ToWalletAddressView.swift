@@ -12,7 +12,7 @@ struct ToWalletAddressView: View {
     private var rotateDegree: CGFloat = 0
 
     private let maxLength = 300
-    
+
     init(viewModel: ToWalletAddressViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }

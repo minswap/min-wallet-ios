@@ -18,7 +18,7 @@ class AppSetting: ObservableObject {
 
     var safeArea: CGFloat = UIApplication.safeArea.top
     var swipeEnabled = true
-    
+
     var rootScreen: MainCoordinatorViewModel.Screen = .policy(.splash)
     {
         willSet {
