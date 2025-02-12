@@ -150,6 +150,7 @@ class AppSetting: ObservableObject {
     }
 
     func isSuspiciousToken(currencySymbol: String) async -> Bool {
+        guard !currencySymbol.isEmpty else { return false }
         guard suspiciousToken.isEmpty else { return true }
         guard let url = URL(string: MinWalletConstant.suspiciousTokenURL) else { return true }
         do {

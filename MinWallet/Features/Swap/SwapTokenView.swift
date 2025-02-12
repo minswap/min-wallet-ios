@@ -107,6 +107,7 @@ struct SwapTokenView: View {
             .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
             .presentSheetModifier()
         }
+        .ignoresSafeArea(.keyboard)
     }
 
     @ViewBuilder
@@ -203,6 +204,7 @@ struct SwapTokenView: View {
         .padding(.horizontal, .xl)
         .padding(.top, .lg)
     }
+
     @ViewBuilder
     private var tokenReceiveView: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -441,9 +443,9 @@ struct WarningItemView: View {
         .padding(.horizontal, .md)
         .contentShape(.rect)
         .onTapGesture {
-            withAnimation {
-                isExpand.toggle()
-            }
+            //withAnimation {
+            isExpand.toggle()
+            //}
         }
     }
 }

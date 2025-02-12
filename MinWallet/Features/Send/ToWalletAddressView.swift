@@ -29,21 +29,25 @@ struct ToWalletAddressView: View {
                     get: { viewModel.isChecking != true },
                     set: { _ in }
                 )
-                CustomTextField(
-                    text: $viewModel.address,
-                    enableTextView: combinedBinding,
-                    font: .labelSmallSecondary ?? .systemFont(ofSize: 14),
-                    textColor: .colorBaseTent,
-                    placeHolderTextColor: .colorInteractiveTentPrimarySub,
-                    placeHolderText: "Enter address or ADAHandle",
-                    onCommit: {}
-                )
-                .padding(.horizontal, .xl)
-                .onChange(of: viewModel.address) { newValue in
-                    viewModel.address = newValue.replacingOccurrences(of: " ", with: "")
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        CustomTextField(
+                            text: $viewModel.address,
+                            enableTextView: combinedBinding,
+                            font: .labelSmallSecondary ?? .systemFont(ofSize: 14),
+                            textColor: .colorBaseTent,
+                            placeHolderTextColor: .colorInteractiveTentPrimarySub,
+                            placeHolderText: "Enter address or ADAHandle",
+                            onCommit: {}
+                        )
+                        .padding(.horizontal, .xl)
+                        .onChange(of: viewModel.address) { newValue in
+                            viewModel.address = newValue.replacingOccurrences(of: " ", with: "")
+                        }
+                        errorTypeView
+                    }
                 }
             }
-            errorTypeView
             itemAddressAda
 
             Spacer()
@@ -117,7 +121,6 @@ struct ToWalletAddressView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        //.allowsHitTesting(!(viewModel.isChecking == true))
         .modifier(
             BaseContentView(
                 screenTitle: " ",

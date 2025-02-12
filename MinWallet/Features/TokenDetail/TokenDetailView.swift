@@ -9,6 +9,8 @@ struct TokenDetailView: View {
     var appSetting: AppSetting
     @EnvironmentObject
     var userInfo: UserInfo
+    @Environment(\.colorScheme)
+    var colorScheme: ColorScheme
     @StateObject
     var tokenManager: TokenManager = TokenManager.shared
     @StateObject
@@ -51,7 +53,7 @@ struct TokenDetailView: View {
                 Spacer()
                 tokenDetailBottomView
                     .background(.colorBaseBackground)
-                    .padding(.horizontal, .xl)
+                    .padding(.horizontal, .md)
             }
             .presentSheet(isPresented: $isShowToolTip) {
                 TokenDetailToolTipView(title: $title, content: $content)

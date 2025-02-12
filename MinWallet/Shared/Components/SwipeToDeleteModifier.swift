@@ -24,14 +24,13 @@ struct SwipeToDeleteModifier: ViewModifier {
                             onDelete()
                         }
                 }
-                .frame(height: geometry.size.height - 4)
+                .frame(height: geometry.size.height + 4)
                 .background(Color.colorInteractiveDangerDefault)
-
                 // Foreground (Content)
                 content
                     .background(.colorBaseBackground)
                     .cornerRadius(offset < 0 ? 12 : 0, corners: [.topRight, .bottomRight])
-                    .shadow(color: offset < 0 ? Color.black.opacity(0.1) : .clear, radius: 4, x: 0, y: 2)
+                    .shadow(color: offset < 0 ? .colorBaseTent.opacity(0.18) : .clear, radius: 4, x: 2, y: 4)
                     .offset(x: offset)
                     .gesture(
                         DragGesture()

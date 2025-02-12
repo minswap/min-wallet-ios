@@ -195,7 +195,7 @@ class SwapTokenViewModel: ObservableObject {
 
     private func generateWarningInfo() async {
         //TODO: Warning info
-        warningInfo = []
+        var warningInfo: [WarningInfo] = []
 
         if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenPay.token.currencySymbol) {
             warningInfo.append(.suspiciousTokenPay(policyId: tokenPay.token.currencySymbol))
@@ -209,6 +209,8 @@ class SwapTokenViewModel: ObservableObject {
         if tokenReceive.token.decimals == 0 {
             warningInfo.append(.indivisibleTokenReceive)
         }
+        self.isExpand = [:]
+        self.warningInfo = warningInfo
     }
 }
 
