@@ -11,6 +11,8 @@ struct ToWalletAddressView: View {
     @State
     private var rotateDegree: CGFloat = 0
 
+    private let maxLength = 300
+    
     init(viewModel: ToWalletAddressViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
@@ -42,11 +44,16 @@ struct ToWalletAddressView: View {
                         )
                         .padding(.horizontal, .xl)
                         .onChange(of: viewModel.address) { newValue in
-                            viewModel.address = newValue.replacingOccurrences(of: " ", with: "")
+                            var newValue = newValue.replacingOccurrences(of: " ", with: "")
+                            if newValue.count > maxLength {
+                                newValue = String(newValue.prefix(maxLength))
+                            }
+                            viewModel.address = newValue
                         }
                         errorTypeView
                     }
                 }
+                .disableBounces()
             }
             itemAddressAda
 
@@ -93,9 +100,9 @@ struct ToWalletAddressView: View {
                     })
                     .contentShape(.rect)
                     .onTapGesture {
-                        if let copied = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines), !copied.isEmpty {
+                        if let copied = UIPasteboard.general.string?.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: ""), !copied.isEmpty {
                             viewModel.reset()
-                            viewModel.address = copied
+                            viewModel.address = String(copied.prefix(maxLength))
                         }
                     }
                     .disabled(viewModel.isChecking == true)
