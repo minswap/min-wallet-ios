@@ -6,6 +6,8 @@ struct SwapTokenInfoView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
 
+    var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Details")
@@ -21,6 +23,10 @@ struct SwapTokenInfoView: View {
                     .foregroundStyle(.colorBaseTent)
             }
             .padding(.top, .lg)
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Minimum received", "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.You can adjust this by setting percentage of Slippage Tolerance")
+            }
             HStack {
                 DashedUnderlineText(text: "Slippage Tolerance", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -29,6 +35,10 @@ struct SwapTokenInfoView: View {
                     .foregroundStyle(.colorBaseTent)
             }
             .padding(.top, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Slippage tolerance", "Your transaction will revert if the price changes unfavorably by more than this percentage.")
+            }
             HStack {
                 DashedUnderlineText(text: "Price Impact", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -37,6 +47,10 @@ struct SwapTokenInfoView: View {
                     .foregroundStyle(.colorBaseSuccess)
             }
             .padding(.top, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Price impact", "This % indicates the potential effect your swap might have on the pool's price. A higher % suggests a more significant impact.")
+            }
             HStack {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -45,6 +59,16 @@ struct SwapTokenInfoView: View {
                     .foregroundStyle(.colorBaseTent)
             }
             .padding(.top, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                /*When a pool has only 1 fee, display “For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.”
+                When a pool has > 1 fee, display:
+"For each trade [from_Token > to_Token]: a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.
+                [to_Token > from_Token]: a b% goes to liquidity providers as Trading Fee and c% goes to Protocol."
+                */
+                //TODO: Jame check fee nhe
+                onShowToolTip?("Trading Fee", "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.")
+            }
             HStack {
                 DashedUnderlineText(text: "Batcher Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -58,11 +82,15 @@ struct SwapTokenInfoView: View {
             }
             .padding(.top, .xl)
             .padding(.bottom, .xs)
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Batcher Fee", "Fee paid for the service of off-chain Laminar batcher to process transactions.")
+            }
             Text("Want a discount?")
                 .font(.paragraphXSmall)
                 .foregroundStyle(.colorInteractiveToneHighlight)
                 .onTapGesture {
-                    UIApplication.shared.open(URL(string: "https://docs.minswap.org/min-token/usdmin-tokenomics/trading-fee-discount")!, options: [:], completionHandler: nil)
+                    "https://docs.minswap.org/min-token/usdmin-tokenomics/trading-fee-discount".openURL()
                 }
             HStack {
                 DashedUnderlineText(text: "Deposit ADA", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -73,7 +101,10 @@ struct SwapTokenInfoView: View {
             }
             .padding(.top, .xl)
             .padding(.bottom, 40)
-
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Deposit ADA", "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled.")
+            }
             CustomButton(title: "Swap") {
                 onDismiss?()
             }

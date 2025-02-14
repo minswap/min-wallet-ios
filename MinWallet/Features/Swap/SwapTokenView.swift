@@ -20,6 +20,12 @@ struct SwapTokenView: View {
     private var focusedField: FocusedField?
     @State
     private var isShowSignContract: Bool = false
+    @State
+    var isShowToolTip: Bool = false
+    @State
+    var content: LocalizedStringKey = ""
+    @State
+    var title: LocalizedStringKey = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -69,16 +75,26 @@ struct SwapTokenView: View {
                 })
         )
         .presentSheet(isPresented: $viewModel.isShowInfo) {
-            SwapTokenInfoView()
-                .environmentObject(viewModel)
+            SwapTokenInfoView(onShowToolTip: { (title, content) in
+                self.content = content
+                self.title = title
+                $isShowToolTip.showSheet()
+            })
+            .environmentObject(viewModel)
         }
         .presentSheet(isPresented: $viewModel.isShowRouting) {
             SwapTokenRoutingView()
                 .environmentObject(viewModel)
         }
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
-            SwapTokenSettingView(viewModel: viewModel)
-                .padding(.xl)
+            SwapTokenSettingView(
+                onShowToolTip: { title, content in
+                    self.content = content
+                    self.title = title
+                    $isShowToolTip.showSheet()
+                }, viewModel: viewModel
+            )
+            .padding(.xl)
         }
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
@@ -106,6 +122,16 @@ struct SwapTokenView: View {
             )
             .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
             .presentSheetModifier()
+        }
+        .presentSheet(isPresented: $isShowToolTip) {
+            TokenDetailToolTipView(title: $title, content: $content)
+                .background(content: {
+                    RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
+                        .fill(.colorBaseBackground)
+                        .ignoresSafeArea()
+
+                })
+                .ignoresSafeArea()
         }
         .ignoresSafeArea(.keyboard)
     }

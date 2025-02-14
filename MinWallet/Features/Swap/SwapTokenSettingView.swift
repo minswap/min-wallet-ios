@@ -16,6 +16,8 @@ struct SwapTokenSettingView: View {
     @FocusState
     private var isFocus: Bool
 
+    var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
+
     let maxValue: Double = 100.0  // Define the maximum value
 
     @Environment(\.partialSheetDismiss)
@@ -98,6 +100,10 @@ struct SwapTokenSettingView: View {
                 }
                 HStack(spacing: .xl) {
                     DashedUnderlineText(text: "Predict Swap Price", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            onShowToolTip?("Predict Swap Price", "Estimate swap price with processing orders.")
+                        }
                     Spacer()
                     Toggle("", isOn: $viewModel.swapSetting.predictSwapPrice)
                         .toggleStyle(SwitchToggleStyle())
@@ -111,6 +117,10 @@ struct SwapTokenSettingView: View {
                 DashedUnderlineText(text: "Route Sorting", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, .md)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        onShowToolTip?("Route Sorting", "Choose how to sort routes: by most liquidity for stable transactions or by high return for maximum profitability.")
+                    }
                 HStack(spacing: .xs) {
                     Text("Most liquidity")
                         .font(.labelSmallSecondary)
