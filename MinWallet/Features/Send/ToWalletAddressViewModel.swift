@@ -51,8 +51,12 @@ class ToWalletAddressViewModel: ObservableObject {
 
     private func validateAddress(newAddress: String) {
         errorType = nil
-        guard address.count > 1 else { return }
-
+        guard !address.isEmpty else { return }
+        guard address.count == 1
+        else {
+            errorType = .invalidAddress
+            return
+        }
         if address.starts(with: "$") {
             //Handle AdaName
             if address.isAdaHandleName {
