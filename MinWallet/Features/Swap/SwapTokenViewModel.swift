@@ -30,7 +30,10 @@ class SwapTokenViewModel: ObservableObject {
     var warningInfo: [WarningInfo] = []
     @Published
     var isExpand: [WarningInfo: Bool] = [:]
-
+    @Published
+    var isConvertRate: Bool = false
+    @Published
+    var rate: String = "1 ADA = 9.443 MIN"
     @Published
     var swapSetting: SwapTokenSetting = .init()
 

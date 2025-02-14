@@ -356,11 +356,14 @@ struct SwapTokenView: View {
         HStack(spacing: 8) {
             Circle().frame(width: 6, height: 6)
                 .foregroundStyle(.colorBaseSuccess)
-            Text("1 ADA = 9.443 MIN")
+            Text(viewModel.isConvertRate ? "1 MIN = 0.105 ADA" : "1 ADA =  9.443 MIN")
                 .font(.paragraphSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
             Image(.icExecutePrice)
                 .fixSize(.xl)
+                .onTapGesture {
+                    viewModel.isConvertRate.toggle()
+                }
             Spacer()
             Text("0.3%")
                 .font(.paragraphXMediumSmall)
@@ -375,13 +378,13 @@ struct SwapTokenView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 10, height: 10)
                 .rotationEffect(.degrees(-90))
+                .containerShape(.rect)
+                .onTapGesture {
+                    hideKeyboard()
+                    $viewModel.isShowInfo.showSheet()
+                }
         }
         .padding(.xl)
-        .containerShape(.rect)
-        .onTapGesture {
-            hideKeyboard()
-            $viewModel.isShowInfo.showSheet()
-        }
     }
 
     @ViewBuilder
