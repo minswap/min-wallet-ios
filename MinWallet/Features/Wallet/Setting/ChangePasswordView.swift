@@ -173,9 +173,8 @@ struct ChangePasswordView: View {
                         else {
                             throw AppGeneralError.localErrorLocalized(message: "Change password failed")
                         }
-
+                        try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                         userInfo.saveWalletInfo(walletInfo: newWallet)
-
                         switch screenType {
                         case .setting:
                             navigator.push(.changePasswordSuccess(.setting))

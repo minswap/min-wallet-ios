@@ -210,16 +210,16 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
+                /*
                 Text("$0.0")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
+                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
                     .frame(width: 16, height: 16)
-                Text("235.789")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Text(viewModel.tokenPay.token.amount.formatNumber(font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
             }
         }
         .padding(.xl)
@@ -273,16 +273,16 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
+                /*
                 Text("$0.0")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
+                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
                     .frame(width: 16, height: 16)
-                Text("235.789")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Text(viewModel.tokenReceive.token.amount.formatNumber(font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
             }
         }
         .padding(.xl)
@@ -402,6 +402,7 @@ struct SwapTokenView: View {
                 }
             }
             .background(.colorSurfaceWarningDefault)
+            .cornerRadius(12)
             .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderWarningSub, lineWidth: 1))
             .padding(.horizontal, .xl)
             .padding(.bottom, .xl)
