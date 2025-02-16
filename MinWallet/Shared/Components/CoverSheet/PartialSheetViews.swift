@@ -3,6 +3,7 @@ import SwiftUI
 
 private struct ModalTypeView<Modal: View>: ViewModifier {
     @Binding var isPresented: Bool
+    @State private var dragOffset: CGFloat = 0
     @State var modalHeight: CGFloat?
     @ViewBuilder var modal: () -> Modal
 
@@ -24,7 +25,24 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
             modal()
                 .frame(height: modalHeight)
                 .opacity(isPresented ? 1 : 0)
-                .offset(y: isPresented ? 0 : 1000)
+                .offset(y: isPresented ? dragOffset : 1000)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            if value.translation.height > 0 {
+                                dragOffset = value.translation.height
+                            }
+                        }
+                        .onEnded { value in
+                            if value.translation.height > 100 {
+                                withAnimation {
+                                    content.hideKeyboard()
+                                    isPresented = false
+                                }
+                            }
+                            dragOffset = 0
+                        }
+                )
         }
         .environment(
             \.partialSheetDismiss,
@@ -76,7 +94,7 @@ extension Binding where Value == Bool {
     }
 }
 
-struct PresentSheetModifier: ViewModifier {
+private struct PresentSheetModifier: ViewModifier {
     func body(content: Content) -> some View {
         VStack(spacing: 0) {
             Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
