@@ -52,7 +52,7 @@ class ToWalletAddressViewModel: ObservableObject {
     private func validateAddress(newAddress: String) {
         errorType = nil
         guard !address.isEmpty else { return }
-        guard address.count == 1
+        guard address.count != 1
         else {
             errorType = .invalidAddress
             return
