@@ -11,7 +11,7 @@
   "schemaDownloadConfiguration": {
     "downloadMethod": {
       "introspection": {
-        "endpointURL": "https://dev-2.minswap.org/graphql",
+        "endpointURL": "https://dev-1.minswap.org/graphql",
         "httpMethod": {
           "POST": {}
         },
