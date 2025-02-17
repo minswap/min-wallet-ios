@@ -47,6 +47,8 @@ class HomeViewModel: ObservableObject {
         Task {
             let tokens = try? await TokenManager.getYourToken()
             TokenManager.shared.yourTokens = tokens
+            UserInfo.shared.adaHandleName = TokenManager.shared.fetchAdaHandleName()
+
             await TokenManager.shared.getPortfolioOverview()
             await getTokens()
             let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
