@@ -263,16 +263,13 @@ struct HomeView: View {
                 .padding(.vertical, .md)
         }
         .onFirstAppear {
-            print("WTF first appear")
             Task {
                 if appSetting.enableNotification {
                     OneSignal.Notifications.requestPermission(
                         { accepted in
-                            print("User accepted notifications: \(accepted)")
+                            //print("User accepted notifications: \(accepted)")
                         }, fallbackToSettings: true)
                 }
-
-                userInfo.adaHandleName = await TokenManager.fetchAdaHandleName()
             }
         }
         .task {

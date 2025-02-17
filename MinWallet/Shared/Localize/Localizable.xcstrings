@@ -136,9 +136,6 @@
         }
       }
     },
-    "$0.0" : {
-
-    },
     "0.3 %@" : {
 
     },
@@ -154,7 +151,10 @@
     "1 %@ = " : {
 
     },
-    "1 ADA = 9.443 MIN" : {
+    "1 ADA =  9.443 MIN" : {
+
+    },
+    "1 MIN = 0.105 ADA" : {
 
     },
     "1,486.35 MIN" : {
@@ -167,9 +167,6 @@
 
     },
     "124.64 A" : {
-
-    },
-    "235.789" : {
 
     },
     "A wallet name must be 3-40 characters" : {
@@ -287,6 +284,9 @@
     "Check" : {
 
     },
+    "Choose how to sort routes: by most liquidity for stable transactions or by high return for maximum profitability." : {
+
+    },
     "Choose your best way to log-in" : {
 
     },
@@ -395,6 +395,9 @@
     "Error while restoring wallet" : {
 
     },
+    "Estimate swap price with processing orders." : {
+
+    },
     "Estimated batcher fee" : {
 
     },
@@ -428,7 +431,13 @@
     "Fd Market cap" : {
 
     },
+    "Fee paid for the service of off-chain Laminar batcher to process transactions." : {
+
+    },
     "Filter" : {
+
+    },
+    "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol." : {
 
     },
     "For projects" : {
@@ -578,6 +587,9 @@
     "Minimum receive" : {
 
     },
+    "Minimum received" : {
+
+    },
     "Minimum Received" : {
 
     },
@@ -703,6 +715,9 @@
     "Predict Swap Price" : {
 
     },
+    "Price impact" : {
+
+    },
     "Price Impact" : {
 
     },
@@ -802,6 +817,9 @@
     "Sign the contract" : {
 
     },
+    "Slippage tolerance" : {
+
+    },
     "Slippage Tolerance" : {
 
     },
@@ -856,6 +874,12 @@
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
+    "This % indicates the potential effect your swap might have on the pool's price. A higher % suggests a more significant impact." : {
+
+    },
+    "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled." : {
+
+    },
     "This project token is migrated to a new token, you can exchange your old token on %@ app. The new token has policyID %@ and tokenName %@." : {
       "localizations" : {
         "en" : {
@@ -903,6 +927,9 @@
 
     },
     "Trading fee" : {
+
+    },
+    "Trading Fee" : {
 
     },
     "Transaction Submitted" : {
@@ -1053,6 +1080,12 @@
 
     },
     "Your transaction has been submitted successfully" : {
+
+    },
+    "Your transaction will revert if the price changes unfavorably by more than this percentage." : {
+
+    },
+    "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.You can adjust this by setting percentage of Slippage Tolerance" : {
 
     },
     "Zap in" : {

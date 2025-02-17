@@ -70,12 +70,8 @@ extension TokenManager {
         return tokens?.getWalletAssetsPositions
     }
 
-    static func fetchAdaHandleName() async -> String {
-        guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return "" }
-
-        let adaHandleNameQuery = try? await MinWalletService.shared.fetch(query: ADAHandleNameQuery(address: address))
-        let tokenName = adaHandleNameQuery?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName ?? ""
-
+    func fetchAdaHandleName() -> String {
+        let tokenName = yourTokens?.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName ?? ""
         let adaName: String? = tokenName.adaName
         return adaName ?? ""
     }

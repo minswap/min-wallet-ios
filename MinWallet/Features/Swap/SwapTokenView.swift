@@ -20,6 +20,12 @@ struct SwapTokenView: View {
     private var focusedField: FocusedField?
     @State
     private var isShowSignContract: Bool = false
+    @State
+    var isShowToolTip: Bool = false
+    @State
+    var content: LocalizedStringKey = ""
+    @State
+    var title: LocalizedStringKey = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -69,16 +75,26 @@ struct SwapTokenView: View {
                 })
         )
         .presentSheet(isPresented: $viewModel.isShowInfo) {
-            SwapTokenInfoView()
-                .environmentObject(viewModel)
+            SwapTokenInfoView(onShowToolTip: { (title, content) in
+                self.content = content
+                self.title = title
+                $isShowToolTip.showSheet()
+            })
+            .environmentObject(viewModel)
         }
         .presentSheet(isPresented: $viewModel.isShowRouting) {
             SwapTokenRoutingView()
                 .environmentObject(viewModel)
         }
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
-            SwapTokenSettingView(viewModel: viewModel)
-                .padding(.xl)
+            SwapTokenSettingView(
+                onShowToolTip: { title, content in
+                    self.content = content
+                    self.title = title
+                    $isShowToolTip.showSheet()
+                }, viewModel: viewModel
+            )
+            .padding(.xl)
         }
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
@@ -106,6 +122,16 @@ struct SwapTokenView: View {
             )
             .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
             .presentSheetModifier()
+        }
+        .presentSheet(isPresented: $isShowToolTip) {
+            TokenDetailToolTipView(title: $title, content: $content)
+                .background(content: {
+                    RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
+                        .fill(.colorBaseBackground)
+                        .ignoresSafeArea()
+
+                })
+                .ignoresSafeArea()
         }
         .ignoresSafeArea(.keyboard)
     }
@@ -184,16 +210,16 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
+                /*
                 Text("$0.0")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
+                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
                     .frame(width: 16, height: 16)
-                Text("235.789")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Text(viewModel.tokenPay.token.amount.formatNumber(font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
             }
         }
         .padding(.xl)
@@ -247,16 +273,16 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
+                /*
                 Text("$0.0")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
+                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
                     .frame(width: 16, height: 16)
-                Text("235.789")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Text(viewModel.tokenReceive.token.amount.formatNumber(font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
             }
         }
         .padding(.xl)
@@ -330,11 +356,14 @@ struct SwapTokenView: View {
         HStack(spacing: 8) {
             Circle().frame(width: 6, height: 6)
                 .foregroundStyle(.colorBaseSuccess)
-            Text("1 ADA = 9.443 MIN")
+            Text(viewModel.isConvertRate ? "1 MIN = 0.105 ADA" : "1 ADA =  9.443 MIN")
                 .font(.paragraphSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
             Image(.icExecutePrice)
                 .fixSize(.xl)
+                .onTapGesture {
+                    viewModel.isConvertRate.toggle()
+                }
             Spacer()
             Text("0.3%")
                 .font(.paragraphXMediumSmall)
@@ -349,13 +378,13 @@ struct SwapTokenView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 10, height: 10)
                 .rotationEffect(.degrees(-90))
+                .containerShape(.rect)
+                .onTapGesture {
+                    hideKeyboard()
+                    $viewModel.isShowInfo.showSheet()
+                }
         }
         .padding(.xl)
-        .containerShape(.rect)
-        .onTapGesture {
-            hideKeyboard()
-            $viewModel.isShowInfo.showSheet()
-        }
     }
 
     @ViewBuilder
@@ -373,6 +402,7 @@ struct SwapTokenView: View {
                 }
             }
             .background(.colorSurfaceWarningDefault)
+            .cornerRadius(12)
             .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderWarningSub, lineWidth: 1))
             .padding(.horizontal, .xl)
             .padding(.bottom, .xl)

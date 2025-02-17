@@ -9,7 +9,7 @@ struct ToWalletAddressView: View {
     @StateObject
     private var viewModel: ToWalletAddressViewModel
     @State
-    private var rotateDegree: CGFloat = 0
+    private var isRotating: Bool = false
 
     private let maxLength = 300
 
@@ -67,14 +67,15 @@ struct ToWalletAddressView: View {
                             .foregroundStyle(.colorInteractiveTentSecondaryDefault)
                             .opacity(viewModel.isChecking == true ? 0 : 1)
                         Image(.icLoading)
-                            .resizable()
                             .fixSize(20)
-                            .rotationEffect(Angle(degrees: rotateDegree))
-                            .onAppear(perform: {
-                                withAnimation(Animation.linear(duration: 3).repeatForever(autoreverses: false)) {
-                                    self.rotateDegree = 360
-                                }
-                            })
+                            .rotationEffect(.degrees(isRotating ? 360 : 0))
+                            .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: isRotating)
+                            .onAppear {
+                                isRotating = true
+                            }
+                            .onDisappear {
+                                isRotating = false
+                            }
                             .opacity(viewModel.isChecking == true ? 1 : 0)
                     }
                     .frame(width: 85, height: 36)

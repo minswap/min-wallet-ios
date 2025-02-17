@@ -125,6 +125,7 @@
 		96BD2A662D0E8F4C00D81277 /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */; };
 		96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BD2A692D0ED06400D81277 /* Constant.swift */; };
 		96C139712D0AC61B00766399 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C139702D0AC61B00766399 /* UserInfo.swift */; };
+		96D109162D5F25CA00BA5D05 /* SwapTokenToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D109152D5F25CA00BA5D05 /* SwapTokenToolTipView.swift */; };
 		96D6884E2D08501300D8C060 /* SearchTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D6884D2D08501300D8C060 /* SearchTokenViewModel.swift */; };
 		96D75EC92D02AFA100036AB1 /* CustomVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */; };
 		96DC05232CF55C5400A78356 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DC05222CF55C5400A78356 /* SettingView.swift */; };
@@ -338,6 +339,7 @@
 		96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
 		96BD2A692D0ED06400D81277 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		96C139702D0AC61B00766399 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		96D109152D5F25CA00BA5D05 /* SwapTokenToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenToolTipView.swift; sourceTree = "<group>"; };
 		96D6884D2D08501300D8C060 /* SearchTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenViewModel.swift; sourceTree = "<group>"; };
 		96D75EC82D02AFA100036AB1 /* CustomVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVisualEffectView.swift; sourceTree = "<group>"; };
 		96DC05222CF55C5400A78356 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -880,6 +882,7 @@
 				96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */,
 				96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */,
 				96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */,
+				96D109152D5F25CA00BA5D05 /* SwapTokenToolTipView.swift */,
 				96B467072CFC093400FA3211 /* SwapTokenView.swift */,
 				96679BC72D2B853C00C9AE26 /* SwapTokenViewModel.swift */,
 			);
@@ -1239,6 +1242,7 @@
 				96D6884E2D08501300D8C060 /* SearchTokenViewModel.swift in Sources */,
 				965592422CFABBF900301DDB /* DisconnectWalletView.swift in Sources */,
 				96DEDE6C2D165E350035A100 /* MinWallet.xcdatamodeld in Sources */,
+				96D109162D5F25CA00BA5D05 /* SwapTokenToolTipView.swift in Sources */,
 				9600DED02CF18804005D997C /* MainCoordinatorViewModel.swift in Sources */,
 				968C06FC2D3BDB3A00D81A33 /* TokenManager.swift in Sources */,
 				9640BBD22D27C14900B0DC42 /* TokenDetailViewModel.swift in Sources */,
