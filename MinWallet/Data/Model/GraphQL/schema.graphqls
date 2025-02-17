@@ -316,6 +316,11 @@ input CancelLbeV2EventInput {
   raiseAsset: InputAsset!
 }
 
+enum CancelOrderType {
+  ORDER_V1
+  ORDER_V2_AND_STABLESWAP
+}
+
 enum ChartPeriod {
   ONE_DAY
   ONE_MONTH
@@ -803,9 +808,81 @@ input InputAssetAmount {
   asset: InputAsset!
 }
 
+input InputCancelBulkOrders {
+  changeAddress: String!
+  orders: [InputCancelOrder!]!
+  type: CancelOrderType!
+}
+
+input InputCancelOrder {
+  rawDatum: String
+  utxo: String!
+}
+
+input InputCommonBatcherFeeReductionOptions {
+  userAddress: String!
+  userReferences: [String!]!
+  userUtxos: [String!]!
+}
+
+input InputCreateBulkOrders {
+  batcherFeeReductionOptions: InputCommonBatcherFeeReductionOptions
+  orders: [InputCreateOrderOptions!]!
+  sender: String!
+}
+
+input InputCreateOrderOptions {
+  dexV1OrderSwapExactIn: InputDexV1OrderSwapExactInOptions
+  dexV1OrderSwapExactOut: InputDexV1OrderSwapExactOutOptions
+  dexV2OrderMultiRouting: InputDexV2OrderMultiRoutingOptions
+  dexV2OrderSwapExactIn: InputDexV2OrderSwapExactInOptions
+  dexV2OrderSwapExactOut: InputDexV2OrderSwapExactOutOptions
+  stableswapOrder: InputStableswapOrderOptions
+}
+
+input InputDexV1OrderSwapExactInOptions {
+  assetInAmount: InputAssetAmount!
+  assetOut: InputAsset!
+  minimumAmountOut: BigInt!
+}
+
+input InputDexV1OrderSwapExactOutOptions {
+  assetIn: InputAsset!
+  assetOutAmount: InputAssetAmount!
+  maximumAmountIn: BigInt!
+}
+
+input InputDexV2OrderMultiRoutingOptions {
+  assetIn: InputAssetAmount!
+  lpAsset: InputAsset!
+  minimumReceived: BigInt!
+  routings: [InputOrderV2SwapRouting!]!
+}
+
+input InputDexV2OrderSwapExactInOptions {
+  assetInAmount: InputAssetAmount!
+  assetOut: InputAsset!
+  direction: OrderV2Direction!
+  lpAsset: InputAsset!
+  minimumAmountOut: BigInt!
+}
+
+input InputDexV2OrderSwapExactOutOptions {
+  assetIn: InputAsset!
+  direction: OrderV2Direction!
+  expectedReceived: BigInt!
+  lpAsset: InputAsset!
+  maximumAmountIn: BigInt!
+}
+
 input InputFinalizeAndSubmit {
   tx: String!
   witnessSet: String!
+}
+
+input InputOrderV2SwapRouting {
+  direction: OrderV2Direction!
+  lpAsset: InputAsset!
 }
 
 input InputPair {
@@ -831,6 +908,14 @@ input InputSocialLinks {
   telegram: String
   twitter: String
   website: String
+}
+
+input InputStableswapOrderOptions {
+  assetInAmount: InputAssetAmount!
+  assetInIndex: BigInt!
+  assetOutIndex: BigInt!
+  lpAsset: InputAsset!
+  minimumAssetOut: BigInt!
 }
 
 input InputTokenomics {
@@ -1383,8 +1468,10 @@ type Mutation {
   buildStakeWithdrawAll(options: BuildStakeWithdrawAllOptions!): String!
   buildStakeWithdrawAllV2(options: BuildStakeWithdrawAllOptions!): String!
   buildStakeWithdrawV2(options: BuildStakeWithdrawOptions!): String!
+  cancelBulkOrders(input: InputCancelBulkOrders!): String!
   cancelLbeV2Event(input: CancelLbeV2EventInput!): String!
   closeLbeV2Event(input: CancelLbeV2EventInput!): String!
+  createBulkOrders(input: InputCreateBulkOrders!): String!
   createLbeV2Event(input: CreateLbeV2EventInput!): String!
   createLbeV2Order(input: CreateLbeV2OrderInput!): String!
   cziBuildZapIn(input: CZIBuildZapInInput!): String!
@@ -1515,6 +1602,11 @@ enum OrderV2Action {
   WITHDRAW
   ZAP_IN
   ZAP_OUT
+}
+
+enum OrderV2Direction {
+  A_TO_B
+  B_TO_A
 }
 
 input OrderV2Input {
