@@ -166,6 +166,7 @@ struct SearchTokenView: View {
                             viewModel.deleteTokenFav(at: index)
                         }
                     )
+                    .zIndex(Double(index) * -1)
                     .onTapGesture {
                         navigator.push(.tokenDetail(token: item))
                     }
