@@ -46,11 +46,12 @@ struct OrderHistoryFilterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
                     HStack(spacing: 8) {
+                        let contractTypes: [ContractType] = [.dex, .dexV2, .stableswap]
                         TextSelectable(content: "All", selected: $contractTypeSelected, value: nil)
                             .onTapGesture {
                                 contractTypeSelected = nil
                             }
-                        ForEach(ContractType.allCases) { type in
+                        ForEach(contractTypes) { type in
                             TextSelectable(content: type.title, selected: $contractTypeSelected, value: type)
                                 .onTapGesture {
                                     contractTypeSelected = type
@@ -64,17 +65,23 @@ struct OrderHistoryFilterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
                     let rawAction: [OrderV2Action] = [.market, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
-                    let actions: [String] = ["All"] + rawAction.map({ $0.titleFilter.toString() })
+                    let allKey: LocalizedStringKey = "All"
+                    let actions: [String] = ([allKey] + rawAction.map({ $0.titleFilter })).map { $0.toString() }
+                    
                     let height = calculateHeightFlowLayout(actions: actions)
                     FlowLayout(
                         mode: .vstack,
                         items: actions,
                         itemSpacing: 0
-                    ) { action in
-                        let action = OrderV2Action(rawValue: action)
-                        TextSelectable(content: action?.title ?? "All", selected: $actionSelected, value: action ?? nil)
+                    ) { title in
+                        let action = OrderV2Action(title: title)
+                        let isActionAll = title == allKey.toString()
+                        let content: LocalizedStringKey? = isActionAll ? allKey : action?.titleFilter
+                        TextSelectable(content: content ?? allKey,
+                                       selected: $actionSelected,
+                                       value: isActionAll ? nil : action)
                             .onTapGesture {
-                                actionSelected = action
+                                actionSelected = title == allKey.toString() ? nil : action
                             }
                     }
                     .frame(height: height)
@@ -268,17 +275,17 @@ extension OrderHistoryFilterView {
                                 .font(.labelSmallSecondary ?? .systemFont(ofSize: 14, weight: .medium))
                             ]))
                 }
-                .gkWidth(consideringHeight: 32) + .lg * 2 + .md
+                .gkWidth(consideringHeight: 32) + .lg * 2 + .md + 1
         }
-        let maxWidth: CGFloat = UIScreen.main.bounds.width - .xl * 2
+        let maxWidth: CGFloat = UIScreen.main.bounds.width - .xl * 2 - 1
         var currentWidth: CGFloat = 0
         var row: CGFloat = 1
-        for width in actionsWidths {
+        for (idx, width) in actionsWidths.enumerated() {
             if currentWidth + width <= maxWidth {
                 currentWidth += width
             } else {
                 row += 1
-                currentWidth = 0
+                currentWidth = width
             }
         }
         return row * 32 + row * .md
