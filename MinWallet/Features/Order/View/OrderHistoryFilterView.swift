@@ -280,7 +280,7 @@ extension OrderHistoryFilterView {
         let maxWidth: CGFloat = UIScreen.main.bounds.width - .xl * 2 - 1
         var currentWidth: CGFloat = 0
         var row: CGFloat = 1
-        for (idx, width) in actionsWidths.enumerated() {
+        for width in actionsWidths {
             if currentWidth + width <= maxWidth {
                 currentWidth += width
             } else {

@@ -58,6 +58,31 @@ extension OrderV2Action: @retroactive Identifiable {
             ""
         }
     }
+    
+    public init?(title: String) {
+        switch title {
+        case OrderV2Action.deposit.titleFilter.toString():
+            self = .deposit
+        case OrderV2Action.limit.titleFilter.toString():
+            self = .limit
+        case OrderV2Action.market.titleFilter.toString():
+            self = .market
+        case OrderV2Action.oco.titleFilter.toString():
+            self = .oco
+        case OrderV2Action.partialSwap.titleFilter.toString():
+            self = .partialSwap
+        case OrderV2Action.stopLoss.titleFilter.toString():
+            self = .stopLoss
+        case OrderV2Action.withdraw.titleFilter.toString():
+            self = .withdraw
+        case OrderV2Action.zapIn.titleFilter.toString():
+            self = .zapIn
+        case OrderV2Action.zapOut.titleFilter.toString():
+            self = .zapOut
+        default:
+            self = .deposit
+        }
+    }
 }
 
 extension OrderV2Status: @retroactive Identifiable {
