@@ -7,6 +7,12 @@ class TokenManager: ObservableObject {
 
     static var shared: TokenManager = .init()
 
+    var hasReloadBalance: Bool = false {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
     var isHasYourToken: Bool = false {
         willSet {
             objectWillChange.send()
@@ -53,9 +59,14 @@ class TokenManager: ObservableObject {
         tokenAda.netSubValue = adaValue
     }
 
-    func reloadPortfolioOverview() {
-        Task {
-            await getPortfolioOverview()
+    func reloadPortfolioOverview() async {
+        await getPortfolioOverview()
+        tokenAda.netValue = 9999
+        tokenAda.netSubValue = 9999
+        hasReloadBalance = true
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.hasReloadBalance = false
         }
     }
 }

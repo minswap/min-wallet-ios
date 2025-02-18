@@ -48,8 +48,6 @@ class HomeViewModel: ObservableObject {
             let tokens = try? await TokenManager.getYourToken()
             TokenManager.shared.yourTokens = tokens
             UserInfo.shared.adaHandleName = TokenManager.shared.fetchAdaHandleName()
-
-            await TokenManager.shared.getPortfolioOverview()
             await getTokens()
             let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
             self.isHasYourToken = !_tokens.isEmpty
@@ -63,9 +61,15 @@ class HomeViewModel: ObservableObject {
                     let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
                     self.isHasYourToken = !_tokens.isEmpty
                 }
-                await TokenManager.shared.getPortfolioOverview()
                 await self.getTokens()
                 try? await Task.sleep(for: .seconds(5 * 60))
+            } while (!Task.isCancelled)
+        }
+
+        Task {
+            try? await Task.sleep(for: .seconds(20))
+            repeat {
+                await TokenManager.shared.reloadPortfolioOverview()
             } while (!Task.isCancelled)
         }
     }
@@ -75,6 +79,7 @@ class HomeViewModel: ObservableObject {
             showSkeletonDic[tabType] = !isLoadMore
         }
         self.isFetching[tabType] = true
+        await TokenManager.shared.getPortfolioOverview()
 
         switch tabType {
         case .market:

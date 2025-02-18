@@ -236,7 +236,9 @@ struct ConfirmSendTokenView: View {
                     })
                 }
                 bannerState.showBanner(isShow: true)
-                TokenManager.shared.reloadPortfolioOverview()
+                Task {
+                    await TokenManager.shared.reloadPortfolioOverview()
+                }
                 if appSetting.rootScreen != .home {
                     appSetting.rootScreen = .home
                 }

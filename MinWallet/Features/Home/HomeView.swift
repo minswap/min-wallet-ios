@@ -289,6 +289,12 @@ struct HomeView: View {
         .onDisappear {
             appSetting.swipeEnabled = true
         }
+        .onChange(of: tokenManager.hasReloadBalance) { value in
+            guard value, viewModel.tabType == .yourToken else { return }
+            Task {
+                await viewModel.getTokens()
+            }
+        }
     }
 
     private func handleIncomingURL(_ url: URL) {
