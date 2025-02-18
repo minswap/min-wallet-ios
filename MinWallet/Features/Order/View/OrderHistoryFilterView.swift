@@ -67,7 +67,7 @@ struct OrderHistoryFilterView: View {
                     let rawAction: [OrderV2Action] = [.market, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
                     let allKey: LocalizedStringKey = "All"
                     let actions: [String] = ([allKey] + rawAction.map({ $0.titleFilter })).map { $0.toString() }
-                    
+
                     let height = calculateHeightFlowLayout(actions: actions)
                     FlowLayout(
                         mode: .vstack,
@@ -77,12 +77,14 @@ struct OrderHistoryFilterView: View {
                         let action = OrderV2Action(title: title)
                         let isActionAll = title == allKey.toString()
                         let content: LocalizedStringKey? = isActionAll ? allKey : action?.titleFilter
-                        TextSelectable(content: content ?? allKey,
-                                       selected: $actionSelected,
-                                       value: isActionAll ? nil : action)
-                            .onTapGesture {
-                                actionSelected = title == allKey.toString() ? nil : action
-                            }
+                        TextSelectable(
+                            content: content ?? allKey,
+                            selected: $actionSelected,
+                            value: isActionAll ? nil : action
+                        )
+                        .onTapGesture {
+                            actionSelected = title == allKey.toString() ? nil : action
+                        }
                     }
                     .frame(height: height)
                     .padding(.bottom, .md)

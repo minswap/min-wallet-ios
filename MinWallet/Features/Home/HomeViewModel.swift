@@ -65,7 +65,7 @@ class HomeViewModel: ObservableObject {
                 try? await Task.sleep(for: .seconds(5 * 60))
             } while (!Task.isCancelled)
         }
-        
+
         Task {
             try? await Task.sleep(for: .seconds(20))
             repeat {
@@ -80,7 +80,7 @@ class HomeViewModel: ObservableObject {
         }
         self.isFetching[tabType] = true
         await TokenManager.shared.getPortfolioOverview()
-        
+
         switch tabType {
         case .market:
             input = TopAssetsInput()

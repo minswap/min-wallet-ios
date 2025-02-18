@@ -58,7 +58,7 @@ extension OrderV2Action: @retroactive Identifiable {
             ""
         }
     }
-    
+
     public init?(title: String) {
         switch title {
         case OrderV2Action.deposit.titleFilter.toString():
