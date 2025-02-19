@@ -35,7 +35,8 @@ struct SwapTokenSettingView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 20)
                 HStack(spacing: 0) {
-                    ForEach(slippages) { splippage in
+                    ForEach(0..<slippages.count, id: \.self) { index in
+                        let splippage = slippages[index]
                         Text("\(splippage.rawValue.formatted())%")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)

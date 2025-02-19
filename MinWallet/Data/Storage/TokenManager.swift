@@ -61,11 +61,9 @@ class TokenManager: ObservableObject {
 
     func reloadPortfolioOverview() async {
         await getPortfolioOverview()
-        tokenAda.netValue = 9999
-        tokenAda.netSubValue = 9999
         hasReloadBalance = true
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(800)) {
             self.hasReloadBalance = false
         }
     }

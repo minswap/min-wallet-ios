@@ -1042,7 +1042,6 @@
 				9651CAB12D0677DA006C46DB /* SwiftyAttributes */,
 				96BD2A472D0D644A00D81277 /* Apollo */,
 				96BD2A582D0D758700D81277 /* MinWalletAPI */,
-				96A285092D17B9FC00F3CCEF /* CoreDataRepository */,
 				96FEDC222D253DCB006AD24F /* SwiftyJSON */,
 				57D403DE2D408D18009DFAA7 /* OneSignalFramework */,
 				57D403E02D408D18009DFAA7 /* OneSignalInAppMessages */,
@@ -1923,10 +1922,6 @@
 		9695528B2D51C9F400FAC352 /* CodeScanner */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CodeScanner;
-		};
-		96A285092D17B9FC00F3CCEF /* CoreDataRepository */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CoreDataRepository;
 		};
 		96BD2A472D0D644A00D81277 /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -52,7 +52,7 @@ struct TokenDetailView: View {
                 }
                 Spacer()
                 Spacer()
-                if tokenManager.isHasYourToken {
+                if tokenManager.adaValue > 0 {
                     tokenDetailBottomView
                         .background(.colorBaseBackground)
                         .padding(.horizontal, .md)
