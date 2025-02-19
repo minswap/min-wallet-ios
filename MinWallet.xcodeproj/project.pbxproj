@@ -50,6 +50,7 @@
 		960D6B362D013ABD0017AF29 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */; };
 		960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B372D0144150017AF29 /* PasswordValidation.swift */; };
 		960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */; };
+		96281EE62D662D2D0014EE5F /* IosTradeEstimateQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96281EE52D662D2D0014EE5F /* IosTradeEstimateQuery.graphql */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		963456642D55AB0600C720AE /* bip0039.txt in Resources */ = {isa = PBXBuildFile; fileRef = 963456632D55AB0100C720AE /* bip0039.txt */; };
 		963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */; };
@@ -258,6 +259,7 @@
 		960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		960D6B372D0144150017AF29 /* PasswordValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidation.swift; sourceTree = "<group>"; };
 		960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSheetModifier.swift; sourceTree = "<group>"; };
+		96281EE52D662D2D0014EE5F /* IosTradeEstimateQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = IosTradeEstimateQuery.graphql; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
 		963456632D55AB0100C720AE /* bip0039.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = bip0039.txt; sourceTree = "<group>"; };
 		963D218D2D1D3A2E002E258E /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
@@ -872,6 +874,7 @@
 				966AFC062D4517B300E733A1 /* SendTokensMutation.graphql */,
 				966AFBEF2D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql */,
 				96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */,
+				96281EE52D662D2D0014EE5F /* IosTradeEstimateQuery.graphql */,
 				96679BCB2D2B87FB00C9AE26 /* AssetsQuery.graphql */,
 				967A8D022D26AEDA007146BE /* TopAssetQuery.graphql */,
 				9674CE492D3622E700892636 /* RoutedPoolsByPairQuery.graphql */,
@@ -1171,6 +1174,7 @@
 				575157DA2CEB4526004CD647 /* Inter-Medium.ttf in Resources */,
 				575157DE2CEB4526004CD647 /* InterDisplay-Regular.ttf in Resources */,
 				9600DEBB2CF18092005D997C /* Localizable.xcstrings in Resources */,
+				96281EE62D662D2D0014EE5F /* IosTradeEstimateQuery.graphql in Resources */,
 				575157E72CEB4526004CD647 /* Inter-Regular.ttf in Resources */,
 				57F1029D2C64CCA1000B3544 /* Preview Assets.xcassets in Resources */,
 				57F1029A2C64CCA1000B3544 /* Assets.xcassets in Resources */,

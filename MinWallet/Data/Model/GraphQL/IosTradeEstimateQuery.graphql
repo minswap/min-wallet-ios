@@ -1,0 +1,18 @@
+query IosTradeEstimate($input: IosTradeEstimateInput!) {
+  iosTradeEstimate(input: $input) {
+    estimateAmount
+    inputIndex
+    lpAssets {
+      currencySymbol
+      tokenName
+    }
+    lpFee
+    outputIndex
+    path {
+      currencySymbol
+      tokenName
+    }
+    priceImpact
+    type
+  }
+}
