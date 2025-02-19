@@ -69,6 +69,7 @@ struct SwapTokenInfoView: View {
                 //TODO: Jame check fee nhe
                 onShowToolTip?("Trading Fee", "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.")
             }
+            /*
             HStack {
                 DashedUnderlineText(text: "Batcher Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -92,10 +93,11 @@ struct SwapTokenInfoView: View {
                 .onTapGesture {
                     "https://docs.minswap.org/min-token/usdmin-tokenomics/trading-fee-discount".openURL()
                 }
+             */
             HStack {
                 DashedUnderlineText(text: "Deposit ADA", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.3 \(Currency.ada.prefix)")
+                Text("2 \(Currency.ada.prefix)")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseTent)
             }
