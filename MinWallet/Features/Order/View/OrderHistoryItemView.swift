@@ -102,6 +102,22 @@ struct OrderHistoryItemView: View {
                 }
                  */
             }
+            if let order = order, let expiredAt = order.order?.expiredAt, order.order?.status.value == .created {
+                HStack(spacing: Spacing.md) {
+                    Image(.icWarningYellow)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                    Text("Expires at \(expiredAt.formattedDateGMT)")
+                        .lineLimit(nil)
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveToneWarning)
+                }
+                .padding(.md)
+                .background(
+                    RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
+                )
+                .frame(minHeight: 32)
+            }
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }
