@@ -30,7 +30,7 @@ struct SwapTokenView: View {
     var title: LocalizedStringKey = ""
     @State
     private var isShowLoading: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -50,7 +50,7 @@ struct SwapTokenView: View {
             )
             let swapTitle: LocalizedStringKey = viewModel.errorInfo?.content ?? "Swap"
             CustomButton(title: swapTitle, isEnable: combinedBinding) {
-               processingSwapToken()
+                processingSwapToken()
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -453,7 +453,7 @@ struct SwapTokenView: View {
             }
         }
     }
-    
+
     private func swapTokenSuccess() {
         Task {
             do {

@@ -5,12 +5,15 @@ import FlowStacks
 struct OrderHistoryView: View {
     @EnvironmentObject
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    @EnvironmentObject
+    var hud: HUDState
     @StateObject
     var viewModel: OrderHistoryViewModel = .init()
     @FocusState
     var isFocus: Bool
     @State var scrollOffset: CGPoint = .zero
+    @State
+    var isShowLoading: Bool = false
 
     var body: some View {
         ZStack {
@@ -22,7 +25,9 @@ struct OrderHistoryView: View {
                     contentView
                 }
                 .refreshable {
-                    viewModel.fetchData()
+                    Task {
+                        await viewModel.fetchData()
+                    }
                 }
                 if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
                     CustomButton(title: "Swap") {
@@ -46,15 +51,18 @@ struct OrderHistoryView: View {
                 fromDate: input.fromDateTimeInterval,
                 toDate: input.toDateTimeInterval,
                 onFilterSelected: { contractType, status, action, fromDate, toDate in
-                    viewModel.contractTypeSelected = contractType
-                    viewModel.statusSelected = status
-                    viewModel.actionSelected = action
-                    viewModel.fromDate = fromDate
-                    viewModel.toDate = toDate
-                    viewModel.fetchData()
+                    Task {
+                        viewModel.contractTypeSelected = contractType
+                        viewModel.statusSelected = status
+                        viewModel.actionSelected = action
+                        viewModel.fromDate = fromDate
+                        viewModel.toDate = toDate
+                        await viewModel.fetchData()
+                    }
                 }
             )
         }
+        .progressView(isShowing: $isShowLoading)
     }
 }
 

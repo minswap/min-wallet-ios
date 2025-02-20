@@ -7,7 +7,7 @@ struct SwapTokenInfoView: View {
     private var onDismiss
     @EnvironmentObject
     private var viewModel: SwapTokenViewModel
-    
+
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
 
     var body: some View {

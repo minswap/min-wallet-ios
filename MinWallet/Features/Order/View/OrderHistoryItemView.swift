@@ -6,6 +6,8 @@ struct OrderHistoryItemView: View {
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
 
+    var onCancelItem: (() -> Void)?
+
     var body: some View {
         VStack(spacing: .lg) {
             tokenView
@@ -89,6 +91,10 @@ struct OrderHistoryItemView: View {
                     RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
                 )
                 .frame(minHeight: 32)
+                CustomButton(title: "Cancel", variant: .secondary) {
+                    onCancelItem?()
+                }
+                .frame(height: 36)
                 /*
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {

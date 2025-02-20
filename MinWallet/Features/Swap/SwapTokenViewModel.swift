@@ -41,7 +41,7 @@ class SwapTokenViewModel: ObservableObject {
     var isSwapExactIn: Bool = true
     @Published
     var iosTradeEstimate: IosTradeEstimateQuery.Data.IosTradeEstimate?
-    
+
     let action: PassthroughSubject<Action, Never> = .init()
     /*
     @Published
@@ -51,15 +51,15 @@ class SwapTokenViewModel: ObservableObject {
     var isGettingTradeInfo: Bool = false
     @Published
     var errorInfo: ErrorInfo? = nil
-    
+
     private var cancellables: Set<AnyCancellable> = []
 
     var hudState: HUDState = .init()
-    
+
     init() {
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
         tokenReceive = WrapTokenSend(token: TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? "")))
-    
+
         action
             .sink { [weak self] action in
                 guard let self = self else { return }
@@ -91,7 +91,7 @@ class SwapTokenViewModel: ObservableObject {
                 self.action.send(.amountReceiveChanged(amount: amount))
             })
             .store(in: &cancellables)
-        
+
         action.send(.getTradingInfo)
     }
 
@@ -101,7 +101,7 @@ class SwapTokenViewModel: ObservableObject {
             guard let token = token, token.uniqueID != tokenReceive.uniqueID, token.uniqueID != tokenPay.uniqueID else { return }
             tokenPay = WrapTokenSend(token: token)
             self.action.send(.getTradingInfo)
-            
+
         case let .selectTokenReceive(token):
             guard let token = token, token.uniqueID != tokenPay.uniqueID, token.uniqueID != tokenReceive.uniqueID else { return }
             tokenReceive = WrapTokenSend(token: token)
@@ -109,7 +109,7 @@ class SwapTokenViewModel: ObservableObject {
 
         case .predictSwapPrice:
             self.action.send(.getTradingInfo)
-            
+
         case .swapToken:
             let tempToken = tokenPay
             tokenPay = tokenReceive
@@ -117,33 +117,33 @@ class SwapTokenViewModel: ObservableObject {
             tokenReceive = tempToken
             tokenReceive.amount = ""
             self.action.send(.getTradingInfo)
-        
+
         case .setMaxAmount:
             tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
             self.action.send(.getTradingInfo)
-            
+
         case .setHalfAmount:
             tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
             self.action.send(.getTradingInfo)
-            
+
         case let .amountPayChanged(amount),
             let .amountReceiveChanged(amount):
             try await getTradingInfo(amount: amount)
             await generateWarningInfo()
             await generateErrorInfo()
-            
+
         case .getTradingInfo:
             let amount = isSwapExactIn ? tokenPay.amount : tokenReceive.amount
             try await getTradingInfo(amount: Double(amount) ?? 0)
             await generateWarningInfo()
             await generateErrorInfo()
         case .routeSorting,
-                .autoRouter,
-                .routeSelected:
+            .autoRouter,
+            .routeSelected:
             break
         }
     }
-    
+
     /*
     private func getRouting() async {
         isLoadingRouting = true
@@ -193,7 +193,7 @@ class SwapTokenViewModel: ObservableObject {
         isLoadingRouting = false
     }
      */
-    
+
     private func generateWarningInfo() async {
         //TODO: Warning info
         var warningInfo: [WarningInfo] = []
@@ -213,7 +213,7 @@ class SwapTokenViewModel: ObservableObject {
         self.isExpand = [:]
         self.warningInfo = warningInfo
     }
-    
+
     private func generateErrorInfo() async {
         let payAmount = Double(tokenPay.amount) ?? 0
         let receiveAmount = Double(tokenReceive.amount) ?? 0
@@ -228,19 +228,20 @@ class SwapTokenViewModel: ObservableObject {
             }
         }
     }
-    
+
     private func getTradingInfo(amount: Double) async throws {
         isGettingTradeInfo = true
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
-        let input = IosTradeEstimateInput(amount: String(Int(amount)),
-                                          inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
-                                          isApplied: swapSetting.predictSwapPrice,
-                                          isSwapExactIn: isSwapExactIn,
-                                          outputAsset: InputAsset(currencySymbol: tokenReceive.token.currencySymbol, tokenName: tokenReceive.token.tokenName))
-        
+        let input = IosTradeEstimateInput(
+            amount: String(Int(amount)),
+            inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
+            isApplied: swapSetting.predictSwapPrice,
+            isSwapExactIn: isSwapExactIn,
+            outputAsset: InputAsset(currencySymbol: tokenReceive.token.currencySymbol, tokenName: tokenReceive.token.tokenName))
+
         let info = try await MinWalletService.shared.fetch(query: IosTradeEstimateQuery(input: input))?.iosTradeEstimate
         self.iosTradeEstimate = info
-        
+
         if isSwapExactIn {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenReceive.token.decimals)) ?? 0
             tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenReceive.token.decimals)
@@ -248,19 +249,19 @@ class SwapTokenViewModel: ObservableObject {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
             tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
         }
-        
+
         isGettingTradeInfo = false
     }
-    
+
     func finalizeAndSubmit(tx: String) async throws -> String? {
         guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localError(message: "Wallet not found") }
         guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: tx)
         else { throw AppGeneralError.localError(message: "Sign transaction failed") }
-        
+
         let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: tx, witnessSet: witnessSet)))
         return data?.finalizeAndSubmit
     }
-    
+
     func swapToken() async throws -> String {
         return ""
     }
@@ -357,11 +358,11 @@ extension SwapTokenViewModel {
             }
         }
     }
-    
+
     enum ErrorInfo {
         case insufficientBalance(name: String)
         case notEnoughAmountInPool(name: String)
-        
+
         var content: LocalizedStringKey {
             switch self {
             case let .insufficientBalance(name):

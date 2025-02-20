@@ -36,25 +36,24 @@ class OrderHistoryViewModel: ObservableObject {
             )
             .sink(receiveValue: { [weak self] value in
                 guard let self = self else { return }
-                self.keyword = keyword
-                self.fetchData()
+                Task {
+                    self.keyword = value
+                    await self.fetchData()
+                }
             })
             .store(in: &cancellables)
     }
 
-    func fetchData() {
-        Task {
-            showSkeleton = true
-            pagination = nil
-            let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-            self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-
-            self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
-            if let cursor = orderData?.orders.cursor {
-                self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
-            }
-            showSkeleton = false
+    func fetchData(showSkeleton: Bool = true) async {
+        self.showSkeleton = showSkeleton
+        pagination = nil
+        let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
+        self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
+        self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
+        if let cursor = orderData?.orders.cursor {
+            self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
         }
+        self.showSkeleton = false
     }
 
     func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
@@ -91,6 +90,16 @@ class OrderHistoryViewModel: ObservableObject {
             toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil,
             txId: !keyword.isBlank && isTxID ? .some(keyword) : nil
         )
+    }
+
+    func cancelOrder(order: OrderHistoryQuery.Data.Orders.WrapOrder) async throws {
+        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [order.order?.txIn.txId ?? ""]))
+        let input: InputCancelBulkOrders = InputCancelBulkOrders(
+            changeAddress: UserInfo.shared.minWallet?.address ?? "",
+            orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
+            type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
+        let _ = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input))
+        await fetchData(showSkeleton: false)
     }
 }
 

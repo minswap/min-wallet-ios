@@ -42,15 +42,35 @@ extension OrderHistoryView {
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(viewModel.orders) { order in
-                        OrderHistoryItemView(order: order)
-                            .padding(.horizontal, .xl)
-                            .contentShape(.rect)
-                            .onAppear {
-                                viewModel.loadMoreData(order: order)
+                        OrderHistoryItemView(
+                            order: order,
+                            onCancelItem: {
+                                Task {
+                                    do {
+                                        withAnimation {
+                                            isShowLoading = true
+                                        }
+                                        try await viewModel.cancelOrder(order: order)
+                                        withAnimation {
+                                            isShowLoading = false
+                                        }
+                                    } catch {
+                                        withAnimation {
+                                            isShowLoading = false
+                                        }
+                                        hud.showMsg(title: "Error", msg: error.localizedDescription)
+                                    }
+                                }
                             }
-                            .onTapGesture {
-                                navigator.push(.orderHistoryDetail(order: order))
-                            }
+                        )
+                        .padding(.horizontal, .xl)
+                        .contentShape(.rect)
+                        .onAppear {
+                            viewModel.loadMoreData(order: order)
+                        }
+                        .onTapGesture {
+                            navigator.push(.orderHistoryDetail(order: order))
+                        }
                     }
                 }
             }
