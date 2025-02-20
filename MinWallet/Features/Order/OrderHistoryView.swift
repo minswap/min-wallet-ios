@@ -62,6 +62,26 @@ struct OrderHistoryView: View {
                 }
             )
         }
+        .presentSheet(isPresented: $viewModel.showCancelOrder) {
+            OrderHistoryCancelView {
+                Task {
+                    do {
+                        withAnimation {
+                            isShowLoading = true
+                        }
+                        try await viewModel.cancelOrder()
+                        withAnimation {
+                            isShowLoading = false
+                        }
+                    } catch {
+                        withAnimation {
+                            isShowLoading = false
+                        }
+                        hud.showMsg(title: "Error", msg: error.localizedDescription)
+                    }
+                }
+            }
+        }
         .progressView(isShowing: $isShowLoading)
     }
 }

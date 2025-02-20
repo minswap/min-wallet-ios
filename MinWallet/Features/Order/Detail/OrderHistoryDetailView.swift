@@ -234,7 +234,6 @@ struct OrderHistoryDetailView: View {
                     Color.colorBorderPrimaryDefault.frame(width: 1)
                 }
             }
-
             VStack(alignment: .leading, spacing: 0) {
                 Text("Execution information")
                     .font(.labelSmallSecondary)
@@ -304,8 +303,18 @@ struct OrderHistoryDetailView: View {
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
                         Text(expiredAt.formattedDateGMT)
+                            .underline()
+                            .baselineOffset(4)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
+                            .onTapGesture {
+                                order.order?.txIn.txId.viewTransaction()
+                            }
+                        Image(.icArrowUp)
+                            .fixSize(.xl)
+                            .onTapGesture {
+                                order.order?.txIn.txId.viewTransaction()
+                            }
                     }
                     .padding(.top, .md)
                 }

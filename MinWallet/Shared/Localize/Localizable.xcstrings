@@ -188,6 +188,9 @@
     "Apply" : {
 
     },
+    "Are you sure you want to cancel this order?" : {
+
+    },
     "Audio" : {
 
     },
@@ -345,6 +348,9 @@
 
     },
     "Disconnect wallet" : {
+
+    },
+    "Dissmis" : {
 
     },
     "Donation" : {
@@ -983,6 +989,9 @@
     "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours." : {
 
     },
+    "Warning" : {
+
+    },
     "When available, uses multiple pools for better liquidity and prices. " : {
 
     },
@@ -990,6 +999,9 @@
 
     },
     "Withdraw" : {
+
+    },
+    "Yes, cancel" : {
 
     },
     "You are disconnecting your wallet?" : {
@@ -1020,6 +1032,9 @@
 
     },
     "You want to send:" : {
+
+    },
+    "You will have to pay a small fees to cancel your orders. Are you sure to continue?" : {
 
     },
     "You’re all set!" : {

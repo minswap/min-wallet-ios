@@ -45,22 +45,8 @@ extension OrderHistoryView {
                         OrderHistoryItemView(
                             order: order,
                             onCancelItem: {
-                                Task {
-                                    do {
-                                        withAnimation {
-                                            isShowLoading = true
-                                        }
-                                        try await viewModel.cancelOrder(order: order)
-                                        withAnimation {
-                                            isShowLoading = false
-                                        }
-                                    } catch {
-                                        withAnimation {
-                                            isShowLoading = false
-                                        }
-                                        hud.showMsg(title: "Error", msg: error.localizedDescription)
-                                    }
-                                }
+                                viewModel.orderToCancel = order
+                                $viewModel.showCancelOrder.showSheet()
                             }
                         )
                         .padding(.horizontal, .xl)

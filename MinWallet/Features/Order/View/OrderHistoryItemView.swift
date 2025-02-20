@@ -91,10 +91,6 @@ struct OrderHistoryItemView: View {
                     RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
                 )
                 .frame(minHeight: 32)
-                CustomButton(title: "Cancel", variant: .secondary) {
-                    onCancelItem?()
-                }
-                .frame(height: 36)
                 /*
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
@@ -115,8 +111,9 @@ struct OrderHistoryItemView: View {
                         .frame(width: 16, height: 16)
                     Text("Expires at \(expiredAt.formattedDateGMT)")
                         .lineLimit(nil)
-                        .font(.paragraphSmall)
+                        .font(.paragraphXSmall)
                         .foregroundStyle(.colorInteractiveToneWarning)
+                    Spacer(minLength: 0)
                 }
                 .padding(.md)
                 .background(
@@ -124,6 +121,13 @@ struct OrderHistoryItemView: View {
                 )
                 .frame(minHeight: 32)
             }
+            if let order = order, order.order?.status.value == .created {
+                CustomButton(title: "Cancel", variant: .secondary) {
+                    onCancelItem?()
+                }
+                .frame(height: 36)
+            }
+            
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }

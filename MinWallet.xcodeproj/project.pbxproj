@@ -85,6 +85,10 @@
 		965592532CFB3A2C00301DDB /* ToWalletAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965592522CFB3A2C00301DDB /* ToWalletAddressView.swift */; };
 		965592552CFB3A3700301DDB /* ConfirmSendTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965592542CFB3A3700301DDB /* ConfirmSendTokenView.swift */; };
 		9655B4212D3FE7D30036FF53 /* TokenDetailToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9655B4202D3FE7D30036FF53 /* TokenDetailToolTipView.swift */; };
+		96580D272D6730BF003CEC4F /* CancelBulkOrdersMutation.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96580D262D6730BF003CEC4F /* CancelBulkOrdersMutation.graphql */; };
+		96580D292D673611003CEC4F /* GetScriptUtxosQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96580D282D673611003CEC4F /* GetScriptUtxosQuery.graphql */; };
+		96580D2B2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96580D2A2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql */; };
+		96580D2D2D674548003CEC4F /* OrderHistoryCancelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96580D2C2D674548003CEC4F /* OrderHistoryCancelView.swift */; };
 		966659FE2CF463AC0046A20E /* TokenDetailChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966659FD2CF463AC0046A20E /* TokenDetailChartView.swift */; };
 		96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966659FF2CF46D480046A20E /* TokenWithPrice.swift */; };
 		96665A022CF477490046A20E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A012CF477490046A20E /* HomeViewModel.swift */; };
@@ -297,6 +301,10 @@
 		965592522CFB3A2C00301DDB /* ToWalletAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToWalletAddressView.swift; sourceTree = "<group>"; };
 		965592542CFB3A3700301DDB /* ConfirmSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmSendTokenView.swift; sourceTree = "<group>"; };
 		9655B4202D3FE7D30036FF53 /* TokenDetailToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailToolTipView.swift; sourceTree = "<group>"; };
+		96580D262D6730BF003CEC4F /* CancelBulkOrdersMutation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = CancelBulkOrdersMutation.graphql; sourceTree = "<group>"; };
+		96580D282D673611003CEC4F /* GetScriptUtxosQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetScriptUtxosQuery.graphql; sourceTree = "<group>"; };
+		96580D2A2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreateBulkOrdersMutation.graphql; sourceTree = "<group>"; };
+		96580D2C2D674548003CEC4F /* OrderHistoryCancelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCancelView.swift; sourceTree = "<group>"; };
 		966659FD2CF463AC0046A20E /* TokenDetailChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailChartView.swift; sourceTree = "<group>"; };
 		966659FF2CF46D480046A20E /* TokenWithPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenWithPrice.swift; sourceTree = "<group>"; };
 		96665A012CF477490046A20E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -871,6 +879,9 @@
 			isa = PBXGroup;
 			children = (
 				966AFC072D451C6800E733A1 /* FinalizeAndSubmitMutation.graphql */,
+				96580D262D6730BF003CEC4F /* CancelBulkOrdersMutation.graphql */,
+				96580D2A2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql */,
+				96580D282D673611003CEC4F /* GetScriptUtxosQuery.graphql */,
 				966AFC062D4517B300E733A1 /* SendTokensMutation.graphql */,
 				966AFBEF2D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql */,
 				96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */,
@@ -973,6 +984,7 @@
 				96FEDC102D23A463006AD24F /* OrderHistoryView+Content.swift */,
 				96FEDC0B2D238F51006AD24F /* OrderHistoryView+Header.swift */,
 				96FEDC072D238C7C006AD24F /* OrderHistoryView.swift */,
+				96580D2C2D674548003CEC4F /* OrderHistoryCancelView.swift */,
 				96FEDC1D2D24E135006AD24F /* OrderHistoryViewModel.swift */,
 				96FEDC142D23AE22006AD24F /* View */,
 			);
@@ -1163,6 +1175,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96580D2B2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql in Resources */,
 				575157CA2CEB4526004CD647 /* InterDisplay-Bold.ttf in Resources */,
 				963456642D55AB0600C720AE /* bip0039.txt in Resources */,
 				966AFBF02D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql in Resources */,
@@ -1172,8 +1185,10 @@
 				96BD2A562D0D6C6100D81277 /* TopAssetsQuery.graphql in Resources */,
 				575157D72CEB4526004CD647 /* Inter-Bold.ttf in Resources */,
 				575157DA2CEB4526004CD647 /* Inter-Medium.ttf in Resources */,
+				96580D272D6730BF003CEC4F /* CancelBulkOrdersMutation.graphql in Resources */,
 				575157DE2CEB4526004CD647 /* InterDisplay-Regular.ttf in Resources */,
 				9600DEBB2CF18092005D997C /* Localizable.xcstrings in Resources */,
+				96580D292D673611003CEC4F /* GetScriptUtxosQuery.graphql in Resources */,
 				96281EE62D662D2D0014EE5F /* IosTradeEstimateQuery.graphql in Resources */,
 				575157E72CEB4526004CD647 /* Inter-Regular.ttf in Resources */,
 				57F1029D2C64CCA1000B3544 /* Preview Assets.xcassets in Resources */,
@@ -1282,6 +1297,7 @@
 				96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */,
 				96679BD52D2E7FC700C9AE26 /* SwapTokenRoutingView.swift in Sources */,
 				960D6B362D013ABD0017AF29 /* KeyboardObserver.swift in Sources */,
+				96580D2D2D674548003CEC4F /* OrderHistoryCancelView.swift in Sources */,
 				96FE0CFC2CF423D1008E4BFD /* SizeReader.swift in Sources */,
 				96FE0CF42CF3672E008E4BFD /* TokenDetailStatisticView.swift in Sources */,
 				9674CE472D36122400892636 /* SwapTokenSetting.swift in Sources */,
