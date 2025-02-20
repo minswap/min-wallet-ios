@@ -2,12 +2,12 @@ import SwiftUI
 
 
 struct OrderHistoryCancelView: View {
-    
+
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-    
+
     var onCancelOrder: (() -> Void)?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Warning")
@@ -44,9 +44,10 @@ struct OrderHistoryCancelView: View {
                         borderColor: .clear,
                         textColorDisable: .colorSurfaceDangerPressed,
                         backgroundColorDisable: .colorSurfaceDanger
-                    )) {
-                        onDismiss?()
-                        onCancelOrder?()
+                    )
+                ) {
+                    onDismiss?()
+                    onCancelOrder?()
                 }
                 .frame(height: 56)
             }
@@ -56,7 +57,7 @@ struct OrderHistoryCancelView: View {
         }
         .presentSheetModifier()
     }
-    
+
 }
 #Preview {
     VStack {
@@ -64,4 +65,3 @@ struct OrderHistoryCancelView: View {
         OrderHistoryCancelView()
     }
 }
-

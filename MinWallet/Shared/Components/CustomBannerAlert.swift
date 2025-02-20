@@ -40,6 +40,7 @@ private struct CustomBannerAlertModifier<InfoContent: View>: ViewModifier {
                         }
                     }
                 })
+                .zIndex(999)
             }
         }
     }

@@ -7,13 +7,18 @@ struct OrderHistoryView: View {
     var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     var hud: HUDState
+    @EnvironmentObject
+    var appSetting: AppSetting
+    @EnvironmentObject
+    var bannerState: BannerState
     @StateObject
     var viewModel: OrderHistoryViewModel = .init()
     @FocusState
     var isFocus: Bool
-    @State var scrollOffset: CGPoint = .zero
     @State
-    var isShowLoading: Bool = false
+    var scrollOffset: CGPoint = .zero
+    @State
+    private var isShowSignContract: Bool = false
 
     var body: some View {
         ZStack {
@@ -62,27 +67,50 @@ struct OrderHistoryView: View {
                 }
             )
         }
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    authenticationSuccess()
+                }
+            )
+        }
         .presentSheet(isPresented: $viewModel.showCancelOrder) {
             OrderHistoryCancelView {
                 Task {
                     do {
-                        withAnimation {
-                            isShowLoading = true
-                        }
-                        try await viewModel.cancelOrder()
-                        withAnimation {
-                            isShowLoading = false
+                        switch appSetting.authenticationType {
+                        case .biometric:
+                            try await appSetting.reAuthenticateUser()
+                            authenticationSuccess()
+                        case .password:
+                            $isShowSignContract.showSheet()
                         }
                     } catch {
-                        withAnimation {
-                            isShowLoading = false
-                        }
                         hud.showMsg(title: "Error", msg: error.localizedDescription)
                     }
                 }
             }
         }
-        .progressView(isShowing: $isShowLoading)
+    }
+
+    private func authenticationSuccess() {
+        Task {
+            do {
+                hud.showLoading(true)
+                let finalID = viewModel.orderToCancel?.order?.txIn.txId
+                try await viewModel.cancelOrder()
+                hud.showLoading(false)
+                bannerState.infoContent = {
+                    bannerState.infoContentDefault(onViewTransaction: {
+                        finalID?.viewTransaction()
+                    })
+                }
+                bannerState.showBanner(isShow: true)
+            } catch {
+                hud.showLoading(false)
+                hud.showMsg(title: "Error", msg: error.localizedDescription)
+            }
+        }
     }
 }
 

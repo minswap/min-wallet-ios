@@ -127,7 +127,7 @@ struct OrderHistoryItemView: View {
                 }
                 .frame(height: 36)
             }
-            
+
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }

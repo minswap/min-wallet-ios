@@ -38,15 +38,6 @@ struct MinWalletApp: App {
                 .environmentObject(hudState)
                 .environmentObject(bannerState)
                 .environment(\.locale, .init(identifier: appSetting.language))
-                .alert(isPresented: $hudState.isPresented) {
-                    Alert(
-                        title: Text(hudState.title), message: Text(hudState.msg),
-                        dismissButton: .default(
-                            Text(hudState.okTitle),
-                            action: {
-                                hudState.onAction?()
-                            }))
-                }
                 .onAppear {
                     appSetting.initAppearanceStyle()
                 }

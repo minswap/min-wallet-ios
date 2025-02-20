@@ -28,8 +28,6 @@ struct SwapTokenView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
-    @State
-    private var isShowLoading: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -144,7 +142,6 @@ struct SwapTokenView: View {
         .onFirstAppear {
             viewModel.hudState = hudState
         }
-        .progressView(isShowing: $isShowLoading)
     }
 
     @ViewBuilder
@@ -457,14 +454,10 @@ struct SwapTokenView: View {
     private func swapTokenSuccess() {
         Task {
             do {
-                withAnimation {
-                    isShowLoading = true
-                }
+                hudState.showLoading(true)
                 let tx = try await viewModel.swapToken()
                 let finalID = try await viewModel.finalizeAndSubmit(tx: tx)
-                withAnimation {
-                    isShowLoading = false
-                }
+                hudState.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
                         finalID?.viewTransaction()
@@ -477,9 +470,7 @@ struct SwapTokenView: View {
                 }
                 navigator.popToRoot()
             } catch {
-                withAnimation {
-                    isShowLoading = false
-                }
+                hudState.showLoading(false)
                 hudState.showMsg(msg: error.localizedDescription)
             }
         }

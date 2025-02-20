@@ -6,10 +6,21 @@ import MinWalletAPI
 struct OrderHistoryDetailView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var hud: HUDState
+    @EnvironmentObject
+    private var userInfo: UserInfo
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
     @State
     private var isExchangeRate: Bool = true
+    @State
+    private var showCancelOrder: Bool = false
+    @State
+    private var isShowSignContract: Bool = false
+    var onReloadOrder: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -61,22 +72,22 @@ struct OrderHistoryDetailView: View {
                     }
                 }
             }
-            /*
-            Spacer()
             if order?.order?.status.value == .created {
+                Spacer()
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-
+                        $showCancelOrder.showSheet()
                     }
                     .frame(height: 56)
+                    /*
                     CustomButton(title: "Update") {
 
                     }
                     .frame(height: 56)
+                     */
                 }
                 .padding(EdgeInsets(top: 24, leading: .xl, bottom: .xl, trailing: .xl))
             }
-             */
         }
         .modifier(
             BaseContentView(
@@ -85,6 +96,30 @@ struct OrderHistoryDetailView: View {
                     navigator.pop()
                 })
         )
+        .presentSheet(isPresented: $showCancelOrder) {
+            OrderHistoryCancelView {
+                Task {
+                    do {
+                        switch appSetting.authenticationType {
+                        case .biometric:
+                            try await appSetting.reAuthenticateUser()
+                            authenticationSuccess()
+                        case .password:
+                            $isShowSignContract.showSheet()
+                        }
+                    } catch {
+                        hud.showMsg(title: "Error", msg: error.localizedDescription)
+                    }
+                }
+            }
+        }
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    authenticationSuccess()
+                }
+            )
+        }
     }
 
     private var tokenView: some View {
@@ -432,7 +467,36 @@ struct OrderHistoryDetailView: View {
         }
     }
 
+    private func cancelOrder() async throws {
+        guard let order = order else { return }
+        let txId = order.order?.txIn.txId ?? ""
+        let txIndex = order.order?.txIn.txIndex ?? 0
+        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
+        let input: InputCancelBulkOrders = InputCancelBulkOrders(
+            changeAddress: userInfo.minWallet?.address ?? "",
+            orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
+            type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
+        let _ = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input))
 
+        let orderV2Input = OrderV2Input(address: userInfo.minWallet?.address ?? "", txId: .some(order.order?.txIn.txId ?? ""))
+        let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: orderV2Input))
+        guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
+        self.order = order
+    }
+
+    private func authenticationSuccess() {
+        Task {
+            do {
+                hud.showLoading(true)
+                try await cancelOrder()
+                onReloadOrder?()
+                hud.showLoading(false)
+            } catch {
+                hud.showLoading(false)
+                hud.showMsg(title: "Error", msg: error.localizedDescription)
+            }
+        }
+    }
 }
 
 

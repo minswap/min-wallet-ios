@@ -55,7 +55,14 @@ extension OrderHistoryView {
                             viewModel.loadMoreData(order: order)
                         }
                         .onTapGesture {
-                            navigator.push(.orderHistoryDetail(order: order))
+                            navigator.push(
+                                .orderHistoryDetail(
+                                    order: order,
+                                    onReloadOrder: {
+                                        Task {
+                                            await viewModel.fetchData(showSkeleton: false)
+                                        }
+                                    }))
                         }
                     }
                 }

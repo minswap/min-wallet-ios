@@ -30,7 +30,7 @@ class OrderHistoryViewModel: ObservableObject {
     private var hasLoadMore: Bool = true
 
     var orderToCancel: OrderHistoryQuery.Data.Orders.WrapOrder? = nil
-    
+
     init() {
         $keyword
             .removeDuplicates()
@@ -98,7 +98,9 @@ class OrderHistoryViewModel: ObservableObject {
 
     func cancelOrder() async throws {
         guard let order = orderToCancel else { return }
-        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [order.order?.txIn.txId ?? ""]))
+        let txId = order.order?.txIn.txId ?? ""
+        let txIndex = order.order?.txIn.txIndex ?? 0
+        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
         let input: InputCancelBulkOrders = InputCancelBulkOrders(
             changeAddress: UserInfo.shared.minWallet?.address ?? "",
             orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],

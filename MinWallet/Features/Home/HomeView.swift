@@ -311,7 +311,7 @@ extension HomeView {
 
             let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
             guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
-            navigator.push(.orderHistoryDetail(order: order))
+            navigator.push(.orderHistoryDetail(order: order, onReloadOrder: nil))
         }
     }
 }

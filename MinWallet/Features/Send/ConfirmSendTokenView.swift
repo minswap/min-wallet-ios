@@ -17,8 +17,6 @@ struct ConfirmSendTokenView: View {
     private var isCopyAddress: Bool = false
     @StateObject
     private var viewModel: ConfirmSendTokenViewModel
-    @State
-    private var isShowLoading: Bool = false
 
     init(viewModel: ConfirmSendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -216,20 +214,15 @@ struct ConfirmSendTokenView: View {
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
-        .progressView(isShowing: $isShowLoading)
     }
 
     private func authenticationSuccess() {
         Task {
             do {
-                withAnimation {
-                    isShowLoading = true
-                }
+                hudState.showLoading(true)
                 try await viewModel.sendTokens()
                 let finalID = try await viewModel.finalizeAndSubmit()
-                withAnimation {
-                    isShowLoading = false
-                }
+                hudState.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
                         finalID?.viewTransaction()
@@ -242,9 +235,7 @@ struct ConfirmSendTokenView: View {
                 }
                 navigator.popToRoot()
             } catch {
-                withAnimation {
-                    isShowLoading = false
-                }
+                hudState.showLoading(false)
                 hudState.showMsg(msg: error.localizedDescription)
             }
         }
