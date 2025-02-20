@@ -13,19 +13,22 @@ class SwapTokenViewModel: ObservableObject {
     var tokenReceive: WrapTokenSend
     @Published
     var isShowInfo: Bool = false
+    /*
     @Published
     var isShowRouting: Bool = false
+     */
     @Published
     var isShowSwapSetting: Bool = false
     @Published
     var isShowSelectReceiveToken: Bool = false
     @Published
     var isShowSelectPayToken: Bool = false
-
+    /*
     @Published
     var wrapRoutings: [WrapRouting] = []
     @Published
     var routingSelected: WrapRouting? = nil
+     */
     @Published
     var warningInfo: [WarningInfo] = []
     @Published
@@ -51,13 +54,19 @@ class SwapTokenViewModel: ObservableObject {
     init() {
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
         tokenReceive = WrapTokenSend(token: TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? "")))
-
+    
         action
             .sink { [weak self] action in
-                self?.handleAction(action)
+                guard let self = self else { return }
+                Task {
+                    do {
+                        try await self.handleAction(action)
+                    } catch {
+                        print("\(error.localizedDescription)")
+                    }
+                }
             }
             .store(in: &cancellables)
-
         $tokenPay
             .map({ Double($0.amount) ?? 0 })
             .removeDuplicates()
@@ -74,7 +83,8 @@ class SwapTokenViewModel: ObservableObject {
                 self?.action.send(.amountReceiveChanged(amount: amount))
             })
             .store(in: &cancellables)
-        action.send(.initSwapToken)
+        
+        action.send(.getTradingInfo)
     }
 
     func swapToken(appSetting: AppSetting, signContract: (() -> Void)?, signSuccess: (() -> Void)?) {
@@ -89,83 +99,53 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
 
-    private func handleAction(_ action: Action) {
+    private func handleAction(_ action: Action) async throws {
         switch action {
-        case .initSwapToken:
-            Task {
-                await getRouting()
-                routingSelected = wrapRoutings.first
-                await generateWarningInfo()
-            }
-
         case let .selectTokenPay(token):
-            Task {
-                guard let token = token, token.uniqueID != tokenReceive.uniqueID, token.uniqueID != tokenPay.uniqueID else { return }
-                tokenPay = WrapTokenSend(token: token)
-                routingSelected = nil
-                await getRouting()
-                routingSelected = wrapRoutings.first
-                await generateWarningInfo()
-            }
+            guard let token = token, token.uniqueID != tokenReceive.uniqueID, token.uniqueID != tokenPay.uniqueID else { return }
+            tokenPay = WrapTokenSend(token: token)
+            self.action.send(.getTradingInfo)
+            
         case let .selectTokenReceive(token):
-            Task {
-                guard let token = token, token.uniqueID != tokenPay.uniqueID, token.uniqueID != tokenReceive.uniqueID else { return }
-                tokenReceive = WrapTokenSend(token: token)
-                routingSelected = nil
-                await getRouting()
-                routingSelected = wrapRoutings.first
-                await generateWarningInfo()
-            }
-        case .routeSorting,
-            .predictSwapPrice,
-            .autoRouter:
-            Task {
-                await getRouting()
-                routingSelected = wrapRoutings.first(where: { $0.uniqueID == routingSelected?.uniqueID })
-                await generateWarningInfo()
-            }
+            guard let token = token, token.uniqueID != tokenPay.uniqueID, token.uniqueID != tokenReceive.uniqueID else { return }
+            tokenReceive = WrapTokenSend(token: token)
+            self.action.send(.getTradingInfo)
 
-        case .routeSelected:
-            //TODO: calculate fee
-            Task {
-                await generateWarningInfo()
-            }
+        case .predictSwapPrice:
+            self.action.send(.getTradingInfo)
+            
         case .swapToken:
             let tempToken = tokenPay
             tokenPay = tokenReceive
             tokenReceive = tempToken
-            //TODO: calculate route
-            self.action.send(.routeSorting)
+            self.action.send(.getTradingInfo)
 
         case .setMaxAmount:
-            Task {
-                tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
-                await generateWarningInfo()
-            }
-
+            tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+            self.action.send(.getTradingInfo)
+            
         case .setHalfAmount:
-            Task {
-                tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
-                await generateWarningInfo()
-            }
-
-        case let .amountPayChanged(amount):
-            Task {
-                print("\(amount)")
-                //TODO: calculate fee
-
-                await generateWarningInfo()
-            }
-        case let .amountReceiveChanged(amount):
-            Task {
-                print("\(amount)")
-                //TODO: calculate fee
-                
-                await generateWarningInfo()
-            }
+            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+            self.action.send(.getTradingInfo)
+            
+        case let .amountPayChanged(amount),
+            let .amountReceiveChanged(amount):
+            try await getTradingInfo(amount: amount)
+            await generateWarningInfo()
+            
+        case .getTradingInfo:
+            let amount = isSwapExactIn ? tokenPay.amount : tokenReceive.amount
+            try await getTradingInfo(amount: Double(amount) ?? 0)
+            await generateWarningInfo()
+            
+        case .routeSorting,
+                .autoRouter,
+                .routeSelected:
+            break
         }
     }
-
+    
+    /*
     private func getRouting() async {
         isLoadingRouting = true
         let query = RoutedPoolsByPairQuery(
@@ -213,7 +193,8 @@ class SwapTokenViewModel: ObservableObject {
         self.wrapRoutings = wrapRoutings
         isLoadingRouting = false
     }
-
+     */
+    
     private func generateWarningInfo() async {
         //TODO: Warning info
         var warningInfo: [WarningInfo] = []
@@ -250,7 +231,6 @@ class SwapTokenViewModel: ObservableObject {
 
 extension SwapTokenViewModel {
     enum Action {
-        case initSwapToken
         case autoRouter
         case predictSwapPrice
         case routeSorting
@@ -262,6 +242,7 @@ extension SwapTokenViewModel {
         case amountPayChanged(amount: Double)
         case amountReceiveChanged(amount: Double)
         case swapToken
+        case getTradingInfo
     }
 }
 

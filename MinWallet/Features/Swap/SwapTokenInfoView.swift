@@ -44,7 +44,8 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Price Impact", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.20%")
+                let priceImpact = viewModel.iosTradeEstimate?.priceImpact ?? 100
+                Text(priceImpact.formatSNumber(maximumFractionDigits: 2) + "%")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseSuccess)
             }

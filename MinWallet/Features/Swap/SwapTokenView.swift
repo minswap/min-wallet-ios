@@ -298,12 +298,14 @@ struct SwapTokenView: View {
 
     @ViewBuilder
     private var routingView: some View {
-        if let routingSelected = viewModel.routingSelected {
+        if let assets = viewModel.iosTradeEstimate?.path, let contractType = viewModel.iosTradeEstimate?.type.value {
             VStack(spacing: .lg) {
                 HStack(spacing: 4) {
+                    /*
                     Text("Select your route")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
+                     */
                     Spacer()
                     Image(.icDown)
                         .resizable()
@@ -312,22 +314,21 @@ struct SwapTokenView: View {
                         .tint(.colorBaseTent)
                 }
                 HStack(spacing: 8) {
-                    Text(routingSelected.title)
+                    Text("Best route")
                         .lineLimit(1)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
-                    Text(routingSelected.routing.type.value?.title)
+                    Text(contractType.title)
                         .font(.paragraphXMediumSmall)
-                        .foregroundStyle(routingSelected.routing.type.value?.foregroundColor ?? .clear)
+                        .foregroundStyle(contractType.foregroundColor)
                         .padding(.horizontal, .md)
                         .frame(height: 20)
                         .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(routingSelected.routing.type.value?.backgroundColor ?? .clear)
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
                         )
                     Spacer()
                     Image(.icStartRouting)
                         .padding(.trailing, 4)
-                    let assets = routingSelected.poolsAsset
                     ForEach(0..<assets.count, id: \.self) { index in
                         let asset = assets[index]
                         TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
@@ -347,11 +348,13 @@ struct SwapTokenView: View {
             .padding(.top, .md)
             .padding(.horizontal, .xl)
             .contentShape(.rect)
+            /*
             .onTapGesture {
                 guard !viewModel.isLoadingRouting else { return }
                 hideKeyboard()
                 $viewModel.isShowRouting.showSheet()
             }
+             */
         }
     }
 
@@ -403,7 +406,7 @@ struct SwapTokenView: View {
                             self.viewModel.isExpand[warningInfo] = isExpand
                         }
                     )
-                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand, showBottomLine: index != viewModel.wrapRoutings.count - 1)
+                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand, showBottomLine: index != viewModel.warningInfo.count - 1)
                 }
             }
             .background(.colorSurfaceWarningDefault)
