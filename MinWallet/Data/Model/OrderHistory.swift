@@ -381,11 +381,10 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
         case "SwapExactInOverSlippageDetail":
             guard order.action.value != .oco else { return nil }
             let currentAmount = (Double(overSlippage.asSwapExactInOverSlippageDetail?.receivedAmount ?? "0") ?? 0) / pow(10.0, decimalsOut)
-            let maxReceivableOutAmount = (Double(overSlippage.asSwapExactInOverSlippageDetail?.maxReceivableOut ?? "0") ?? 0) / pow(10.0, decimalsOut)
+            /*Your attempt to swap 4 ADA for HOSKY could not be completed because the amount of HOSKY available at the current rate (39,848 HOSKY) is less than your minimum expected amount (46,620 HOSKY). This can occur due to changes in market prices or liquidity.*/
             attr = [
                 AttributedString(key: "Your attempt to swap ").build(),
                 detail.inputs.first?.amount.formatNumberOrder(suffix: inputTicker, roundingOffset: Int(decimalsIn)),
-                AttributedString(inputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
                 AttributedString(key: " for ").build(),
                 AttributedString(outputTicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
                 AttributedString(key: " could not be completed because the amount of ").build(),
@@ -393,9 +392,9 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
                 AttributedString(key: " available at the current rate ").build(),
                 AttributedString("(").build(font: .paragraphXSemiSmall),
                 currentAmount.formatNumberOrder(suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
-                AttributedString(key: " is higher than the maximum amount the pool can offer ").build(),
+                AttributedString(key: " is less than your minimum expected amount ").build(),
                 AttributedString("(").build(font: .paragraphXSemiSmall),
-                maxReceivableOutAmount.formatNumberOrder(suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
+                detail.outputs.first?.satisfiedAmount.formatNumberOrder(suffix: outputTicker + ")", roundingOffset: Int(decimalsOut)),
                 AttributedString(key: ". This can occur due to changes in market prices or liquidity.").build(),
             ]
         case "SwapExactOutOverSlippageDetail":

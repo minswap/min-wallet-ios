@@ -49,9 +49,6 @@
     " is greater than your stop amount " : {
 
     },
-    " is higher than the maximum amount the pool can offer " : {
-
-    },
     " is less than your minimum " : {
 
     },
@@ -408,6 +405,12 @@
 
     },
     "Execution information" : {
+
+    },
+    "Expires at" : {
+
+    },
+    "Expires at %@" : {
 
     },
     "External links" : {

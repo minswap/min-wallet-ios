@@ -46,6 +46,5 @@ vendor
 .DS_Store
 
 MinWalletAPI/.build
-CoreDataRepository/.build
 CodeScanner/.build
 apollo-ios-cli

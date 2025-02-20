@@ -69,9 +69,32 @@ class HomeViewModel: ObservableObject {
         Task {
             try? await Task.sleep(for: .seconds(20))
             repeat {
-                await TokenManager.shared.reloadPortfolioOverview()
+                if tabType == .yourToken {
+                    await TokenManager.shared.getPortfolioOverview()
+                    let tokens = TokenManager.shared.yourTokens
+                    let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
+                    self.isHasYourToken = !_tokens.isEmpty
+                    self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + _tokens
+                    self.hasLoadMoreDic[tabType] = false
+                    self.showSkeletonDic[tabType] = false
+                    self.isFetching[tabType] = false
+                }
+                try? await Task.sleep(for: .seconds(20))
             } while (!Task.isCancelled)
         }
+
+        TokenManager.shared.reloadBalance
+            .sink { [weak self] in
+                guard let self = self else { return }
+                Task {
+                    if self.tabType == .yourToken {
+                        await self.getTokens()
+                    } else {
+                        await TokenManager.shared.getPortfolioOverview()
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
 
     func getTokens(isLoadMore: Bool = false) async {

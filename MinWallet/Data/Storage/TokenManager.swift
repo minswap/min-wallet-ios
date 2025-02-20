@@ -1,5 +1,6 @@
 import Foundation
 import MinWalletAPI
+import Combine
 
 
 @MainActor
@@ -7,11 +8,7 @@ class TokenManager: ObservableObject {
 
     static var shared: TokenManager = .init()
 
-    var hasReloadBalance: Bool = false {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    let reloadBalance: PassthroughSubject<Void, Never> = .init()
 
     var isHasYourToken: Bool = false {
         willSet {
@@ -57,17 +54,6 @@ class TokenManager: ObservableObject {
         adaValue = (portfolioOverview?.portfolioOverview.adaValue.doubleValue ?? 0) / 1_000_000
         tokenAda.netValue = adaValue
         tokenAda.netSubValue = adaValue
-    }
-
-    func reloadPortfolioOverview() async {
-        await getPortfolioOverview()
-        tokenAda.netValue = 9999
-        tokenAda.netSubValue = 9999
-        hasReloadBalance = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.hasReloadBalance = false
-        }
     }
 }
 

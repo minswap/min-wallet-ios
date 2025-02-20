@@ -51,7 +51,8 @@ struct OrderHistoryFilterView: View {
                             .onTapGesture {
                                 contractTypeSelected = nil
                             }
-                        ForEach(contractTypes) { type in
+                        ForEach(0..<contractTypes.count, id: \.self) { index in
+                            let type = contractTypes[index]
                             TextSelectable(content: type.title, selected: $contractTypeSelected, value: type)
                                 .onTapGesture {
                                     contractTypeSelected = type
@@ -97,7 +98,9 @@ struct OrderHistoryFilterView: View {
                             .onTapGesture {
                                 statusSelected = nil
                             }
-                        ForEach(OrderV2Status.allCases) { type in
+                        let orderV2Statuses = OrderV2Status.allCases
+                        ForEach(0..<orderV2Statuses.count, id: \.self) { index in
+                            let type = orderV2Statuses[index]
                             TextSelectable(content: type.title, selected: $statusSelected, value: type)
                                 .onTapGesture {
                                     statusSelected = type

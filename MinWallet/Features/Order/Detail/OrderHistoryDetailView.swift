@@ -46,7 +46,7 @@ struct OrderHistoryDetailView: View {
                         }
                         .padding(.md)
                         .background(
-                            RoundedRectangle(cornerRadius: .lg).fill(.colorInteractiveToneDanger8)
+                            RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
                         )
                         .frame(minHeight: 32)
                         .padding(.top, .xl)
@@ -292,6 +292,18 @@ struct OrderHistoryDetailView: View {
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
                         Text(order?.detail.routes)
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    }
+                    .padding(.top, .md)
+                }
+                if let order = order, let expiredAt = order.order?.expiredAt, order.order?.status.value == .created {
+                    HStack(spacing: 4) {
+                        Text("Expires at")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                        Text(expiredAt.formattedDateGMT)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                     }
