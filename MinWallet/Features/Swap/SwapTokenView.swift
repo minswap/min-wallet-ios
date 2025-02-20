@@ -13,6 +13,8 @@ struct SwapTokenView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @EnvironmentObject
+    private var hudState: HUDState
+    @EnvironmentObject
     private var bannerState: BannerState
     @StateObject
     private var viewModel: SwapTokenViewModel = .init()
@@ -140,6 +142,9 @@ struct SwapTokenView: View {
                 .ignoresSafeArea()
         }
         .ignoresSafeArea(.keyboard)
+        .onFirstAppear {
+            viewModel.hudState = hudState
+        }
     }
 
     @ViewBuilder
@@ -152,6 +157,7 @@ struct SwapTokenView: View {
             .zIndex(999)
             .containerShape(.rect)
             .onTapGesture {
+                hideKeyboard()
                 viewModel.action.send(.swapToken)
             }
         tokenReceiveView
@@ -291,7 +297,10 @@ struct SwapTokenView: View {
             }
         }
         .padding(.xl)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(focusedField == .receive ? .colorBorderPrimaryPressed : .colorBorderPrimarySub, lineWidth: focusedField == .receive ? 2 : 1)
+        )
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
     }
@@ -360,39 +369,45 @@ struct SwapTokenView: View {
 
     @ViewBuilder
     private var bottomView: some View {
-        Color.colorBorderPrimarySub.frame(height: 1)
-        HStack(spacing: 8) {
-            Circle().frame(width: 6, height: 6)
-                .foregroundStyle(.colorBaseSuccess)
-            Text(viewModel.isConvertRate ? "1 MIN = 0.105 ADA" : "1 ADA =  9.443 MIN")
-                .font(.paragraphSmall)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
-            Image(.icExecutePrice)
-                .fixSize(.xl)
-                .onTapGesture {
-                    viewModel.isConvertRate.toggle()
-                }
-            Spacer()
-            Text("0.3%")
-                .font(.paragraphXMediumSmall)
-                .foregroundStyle(.colorInteractiveToneSuccess)
-                .padding(.horizontal, .md)
-                .frame(height: 20)
-                .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
-                )
-            Image(.icNext)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 10, height: 10)
-                .rotationEffect(.degrees(-90))
-                .containerShape(.rect)
-                .onTapGesture {
-                    hideKeyboard()
-                    $viewModel.isShowInfo.showSheet()
-                }
+        let payAmount = Double(viewModel.tokenPay.amount) ?? 0
+        let receiveAmount = Double(viewModel.tokenReceive.amount) ?? 0
+        if !payAmount.isZero && !receiveAmount.isZero {
+            Color.colorBorderPrimarySub.frame(height: 1)
+            HStack(spacing: 8) {
+                Circle().frame(width: 6, height: 6)
+                    .foregroundStyle(.colorBaseSuccess)
+                let rate: Double = !viewModel.isConvertRate ? (receiveAmount / payAmount) : (payAmount / receiveAmount)
+                let firstAtt = AttributedString("1 \(!viewModel.isConvertRate ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName) = ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub)
+                let attribute = rate.formatNumber(suffix: viewModel.isConvertRate ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                Text(firstAtt + attribute)
+                Image(.icExecutePrice)
+                    .fixSize(.xl)
+                    .onTapGesture {
+                        viewModel.isConvertRate.toggle()
+                    }
+                Spacer()
+                let priceImpact = viewModel.iosTradeEstimate?.priceImpact ?? 100
+                Text(priceImpact.formatSNumber(maximumFractionDigits: 2) + "%")
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveToneSuccess)
+                    .padding(.horizontal, .md)
+                    .frame(height: 20)
+                    .background(
+                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
+                    )
+                Image(.icNext)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 10, height: 10)
+                    .rotationEffect(.degrees(-90))
+                    .containerShape(.rect)
+                    .onTapGesture {
+                        hideKeyboard()
+                        $viewModel.isShowInfo.showSheet()
+                    }
+            }
+            .padding(.xl)
         }
-        .padding(.xl)
     }
 
     @ViewBuilder

@@ -136,19 +136,7 @@
     "0.3 %@" : {
 
     },
-    "0.3%" : {
-
-    },
-    "0.20%" : {
-
-    },
     "1 %@ = " : {
-
-    },
-    "1 ADA =  9.443 MIN" : {
-
-    },
-    "1 MIN = 0.105 ADA" : {
 
     },
     "1,486.35 MIN" : {
@@ -375,6 +363,9 @@
 
     },
     "Enter your password" : {
+
+    },
+    "Error" : {
 
     },
     "Error creating wallet" : {
@@ -785,9 +776,6 @@
 
     },
     "Select route" : {
-
-    },
-    "Select your route" : {
 
     },
     "Send" : {
