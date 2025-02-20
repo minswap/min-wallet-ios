@@ -142,9 +142,6 @@
     "0.20%" : {
 
     },
-    "0.50%" : {
-
-    },
     "1 %@ = " : {
 
     },
@@ -155,9 +152,6 @@
 
     },
     "1,486.35 MIN" : {
-
-    },
-    "1.5 %@" : {
 
     },
     "2 %@" : {
@@ -231,9 +225,6 @@
 
     },
     "Batched at" : {
-
-    },
-    "Batcher Fee" : {
 
     },
     "Before you start, please read and keep the following security tips in mind." : {
@@ -434,9 +425,6 @@
     "Fd Market cap" : {
 
     },
-    "Fee paid for the service of off-chain Laminar batcher to process transactions." : {
-
-    },
     "Filter" : {
 
     },
@@ -594,6 +582,9 @@
 
     },
     "Minimum Received" : {
+
+    },
+    "Minimum Send" : {
 
     },
     "minswap" : {
@@ -999,9 +990,6 @@
 
     },
     "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours." : {
-
-    },
-    "Want a discount?" : {
 
     },
     "When available, uses multiple pools for better liquidity and prices. " : {

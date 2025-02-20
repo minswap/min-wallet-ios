@@ -4,10 +4,10 @@
 @_exported import ApolloAPI
 
 public class IosTradeEstimateQuery: GraphQLQuery {
-  public static let operationName: String = "IosTradeEstimate"
+  public static let operationName: String = "IosTradeEstimateQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query IosTradeEstimate($input: IosTradeEstimateInput!) { iosTradeEstimate(input: $input) { __typename estimateAmount inputIndex lpAssets { __typename currencySymbol tokenName } lpFee outputIndex path { __typename currencySymbol tokenName } priceImpact type } }"#
+      #"query IosTradeEstimateQuery($input: IosTradeEstimateInput!) { iosTradeEstimate(input: $input) { __typename estimateAmount inputIndex lpAssets { __typename currencySymbol tokenName } lpFee outputIndex path { __typename currencySymbol tokenName } priceImpact type } }"#
     ))
 
   public var input: IosTradeEstimateInput

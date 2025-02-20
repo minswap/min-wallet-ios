@@ -5,7 +5,9 @@ import FlowStacks
 struct SwapTokenInfoView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-
+    @EnvironmentObject
+    private var viewModel: SwapTokenViewModel
+    
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
 
     var body: some View {
@@ -16,7 +18,7 @@ struct SwapTokenInfoView: View {
                 .frame(height: 60)
                 .padding(.top, .md)
             HStack {
-                DashedUnderlineText(text: "Minimum Received", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                DashedUnderlineText(text: viewModel.isSwapExactIn ? "Minimum Received" : "Minimum Send", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 Text("1,486.35 MIN")
                     .font(.labelMediumSecondary)
@@ -30,7 +32,7 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Slippage Tolerance", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.50%")
+                Text(viewModel.swapSetting.slippageSelectedValue().formatSNumber(maximumFractionDigits: 2) + "%")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseTent)
             }
@@ -123,5 +125,6 @@ struct SwapTokenInfoView: View {
     VStack {
         Spacer()
         SwapTokenInfoView()
+            .environmentObject(SwapTokenViewModel())
     }
 }

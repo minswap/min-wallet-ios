@@ -36,7 +36,11 @@ class SwapTokenViewModel: ObservableObject {
     var rate: String = "1 ADA = 9.443 MIN"
     @Published
     var swapSetting: SwapTokenSetting = .init()
-
+    @Published
+    var isSwapExactIn: Bool = true
+    @Published
+    var iosTradeEstimate: IosTradeEstimateQuery.Data.IosTradeEstimate?
+    
     let action: PassthroughSubject<Action, Never> = .init()
 
     @Published
@@ -62,7 +66,14 @@ class SwapTokenViewModel: ObservableObject {
                 self?.action.send(.amountPayChanged(amount: amount))
             })
             .store(in: &cancellables)
-
+        $tokenReceive
+            .map({ Double($0.amount) ?? 0 })
+            .removeDuplicates()
+            .debounce(for: .milliseconds(400), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] amount in
+                self?.action.send(.amountReceiveChanged(amount: amount))
+            })
+            .store(in: &cancellables)
         action.send(.initSwapToken)
     }
 
@@ -145,6 +156,13 @@ class SwapTokenViewModel: ObservableObject {
 
                 await generateWarningInfo()
             }
+        case let .amountReceiveChanged(amount):
+            Task {
+                print("\(amount)")
+                //TODO: calculate fee
+                
+                await generateWarningInfo()
+            }
         }
     }
 
@@ -215,6 +233,18 @@ class SwapTokenViewModel: ObservableObject {
         self.isExpand = [:]
         self.warningInfo = warningInfo
     }
+    
+    private func getTradingInfo(amount: Double) async throws {
+        let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
+        let input = IosTradeEstimateInput(amount: String(Int(amount)),
+                                          inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
+                                          isApplied: swapSetting.predictSwapPrice,
+                                          isSwapExactIn: isSwapExactIn,
+                                          outputAsset: InputAsset(currencySymbol: tokenReceive.token.currencySymbol, tokenName: tokenReceive.token.tokenName))
+        
+        let info = try await MinWalletService.shared.fetch(query: IosTradeEstimateQuery(input: input))?.iosTradeEstimate
+        self.iosTradeEstimate = info
+    }
 }
 
 
@@ -230,6 +260,7 @@ extension SwapTokenViewModel {
         case setMaxAmount
         case setHalfAmount
         case amountPayChanged(amount: Double)
+        case amountReceiveChanged(amount: Double)
         case swapToken
     }
 }

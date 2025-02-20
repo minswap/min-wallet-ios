@@ -32,6 +32,10 @@ struct SwapTokenView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     contentView
+                        .onChange(of: focusedField) { focusedField in
+                            guard let focusedField = focusedField else { return }
+                            viewModel.isSwapExactIn = focusedField == .pay
+                        }
                 }
             }
             Spacer()
@@ -82,10 +86,12 @@ struct SwapTokenView: View {
             })
             .environmentObject(viewModel)
         }
+        /*
         .presentSheet(isPresented: $viewModel.isShowRouting) {
             SwapTokenRoutingView()
                 .environmentObject(viewModel)
         }
+         */
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
             SwapTokenSettingView(
                 onShowToolTip: { title, content in
@@ -246,7 +252,6 @@ struct SwapTokenView: View {
                 .font(.titleH4)
                 .foregroundStyle(.colorBaseTent)
                 .focused($focusedField, equals: .receive)
-                .disabled(true)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(

@@ -10,6 +10,15 @@ struct SwapTokenSetting {
     var slippageSelected: SwapTokenSettingView.Slippage? = ._01
 
     init() {}
+    
+    func slippageSelectedValue() -> Double {
+        guard let slippageSelected = slippageSelected
+        else {
+            return Double(slippageTolerance) ?? 0
+        }
+        
+        return slippageSelected.rawValue
+    }
 }
 
 extension SwapTokenSetting {
