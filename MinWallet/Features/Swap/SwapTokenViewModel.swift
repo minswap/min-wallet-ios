@@ -43,10 +43,15 @@ class SwapTokenViewModel: ObservableObject {
     var iosTradeEstimate: IosTradeEstimateQuery.Data.IosTradeEstimate?
     
     let action: PassthroughSubject<Action, Never> = .init()
-
+    /*
     @Published
     var isLoadingRouting: Bool = true
-
+*/
+    @Published
+    var isGettingTradeInfo: Bool = false
+    @Published
+    var errorInfo: ErrorInfo? = nil
+    
     private var cancellables: Set<AnyCancellable> = []
 
     var hudState: HUDState = .init()
@@ -90,18 +95,6 @@ class SwapTokenViewModel: ObservableObject {
         action.send(.getTradingInfo)
     }
 
-    func swapToken(appSetting: AppSetting, signContract: (() -> Void)?, signSuccess: (() -> Void)?) {
-        Task {
-            switch appSetting.authenticationType {
-            case .biometric:
-                try await appSetting.reAuthenticateUser()
-                signSuccess?()
-            case .password:
-                signContract?()
-            }
-        }
-    }
-
     private func handleAction(_ action: Action) async throws {
         switch action {
         case let .selectTokenPay(token):
@@ -123,8 +116,8 @@ class SwapTokenViewModel: ObservableObject {
             tokenPay.amount = ""
             tokenReceive = tempToken
             tokenReceive.amount = ""
-            //self.action.send(.getTradingInfo)
-
+            self.action.send(.getTradingInfo)
+        
         case .setMaxAmount:
             tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
             self.action.send(.getTradingInfo)
@@ -222,10 +215,22 @@ class SwapTokenViewModel: ObservableObject {
     }
     
     private func generateErrorInfo() async {
-        
+        let payAmount = Double(tokenPay.amount) ?? 0
+        let receiveAmount = Double(tokenReceive.amount) ?? 0
+        errorInfo = nil
+        if isSwapExactIn {
+            if payAmount > tokenPay.token.amount {
+                errorInfo = .insufficientBalance(name: tokenPay.token.adaName)
+            }
+        } else {
+            if receiveAmount > tokenReceive.token.amount {
+                errorInfo = .notEnoughAmountInPool(name: tokenReceive.token.adaName)
+            }
+        }
     }
     
     private func getTradingInfo(amount: Double) async throws {
+        isGettingTradeInfo = true
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let input = IosTradeEstimateInput(amount: String(Int(amount)),
                                           inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
@@ -243,6 +248,21 @@ class SwapTokenViewModel: ObservableObject {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
             tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
         }
+        
+        isGettingTradeInfo = false
+    }
+    
+    func finalizeAndSubmit(tx: String) async throws -> String? {
+        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localError(message: "Wallet not found") }
+        guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: tx)
+        else { throw AppGeneralError.localError(message: "Sign transaction failed") }
+        
+        let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: tx, witnessSet: witnessSet)))
+        return data?.finalizeAndSubmit
+    }
+    
+    func swapToken() async throws -> String {
+        return ""
     }
 }
 
@@ -334,6 +354,20 @@ extension SwapTokenViewModel {
             case .indivisibleTokenPay,
                 .indivisibleTokenReceive:
                 "Certain tokens on the Cardano blockchain are designed as indivisible. This means each token must be used, transferred, or traded as a whole unit."
+            }
+        }
+    }
+    
+    enum ErrorInfo {
+        case insufficientBalance(name: String)
+        case notEnoughAmountInPool(name: String)
+        
+        var content: LocalizedStringKey {
+            switch self {
+            case let .insufficientBalance(name):
+                return "Insufficient \(name) balance"
+            case let .notEnoughAmountInPool(name):
+                return "Not enough \(name) amount in pool)"
             }
         }
     }

@@ -506,6 +506,9 @@
     "Input information" : {
 
     },
+    "Insufficient %@ balance" : {
+
+    },
     "Invalid address" : {
 
     },
@@ -609,6 +612,9 @@
 
     },
     "Nofification" : {
+
+    },
+    "Not enough %@ amount in pool)" : {
 
     },
     "Notice" : {

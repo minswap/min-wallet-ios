@@ -28,7 +28,9 @@ struct SwapTokenView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
-
+    @State
+    private var isShowLoading: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -42,16 +44,13 @@ struct SwapTokenView: View {
             }
             Spacer()
             bottomView
-            CustomButton(title: "Swap") {
-                hideKeyboard()
-                viewModel.swapToken(
-                    appSetting: appSetting,
-                    signContract: {
-                        isShowSignContract = true
-                    },
-                    signSuccess: {
-                        swapTokenSuccess()
-                    })
+            let combinedBinding = Binding<Bool>(
+                get: { viewModel.errorInfo == nil },
+                set: { _ in }
+            )
+            let swapTitle: LocalizedStringKey = viewModel.errorInfo?.content ?? "Swap"
+            CustomButton(title: swapTitle, isEnable: combinedBinding) {
+               processingSwapToken()
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -145,6 +144,7 @@ struct SwapTokenView: View {
         .onFirstAppear {
             viewModel.hudState = hudState
         }
+        .progressView(isShowing: $isShowLoading)
     }
 
     @ViewBuilder
@@ -433,17 +433,56 @@ struct SwapTokenView: View {
         }
     }
 
+    private func processingSwapToken() {
+        hideKeyboard()
+        guard !viewModel.isGettingTradeInfo, viewModel.errorInfo == nil, viewModel.iosTradeEstimate != nil else { return }
+        let amountToPay = Double(viewModel.tokenPay.amount) ?? 0
+        let amountToReceive = Double(viewModel.tokenReceive.amount) ?? 0
+        guard amountToPay > 0, amountToReceive > 0 else { return }
+        Task {
+            do {
+                switch appSetting.authenticationType {
+                case .biometric:
+                    try await appSetting.reAuthenticateUser()
+                    swapTokenSuccess()
+                case .password:
+                    $isShowSignContract.showSheet()
+                }
+            } catch {
+                hudState.showMsg(msg: error.localizedDescription)
+            }
+        }
+    }
+    
     private func swapTokenSuccess() {
-        bannerState.infoContent = {
-            bannerState.infoContentDefault(onViewTransaction: {
-
-            })
+        Task {
+            do {
+                withAnimation {
+                    isShowLoading = true
+                }
+                let tx = try await viewModel.swapToken()
+                let finalID = try await viewModel.finalizeAndSubmit(tx: tx)
+                withAnimation {
+                    isShowLoading = false
+                }
+                bannerState.infoContent = {
+                    bannerState.infoContentDefault(onViewTransaction: {
+                        finalID?.viewTransaction()
+                    })
+                }
+                bannerState.showBanner(isShow: true)
+                TokenManager.shared.reloadBalance.send(())
+                if appSetting.rootScreen != .home {
+                    appSetting.rootScreen = .home
+                }
+                navigator.popToRoot()
+            } catch {
+                withAnimation {
+                    isShowLoading = false
+                }
+                hudState.showMsg(msg: error.localizedDescription)
+            }
         }
-        bannerState.showBanner(isShow: true)
-        if appSetting.rootScreen != .home {
-            appSetting.rootScreen = .home
-        }
-        navigator.popToRoot()
     }
 }
 
