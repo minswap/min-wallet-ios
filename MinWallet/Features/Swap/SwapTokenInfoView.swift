@@ -20,9 +20,8 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: viewModel.isSwapExactIn ? "Minimum Received" : "Minimum Send", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("1,486.35 MIN")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseTent)
+                let tokenName = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.adaName : viewModel.tokenPay.token.adaName
+                Text(viewModel.minimumMaximumAmount.formatNumber(suffix: tokenName, font: .labelMediumSecondary, fontColor: .colorBaseTent))
             }
             .padding(.top, .lg)
             .contentShape(.rect)
@@ -57,9 +56,8 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.3 \(Currency.ada.prefix)")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseTent)
+                let fee = viewModel.iosTradeEstimate?.lpFee?.toExact(decimal: viewModel.tokenPay.token.decimals) ?? 0
+                Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary,fontColor: .colorBaseTent))
             }
             .padding(.top, .xl)
             .contentShape(.rect)

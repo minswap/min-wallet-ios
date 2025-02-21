@@ -305,14 +305,14 @@ class SwapTokenViewModel: ObservableObject {
                             amount: amountPay,
                             asset: InputAsset(currencySymbol: tokenPay.currencySymbol, tokenName: tokenPay.tokenName)),
                         assetOut: InputAsset(currencySymbol: tokenReceive.currencySymbol, tokenName: tokenReceive.tokenName),
-                        direction: .case(.aToB), //TODO: cuongnv direction
+                        direction: .case(iosTradeEstimate.direction?.value.map({ $0 }) ?? .aToB),
                         lpAsset: InputAsset(currencySymbol: lpAsset.currencySymbol, tokenName: lpAsset.tokenName),
                         minimumAmountOut: amountReceive))
             } else {
                 inputDexV2OrderSwapExactOutOptions = .some(
                     InputDexV2OrderSwapExactOutOptions(
                         assetIn: InputAsset(currencySymbol: tokenPay.currencySymbol, tokenName: tokenPay.tokenName),
-                        direction: .case(.aToB), //TODO: cuongnv direction
+                        direction: .case(iosTradeEstimate.direction?.value.map({ $0 }) ?? .aToB),
                         expectedReceived: amountReceive,
                         lpAsset: InputAsset(currencySymbol: lpAsset.currencySymbol, tokenName: lpAsset.tokenName),
                         maximumAmountIn: amountPay))
@@ -340,6 +340,14 @@ class SwapTokenViewModel: ObservableObject {
         let data = try await MinWalletService.shared.mutation(mutation: CreateBulkOrdersMutation(input: InputCreateBulkOrders(orders: [inputCreateOrder], sender: address)))
         guard let tx = data?.createBulkOrders else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
         return tx
+    }
+    
+    var minimumMaximumAmount: Double {
+        if isSwapExactIn {
+            (1 / (1 + swapSetting.slippageSelectedValue() / 100)) * tokenReceive.amount.doubleValue
+        } else {
+            (1 + swapSetting.slippageSelectedValue() / 100) * tokenPay.amount.doubleValue
+        }
     }
 }
 

@@ -14,5 +14,6 @@ query IosTradeEstimateQuery($input: IosTradeEstimateInput!) {
     }
     priceImpact
     type
+    direction
   }
 }
