@@ -254,16 +254,92 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     func finalizeAndSubmit(tx: String) async throws -> String? {
-        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localError(message: "Wallet not found") }
+        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
         guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: tx)
-        else { throw AppGeneralError.localError(message: "Sign transaction failed") }
-
+        else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
         let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: tx, witnessSet: witnessSet)))
         return data?.finalizeAndSubmit
     }
 
     func swapToken() async throws -> String {
-        return ""
+        guard let iosTradeEstimate = iosTradeEstimate else { return "" }
+        guard let address: String = UserInfo.shared.minWallet?.address else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
+        guard let lpAsset = iosTradeEstimate.lpAssets.first else { throw AppGeneralError.localErrorLocalized(message: "No LP asset found") }
+        
+        let amountPay = String(Int(tokenPay.amount.toExact(decimal: tokenPay.token.decimals)))
+        let amountReceive = String(Int(tokenReceive.amount.toExact(decimal: tokenReceive.token.decimals)))
+        let assetIndex = iosTradeEstimate.inputIndex.map({ String($0) }) ?? ""
+        let assetOutIndex = iosTradeEstimate.outputIndex.map({ String($0) }) ?? ""
+
+        var inputDexV1OrderSwapExactInOptions: GraphQLNullable<InputDexV1OrderSwapExactInOptions>?
+        var inputDexV1OrderSwapExactOutOptions: GraphQLNullable<InputDexV1OrderSwapExactOutOptions>?
+        var inputDexV2OrderMultiRoutingOptions: GraphQLNullable<InputDexV2OrderMultiRoutingOptions>?
+        var inputDexV2OrderSwapExactInOptions: GraphQLNullable<InputDexV2OrderSwapExactInOptions>?
+        var inputDexV2OrderSwapExactOutOptions: GraphQLNullable<InputDexV2OrderSwapExactOutOptions>?
+        var inputStableswapOrderOptions: GraphQLNullable<InputStableswapOrderOptions>?
+        
+        switch iosTradeEstimate.type.value {
+        case .dex:
+            if isSwapExactIn {
+                inputDexV1OrderSwapExactInOptions = .some(
+                    InputDexV1OrderSwapExactInOptions(
+                        assetInAmount: InputAssetAmount(
+                            amount: amountPay,
+                            asset: InputAsset(currencySymbol: tokenPay.currencySymbol, tokenName: tokenPay.tokenName)),
+                        assetOut: InputAsset(currencySymbol: tokenReceive.currencySymbol, tokenName: tokenReceive.tokenName),
+                        minimumAmountOut: amountReceive))
+            } else {
+                inputDexV1OrderSwapExactOutOptions = .some(
+                    InputDexV1OrderSwapExactOutOptions(
+                        assetIn: InputAsset(currencySymbol: tokenPay.currencySymbol, tokenName: tokenPay.tokenName),
+                        assetOutAmount: InputAssetAmount(
+                            amount: amountReceive,
+                            asset: InputAsset(currencySymbol: tokenReceive.currencySymbol, tokenName: tokenReceive.tokenName)),
+                        maximumAmountIn: amountPay))
+            }
+        case .dexV2:
+            if isSwapExactIn {
+                inputDexV2OrderSwapExactInOptions = .some(
+                    InputDexV2OrderSwapExactInOptions(
+                        assetInAmount: InputAssetAmount(
+                            amount: amountPay,
+                            asset: InputAsset(currencySymbol: tokenPay.currencySymbol, tokenName: tokenPay.tokenName)),
+                        assetOut: InputAsset(currencySymbol: tokenReceive.currencySymbol, tokenName: tokenReceive.tokenName),
+                        direction: .case(.aToB), //TODO: cuongnv direction
+                        lpAsset: InputAsset(currencySymbol: lpAsset.currencySymbol, tokenName: lpAsset.tokenName),
+                        minimumAmountOut: amountReceive))
+            } else {
+                inputDexV2OrderSwapExactOutOptions = .some(
+                    InputDexV2OrderSwapExactOutOptions(
+                        assetIn: InputAsset(currencySymbol: tokenPay.currencySymbol, tokenName: tokenPay.tokenName),
+                        direction: .case(.aToB), //TODO: cuongnv direction
+                        expectedReceived: amountReceive,
+                        lpAsset: InputAsset(currencySymbol: lpAsset.currencySymbol, tokenName: lpAsset.tokenName),
+                        maximumAmountIn: amountPay))
+            }
+        case .stableswap:
+            inputStableswapOrderOptions = .some(
+                InputStableswapOrderOptions(
+                    assetInAmount: InputAssetAmount(
+                        amount: amountPay,
+                        asset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName)),
+                    assetInIndex: assetIndex,
+                    assetOutIndex: assetOutIndex,
+                    lpAsset: InputAsset(currencySymbol: lpAsset.currencySymbol, tokenName: lpAsset.tokenName),
+                    minimumAssetOut: amountReceive))
+        default:
+            break
+        }
+        let inputCreateOrder = InputCreateOrderOptions(
+            dexV1OrderSwapExactIn: inputDexV1OrderSwapExactInOptions ?? .none,
+            dexV1OrderSwapExactOut: inputDexV1OrderSwapExactOutOptions ?? .none,
+            dexV2OrderMultiRouting: inputDexV2OrderMultiRoutingOptions ?? .none,
+            dexV2OrderSwapExactIn: inputDexV2OrderSwapExactInOptions ?? .none,
+            dexV2OrderSwapExactOut: inputDexV2OrderSwapExactOutOptions ?? .none,
+            stableswapOrder: inputStableswapOrderOptions ?? .none)
+        let data = try await MinWalletService.shared.mutation(mutation: CreateBulkOrdersMutation(input: InputCreateBulkOrders(orders: [inputCreateOrder], sender: address)))
+        guard let tx = data?.createBulkOrders else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
+        return tx
     }
 }
 

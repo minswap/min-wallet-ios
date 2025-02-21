@@ -29,15 +29,15 @@ class ConfirmSendTokenViewModel: ObservableObject {
         let sendTokens = try await MinWalletService.shared.mutation(mutation: sendTokensMutation)
         tx = sendTokens?.sendTokens
         if tx == nil {
-            throw AppGeneralError.localError(message: "Transaction not exist")
+            throw AppGeneralError.localErrorLocalized(message: "Transaction not exist")
         }
     }
 
     func finalizeAndSubmit() async throws -> String? {
-        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localError(message: "Wallet not found") }
-        guard let tx = tx else { throw AppGeneralError.localError(message: "Transaction not found") }
+        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
+        guard let tx = tx else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
         guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: tx)
-        else { throw AppGeneralError.localError(message: "Sign transaction failed") }
+        else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
 
         let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: tx, witnessSet: witnessSet)))
         return data?.finalizeAndSubmit

@@ -951,6 +951,7 @@ input IosTradeEstimateInput {
 }
 
 type IosTradeEstimateOutput {
+  direction: OrderV2Direction
   estimateAmount: BigInt
   inputIndex: Int
   lpAssets: [Asset!]!

@@ -53,4 +53,12 @@ struct WrapTokenSend: Identifiable {
     var uniqueID: String {
         token.uniqueID
     }
+
+    var currencySymbol: String {
+        token.currencySymbol
+    }
+
+    var tokenName: String {
+        token.tokenName
+    }
 }
