@@ -422,9 +422,6 @@
     "Filter" : {
 
     },
-    "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol." : {
-
-    },
     "For projects" : {
 
     },
@@ -862,6 +859,9 @@
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {
 
     },
+    "The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol." : {
+
+    },
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
@@ -921,9 +921,6 @@
 
     },
     "Trading fee" : {
-
-    },
-    "Trading Fee" : {
 
     },
     "Transaction not exist" : {
