@@ -22,6 +22,7 @@ protocol TokenProtocol {
 
     var nftDisplayName: String { get }
     var nftImage: String { get }
+    var hasMetaData: Bool { get }
 }
 
 extension TokenProtocol {
@@ -65,4 +66,7 @@ struct WrapTokenProtocol: Identifiable {
     init(token: TokenProtocol) {
         self.token = token
     }
+
+    var currencySymbol: String { token.currencySymbol }
+    var tokenName: String { token.tokenName }
 }

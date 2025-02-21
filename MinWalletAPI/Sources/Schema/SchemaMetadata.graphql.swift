@@ -31,6 +31,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "AssetsResponse": return MinWalletAPI.Objects.AssetsResponse
     case "DepositOverSlippageDetail": return MinWalletAPI.Objects.DepositOverSlippageDetail
     case "DexV2WithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.DexV2WithdrawImbalanceOverSlippageDetail
+    case "IosTradeEstimateOutput": return MinWalletAPI.Objects.IosTradeEstimateOutput
     case "Mutation": return MinWalletAPI.Objects.Mutation
     case "OCOOverSlipageDetail": return MinWalletAPI.Objects.OCOOverSlipageDetail
     case "OrderHistory": return MinWalletAPI.Objects.OrderHistory
@@ -47,6 +48,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "RoutedPools": return MinWalletAPI.Objects.RoutedPools
     case "Routing": return MinWalletAPI.Objects.Routing
     case "RoutingOverSlipageDetail": return MinWalletAPI.Objects.RoutingOverSlipageDetail
+    case "ScriptUtxo": return MinWalletAPI.Objects.ScriptUtxo
     case "SimpleChart": return MinWalletAPI.Objects.SimpleChart
     case "StableswapWithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.StableswapWithdrawImbalanceOverSlippageDetail
     case "StopOverSlippageDetail": return MinWalletAPI.Objects.StopOverSlippageDetail

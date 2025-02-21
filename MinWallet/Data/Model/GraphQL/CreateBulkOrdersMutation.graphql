@@ -1,0 +1,3 @@
+mutation CreateBulkOrders($input: InputCreateBulkOrders!) {
+  createBulkOrders(input: $input)
+}

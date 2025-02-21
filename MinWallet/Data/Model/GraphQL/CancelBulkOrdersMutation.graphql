@@ -1,0 +1,3 @@
+mutation CancelBulkOrdersMutation($input: InputCancelBulkOrders!) {
+  cancelBulkOrders(input: $input)
+}

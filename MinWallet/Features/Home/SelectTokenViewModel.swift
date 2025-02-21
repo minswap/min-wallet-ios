@@ -19,9 +19,10 @@ class SelectTokenViewModel: ObservableObject {
     @Published
     var sourceScreenType: SendTokenView.ScreenType = .normal
 
+    var searchAfter: [String]? = nil
+
     private var hasLoadMore: Bool = true
     private var isFetching: Bool = true
-    ////currencySymbol + . + tokenName
 
     private var cancellables: Set<AnyCancellable> = []
     private var cachedIndex: [String: Int] = [:]
@@ -61,29 +62,41 @@ class SelectTokenViewModel: ObservableObject {
             .sink { [weak self] newData in
                 guard let self = self else { return }
                 self.keyword = newData
-                //self.getTokens()
-                let rawTokens = self.rawTokens
+                switch self.screenType {
+                case .initSelectedToken,
+                    .sendToken:
+                    let rawTokens = self.rawTokens
 
-                let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-                let _tokens =
-                    keyword.isEmpty
-                    ? rawTokens
-                    : rawTokens.filter({
-                        let stringToCompare: [String] = [
-                            $0.adaName.lowercased(),
-                            $0.currencySymbol,
-                            $0.tokenName.lowercased(),
-                            $0.projectName.lowercased(),
-                            $0.ticker.lowercased(),
-                        ]
-                        return stringToCompare.first { $0.contains(keyword) } != nil
-                    })
-                self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
+                    let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                    let _tokens =
+                        keyword.isBlank
+                        ? rawTokens
+                        : rawTokens.filter({
+                            let stringToCompare: [String] = [
+                                $0.adaName.lowercased(),
+                                $0.currencySymbol,
+                                $0.tokenName.lowercased(),
+                                $0.projectName.lowercased(),
+                                $0.ticker.lowercased(),
+                            ]
+                            return stringToCompare.first { $0.contains(keyword) } != nil
+                        })
+                    self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
+                case .swapToken:
+                    self.getTokens()
+                }
+
             }
             .store(in: &cancellables)
 
-        self.tokens = rawTokens.map({ WrapTokenProtocol(token: $0) })
-        if self.tokens.count < 2 {
+        switch screenType {
+        case .initSelectedToken, .sendToken:
+            if rawTokens.count <= 1 {
+                self.getTokens()
+            } else {
+                self.tokens = rawTokens.map({ WrapTokenProtocol(token: $0) })
+            }
+        case .swapToken:
             self.getTokens()
         }
     }
@@ -92,43 +105,79 @@ class SelectTokenViewModel: ObservableObject {
         showSkeleton = !isLoadMore
         isFetching = true
         Task {
-            let tokens = try? await TokenManager.getYourToken()
-            TokenManager.shared.yourTokens = tokens
-            let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            let _tokens =
-                keyword.isEmpty
-                ? rawTokens
-                : rawTokens.filter({
-                    let stringToCompare: [String] = [
-                        $0.adaName.lowercased(),
-                        $0.currencySymbol,
-                        $0.tokenName.lowercased(),
-                        $0.projectName.lowercased(),
-                        $0.ticker.lowercased(),
-                    ]
-                    return stringToCompare.first { $0.contains(keyword) } != nil
-                })
-            self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
-            switch screenType {
-            case .initSelectedToken:
-                self.tokensSelected[TokenManager.shared.tokenAda.uniqueID] = TokenManager.shared.tokenAda
-            default:
-                break
+            do {
+                var _tokens: [TokenProtocol] = []
+                if !isLoadMore {
+                    let tokens = try await TokenManager.getYourToken()
+                    TokenManager.shared.yourTokens = tokens
+                    let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                    _tokens =
+                        keyword.isEmpty
+                        ? rawTokens
+                        : rawTokens.filter({
+                            let stringToCompare: [String] = [
+                                $0.adaName.lowercased(),
+                                $0.currencySymbol,
+                                $0.tokenName.lowercased(),
+                                $0.projectName.lowercased(),
+                                $0.ticker.lowercased(),
+                            ]
+                            return stringToCompare.first { $0.contains(keyword) } != nil
+                        })
+                } else {
+                    _tokens = self.tokens.map({ $0.token })
+                }
+
+                switch screenType {
+                case .initSelectedToken:
+                    self.hasLoadMore = false
+                    self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
+                    self.tokensSelected[TokenManager.shared.tokenAda.uniqueID] = TokenManager.shared.tokenAda
+
+                case .sendToken:
+                    self.hasLoadMore = false
+                    self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
+
+                case .swapToken:
+                    let input = AssetsInput()
+                        .with {
+                            if let searchAfter = searchAfter {
+                                $0.searchAfter = .some(searchAfter)
+                            }
+                            if !keyword.isBlank {
+                                $0.term = .some(keyword)
+                            }
+                        }
+                    let assets = try await MinWalletService.shared.fetch(query: AssetsQuery(input: .some(input)))
+                    self.searchAfter = assets?.assets.searchAfter
+
+                    if let assets = assets?.assets.assets, !assets.isEmpty {
+                        self.hasLoadMore = true
+                        let currentUniqueIds = _tokens.map { $0.uniqueID }
+                        let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
+                        self.tokens = (_tokens + _assets).map({ WrapTokenProtocol(token: $0) })
+                    } else {
+                        self.hasLoadMore = false
+                    }
+                }
+
+                self.showSkeleton = false
+                self.isFetching = false
+            } catch {
+                self.hasLoadMore = false
+                self.showSkeleton = false
+                self.isFetching = false
             }
-            self.hasLoadMore = false
-            self.showSkeleton = false
-            self.isFetching = false
         }
     }
 
     func loadMoreData(item: TokenProtocol) {
-        /*
+        guard case .swapToken = screenType else { return }
         guard hasLoadMore, !isFetching else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
         if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
-         */
     }
 
     func toggleSelected(token: TokenProtocol) {

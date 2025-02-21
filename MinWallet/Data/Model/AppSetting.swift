@@ -152,15 +152,15 @@ class AppSetting: ObservableObject {
 
     func isSuspiciousToken(currencySymbol: String) async -> Bool {
         guard !currencySymbol.isEmpty else { return false }
-        guard suspiciousToken.isEmpty else { return true }
-        guard let url = URL(string: MinWalletConstant.suspiciousTokenURL) else { return true }
+        guard suspiciousToken.isEmpty else { return false }
+        guard let url = URL(string: MinWalletConstant.suspiciousTokenURL) else { return false }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let tokensScam = String(decoding: data, as: UTF8.self).split(separator: "\n").map { String($0) }
             AppSetting.shared.suspiciousToken = tokensScam
             return tokensScam.contains(currencySymbol)
         } catch {
-            return true
+            return false
         }
     }
 }

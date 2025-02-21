@@ -28,9 +28,12 @@ struct AmountTextField: View {
                 let currentValue = Decimal(string: value) ?? 0
                 if !value.isBlank && currentValue < Decimal(minValue) && currentValue > 0 {
                     value = minValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
-                } else if let maxValue = maxValue, currentValue > Decimal(maxValue) {
+                }
+                /*
+                else if let maxValue = maxValue, currentValue > Decimal(maxValue) {
                     value = maxValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
                 }
+                 */
             }
     }
 }

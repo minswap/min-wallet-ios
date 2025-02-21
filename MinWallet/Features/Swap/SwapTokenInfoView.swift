@@ -5,6 +5,8 @@ import FlowStacks
 struct SwapTokenInfoView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
+    @EnvironmentObject
+    private var viewModel: SwapTokenViewModel
 
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
 
@@ -16,11 +18,10 @@ struct SwapTokenInfoView: View {
                 .frame(height: 60)
                 .padding(.top, .md)
             HStack {
-                DashedUnderlineText(text: "Minimum Received", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                DashedUnderlineText(text: viewModel.isSwapExactIn ? "Minimum Received" : "Minimum Send", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("1,486.35 MIN")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseTent)
+                let tokenName = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.adaName : viewModel.tokenPay.token.adaName
+                Text(viewModel.minimumMaximumAmount.formatNumber(suffix: tokenName, font: .labelMediumSecondary, fontColor: .colorBaseTent))
             }
             .padding(.top, .lg)
             .contentShape(.rect)
@@ -30,7 +31,7 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Slippage Tolerance", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.50%")
+                Text(viewModel.swapSetting.slippageSelectedValue().formatSNumber(maximumFractionDigits: 2) + "%")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseTent)
             }
@@ -42,7 +43,8 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Price Impact", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.20%")
+                let priceImpact = viewModel.iosTradeEstimate?.priceImpact ?? 100
+                Text(priceImpact.formatSNumber(maximumFractionDigits: 2) + "%")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseSuccess)
             }
@@ -54,21 +56,15 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.3 \(Currency.ada.prefix)")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseTent)
+                let fee = viewModel.iosTradeEstimate?.lpFee?.toExact(decimal: viewModel.tokenPay.token.decimals) ?? 0
+                Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary, fontColor: .colorBaseTent))
             }
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                /*When a pool has only 1 fee, display “For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.”
-                When a pool has > 1 fee, display:
-"For each trade [from_Token > to_Token]: a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.
-                [to_Token > from_Token]: a b% goes to liquidity providers as Trading Fee and c% goes to Protocol."
-                */
-                //TODO: Jame check fee nhe
-                onShowToolTip?("Trading Fee", "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.")
+                onShowToolTip?("Trading fee", "The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol.")
             }
+            /*
             HStack {
                 DashedUnderlineText(text: "Batcher Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -92,10 +88,11 @@ struct SwapTokenInfoView: View {
                 .onTapGesture {
                     "https://docs.minswap.org/min-token/usdmin-tokenomics/trading-fee-discount".openURL()
                 }
+             */
             HStack {
                 DashedUnderlineText(text: "Deposit ADA", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("0.3 \(Currency.ada.prefix)")
+                Text("2 \(Currency.ada.prefix)")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorBaseTent)
             }
@@ -121,5 +118,6 @@ struct SwapTokenInfoView: View {
     VStack {
         Spacer()
         SwapTokenInfoView()
+            .environmentObject(SwapTokenViewModel())
     }
 }

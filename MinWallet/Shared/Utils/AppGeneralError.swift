@@ -2,23 +2,17 @@ import SwiftUI
 
 
 enum AppGeneralError: LocalizedError {
-    static let GenericError = "Có lỗi xảy ra"
 
-    case serverUnauthenticated
     case localErrorLocalized(message: LocalizedStringKey)
     case serverErrorLocalized(message: LocalizedStringKey)
     case invalidResponseErrorLocalized(message: LocalizedStringKey)
 
-    case localError(message: String)
     case serverError(message: String)
     case invalidResponseError(message: String)
 
     var errorDescription: String? {
         switch self {
-        case .serverUnauthenticated:
-            return "Session Expired"
-        case .localError(let message),
-            .serverError(let message),
+        case .serverError(let message),
             .invalidResponseError(let message):
             return message
         case .localErrorLocalized(let message),

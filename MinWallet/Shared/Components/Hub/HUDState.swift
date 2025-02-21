@@ -12,6 +12,8 @@ class HUDState: ObservableObject {
     private(set) var okTitle: LocalizedStringKey = ""
     @Published
     var isPresented: Bool = false
+    @Published
+    var isShowLoading: Bool = false
 
     var onAction: (() -> Void)?
 
@@ -28,5 +30,11 @@ class HUDState: ObservableObject {
         self.okTitle = okTitle
         self.onAction = onAction
         self.isPresented = true
+    }
+
+    func showLoading(_ isShow: Bool) {
+        withAnimation {
+            isShowLoading = isShow
+        }
     }
 }

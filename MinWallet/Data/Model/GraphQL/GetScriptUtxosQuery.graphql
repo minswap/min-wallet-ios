@@ -1,0 +1,6 @@
+query GetScriptUtxos($txIns: [String!]!) {
+  getScriptUtxos(txIns: $txIns) {
+    rawDatum
+    rawUtxo
+  }
+}

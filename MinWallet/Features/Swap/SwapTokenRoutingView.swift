@@ -17,6 +17,7 @@ struct SwapTokenRoutingView: View {
                 .frame(height: 60)
                 .padding(.top, .md)
                 .padding(.horizontal, .xl)
+            /*
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(0..<viewModel.wrapRoutings.count, id: \.self) { index in
@@ -43,6 +44,7 @@ struct SwapTokenRoutingView: View {
                     }
                 }
             }
+             */
             Spacer(minLength: 0)
             CustomButton(title: "Swap") {
                 onDismiss?()

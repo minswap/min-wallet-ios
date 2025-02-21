@@ -67,6 +67,7 @@ struct SwapTokenSettingView: View {
                                     return newValue
                                 }()
                                 viewModel.swapSetting.slippageTolerance = filtered
+                                viewModel.swapSetting.slippageSelected = nil
                             }
                         Text("%")
                             .font(.labelMediumSecondary)

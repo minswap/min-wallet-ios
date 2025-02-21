@@ -133,31 +133,7 @@
         }
       }
     },
-    "0.3 %@" : {
-
-    },
-    "0.3%" : {
-
-    },
-    "0.20%" : {
-
-    },
-    "0.50%" : {
-
-    },
     "1 %@ = " : {
-
-    },
-    "1 ADA =  9.443 MIN" : {
-
-    },
-    "1 MIN = 0.105 ADA" : {
-
-    },
-    "1,486.35 MIN" : {
-
-    },
-    "1.5 %@" : {
 
     },
     "2 %@" : {
@@ -206,6 +182,9 @@
     "Apply" : {
 
     },
+    "Are you sure you want to cancel this order?" : {
+
+    },
     "Audio" : {
 
     },
@@ -233,9 +212,6 @@
     "Batched at" : {
 
     },
-    "Batcher Fee" : {
-
-    },
     "Before you start, please read and keep the following security tips in mind." : {
 
     },
@@ -252,6 +228,9 @@
 
     },
     "Cancel" : {
+
+    },
+    "Cancel order failed" : {
 
     },
     "Cancelled" : {
@@ -368,6 +347,9 @@
     "Disconnect wallet" : {
 
     },
+    "Dissmis" : {
+
+    },
     "Donation" : {
 
     },
@@ -384,6 +366,9 @@
 
     },
     "Enter your password" : {
+
+    },
+    "Error" : {
 
     },
     "Error creating wallet" : {
@@ -434,13 +419,7 @@
     "Fd Market cap" : {
 
     },
-    "Fee paid for the service of off-chain Laminar batcher to process transactions." : {
-
-    },
     "Filter" : {
-
-    },
-    "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol." : {
 
     },
     "For projects" : {
@@ -527,6 +506,9 @@
     "Input information" : {
 
     },
+    "Insufficient %@ balance" : {
+
+    },
     "Invalid address" : {
 
     },
@@ -596,6 +578,9 @@
     "Minimum Received" : {
 
     },
+    "Minimum Send" : {
+
+    },
     "minswap" : {
 
     },
@@ -623,10 +608,16 @@
     "No data" : {
 
     },
+    "No LP asset found" : {
+
+    },
     "No results" : {
 
     },
     "Nofification" : {
+
+    },
+    "Not enough %@ amount in pool)" : {
 
     },
     "Notice" : {
@@ -724,9 +715,6 @@
     "Price Impact" : {
 
     },
-    "Price impact is more than %@%%, make sure to check the price " : {
-
-    },
     "Price impact is more than %@%%, make sure to check the price before submitting the transaction." : {
 
     },
@@ -763,9 +751,6 @@
     "Route" : {
 
     },
-    "Route %lld" : {
-
-    },
     "Route Sorting" : {
 
     },
@@ -799,9 +784,6 @@
     "Select route" : {
 
     },
-    "Select your route" : {
-
-    },
     "Send" : {
 
     },
@@ -818,6 +800,9 @@
 
     },
     "Sign the contract" : {
+
+    },
+    "Sign transaction failed" : {
 
     },
     "Slippage tolerance" : {
@@ -874,6 +859,9 @@
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {
 
     },
+    "The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol." : {
+
+    },
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
@@ -894,6 +882,9 @@
       }
     },
     "This token has not been verified yet. Please ensure the correct policyId" : {
+
+    },
+    "This token isn't registered on Cardano Token Registry. Please make sure to double check the policy Id: %@" : {
 
     },
     "Timezone" : {
@@ -932,7 +923,10 @@
     "Trading fee" : {
 
     },
-    "Trading Fee" : {
+    "Transaction not exist" : {
+
+    },
+    "Transaction not found" : {
 
     },
     "Transaction Submitted" : {
@@ -1001,7 +995,10 @@
     "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours." : {
 
     },
-    "Want a discount?" : {
+    "Wallet not found" : {
+
+    },
+    "Warning" : {
 
     },
     "When available, uses multiple pools for better liquidity and prices. " : {
@@ -1011,6 +1008,9 @@
 
     },
     "Withdraw" : {
+
+    },
+    "Yes, cancel" : {
 
     },
     "You are disconnecting your wallet?" : {
@@ -1041,6 +1041,9 @@
 
     },
     "You want to send:" : {
+
+    },
+    "You will have to pay a small fees to cancel your orders. Are you sure to continue?" : {
 
     },
     "You’re all set!" : {

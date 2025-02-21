@@ -44,7 +44,7 @@ struct TokenDetailView: View {
                             }
                         }
                         tokenDetailChartView
-                            .padding(.top, .xl)
+                            .padding(.top, .xl + .md)
                         tokenDetailStatisticView
                             .padding(.top, .xl)
                             .padding(.horizontal, .xl)

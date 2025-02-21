@@ -13,6 +13,8 @@ struct SwapTokenView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @EnvironmentObject
+    private var hudState: HUDState
+    @EnvironmentObject
     private var bannerState: BannerState
     @StateObject
     private var viewModel: SwapTokenViewModel = .init()
@@ -32,20 +34,21 @@ struct SwapTokenView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     contentView
+                        .onChange(of: focusedField) { focusedField in
+                            guard let focusedField = focusedField else { return }
+                            viewModel.isSwapExactIn = focusedField == .pay
+                        }
                 }
             }
             Spacer()
             bottomView
-            CustomButton(title: "Swap") {
-                hideKeyboard()
-                viewModel.swapToken(
-                    appSetting: appSetting,
-                    signContract: {
-                        isShowSignContract = true
-                    },
-                    signSuccess: {
-                        swapTokenSuccess()
-                    })
+            let combinedBinding = Binding<Bool>(
+                get: { viewModel.errorInfo == nil },
+                set: { _ in }
+            )
+            let swapTitle: LocalizedStringKey = viewModel.errorInfo?.content ?? "Swap"
+            CustomButton(title: swapTitle, isEnable: combinedBinding) {
+                processingSwapToken()
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -82,10 +85,12 @@ struct SwapTokenView: View {
             })
             .environmentObject(viewModel)
         }
+        /*
         .presentSheet(isPresented: $viewModel.isShowRouting) {
             SwapTokenRoutingView()
                 .environmentObject(viewModel)
         }
+         */
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
             SwapTokenSettingView(
                 onShowToolTip: { title, content in
@@ -134,6 +139,9 @@ struct SwapTokenView: View {
                 .ignoresSafeArea()
         }
         .ignoresSafeArea(.keyboard)
+        .onFirstAppear {
+            viewModel.hudState = hudState
+        }
     }
 
     @ViewBuilder
@@ -146,6 +154,7 @@ struct SwapTokenView: View {
             .zIndex(999)
             .containerShape(.rect)
             .onTapGesture {
+                hideKeyboard()
                 viewModel.action.send(.swapToken)
             }
         tokenReceiveView
@@ -246,7 +255,6 @@ struct SwapTokenView: View {
                 .font(.titleH4)
                 .foregroundStyle(.colorBaseTent)
                 .focused($focusedField, equals: .receive)
-                .disabled(true)
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
@@ -286,19 +294,24 @@ struct SwapTokenView: View {
             }
         }
         .padding(.xl)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(focusedField == .receive ? .colorBorderPrimaryPressed : .colorBorderPrimarySub, lineWidth: focusedField == .receive ? 2 : 1)
+        )
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
     }
 
     @ViewBuilder
     private var routingView: some View {
-        if let routingSelected = viewModel.routingSelected {
+        if let assets = viewModel.iosTradeEstimate?.path, let contractType = viewModel.iosTradeEstimate?.type.value {
             VStack(spacing: .lg) {
                 HStack(spacing: 4) {
+                    /*
                     Text("Select your route")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
+                     */
                     Spacer()
                     Image(.icDown)
                         .resizable()
@@ -307,22 +320,21 @@ struct SwapTokenView: View {
                         .tint(.colorBaseTent)
                 }
                 HStack(spacing: 8) {
-                    Text(routingSelected.title)
+                    Text("Best route")
                         .lineLimit(1)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
-                    Text(routingSelected.routing.type.value?.title)
+                    Text(contractType.title)
                         .font(.paragraphXMediumSmall)
-                        .foregroundStyle(routingSelected.routing.type.value?.foregroundColor ?? .clear)
+                        .foregroundStyle(contractType.foregroundColor)
                         .padding(.horizontal, .md)
                         .frame(height: 20)
                         .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(routingSelected.routing.type.value?.backgroundColor ?? .clear)
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
                         )
                     Spacer()
                     Image(.icStartRouting)
                         .padding(.trailing, 4)
-                    let assets = routingSelected.poolsAsset
                     ForEach(0..<assets.count, id: \.self) { index in
                         let asset = assets[index]
                         TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
@@ -342,49 +354,57 @@ struct SwapTokenView: View {
             .padding(.top, .md)
             .padding(.horizontal, .xl)
             .contentShape(.rect)
+            /*
             .onTapGesture {
                 guard !viewModel.isLoadingRouting else { return }
                 hideKeyboard()
                 $viewModel.isShowRouting.showSheet()
             }
+             */
         }
     }
 
     @ViewBuilder
     private var bottomView: some View {
-        Color.colorBorderPrimarySub.frame(height: 1)
-        HStack(spacing: 8) {
-            Circle().frame(width: 6, height: 6)
-                .foregroundStyle(.colorBaseSuccess)
-            Text(viewModel.isConvertRate ? "1 MIN = 0.105 ADA" : "1 ADA =  9.443 MIN")
-                .font(.paragraphSmall)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
-            Image(.icExecutePrice)
-                .fixSize(.xl)
-                .onTapGesture {
-                    viewModel.isConvertRate.toggle()
-                }
-            Spacer()
-            Text("0.3%")
-                .font(.paragraphXMediumSmall)
-                .foregroundStyle(.colorInteractiveToneSuccess)
-                .padding(.horizontal, .md)
-                .frame(height: 20)
-                .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
-                )
-            Image(.icNext)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 10, height: 10)
-                .rotationEffect(.degrees(-90))
-                .containerShape(.rect)
-                .onTapGesture {
-                    hideKeyboard()
-                    $viewModel.isShowInfo.showSheet()
-                }
+        let payAmount = Double(viewModel.tokenPay.amount) ?? 0
+        let receiveAmount = Double(viewModel.tokenReceive.amount) ?? 0
+        if !payAmount.isZero && !receiveAmount.isZero {
+            Color.colorBorderPrimarySub.frame(height: 1)
+            HStack(spacing: 8) {
+                Circle().frame(width: 6, height: 6)
+                    .foregroundStyle(.colorBaseSuccess)
+                let rate: Double = !viewModel.isConvertRate ? (receiveAmount / payAmount) : (payAmount / receiveAmount)
+                let firstAtt = AttributedString("1 \(!viewModel.isConvertRate ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName) = ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub)
+                let attribute = rate.formatNumber(suffix: viewModel.isConvertRate ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                Text(firstAtt + attribute)
+                Image(.icExecutePrice)
+                    .fixSize(.xl)
+                    .onTapGesture {
+                        viewModel.isConvertRate.toggle()
+                    }
+                Spacer()
+                let priceImpact = viewModel.iosTradeEstimate?.priceImpact ?? 100
+                Text(priceImpact.formatSNumber(maximumFractionDigits: 2) + "%")
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(.colorInteractiveToneSuccess)
+                    .padding(.horizontal, .md)
+                    .frame(height: 20)
+                    .background(
+                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
+                    )
+                Image(.icNext)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 10, height: 10)
+                    .rotationEffect(.degrees(-90))
+                    .containerShape(.rect)
+                    .onTapGesture {
+                        hideKeyboard()
+                        $viewModel.isShowInfo.showSheet()
+                    }
+            }
+            .padding(.xl)
         }
-        .padding(.xl)
     }
 
     @ViewBuilder
@@ -398,7 +418,7 @@ struct SwapTokenView: View {
                             self.viewModel.isExpand[warningInfo] = isExpand
                         }
                     )
-                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand, showBottomLine: index != viewModel.wrapRoutings.count - 1)
+                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand, showBottomLine: index != viewModel.warningInfo.count - 1)
                 }
             }
             .background(.colorSurfaceWarningDefault)
@@ -410,17 +430,50 @@ struct SwapTokenView: View {
         }
     }
 
-    private func swapTokenSuccess() {
-        bannerState.infoContent = {
-            bannerState.infoContentDefault(onViewTransaction: {
+    private func processingSwapToken() {
+        hideKeyboard()
+        guard !viewModel.isGettingTradeInfo, viewModel.errorInfo == nil, viewModel.iosTradeEstimate != nil else { return }
+        let amountToPay = Double(viewModel.tokenPay.amount) ?? 0
+        let amountToReceive = Double(viewModel.tokenReceive.amount) ?? 0
+        guard amountToPay > 0, amountToReceive > 0 else { return }
+        Task {
+            do {
+                switch appSetting.authenticationType {
+                case .biometric:
+                    try await appSetting.reAuthenticateUser()
+                    swapTokenSuccess()
+                case .password:
+                    $isShowSignContract.showSheet()
+                }
+            } catch {
+                hudState.showMsg(msg: error.localizedDescription)
+            }
+        }
+    }
 
-            })
+    private func swapTokenSuccess() {
+        Task {
+            do {
+                hudState.showLoading(true)
+                let txRaw = try await viewModel.swapToken()
+                let finalID = try await TokenManager.finalizeAndSubmit(txRaw: txRaw)
+                hudState.showLoading(false)
+                bannerState.infoContent = {
+                    bannerState.infoContentDefault(onViewTransaction: {
+                        finalID?.viewTransaction()
+                    })
+                }
+                bannerState.showBanner(isShow: true)
+                TokenManager.shared.reloadBalance.send(())
+                if appSetting.rootScreen != .home {
+                    appSetting.rootScreen = .home
+                }
+                navigator.popToRoot()
+            } catch {
+                hudState.showLoading(false)
+                hudState.showMsg(msg: error.localizedDescription)
+            }
         }
-        bannerState.showBanner(isShow: true)
-        if appSetting.rootScreen != .home {
-            appSetting.rootScreen = .home
-        }
-        navigator.popToRoot()
     }
 }
 

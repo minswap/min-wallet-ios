@@ -8,6 +8,10 @@ struct MainCoordinator: View {
     private var viewModel = MainCoordinatorViewModel()
     @EnvironmentObject
     private var appSetting: AppSetting
+    @EnvironmentObject
+    private var bannerState: BannerState
+    @EnvironmentObject
+    private var hudState: HUDState
 
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
@@ -118,8 +122,8 @@ struct MainCoordinator: View {
                         case .forgotPassword:
                             ForgotPasswordView(screenType: .enterPassword).navigationBarHidden(true)
                         }
-                    case let .orderHistoryDetail(order):
-                        OrderHistoryDetailView(order: order).navigationBarHidden(true)
+                    case let .orderHistoryDetail(order, onReloadOrder):
+                        OrderHistoryDetailView(order: order, onReloadOrder: onReloadOrder).navigationBarHidden(true)
                     case .orderHistory:
                         OrderHistoryView().navigationBarHidden(true)
                     case .scanQR:
@@ -129,6 +133,26 @@ struct MainCoordinator: View {
                 .navigationBarHidden(true)
                 .environment(\.locale, .init(identifier: appSetting.language))
         }
+        .alert(isPresented: $hudState.isPresented) {
+            Alert(
+                title: Text(hudState.title), message: Text(hudState.msg),
+                dismissButton: .default(
+                    Text(hudState.okTitle),
+                    action: {
+                        hudState.onAction?()
+                    }))
+        }
+        .banner(
+            isShowing: $bannerState.isShowingBanner,
+            infoContent: {
+                if let infoContent = bannerState.infoContent {
+                    infoContent()
+                } else {
+                    EmptyView()
+                }
+            }
+        )
+        .progressView(isShowing: $hudState.isShowLoading)
     }
 }
 
