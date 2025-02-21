@@ -62,7 +62,7 @@ struct SwapTokenInfoView: View {
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("Trading fee","The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol.")
+                onShowToolTip?("Trading fee", "The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol.")
             }
             /*
             HStack {
