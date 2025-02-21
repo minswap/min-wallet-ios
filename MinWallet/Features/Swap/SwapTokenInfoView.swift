@@ -62,13 +62,7 @@ struct SwapTokenInfoView: View {
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                /*When a pool has only 1 fee, display “For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.”
-                When a pool has > 1 fee, display:
-"For each trade [from_Token > to_Token]: a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.
-                [to_Token > from_Token]: a b% goes to liquidity providers as Trading Fee and c% goes to Protocol."
-                */
-                //TODO: Jame check fee nhe
-                onShowToolTip?("Trading Fee", "For each trade, a x% goes to liquidity providers as Trading Fee and y% goes to Protocol.")
+                onShowToolTip?("Trading fee","The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol.")
             }
             /*
             HStack {
