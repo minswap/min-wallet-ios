@@ -33,9 +33,13 @@ pub struct EWWallet {
     export: String,
     version: String,
     id: String,
+    #[serde(rename = "networkId")]
     network_id: String,
+    #[serde(rename = "signType")]
     sign_type: String,
+    #[serde(rename = "rootKey")]
     root_key: EWRootKey,
+    #[serde(rename = "accountList")]
     account_list: Vec<EWAccount>,
 }
 
@@ -52,12 +56,14 @@ pub struct EWAccount {
     #[serde(rename = "pub")]
     pub_key: String,
     path: (u32, u32, u32),
+    #[serde(rename = "signType")]
     sign_type: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EWSettings {
     id: String,
+    #[serde(rename = "networkId")]
     network_id: String,
     name: String,
 }
@@ -391,6 +397,46 @@ mod tests {
         let new_prk = round_trip_wallet.get_private_key(password, 0).unwrap();
         assert_eq!(old_prk.to_hex(), new_prk.to_hex());
     }
+
+    #[test]
+    fn test_export_wallet2() {
+        let data = r#"
+        {
+            "wallet": {
+                "export": "minswap",
+                "version": "1.0.0",
+                "id": "xpub15ux84rpzhn8-pm",
+                "networkId": "preprod",
+                "signType": "mnemonic",
+                "rootKey": {
+                "pub": "xpub15ux84rpzhn8gpu9zk47cdmtdkvs6c3mxtnlf5vp30rwhq0ydmc7k88zdnygw2vlmkva5jzyc502mz6u6njjgkly39yn520k7v3axjwsmp0xx2",
+                "prv": "c845ca25d1d945f80a4123b4fcf6f90f7a9af3784baf53fbf91ab80282ba09518ca7eb3598d21a933caab68b47426be9bfaf63aaba3e7ae705a65143ba861928639c4d9910e533fbb33b490898a3d5b16b9a9ca48b7c912927453ede647a693a"
+                },
+                "accountList": [
+                {
+                    "id": "xpub13saj9lmw6lm",
+                    "pub": "xpub13saj9lmw6lmxscca2rsx2s2qawxvwuwt945ylrakaekrauy6k245vk0z7wm5we0u26yljzkrgnagvjafnq6hxfflxdcmmxdrudpw5kqv4nzmy",
+                    "path": [
+                    1852,
+                    1815,
+                    0
+                    ],
+                    "signType": "mnemonic"
+                }
+                ]
+            },
+            "settings": {
+                "id": "xpub15ux84rpzhn8-pm",
+                "networkId": "preprod",
+                "name": "Tony in the air"
+            }
+        }"#.to_string();
+        let password = "Minswap@123456".to_string();
+        let wallet_name = "My MinWallet".to_string();
+        let wallet = import_wallet(data, password, wallet_name).unwrap();
+        assert_eq!(wallet.address, "addr_test1qqf2dhk96l2kq4xh2fkhwksv0h49vy9exw383eshppn863jereuqgh2zwxsedytve5gp9any9jwc5hz98sd47rwfv40stc26fr");
+    }
+
     #[test]
     fn test_verify_password() {
         let phrase =
