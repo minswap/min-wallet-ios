@@ -230,6 +230,9 @@
     "Cancel" : {
 
     },
+    "Cancel order failed" : {
+
+    },
     "Cancelled" : {
 
     },
@@ -715,9 +718,6 @@
     "Price Impact" : {
 
     },
-    "Price impact is more than %@%%, make sure to check the price " : {
-
-    },
     "Price impact is more than %@%%, make sure to check the price before submitting the transaction." : {
 
     },
@@ -882,6 +882,9 @@
       }
     },
     "This token has not been verified yet. Please ensure the correct policyId" : {
+
+    },
+    "This token isn't registered on Cardano Token Registry. Please make sure to double check the policy Id: %@" : {
 
     },
     "Timezone" : {

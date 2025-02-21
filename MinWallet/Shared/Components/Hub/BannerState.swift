@@ -40,6 +40,7 @@ class BannerState: ObservableObject {
                     }
                     .padding(.top, 4)
                 }
+                Spacer(minLength: 0)
             }
             .padding()
             .background(.colorBaseBackground)

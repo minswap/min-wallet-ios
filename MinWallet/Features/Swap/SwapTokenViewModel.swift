@@ -7,6 +7,19 @@ import Then
 @MainActor
 class SwapTokenViewModel: ObservableObject {
 
+    private let functionalToken: String = "a04ce7a52545e5e33c2867e148898d9e667a69602285f6a1298f9d68"
+    private let functionalName: String = "Liqwid Finance"
+    private let migrateTokens = [
+        (
+            old: TokenDefault(
+                symbol: "6ac8ef33b510ec004fe11585f7c5a9f0c07f0c23428ab4f29c1d7d10",
+                tName: "4d454c44"),
+            new: TokenDefault(
+                symbol: "a2944573e99d2ed3055b808eaa264f0bf119e01fc6b18863067c63e4",
+                tName: "4d454c44")
+        )
+    ]
+
     @Published
     var tokenPay: WrapTokenSend
     @Published
@@ -198,17 +211,44 @@ class SwapTokenViewModel: ObservableObject {
         //TODO: Warning info
         var warningInfo: [WarningInfo] = []
 
-        if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenPay.token.currencySymbol) {
-            warningInfo.append(.suspiciousTokenPay(policyId: tokenPay.token.currencySymbol))
+        if let priceImpact = iosTradeEstimate?.priceImpact, priceImpact >= 5 {
+            warningInfo.append(.highPriceImpact(percent: "5"))
         }
-        if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenReceive.token.currencySymbol) {
-            warningInfo.append(.suspiciousTokenReceive(policyId: tokenReceive.token.currencySymbol))
+        if swapSetting.isUnlimitedSlippage {
+            warningInfo.append(.unlimitedSlippageIsActivated)
         }
-        if tokenPay.token.decimals == 0 {
+        if swapSetting.slippageSelectedValue() >= 50 {
+            warningInfo.append(.unsafeSlippageTolerance(percent: "50"))
+        }
+        if tokenPay.currencySymbol == functionalToken {
+            warningInfo.append(.functionalTokenPay(ticker: tokenPay.adaName, project: functionalName))
+        }
+        if tokenReceive.currencySymbol == functionalToken {
+            warningInfo.append(.functionalTokenReceive(ticker: tokenReceive.adaName, project: functionalName))
+        }
+        if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenPay.currencySymbol) {
+            warningInfo.append(.suspiciousTokenPay(policyId: tokenPay.currencySymbol))
+        }
+        if await AppSetting.shared.isSuspiciousToken(currencySymbol: tokenReceive.currencySymbol) {
+            warningInfo.append(.suspiciousTokenReceive(policyId: tokenReceive.currencySymbol))
+        }
+        if let migrate = migrateTokens.first(where: { (old, new) in old.currencySymbol == tokenPay.currencySymbol }) {
+            warningInfo.append(.tokenPayMigration(projectName: tokenPay.token.projectName, tokenName: migrate.new.adaName, policyId: migrate.new.currencySymbol))
+        }
+        if let migrate = migrateTokens.first(where: { (old, new) in old.currencySymbol == tokenReceive.currencySymbol }) {
+            warningInfo.append(.tokenPayMigration(projectName: tokenReceive.token.projectName, tokenName: migrate.new.adaName, policyId: migrate.new.currencySymbol))
+        }
+
+        if !tokenPay.token.hasMetaData {
+            warningInfo.append(.unregisteredTokenPay(policyID: tokenPay.currencySymbol))
+        }
+
+        if !tokenReceive.token.hasMetaData {
+            warningInfo.append(.unregisteredTokenReceive(policyID: tokenReceive.currencySymbol))
+        }
+
+        if tokenPay.token.decimals == 0 || tokenReceive.token.decimals == 0 {
             warningInfo.append(.indivisibleTokenPay)
-        }
-        if tokenReceive.token.decimals == 0 {
-            warningInfo.append(.indivisibleTokenReceive)
         }
         self.isExpand = [:]
         self.warningInfo = warningInfo
@@ -253,19 +293,11 @@ class SwapTokenViewModel: ObservableObject {
         isGettingTradeInfo = false
     }
 
-    func finalizeAndSubmit(tx: String) async throws -> String? {
-        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
-        guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: tx)
-        else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
-        let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: tx, witnessSet: witnessSet)))
-        return data?.finalizeAndSubmit
-    }
-
     func swapToken() async throws -> String {
         guard let iosTradeEstimate = iosTradeEstimate else { return "" }
         guard let address: String = UserInfo.shared.minWallet?.address else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
         guard let lpAsset = iosTradeEstimate.lpAssets.first else { throw AppGeneralError.localErrorLocalized(message: "No LP asset found") }
-        
+
         let amountPay = String(Int(tokenPay.amount.toExact(decimal: tokenPay.token.decimals)))
         let amountReceive = String(Int(tokenReceive.amount.toExact(decimal: tokenReceive.token.decimals)))
         let assetIndex = iosTradeEstimate.inputIndex.map({ String($0) }) ?? ""
@@ -277,7 +309,7 @@ class SwapTokenViewModel: ObservableObject {
         var inputDexV2OrderSwapExactInOptions: GraphQLNullable<InputDexV2OrderSwapExactInOptions>?
         var inputDexV2OrderSwapExactOutOptions: GraphQLNullable<InputDexV2OrderSwapExactOutOptions>?
         var inputStableswapOrderOptions: GraphQLNullable<InputStableswapOrderOptions>?
-        
+
         switch iosTradeEstimate.type.value {
         case .dex:
             if isSwapExactIn {
@@ -341,7 +373,7 @@ class SwapTokenViewModel: ObservableObject {
         guard let tx = data?.createBulkOrders else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
         return tx
     }
-    
+
     var minimumMaximumAmount: Double {
         if isSwapExactIn {
             (1 / (1 + swapSetting.slippageSelectedValue() / 100)) * tokenReceive.amount.doubleValue
@@ -388,7 +420,8 @@ extension SwapTokenViewModel {
         case tokenPayMigration(projectName: String, tokenName: String, policyId: String)
         case tokenReceiveMigration(projectName: String, tokenName: String, policyId: String)
         ///Token exists in MIGRATED_TOKENS
-        case unregisteredToken(percent: String)
+        case unregisteredTokenPay(policyID: String)
+        case unregisteredTokenReceive(policyID: String)
         ///decimals == 0
         case indivisibleTokenPay
         case indivisibleTokenReceive
@@ -409,7 +442,7 @@ extension SwapTokenViewModel {
             case .tokenPayMigration,
                 .tokenReceiveMigration:
                 "Token migration"
-            case .unregisteredToken:
+            case .unregisteredTokenPay, .unregisteredTokenReceive:
                 "Unregistered token"
             case .indivisibleTokenPay,
                 .indivisibleTokenReceive:
@@ -434,8 +467,9 @@ extension SwapTokenViewModel {
             case let .tokenPayMigration(projectName, policyId, tokenName),
                 let .tokenReceiveMigration(projectName, policyId, tokenName):
                 "This project token is migrated to a new token, you can exchange your old token on \(projectName) app. The new token has policyID \(policyId) and tokenName \(tokenName)."
-            case let .unregisteredToken(percent):
-                "Price impact is more than \(percent)%, make sure to check the price "
+            case let .unregisteredTokenPay(policyID),
+                let .unregisteredTokenReceive(policyID):
+                "This token isn't registered on Cardano Token Registry. Please make sure to double check the policy Id: \(policyID)"
             case .indivisibleTokenPay,
                 .indivisibleTokenReceive:
                 "Certain tokens on the Cardano blockchain are designed as indivisible. This means each token must be used, transferred, or traded as a whole unit."

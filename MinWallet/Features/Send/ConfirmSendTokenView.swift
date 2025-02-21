@@ -220,8 +220,8 @@ struct ConfirmSendTokenView: View {
         Task {
             do {
                 hudState.showLoading(true)
-                try await viewModel.sendTokens()
-                let finalID = try await viewModel.finalizeAndSubmit()
+                let txRaw = try await viewModel.sendTokens()
+                let finalID = try await TokenManager.finalizeAndSubmit(txRaw: txRaw)
                 hudState.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {

@@ -61,4 +61,8 @@ struct WrapTokenSend: Identifiable {
     var tokenName: String {
         token.tokenName
     }
+
+    var adaName: String {
+        token.adaName
+    }
 }

@@ -22,6 +22,7 @@ protocol TokenProtocol {
 
     var nftDisplayName: String { get }
     var nftImage: String { get }
+    var hasMetaData: Bool { get }
 }
 
 extension TokenProtocol {

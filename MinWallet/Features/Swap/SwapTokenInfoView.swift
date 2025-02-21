@@ -57,7 +57,7 @@ struct SwapTokenInfoView: View {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 let fee = viewModel.iosTradeEstimate?.lpFee?.toExact(decimal: viewModel.tokenPay.token.decimals) ?? 0
-                Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary,fontColor: .colorBaseTent))
+                Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary, fontColor: .colorBaseTent))
             }
             .padding(.top, .xl)
             .contentShape(.rect)

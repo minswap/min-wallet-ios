@@ -105,7 +105,8 @@ class OrderHistoryViewModel: ObservableObject {
             changeAddress: UserInfo.shared.minWallet?.address ?? "",
             orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
             type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
-        let _ = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input))
+        guard let txRaw = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input)) else { throw AppGeneralError.localErrorLocalized(message: "Cancel order failed") }
+        let _ = try await TokenManager.finalizeAndSubmit(txRaw: txRaw.cancelBulkOrders)
         await fetchData(showSkeleton: false)
         orderToCancel = nil
     }
