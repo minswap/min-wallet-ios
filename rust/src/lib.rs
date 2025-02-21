@@ -33,9 +33,13 @@ pub struct EWWallet {
     export: String,
     version: String,
     id: String,
+    #[serde(rename = "networkId")]
     network_id: String,
+    #[serde(rename = "signType")]
     sign_type: String,
+    #[serde(rename = "rootKey")]
     root_key: EWRootKey,
+    #[serde(rename = "accountList")]
     account_list: Vec<EWAccount>,
 }
 
@@ -52,12 +56,14 @@ pub struct EWAccount {
     #[serde(rename = "pub")]
     pub_key: String,
     path: (u32, u32, u32),
+    #[serde(rename = "signType")]
     sign_type: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EWSettings {
     id: String,
+    #[serde(rename = "networkId")]
     network_id: String,
     name: String,
 }
