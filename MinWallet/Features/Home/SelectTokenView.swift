@@ -15,7 +15,7 @@ struct SelectTokenView: View {
     @FocusState
     private var isFocus: Bool
     @Environment(\.partialSheetDismiss)
-    var onDismiss
+    private var onDismiss
 
     init(
         viewModel: SelectTokenViewModel,
@@ -146,6 +146,9 @@ struct SelectTokenView: View {
                                     )
                                     SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: false)
                                         .contentShape(.rect)
+                                        .onAppear() {
+                                            viewModel.loadMoreData(item: item)
+                                        }
                                         .onTapGesture {
                                             viewModel.toggleSelected(token: item)
                                             onDismiss?()

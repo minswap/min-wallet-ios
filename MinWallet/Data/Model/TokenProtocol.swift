@@ -66,4 +66,7 @@ struct WrapTokenProtocol: Identifiable {
     init(token: TokenProtocol) {
         self.token = token
     }
+
+    var currencySymbol: String { token.currencySymbol }
+    var tokenName: String { token.tokenName }
 }
