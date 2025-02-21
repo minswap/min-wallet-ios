@@ -127,7 +127,7 @@ class HomeViewModel: ObservableObject {
             }
             self.tokensDic[tabType] = currentTokens
             self.searchAfter = tokens?.topAssets.searchAfter
-            self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit
+            self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit || self.searchAfter != nil
             self.showSkeletonDic[tabType] = false
             self.isFetching[tabType] = false
 

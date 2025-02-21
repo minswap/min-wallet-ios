@@ -41,7 +41,7 @@ class TokenManager: ObservableObject {
         }
     }
 
-    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano")
+    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano", decimal: 6)
 
     private init() {}
 

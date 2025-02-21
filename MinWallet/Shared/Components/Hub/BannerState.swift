@@ -52,8 +52,10 @@ class BannerState: ObservableObject {
     }
 
     func showBanner(isShow: Bool) {
-        withAnimation {
-            isShowingBanner = isShow
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+            withAnimation {
+                self.isShowingBanner = isShow
+            }
         }
     }
 }

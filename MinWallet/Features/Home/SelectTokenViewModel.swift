@@ -30,12 +30,18 @@ class SelectTokenViewModel: ObservableObject {
     private var rawTokens: [TokenProtocol] {
         [TokenManager.shared.tokenAda] + (TokenManager.shared.yourTokens?.assets ?? []) + (TokenManager.shared.yourTokens?.lpTokens ?? [])
     }
-
+    
+    deinit {
+        print("Deinit SelectTokenViewModel")
+    }
+    
     init(
-        tokensSelected: [TokenProtocol?],
+        tokensSelected: [TokenProtocol?] = [],
         screenType: SelectTokenView.ScreenType,
         sourceScreenType: SendTokenView.ScreenType
     ) {
+        print("Init SelectTokenViewModel")
+
         self.screenType = screenType
         self.sourceScreenType = sourceScreenType
         self.tokensSelected = tokensSelected.compactMap({ $0 })
@@ -141,7 +147,7 @@ class SelectTokenViewModel: ObservableObject {
                 case .swapToken:
                     let input = AssetsInput()
                         .with {
-                            if let searchAfter = searchAfter {
+                            if isLoadMore, let searchAfter = searchAfter {
                                 $0.searchAfter = .some(searchAfter)
                             }
                             if !keyword.isBlank {
@@ -150,14 +156,11 @@ class SelectTokenViewModel: ObservableObject {
                         }
                     let assets = try await MinWalletService.shared.fetch(query: AssetsQuery(input: .some(input)))
                     self.searchAfter = assets?.assets.searchAfter
-
+                    self.hasLoadMore  = self.searchAfter != nil
                     if let assets = assets?.assets.assets, !assets.isEmpty {
-                        self.hasLoadMore = true
                         let currentUniqueIds = _tokens.map { $0.uniqueID }
                         let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
                         self.tokens = (_tokens + _assets).map({ WrapTokenProtocol(token: $0) })
-                    } else {
-                        self.hasLoadMore = false
                     }
                 }
 
@@ -193,6 +196,19 @@ class SelectTokenViewModel: ObservableObject {
             tokensSelected.removeAll()
             tokensSelected[token.uniqueID] = token
         }
+    }
+    
+    func selectToken(tokens: [TokenProtocol]) {
+        tokensSelected = tokens.compactMap({ $0 })
+            .reduce(
+                [:],
+                { result, token in
+                    result.appending([token.uniqueID: token])
+                })
+        tokens.enumerated()
+            .forEach { idx, token in
+                self.cachedIndex[token.uniqueID] = idx
+            }
     }
 }
 

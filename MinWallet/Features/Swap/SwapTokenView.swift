@@ -108,21 +108,11 @@ struct SwapTokenView: View {
                 }
             )
         }
-        .presentSheet(isPresented: $viewModel.isShowSelectPayToken) {
+        .presentSheet(isPresented: $viewModel.isShowSelectToken) {
             SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenPay.token], screenType: .swapToken, sourceScreenType: .normal),
+                viewModel: viewModel.selectTokenVM,
                 onSelectToken: { tokens in
-                    self.viewModel.action.send(.selectTokenPay(token: tokens.first))
-                }
-            )
-            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
-            .presentSheetModifier()
-        }
-        .presentSheet(isPresented: $viewModel.isShowSelectReceiveToken) {
-            SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: [viewModel.tokenReceive.token], screenType: .swapToken, sourceScreenType: .normal),
-                onSelectToken: { tokens in
-                    self.viewModel.action.send(.selectTokenReceive(token: tokens.first))
+                    viewModel.action.send(.selectToken(token: tokens.first))
                 }
             )
             .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
@@ -215,7 +205,7 @@ struct SwapTokenView: View {
                 .contentShape(.rect)
                 .onTapGesture {
                     hideKeyboard()
-                    $viewModel.isShowSelectPayToken.showSheet()
+                    viewModel.action.send(.showSelectToken(isTokenPay: true))
                 }
             }
             HStack(alignment: .center, spacing: 4) {
@@ -277,7 +267,7 @@ struct SwapTokenView: View {
                 .overlay(RoundedRectangle(cornerRadius: 20).fill(Color.colorSurfacePrimaryDefault))
                 .onTapGesture {
                     hideKeyboard()
-                    $viewModel.isShowSelectReceiveToken.showSheet()
+                    viewModel.action.send(.showSelectToken(isTokenPay: false))
                 }
             }
             HStack(alignment: .center, spacing: 4) {
@@ -370,13 +360,14 @@ struct SwapTokenView: View {
         let receiveAmount = Double(viewModel.tokenReceive.amount) ?? 0
         if !payAmount.isZero && !receiveAmount.isZero {
             Color.colorBorderPrimarySub.frame(height: 1)
-            HStack(spacing: 8) {
+            HStack(alignment: .center, spacing: 8) {
                 Circle().frame(width: 6, height: 6)
                     .foregroundStyle(.colorBaseSuccess)
                 let rate: Double = !viewModel.isConvertRate ? (receiveAmount / payAmount) : (payAmount / receiveAmount)
                 let firstAtt = AttributedString("1 \(!viewModel.isConvertRate ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName) = ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub)
                 let attribute = rate.formatNumber(suffix: viewModel.isConvertRate ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
                 Text(firstAtt + attribute)
+                    .frame(height: 22)
                 Image(.icExecutePrice)
                     .fixSize(.xl)
                     .onTapGesture {
@@ -514,7 +505,6 @@ struct WarningItemView: View {
                     .foregroundStyle(.colorBaseTent)
                     .padding(.top, .xs)
             }
-
             if showBottomLine {
                 Color.colorBorderPrimarySub.frame(height: 1)
                     .padding(.top, .md)

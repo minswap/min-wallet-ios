@@ -299,6 +299,10 @@ extension String {
     func toExact(decimal: Int) -> Double {
         return (Double(self) ?? 0) / pow(10.0, Double(decimal))
     }
+    
+    func toSendBE(decimal: Int) -> Double {
+        return (Double(self) ?? 0) * pow(10.0, Double(decimal))
+    }
 }
 extension Double {
     func toExact(decimal: Double?) -> Double {

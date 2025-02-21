@@ -13,7 +13,8 @@ class MinWalletService {
     }
 
     func fetch<Query: GraphQLQuery>(query: Query) async throws -> Query.Data? {
-        try await withCheckedThrowingContinuation { continuation in
+        print("\(query.description)")
+        return try await withCheckedThrowingContinuation { continuation in
             apolloClient.fetch(query: query) { result in
                 switch result {
                 case let .success(response):
@@ -31,7 +32,8 @@ class MinWalletService {
     }
 
     func mutation<Mutation: GraphQLMutation>(mutation: Mutation) async throws -> Mutation.Data? {
-        try await withCheckedThrowingContinuation { continuation in
+        print("\(mutation.description)")
+        return try await withCheckedThrowingContinuation { continuation in
             apolloClient.perform(mutation: mutation) { result in
                 switch result {
                 case let .success(response):
@@ -46,5 +48,16 @@ class MinWalletService {
                 }
             }
         }
+    }
+}
+
+extension GraphQLOperation {
+    var description: String {
+        /*
+        let operation = "------Oper------:\n" + "\(String(describing: self))"
+        let variables = "------Vars------:\n" + "\(self.__variables as AnyObject)"
+        return operation + variables
+         */
+        return String(describing: self)
     }
 }

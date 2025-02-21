@@ -556,14 +556,14 @@ struct TokenDefault: TokenProtocol {
 
     var socialLinks: [SocialLinks: String] { [:] }
 
-    var decimals: Int { 6 }
+    var decimals: Int { mDecimals }
 
     var symbol: String = ""
     var tName: String = ""
     var minName: String = ""
     var netValue: Double = 0
     var netSubValue: Double = 0
-
+    var mDecimals: Int = 0
     var amount: Double {
         netValue
     }
@@ -577,13 +577,15 @@ struct TokenDefault: TokenProtocol {
         tName: String,
         minName: String = "",
         netValue: Double = 0,
-        netSubValue: Double = 0
+        netSubValue: Double = 0,
+        decimal: Int = 0
     ) {
         self.symbol = symbol
         self.tName = tName
         self.minName = minName
         self.netValue = netValue
         self.netSubValue = netSubValue
+        self.mDecimals = decimal
     }
 }
 
