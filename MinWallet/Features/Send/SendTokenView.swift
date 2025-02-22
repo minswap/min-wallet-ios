@@ -90,10 +90,10 @@ struct SendTokenView: View {
                             .padding(.horizontal, .xl)
                             .padding(.top, .lg)
                         }
-
                         Button(
                             action: {
                                 hideKeyboard()
+                                viewModel.selectTokenVM.selectToken(tokens: viewModel.tokens.map({ $0.token }))
                                 $isShowSelectToken.showSheet()
                             },
                             label: {
@@ -130,16 +130,6 @@ struct SendTokenView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("Done") {
-                    focusedField = nil
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
         .modifier(
             BaseContentView(
                 screenTitle: " ",
@@ -150,16 +140,23 @@ struct SendTokenView: View {
                     navigator.popToRoot()
                 })
         )
-        .presentSheet(isPresented: $isShowSelectToken) {
-            SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: viewModel.tokens.map({ $0.token }), screenType: .sendToken, sourceScreenType: viewModel.screenType),
-                onSelectToken: { tokens in
-                    viewModel.addToken(tokens: tokens)
-                }
-            )
-            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.85)
-            .presentSheetModifier()
-        }
+        .presentSheet(
+            isPresented: $isShowSelectToken,
+            onDimiss: {
+                viewModel.selectTokenVM.resetState()
+            },
+            content: {
+                SelectTokenView(
+                    viewModel: viewModel.selectTokenVM,
+                    onSelectToken: { tokens in
+                        viewModel.addToken(tokens: tokens)
+                    }
+                )
+                .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.85)
+                .presentSheetModifier()
+            }
+        )
+        .ignoresSafeArea(.keyboard)
     }
 }
 

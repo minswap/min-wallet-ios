@@ -32,17 +32,11 @@ class SelectTokenViewModel: ObservableObject {
         [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
     }
 
-    deinit {
-        print("Deinit SelectTokenViewModel")
-    }
-
     init(
         tokensSelected: [TokenProtocol?] = [],
         screenType: SelectTokenView.ScreenType,
         sourceScreenType: SendTokenView.ScreenType
     ) {
-        print("Init SelectTokenViewModel")
-
         self.screenType = screenType
         self.sourceScreenType = sourceScreenType
         self.tokensSelected = tokensSelected.compactMap({ $0 })

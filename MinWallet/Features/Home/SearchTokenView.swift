@@ -21,6 +21,9 @@ struct SearchTokenView: View {
                         .placeholder("Search", when: viewModel.keyword.isEmpty)
                         .focused($isFocus)
                         .lineLimit(1)
+                        .keyboardType(.asciiCapable)
+                        .submitLabel(.done)
+                        .autocorrectionDisabled()
                     if !viewModel.keyword.isBlank {
                         Image(.icCloseFill)
                             .fixSize(16)
@@ -77,6 +80,7 @@ struct SearchTokenView: View {
                 Spacer(minLength: 0)
             }
         }
+        /*
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -86,6 +90,7 @@ struct SearchTokenView: View {
                 .foregroundStyle(.colorLabelToolbarDone)
             }
         }
+         */
         .background(.colorBaseBackground)
         .onAppear {
             viewModel.getTokens()

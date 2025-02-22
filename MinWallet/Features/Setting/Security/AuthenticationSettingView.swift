@@ -100,15 +100,6 @@ struct AuthenticationSettingView: View {
         .presentSheet(isPresented: $isShowEnterYourPassword) {
             EnterYourPasswordView(authenticationType: $authenticationTypeSelected)
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    hideKeyboard()
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
     }
 }
 

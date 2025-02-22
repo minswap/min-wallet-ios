@@ -12,6 +12,9 @@ struct SecurePasswordTextField: View {
         HStack {
             TextField("", text: $visibleInput)
                 .font(.paragraphSmall)
+                .keyboardType(.asciiCapable)
+                .submitLabel(.done)
+                .autocorrectionDisabled()
                 .placeholder(placeHolder, when: visibleInput.isEmpty)
                 .foregroundStyle(.colorBaseTent)
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 50))

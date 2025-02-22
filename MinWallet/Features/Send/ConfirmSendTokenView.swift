@@ -205,15 +205,6 @@ struct ConfirmSendTokenView: View {
                 }
             )
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    hideKeyboard()
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
     }
 
     private func authenticationSuccess() {

@@ -61,7 +61,9 @@ struct SelectTokenView: View {
                             Color.clear.frame(height: 0)
                         }
                     }
-                })
+                }
+            )
+            .ignoresSafeArea(.keyboard)
         }
         .background(.colorBaseBackground)
     }
@@ -103,6 +105,9 @@ struct SelectTokenView: View {
                     .placeholder("Search", when: viewModel.keyword.isEmpty)
                     .focused($isFocus)
                     .lineLimit(1)
+                    .keyboardType(.asciiCapable)
+                    .submitLabel(.done)
+                    .autocorrectionDisabled()
             }
             .padding(.md)
             .overlay(RoundedRectangle(cornerRadius: 20).stroke(.colorBorderPrimaryDefault, lineWidth: 1))

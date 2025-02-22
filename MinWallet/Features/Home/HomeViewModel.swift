@@ -57,6 +57,11 @@ class HomeViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] time in
                 guard let self = self, !TokenManager.shared.isLoadingPortfolioOverviewAndYourToken else { return }
+                guard AppSetting.shared.isLogin
+                else {
+                    self.timerReloadBalance?.cancel()
+                    return
+                }
                 Task {
                     switch self.tabType {
                     case .market:
@@ -74,6 +79,11 @@ class HomeViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] time in
                 guard let self = self else { return }
+                guard AppSetting.shared.isLogin
+                else {
+                    self.timerReloadMarket?.cancel()
+                    return
+                }
                 Task {
                     switch self.tabType {
                     case .market:

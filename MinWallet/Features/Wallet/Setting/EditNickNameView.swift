@@ -33,6 +33,9 @@ struct EditNickNameView: View {
                     .placeholder("Give your wallet a nickname", when: nickName.isEmpty)
                     .padding(EdgeInsets(top: 0, leading: isFocus ? 0 : 16, bottom: 0, trailing: 16))
                     .focused($isFocus)
+                    .keyboardType(.asciiCapable)
+                    .submitLabel(.done)
+                    .autocorrectionDisabled()
                     .frame(height: 44)
                     .overlay(
                         RoundedRectangle(cornerRadius: BorderRadius.full)

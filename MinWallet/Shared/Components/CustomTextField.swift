@@ -71,6 +71,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.isUserInteractionEnabled = enableTextView
         textView.bounces = false
         textView.adjustsFontForContentSizeCategory = true
+        textView.autocorrectionType = .no
         let placeholderLabel = UILabel()
         placeholderLabel.text = placeHolderText.toString()
         placeholderLabel.textColor = placeHolderTextColor
