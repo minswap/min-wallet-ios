@@ -7,6 +7,8 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
     @State var modalHeight: CGFloat?
     @ViewBuilder var modal: () -> Modal
 
+    var onDimiss: (() -> Void)?
+
     func body(content: Content) -> some View {
         ZStack {
             content
@@ -18,6 +20,7 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                     withAnimation {
                         content.hideKeyboard()
                         isPresented.toggle()
+                        onDimiss?()
                     }
                 }
         }
@@ -38,6 +41,7 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                                 withAnimation {
                                     content.hideKeyboard()
                                     isPresented = false
+                                    onDimiss?()
                                 }
                             }
                             dragOffset = 0
@@ -50,6 +54,7 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                 withAnimation {
                     content.hideKeyboard()
                     isPresented = false
+                    onDimiss?()
                 }
             })
     }
@@ -59,13 +64,16 @@ extension View {
     func presentSheet<Modal: View>(
         isPresented: Binding<Bool>,
         height: CGFloat? = nil,
+        onDimiss: (() -> Void)? = nil,
         @ViewBuilder content: @escaping () -> Modal
     ) -> some View {
         modifier(
             ModalTypeView(
                 isPresented: isPresented,
                 modalHeight: height,
-                modal: content)
+                modal: content,
+                onDimiss: onDimiss
+            )
         )
     }
 

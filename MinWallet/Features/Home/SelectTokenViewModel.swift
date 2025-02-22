@@ -116,7 +116,7 @@ class SelectTokenViewModel: ObservableObject {
 
                 var _tokens: [TokenProtocol] = []
                 if !isLoadMore {
-                    let _ = try await TokenManager.getYourToken()
+                    //let _ = try await TokenManager.getYourToken()
                     let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
                     _tokens =
                         keyword.isEmpty
@@ -200,7 +200,6 @@ class SelectTokenViewModel: ObservableObject {
     }
 
     func selectToken(tokens: [TokenProtocol]) {
-        scrollToTop = true
         tokensSelected = tokens.compactMap({ $0 })
             .reduce(
                 [:],
@@ -211,8 +210,16 @@ class SelectTokenViewModel: ObservableObject {
             .forEach { idx, token in
                 self.cachedIndex[token.uniqueID] = idx
             }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
-            self.scrollToTop = false
+    }
+
+    func resetState() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in
+            guard let self = self else { return }
+            self.scrollToTop = true
+            self.keyword = ""
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+                self.scrollToTop = false
+            }
         }
     }
 }

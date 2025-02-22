@@ -121,6 +121,10 @@ class SwapTokenViewModel: ObservableObject {
             .store(in: &cancellables)
 
         action.send(.getTradingInfo)
+
+        TokenManager.shared.reloadBalance.map { _ in Action.reloadBalance }
+            .subscribe(action)
+            .store(in: &cancellables)
     }
 
     private func handleAction(_ action: Action) async throws {
@@ -192,6 +196,33 @@ class SwapTokenViewModel: ObservableObject {
             if swapSetting.slippageSelectedValue() >= 50 {
                 warningInfo.append(.unsafeSlippageTolerance(percent: "50"))
             }
+        case .reloadBalance:
+            let tokens = TokenManager.shared.normalTokens + [TokenManager.shared.tokenAda]
+            var isReloadSelectToken: Bool = false
+            if let tokenPayChange = tokens.first(where: { $0.uniqueID == tokenPay.uniqueID }), tokenPay.token.amount != tokenPayChange.amount {
+                tokenPay.token = tokenPayChange
+                isReloadSelectToken = true
+            }
+            if let tokenReceiveChange = tokens.first(where: { $0.uniqueID == tokenReceive.uniqueID }), tokenReceive.token.amount != tokenReceiveChange.amount {
+                tokenReceive.token = tokenReceiveChange
+                isReloadSelectToken = true
+            }
+
+            if isSwapExactIn {
+                if tokenPay.amount.doubleValue > tokenPay.token.amount {
+                    self.action.send(.setMaxAmount)
+                }
+            } else {
+                if tokenReceive.amount.doubleValue > tokenReceive.token.amount {
+                    tokenReceive.amount = tokenReceive.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+                }
+            }
+
+            if isReloadSelectToken {
+                selectTokenVM.getTokens()
+            }
+        case .hiddenSelectToken:
+            selectTokenVM.resetState()
         }
     }
 
@@ -454,6 +485,8 @@ extension SwapTokenViewModel {
         case showSelectToken(isTokenPay: Bool)
         case recheckUnSafeSlippage
         case resetSwap
+        case reloadBalance
+        case hiddenSelectToken
     }
 }
 

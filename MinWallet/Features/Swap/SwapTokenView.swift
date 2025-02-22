@@ -113,16 +113,22 @@ struct SwapTokenView: View {
                 }
             )
         }
-        .presentSheet(isPresented: $viewModel.isShowSelectToken) {
-            SelectTokenView(
-                viewModel: viewModel.selectTokenVM,
-                onSelectToken: { tokens in
-                    viewModel.action.send(.selectToken(token: tokens.first))
-                }
-            )
-            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
-            .presentSheetModifier()
-        }
+        .presentSheet(
+            isPresented: $viewModel.isShowSelectToken,
+            onDimiss: {
+                viewModel.action.send(.hiddenSelectToken)
+            },
+            content: {
+                SelectTokenView(
+                    viewModel: viewModel.selectTokenVM,
+                    onSelectToken: { tokens in
+                        viewModel.action.send(.selectToken(token: tokens.first))
+                    }
+                )
+                .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+                .presentSheetModifier()
+            }
+        )
         .presentSheet(isPresented: $isShowToolTip) {
             TokenDetailToolTipView(title: $title, content: $content)
                 .background(content: {

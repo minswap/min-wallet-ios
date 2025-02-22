@@ -62,6 +62,7 @@ class TokenManager: ObservableObject {
 
         let _ = try await [firstImage, secondImage]
         isLoadingPortfolioOverviewAndYourToken = false
+        reloadBalance.send(())
     }
 }
 
@@ -71,7 +72,7 @@ extension TokenManager {
     }
 
     @discardableResult
-    static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
+    private static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
         let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
         TokenManager.shared.yourTokens = tokens?.getWalletAssetsPositions
         UserInfo.shared.adaHandleName = tokens?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName.adaName ?? ""
