@@ -59,7 +59,7 @@ class SwapTokenViewModel: ObservableObject {
     var isLoadingRouting: Bool = true
      */
     @Published
-    var isGettingTradeInfo: Bool = false
+    var isGettingTradeInfo: Bool = true
     @Published
     var errorInfo: ErrorInfo? = nil
     @Published
@@ -151,11 +151,21 @@ class SwapTokenViewModel: ObservableObject {
         case .swapToken:
             let tempToken = tokenPay
             isSwapExactIn = true
+            var isForceGetTradingInfo: Bool = false
+
+            if tokenPay.amount.doubleValue == 0 {
+                isForceGetTradingInfo = true
+            }
+
             tokenPay = tokenReceive
             tokenPay.amount = ""
             tokenReceive = tempToken
             tokenReceive.amount = ""
             isConvertRate = false
+
+            if isForceGetTradingInfo {
+                self.action.send(.getTradingInfo)
+            }
 
         case .setMaxAmount:
             tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
@@ -207,20 +217,11 @@ class SwapTokenViewModel: ObservableObject {
                 tokenReceive.token = tokenReceiveChange
                 isReloadSelectToken = true
             }
-
-            if isSwapExactIn {
-                if tokenPay.amount.doubleValue > tokenPay.token.amount {
-                    self.action.send(.setMaxAmount)
-                }
-            } else {
-                if tokenReceive.amount.doubleValue > tokenReceive.token.amount {
-                    tokenReceive.amount = tokenReceive.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
-                }
-            }
-
             if isReloadSelectToken {
                 selectTokenVM.getTokens()
             }
+            await generateErrorInfo()
+
         case .hiddenSelectToken:
             selectTokenVM.resetState()
         }
@@ -339,7 +340,9 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     private func getTradingInfo(amount: Double) async throws {
-        isGettingTradeInfo = true
+        withAnimation {
+            isGettingTradeInfo = true
+        }
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let input = IosTradeEstimateInput(
             amount: String(Int(amount)),
@@ -358,8 +361,9 @@ class SwapTokenViewModel: ObservableObject {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
             tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
         }
-
-        isGettingTradeInfo = false
+        withAnimation {
+            isGettingTradeInfo = false
+        }
     }
 
     func swapToken() async throws -> String {

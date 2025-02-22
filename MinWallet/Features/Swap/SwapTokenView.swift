@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import SkeletonUI
 
 
 struct SwapTokenView: View {
@@ -185,14 +186,22 @@ struct SwapTokenView: View {
                     }
             }
             HStack(alignment: .center, spacing: 6) {
-                AmountTextField(
-                    value: $viewModel.tokenPay.amount,
-                    maxValue: viewModel.tokenPay.token.amount,
-                    fontPlaceHolder: .titleH4
-                )
-                .font(.titleH4)
-                .foregroundStyle(.colorBaseTent)
-                .focused($focusedField, equals: .pay)
+                if !viewModel.isSwapExactIn && viewModel.isGettingTradeInfo {
+                    HStack(spacing: 0) {
+                        Text("")
+                    }
+                    .skeleton(with: true)
+                    .frame(width: 124, height: 32)
+                } else {
+                    AmountTextField(
+                        value: $viewModel.tokenPay.amount,
+                        maxValue: viewModel.tokenPay.token.amount,
+                        fontPlaceHolder: .titleH4
+                    )
+                    .font(.titleH4)
+                    .foregroundStyle(.colorBaseTent)
+                    .focused($focusedField, equals: .pay)
+                }
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
@@ -248,14 +257,22 @@ struct SwapTokenView: View {
                 .font(.paragraphSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
             HStack(alignment: .center, spacing: 6) {
-                AmountTextField(
-                    value: $viewModel.tokenReceive.amount,
-                    maxValue: viewModel.tokenReceive.token.amount,
-                    fontPlaceHolder: .titleH4
-                )
-                .font(.titleH4)
-                .foregroundStyle(.colorBaseTent)
-                .focused($focusedField, equals: .receive)
+                if viewModel.isSwapExactIn && viewModel.isGettingTradeInfo {
+                    HStack(spacing: 0) {
+                        Text("")
+                    }
+                    .skeleton(with: true)
+                    .frame(width: 124, height: 32)
+                } else {
+                    AmountTextField(
+                        value: $viewModel.tokenReceive.amount,
+                        maxValue: viewModel.tokenReceive.token.amount,
+                        fontPlaceHolder: .titleH4
+                    )
+                    .font(.titleH4)
+                    .foregroundStyle(.colorBaseTent)
+                    .focused($focusedField, equals: .receive)
+                }
                 Spacer()
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
@@ -305,14 +322,60 @@ struct SwapTokenView: View {
 
     @ViewBuilder
     private var routingView: some View {
-        if let assets = viewModel.iosTradeEstimate?.path, let contractType = viewModel.iosTradeEstimate?.type.value {
+        HStack(alignment: .center, spacing: 8) {
+            Text("Trade route")
+                .lineLimit(1)
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+            /*
+            let contractType = viewModel.iosTradeEstimate?.type.value
+            if !viewModel.isGettingTradeInfo, let contractType = contractType {
+                Text(contractType.title)
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(contractType.foregroundColor)
+                    .padding(.horizontal, .md)
+                    .frame(height: 20)
+                    .background(
+                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
+                    )
+            }
+             */
+            Spacer(minLength: 0)
+            if viewModel.isGettingTradeInfo {
+                HStack(spacing: 0) {
+                    Text("")
+                }
+                .skeleton(with: true)
+                .frame(width: 56, height: 16)
+            } else if let assets = viewModel.iosTradeEstimate?.path, !assets.isEmpty {
+                Image(.icStartRouting)
+                    .padding(.trailing, 4)
+                ForEach(0..<assets.count, id: \.self) { index in
+                    if let asset = assets[gk_safeIndex: index] {
+                        TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
+                        if index != assets.count - 1 {
+                            Image(.icBack)
+                                .resizable()
+                                .renderingMode(.template)
+                                .rotationEffect(.degrees(180))
+                                .frame(width: 14, height: 14)
+                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, .xl)
+        .frame(height: 48)
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
+        .padding(.top, .md)
+        .padding(.horizontal, .xl)
+        /*
             VStack(spacing: .lg) {
                 HStack(spacing: 4) {
-                    /*
                     Text("Select your route")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
-                     */
                     Spacer()
                     Image(.icDown)
                         .resizable()
@@ -356,14 +419,12 @@ struct SwapTokenView: View {
             .padding(.top, .md)
             .padding(.horizontal, .xl)
             .contentShape(.rect)
-            /*
             .onTapGesture {
                 guard !viewModel.isLoadingRouting else { return }
                 hideKeyboard()
                 $viewModel.isShowRouting.showSheet()
             }
              */
-        }
     }
 
     @ViewBuilder
