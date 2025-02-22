@@ -119,7 +119,8 @@ struct SwapTokenSettingView: View {
                 }
                 .frame(height: 32)
                 .padding(.top, .lg)
-                .padding(.bottom, .lg)
+                .padding(.bottom, 24)
+                /*
                 DashedUnderlineText(text: "Route Sorting", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, .md)
@@ -189,6 +190,7 @@ struct SwapTokenSettingView: View {
                     TextLearnMoreSendTokenView(text: "When available, uses multiple pools for better liquidity and prices. ", textClickAble: "Learn more", preferredMaxLayoutWidth: width)
                 }
                 .padding(.bottom, 24)
+                 */
             }
             .padding(.horizontal, .xl)
             .background(content: {

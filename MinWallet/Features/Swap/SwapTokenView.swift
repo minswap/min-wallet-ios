@@ -97,23 +97,6 @@ struct SwapTokenView: View {
                 .environmentObject(viewModel)
         }
          */
-        .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
-            SwapTokenSettingView(
-                onShowToolTip: { title, content in
-                    self.content = content
-                    self.title = title
-                    $isShowToolTip.showSheet()
-                }, viewModel: viewModel
-            )
-            .padding(.xl)
-        }
-        .presentSheet(isPresented: $isShowSignContract) {
-            SignContractView(
-                onSignSuccess: {
-                    swapTokenSuccess()
-                }
-            )
-        }
         .presentSheet(
             isPresented: $viewModel.isShowSelectToken,
             onDimiss: {
@@ -141,6 +124,23 @@ struct SwapTokenView: View {
                 .ignoresSafeArea()
         }
         .ignoresSafeArea(.keyboard)
+        .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
+            SwapTokenSettingView(
+                onShowToolTip: { title, content in
+                    self.content = content
+                    self.title = title
+                    $isShowToolTip.showSheet()
+                }, viewModel: viewModel
+            )
+            .padding(.xl)
+        }
+        .presentSheet(isPresented: $isShowSignContract) {
+            SignContractView(
+                onSignSuccess: {
+                    swapTokenSuccess()
+                }
+            )
+        }
         .onFirstAppear {
             viewModel.hudState = hudState
         }

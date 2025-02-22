@@ -197,9 +197,6 @@
     "Authentication invalid, please try again later" : {
 
     },
-    "Auto Router" : {
-
-    },
     "Avg. price" : {
 
     },
@@ -255,9 +252,6 @@
 
     },
     "Check" : {
-
-    },
-    "Choose how to sort routes: by most liquidity for stable transactions or by high return for maximum profitability." : {
 
     },
     "Choose your best way to log-in" : {
@@ -458,9 +452,6 @@
     "High price impact" : {
 
     },
-    "High return" : {
-
-    },
     "I have written the seed phrase and stored it in a secured place." : {
 
     },
@@ -533,9 +524,6 @@
     "Language" : {
 
     },
-    "Learn more" : {
-
-    },
     "Let's swap now" : {
 
     },
@@ -585,9 +573,6 @@
 
     },
     "Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management." : {
-
-    },
-    "Most liquidity" : {
 
     },
     "My balance" : {
@@ -749,9 +734,6 @@
 
     },
     "Route" : {
-
-    },
-    "Route Sorting" : {
 
     },
     "Sample" : {
@@ -1002,9 +984,6 @@
 
     },
     "Warning" : {
-
-    },
-    "When available, uses multiple pools for better liquidity and prices. " : {
 
     },
     "When you set the appearance to default, theme app will be depended on device settings." : {
