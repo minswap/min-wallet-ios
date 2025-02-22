@@ -467,6 +467,9 @@
     "I have written the seed phrase and stored it in a secured place." : {
 
     },
+    "I understand these warnings" : {
+
+    },
     "If I clear my local storage without backing up the seed phrase, Minswap cannot retrieve it for me." : {
 
     },

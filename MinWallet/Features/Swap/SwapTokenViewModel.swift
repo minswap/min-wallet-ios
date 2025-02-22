@@ -62,13 +62,15 @@ class SwapTokenViewModel: ObservableObject {
     var isGettingTradeInfo: Bool = false
     @Published
     var errorInfo: ErrorInfo? = nil
+    @Published
+    var understandingWarning: Bool = false
 
     @Published
     var selectTokenVM: SelectTokenViewModel = .init(screenType: .swapToken, sourceScreenType: .normal)
     @Published
     var isShowSelectToken: Bool = false
     var isSelectTokenPay: Bool = true
-    
+
     private var cancellables: Set<AnyCancellable> = []
 
     var hudState: HUDState = .init()
@@ -76,15 +78,15 @@ class SwapTokenViewModel: ObservableObject {
     deinit {
         print("Deinit SwapTokenViewModel")
     }
-    
+
     init() {
         print("Init SwapTokenViewModel")
-        
+
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
         let minTokenDefault = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
         let minToken = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == minTokenDefault.uniqueID })
         tokenReceive = WrapTokenSend(token: minToken ?? minTokenDefault)
-        
+
         action
             .sink { [weak self] action in
                 guard let self = self else { return }
@@ -132,7 +134,7 @@ class SwapTokenViewModel: ObservableObject {
                 tokenReceive = WrapTokenSend(token: token)
             }
             self.action.send(.getTradingInfo)
-            
+
         case .predictSwapPrice:
             self.action.send(.getTradingInfo)
 
@@ -144,7 +146,7 @@ class SwapTokenViewModel: ObservableObject {
             tokenReceive = tempToken
             tokenReceive.amount = ""
             isConvertRate = false
-            //self.action.send(.getTradingInfo)
+        //self.action.send(.getTradingInfo)
 
         case .setMaxAmount:
             tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
@@ -163,7 +165,7 @@ class SwapTokenViewModel: ObservableObject {
             try await getTradingInfo(amount: Double(amount) ?? 0)
             await generateWarningInfo()
             await generateErrorInfo()
-            
+
         case .routeSorting,
             .autoRouter,
             .routeSelected:
@@ -173,6 +175,17 @@ class SwapTokenViewModel: ObservableObject {
             self.isSelectTokenPay = isTokenPay
             withAnimation {
                 isShowSelectToken = true
+            }
+        case .recheckUnSafeSlippage:
+            warningInfo.removeAll { warning in
+                if case SwapTokenViewModel.WarningInfo.unsafeSlippageTolerance = warning {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            if swapSetting.slippageSelectedValue() >= 50 {
+                warningInfo.append(.unsafeSlippageTolerance(percent: "50"))
             }
         }
     }
@@ -401,6 +414,22 @@ class SwapTokenViewModel: ObservableObject {
             (1 + swapSetting.slippageSelectedValue() / 100) * tokenPay.amount.doubleValue
         }
     }
+
+    var enableSwap: Bool {
+        if !warningInfo.isEmpty && !understandingWarning {
+            return false
+        }
+
+        if errorInfo != nil {
+            return false
+        }
+
+        if tokenPay.amount.doubleValue.isZero || tokenReceive.amount.doubleValue.isZero {
+            return false
+        }
+
+        return true
+    }
 }
 
 
@@ -418,6 +447,7 @@ extension SwapTokenViewModel {
         case swapToken
         case getTradingInfo
         case showSelectToken(isTokenPay: Bool)
+        case recheckUnSafeSlippage
     }
 }
 

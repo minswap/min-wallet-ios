@@ -9,6 +9,7 @@ struct SwapTokenInfoView: View {
     private var viewModel: SwapTokenViewModel
 
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
+    var onSwap: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -102,8 +103,14 @@ struct SwapTokenInfoView: View {
             .onTapGesture {
                 onShowToolTip?("Deposit ADA", "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled.")
             }
-            CustomButton(title: "Swap") {
+            let combinedBinding = Binding<Bool>(
+                get: { viewModel.enableSwap },
+                set: { _ in }
+            )
+            let swapTitle: LocalizedStringKey = viewModel.errorInfo?.content ?? "Swap"
+            CustomButton(title: swapTitle, isEnable: combinedBinding) {
                 onDismiss?()
+                onSwap?()
             }
             .frame(height: 56)
             .padding(.bottom, .md)

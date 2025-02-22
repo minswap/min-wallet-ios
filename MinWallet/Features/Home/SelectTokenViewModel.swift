@@ -18,7 +18,8 @@ class SelectTokenViewModel: ObservableObject {
     var screenType: SelectTokenView.ScreenType = .initSelectedToken
     @Published
     var sourceScreenType: SendTokenView.ScreenType = .normal
-
+    @Published
+    var scrollToTop: Bool = false
     var searchAfter: [String]? = nil
 
     private var hasLoadMore: Bool = true
@@ -30,11 +31,11 @@ class SelectTokenViewModel: ObservableObject {
     private var rawTokens: [TokenProtocol] {
         [TokenManager.shared.tokenAda] + (TokenManager.shared.yourTokens?.assets ?? []) + (TokenManager.shared.yourTokens?.lpTokens ?? [])
     }
-    
+
     deinit {
         print("Deinit SelectTokenViewModel")
     }
-    
+
     init(
         tokensSelected: [TokenProtocol?] = [],
         screenType: SelectTokenView.ScreenType,
@@ -156,7 +157,7 @@ class SelectTokenViewModel: ObservableObject {
                         }
                     let assets = try await MinWalletService.shared.fetch(query: AssetsQuery(input: .some(input)))
                     self.searchAfter = assets?.assets.searchAfter
-                    self.hasLoadMore  = self.searchAfter != nil
+                    self.hasLoadMore = self.searchAfter != nil
                     if let assets = assets?.assets.assets, !assets.isEmpty {
                         let currentUniqueIds = _tokens.map { $0.uniqueID }
                         let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
@@ -178,7 +179,7 @@ class SelectTokenViewModel: ObservableObject {
         guard case .swapToken = screenType else { return }
         guard hasLoadMore, !isFetching else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
-        if tokens.firstIndex(where: { ($0.currencySymbol + $0.tokenName) == (item.currencySymbol + $0.tokenName) }) == thresholdIndex {
+        if tokens.firstIndex(where: { ($0.token.uniqueID == item.uniqueID) }) == thresholdIndex {
             getTokens(isLoadMore: true)
         }
     }
@@ -197,8 +198,9 @@ class SelectTokenViewModel: ObservableObject {
             tokensSelected[token.uniqueID] = token
         }
     }
-    
+
     func selectToken(tokens: [TokenProtocol]) {
+        scrollToTop = true
         tokensSelected = tokens.compactMap({ $0 })
             .reduce(
                 [:],
@@ -209,6 +211,9 @@ class SelectTokenViewModel: ObservableObject {
             .forEach { idx, token in
                 self.cachedIndex[token.uniqueID] = idx
             }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+            self.scrollToTop = false
+        }
     }
 }
 

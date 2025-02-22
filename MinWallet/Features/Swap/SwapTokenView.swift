@@ -43,7 +43,7 @@ struct SwapTokenView: View {
             Spacer()
             bottomView
             let combinedBinding = Binding<Bool>(
-                get: { viewModel.errorInfo == nil },
+                get: { viewModel.enableSwap },
                 set: { _ in }
             )
             let swapTitle: LocalizedStringKey = viewModel.errorInfo?.content ?? "Swap"
@@ -78,11 +78,16 @@ struct SwapTokenView: View {
                 })
         )
         .presentSheet(isPresented: $viewModel.isShowInfo) {
-            SwapTokenInfoView(onShowToolTip: { (title, content) in
-                self.content = content
-                self.title = title
-                $isShowToolTip.showSheet()
-            })
+            SwapTokenInfoView(
+                onShowToolTip: { (title, content) in
+                    self.content = content
+                    self.title = title
+                    $isShowToolTip.showSheet()
+                },
+                onSwap: {
+                    processingSwapToken()
+                }
+            )
             .environmentObject(viewModel)
         }
         /*
@@ -383,6 +388,11 @@ struct SwapTokenView: View {
                     .background(
                         RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
                     )
+                    .containerShape(.rect)
+                    .onTapGesture {
+                        hideKeyboard()
+                        $viewModel.isShowInfo.showSheet()
+                    }
                 Image(.icNext)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -409,7 +419,21 @@ struct SwapTokenView: View {
                             self.viewModel.isExpand[warningInfo] = isExpand
                         }
                     )
-                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand, showBottomLine: index != viewModel.warningInfo.count - 1)
+                    WarningItemView(waringInfo: warningInfo, isExpand: isExpand)
+                }
+                HStack(alignment: .center, spacing: 8) {
+                    Image(viewModel.understandingWarning ? .icSquareCheckBox : .icSquareUncheckBox)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                    Text("I understand these warnings")
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.md)
+                .contentShape(.rect)
+                .onTapGesture {
+                    viewModel.understandingWarning.toggle()
                 }
             }
             .background(.colorSurfaceWarningDefault)
@@ -424,9 +448,7 @@ struct SwapTokenView: View {
     private func processingSwapToken() {
         hideKeyboard()
         guard !viewModel.isGettingTradeInfo, viewModel.errorInfo == nil, viewModel.iosTradeEstimate != nil else { return }
-        let amountToPay = Double(viewModel.tokenPay.amount) ?? 0
-        let amountToReceive = Double(viewModel.tokenReceive.amount) ?? 0
-        guard amountToPay > 0, amountToReceive > 0 else { return }
+        guard !viewModel.tokenPay.amount.doubleValue.isZero, !viewModel.tokenReceive.amount.doubleValue.isZero else { return }
         Task {
             do {
                 switch appSetting.authenticationType {
@@ -470,16 +492,19 @@ struct SwapTokenView: View {
 
 #Preview {
     SwapTokenView()
+        .environmentObject(HUDState())
 }
 
 
 struct WarningItemView: View {
-    @State
-    var waringInfo: SwapTokenViewModel.WarningInfo = .indivisibleTokenPay
+    let waringInfo: SwapTokenViewModel.WarningInfo
     @Binding
     var isExpand: Bool
-    @State
-    var showBottomLine: Bool = true
+
+    init(waringInfo: SwapTokenViewModel.WarningInfo, isExpand: Binding<Bool>) {
+        self.waringInfo = waringInfo
+        self._isExpand = isExpand
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -505,6 +530,9 @@ struct WarningItemView: View {
                     .foregroundStyle(.colorBaseTent)
                     .padding(.top, .xs)
             }
+            Color.colorBorderPrimarySub.frame(height: 1)
+                .padding(.top, .md)
+            /*
             if showBottomLine {
                 Color.colorBorderPrimarySub.frame(height: 1)
                     .padding(.top, .md)
@@ -512,6 +540,7 @@ struct WarningItemView: View {
                 Color.clear.frame(height: 1)
                     .padding(.top, .md)
             }
+             */
         }
         .padding(.horizontal, .md)
         .contentShape(.rect)

@@ -49,6 +49,7 @@ struct SwapTokenSettingView: View {
                             .contentShape(.rect)
                             .onTapGesture {
                                 viewModel.swapSetting.slippageSelected = splippage
+                                viewModel.action.send(.recheckUnSafeSlippage)
                             }
                         Spacer()
                     }
@@ -68,6 +69,7 @@ struct SwapTokenSettingView: View {
                                 }()
                                 viewModel.swapSetting.slippageTolerance = filtered
                                 viewModel.swapSetting.slippageSelected = nil
+                                viewModel.action.send(.recheckUnSafeSlippage)
                             }
                         Text("%")
                             .font(.labelMediumSecondary)
@@ -79,7 +81,7 @@ struct SwapTokenSettingView: View {
                     .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                 }
                 .padding(.top, .md)
-                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) > 50 && viewModel.swapSetting.slippageSelected == nil {
+                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) >= 50 && viewModel.swapSetting.slippageSelected == nil {
                     HStack(spacing: Spacing.md) {
                         Image(.icWarning)
                             .resizable()
@@ -93,6 +95,7 @@ struct SwapTokenSettingView: View {
                                 .font(.paragraphXSmall)
                                 .foregroundStyle(.colorInteractiveToneDanger)
                         }
+                        Spacer(minLength: 0)
                     }
                     .padding(.md)
                     .background(
