@@ -229,7 +229,7 @@ struct ConfirmSendTokenView: View {
                     })
                 }
                 bannerState.showBanner(isShow: true)
-                TokenManager.shared.reloadBalance.send(())
+                //TokenManager.shared.reloadBalance.send(())
                 if appSetting.rootScreen != .home {
                     appSetting.rootScreen = .home
                 }

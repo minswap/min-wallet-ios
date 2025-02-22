@@ -138,38 +138,39 @@ struct SearchTokenView: View {
                 .frame(height: 32)
                 .padding(.horizontal, .xl)
             ForEach(0..<viewModel.tokensFav.count, id: \.self) { index in
-                let item = viewModel.tokensFav[index]
-                let offsetBinding = Binding<CGFloat>(
-                    get: {
-                        viewModel.offsets[gk_safeIndex: index] ?? 0
-                    },
-                    set: { value in
-                        guard index >= 0, index < viewModel.offsets.count else { return }
-                        viewModel.offsets[index] = value
-                    }
-                )
-                let deleteBinding = Binding<Bool>(
-                    get: {
-                        viewModel.isDeleted[gk_safeIndex: index] ?? false
-                    },
-                    set: { value in
-                        guard index >= 0, index < viewModel.isDeleted.count else { return }
-                        viewModel.isDeleted[index] = value
-                    }
-                )
-
-                TokenListItemView(token: item, showBottomLine: index != viewModel.tokensFav.count - 1)
-                    .contentShape(.rect)
-                    .swipeToDelete(
-                        offset: offsetBinding, isDeleted: deleteBinding, height: 68,
-                        onDelete: {
-                            viewModel.deleteTokenFav(at: index)
+                if let item = viewModel.tokensFav[gk_safeIndex: index] {
+                    let offsetBinding = Binding<CGFloat>(
+                        get: {
+                            viewModel.offsets[gk_safeIndex: index] ?? 0
+                        },
+                        set: { value in
+                            guard index >= 0, index < viewModel.offsets.count else { return }
+                            viewModel.offsets[index] = value
                         }
                     )
-                    .zIndex(Double(index) * -1)
-                    .onTapGesture {
-                        navigator.push(.tokenDetail(token: item))
-                    }
+                    let deleteBinding = Binding<Bool>(
+                        get: {
+                            viewModel.isDeleted[gk_safeIndex: index] ?? false
+                        },
+                        set: { value in
+                            guard index >= 0, index < viewModel.isDeleted.count else { return }
+                            viewModel.isDeleted[index] = value
+                        }
+                    )
+
+                    TokenListItemView(token: item, showBottomLine: index != viewModel.tokensFav.count - 1)
+                        .contentShape(.rect)
+                        .swipeToDelete(
+                            offset: offsetBinding, isDeleted: deleteBinding, height: 68,
+                            onDelete: {
+                                viewModel.deleteTokenFav(at: index)
+                            }
+                        )
+                        .zIndex(Double(index) * -1)
+                        .onTapGesture {
+                            navigator.push(.tokenDetail(token: item))
+                        }
+                }
             }
         }
     }
@@ -196,16 +197,17 @@ struct SearchTokenView: View {
                 .padding(.top, spacing)
         }
         ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-            let item = viewModel.tokens[index]
-            TokenListItemView(token: item)
-                .contentShape(.rect)
-                .onTapGesture {
-                    viewModel.addRecentSearch(keyword: item.adaName)
-                    navigator.push(.tokenDetail(token: item))
-                }
-                .onAppear() {
-                    viewModel.loadMoreData(item: item)
-                }
+            if let item = viewModel.tokens[gk_safeIndex: index] {
+                TokenListItemView(token: item)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        viewModel.addRecentSearch(keyword: item.adaName)
+                        navigator.push(.tokenDetail(token: item))
+                    }
+                    .onAppear() {
+                        viewModel.loadMoreData(item: item)
+                    }
+            }
         }
     }
 }

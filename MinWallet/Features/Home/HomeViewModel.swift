@@ -7,8 +7,6 @@ import OneSignalFramework
 @MainActor
 class HomeViewModel: ObservableObject {
 
-    static var shared: HomeViewModel = .init()
-
     @Published
     var tabType: TokenListView.TabType = .market
     @Published
@@ -17,8 +15,6 @@ class HomeViewModel: ObservableObject {
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
     var tabTypes: [TokenListView.TabType] = []
-    @Published
-    var isHasYourToken: Bool = false
 
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
@@ -27,6 +23,13 @@ class HomeViewModel: ObservableObject {
     private let limit: Int = 20
 
     private var cancellables: Set<AnyCancellable> = []
+    private var timerReloadBalance: AnyCancellable?
+    private var timerReloadMarket: AnyCancellable?
+
+    deinit {
+        timerReloadBalance?.cancel()
+        timerReloadMarket?.cancel()
+    }
 
     init() {
         guard AppSetting.shared.isLogin else { return }
@@ -34,75 +37,60 @@ class HomeViewModel: ObservableObject {
 
         $tabType
             .removeDuplicates()
-            .dropFirst()
+            .debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
             .sink { [weak self] newValue in
                 guard let self = self else { return }
                 Task {
                     self.tabType = newValue
                     await self.getTokens()
-                }
-            }
-            .store(in: &cancellables)
-
-        Task {
-            let tokens = try? await TokenManager.getYourToken()
-            TokenManager.shared.yourTokens = tokens
-            UserInfo.shared.adaHandleName = TokenManager.shared.fetchAdaHandleName()
-            await getTokens()
-            let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
-            self.isHasYourToken = !_tokens.isEmpty
-            self.tabTypes = (tokens?.nfts ?? []).isEmpty ? [.market, .yourToken] : [.market, .yourToken, .nft]
-
-            try? await Task.sleep(for: .seconds(5 * 60))
-            repeat {
-                if tabType != .yourToken {
-                    let tokens = try? await TokenManager.getYourToken()
-                    TokenManager.shared.yourTokens = tokens
-                    let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
-                    self.isHasYourToken = !_tokens.isEmpty
-                }
-                await self.getTokens()
-                try? await Task.sleep(for: .seconds(5 * 60))
-            } while (!Task.isCancelled)
-        }
-
-        Task {
-            try? await Task.sleep(for: .seconds(20))
-            repeat {
-                if tabType == .yourToken {
-                    await TokenManager.shared.getPortfolioOverview()
-                    let tokens = TokenManager.shared.yourTokens
-                    let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
-                    self.isHasYourToken = !_tokens.isEmpty
-                    self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + _tokens
-                    self.hasLoadMoreDic[tabType] = false
-                    self.showSkeletonDic[tabType] = false
-                    self.isFetching[tabType] = false
-                }
-                try? await Task.sleep(for: .seconds(20))
-            } while (!Task.isCancelled)
-        }
-
-        TokenManager.shared.reloadBalance
-            .sink { [weak self] in
-                guard let self = self else { return }
-                Task {
-                    if self.tabType == .yourToken {
-                        await self.getTokens()
-                    } else {
-                        await TokenManager.shared.getPortfolioOverview()
-                    }
+                    self.tabTypes = (TokenManager.shared.yourTokens?.nfts ?? []).isEmpty ? [.market, .yourToken] : [.market, .yourToken, .nft]
                 }
             }
             .store(in: &cancellables)
     }
 
-    func getTokens(isLoadMore: Bool = false) async {
+    private func createTimerReloadBalance() {
+        timerReloadBalance?.cancel()
+        timerReloadBalance = Timer.publish(every: TokenManager.TIME_RELOAD_BALANCE, on: .main, in: .common)
+            .autoconnect()
+            .throttle(for: .seconds(TokenManager.TIME_RELOAD_BALANCE), scheduler: RunLoop.main, latest: true)
+            .removeDuplicates()
+            .sink { [weak self] time in
+                guard let self = self, !TokenManager.shared.isLoadingPortfolioOverviewAndYourToken else { return }
+                Task {
+                    switch self.tabType {
+                    case .market:
+                        try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
+                    case .yourToken, .nft:
+                        await self.getTokens()
+                    }
+                }
+            }
+
+        timerReloadMarket?.cancel()
+        timerReloadMarket = Timer.publish(every: TokenManager.TIME_RELOAD_MARKET, on: .main, in: .common)
+            .autoconnect()
+            .throttle(for: .seconds(TokenManager.TIME_RELOAD_MARKET), scheduler: RunLoop.main, latest: true)
+            .removeDuplicates()
+            .sink { [weak self] time in
+                guard let self = self else { return }
+                Task {
+                    switch self.tabType {
+                    case .market:
+                        await self.getTokens()
+                    case .yourToken,
+                        .nft:
+                        break
+                    }
+                }
+            }
+    }
+
+    private func getTokens(isLoadMore: Bool = false) async {
         if showSkeletonDic[tabType] == nil {
             showSkeletonDic[tabType] = !isLoadMore
         }
         self.isFetching[tabType] = true
-        await TokenManager.shared.getPortfolioOverview()
 
         switch tabType {
         case .market:
@@ -117,7 +105,12 @@ class HomeViewModel: ObservableObject {
                     }
                 })
 
-            let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
+            async let tokenRaw = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
+            async let getPortfolioOverviewAndYourToken: Void? = try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
+
+            let results = await (tokenRaw, getPortfolioOverviewAndYourToken)
+            let tokens = results.0
+
             let _tokens = tokens?.topAssets.topAssets ?? []
             var currentTokens = tokensDic[tabType] ?? []
             if isLoadMore {
@@ -130,26 +123,21 @@ class HomeViewModel: ObservableObject {
             self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit || self.searchAfter != nil
             self.showSkeletonDic[tabType] = false
             self.isFetching[tabType] = false
-
         case .yourToken:
-            let tokens = try? await TokenManager.getYourToken()
-            let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
-            TokenManager.shared.yourTokens = tokens
-            self.isHasYourToken = !_tokens.isEmpty
-            self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + _tokens
+            try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
+            self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
             self.hasLoadMoreDic[tabType] = false
             self.showSkeletonDic[tabType] = false
             self.isFetching[tabType] = false
         case .nft:
-            let tokens = try? await TokenManager.getYourToken()
-            let _tokens: [TokenProtocol] = (tokens?.assets ?? []) + (tokens?.lpTokens ?? [])
-            TokenManager.shared.yourTokens = tokens
-            self.isHasYourToken = !_tokens.isEmpty
-            self.tokensDic[tabType] = tokens?.nfts ?? []
+            try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
+            self.tokensDic[tabType] = TokenManager.shared.yourTokens?.nfts ?? []
             self.hasLoadMoreDic[tabType] = false
             self.showSkeletonDic[tabType] = false
             self.isFetching[tabType] = false
         }
+
+        createTimerReloadBalance()
     }
 
     func loadMoreData(item: TokenProtocol) {

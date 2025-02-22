@@ -331,15 +331,16 @@ struct SwapTokenView: View {
                     Image(.icStartRouting)
                         .padding(.trailing, 4)
                     ForEach(0..<assets.count, id: \.self) { index in
-                        let asset = assets[index]
-                        TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
-                        if index != assets.count - 1 {
-                            Image(.icBack)
-                                .resizable()
-                                .renderingMode(.template)
-                                .rotationEffect(.degrees(180))
-                                .frame(width: 14, height: 14)
-                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                        if let asset = assets[gk_safeIndex: index] {
+                            TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
+                            if index != assets.count - 1 {
+                                Image(.icBack)
+                                    .resizable()
+                                    .renderingMode(.template)
+                                    .rotationEffect(.degrees(180))
+                                    .frame(width: 14, height: 14)
+                                    .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                            }
                         }
                     }
                 }
@@ -477,11 +478,14 @@ struct SwapTokenView: View {
                     })
                 }
                 bannerState.showBanner(isShow: true)
+                viewModel.action.send(.resetSwap)
+                /*
                 TokenManager.shared.reloadBalance.send(())
                 if appSetting.rootScreen != .home {
                     appSetting.rootScreen = .home
                 }
                 navigator.popToRoot()
+                 */
             } catch {
                 hudState.showLoading(false)
                 hudState.showMsg(msg: error.localizedDescription)

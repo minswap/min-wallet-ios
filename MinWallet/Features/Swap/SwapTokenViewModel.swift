@@ -125,6 +125,12 @@ class SwapTokenViewModel: ObservableObject {
 
     private func handleAction(_ action: Action) async throws {
         switch action {
+        case .resetSwap:
+            isSwapExactIn = true
+            tokenPay.amount = ""
+            tokenReceive.amount = ""
+            isConvertRate = false
+
         case let .selectToken(token):
             if isSelectTokenPay {
                 guard let token = token, token.uniqueID != tokenReceive.uniqueID, token.uniqueID != tokenPay.uniqueID else { return }
@@ -146,7 +152,6 @@ class SwapTokenViewModel: ObservableObject {
             tokenReceive = tempToken
             tokenReceive.amount = ""
             isConvertRate = false
-        //self.action.send(.getTradingInfo)
 
         case .setMaxAmount:
             tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
@@ -448,6 +453,7 @@ extension SwapTokenViewModel {
         case getTradingInfo
         case showSelectToken(isTokenPay: Bool)
         case recheckUnSafeSlippage
+        case resetSwap
     }
 }
 

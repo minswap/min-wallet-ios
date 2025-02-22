@@ -29,7 +29,7 @@ class SelectTokenViewModel: ObservableObject {
     private var cachedIndex: [String: Int] = [:]
 
     private var rawTokens: [TokenProtocol] {
-        [TokenManager.shared.tokenAda] + (TokenManager.shared.yourTokens?.assets ?? []) + (TokenManager.shared.yourTokens?.lpTokens ?? [])
+        [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
     }
 
     deinit {
@@ -109,14 +109,14 @@ class SelectTokenViewModel: ObservableObject {
     }
 
     func getTokens(isLoadMore: Bool = false) {
-        showSkeleton = !isLoadMore
-        isFetching = true
         Task {
             do {
+                showSkeleton = !isLoadMore
+                isFetching = true
+
                 var _tokens: [TokenProtocol] = []
                 if !isLoadMore {
-                    let tokens = try await TokenManager.getYourToken()
-                    TokenManager.shared.yourTokens = tokens
+                    let _ = try await TokenManager.getYourToken()
                     let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
                     _tokens =
                         keyword.isEmpty

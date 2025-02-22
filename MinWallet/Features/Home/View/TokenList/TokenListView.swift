@@ -7,6 +7,8 @@ import MinWalletAPI
 struct TokenListView: View {
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var tokenManager: TokenManager
 
     @ObservedObject
     var viewModel: HomeViewModel
@@ -18,7 +20,7 @@ struct TokenListView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if viewModel.isHasYourToken {
+            if !tokenManager.normalTokens.isEmpty && !viewModel.showSkeleton {
                 HStack(spacing: 0) {
                     ForEach(viewModel.tabTypes) { type in
                         Text(type.title)
@@ -29,6 +31,7 @@ struct TokenListView: View {
                             .background(viewModel.tabType == type ? .colorSurfacePrimaryDefault : .clear)
                             .cornerRadius(BorderRadius.full)
                             .padding(.trailing, .lg)
+                            .layoutPriority(viewModel.tabType == type ? 998 : viewModel.tabType.layoutPriority)
                             .onTapGesture {
                                 viewModel.tabType = type
                             }
@@ -41,12 +44,13 @@ struct TokenListView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                             .padding(.leading, .md)
+                            .layoutPriority(999)
                     }
                 }
                 .frame(height: 36)
                 .padding(.horizontal, .xl)
                 .padding(.bottom, .lg)
-            } else if !viewModel.showSkeleton {
+            } else if tokenManager.normalTokens.isEmpty && !viewModel.showSkeleton {
                 Text("Crypto prices")
                     .padding(.horizontal, .xl)
                     .font(.titleH6)
@@ -71,42 +75,43 @@ struct TokenListView: View {
                     if viewModel.tabType == .nft {
                         LazyVGrid(columns: columns, spacing: .xl) {
                             ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                                let item = viewModel.tokens[index]
-                                VStack(alignment: .leading, spacing: .md) {
-                                    if item.isAdaHandleName {
-                                        ZStack(alignment: .center) {
-                                            Image(.icNftAdaHandle)
-                                                .resizable()
-                                                .aspectRatio(1, contentMode: .fit)
-                                                .frame(maxWidth: .infinity)
-                                                .cornerRadius(.xl)
-                                            Text(item.tokenName.adaName)
-                                                .font(.labelMediumSecondary)
-                                                .foregroundStyle(.white)
-                                        }
-                                    } else {
-                                        CustomWebImage(
-                                            url: item.buildNFTURL(),
-                                            placeholder: {
-                                                Image(nil)
+                                if let item = viewModel.tokens[gk_safeIndex: index] {
+                                    VStack(alignment: .leading, spacing: .md) {
+                                        if item.isAdaHandleName {
+                                            ZStack(alignment: .center) {
+                                                Image(.icNftAdaHandle)
                                                     .resizable()
-                                                    .scaledToFill()
-                                                    .background(.colorSurfacePrimaryDefault)
-                                                    .clipped()
-                                                    .overlay {
-                                                        Image(.icNftPlaceholder)
-                                                            .fixSize(44)
-                                                    }
+                                                    .aspectRatio(1, contentMode: .fit)
+                                                    .frame(maxWidth: .infinity)
+                                                    .cornerRadius(.xl)
+                                                Text(item.tokenName.adaName)
+                                                    .font(.labelMediumSecondary)
+                                                    .foregroundStyle(.white)
                                             }
-                                        )
-                                        .cornerRadius(.xl)
-                                    }
+                                        } else {
+                                            CustomWebImage(
+                                                url: item.buildNFTURL(),
+                                                placeholder: {
+                                                    Image(nil)
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .background(.colorSurfacePrimaryDefault)
+                                                        .clipped()
+                                                        .overlay {
+                                                            Image(.icNftPlaceholder)
+                                                                .fixSize(44)
+                                                        }
+                                                }
+                                            )
+                                            .cornerRadius(.xl)
+                                        }
 
-                                    let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
-                                    Text(name)
-                                        .lineLimit(1)
-                                        .font(.paragraphXMediumSmall)
-                                        .foregroundStyle(.colorBaseTent)
+                                        let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
+                                        Text(name)
+                                            .lineLimit(1)
+                                            .font(.paragraphXMediumSmall)
+                                            .foregroundStyle(.colorBaseTent)
+                                    }
                                 }
                             }
                         }
@@ -116,26 +121,29 @@ struct TokenListView: View {
                             spacing: 0,
                             content: {
                                 ForEach(0..<viewModel.tokens.count, id: \.self) { index in
-                                    let item = viewModel.tokens[index]
-                                    TokenListItemView(token: item, showSubPrice: viewModel.tabType == .yourToken)
-                                        .contentShape(.rect)
-                                        .onAppear() {
-                                            viewModel.loadMoreData(item: item)
-                                        }
-                                        .onTapGesture {
-                                            guard !item.isTokenADA else { return }
-                                            navigator.push(.tokenDetail(token: item))
-                                        }
+                                    if let item = viewModel.tokens[gk_safeIndex: index] {
+                                        TokenListItemView(token: item, showSubPrice: viewModel.tabType == .yourToken)
+                                            .contentShape(.rect)
+                                            .onAppear() {
+                                                viewModel.loadMoreData(item: item)
+                                            }
+                                            .onTapGesture {
+                                                guard !item.isTokenADA else { return }
+                                                navigator.push(.tokenDetail(token: item))
+                                            }
+                                    }
                                 }
                             })
                     }
                 }
             }
+            /*
             .refreshable {
                 Task {
                     await viewModel.getTokens()
                 }
             }
+             */
         }
     }
 }
@@ -176,6 +184,17 @@ extension TokenListView {
                 "Your tokens"
             case .nft:
                 "Your NFTs"
+            }
+        }
+
+        var layoutPriority: Double {
+            switch self {
+            case .market:
+                return 9
+            case .yourToken:
+                return 8
+            case .nft:
+                return 7
             }
         }
     }

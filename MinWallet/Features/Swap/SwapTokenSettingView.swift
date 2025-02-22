@@ -36,22 +36,23 @@ struct SwapTokenSettingView: View {
                     .padding(.top, 20)
                 HStack(spacing: 0) {
                     ForEach(0..<slippages.count, id: \.self) { index in
-                        let splippage = slippages[index]
-                        Text("\(splippage.rawValue.formatted())%")
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
-                            .fixedSize(horizontal: true, vertical: false)
-                            .frame(height: 36)
-                            .padding(.horizontal, .lg)
-                            .background(content: {
-                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == viewModel.swapSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
-                            })
-                            .contentShape(.rect)
-                            .onTapGesture {
-                                viewModel.swapSetting.slippageSelected = splippage
-                                viewModel.action.send(.recheckUnSafeSlippage)
-                            }
-                        Spacer()
+                        if let splippage = slippages[gk_safeIndex: index] {
+                            Text("\(splippage.rawValue.formatted())%")
+                                .font(.labelSmallSecondary)
+                                .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .frame(height: 36)
+                                .padding(.horizontal, .lg)
+                                .background(content: {
+                                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == viewModel.swapSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
+                                })
+                                .contentShape(.rect)
+                                .onTapGesture {
+                                    viewModel.swapSetting.slippageSelected = splippage
+                                    viewModel.action.send(.recheckUnSafeSlippage)
+                                }
+                            Spacer()
+                        }
                     }
                     HStack(spacing: .md) {
                         TextField("", text: $viewModel.swapSetting.slippageTolerance)
