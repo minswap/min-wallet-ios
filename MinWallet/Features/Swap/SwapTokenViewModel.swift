@@ -87,6 +87,12 @@ class SwapTokenViewModel: ObservableObject {
         let minToken = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == minTokenDefault.uniqueID })
         tokenReceive = WrapTokenSend(token: minToken ?? minTokenDefault)
 
+        subscribeCombine()
+        action.send(.getTradingInfo)
+    }
+
+    func subscribeCombine() {
+        unsubscribeCombine()
         action
             .sink { [weak self] action in
                 guard let self = self else { return }
@@ -119,12 +125,14 @@ class SwapTokenViewModel: ObservableObject {
                 self.action.send(.amountReceiveChanged(amount: amount))
             })
             .store(in: &cancellables)
-
-        action.send(.getTradingInfo)
-
         TokenManager.shared.reloadBalance.map { _ in Action.reloadBalance }
             .subscribe(action)
             .store(in: &cancellables)
+    }
+
+    func unsubscribeCombine() {
+        cancellables.forEach({ $0.cancel() })
+        cancellables = []
     }
 
     private func handleAction(_ action: Action) async throws {
@@ -217,10 +225,11 @@ class SwapTokenViewModel: ObservableObject {
                 tokenReceive.token = tokenReceiveChange
                 isReloadSelectToken = true
             }
+
             if isReloadSelectToken {
                 selectTokenVM.getTokens()
+                await generateErrorInfo()
             }
-            await generateErrorInfo()
 
         case .hiddenSelectToken:
             selectTokenVM.resetState()

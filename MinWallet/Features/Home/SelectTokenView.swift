@@ -25,7 +25,7 @@ struct SelectTokenView: View {
         self.onSelectToken = onSelectToken
     }
 
-    @ObservedObject
+    @StateObject
     private var viewModel: SelectTokenViewModel
 
     var onSelectToken: (([TokenProtocol]) -> Void)?

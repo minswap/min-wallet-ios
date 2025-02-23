@@ -141,8 +141,14 @@ struct SwapTokenView: View {
                 }
             )
         }
-        .onFirstAppear {
-            viewModel.hudState = hudState
+        .onAppear { [weak viewModel] in
+            viewModel?.hudState = hudState
+            print("SwapTokenView appear")
+            viewModel?.subscribeCombine()
+        }
+        .onDisappear { [weak viewModel] in
+            print("SwapTokenView onDisappear")
+            viewModel?.unsubscribeCombine()
         }
     }
 
