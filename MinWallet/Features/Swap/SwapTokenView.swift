@@ -119,7 +119,6 @@ struct SwapTokenView: View {
                     RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
                         .fill(.colorBaseBackground)
                         .ignoresSafeArea()
-
                 })
                 .ignoresSafeArea()
         }
@@ -143,11 +142,11 @@ struct SwapTokenView: View {
         }
         .onAppear { [weak viewModel] in
             viewModel?.hudState = hudState
-            print("SwapTokenView appear")
+//            print("SwapTokenView appear")
             viewModel?.subscribeCombine()
         }
         .onDisappear { [weak viewModel] in
-            print("SwapTokenView onDisappear")
+//            print("SwapTokenView onDisappear")
             viewModel?.unsubscribeCombine()
         }
     }

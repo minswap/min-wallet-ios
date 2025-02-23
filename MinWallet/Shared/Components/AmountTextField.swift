@@ -9,9 +9,11 @@ struct AmountTextField: View {
 
     var body: some View {
         TextField("", text: $value)
-            .keyboardType(.decimalPad)
             .placeholder("0.0", font: fontPlaceHolder, when: value.isEmpty)
+            .keyboardType(.decimalPad)
             .lineLimit(1)
+            .submitLabel(.done)
+            .autocorrectionDisabled()
             .onChange(of: value) { newValue in
                 let filtered = newValue.replacingOccurrences(of: ",", with: ".").filter { "0123456789.".contains($0) }
                 if filtered.contains(".") {
