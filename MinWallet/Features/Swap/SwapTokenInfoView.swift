@@ -5,8 +5,8 @@ import FlowStacks
 struct SwapTokenInfoView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-    @EnvironmentObject
-    private var viewModel: SwapTokenViewModel
+    @ObservedObject
+    var viewModel: SwapTokenViewModel
 
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
     var onSwap: (() -> Void)?
@@ -124,7 +124,6 @@ struct SwapTokenInfoView: View {
 #Preview {
     VStack {
         Spacer()
-        SwapTokenInfoView()
-            .environmentObject(SwapTokenViewModel())
+        SwapTokenInfoView(viewModel: SwapTokenViewModel())
     }
 }

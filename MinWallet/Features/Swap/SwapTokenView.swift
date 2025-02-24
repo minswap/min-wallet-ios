@@ -80,6 +80,7 @@ struct SwapTokenView: View {
         )
         .presentSheet(isPresented: $viewModel.isShowInfo) {
             SwapTokenInfoView(
+                viewModel: viewModel,
                 onShowToolTip: { (title, content) in
                     self.content = content
                     self.title = title
@@ -89,7 +90,6 @@ struct SwapTokenView: View {
                     processingSwapToken()
                 }
             )
-            .environmentObject(viewModel)
         }
         /*
         .presentSheet(isPresented: $viewModel.isShowRouting) {
@@ -198,16 +198,21 @@ struct SwapTokenView: View {
                     .skeleton(with: true)
                     .frame(width: 124, height: 32)
                 } else {
+                    let minValueBinding = Binding<Double>(
+                        get: { pow(10, Double(viewModel.tokenPay.token.decimals) * -1) },
+                        set: { _ in }
+                    )
                     AmountTextField(
                         value: $viewModel.tokenPay.amount,
-                        maxValue: viewModel.tokenPay.token.amount,
+                        minValue: minValueBinding,
+                        maxValue: .constant(nil),
                         fontPlaceHolder: .titleH4
                     )
                     .font(.titleH4)
                     .foregroundStyle(.colorBaseTent)
                     .focused($focusedField, equals: .pay)
                 }
-                Spacer()
+                Spacer(minLength: 0)
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
                         currencySymbol: viewModel.tokenPay.token.currencySymbol,
@@ -215,7 +220,7 @@ struct SwapTokenView: View {
                         isVerified: viewModel.tokenPay.token.isVerified,
                         size: .init(width: 24, height: 24)
                     )
-                    Text(viewModel.tokenPay.token.adaName)
+                    Text(viewModel.tokenPay.adaName)
                         .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -269,16 +274,21 @@ struct SwapTokenView: View {
                     .skeleton(with: true)
                     .frame(width: 124, height: 32)
                 } else {
+                    let minValueBinding = Binding<Double>(
+                        get: { pow(10, Double(viewModel.tokenReceive.token.decimals) * -1) },
+                        set: { _ in }
+                    )
                     AmountTextField(
                         value: $viewModel.tokenReceive.amount,
-                        maxValue: viewModel.tokenReceive.token.amount,
+                        minValue: minValueBinding,
+                        maxValue: .constant(nil),
                         fontPlaceHolder: .titleH4
                     )
                     .font(.titleH4)
                     .foregroundStyle(.colorBaseTent)
                     .focused($focusedField, equals: .receive)
                 }
-                Spacer()
+                Spacer(minLength: 0)
                 HStack(alignment: .center, spacing: .md) {
                     TokenLogoView(
                         currencySymbol: viewModel.tokenReceive.token.currencySymbol,
@@ -286,7 +296,7 @@ struct SwapTokenView: View {
                         isVerified: viewModel.tokenReceive.token.isVerified,
                         size: .init(width: 24, height: 24)
                     )
-                    Text(viewModel.tokenReceive.token.adaName)
+                    Text(viewModel.tokenReceive.adaName)
                         .lineLimit(1)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)

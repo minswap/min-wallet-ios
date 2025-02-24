@@ -65,6 +65,11 @@ struct WrapTokenSend: Identifiable {
     }
 
     var adaName: String {
-        token.adaName
+        let name = token.adaName
+        if name.count > 6 {
+            return name.prefix(6) + "..."
+        } else {
+            return name
+        }
     }
 }

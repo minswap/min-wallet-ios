@@ -354,7 +354,7 @@ class SwapTokenViewModel: ObservableObject {
         }
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let input = IosTradeEstimateInput(
-            amount: String(Int(amount)),
+            amount: amount.toIntStringValue,
             inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
             isApplied: swapSetting.predictSwapPrice,
             isSwapExactIn: isSwapExactIn,
@@ -380,8 +380,8 @@ class SwapTokenViewModel: ObservableObject {
         guard let address: String = UserInfo.shared.minWallet?.address else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
         guard let lpAsset = iosTradeEstimate.lpAssets.first else { throw AppGeneralError.localErrorLocalized(message: "No LP asset found") }
 
-        let amountPay = String(Int(tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals)))
-        let amountReceive = String(Int(tokenReceive.amount.toSendBE(decimal: tokenReceive.token.decimals)))
+        let amountPay = tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals).toIntStringValue
+        let amountReceive = tokenReceive.amount.toSendBE(decimal: tokenReceive.token.decimals).toIntStringValue
         let assetIndex = iosTradeEstimate.inputIndex.map({ String($0) }) ?? ""
         let assetOutIndex = iosTradeEstimate.outputIndex.map({ String($0) }) ?? ""
 

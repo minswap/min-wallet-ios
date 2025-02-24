@@ -71,8 +71,20 @@ struct SendTokenView: View {
                         ForEach($viewModel.tokens) { $item in
                             let item = $item.wrappedValue
                             HStack(spacing: .md) {
-                                AmountTextField(value: $item.amount, minValue: pow(10, Double(item.token.decimals) * -1), maxValue: item.token.isTokenADA ? (max(item.token.amount - 10, 0)) : item.token.amount)
-                                    .focused($focusedField, equals: .row(id: item.token.uniqueID))
+                                let minValueBinding = Binding<Double>(
+                                    get: { pow(10, Double(item.token.decimals) * -1) },
+                                    set: { _ in }
+                                )
+                                let maxValueBinding = Binding<Double?>(
+                                    get: { item.token.isTokenADA ? (max(item.token.amount - 10, 0)) : item.token.amount },
+                                    set: { _ in }
+                                )
+                                AmountTextField(
+                                    value: $item.amount,
+                                    minValue: minValueBinding,
+                                    maxValue: maxValueBinding
+                                )
+                                .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
                                     .font(.labelMediumSecondary)
                                     .foregroundStyle(.colorInteractiveToneHighlight)

@@ -308,6 +308,10 @@ extension Double {
     func toExact(decimal: Double?) -> Double {
         return self / pow(10.0, decimal ?? 0)
     }
+
+    var toIntStringValue: String {
+        String(Int(min(Double(Int.max), self)))
+    }
 }
 
 extension String {
