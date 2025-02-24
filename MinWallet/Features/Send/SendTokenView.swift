@@ -71,8 +71,20 @@ struct SendTokenView: View {
                         ForEach($viewModel.tokens) { $item in
                             let item = $item.wrappedValue
                             HStack(spacing: .md) {
-                                AmountTextField(value: $item.amount, minValue: pow(10, Double(item.token.decimals) * -1), maxValue: item.token.isTokenADA ? (max(item.token.amount - 10, 0)) : item.token.amount)
-                                    .focused($focusedField, equals: .row(id: item.token.uniqueID))
+                                let minValueBinding = Binding<Double>(
+                                    get: { pow(10, Double(item.token.decimals) * -1) },
+                                    set: { _ in }
+                                )
+                                let maxValueBinding = Binding<Double?>(
+                                    get: { item.token.isTokenADA ? (max(item.token.amount - 10, 0)) : item.token.amount },
+                                    set: { _ in }
+                                )
+                                AmountTextField(
+                                    value: $item.amount,
+                                    minValue: minValueBinding,
+                                    maxValue: maxValueBinding
+                                )
+                                .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
                                     .font(.labelMediumSecondary)
                                     .foregroundStyle(.colorInteractiveToneHighlight)
@@ -90,10 +102,10 @@ struct SendTokenView: View {
                             .padding(.horizontal, .xl)
                             .padding(.top, .lg)
                         }
-
                         Button(
                             action: {
                                 hideKeyboard()
+                                viewModel.selectTokenVM.selectToken(tokens: viewModel.tokens.map({ $0.token }))
                                 $isShowSelectToken.showSheet()
                             },
                             label: {
@@ -130,16 +142,6 @@ struct SendTokenView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("Done") {
-                    focusedField = nil
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
         .modifier(
             BaseContentView(
                 screenTitle: " ",
@@ -150,16 +152,23 @@ struct SendTokenView: View {
                     navigator.popToRoot()
                 })
         )
-        .presentSheet(isPresented: $isShowSelectToken) {
-            SelectTokenView(
-                viewModel: SelectTokenViewModel(tokensSelected: viewModel.tokens.map({ $0.token }), screenType: .sendToken, sourceScreenType: viewModel.screenType),
-                onSelectToken: { tokens in
-                    viewModel.addToken(tokens: tokens)
-                }
-            )
-            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.85)
-            .presentSheetModifier()
-        }
+        .presentSheet(
+            isPresented: $isShowSelectToken,
+            onDimiss: {
+                viewModel.selectTokenVM.resetState()
+            },
+            content: {
+                SelectTokenView(
+                    viewModel: viewModel.selectTokenVM,
+                    onSelectToken: { tokens in
+                        viewModel.addToken(tokens: tokens)
+                    }
+                )
+                .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.85)
+                .presentSheetModifier()
+            }
+        )
+        .ignoresSafeArea(.keyboard)
     }
 }
 

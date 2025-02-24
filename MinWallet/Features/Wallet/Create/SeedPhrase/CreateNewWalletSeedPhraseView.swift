@@ -164,21 +164,23 @@ private struct SeedPhraseContentView: View {
                     .padding(.bottom, ._3xl)
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach(0..<seedPhrase.count, id: \.self) { index in
-                        HStack() {
-                            Text(String(index + 1))
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                                .frame(width: 20, alignment: .leading)
-                            Text(seedPhrase[index])
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorBaseTent)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            if index % 2 == 0 {
-                                Color.colorBorderPrimaryTer.frame(width: 1)
-                                    .padding(.trailing, 4)
+                        if let seedPhrase = seedPhrase[gk_safeIndex: index] {
+                            HStack() {
+                                Text(String(index + 1))
+                                    .font(.paragraphSmall)
+                                    .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                                    .frame(width: 20, alignment: .leading)
+                                Text(seedPhrase)
+                                    .font(.paragraphSmall)
+                                    .foregroundStyle(.colorBaseTent)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                if index % 2 == 0 {
+                                    Color.colorBorderPrimaryTer.frame(width: 1)
+                                        .padding(.trailing, 4)
+                                }
                             }
+                            .frame(height: 32)
                         }
-                        .frame(height: 32)
                     }
                 }
                 .padding(.horizontal, 20)

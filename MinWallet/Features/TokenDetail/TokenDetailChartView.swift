@@ -150,7 +150,7 @@ extension TokenDetailView {
                          */
                     }
                 }
-                .frame(height: 200)
+                .frame(height: 180)
                 HStack {
                     Text(viewModel.formatDate(value: minDate))
                         .font(.paragraphXMediumSmall)
@@ -196,6 +196,7 @@ extension TokenDetailView {
             .frame(height: 36)
             .background(RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimarySub))
             .padding(.top, .xl)
+            .padding(.horizontal, .xl)
         }
     }
 

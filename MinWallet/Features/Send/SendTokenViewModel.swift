@@ -8,6 +8,8 @@ class SendTokenViewModel: ObservableObject {
     var tokens: [WrapTokenSend] = []
     @Published
     var screenType: SendTokenView.ScreenType = .normal
+    @Published
+    var selectTokenVM: SelectTokenViewModel = .init(screenType: .sendToken, sourceScreenType: .normal)
 
     init(tokens: [TokenProtocol], screenType: SendTokenView.ScreenType) {
         self.tokens = tokens.map({ WrapTokenSend(token: $0) })
@@ -52,5 +54,22 @@ struct WrapTokenSend: Identifiable {
 
     var uniqueID: String {
         token.uniqueID
+    }
+
+    var currencySymbol: String {
+        token.currencySymbol
+    }
+
+    var tokenName: String {
+        token.tokenName
+    }
+
+    var adaName: String {
+        let name = token.adaName
+        if name.count > 6 {
+            return name.prefix(6) + "..."
+        } else {
+            return name
+        }
     }
 }

@@ -49,6 +49,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.backgroundColor = .clear
         textView.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: .paragraphSmall ?? .systemFont(ofSize: 14))
         textView.adjustsFontForContentSizeCategory = true
+        textView.autocorrectionType = .no
         textView.bounces = false
         // Configure the placeholder label
         let placeholderLabel = UILabel()

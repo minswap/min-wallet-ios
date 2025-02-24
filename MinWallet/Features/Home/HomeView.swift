@@ -27,8 +27,6 @@ struct HomeView: View {
     private var showSideMenu: Bool = false
     @State
     private var isCopyAddress: Bool = false
-    @State
-    private var isViewAppear: Bool = false
 
     var body: some View {
         ZStack {
@@ -229,6 +227,7 @@ struct HomeView: View {
                     .padding(.horizontal, Spacing.xl)
 */
                 TokenListView(viewModel: viewModel)
+                    .environmentObject(tokenManager)
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
@@ -272,13 +271,6 @@ struct HomeView: View {
                 }
             }
         }
-        .task {
-            guard isViewAppear else {
-                isViewAppear = true
-                return
-            }
-            await viewModel.getTokens()
-        }
         .onOpenURL { incomingURL in
             //minswap://testnet-preprod.minswap.org/orders?s= 83ada93f2ecadf5bbff265d36ae14303b5e19303f5ae107629ebf1961a7e7f98
             handleIncomingURL(incomingURL)
@@ -311,7 +303,7 @@ extension HomeView {
 
             let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
             guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
-            navigator.push(.orderHistoryDetail(order: order))
+            navigator.push(.orderHistoryDetail(order: order, onReloadOrder: nil))
         }
     }
 }

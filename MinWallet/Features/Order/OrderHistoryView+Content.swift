@@ -42,15 +42,28 @@ extension OrderHistoryView {
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(viewModel.orders) { order in
-                        OrderHistoryItemView(order: order)
-                            .padding(.horizontal, .xl)
-                            .contentShape(.rect)
-                            .onAppear {
-                                viewModel.loadMoreData(order: order)
+                        OrderHistoryItemView(
+                            order: order,
+                            onCancelItem: {
+                                viewModel.orderToCancel = order
+                                $viewModel.showCancelOrder.showSheet()
                             }
-                            .onTapGesture {
-                                navigator.push(.orderHistoryDetail(order: order))
-                            }
+                        )
+                        .padding(.horizontal, .xl)
+                        .contentShape(.rect)
+                        .onAppear {
+                            viewModel.loadMoreData(order: order)
+                        }
+                        .onTapGesture {
+                            navigator.push(
+                                .orderHistoryDetail(
+                                    order: order,
+                                    onReloadOrder: {
+                                        Task {
+                                            await viewModel.fetchData(showSkeleton: false)
+                                        }
+                                    }))
+                        }
                     }
                 }
             }

@@ -26,7 +26,7 @@ struct TokenLogoView: View {
         self._currencySymbol = .constant(currencySymbol)
         self._tokenName = .constant(tokenName)
         self.isVerified = isVerified
-        self.size = size
+        self._size = .init(initialValue: size)
     }
 
     private var uniqueID: String {

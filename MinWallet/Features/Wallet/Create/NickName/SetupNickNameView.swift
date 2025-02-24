@@ -38,15 +38,9 @@ struct SetupNickNameView: View {
                 .foregroundStyle(.colorBaseTent)
                 .focused($isInputActive)
                 .padding(.horizontal, .xl)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-                        Button("Done") {
-                            isInputActive = false
-                        }
-                        .foregroundStyle(.colorLabelToolbarDone)
-                    }
-                }
+                .keyboardType(.asciiCapable)
+                .submitLabel(.done)
+                .autocorrectionDisabled()
                 .onReceive(Just(nickName)) { _ in
                     if nickName.count > 40 {
                         nickName = String(nickName.prefix(40))

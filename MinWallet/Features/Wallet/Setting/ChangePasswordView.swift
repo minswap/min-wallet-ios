@@ -190,16 +190,6 @@ struct ChangePasswordView: View {
                 .padding(.horizontal, .xl)
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-
-                Button("Done") {
-                    focusedField = nil
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
         .modifier(
             BaseContentView(
                 screenTitle: " ",

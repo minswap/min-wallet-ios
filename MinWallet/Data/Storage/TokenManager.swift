@@ -6,18 +6,17 @@ import Combine
 @MainActor
 class TokenManager: ObservableObject {
 
+    static let TIME_RELOAD_BALANCE: TimeInterval = 20
+    static let TIME_RELOAD_MARKET: TimeInterval = 5 * 60
+
     static var shared: TokenManager = .init()
 
     let reloadBalance: PassthroughSubject<Void, Never> = .init()
 
-    var isHasYourToken: Bool = false {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    var isLoadingPortfolioOverviewAndYourToken: Bool = false
 
     ///Cached your token, include normal + lp tokens + nft
-    var yourTokens: WalletAssetsQuery.Data.GetWalletAssetsPositions? {
+    private(set) var yourTokens: WalletAssetsQuery.Data.GetWalletAssetsPositions? {
         willSet {
             objectWillChange.send()
         }
@@ -41,11 +40,11 @@ class TokenManager: ObservableObject {
         }
     }
 
-    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano")
+    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano", decimal: 6)
 
     private init() {}
 
-    func getPortfolioOverview() async -> Void {
+    private func getPortfolioOverview() async -> Void {
         guard AppSetting.shared.isLogin else { return }
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
         let portfolioOverview = try? await MinWalletService.shared.fetch(query: PortfolioOverviewQuery(address: UserInfo.shared.minWallet?.address ?? ""))
@@ -55,6 +54,16 @@ class TokenManager: ObservableObject {
         tokenAda.netValue = adaValue
         tokenAda.netSubValue = adaValue
     }
+
+    func getPortfolioOverviewAndYourToken() async throws -> Void {
+        isLoadingPortfolioOverviewAndYourToken = true
+        async let firstImage: Void = getPortfolioOverview()
+        async let secondImage: Void? = TokenManager.getYourToken().map { _ in return () }
+
+        let _ = try await [firstImage, secondImage]
+        isLoadingPortfolioOverviewAndYourToken = false
+        reloadBalance.send(())
+    }
 }
 
 extension TokenManager {
@@ -62,14 +71,29 @@ extension TokenManager {
         TokenManager.shared = .init()
     }
 
-    static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
+    @discardableResult
+    private static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
         let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-        return tokens?.getWalletAssetsPositions
+        TokenManager.shared.yourTokens = tokens?.getWalletAssetsPositions
+        UserInfo.shared.adaHandleName = tokens?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName.adaName ?? ""
+        return TokenManager.shared.yourTokens
     }
 
-    func fetchAdaHandleName() -> String {
-        let tokenName = yourTokens?.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName ?? ""
-        let adaName: String? = tokenName.adaName
-        return adaName ?? ""
+    ///Not include nft
+    var normalTokens: [TokenProtocol] {
+        return (yourTokens?.assets ?? []) + (yourTokens?.lpTokens ?? [])
+    }
+}
+
+
+extension TokenManager {
+    ///Tx raw -> tx ID
+    static func finalizeAndSubmit(txRaw: String) async throws -> String? {
+        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
+        guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: txRaw)
+        else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
+
+        let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: txRaw, witnessSet: witnessSet)))
+        return data?.finalizeAndSubmit
     }
 }

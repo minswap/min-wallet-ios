@@ -70,6 +70,10 @@ extension TopAssetQuery.Data.TopAsset: TokenProtocol {
     var decimals: Int {
         asset.metadata?.decimals ?? 0
     }
+
+    var hasMetaData: Bool {
+        asset.metadata != nil
+    }
 }
 
 extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
@@ -138,6 +142,10 @@ extension TopAssetsQuery.Data.TopAssets.TopAsset: TokenProtocol {
 
     var decimals: Int {
         asset.metadata?.decimals ?? 0
+    }
+
+    var hasMetaData: Bool {
+        asset.metadata != nil
     }
 }
 
@@ -215,6 +223,10 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Asset: TokenProtocol {
     var decimals: Int {
         amountAsset.asset.metadata?.decimals ?? 0
     }
+
+    var hasMetaData: Bool {
+        amountAsset.asset.metadata != nil
+    }
 }
 
 extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol {
@@ -289,6 +301,10 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.LpToken: TokenProtocol
     var decimals: Int {
         amountLPAsset.asset.metadata?.decimals ?? 0
     }
+
+    var hasMetaData: Bool {
+        amountLPAsset.asset.metadata != nil
+    }
 }
 
 
@@ -308,6 +324,7 @@ extension WalletAssetsQuery.Data.GetWalletAssetsPositions.Nft: TokenProtocol {
 
     var nftDisplayName: String { displayName ?? "" }
     var nftImage: String { image ?? "" }
+    var hasMetaData: Bool { true }
 }
 
 
@@ -353,6 +370,10 @@ struct TokenProtocolDefault: TokenProtocol {
     }
     var decimals: Int {
         2
+    }
+
+    var hasMetaData: Bool {
+        true
     }
 
     init() {}
@@ -422,6 +443,10 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
 
     var decimals: Int {
         metadata?.decimals ?? 0
+    }
+
+    var hasMetaData: Bool {
+        metadata != nil
     }
 }
 
@@ -531,16 +556,20 @@ struct TokenDefault: TokenProtocol {
 
     var socialLinks: [SocialLinks: String] { [:] }
 
-    var decimals: Int { 6 }
+    var decimals: Int { mDecimals }
 
     var symbol: String = ""
     var tName: String = ""
     var minName: String = ""
     var netValue: Double = 0
     var netSubValue: Double = 0
-
+    var mDecimals: Int = 0
     var amount: Double {
         netValue
+    }
+
+    var hasMetaData: Bool {
+        true
     }
 
     init(
@@ -548,13 +577,15 @@ struct TokenDefault: TokenProtocol {
         tName: String,
         minName: String = "",
         netValue: Double = 0,
-        netSubValue: Double = 0
+        netSubValue: Double = 0,
+        decimal: Int = 0
     ) {
         self.symbol = symbol
         self.tName = tName
         self.minName = minName
         self.netValue = netValue
         self.netSubValue = netSubValue
+        self.mDecimals = decimal
     }
 }
 

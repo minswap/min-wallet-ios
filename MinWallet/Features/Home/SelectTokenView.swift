@@ -15,7 +15,7 @@ struct SelectTokenView: View {
     @FocusState
     private var isFocus: Bool
     @Environment(\.partialSheetDismiss)
-    var onDismiss
+    private var onDismiss
 
     init(
         viewModel: SelectTokenViewModel,
@@ -25,7 +25,7 @@ struct SelectTokenView: View {
         self.onSelectToken = onSelectToken
     }
 
-    @ObservedObject
+    @StateObject
     private var viewModel: SelectTokenViewModel
 
     var onSelectToken: (([TokenProtocol]) -> Void)?
@@ -61,7 +61,9 @@ struct SelectTokenView: View {
                             Color.clear.frame(height: 0)
                         }
                     }
-                })
+                }
+            )
+            .ignoresSafeArea(.keyboard)
         }
         .background(.colorBaseBackground)
     }
@@ -103,62 +105,89 @@ struct SelectTokenView: View {
                     .placeholder("Search", when: viewModel.keyword.isEmpty)
                     .focused($isFocus)
                     .lineLimit(1)
+                    .keyboardType(.asciiCapable)
+                    .submitLabel(.done)
+                    .autocorrectionDisabled()
             }
             .padding(.md)
             .overlay(RoundedRectangle(cornerRadius: 20).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
             .padding(.horizontal, .xl)
             .padding(.top, .lg)
-            ScrollView {
-                if viewModel.showSkeleton {
-                    ForEach(0..<20, id: \.self) { index in
-                        TokenListItemSkeletonView()
-                    }
-                    .padding(.top, .xl)
-                } else if viewModel.tokens.isEmpty {
-                    VStack(alignment: .center, spacing: 16) {
-                        Image(.icEmptyResult)
-                            .fixSize(120)
-                        Text("No results")
-                            .font(.labelMediumSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    }
-                    .padding(.top, 50)
-                } else {
-                    LazyVStack(
-                        spacing: 0,
-                        content: {
-                            ForEach($viewModel.tokens) { $item in
-                                let item = $item.wrappedValue.token
-                                if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
-                                    let combinedBinding = Binding<Bool>(
-                                        get: { viewModel.tokensSelected[item.uniqueID] != nil || item.uniqueID == MinWalletConstant.adaToken },
-                                        set: { _ in }
-                                    )
-                                    SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: true)
-                                        .contentShape(.rect)
-                                        .onTapGesture {
-                                            viewModel.toggleSelected(token: item)
-                                        }
-                                } else {
-                                    let combinedBinding = Binding<Bool>(
-                                        get: { viewModel.tokensSelected[item.uniqueID] != nil },
-                                        set: { _ in }
-                                    )
-                                    SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: false)
-                                        .contentShape(.rect)
-                                        .onTapGesture {
-                                            viewModel.toggleSelected(token: item)
-                                            onDismiss?()
-                                            let tokenSelected = viewModel.tokenCallBack
-                                            onSelectToken?(tokenSelected)
-                                        }
+            ScrollViewReader { value in
+                ScrollView {
+                    if viewModel.showSkeleton {
+                        LazyVStack(
+                            spacing: 0,
+                            content: {
+                                ForEach(0..<20, id: \.self) { index in
+                                    TokenListItemSkeletonView()
                                 }
                             }
-                        })
+                        )
+                        .padding(.top, .xl)
+                    } else if viewModel.tokens.isEmpty {
+                        VStack(alignment: .center, spacing: 16) {
+                            Image(.icEmptyResult)
+                                .fixSize(120)
+                            Text("No results")
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorBaseTent)
+                        }
+                        .padding(.top, 50)
+                    } else {
+                        LazyVStack(
+                            spacing: 0,
+                            content: {
+                                Color.clear.frame(height: 0.1)
+                                    .id(0)
+                                ForEach($viewModel.tokens) { $item in
+                                    let item = $item.wrappedValue.token
+                                    if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
+                                        let combinedBinding = Binding<Bool>(
+                                            get: { viewModel.tokensSelected[item.uniqueID] != nil || item.uniqueID == MinWalletConstant.adaToken },
+                                            set: { _ in }
+                                        )
+                                        SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: true)
+                                            .contentShape(.rect)
+                                            .onTapGesture {
+                                                viewModel.toggleSelected(token: item)
+                                            }
+                                    } else {
+                                        let combinedBinding = Binding<Bool>(
+                                            get: { viewModel.tokensSelected[item.uniqueID] != nil },
+                                            set: { _ in }
+                                        )
+                                        SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: false)
+                                            .contentShape(.rect)
+                                            .onAppear() {
+                                                viewModel.loadMoreData(item: item)
+                                            }
+                                            .onTapGesture {
+                                                viewModel.toggleSelected(token: item)
+                                                onDismiss?()
+                                                let tokenSelected = viewModel.tokenCallBack
+                                                onSelectToken?(tokenSelected)
+                                            }
+                                    }
+                                }
+                            }
+                        )
+                        .onChange(of: viewModel.scrollToTop) { scrollToTop in
+                            guard scrollToTop else { return }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+                                value.scrollTo(0, anchor: .top)
+                            }
+                        }
+                    }
                 }
             }
             .refreshable {
-                viewModel.getTokens()
+                switch viewModel.screenType {
+                case .swapToken:
+                    viewModel.getTokens()
+                default:
+                    break
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

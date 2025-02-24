@@ -17,8 +17,6 @@ struct ConfirmSendTokenView: View {
     private var isCopyAddress: Bool = false
     @StateObject
     private var viewModel: ConfirmSendTokenViewModel
-    @State
-    private var isShowLoading: Bool = false
 
     init(viewModel: ConfirmSendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -207,44 +205,28 @@ struct ConfirmSendTokenView: View {
                 }
             )
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    hideKeyboard()
-                }
-                .foregroundStyle(.colorLabelToolbarDone)
-            }
-        }
-        .progressView(isShowing: $isShowLoading)
     }
 
     private func authenticationSuccess() {
         Task {
             do {
-                withAnimation {
-                    isShowLoading = true
-                }
-                try await viewModel.sendTokens()
-                let finalID = try await viewModel.finalizeAndSubmit()
-                withAnimation {
-                    isShowLoading = false
-                }
+                hudState.showLoading(true)
+                let txRaw = try await viewModel.sendTokens()
+                let finalID = try await TokenManager.finalizeAndSubmit(txRaw: txRaw)
+                hudState.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
                         finalID?.viewTransaction()
                     })
                 }
                 bannerState.showBanner(isShow: true)
-                TokenManager.shared.reloadBalance.send(())
+                //TokenManager.shared.reloadBalance.send(())
                 if appSetting.rootScreen != .home {
                     appSetting.rootScreen = .home
                 }
                 navigator.popToRoot()
             } catch {
-                withAnimation {
-                    isShowLoading = false
-                }
+                hudState.showLoading(false)
                 hudState.showMsg(msg: error.localizedDescription)
             }
         }

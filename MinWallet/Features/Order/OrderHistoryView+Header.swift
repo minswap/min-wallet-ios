@@ -15,6 +15,9 @@ extension OrderHistoryView {
                             .placeholder("Search by token name, txID", when: viewModel.keyword.isEmpty)
                             .focused($isFocus)
                             .lineLimit(1)
+                            .keyboardType(.asciiCapable)
+                            .submitLabel(.done)
+                            .autocorrectionDisabled()
                         if !viewModel.keyword.isEmpty {
                             Image(.icCloseFill)
                                 .resizable()

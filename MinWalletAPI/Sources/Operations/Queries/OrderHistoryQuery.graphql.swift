@@ -7,7 +7,7 @@ public class OrderHistoryQuery: GraphQLQuery {
   public static let operationName: String = "OrderHistoryQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId overSlippage { __typename ... on DepositOverSlippageDetail { receivedLPAmount type } ... on DexV2WithdrawImbalanceOverSlippageDetail { receivedAmountA receivedAmountB type } ... on OCOOverSlipageDetail { receivedAmount type } ... on PartialFillOverSlippageDetail { swapableAmount type } ... on RoutingOverSlipageDetail { receivedAmount type } ... on StableswapWithdrawImbalanceOverSlippageDetail { necessaryLPAmount type } ... on StopOverSlippageDetail { receivedAmount type } ... on SwapExactInOverSlippageDetail { maxReceivableOut receivedAmount type } ... on SwapExactOutOverSlippageDetail { maxReceivableOut necessarySwapAmount type } ... on WithdrawOverSlippageDetail { maxWithdrawawls receivedAmounts type } ... on ZapInOverSlippageDetail { receivedLPAmount type } ... on ZapOutOverSlippageDetail { receivedAmount type } } } cursor { __typename stableswap v1 v2 } } }"#
+      #"query OrderHistoryQuery($ordersInput2: OrderV2Input!) { orders(input: $ordersInput2) { __typename orders { __typename action createdAt details type txIn { __typename txId txIndex } expiredAt linkedPools { __typename assets { __typename currencySymbol metadata { __typename decimals isVerified name ticker } tokenName } lpAsset { __typename currencySymbol metadata { __typename isVerified decimals ticker name } tokenName } } status updatedAt updatedTxId overSlippage { __typename ... on DepositOverSlippageDetail { receivedLPAmount type } ... on DexV2WithdrawImbalanceOverSlippageDetail { receivedAmountA receivedAmountB type } ... on OCOOverSlipageDetail { receivedAmount type } ... on PartialFillOverSlippageDetail { swapableAmount type } ... on RoutingOverSlipageDetail { receivedAmount type } ... on StableswapWithdrawImbalanceOverSlippageDetail { necessaryLPAmount type } ... on StopOverSlippageDetail { receivedAmount type } ... on SwapExactInOverSlippageDetail { maxReceivableOut receivedAmount type } ... on SwapExactOutOverSlippageDetail { maxReceivableOut necessarySwapAmount type } ... on WithdrawOverSlippageDetail { maxWithdrawawls receivedAmounts type } ... on ZapInOverSlippageDetail { receivedLPAmount type } ... on ZapOutOverSlippageDetail { receivedAmount type } } datum } cursor { __typename stableswap v1 v2 } } }"#
     ))
 
   public var ordersInput2: OrderV2Input
@@ -67,6 +67,7 @@ public class OrderHistoryQuery: GraphQLQuery {
           .field("updatedAt", String?.self),
           .field("updatedTxId", String?.self),
           .field("overSlippage", OverSlippage?.self),
+          .field("datum", String.self),
         ] }
 
         public var action: GraphQLEnum<MinWalletAPI.OrderV2Action> { __data["action"] }
@@ -80,6 +81,7 @@ public class OrderHistoryQuery: GraphQLQuery {
         public var updatedAt: String? { __data["updatedAt"] }
         public var updatedTxId: String? { __data["updatedTxId"] }
         public var overSlippage: OverSlippage? { __data["overSlippage"] }
+        public var datum: String { __data["datum"] }
 
         /// Orders.Order.TxIn
         ///
@@ -92,9 +94,11 @@ public class OrderHistoryQuery: GraphQLQuery {
           public static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
             .field("txId", String.self),
+            .field("txIndex", Int.self),
           ] }
 
           public var txId: String { __data["txId"] }
+          public var txIndex: Int { __data["txIndex"] }
         }
 
         /// Orders.Order.LinkedPool

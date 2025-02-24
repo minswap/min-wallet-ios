@@ -10,36 +10,21 @@ class ConfirmSendTokenViewModel: ObservableObject {
     @Published
     var address: String = ""
 
-    var tx: String?
-
     init(tokens: [WrapTokenSend], address: String) {
         self.tokens = tokens
         self.address = address
     }
 
-    func sendTokens() async throws {
-        if tx != nil { return }
+    func sendTokens() async throws -> String {
         let receiver = address
         let sender = UserInfo.shared.minWallet?.address ?? ""
         let assetAmounts: [InputAssetAmount] = tokens.map { token in
             let amount = token.amount.doubleValue * pow(10, Double(token.token.decimals))
-            return InputAssetAmount(amount: String(Int(amount)), asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
+            return InputAssetAmount(amount: amount.toIntStringValue, asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
         }
         let sendTokensMutation = SendTokensMutation(input: InputSendTokens(assetAmounts: assetAmounts, receiver: receiver, sender: sender))
         let sendTokens = try await MinWalletService.shared.mutation(mutation: sendTokensMutation)
-        tx = sendTokens?.sendTokens
-        if tx == nil {
-            throw AppGeneralError.localError(message: "Transaction not exist")
-        }
-    }
-
-    func finalizeAndSubmit() async throws -> String? {
-        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localError(message: "Wallet not found") }
-        guard let tx = tx else { throw AppGeneralError.localError(message: "Transaction not found") }
-        guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: tx)
-        else { throw AppGeneralError.localError(message: "Sign transaction failed") }
-
-        let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: tx, witnessSet: witnessSet)))
-        return data?.finalizeAndSubmit
+        guard let txRaw = sendTokens?.sendTokens else { throw AppGeneralError.localErrorLocalized(message: "Transaction not exist") }
+        return txRaw
     }
 }

@@ -90,7 +90,7 @@ class SearchTokenViewModel: ObservableObject {
                 self.tokens = _tokens
             }
             self.searchAfter = tokens?.topAssets.searchAfter
-            self.hasLoadMore = _tokens.count >= self.limit
+            self.hasLoadMore = _tokens.count >= self.limit || self.searchAfter != nil
             self.showSkeleton = false
             self.isFetching = false
         }

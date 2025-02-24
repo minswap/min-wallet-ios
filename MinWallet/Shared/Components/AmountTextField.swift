@@ -3,15 +3,17 @@ import SwiftUI
 
 struct AmountTextField: View {
     @Binding var value: String
-    @State var minValue: Double = 0
-    @State var maxValue: Double?
+    @Binding var minValue: Double
+    @Binding var maxValue: Double?
     @State var fontPlaceHolder: Font = .paragraphSmall
 
     var body: some View {
         TextField("", text: $value)
-            .keyboardType(.decimalPad)
             .placeholder("0.0", font: fontPlaceHolder, when: value.isEmpty)
+            .keyboardType(.decimalPad)
             .lineLimit(1)
+            .submitLabel(.done)
+            .autocorrectionDisabled()
             .onChange(of: value) { newValue in
                 let filtered = newValue.replacingOccurrences(of: ",", with: ".").filter { "0123456789.".contains($0) }
                 if filtered.contains(".") {

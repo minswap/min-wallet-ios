@@ -695,6 +695,11 @@ type FeaturingEvent {
   bannerUrl: String!
 }
 
+enum FeeManagerType {
+  DELEGATED
+  POOL_CREATOR
+}
+
 type Fraction {
   denominator: BigInt!
   numerator: BigInt!
@@ -710,9 +715,14 @@ input HarvestPool {
   lpAsset: String!
 }
 
+type HomePageMinBar {
+  poolStats: MINBarPoolStats!
+  tieredAPRs: [MINBarAPR!]!
+}
+
 type HomePageResponse {
   dexOverview: DexOverview!
-  minStakingStats: [MINBarPoolStats!]!
+  minStakingStats: [HomePageMinBar!]!
   topDexAssets: [TopAsset!]!
   topFarmPools: [FarmPool!]!
 }
@@ -932,17 +942,24 @@ type InvalidOrder {
   value: String!
 }
 
-type IosPool {
-  lpAsset: Asset!
-  poolAssets: [Asset!]!
-  poolInfo: String!
-  tvlInAda: BigInt
-  type: AMMType!
+input IosTradeEstimateInput {
+  amount: BigInt!
+  inputAsset: InputAsset!
+  isApplied: Boolean!
+  isSwapExactIn: Boolean!
+  outputAsset: InputAsset!
 }
 
-type IosRoutedPools {
-  pools: [IosPool!]!
-  routings: [Routing!]!
+type IosTradeEstimateOutput {
+  direction: OrderV2Direction
+  estimateAmount: BigInt
+  inputIndex: Int
+  lpAssets: [Asset!]!
+  lpFee: BigInt
+  outputIndex: Int
+  path: [Asset!]!
+  priceImpact: Float
+  type: AMMType!
 }
 
 type KupoAsset {
@@ -1222,7 +1239,8 @@ type LpFeeGovernanceSnapshot {
 
 type LpFeeProposalStats {
   fee: [BigInt!]!
-  feeManagerAddress: String
+  feeManagerAddress: [String!]!
+  managerType: FeeManagerType!
   numberOfActiveProposals: Int!
   totalProposals: Int!
 }
@@ -1263,18 +1281,32 @@ type MINBarDuration {
   multiplier: Int!
 }
 
+type MINBarLiquidPoolStats {
+  aprs: [FarmRewardAPR!]!
+  circulatingSupplyStaked: Float!
+  dailyEmission: [DailyRewardEmission!]!
+  totalStaking: BigInt!
+  uniqueWallets: BigInt!
+}
+
+type MINBarLiquidStakingData {
+  pendingRewards: [FarmRewardAmount!]!
+  stakingAdaWorth: BigInt
+  stakingAmount: BigInt!
+  stakingUtxo: String!
+}
+
 type MINBarPool {
   asset: Asset!
-  stakings: [MINBarStakingData!]!
-  stats: MINBarPoolStats!
+  liquidStats: MINBarLiquidPoolStats!
+  poolStats: MINBarPoolStats!
   supportedDurations: [MINBarDuration!]!
+  tieredStats: MINBarTieredPoolStats!
 }
 
 type MINBarPoolStats {
-  aprs: [MINBarAPR!]!
   circulatingSupplyStaked: Float!
   dailyEmission: [DailyRewardEmission!]!
-  totalBoostingStaking: BigInt!
   totalStaking: BigInt!
   uniqueWallets: BigInt!
 }
@@ -1312,6 +1344,16 @@ type MINBarStakingData {
   stakingAdaWorth: BigInt
   stakingAmount: BigInt!
   stakingUtxo: String!
+  version: String!
+}
+
+type MINBarTieredPoolStats {
+  aprs: [MINBarAPR!]!
+  circulatingSupplyStaked: Float!
+  dailyEmission: [DailyRewardEmission!]!
+  totalBoostingStaking: BigInt!
+  totalStaking: BigInt!
+  uniqueWallets: BigInt!
 }
 
 input MINBarUnStakeOptions {
@@ -1334,12 +1376,6 @@ enum MigrationType {
   FARM_V1
   FARM_V2
   WALLET
-}
-
-input MinBarBuildLiquidDepositOptions {
-  additionalAmount: BigInt!
-  depositUtxoTxIn: String!
-  inputsToChoose: [String!]!
 }
 
 input MinBarBuildLiquidHarvestOptions {
@@ -1377,15 +1413,23 @@ input MinBarBuildTieredUnstakeOptions {
   unstakeUtxoTxIn: String!
 }
 
-type MinBarPositionStats {
+type MinBarLiquidPositionStats {
   amount: BigInt!
-  duration: BigInt!
   numOfPositions: Int!
 }
 
 type MinBarStakingStats {
+  liquidPoolStats: MINBarLiquidPoolStats
+  liquidPositionStats: MinBarLiquidPositionStats!
   poolStats: MINBarPoolStats!
-  positionStats: [MinBarPositionStats!]!
+  tieredPoolStats: MINBarTieredPoolStats!
+  tieredPositionStats: [MinBarTieredPositionStats!]!
+}
+
+type MinBarTieredPositionStats {
+  amount: BigInt!
+  duration: BigInt!
+  numOfPositions: Int!
 }
 
 type MinBarUnstakeResult {
@@ -1481,14 +1525,13 @@ type Mutation {
   idoDepositOrWithdrawOrder(input: IdoDepositOrWithdrawOrderInput!): String!
   lbeBuildDeposit(input: LBEBuildDepositInput!): String!
   logTx(input: PendingTxInput!): String!
-  minBarBuildLiquidDepositTx(options: MinBarBuildLiquidDepositOptions!): String!
   minBarBuildLiquidHarvestTx(options: MinBarBuildLiquidHarvestOptions!): String!
   minBarBuildLiquidStakeTx(options: MinBarBuildLiquidStakeOptions!): String!
   minBarBuildLiquidUnstakeTx(options: MinBarBuildLiquidUnstakeOptions!): String!
   minBarBuildLiquidWithdrawTx(options: MinBarBuildLiquidWithdrawOptions!): String!
   minBarBuildStakeTx(options: MINBarStakeOptions!): String!
   minBarBuildTieredStakeTx(options: MinBarBuildTieredStakeOptions!): String!
-  minBarBuildTieredUnstakeTx(options: MinBarBuildTieredUnstakeOptions!): String!
+  minBarBuildTieredUnstakeTx(options: MinBarBuildTieredUnstakeOptions!): MinBarUnstakeResult!
   minBarBuildUnStakeTx(options: MINBarUnStakeOptions!): MinBarUnstakeResult!
   mintBuildUnstakingTx(options: MintBuildUnstakingOptions!): String!
   notificationGenerateAuthHash(identifier: String!): String!
@@ -1739,6 +1782,17 @@ type PortfolioLPPosition {
   poolShare: Float!
 }
 
+type PortfolioLiquidStakingPosition {
+  amountAsset: AssetAmount!
+  id: String!
+  netAdaValue: BigInt!
+  pendingRewards: [FarmRewardAmount!]!
+  pnl24H: BigInt!
+  rewardPercent: Float!
+  stakeAt: BigInt!
+  stakedAssetAdaValue: BigInt!
+}
+
 type PortfolioMINStakingPosition {
   amountAsset: AssetAmount!
   duration: MINBarDuration!
@@ -1749,6 +1803,7 @@ type PortfolioMINStakingPosition {
   pnl24H: BigInt!
   rewardPercent: Float!
   stakedAssetAdaValue: BigInt!
+  version: String!
 }
 
 type PortfolioMINtStakingPosition {
@@ -1784,6 +1839,7 @@ type PortfolioOverview {
 type PortfolioPositions {
   assets: [PortfolioTokenPosition]!
   farming: [PortfolioFarmPosition]!
+  liquidStaking: [PortfolioLiquidStakingPosition]!
   lpTokens: [PortfolioLPPosition]!
   minStaking: [PortfolioMINStakingPosition]!
   mintStaking: [PortfolioMINtStakingPosition]!
@@ -1897,7 +1953,7 @@ type Query {
   idoFeaturingEvents: [IdoEvent!]!
   idoVerifyWhitelistAddress(address: String!): Boolean!
   invalidOrders(address: String!): [InvalidOrder!]!
-  iosRoutedPoolsByPair(isApplied: Boolean!, pair: InputPair!): IosRoutedPools!
+  iosTradeEstimate(input: IosTradeEstimateInput!): IosTradeEstimateOutput
   launchBowlAnalytic: LaunchBowlAnalytic!
   launchBowlJoinedProject(input: LaunchBowlJoinedProjectsInput!): Events!
   launchBowlLiveProjectCount: Int!
@@ -1917,7 +1973,7 @@ type Query {
   lpFeeProposalStats(input: LpFeeProposalStatsInput!): LpFeeProposalStats
   lpFeeProposalVotes(input: LpFeeProposalVotesInput!): [LpFeeProposalVote!]!
   lpFeeProposals(input: LPFeeProposalsInput): [LPFeeProposal!]!
-  minBarPools(address: String): [MINBarPool!]!
+  minBarPools: [MINBarPool!]!
   minBarStakingChart(interval: MINBarStakingChartInterval!): [MINBarStakingChart!]!
   minBarStakingStats: MinBarStakingStats!
   minTokenStats: MinTokenStats!
@@ -1933,6 +1989,7 @@ type Query {
   poolsByLPAssets(lpAssets: [InputAsset!]!): [AMMPool!]!
   poolsByPairs(pairs: [InputPair!]!): [AMMPool!]!
   portfolioFarmPosition(address: String!): [PortfolioFarmPosition]!
+  portfolioLiquidStakingPosition(address: String!): [PortfolioLiquidStakingPosition]!
   portfolioLpPosition(address: String!): [PortfolioLPPosition]!
   portfolioMinStakingPosition(address: String!): [PortfolioMINStakingPosition]!
   portfolioOverview(address: String!): PortfolioOverview!

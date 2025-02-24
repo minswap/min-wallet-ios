@@ -82,16 +82,6 @@ struct ReInputSeedPhraseView: View {
             )
             .focused($isFocus)
             .padding(.horizontal, .xl)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-
-                    Button("Done") {
-                        isFocus = false
-                    }
-                    .foregroundStyle(.colorLabelToolbarDone)
-                }
-            }
             if !textWarning.toString().isEmpty {
                 HStack(alignment: .center, spacing: 4) {
                     Image(.icWarning)

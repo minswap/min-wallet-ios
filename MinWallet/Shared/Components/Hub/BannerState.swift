@@ -40,6 +40,7 @@ class BannerState: ObservableObject {
                     }
                     .padding(.top, 4)
                 }
+                Spacer(minLength: 0)
             }
             .padding()
             .background(.colorBaseBackground)
@@ -51,8 +52,10 @@ class BannerState: ObservableObject {
     }
 
     func showBanner(isShow: Bool) {
-        withAnimation {
-            isShowingBanner = isShow
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+            withAnimation {
+                self.isShowingBanner = isShow
+            }
         }
     }
 }

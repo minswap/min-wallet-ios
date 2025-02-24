@@ -296,10 +296,21 @@ extension String {
     func toExact(decimal: Double) -> Double {
         return (Double(self) ?? 0) / pow(10.0, decimal)
     }
+    func toExact(decimal: Int) -> Double {
+        return (Double(self) ?? 0) / pow(10.0, Double(decimal))
+    }
+
+    func toSendBE(decimal: Int) -> Double {
+        return (Double(self) ?? 0) * pow(10.0, Double(decimal))
+    }
 }
 extension Double {
     func toExact(decimal: Double?) -> Double {
         return self / pow(10.0, decimal ?? 0)
+    }
+
+    var toIntStringValue: String {
+        String(Int(min(Double(Int.max), self)))
     }
 }
 

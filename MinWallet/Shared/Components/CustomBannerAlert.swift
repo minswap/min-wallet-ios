@@ -40,6 +40,7 @@ private struct CustomBannerAlertModifier<InfoContent: View>: ViewModifier {
                         }
                     }
                 })
+                .zIndex(999)
             }
         }
     }
@@ -83,7 +84,7 @@ extension View {
 
 
 private struct ProgressViewModifier: ViewModifier {
-    @Binding var isShowing: Bool
+    @Binding private var isShowing: Bool
 
     init(isShowing: Binding<Bool>) {
         _isShowing = isShowing

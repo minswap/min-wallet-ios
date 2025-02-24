@@ -168,18 +168,6 @@ struct CreateNewPasswordView: View {
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    HStack {
-                        Text("")
-                        Spacer()
-                        Button("Done") {
-                            focusedField = nil
-                        }
-                        .foregroundStyle(.colorLabelToolbarDone)
-                    }
-                }
-            }
         }
         .modifier(
             BaseContentView(
