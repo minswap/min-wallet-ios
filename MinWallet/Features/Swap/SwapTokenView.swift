@@ -142,11 +142,11 @@ struct SwapTokenView: View {
         }
         .onAppear { [weak viewModel] in
             viewModel?.hudState = hudState
-//            print("SwapTokenView appear")
+            //            print("SwapTokenView appear")
             viewModel?.subscribeCombine()
         }
         .onDisappear { [weak viewModel] in
-//            print("SwapTokenView onDisappear")
+            //            print("SwapTokenView onDisappear")
             viewModel?.unsubscribeCombine()
         }
     }
@@ -499,7 +499,7 @@ struct SwapTokenView: View {
                         .resizable()
                         .frame(width: 16, height: 16)
                     Text("I understand these warnings")
-                        .font(.paragraphSmall)
+                        .font(.paragraphXMediumSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }

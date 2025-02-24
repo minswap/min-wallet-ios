@@ -57,8 +57,9 @@ class SelectTokenViewModel: ObservableObject {
             break
         }
         $keyword
-            .dropFirst()
+            .map({ $0.trimmingCharacters(in: .whitespacesAndNewlines) })
             .removeDuplicates()
+            .dropFirst()
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
             .sink { [weak self] newData in
                 guard let self = self else { return }
