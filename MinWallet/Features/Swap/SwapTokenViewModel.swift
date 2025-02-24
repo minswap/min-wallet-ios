@@ -146,10 +146,10 @@ class SwapTokenViewModel: ObservableObject {
         case let .selectToken(token):
             if isSelectTokenPay {
                 guard let token = token, token.uniqueID != tokenReceive.uniqueID, token.uniqueID != tokenPay.uniqueID else { return }
-                tokenPay = WrapTokenSend(token: token)
+                tokenPay = WrapTokenSend(token: token, amount: tokenPay.amount)
             } else {
                 guard let token = token, token.uniqueID != tokenPay.uniqueID, token.uniqueID != tokenReceive.uniqueID else { return }
-                tokenReceive = WrapTokenSend(token: token)
+                tokenReceive = WrapTokenSend(token: token, amount: tokenReceive.amount)
             }
             self.action.send(.getTradingInfo)
 
