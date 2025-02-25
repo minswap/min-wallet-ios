@@ -12,7 +12,7 @@ extension String {
     }
 
     var doubleValue: Double {
-        Double(self) ?? 0
+        Double(self.replacingOccurrences(of: ",", with: "")) ?? 0
     }
 
     var hexToText: String? {
@@ -126,7 +126,7 @@ extension Data {
 
 
 extension Double {
-    func formatSNumber(usesGroupingSeparator: Bool = true, maximumFractionDigits: Int) -> String {
+    func formatSNumber(usesGroupingSeparator: Bool = true, maximumFractionDigits: Int = 15) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = ","
@@ -140,7 +140,7 @@ extension Double {
     func formatNumber(
         prefix: String = "",
         suffix: String = "",
-        roundingOffset: Int = 3,
+        roundingOffset: Int? = 3,
         font: Font = .labelMediumSecondary,
         fontColor: Color = .colorBaseTent,
         isFormatK: Bool = false
@@ -224,10 +224,16 @@ extension Double {
             startIndex = decimalPart.index(after: startIndex)
         }
 
-        let roundingIndex = decimalPart.index(startIndex, offsetBy: roundingOffset, limitedBy: decimalPart.endIndex) ?? decimalPart.endIndex
+        let roundingIndex: String.Index = {
+            if let roundingOffset = roundingOffset {
+                return decimalPart.index(startIndex, offsetBy: roundingOffset, limitedBy: decimalPart.endIndex) ?? decimalPart.endIndex
+            }
+            return decimalPart.endIndex
+        }()
+
         let roundedDecimal = String(decimalPart[startIndex..<roundingIndex])
 
-        if zerosCount >= 4 {
+        if zerosCount >= 4 && roundingOffset != nil {
             result.append(AttributedString("0"))
             result.font = font
             result.foregroundColor = fontColor
@@ -294,23 +300,19 @@ extension NSAttributedString {
 
 extension String {
     func toExact(decimal: Double) -> Double {
-        return (Double(self) ?? 0) / pow(10.0, decimal)
+        return self.doubleValue / pow(10.0, decimal)
     }
     func toExact(decimal: Int) -> Double {
-        return (Double(self) ?? 0) / pow(10.0, Double(decimal))
+        return self.doubleValue / pow(10.0, Double(decimal))
     }
 
     func toSendBE(decimal: Int) -> Double {
-        return (Double(self) ?? 0) * pow(10.0, Double(decimal))
+        return self.doubleValue * pow(10.0, Double(decimal))
     }
 }
 extension Double {
     func toExact(decimal: Double?) -> Double {
         return self / pow(10.0, decimal ?? 0)
-    }
-
-    var toIntStringValue: String {
-        String(Int(min(Double(Int.max), self)))
     }
 }
 

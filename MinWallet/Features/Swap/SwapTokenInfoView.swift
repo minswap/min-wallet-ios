@@ -20,9 +20,10 @@ struct SwapTokenInfoView: View {
                 .padding(.top, .md)
             HStack {
                 DashedUnderlineText(text: viewModel.isSwapExactIn ? "Minimum Received" : "Minimum Send", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
-                Spacer()
-                let tokenName = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.adaName : viewModel.tokenPay.token.adaName
-                Text(viewModel.minimumMaximumAmount.formatNumber(suffix: tokenName, font: .labelMediumSecondary, fontColor: .colorBaseTent))
+                Spacer(minLength: 0)
+                let tokenName = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.adaName : viewModel.tokenPay.adaName
+                Text(viewModel.minimumMaximumAmount.formatNumber(suffix: tokenName, roundingOffset: nil, font: .labelMediumSecondary, fontColor: .colorBaseTent))
+                    .lineLimit(1)
             }
             .padding(.top, .lg)
             .contentShape(.rect)
@@ -44,10 +45,12 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Price Impact", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                let priceImpact = viewModel.iosTradeEstimate?.priceImpact ?? 100
-                Text(priceImpact.formatSNumber(maximumFractionDigits: 2) + "%")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseSuccess)
+                if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
+                    let priceImpactColor = iosTradeEstimate.priceImpactColor
+                    Text(priceImpact.formatSNumber() + "%")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(priceImpactColor.0)
+                }
             }
             .padding(.top, .xl)
             .contentShape(.rect)

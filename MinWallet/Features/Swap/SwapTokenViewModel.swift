@@ -107,7 +107,7 @@ class SwapTokenViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         $tokenPay
-            .map({ Double($0.amount) ?? 0 })
+            .map({ $0.amount.doubleValue })
             .removeDuplicates()
             .dropFirst()
             .debounce(for: .milliseconds(400), scheduler: DispatchQueue.main)
@@ -117,7 +117,7 @@ class SwapTokenViewModel: ObservableObject {
             })
             .store(in: &cancellables)
         $tokenReceive
-            .map({ Double($0.amount) ?? 0 })
+            .map({ $0.amount.doubleValue })
             .removeDuplicates()
             .debounce(for: .milliseconds(400), scheduler: DispatchQueue.main)
             .sink(receiveValue: { [weak self] amount in
@@ -189,7 +189,7 @@ class SwapTokenViewModel: ObservableObject {
 
         case .getTradingInfo:
             let amount = isSwapExactIn ? tokenPay.amount : tokenReceive.amount
-            try await getTradingInfo(amount: Double(amount) ?? 0)
+            try await getTradingInfo(amount: amount.doubleValue)
             await generateWarningInfo()
             await generateErrorInfo()
 
@@ -334,8 +334,8 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     private func generateErrorInfo() async {
-        let payAmount = Double(tokenPay.amount) ?? 0
-        let receiveAmount = Double(tokenReceive.amount) ?? 0
+        let payAmount = tokenPay.amount.doubleValue
+        let receiveAmount = tokenReceive.amount.doubleValue
         errorInfo = nil
         if isSwapExactIn {
             if payAmount > tokenPay.token.amount {
@@ -354,7 +354,7 @@ class SwapTokenViewModel: ObservableObject {
         }
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let input = IosTradeEstimateInput(
-            amount: amount.toIntStringValue,
+            amount: amount.formatSNumber(usesGroupingSeparator: false),
             inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
             isApplied: swapSetting.predictSwapPrice,
             isSwapExactIn: isSwapExactIn,
@@ -365,10 +365,10 @@ class SwapTokenViewModel: ObservableObject {
 
         if isSwapExactIn {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenReceive.token.decimals)) ?? 0
-            tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenReceive.token.decimals)
+            tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber()
         } else {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
-            tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
+            tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber()
         }
         withAnimation {
             isGettingTradeInfo = false
@@ -380,8 +380,8 @@ class SwapTokenViewModel: ObservableObject {
         guard let address: String = UserInfo.shared.minWallet?.address else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
         guard let lpAsset = iosTradeEstimate.lpAssets.first else { throw AppGeneralError.localErrorLocalized(message: "No LP asset found") }
 
-        let amountPay = tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals).toIntStringValue
-        let amountReceive = tokenReceive.amount.toSendBE(decimal: tokenReceive.token.decimals).toIntStringValue
+        let amountPay = tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals).formatSNumber(usesGroupingSeparator: false)
+        let amountReceive = tokenReceive.amount.toSendBE(decimal: tokenReceive.token.decimals).formatSNumber(usesGroupingSeparator: false)
         let assetIndex = iosTradeEstimate.inputIndex.map({ String($0) }) ?? ""
         let assetOutIndex = iosTradeEstimate.outputIndex.map({ String($0) }) ?? ""
 
@@ -590,6 +590,19 @@ extension SwapTokenViewModel {
             case let .notEnoughAmountInPool(name):
                 return "Not enough \(name) amount in pool)"
             }
+        }
+    }
+}
+
+extension IosTradeEstimateQuery.Data.IosTradeEstimate {
+    var priceImpactColor: (Color, Color) {
+        guard let priceImpact = priceImpact else { return (.clear, .clear) }
+        if priceImpact < 0.02 {
+            return (.colorInteractiveToneSuccess, .colorSurfaceSuccess)
+        } else if priceImpact > 0.05 {
+            return (.colorInteractiveToneDanger, .colorSurfaceDanger)
+        } else {
+            return (.colorInteractiveToneWarning, .colorSurfaceWarningDefault)
         }
     }
 }

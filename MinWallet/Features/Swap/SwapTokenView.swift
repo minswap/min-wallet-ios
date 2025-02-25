@@ -462,20 +462,36 @@ struct SwapTokenView: View {
                         viewModel.isConvertRate.toggle()
                     }
                 Spacer()
-                let priceImpact = viewModel.iosTradeEstimate?.priceImpact ?? 100
-                Text(priceImpact.formatSNumber(maximumFractionDigits: 2) + "%")
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(.colorInteractiveToneSuccess)
-                    .padding(.horizontal, .md)
-                    .frame(height: 20)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
-                    )
-                    .containerShape(.rect)
-                    .onTapGesture {
-                        hideKeyboard()
-                        $viewModel.isShowInfo.showSheet()
-                    }
+                if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
+                    let priceImpactColor = iosTradeEstimate.priceImpactColor
+                    Text(priceImpact.formatSNumber() + "%")
+                        .font(.paragraphXMediumSmall)
+                        .foregroundStyle(priceImpactColor.0)
+                        .padding(.horizontal, .md)
+                        .frame(height: 20)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(priceImpactColor.1)
+                        )
+                        .containerShape(.rect)
+                        .onTapGesture {
+                            hideKeyboard()
+                            $viewModel.isShowInfo.showSheet()
+                        }
+                } else {
+                    Text("--%")
+                        .font(.paragraphXMediumSmall)
+                        .foregroundStyle(.colorInteractiveToneSuccess)
+                        .padding(.horizontal, .md)
+                        .frame(height: 20)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
+                        )
+                        .containerShape(.rect)
+                        .onTapGesture {
+                            hideKeyboard()
+                            $viewModel.isShowInfo.showSheet()
+                        }
+                }
                 Image(.icNext)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
