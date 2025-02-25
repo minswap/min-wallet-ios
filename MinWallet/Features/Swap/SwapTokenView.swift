@@ -248,7 +248,7 @@ struct SwapTokenView: View {
                 Image(.icWallet)
                     .resizable()
                     .frame(width: 16, height: 16)
-                Text(viewModel.tokenPay.token.amount.formatNumber(font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
+                Text(viewModel.tokenPay.token.amount.formatNumber(roundingOffset: nil, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
             }
         }
         .padding(.xl)
@@ -323,7 +323,7 @@ struct SwapTokenView: View {
                 Image(.icWallet)
                     .resizable()
                     .frame(width: 16, height: 16)
-                Text(viewModel.tokenReceive.token.amount.formatNumber(font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
+                Text(viewModel.tokenReceive.token.amount.formatNumber(roundingOffset: nil, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
             }
         }
         .padding(.xl)
@@ -444,8 +444,8 @@ struct SwapTokenView: View {
 
     @ViewBuilder
     private var bottomView: some View {
-        let payAmount = Double(viewModel.tokenPay.amount) ?? 0
-        let receiveAmount = Double(viewModel.tokenReceive.amount) ?? 0
+        let payAmount = viewModel.tokenPay.amount.doubleValue
+        let receiveAmount = viewModel.tokenReceive.amount.doubleValue
         if !payAmount.isZero && !receiveAmount.isZero {
             Color.colorBorderPrimarySub.frame(height: 1)
             HStack(alignment: .center, spacing: 8) {
@@ -520,19 +520,21 @@ struct SwapTokenView: View {
                     )
                     WarningItemView(waringInfo: warningInfo, isExpand: isExpand)
                 }
-                HStack(alignment: .center, spacing: 8) {
-                    Image(viewModel.understandingWarning ? .icSquareCheckBox : .icSquareUncheckBox)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text("I understand these warnings")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.md)
-                .contentShape(.rect)
-                .onTapGesture {
-                    viewModel.understandingWarning.toggle()
+                if viewModel.warningInfo.contains(where: { $0 != .indivisibleTokenPay && $0 != .indivisibleTokenReceive }) {
+                    HStack(alignment: .center, spacing: 8) {
+                        Image(viewModel.understandingWarning ? .icSquareCheckBox : .icSquareUncheckBox)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("I understand these warnings")
+                            .font(.paragraphXMediumSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.md)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        viewModel.understandingWarning.toggle()
+                    }
                 }
             }
             .background(.colorSurfaceWarningDefault)

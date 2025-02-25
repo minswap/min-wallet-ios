@@ -15,11 +15,11 @@ struct AmountTextField: View {
             .submitLabel(.done)
             .autocorrectionDisabled()
             .onChange(of: value) { newValue in
-                value = formatCurrency(newValue)
+                value = AmountTextField.formatCurrency(newValue, minValue: minValue, maxValue: maxValue)
             }
     }
 
-    private func formatCurrency(_ input: String) -> String {
+    static func formatCurrency(_ input: String, minValue: Double, maxValue: Double?, minimumFractionDigits: Int? = nil) -> String {
         var input = input
         if input.count > 1 && input.last == "," {
             input = String(input.dropLast(1)) + "."
@@ -29,7 +29,7 @@ struct AmountTextField: View {
 
         let components = cleanedInput.components(separatedBy: ".")
         var wholeNumber = components[0]
-        let fractionalPart = components.count > 1 ? ".\(components[1])" : ""
+        var fractionalPart = components.count > 1 ? ".\(components[1])" : ""
 
         if !wholeNumber.isEmpty {
             let formatter = NumberFormatter()
@@ -41,16 +41,20 @@ struct AmountTextField: View {
             if let number = Int(wholeNumber), let formatted = formatter.string(from: NSNumber(value: number)) {
                 wholeNumber = formatted
             }
+            if let number = Int(wholeNumber), let formatted = formatter.string(from: NSNumber(value: number)) {
+                wholeNumber = formatted
+            }
         }
 
+        if let minimumFractionDigits = minimumFractionDigits {
+            fractionalPart = String(fractionalPart.prefix(minimumFractionDigits + 1))
+        }
+        
         let formattedValue = wholeNumber + fractionalPart
 
         if let doubleValue = Double(formattedValue.replacingOccurrences(of: ",", with: "")), !input.isBlank, doubleValue > 0 {
             let clampedValue: Double = {
-                guard let maxValue = maxValue else {
-                    print("WTF minvalue \(minValue) current value \(doubleValue)")
-                    return max(doubleValue, minValue)
-                }
+                guard let maxValue = maxValue else { return max(doubleValue, minValue) }
                 return min(max(doubleValue, minValue), maxValue)
             }()
 

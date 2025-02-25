@@ -35,7 +35,7 @@ struct ConfirmSendTokenView: View {
                         .padding(.horizontal, .xl)
                     ForEach(viewModel.tokens) { item in
                         HStack(spacing: 8) {
-                            let amount = Double(item.amount) ?? 0
+                            let amount = item.amount.doubleValue
                             Text(amount.formatSNumber(maximumFractionDigits: 15))
                                 .font(.labelSmallSecondary)
                                 .foregroundStyle(.colorBaseTent)

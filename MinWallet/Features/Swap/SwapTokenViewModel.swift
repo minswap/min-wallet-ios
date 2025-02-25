@@ -176,10 +176,10 @@ class SwapTokenViewModel: ObservableObject {
             }
 
         case .setMaxAmount:
-            tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+            tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false)
 
         case .setHalfAmount:
-            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false)
 
         case let .amountPayChanged(amount),
             let .amountReceiveChanged(amount):
@@ -465,10 +465,12 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     var enableSwap: Bool {
-        if !warningInfo.isEmpty && !understandingWarning {
+        if !warningInfo.isEmpty {
             return false
         }
-
+        if !understandingWarning && warningInfo.contains(where: { $0 != .indivisibleTokenPay && $0 != .indivisibleTokenReceive }) {
+            return false
+        }
         if errorInfo != nil {
             return false
         }
