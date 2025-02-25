@@ -15,24 +15,50 @@ struct AmountTextField: View {
             .submitLabel(.done)
             .autocorrectionDisabled()
             .onChange(of: value) { newValue in
-                let filtered = newValue.replacingOccurrences(of: ",", with: ".").filter { "0123456789.".contains($0) }
-                if filtered.contains(".") {
-                    let splitted = filtered.split(separator: ".", omittingEmptySubsequences: false)
-                    if splitted.count >= 2 {
-                        let preDecimal = String(splitted[0])
-                        let afterDecimal = String(splitted[1])
-                        value = "\(preDecimal).\(afterDecimal)"
-                    }
-                } else {
-                    value = filtered
-                }
-
-                let currentValue = Decimal(string: value) ?? 0
-                if !value.isBlank && currentValue < Decimal(minValue) && currentValue > 0 {
-                    value = minValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
-                } else if let maxValue = maxValue, currentValue > Decimal(maxValue) {
-                    value = maxValue.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
-                }
+                value = formatCurrency(newValue)
             }
+    }
+
+    private func formatCurrency(_ input: String) -> String {
+        var input = input
+        if input.count > 1 && input.last == "," {
+            input = String(input.dropLast(1)) + "."
+        }
+
+        let cleanedInput = input.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
+
+        let components = cleanedInput.components(separatedBy: ".")
+        var wholeNumber = components[0]
+        let fractionalPart = components.count > 1 ? ".\(components[1])" : ""
+
+        if !wholeNumber.isEmpty {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.groupingSeparator = ","
+            formatter.decimalSeparator = "."
+            formatter.maximumFractionDigits = 0
+
+            if let number = Int(wholeNumber), let formatted = formatter.string(from: NSNumber(value: number)) {
+                wholeNumber = formatted
+            }
+        }
+
+        let formattedValue = wholeNumber + fractionalPart
+
+        if let doubleValue = Double(formattedValue.replacingOccurrences(of: ",", with: "")), !input.isBlank, doubleValue > 0 {
+            let clampedValue: Double = {
+                guard let maxValue = maxValue else {
+                    print("WTF minvalue \(minValue) current value \(doubleValue)")
+                    return max(doubleValue, minValue)
+                }
+                return min(max(doubleValue, minValue), maxValue)
+            }()
+
+            if clampedValue != doubleValue {
+                return clampedValue.formatSNumber()
+            }
+        }
+
+        return formattedValue
     }
 }
