@@ -327,7 +327,7 @@ class SwapTokenViewModel: ObservableObject {
         }
 
         if tokenPay.token.decimals == 0 || tokenReceive.token.decimals == 0 {
-            warningInfo.append(.indivisibleTokenPay)
+            warningInfo.append(.indivisibleToken)
         }
         self.warningInfo = warningInfo
         self.isExpand = [:]
@@ -465,10 +465,7 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     var enableSwap: Bool {
-        if !warningInfo.isEmpty {
-            return false
-        }
-        if !understandingWarning && warningInfo.contains(where: { $0 != .indivisibleTokenPay && $0 != .indivisibleTokenReceive }) {
+        if !understandingWarning && !warningInfo.filter({ $0 != .indivisibleToken }).isEmpty {
             return false
         }
         if errorInfo != nil {
@@ -527,8 +524,7 @@ extension SwapTokenViewModel {
         case unregisteredTokenPay(policyID: String)
         case unregisteredTokenReceive(policyID: String)
         ///decimals == 0
-        case indivisibleTokenPay
-        case indivisibleTokenReceive
+        case indivisibleToken
 
         var title: LocalizedStringKey {
             switch self {
@@ -548,8 +544,7 @@ extension SwapTokenViewModel {
                 "Token migration"
             case .unregisteredTokenPay, .unregisteredTokenReceive:
                 "Unregistered token"
-            case .indivisibleTokenPay,
-                .indivisibleTokenReceive:
+            case .indivisibleToken:
                 "Indivisible Token"
             }
         }
@@ -574,8 +569,7 @@ extension SwapTokenViewModel {
             case let .unregisteredTokenPay(policyID),
                 let .unregisteredTokenReceive(policyID):
                 "This token isn't registered on Cardano Token Registry. Please make sure to double check the policy Id: \(policyID)"
-            case .indivisibleTokenPay,
-                .indivisibleTokenReceive:
+            case .indivisibleToken:
                 "Certain tokens on the Cardano blockchain are designed as indivisible. This means each token must be used, transferred, or traded as a whole unit."
             }
         }

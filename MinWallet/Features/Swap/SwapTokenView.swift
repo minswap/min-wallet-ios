@@ -53,7 +53,7 @@ struct SwapTokenView: View {
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
-            .padding(.top, 24)
+            .padding(.top, .xl)
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -492,18 +492,38 @@ struct SwapTokenView: View {
                             $viewModel.isShowInfo.showSheet()
                         }
                 }
-                Image(.icNext)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 10, height: 10)
-                    .rotationEffect(.degrees(-90))
-                    .containerShape(.rect)
-                    .onTapGesture {
-                        hideKeyboard()
-                        $viewModel.isShowInfo.showSheet()
-                    }
+                HStack(alignment: .center) {
+                    Image(.icNext)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 10, height: 10)
+                        .rotationEffect(.degrees(-90))
+                }
+                .frame(height: 22)
+                .containerShape(.rect)
+                .onTapGesture {
+                    hideKeyboard()
+                    $viewModel.isShowInfo.showSheet()
+                }
             }
             .padding(.xl)
+        }
+        if !viewModel.warningInfo.filter({ $0 != .indivisibleToken }).isEmpty {
+            HStack(alignment: .center, spacing: 8) {
+                Image(viewModel.understandingWarning ? .icSquareCheckBox : .icSquareUncheckBox)
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                Text("I understand these warnings")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorBaseTent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                viewModel.understandingWarning.toggle()
+            }
         }
     }
 
@@ -519,22 +539,6 @@ struct SwapTokenView: View {
                         }
                     )
                     WarningItemView(waringInfo: warningInfo, isExpand: isExpand)
-                }
-                if viewModel.warningInfo.contains(where: { $0 != .indivisibleTokenPay && $0 != .indivisibleTokenReceive }) {
-                    HStack(alignment: .center, spacing: 8) {
-                        Image(viewModel.understandingWarning ? .icSquareCheckBox : .icSquareUncheckBox)
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                        Text("I understand these warnings")
-                            .font(.paragraphXMediumSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .padding(.md)
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        viewModel.understandingWarning.toggle()
-                    }
                 }
             }
             .background(.colorSurfaceWarningDefault)
@@ -623,7 +627,7 @@ struct WarningItemView: View {
                 Spacer()
                 Image(.icArrowDown)
                     .resizable()
-                    .rotationEffect(.degrees(isExpand ? 0 : -180))
+                    .rotationEffect(.degrees(isExpand ? -180 : 0))
                     .frame(width: 16, height: 16)
             }
             .padding(.top, .md)

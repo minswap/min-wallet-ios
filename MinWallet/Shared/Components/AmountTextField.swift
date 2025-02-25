@@ -49,7 +49,7 @@ struct AmountTextField: View {
         if let minimumFractionDigits = minimumFractionDigits {
             fractionalPart = String(fractionalPart.prefix(minimumFractionDigits + 1))
         }
-        
+
         let formattedValue = wholeNumber + fractionalPart
 
         if let doubleValue = Double(formattedValue.replacingOccurrences(of: ",", with: "")), !input.isBlank, doubleValue > 0 {
