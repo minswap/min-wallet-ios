@@ -37,7 +37,7 @@ struct SwapTokenSettingView: View {
                 HStack(spacing: 0) {
                     ForEach(0..<slippages.count, id: \.self) { index in
                         if let splippage = slippages[gk_safeIndex: index] {
-                            Text("\(splippage.rawValue.formatted())%")
+                            Text("\(splippage.rawValue.formatSNumber())%")
                                 .font(.labelSmallSecondary)
                                 .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
                                 .fixedSize(horizontal: true, vertical: false)
@@ -61,14 +61,7 @@ struct SwapTokenSettingView: View {
                             .focused($isFocus)
                             .lineLimit(1)
                             .onChange(of: viewModel.swapSetting.slippageTolerance) { newValue in
-                                let newValue = newValue.replacingOccurrences(of: ",", with: ".")
-                                let filtered: String = {
-                                    if let number = Double(newValue), number > maxValue {
-                                        return String(maxValue)
-                                    }
-                                    return newValue
-                                }()
-                                viewModel.swapSetting.slippageTolerance = filtered
+                                viewModel.swapSetting.slippageTolerance = AmountTextField.formatCurrency(newValue, minValue: 0, maxValue: maxValue, minimumFractionDigits: 4)
                                 viewModel.swapSetting.slippageSelected = nil
                                 viewModel.action.send(.recheckUnSafeSlippage)
                             }

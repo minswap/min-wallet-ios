@@ -15,7 +15,7 @@ struct SwapTokenSetting {
     func slippageSelectedValue() -> Double {
         guard let slippageSelected = slippageSelected
         else {
-            return Double(slippageTolerance) ?? 0
+            return slippageTolerance.doubleValue
         }
 
         return slippageSelected.rawValue

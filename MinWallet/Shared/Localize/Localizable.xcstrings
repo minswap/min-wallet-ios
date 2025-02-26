@@ -89,6 +89,9 @@
     "--" : {
 
     },
+    "--%" : {
+
+    },
     ". This can happen due to changes in market prices or liquidity." : {
 
     },
@@ -342,6 +345,9 @@
 
     },
     "Donation" : {
+
+    },
+    "Done" : {
 
     },
     "Edit nickname" : {
