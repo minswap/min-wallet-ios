@@ -206,9 +206,7 @@ struct SettingView: View {
                                         { accepted in
                                             appSetting.enableNotification = accepted
                                             if accepted {
-                                                if UserDataManager.shared.notificationGenerateAuthHash?.isBlank == true {
-                                                    HomeViewModel.generateTokenHash()
-                                                }
+                                                HomeViewModel.generateTokenHash()
                                             } else {
                                                 OneSignal.logout()
                                             }

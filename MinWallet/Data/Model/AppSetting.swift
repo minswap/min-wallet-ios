@@ -149,6 +149,8 @@ class AppSetting: ObservableObject {
 
         TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
+        UserDataManager.shared.tokenRecentSearch = []
+        UserDataManager.shared.tokenFav = []
         UserDataManager.shared.notificationGenerateAuthHash = nil
         OneSignal.logout()
     }

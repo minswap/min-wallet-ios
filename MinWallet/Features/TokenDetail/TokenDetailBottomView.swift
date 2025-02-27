@@ -16,7 +16,7 @@ extension TokenDetailView {
                         .padding(.top, .xl)
                     HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(tokenManager.netAdaValue.getPriceValue(appSetting: appSetting, font: .titleH5).attribute)
+                            Text(tokenManager.adaValue.formatNumber(suffix: Currency.ada.prefix, font: .titleH5, fontColor: .colorBaseTent))
                                 .minimumScaleFactor(0.8)
                                 .lineLimit(1)
                             Text(tokenManager.adaValue.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)

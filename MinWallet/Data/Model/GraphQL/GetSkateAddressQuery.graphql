@@ -1,0 +1,3 @@
+query GetSkateAddressQuery($address: String!) {
+ getStakeAddress(address: $address)
+}

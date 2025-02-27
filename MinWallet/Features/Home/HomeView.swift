@@ -264,11 +264,11 @@ struct HomeView: View {
         .onFirstAppear {
             Task {
                 if appSetting.enableNotification {
-                    let previous = OneSignal.Notifications.canRequestPermission
                     OneSignal.Notifications.requestPermission(
                         { accepted in
-                            if previous && !OneSignal.Notifications.canRequestPermission && !accepted {
-                                appSetting.enableNotification = false
+                            appSetting.enableNotification = accepted
+                            if accepted {
+                                HomeViewModel.generateTokenHash()
                             }
                         }, fallbackToSettings: true)
                 }
