@@ -17,8 +17,8 @@ struct SendTokenView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var appSetting: AppSetting
-    @EnvironmentObject
-    private var tokenManager: TokenManager
+    @StateObject
+    private var tokenManager: TokenManager = TokenManager.shared
     @FocusState
     private var focusedField: Focusable?
     @State
@@ -76,7 +76,7 @@ struct SendTokenView: View {
                                     set: { _ in }
                                 )
                                 let maxValueBinding = Binding<Double?>(
-                                    get: { item.token.isTokenADA ? (max(item.token.amount - 10, 0)) : item.token.amount },
+                                    get: { item.token.isTokenADA ? (max(item.token.amount - self.tokenManager.minimumAdaValue, 0)) : item.token.amount },
                                     set: { _ in }
                                 )
                                 AmountTextField(

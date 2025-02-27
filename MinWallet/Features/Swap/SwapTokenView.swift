@@ -512,7 +512,7 @@ struct SwapTokenView: View {
             }
             .padding(.xl)
         }
-        if !viewModel.warningInfo.filter({ $0 != .indivisibleToken }).isEmpty {
+        if viewModel.showUnderstandingCheckbox {
             HStack(alignment: .center, spacing: 8) {
                 Image(viewModel.understandingWarning ? .icSquareCheckBox : .icSquareUncheckBox)
                     .resizable()

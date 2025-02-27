@@ -18,7 +18,7 @@ class MinWalletService {
             os_log("\(query.description) BEGIN")
         #endif
         return try await withCheckedThrowingContinuation { continuation in
-            apolloClient.fetch(query: query) { result in
+            apolloClient.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
                 #if DEBUG
                     os_log("\(query.description) END")
                 #endif
