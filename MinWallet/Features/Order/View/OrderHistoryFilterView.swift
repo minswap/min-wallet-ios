@@ -241,6 +241,12 @@ struct OrderHistoryFilterView: View {
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
                     if showSelectToDate || showSelectFromDate {
+                        if showSelectToDate && toDate == nil {
+                            toDate = Date().endOfDay
+                        }
+                        if showSelectFromDate && fromDate == nil {
+                            fromDate = Date().startOfDay
+                        }
                         showSelectToDate = false
                         showSelectFromDate = false
                         return
@@ -248,8 +254,8 @@ struct OrderHistoryFilterView: View {
                     onDismiss?()
                     fromDate = fromDate?.startOfDay
                     toDate = toDate?.endOfDay
-                    //print("WTF \(fromDate) \(fromDate?.startOfDay) \(fromDate?.startOfDay.timeIntervalSince1970)")
-                    //print("WTF \(toDate?.endOfDay) \(toDate?.endOfDay.timeIntervalSince1970)")
+//                    print("WTF \(fromDate) \(fromDate?.startOfDay) \(fromDate?.startOfDay.timeIntervalSince1970)")
+//                    print("WTF \(toDate?.endOfDay) \(toDate?.endOfDay.timeIntervalSince1970)")
                     onFilterSelected?(contractTypeSelected, statusSelected, actionSelected, fromDate, toDate)
                 }
                 .frame(height: 56)
