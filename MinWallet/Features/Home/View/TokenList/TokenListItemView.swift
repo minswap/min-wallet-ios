@@ -29,17 +29,23 @@ struct TokenListItemView: View {
                         .lineLimit(1)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
-                    let priceValue: AttributedString = {
-                        switch appSetting.currency {
-                        case Currency.ada.rawValue:
-                            return (token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : "")
-                        default:
-                            return ((token?.priceValue ?? 0) * appSetting.currencyInADA).formatNumber(prefix: !showSubPrice ? Currency.usd.prefix : "")
-                        }
-                    }()
-                    Text(priceValue)
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorBaseTent)
+                    if showSubPrice {
+                        Text((token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : ""))
+                            .font(.labelMediumSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    } else {
+                        let priceValue: AttributedString = {
+                            switch appSetting.currency {
+                            case Currency.ada.rawValue:
+                                return (token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : "")
+                            default:
+                                return ((token?.priceValue ?? 0) * appSetting.currencyInADA).formatNumber(prefix: !showSubPrice ? Currency.usd.prefix : "")
+                            }
+                        }()
+                        Text(priceValue)
+                            .font(.labelMediumSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    }
                 }
                 HStack(spacing: 0) {
                     Text(name.isBlank ? adaName : name)
@@ -51,8 +57,16 @@ struct TokenListItemView: View {
 
                     if showSubPrice {
                         let subPrice: Double = token?.subPriceValue ?? 0
-                        Text(subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub))
-                            .font(.paragraphSmall)
+                        let subPriceValue: AttributedString = {
+                            switch appSetting.currency {
+                            case Currency.ada.rawValue:
+                                return subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                            default:
+                                return (subPrice * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                            }
+                        }()
+
+                        Text(subPriceValue)
                             .layoutPriority(999)
                     } else {
                         let percentChange: Double = token?.percentChange ?? 0
