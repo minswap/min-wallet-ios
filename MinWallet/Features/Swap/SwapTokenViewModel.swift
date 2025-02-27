@@ -297,7 +297,6 @@ class SwapTokenViewModel: ObservableObject {
      */
 
     private func generateWarningInfo() async {
-        //TODO: Warning info
         var warningInfo: [WarningInfo] = []
 
         if let priceImpact = iosTradeEstimate?.priceImpact, priceImpact >= 5 {
@@ -475,7 +474,7 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     var enableSwap: Bool {
-        if !understandingWarning && !warningInfo.filter({ $0 != .indivisibleToken }).isEmpty {
+        if !understandingWarning && showUnderstandingCheckbox {
             return false
         }
         if errorInfo != nil {
@@ -487,6 +486,19 @@ class SwapTokenViewModel: ObservableObject {
         }
 
         return true
+    }
+    
+    var showUnderstandingCheckbox: Bool {
+        let warningInfo = warningInfo.filter { warning in
+            switch warning {
+            case .indivisibleToken, .unregisteredTokenPay, .unregisteredTokenReceive:
+                return false
+            default:
+                return true
+            }
+        }
+        
+        return !warningInfo.isEmpty
     }
 }
 
