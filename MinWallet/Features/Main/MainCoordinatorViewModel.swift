@@ -90,13 +90,13 @@ enum SendTokenScreen: Hashable, Identifiable {
 
 enum SwapTokenScreen: Hashable, Identifiable {
     var id: UUID { UUID() }
-    
+
     case swapToken(token: TokenProtocol?)
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     static func == (lhs: SwapTokenScreen, rhs: SwapTokenScreen) -> Bool {
         switch (lhs, rhs) {
         case (.swapToken, .swapToken):

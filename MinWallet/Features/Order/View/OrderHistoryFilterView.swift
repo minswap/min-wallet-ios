@@ -28,11 +28,11 @@ struct OrderHistoryFilterView: View {
     var onDismiss
     @Environment(\.enableDragGesture)
     var enableDragGesture
-    
+
     var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
 
     private func formateDate(_ date: Date?) -> String {
-        guard let date = date else { return "Select date"}
+        guard let date = date else { return "Select date" }
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-YYYY"
         if AppSetting.shared.timeZone == AppSetting.TimeZone.utc.rawValue {
@@ -41,7 +41,7 @@ struct OrderHistoryFilterView: View {
         }
         return formatter.string(from: date)
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Filter")
@@ -254,8 +254,8 @@ struct OrderHistoryFilterView: View {
                     onDismiss?()
                     fromDate = fromDate?.startOfDay
                     toDate = toDate?.endOfDay
-//                    print("WTF \(fromDate) \(fromDate?.startOfDay) \(fromDate?.startOfDay.timeIntervalSince1970)")
-//                    print("WTF \(toDate?.endOfDay) \(toDate?.endOfDay.timeIntervalSince1970)")
+                    //                    print("WTF \(fromDate) \(fromDate?.startOfDay) \(fromDate?.startOfDay.timeIntervalSince1970)")
+                    //                    print("WTF \(toDate?.endOfDay) \(toDate?.endOfDay.timeIntervalSince1970)")
                     onFilterSelected?(contractTypeSelected, statusSelected, actionSelected, fromDate, toDate)
                 }
                 .frame(height: 56)

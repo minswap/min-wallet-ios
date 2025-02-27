@@ -146,7 +146,7 @@ struct SendTokenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                
+
                 Button("Done") {
                     hideKeyboard()
                 }

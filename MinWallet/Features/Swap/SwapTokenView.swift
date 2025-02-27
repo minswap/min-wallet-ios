@@ -33,7 +33,7 @@ struct SwapTokenView: View {
     init(viewModel: SwapTokenViewModel) {
         _viewModel = .init(wrappedValue: viewModel)
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {

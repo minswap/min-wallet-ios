@@ -51,9 +51,12 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                         }
                 )
         }
-        .environment(\.enableDragGesture, { enabled in
-            enableDragGesture = enabled
-        })
+        .environment(
+            \.enableDragGesture,
+            { enabled in
+                enableDragGesture = enabled
+            }
+        )
         .environment(
             \.partialSheetDismiss,
             {

@@ -18,7 +18,7 @@ struct TimeZoneView: View {
                 HStack(spacing: 16) {
                     Text("Local")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.timeZone ==  AppSetting.TimeZone.local.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
+                        .foregroundStyle(appSetting.timeZone == AppSetting.TimeZone.local.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
                         .opacity(appSetting.timeZone == AppSetting.TimeZone.local.rawValue ? 1 : 0)
