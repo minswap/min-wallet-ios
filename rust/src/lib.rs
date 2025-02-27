@@ -20,6 +20,7 @@ pub struct MinWallet {
     network_id: u32,
     encrypted_key: String,
     account_index: u32,
+    public_key: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -235,6 +236,7 @@ pub fn import_wallet(data: String, password: String, wallet_name: String) -> Opt
     };
     let account_index = 0;
     let account_key = MinWallet::get_account(&root_key, account_index);
+    let public_key = account_key.to_public().to_hex();
 
     // Encrypt root key with password
     let encrypted_key = match MinWallet::gen_encrypted_key(password.as_str(), &root_key) {
@@ -262,6 +264,7 @@ pub fn import_wallet(data: String, password: String, wallet_name: String) -> Opt
         network_id,
         account_index,
         encrypted_key,
+        public_key,
     })
 }
 // *************************** END EXPORT ***************************
@@ -286,6 +289,7 @@ impl MinWallet {
         // Derive root key and account key
         let root_key = MinWallet::entropy_to_root_key(&entropy);
         let account_key = MinWallet::get_account(&root_key, account_index);
+        let public_key = account_key.to_public().to_hex();
 
         // Encrypt root key with password
         let encrypted_key = match MinWallet::gen_encrypted_key(password, &root_key) {
@@ -308,6 +312,7 @@ impl MinWallet {
             network_id,
             account_index,
             encrypted_key,
+            public_key,
         })
     }
 
@@ -486,6 +491,7 @@ mod tests {
             "My MinWallet".to_string(),
         )
         .unwrap();
+        assert_eq!(wallet.public_key, "2f676911d4c7c7a6fd1d44100ff057d9807badcff26d5dd758700f271988acb02f1b52e9302928cb7d7ee03b68a7c8dfba940b7100e8795fff75174e28137448");
         assert_eq!(wallet.address, "addr_test1qp5cpdqd3n6nuaa8rr8h20lnsxzx2uxdapknyh6fryl7e32e34tccc70arj2f4m9x9zdz4vu29rzzrtszalvqzpx625s2z2338".to_string());
 
         let prk = wallet.get_private_key(password, 0).unwrap();
