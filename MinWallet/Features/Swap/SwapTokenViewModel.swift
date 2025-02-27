@@ -487,7 +487,7 @@ class SwapTokenViewModel: ObservableObject {
 
         return true
     }
-    
+
     var showUnderstandingCheckbox: Bool {
         let warningInfo = warningInfo.filter { warning in
             switch warning {
@@ -497,7 +497,7 @@ class SwapTokenViewModel: ObservableObject {
                 return true
             }
         }
-        
+
         return !warningInfo.isEmpty
     }
 }

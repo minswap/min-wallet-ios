@@ -9,6 +9,7 @@ extension MinWallet: Codable {
         networkId = try container.decode(UInt32.self, forKey: .networkId)
         accountIndex = try container.decode(UInt32.self, forKey: .accountIndex)
         encryptedKey = try container.decode(String.self, forKey: .encryptedKey)
+        publicKey = try container.decode(String.self, forKey: .publicKey)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -18,6 +19,7 @@ extension MinWallet: Codable {
         try container.encode(networkId, forKey: .networkId)
         try container.encode(accountIndex, forKey: .accountIndex)
         try container.encode(encryptedKey, forKey: .encryptedKey)
+        try container.encode(publicKey, forKey: .publicKey)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -26,5 +28,6 @@ extension MinWallet: Codable {
         case networkId
         case accountIndex
         case encryptedKey
+        case publicKey
     }
 }
