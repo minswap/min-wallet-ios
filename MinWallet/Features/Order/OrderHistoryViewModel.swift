@@ -91,7 +91,7 @@ class OrderHistoryViewModel: ObservableObject {
             fromDate: fromDate != nil ? .some(String(Int(fromDate!.timeIntervalSince1970 * 1000))) : nil,
             pagination: pagination != nil ? .some(pagination!) : nil,
             status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
-            toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000)) : nil,
+            toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000 - 1)) : nil,
             txId: !keyword.isBlank && isTxID ? .some(keyword) : nil
         )
     }

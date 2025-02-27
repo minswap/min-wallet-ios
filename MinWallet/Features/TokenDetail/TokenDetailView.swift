@@ -58,7 +58,7 @@ struct TokenDetailView: View {
                         .padding(.horizontal, .md)
                 } else {
                     CustomButton(title: "Swap") {
-                        navigator.push(.swapToken(.swapToken))
+                        navigator.push(.swapToken(.swapToken(token: nil)))
                     }
                     .frame(height: 56)
                     .padding(.horizontal, .xl)

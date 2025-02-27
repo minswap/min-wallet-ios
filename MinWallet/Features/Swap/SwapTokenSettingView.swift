@@ -212,7 +212,7 @@ struct SwapTokenSettingView: View {
 
 #Preview {
     VStack {
-        SwapTokenSettingView(viewModel: SwapTokenViewModel())
+        SwapTokenSettingView(viewModel: SwapTokenViewModel(tokenReceive: nil))
             .padding(16)
         Spacer()
     }

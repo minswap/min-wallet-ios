@@ -144,6 +144,9 @@ class AppSetting: ObservableObject {
     @MainActor func deleteAccount() {
         isLogin = false
         authenticationType = .biometric
+        enableNotification = true
+        timeZone = TimeZone.local.rawValue
+
         TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
         UserDataManager.shared.notificationGenerateAuthHash = nil

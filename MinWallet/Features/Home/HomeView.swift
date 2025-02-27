@@ -231,7 +231,7 @@ struct HomeView: View {
                     .padding(.top, .xl)
                 Spacer()
                 CustomButton(title: "Swap") {
-                    navigator.push(.swapToken(.swapToken))
+                    navigator.push(.swapToken(.swapToken(token: nil)))
                 }
                 .frame(height: 56)
                 .padding(.horizontal, .xl)
@@ -264,9 +264,12 @@ struct HomeView: View {
         .onFirstAppear {
             Task {
                 if appSetting.enableNotification {
+                    let previous = OneSignal.Notifications.canRequestPermission
                     OneSignal.Notifications.requestPermission(
                         { accepted in
-                            //print("User accepted notifications: \(accepted)")
+                            if previous && !OneSignal.Notifications.canRequestPermission && !accepted {
+                                appSetting.enableNotification = false
+                            }
                         }, fallbackToSettings: true)
                 }
             }

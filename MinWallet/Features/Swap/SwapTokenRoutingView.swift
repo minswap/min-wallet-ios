@@ -123,5 +123,5 @@ private struct SwapTokenRoutingItemView: View {
 
 #Preview {
     SwapTokenRoutingView()
-        .environmentObject(SwapTokenViewModel())
+        .environmentObject(SwapTokenViewModel(tokenReceive: nil))
 }

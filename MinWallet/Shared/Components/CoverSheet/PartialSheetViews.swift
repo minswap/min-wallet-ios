@@ -6,6 +6,7 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
     @State private var dragOffset: CGFloat = 0
     @State var modalHeight: CGFloat?
     @ViewBuilder var modal: () -> Modal
+    @State private var enableDragGesture: Bool = true
 
     var onDimiss: (() -> Void)?
 
@@ -32,11 +33,13 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                 .gesture(
                     DragGesture()
                         .onChanged { value in
+                            guard enableDragGesture else { return }
                             if value.translation.height > 0 {
                                 dragOffset = value.translation.height
                             }
                         }
                         .onEnded { value in
+                            guard enableDragGesture else { return }
                             if value.translation.height > 100 {
                                 withAnimation {
                                     content.hideKeyboard()
@@ -48,6 +51,12 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
                         }
                 )
         }
+        .environment(
+            \.enableDragGesture,
+            { enabled in
+                enableDragGesture = enabled
+            }
+        )
         .environment(
             \.partialSheetDismiss,
             {
@@ -86,10 +95,18 @@ struct PartialSheetDismissKey: EnvironmentKey {
     static let defaultValue: (() -> Void)? = nil
 }
 
+struct EnableDragGestureKey: EnvironmentKey {
+    static let defaultValue: ((Bool) -> Void)? = nil
+}
+
 extension EnvironmentValues {
     var partialSheetDismiss: (() -> Void)? {
         get { self[PartialSheetDismissKey.self] }
         set { self[PartialSheetDismissKey.self] = newValue }
+    }
+    var enableDragGesture: ((Bool) -> Void)? {
+        get { self[EnableDragGestureKey.self] }
+        set { self[EnableDragGestureKey.self] = newValue }
     }
 }
 

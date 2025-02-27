@@ -225,7 +225,17 @@ extension Date {
     }
 
     var startOfDay: Date {
-        return Calendar.current.startOfDay(for: self)
+        var calendar = Calendar(identifier: .gregorian)
+        if AppSetting.shared.timeZone == AppSetting.TimeZone.utc.rawValue {
+            calendar.timeZone = .gmt
+            calendar.locale = Locale(identifier: "en_US_POSIX")
+
+        }
+        return calendar.startOfDay(for: self)
+    }
+
+    var endOfDay: Date {
+        return self.startOfDay.addingTimeInterval(86400 - 1)
     }
 }
 

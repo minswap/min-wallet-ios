@@ -89,6 +89,7 @@ struct SendTokenView: View {
                                     .font(.labelMediumSecondary)
                                     .foregroundStyle(.colorInteractiveToneHighlight)
                                     .onTapGesture {
+                                        hideKeyboard()
                                         viewModel.setMaxAmount(item: item)
                                     }
                                 TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
@@ -142,14 +143,27 @@ struct SendTokenView: View {
             .frame(height: 56)
             .padding(.horizontal, .xl)
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+
+                Button("Done") {
+                    hideKeyboard()
+                }
+                .foregroundStyle(.colorLabelToolbarDone)
+            }
+        }
         .modifier(
             BaseContentView(
                 screenTitle: " ",
                 actionLeft: {
+                    /*
                     if appSetting.rootScreen != .home {
                         appSetting.rootScreen = .home
                     }
                     navigator.popToRoot()
+                     */
+                    navigator.pop()
                 })
         )
         .presentSheet(
@@ -169,6 +183,7 @@ struct SendTokenView: View {
             }
         )
         .ignoresSafeArea(.keyboard)
+        .modifier(DismissingKeyboard())
     }
 }
 

@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import MinWalletAPI
 
 
 struct OrderHistoryView: View {
@@ -36,7 +37,7 @@ struct OrderHistoryView: View {
                 }
                 if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
                     CustomButton(title: "Swap") {
-                        navigator.push(.swapToken(.swapToken))
+                        navigator.push(.swapToken(.swapToken(token: nil)))
                     }
                     .frame(height: 56)
                     .padding(.horizontal, .xl)

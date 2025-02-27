@@ -57,21 +57,28 @@ struct TokenListView: View {
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)
             }
-            ScrollView {
-                if viewModel.showSkeleton {
+            if viewModel.showSkeleton {
+                ScrollView {
                     ForEach(0..<20, id: \.self) { index in
                         TokenListItemSkeletonView()
                     }
-                } else if viewModel.tokens.isEmpty {
-                    HStack {
-                        Spacer()
-                        Text("No data")
-                            .padding(.horizontal, .xl)
-                            .font(.paragraphSmall)
+                }
+                .scrollDisabled(true)
+            } else if viewModel.tokens.isEmpty {
+                HStack {
+                    Spacer(minLength: 0)
+                    VStack(alignment: .center, spacing: 16) {
+                        Image(.icEmptyResult)
+                            .fixSize(120)
+                        Text("No results")
+                            .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        Spacer()
                     }
-                } else {
+                    Spacer(minLength: 0)
+                }
+                .padding(.top, 50)
+            } else {
+                ScrollView {
                     if viewModel.tabType == .nft {
                         LazyVGrid(columns: columns, spacing: .xl) {
                             ForEach(0..<viewModel.tokens.count, id: \.self) { index in
@@ -137,13 +144,7 @@ struct TokenListView: View {
                     }
                 }
             }
-            /*
-            .refreshable {
-                Task {
-                    await viewModel.getTokens()
-                }
-            }
-             */
+            Spacer(minLength: 0)
         }
     }
 }

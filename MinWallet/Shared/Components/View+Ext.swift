@@ -42,8 +42,17 @@ extension View {
     }
 }
 
+struct DismissingKeyboard: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .onTapGesture {
+                content.hideKeyboard()
+            }
+    }
+}
 
 extension View {
+
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }

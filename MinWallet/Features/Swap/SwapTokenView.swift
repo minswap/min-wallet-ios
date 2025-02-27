@@ -18,7 +18,7 @@ struct SwapTokenView: View {
     @EnvironmentObject
     private var bannerState: BannerState
     @StateObject
-    private var viewModel: SwapTokenViewModel = .init()
+    private var viewModel: SwapTokenViewModel
     @FocusState
     private var focusedField: FocusedField?
     @State
@@ -29,6 +29,10 @@ struct SwapTokenView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
+
+    init(viewModel: SwapTokenViewModel) {
+        _viewModel = .init(wrappedValue: viewModel)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -113,15 +117,6 @@ struct SwapTokenView: View {
                 .presentSheetModifier()
             }
         )
-        .presentSheet(isPresented: $isShowToolTip) {
-            TokenDetailToolTipView(title: $title, content: $content)
-                .background(content: {
-                    RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
-                        .fill(.colorBaseBackground)
-                        .ignoresSafeArea()
-                })
-                .ignoresSafeArea()
-        }
         .ignoresSafeArea(.keyboard)
         .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
             SwapTokenSettingView(
@@ -139,6 +134,15 @@ struct SwapTokenView: View {
                     swapTokenSuccess()
                 }
             )
+        }
+        .presentSheet(isPresented: $isShowToolTip) {
+            TokenDetailToolTipView(title: $title, content: $content)
+                .background(content: {
+                    RoundedCorners(lineWidth: 0, tl: 24, tr: 24, bl: 0, br: 0)
+                        .fill(.colorBaseBackground)
+                        .ignoresSafeArea()
+                })
+                .ignoresSafeArea()
         }
         .onAppear { [weak viewModel] in
             viewModel?.hudState = hudState
@@ -599,7 +603,7 @@ struct SwapTokenView: View {
 }
 
 #Preview {
-    SwapTokenView()
+    SwapTokenView(viewModel: SwapTokenViewModel(tokenReceive: nil))
         .environmentObject(HUDState())
 }
 
