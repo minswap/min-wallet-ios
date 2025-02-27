@@ -181,7 +181,12 @@ class SwapTokenViewModel: ObservableObject {
             }
 
         case .setMaxAmount:
-            tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false)
+            if tokenPay.token.isTokenADA {
+                let maxAmount = tokenPay.token.amount - TokenManager.shared.minimumAdaValue
+                tokenPay.amount = maxAmount.formatSNumber(usesGroupingSeparator: false)
+            } else {
+                tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false)
+            }
 
         case .setHalfAmount:
             tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false)

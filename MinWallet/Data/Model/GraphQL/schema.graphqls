@@ -1943,6 +1943,7 @@ type Query {
 
   """Query all the migration flows of *address*"""
   getDexMigrations(address: String!): [DexMigration!]!
+  getMinimumLovelace(address: String!): BigInt!
   getScriptUtxos(txIns: [String!]!): [ScriptUtxo!]
   getStakeAddress(address: String!): String!
   getUtxos(address: String!): [KupoUtxo!]!

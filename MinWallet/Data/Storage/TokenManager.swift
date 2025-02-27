@@ -39,7 +39,13 @@ class TokenManager: ObservableObject {
             objectWillChange.send()
         }
     }
-
+    
+    var minimumAdaValue: Double = 0 {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
     var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano", decimal: 6)
 
     private init() {}
@@ -57,12 +63,23 @@ class TokenManager: ObservableObject {
 
     func getPortfolioOverviewAndYourToken() async throws -> Void {
         isLoadingPortfolioOverviewAndYourToken = true
-        async let firstImage: Void = getPortfolioOverview()
-        async let secondImage: Void? = TokenManager.getYourToken().map { _ in return () }
-
-        let _ = try await [firstImage, secondImage]
+        async let getPortfolioOverviewAsync: Void = getPortfolioOverview()
+        async let getYourTokenAsync: Void? = TokenManager.getYourToken().map { _ in return () }
+        async let fetchMinimumAdaValueAsync: Void? = fetchMinimumAdaValue()
+        
+        let _ = try await [getPortfolioOverviewAsync, getYourTokenAsync, fetchMinimumAdaValueAsync]
         isLoadingPortfolioOverviewAndYourToken = false
         reloadBalance.send(())
+    }
+    
+    private func fetchMinimumAdaValue() async throws -> Void {
+        do {
+            guard let address = UserInfo.shared.minWallet?.address else { return }
+            let minimumAda = try await MinWalletService.shared.fetch(query: GetMinimumLovelaceQuery(address: address))
+            minimumAdaValue = (minimumAda?.getMinimumLovelace.doubleValue ?? 0) / 1_000_000
+        } catch {
+            minimumAdaValue = 0
+        }
     }
 }
 

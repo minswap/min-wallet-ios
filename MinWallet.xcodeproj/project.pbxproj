@@ -151,6 +151,7 @@
 		96DEDE6D2D1660EF0035A100 /* MinWallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE732D126892003BF81F /* MinWallet.xcdatamodeld */; };
 		96DEDE6E2D1660EF0035A100 /* MinWallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE732D126892003BF81F /* MinWallet.xcdatamodeld */; };
 		96ED4DA52D7057E100968C31 /* GetSkateAddressQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96ED4DA42D7057E100968C31 /* GetSkateAddressQuery.graphql */; };
+		96ED4DC52D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96ED4DC42D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql */; };
 		96F7A22A2D5A532200CD1D19 /* FLEX in Frameworks */ = {isa = PBXBuildFile; productRef = 96F7A2292D5A532200CD1D19 /* FLEX */; };
 		96F7FA092CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */; };
 		96F7FA0B2CFDBA6E00E2EF5B /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7FA0A2CFDBA6E00E2EF5B /* TestView.swift */; };
@@ -366,6 +367,7 @@
 		96DC054C2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewWalletSeedPhraseView.swift; sourceTree = "<group>"; };
 		96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		96ED4DA42D7057E100968C31 /* GetSkateAddressQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetSkateAddressQuery.graphql; sourceTree = "<group>"; };
+		96ED4DC42D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetMinimumLovelaceQuery.graphql; sourceTree = "<group>"; };
 		96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreWalletImportFileView.swift; sourceTree = "<group>"; };
 		96F7FA0A2CFDBA6E00E2EF5B /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseTextField.swift; sourceTree = "<group>"; };
@@ -887,6 +889,7 @@
 				96580D282D673611003CEC4F /* GetScriptUtxosQuery.graphql */,
 				966AFC062D4517B300E733A1 /* SendTokensMutation.graphql */,
 				966AFBEF2D4338DF00E733A1 /* NotificationGenerateAuthHashMutation.graphql */,
+				96ED4DC42D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql */,
 				96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */,
 				96281EE52D662D2D0014EE5F /* IosTradeEstimateQuery.graphql */,
 				96679BCB2D2B87FB00C9AE26 /* AssetsQuery.graphql */,
@@ -1188,6 +1191,7 @@
 				575157D62CEB4526004CD647 /* InterDisplay-Medium.ttf in Resources */,
 				96BD2A562D0D6C6100D81277 /* TopAssetsQuery.graphql in Resources */,
 				575157D72CEB4526004CD647 /* Inter-Bold.ttf in Resources */,
+				96ED4DC52D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql in Resources */,
 				575157DA2CEB4526004CD647 /* Inter-Medium.ttf in Resources */,
 				96580D272D6730BF003CEC4F /* CancelBulkOrdersMutation.graphql in Resources */,
 				575157DE2CEB4526004CD647 /* InterDisplay-Regular.ttf in Resources */,

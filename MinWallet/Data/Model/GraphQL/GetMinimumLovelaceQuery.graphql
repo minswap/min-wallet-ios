@@ -1,0 +1,3 @@
+query GetMinimumLovelaceQuery($address: String!) {
+    getMinimumLovelace(address: $address)
+}
