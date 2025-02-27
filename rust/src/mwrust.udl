@@ -16,4 +16,5 @@ dictionary MinWallet {
     u32 network_id;
     u32 account_index;
     string encrypted_key;
+    string public_key;
 };
