@@ -33,7 +33,6 @@ class HomeViewModel: ObservableObject {
 
     init() {
         guard AppSetting.shared.isLogin else { return }
-        Self.generateTokenHash()
 
         $tabType
             .removeDuplicates()
@@ -165,10 +164,14 @@ class HomeViewModel: ObservableObject {
         guard AppSetting.shared.isLogin, AppSetting.shared.enableNotification else { return }
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
         Task {
-            let mutation = try? await MinWalletService.shared.mutation(mutation: NotificationGenerateAuthHashMutation(identifier: address))
-            if let token = mutation?.notificationGenerateAuthHash, !token.isBlank {
+            async let notificationGenerateAuthHashAsync = MinWalletService.shared.mutation(mutation: NotificationGenerateAuthHashMutation(identifier: address))?.notificationGenerateAuthHash
+            async let skateAddressAsync = MinWalletService.shared.fetch(query: GetSkateAddressQuery(address: address))?.getStakeAddress
+
+            let value = try? await (notificationGenerateAuthHashAsync, skateAddressAsync)
+
+            if let token = value?.0, !token.isBlank, let skateAddress = value?.1, !skateAddress.isBlank, AppSetting.shared.enableNotification {
                 UserDataManager.shared.notificationGenerateAuthHash = token
-                OneSignal.login(externalId: address, token: token)
+                OneSignal.login(externalId: skateAddress, token: token)
             }
         }
     }

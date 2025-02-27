@@ -1944,6 +1944,7 @@ type Query {
   """Query all the migration flows of *address*"""
   getDexMigrations(address: String!): [DexMigration!]!
   getScriptUtxos(txIns: [String!]!): [ScriptUtxo!]
+  getStakeAddress(address: String!): String!
   getUtxos(address: String!): [KupoUtxo!]!
   getWalletAssetsPositions(address: String!): WalletAssetsPositions!
   hello: Void
