@@ -264,9 +264,12 @@ struct HomeView: View {
         .onFirstAppear {
             Task {
                 if appSetting.enableNotification {
+                    let previous = OneSignal.Notifications.canRequestPermission
                     OneSignal.Notifications.requestPermission(
                         { accepted in
-                            //print("User accepted notifications: \(accepted)")
+                            if previous && !OneSignal.Notifications.canRequestPermission && !accepted {
+                                appSetting.enableNotification = false
+                            }
                         }, fallbackToSettings: true)
                 }
             }
