@@ -7,6 +7,8 @@ import SwiftyAttributes
 
 
 struct OrderHistoryFilterView: View {
+    @EnvironmentObject
+    private var appSetting: AppSetting
     @State
     var contractTypeSelected: ContractType?
     @State
@@ -24,15 +26,22 @@ struct OrderHistoryFilterView: View {
 
     @Environment(\.partialSheetDismiss)
     var onDismiss
-
+    @Environment(\.enableDragGesture)
+    var enableDragGesture
+    
     var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
 
-    private let dateFormatter: DateFormatter = {
+    private func formateDate(_ date: Date?) -> String {
+        guard let date = date else { return "Select date"}
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-YYYY"
-        return formatter
-    }()
-
+        if AppSetting.shared.timeZone == AppSetting.TimeZone.utc.rawValue {
+            formatter.timeZone = .gmt
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+        }
+        return formatter.string(from: date)
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Filter")
@@ -115,14 +124,15 @@ struct OrderHistoryFilterView: View {
                 }
                 .padding(.top, .lg)
             }
-
             HStack(spacing: .xl) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("From")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(fromDate ?? Date(), formatter: dateFormatter)
+                    Text(formateDate(fromDate))
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorBaseTent)
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .overlay(
@@ -130,7 +140,6 @@ struct OrderHistoryFilterView: View {
                                 .stroke(showSelectFromDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectFromDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            //                            withAnimation {
                             guard !showSelectFromDate else {
                                 showSelectToDate = false
                                 showSelectFromDate = false
@@ -138,7 +147,6 @@ struct OrderHistoryFilterView: View {
                             }
                             showSelectToDate = false
                             showSelectFromDate = true
-                            //                            }
                         }
                 }
 
@@ -147,7 +155,9 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(toDate ?? Date(), formatter: dateFormatter)
+                    Text(formateDate(toDate))
+                        .font(.paragraphSmall)
+                        .foregroundStyle(.colorBaseTent)
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .overlay(
@@ -155,7 +165,6 @@ struct OrderHistoryFilterView: View {
                                 .stroke(showSelectToDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectToDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            //                            withAnimation {
                             guard !showSelectToDate else {
                                 showSelectToDate = false
                                 showSelectFromDate = false
@@ -163,7 +172,6 @@ struct OrderHistoryFilterView: View {
                             }
                             showSelectToDate = true
                             showSelectFromDate = false
-                            //                            }
                         }
                 }
             }
@@ -172,6 +180,7 @@ struct OrderHistoryFilterView: View {
                 Color.clear.frame(height: 1).padding(.vertical, .xl)
             }
             if showSelectFromDate || showSelectToDate {
+                let timeZone: TimeZone = appSetting.timeZone == AppSetting.TimeZone.utc.rawValue ? .gmt : .current
                 VStack(alignment: .center) {
                     if showSelectFromDate {
                         let fromDateBinding = Binding<Date>(
@@ -189,6 +198,8 @@ struct OrderHistoryFilterView: View {
                         .labelsHidden()
                         .datePickerStyle(.wheel)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                        .environment(\.timeZone, timeZone)
+                        .id(fromDate)
                     }
                     if showSelectToDate {
                         let toDateBinding = Binding<Date>(
@@ -206,6 +217,8 @@ struct OrderHistoryFilterView: View {
                         .labelsHidden()
                         .datePickerStyle(.wheel)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                        .environment(\.timeZone, timeZone)
+                        .id(toDate)
                     }
                 }
             }
@@ -218,18 +231,25 @@ struct OrderHistoryFilterView: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
                         self.showSelectToDate = false
                         self.showSelectFromDate = false
+                        self.contractTypeSelected = nil
+                        self.statusSelected = nil
+                        self.actionSelected = nil
+                        self.fromDate = nil
+                        self.toDate = nil
                     }
                 }
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
                     if showSelectToDate || showSelectFromDate {
-                        //                        withAnimation {
                         showSelectToDate = false
                         showSelectFromDate = false
-                        //                        }
                         return
                     }
                     onDismiss?()
+                    fromDate = fromDate?.startOfDay
+                    toDate = toDate?.endOfDay
+                    //print("WTF \(fromDate) \(fromDate?.startOfDay) \(fromDate?.startOfDay.timeIntervalSince1970)")
+                    //print("WTF \(toDate?.endOfDay) \(toDate?.endOfDay.timeIntervalSince1970)")
                     onFilterSelected?(contractTypeSelected, statusSelected, actionSelected, fromDate, toDate)
                 }
                 .frame(height: 56)
@@ -238,6 +258,9 @@ struct OrderHistoryFilterView: View {
         }
         .padding(.horizontal, .xl)
         .presentSheetModifier()
+        .onAppear {
+            enableDragGesture?(false)
+        }
     }
 }
 
@@ -246,6 +269,7 @@ struct OrderHistoryFilterView: View {
         OrderHistoryFilterView()
         Spacer()
     }
+    .environmentObject(AppSetting.shared)
 }
 
 private struct TextSelectable<T: Equatable>: View {

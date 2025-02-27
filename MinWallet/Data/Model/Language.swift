@@ -1,9 +1,11 @@
 import Foundation
 import Then
 
-enum TimeZone: String {
-    case local = "Local"
-    case utc = "UTC"
+extension AppSetting {
+    enum TimeZone: String {
+        case local = "Local"
+        case utc = "UTC"
+    }
 }
 
 enum Currency: String {

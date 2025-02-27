@@ -1,5 +1,6 @@
 import SwiftUI
 import FlowStacks
+import MinWalletAPI
 
 
 struct OrderHistoryView: View {

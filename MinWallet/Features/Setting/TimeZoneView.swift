@@ -18,29 +18,29 @@ struct TimeZoneView: View {
                 HStack(spacing: 16) {
                     Text("Local")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.timeZone == TimeZone.local.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
+                        .foregroundStyle(appSetting.timeZone ==  AppSetting.TimeZone.local.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
-                        .opacity(appSetting.timeZone == TimeZone.local.rawValue ? 1 : 0)
+                        .opacity(appSetting.timeZone == AppSetting.TimeZone.local.rawValue ? 1 : 0)
                 }
                 .frame(height: 52)
                 .contentShape(.rect)
                 .onTapGesture {
-                    appSetting.timeZone = TimeZone.local.rawValue
+                    appSetting.timeZone = AppSetting.TimeZone.local.rawValue
                 }
                 HStack(spacing: 16) {
                     Text("UTC")
                         .font(.paragraphSmall)
-                        .foregroundStyle(appSetting.timeZone == TimeZone.utc.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
+                        .foregroundStyle(appSetting.timeZone == AppSetting.TimeZone.utc.rawValue ? .colorInteractiveToneHighlight : .colorBaseTent)
                     Spacer()
                     Image(.icChecked)
-                        .opacity(appSetting.timeZone == TimeZone.utc.rawValue ? 1 : 0)
+                        .opacity(appSetting.timeZone == AppSetting.TimeZone.utc.rawValue ? 1 : 0)
                 }
                 .frame(height: 52)
                 .padding(.bottom, .xl)
                 .contentShape(.rect)
                 .onTapGesture {
-                    appSetting.timeZone = TimeZone.utc.rawValue
+                    appSetting.timeZone = AppSetting.TimeZone.utc.rawValue
                 }
             }
             .padding(.horizontal, .xl)
