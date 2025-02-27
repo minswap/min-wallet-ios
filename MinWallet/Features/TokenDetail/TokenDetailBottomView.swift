@@ -26,7 +26,7 @@ extension TokenDetailView {
                         }
                         Spacer()
                         CustomButton(title: "Swap") {
-                            navigator.push(.swapToken(.swapToken))
+                            navigator.push(.swapToken(.swapToken(token: viewModel.token)))
                         }
                         .frame(width: 90, height: 44)
                     }

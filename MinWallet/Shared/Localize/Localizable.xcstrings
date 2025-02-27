@@ -139,6 +139,9 @@
     "1 %@ = " : {
 
     },
+    "1/6 of Liquidity Providers Fee going to MIN stakers?" : {
+
+    },
     "2 %@" : {
 
     },
@@ -341,7 +344,7 @@
     "Disconnect wallet" : {
 
     },
-    "Dissmis" : {
+    "Dismiss" : {
 
     },
     "Donation" : {
@@ -593,9 +596,6 @@
     "Nickname" : {
 
     },
-    "No data" : {
-
-    },
     "No LP asset found" : {
 
     },
@@ -763,6 +763,9 @@
     "Seedphrase" : {
 
     },
+    "Select date" : {
+
+    },
     "Select method to restore your wallet:" : {
 
     },
@@ -842,9 +845,6 @@
 
     },
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {
-
-    },
-    "The trading fee is divided into two parts: one portion is distributed to liquidity providers (LPs) as a reward for supplying liquidity to the protocol, while the other portion goes to the protocol." : {
 
     },
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {

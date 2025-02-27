@@ -79,13 +79,17 @@ class SwapTokenViewModel: ObservableObject {
         print("Deinit SwapTokenViewModel")
     }
 
-    init() {
+    init(tokenReceive: TokenProtocol?) {
         print("Init SwapTokenViewModel")
 
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
-        let minTokenDefault = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
-        let minToken = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == minTokenDefault.uniqueID })
-        tokenReceive = WrapTokenSend(token: minToken ?? minTokenDefault)
+        if let tokenReceive = tokenReceive {
+            self.tokenReceive = WrapTokenSend(token: tokenReceive)
+        } else {
+            let minTokenDefault = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
+            let minToken = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == minTokenDefault.uniqueID })
+            self.tokenReceive = WrapTokenSend(token: minToken ?? minTokenDefault)
+        }
 
         subscribeCombine()
         action.send(.getTradingInfo)

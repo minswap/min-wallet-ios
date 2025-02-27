@@ -9,15 +9,15 @@ struct TokenListView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var tokenManager: TokenManager
-
+    
     @ObservedObject
     var viewModel: HomeViewModel
-
+    
     private let columns = [
         GridItem(.flexible(), spacing: .xl),
         GridItem(.flexible(), spacing: .xl),
     ]
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if !tokenManager.normalTokens.isEmpty && !viewModel.showSkeleton {
@@ -57,21 +57,28 @@ struct TokenListView: View {
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)
             }
-            ScrollView {
-                if viewModel.showSkeleton {
+            if viewModel.showSkeleton {
+                ScrollView {
                     ForEach(0..<20, id: \.self) { index in
                         TokenListItemSkeletonView()
                     }
-                } else if viewModel.tokens.isEmpty {
-                    HStack {
-                        Spacer()
-                        Text("No data")
-                            .padding(.horizontal, .xl)
-                            .font(.paragraphSmall)
+                }
+                .scrollDisabled(true)
+            } else if viewModel.tokens.isEmpty {
+                HStack {
+                    Spacer(minLength: 0)
+                    VStack(alignment: .center, spacing: 16) {
+                        Image(.icEmptyResult)
+                            .fixSize(120)
+                        Text("No results")
+                            .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
-                        Spacer()
                     }
-                } else {
+                    Spacer(minLength: 0)
+                }
+                .padding(.top, 50)
+            } else {
+                ScrollView {
                     if viewModel.tabType == .nft {
                         LazyVGrid(columns: columns, spacing: .xl) {
                             ForEach(0..<viewModel.tokens.count, id: \.self) { index in
@@ -105,7 +112,7 @@ struct TokenListView: View {
                                             )
                                             .cornerRadius(.xl)
                                         }
-
+                                        
                                         let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
                                         Text(name)
                                             .lineLimit(1)
@@ -137,13 +144,7 @@ struct TokenListView: View {
                     }
                 }
             }
-            /*
-            .refreshable {
-                Task {
-                    await viewModel.getTokens()
-                }
-            }
-             */
+            Spacer(minLength: 0)
         }
     }
 }
@@ -159,7 +160,7 @@ extension TokenListView {
     static let marketUUID = UUID()
     static let yourTokenUUID = UUID()
     static let nftUUID = UUID()
-
+    
     enum TabType: CaseIterable, Identifiable {
         var id: UUID {
             switch self {
@@ -171,11 +172,11 @@ extension TokenListView {
                 return nftUUID
             }
         }
-
+        
         case market
         case yourToken
         case nft
-
+        
         var title: LocalizedStringKey {
             switch self {
             case .market:
@@ -186,7 +187,7 @@ extension TokenListView {
                 "Your NFTs"
             }
         }
-
+        
         var layoutPriority: Double {
             switch self {
             case .market:

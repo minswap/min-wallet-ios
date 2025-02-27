@@ -18,7 +18,7 @@ struct SwapTokenView: View {
     @EnvironmentObject
     private var bannerState: BannerState
     @StateObject
-    private var viewModel: SwapTokenViewModel = .init()
+    private var viewModel: SwapTokenViewModel
     @FocusState
     private var focusedField: FocusedField?
     @State
@@ -30,6 +30,10 @@ struct SwapTokenView: View {
     @State
     var title: LocalizedStringKey = ""
 
+    init(viewModel: SwapTokenViewModel) {
+        _viewModel = .init(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -599,7 +603,7 @@ struct SwapTokenView: View {
 }
 
 #Preview {
-    SwapTokenView()
+    SwapTokenView(viewModel: SwapTokenViewModel(tokenReceive: nil))
         .environmentObject(HUDState())
 }
 

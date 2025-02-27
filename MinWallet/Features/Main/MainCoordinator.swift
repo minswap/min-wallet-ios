@@ -100,8 +100,8 @@ struct MainCoordinator: View {
 
                     case let .swapToken(screen):
                         switch screen {
-                        case .swapToken:
-                            SwapTokenView().navigationBarHidden(true)
+                        case let .swapToken(token):
+                            SwapTokenView(viewModel: SwapTokenViewModel(tokenReceive: token)).navigationBarHidden(true)
                         }
 
                     case .searchToken:

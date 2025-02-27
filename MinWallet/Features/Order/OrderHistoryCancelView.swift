@@ -32,7 +32,7 @@ struct OrderHistoryCancelView: View {
                 .padding(.horizontal, .xl)
 
             HStack(spacing: .xl) {
-                CustomButton(title: "Dissmis", variant: .secondary) {
+                CustomButton(title: "Dismiss", variant: .secondary) {
                     onDismiss?()
                 }
                 .frame(height: 56)
