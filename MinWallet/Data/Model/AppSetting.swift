@@ -143,16 +143,20 @@ class AppSetting: ObservableObject {
 
     @MainActor func deleteAccount() {
         isLogin = false
-        authenticationType = .biometric
-        enableNotification = true
-        timeZone = TimeZone.local.rawValue
 
         TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
         UserDataManager.shared.tokenRecentSearch = []
         UserDataManager.shared.tokenFav = []
         UserDataManager.shared.notificationGenerateAuthHash = nil
+        OneSignal.Notifications.clearAll()
         OneSignal.logout()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            self.authenticationType = .biometric
+            self.enableNotification = true
+            self.timeZone = TimeZone.local.rawValue
+        }
     }
 
     func isSuspiciousToken(currencySymbol: String) async -> Bool {

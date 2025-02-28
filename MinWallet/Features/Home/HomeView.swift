@@ -27,6 +27,10 @@ struct HomeView: View {
     private var showSideMenu: Bool = false
     @State
     private var isCopyAddress: Bool = false
+    @State
+    private var isPresentAlertPermission: Bool = false
+    @State
+    private var openAppSetting: Bool = false
 
     var body: some View {
         ZStack {
@@ -221,11 +225,11 @@ struct HomeView: View {
                 .padding(.vertical, Spacing.md)
                 .padding(.horizontal, Spacing.xl)
                 /*
-                Carousel().frame(height: 98)
+                 Carousel().frame(height: 98)
 
-                    .padding(.vertical, Spacing.md)
-                    .padding(.horizontal, Spacing.xl)
-*/
+                 .padding(.vertical, Spacing.md)
+                 .padding(.horizontal, Spacing.xl)
+                 */
                 TokenListView(viewModel: viewModel)
                     .environmentObject(tokenManager)
                     .padding(.top, .xl)
@@ -241,7 +245,13 @@ struct HomeView: View {
             }
         }
         .sideMenu(isShowing: $showSideMenu) {
-            SettingView(isShowAppearance: $isShowAppearance, isShowTimeZone: $isShowTimeZone, isShowCurrency: $isShowCurrency, isShowLanguage: $isShowLanguage)
+            SettingView(
+                isShowAppearance: $isShowAppearance,
+                isShowTimeZone: $isShowTimeZone,
+                isShowCurrency: $isShowCurrency,
+                isShowLanguage: $isShowLanguage,
+                isPresentAlertPermission: $isPresentAlertPermission
+            )
         }
         .presentSheet(isPresented: $isShowAppearance) {
             AppearanceView()
@@ -263,14 +273,16 @@ struct HomeView: View {
         }
         .onFirstAppear {
             Task {
+                let firstRequest = OneSignal.Notifications.canRequestPermission
                 if appSetting.enableNotification {
                     OneSignal.Notifications.requestPermission(
                         { accepted in
-                            appSetting.enableNotification = accepted
-                            if accepted {
-                                HomeViewModel.generateTokenHash()
+                            if firstRequest {
+                                appSetting.enableNotification = accepted
+                            } else if !accepted {
+                                isPresentAlertPermission = true
                             }
-                        }, fallbackToSettings: true)
+                        }, fallbackToSettings: false)
                 }
             }
         }
@@ -283,6 +295,28 @@ struct HomeView: View {
         }
         .onDisappear {
             appSetting.swipeEnabled = true
+        }
+        .alert(isPresented: $isPresentAlertPermission) {
+            Alert(
+                title: Text("Open Settings"), message: Text("You currently have notifications turned off for this application. You can open Setting to re-enable them."),
+                primaryButton: Alert.Button.default(
+                    Text("Cancel"),
+                    action: {
+                        appSetting.enableNotification = false
+                    }),
+                secondaryButton: Alert.Button.default(
+                    Text("Open Settings").foregroundColor(.red),
+                    action: {
+                        openAppSetting = true
+                        openAppNotificationSettings()
+                    }))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            guard openAppSetting else { return }
+            openAppSetting = false
+            if appSetting.enableNotification {
+                appSetting.enableNotification = OneSignal.Notifications.permission
+            }
         }
     }
 

@@ -18,11 +18,12 @@ class ConfirmSendTokenViewModel: ObservableObject {
     func sendTokens() async throws -> String {
         let receiver = address
         let sender = UserInfo.shared.minWallet?.address ?? ""
+        let publicKey = UserInfo.shared.minWallet?.publicKey ?? ""
         let assetAmounts: [InputAssetAmount] = tokens.map { token in
             let amount = token.amount.doubleValue * pow(10, Double(token.token.decimals))
             return InputAssetAmount(amount: amount.formatSNumber(usesGroupingSeparator: false), asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
         }
-        let sendTokensMutation = SendTokensMutation(input: InputSendTokens(assetAmounts: assetAmounts, receiver: receiver, sender: sender))
+        let sendTokensMutation = SendTokensMutation(input: InputSendTokens(assetAmounts: assetAmounts, publicKey: publicKey, receiver: receiver, sender: sender))
         let sendTokens = try await MinWalletService.shared.mutation(mutation: sendTokensMutation)
         guard let txRaw = sendTokens?.sendTokens else { throw AppGeneralError.localErrorLocalized(message: "Transaction not exist") }
         return txRaw

@@ -387,6 +387,7 @@ class SwapTokenViewModel: ObservableObject {
     func swapToken() async throws -> String {
         guard let iosTradeEstimate = iosTradeEstimate else { return "" }
         guard let address: String = UserInfo.shared.minWallet?.address else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
+        guard let publicKey = UserInfo.shared.minWallet?.publicKey else { throw AppGeneralError.localErrorLocalized(message: "Public key not found") }
         guard let lpAsset = iosTradeEstimate.lpAssets.first else { throw AppGeneralError.localErrorLocalized(message: "No LP asset found") }
 
         let amountPay = tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals).formatSNumber(usesGroupingSeparator: false)
@@ -460,7 +461,7 @@ class SwapTokenViewModel: ObservableObject {
             dexV2OrderSwapExactIn: inputDexV2OrderSwapExactInOptions ?? .none,
             dexV2OrderSwapExactOut: inputDexV2OrderSwapExactOutOptions ?? .none,
             stableswapOrder: inputStableswapOrderOptions ?? .none)
-        let data = try await MinWalletService.shared.mutation(mutation: CreateBulkOrdersMutation(input: InputCreateBulkOrders(orders: [inputCreateOrder], sender: address)))
+        let data = try await MinWalletService.shared.mutation(mutation: CreateBulkOrdersMutation(input: InputCreateBulkOrders(orders: [inputCreateOrder], publicKey: publicKey, sender: address)))
         guard let tx = data?.createBulkOrders else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
         return tx
     }

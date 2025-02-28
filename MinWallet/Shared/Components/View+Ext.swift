@@ -121,3 +121,13 @@ extension MinWalletApp {
         }
     }
 }
+
+extension View {
+    func openAppNotificationSettings() {
+        if let bundleIdentifier = Bundle.main.bundleIdentifier, let appSettings = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
+            if UIApplication.shared.canOpenURL(appSettings) {
+                UIApplication.shared.open(appSettings)
+            }
+        }
+    }
+}

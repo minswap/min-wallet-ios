@@ -602,13 +602,13 @@
     "No results" : {
 
     },
-    "Nofification" : {
-
-    },
     "Not enough %@ amount in pool)" : {
 
     },
     "Notice" : {
+
+    },
+    "Notification" : {
 
     },
     "OCO" : {
@@ -707,6 +707,9 @@
 
     },
     "Privacy policy" : {
+
+    },
+    "Public key not found" : {
 
     },
     "Re-input your seed phrase" : {
@@ -996,6 +999,9 @@
 
     },
     "You are disconnecting your wallet?" : {
+
+    },
+    "You currently have notifications turned off for this application. You can open Setting to re-enable them." : {
 
     },
     "You have no order" : {

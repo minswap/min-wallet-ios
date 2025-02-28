@@ -12,11 +12,13 @@ public struct InputSendTokens: InputObject {
 
   public init(
     assetAmounts: [InputAssetAmount],
+    publicKey: String,
     receiver: String,
     sender: String
   ) {
     __data = InputDict([
       "assetAmounts": assetAmounts,
+      "publicKey": publicKey,
       "receiver": receiver,
       "sender": sender
     ])
@@ -25,6 +27,11 @@ public struct InputSendTokens: InputObject {
   public var assetAmounts: [InputAssetAmount] {
     get { __data["assetAmounts"] }
     set { __data["assetAmounts"] = newValue }
+  }
+
+  public var publicKey: String {
+    get { __data["publicKey"] }
+    set { __data["publicKey"] = newValue }
   }
 
   public var receiver: String {

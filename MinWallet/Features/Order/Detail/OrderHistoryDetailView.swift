@@ -475,6 +475,7 @@ struct OrderHistoryDetailView: View {
         let input: InputCancelBulkOrders = InputCancelBulkOrders(
             changeAddress: userInfo.minWallet?.address ?? "",
             orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
+            publicKey: UserInfo.shared.minWallet?.publicKey ?? "",
             type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
         let _ = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input))
 

@@ -821,6 +821,7 @@ input InputAssetAmount {
 input InputCancelBulkOrders {
   changeAddress: String!
   orders: [InputCancelOrder!]!
+  publicKey: String!
   type: CancelOrderType!
 }
 
@@ -838,6 +839,7 @@ input InputCommonBatcherFeeReductionOptions {
 input InputCreateBulkOrders {
   batcherFeeReductionOptions: InputCommonBatcherFeeReductionOptions
   orders: [InputCreateOrderOptions!]!
+  publicKey: String!
   sender: String!
 }
 
@@ -909,6 +911,7 @@ input InputProjectDetails {
 
 input InputSendTokens {
   assetAmounts: [InputAssetAmount!]!
+  publicKey: String!
   receiver: String!
   sender: String!
 }
