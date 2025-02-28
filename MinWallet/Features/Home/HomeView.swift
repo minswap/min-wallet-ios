@@ -28,8 +28,6 @@ struct HomeView: View {
     @State
     private var isCopyAddress: Bool = false
     @State
-    private var enableNotification: Bool = false
-    @State
     private var isPresentAlertPermission: Bool = false
     @State
     private var openAppSetting: Bool = false

@@ -13,11 +13,13 @@ public struct InputCreateBulkOrders: InputObject {
   public init(
     batcherFeeReductionOptions: GraphQLNullable<InputCommonBatcherFeeReductionOptions> = nil,
     orders: [InputCreateOrderOptions],
+    publicKey: String,
     sender: String
   ) {
     __data = InputDict([
       "batcherFeeReductionOptions": batcherFeeReductionOptions,
       "orders": orders,
+      "publicKey": publicKey,
       "sender": sender
     ])
   }
@@ -30,6 +32,11 @@ public struct InputCreateBulkOrders: InputObject {
   public var orders: [InputCreateOrderOptions] {
     get { __data["orders"] }
     set { __data["orders"] = newValue }
+  }
+
+  public var publicKey: String {
+    get { __data["publicKey"] }
+    set { __data["publicKey"] = newValue }
   }
 
   public var sender: String {

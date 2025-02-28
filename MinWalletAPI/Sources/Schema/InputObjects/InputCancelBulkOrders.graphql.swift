@@ -13,11 +13,13 @@ public struct InputCancelBulkOrders: InputObject {
   public init(
     changeAddress: String,
     orders: [InputCancelOrder],
+    publicKey: String,
     type: GraphQLEnum<CancelOrderType>
   ) {
     __data = InputDict([
       "changeAddress": changeAddress,
       "orders": orders,
+      "publicKey": publicKey,
       "type": type
     ])
   }
@@ -30,6 +32,11 @@ public struct InputCancelBulkOrders: InputObject {
   public var orders: [InputCancelOrder] {
     get { __data["orders"] }
     set { __data["orders"] = newValue }
+  }
+
+  public var publicKey: String {
+    get { __data["publicKey"] }
+    set { __data["publicKey"] = newValue }
   }
 
   public var type: GraphQLEnum<CancelOrderType> {
