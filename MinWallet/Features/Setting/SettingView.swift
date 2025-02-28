@@ -24,7 +24,9 @@ struct SettingView: View {
     var isShowLanguage: Bool
     @State
     private var isCopyAddress: Bool = false
-
+    @Binding
+    var isPresentAlertPermission: Bool
+    
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
     var body: some View {
@@ -193,7 +195,7 @@ struct SettingView: View {
                 }
                 .frame(height: 52)
                 HStack(spacing: 12) {
-                    Text("Nofification")
+                    Text("Notification")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
@@ -204,15 +206,14 @@ struct SettingView: View {
                                 if newValue {
                                     OneSignal.Notifications.requestPermission(
                                         { accepted in
-                                            appSetting.enableNotification = accepted
+                                            //enableNotification = accepted
                                             if accepted {
-                                                HomeViewModel.generateTokenHash()
+                                                
                                             } else {
-                                                OneSignal.logout()
+                                                //OneSignal.logout()
+                                                isPresentAlertPermission = true
                                             }
-                                        }, fallbackToSettings: true)
-                                } else {
-                                    OneSignal.logout()
+                                        }, fallbackToSettings: false)
                                 }
                             }
                         }
@@ -292,7 +293,7 @@ struct SettingView: View {
 
 #Preview {
     VStack {
-        SettingView(isShowAppearance: .constant(false), isShowTimeZone: .constant(false), isShowCurrency: .constant(false), isShowLanguage: .constant(false))
+        SettingView(isShowAppearance: .constant(false), isShowTimeZone: .constant(false), isShowCurrency: .constant(false), isShowLanguage: .constant(false), isPresentAlertPermission: .constant(false))
             .environmentObject(AppSetting.shared)
             .environmentObject(UserInfo.shared)
     }

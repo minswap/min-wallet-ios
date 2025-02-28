@@ -909,6 +909,7 @@ input InputProjectDetails {
 
 input InputSendTokens {
   assetAmounts: [InputAssetAmount!]!
+  publicKey: String!
   receiver: String!
   sender: String!
 }
