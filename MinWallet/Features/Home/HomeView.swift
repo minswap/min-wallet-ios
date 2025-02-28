@@ -31,7 +31,7 @@ struct HomeView: View {
     private var isPresentAlertPermission: Bool = false
     @State
     private var openAppSetting: Bool = false
-    
+
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
