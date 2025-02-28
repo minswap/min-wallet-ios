@@ -34,7 +34,7 @@ class HomeViewModel: ObservableObject {
     init() {
         guard AppSetting.shared.isLogin else { return }
         Self.generateTokenHash()
-        
+
         $tabType
             .removeDuplicates()
             .debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)

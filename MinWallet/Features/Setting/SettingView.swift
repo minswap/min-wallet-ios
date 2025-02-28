@@ -26,7 +26,7 @@ struct SettingView: View {
     private var isCopyAddress: Bool = false
     @Binding
     var isPresentAlertPermission: Bool
-    
+
     private let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 
     var body: some View {
@@ -208,7 +208,7 @@ struct SettingView: View {
                                         { accepted in
                                             //enableNotification = accepted
                                             if accepted {
-                                                
+
                                             } else {
                                                 //OneSignal.logout()
                                                 isPresentAlertPermission = true

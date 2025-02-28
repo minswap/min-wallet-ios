@@ -45,7 +45,7 @@ struct HomeView: View {
                             .scaledToFit()
                             .frame(width: 40, height: 40)
                             .clipShape(Circle())
-                        
+
                         Image(.icSubAvatar)
                             .resizable()
                             .frame(width: 14, height: 14)
@@ -198,7 +198,7 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, .xl)
                 .padding(.vertical, .lg)
-                
+
                 HStack(spacing: Spacing.md) {
                     CustomButton(
                         title: "Receive",
@@ -228,7 +228,7 @@ struct HomeView: View {
                 .padding(.horizontal, Spacing.xl)
                 /*
                  Carousel().frame(height: 98)
-                 
+
                  .padding(.vertical, Spacing.md)
                  .padding(.horizontal, Spacing.xl)
                  */
@@ -247,11 +247,12 @@ struct HomeView: View {
             }
         }
         .sideMenu(isShowing: $showSideMenu) {
-            SettingView(isShowAppearance: $isShowAppearance,
-                        isShowTimeZone: $isShowTimeZone,
-                        isShowCurrency: $isShowCurrency,
-                        isShowLanguage: $isShowLanguage,
-                        isPresentAlertPermission: $isPresentAlertPermission
+            SettingView(
+                isShowAppearance: $isShowAppearance,
+                isShowTimeZone: $isShowTimeZone,
+                isShowCurrency: $isShowCurrency,
+                isShowLanguage: $isShowLanguage,
+                isPresentAlertPermission: $isPresentAlertPermission
             )
         }
         .presentSheet(isPresented: $isShowAppearance) {
@@ -300,18 +301,22 @@ struct HomeView: View {
         .alert(isPresented: $isPresentAlertPermission) {
             Alert(
                 title: Text("Open Settings"), message: Text("You currently have notifications turned off for this application. You can open Setting to re-enable them."),
-                primaryButton: Alert.Button.default(Text("Cancel"), action: {
-                    appSetting.enableNotification = false
-                }),
-                secondaryButton: Alert.Button.default(Text("Open Settings").foregroundColor(.red), action: {
-                    openAppSetting = true
-                    openAppNotificationSettings()
-                }))
+                primaryButton: Alert.Button.default(
+                    Text("Cancel"),
+                    action: {
+                        appSetting.enableNotification = false
+                    }),
+                secondaryButton: Alert.Button.default(
+                    Text("Open Settings").foregroundColor(.red),
+                    action: {
+                        openAppSetting = true
+                        openAppNotificationSettings()
+                    }))
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
             guard openAppSetting else { return }
             openAppSetting = false
-            if appSetting.enableNotification  {
+            if appSetting.enableNotification {
                 appSetting.enableNotification = OneSignal.Notifications.permission
             }
         }

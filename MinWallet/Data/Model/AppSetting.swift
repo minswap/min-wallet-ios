@@ -151,7 +151,7 @@ class AppSetting: ObservableObject {
         UserDataManager.shared.notificationGenerateAuthHash = nil
         OneSignal.Notifications.clearAll()
         OneSignal.logout()
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             self.authenticationType = .biometric
             self.enableNotification = true
