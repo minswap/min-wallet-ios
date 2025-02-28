@@ -124,13 +124,10 @@ extension MinWalletApp {
 
 extension View {
     func openAppNotificationSettings() {
-        guard let bundleId = Bundle.main.bundleIdentifier,
-              let url = URL(string: "App-Prefs:root=NOTIFICATIONS_ID&path=\(bundleId)") else {
-            return
-        }
-        
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
+        if let bundleIdentifier = Bundle.main.bundleIdentifier, let appSettings = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
+            if UIApplication.shared.canOpenURL(appSettings) {
+                UIApplication.shared.open(appSettings)
+            }
         }
     }
 }
