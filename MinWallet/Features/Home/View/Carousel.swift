@@ -5,7 +5,7 @@ private struct Data {
     let description: String
 }
 
-struct Carousel: View {
+struct CarouselView: View {
     private let data = [
         Data(
             title: "Get your first token now",
@@ -14,76 +14,72 @@ struct Carousel: View {
         Data(title: "Join the latest IDO today?", description: "Get your tokens early"),
     ]
 
-    @State private var scrollIndex: Int?
+    @State private var scrollIndex: Int = 0
 
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottomLeading) {
                 IndicatorView(count: data.count, scrollIndex: scrollIndex)
                     .offset(x: Spacing.xl, y: -Spacing.xl)
-
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: 0) {
-                        ForEach(0..<data.count, id: \.self) {
-                            index in
-                            let item = data[index]
-                            HStack(alignment: .top) {
-                                VStack(alignment: .leading) {
-                                    Text(item.title)
-                                        .font(.labelMediumSecondary)
-                                        .foregroundStyle(.colorBaseTent)
-                                    Spacer()
-                                        .frame(height: Spacing.xs)
-                                    Text(item.description).font(.paragraphXSmall)
-                                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                                }
-                                .padding(.top, Spacing.xl)
-                                .padding(.leading, Spacing.xl)
-
+                TabView(selection: $scrollIndex) {
+                    ForEach(0..<data.count, id: \.self) {
+                        index in
+                        let item = data[index]
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading) {
+                                Text(item.title)
+                                    .font(.labelMediumSecondary)
+                                    .foregroundStyle(.colorBaseTent)
                                 Spacer()
-
-                                Image(.comingSoon).resizable()
-                                    .frame(
-                                        width: 98, height: 98)
+                                    .frame(height: Spacing.xs)
+                                Text(item.description).font(.paragraphXSmall)
+                                    .foregroundStyle(.colorInteractiveTentPrimarySub)
                             }
-                            .frame(
-                                width: geometry.size.width,  // 80% of container's width
-                                height: geometry.size.height  // 20% of container's height
-                            )
-                            //                            .position(
-                            //                                x: geometry.size.width / 2, // Center horizontally
-                            //                                y: geometry.size.height / 2 // Center vertically
-                            //                            )
-                            //                        .containerRelativeFrame(.horizontal)
-                            //                                                    .scrollTransition(.animated, axis: .horizontal) {
-                            //                                                        content, phase in
-                            //                                                        content.opacity(phase.isIdentity ? 1.0 : 0)
-                            //                                                    }
+                            .padding(.top, Spacing.xl)
+                            .padding(.leading, Spacing.xl)
+
+                            Spacer()
+
+                            Image(.comingSoon).resizable()
+                                .frame(
+                                    width: 98, height: 98)
                         }
                     }
-                    //                .scrollTargetLayout()
                 }
-                .disableBounces()
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .onChange(of: scrollIndex) { newValue in
+                    if newValue == data.count {
+                        scrollIndex = 0
+                    } else if newValue == -1 {
+                        scrollIndex = data.count - 1
+                    }
+                }
             }
             .cornerRadius(BorderRadius._3xl)
             .overlay(
                 RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1)
             )
             .padding(0)
-            .fixedSize(horizontal: false, vertical: true)
+        }
+        .onAppear {
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
+                withAnimation {
+                    scrollIndex = (scrollIndex + 1) % data.count
+                }
+            }
         }
     }
 }
 
-struct IndicatorView: View {
+private struct IndicatorView: View {
     let count: Int
-    let scrollIndex: Int?
+    let scrollIndex: Int
 
     var body: some View {
         HStack(spacing: Spacing.xs) {
             ForEach(0..<count, id: \.self) {
                 indicator in
-                let index = scrollIndex ?? 0
+                let index = scrollIndex
                 Rectangle()
                     .frame(
                         width: indicator == index ? 12 : 6, height: 4
@@ -101,6 +97,10 @@ struct IndicatorView: View {
 
 
 #Preview {
-    Carousel()
-        .frame(height: 150)
+    VStack(spacing: 0) {
+        CarouselView()
+            .frame(height: 98)
+            .padding(.horizontal, .xl)
+
+    }
 }

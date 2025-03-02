@@ -224,12 +224,10 @@ struct HomeView: View {
                 }
                 .padding(.vertical, Spacing.md)
                 .padding(.horizontal, Spacing.xl)
-                /*
-                 Carousel().frame(height: 98)
-
-                 .padding(.vertical, Spacing.md)
-                 .padding(.horizontal, Spacing.xl)
-                 */
+                CarouselView().frame(height: 98)
+                    .padding(.top, Spacing.xl)
+                    .padding(.bottom, Spacing.md)
+                    .padding(.horizontal, Spacing.xl)
                 TokenListView(viewModel: viewModel)
                     .environmentObject(tokenManager)
                     .padding(.top, .xl)
