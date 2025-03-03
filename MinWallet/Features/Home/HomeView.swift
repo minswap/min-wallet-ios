@@ -324,7 +324,7 @@ struct HomeView: View {
         //guard url.scheme == MinWalletConstant.minswapScheme else { return }
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
 
-        guard (components.path == "/orders" || components.path == "/order"), let orderID = components.queryItems?.first(where: { $0.name == "s" })?.value else { return }
+        guard components.path == "/orders", let orderID = components.queryItems?.first(where: { $0.name == "s" })?.value else { return }
         fetchOrderDetail(order: orderID)
     }
 }

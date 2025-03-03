@@ -165,16 +165,7 @@ struct SwapTokenView: View {
             .zIndex(999)
             .containerShape(.rect)
             .onTapGesture {
-                //hideKeyboard()
-                if focusedField != nil {
-                    if viewModel.isSwapExactIn {
-                        focusedField = .receive
-                    } else {
-                        focusedField = .pay
-                    }
-                } else {
-                    viewModel.isSwapExactIn.toggle()
-                }
+                hideKeyboard()
                 viewModel.action.send(.swapToken)
             }
         tokenReceiveView

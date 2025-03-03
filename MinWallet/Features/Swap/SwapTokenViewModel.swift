@@ -162,25 +162,24 @@ class SwapTokenViewModel: ObservableObject {
             self.action.send(.getTradingInfo)
 
         case .swapToken:
-            withAnimation {
-                let tempToken = tokenPay
-                //isSwapExactIn = !isSwapExactIn
-                var isForceGetTradingInfo: Bool = false
+            let tempToken = tokenPay
+            isSwapExactIn = true
+            var isForceGetTradingInfo: Bool = false
 
-                if tokenPay.amount.doubleValue.isZero && tokenReceive.amount.doubleValue.isZero {
-                    isForceGetTradingInfo = true
-                }
-
-                tokenPay = tokenReceive
-                //tokenPay.amount = ""
-                tokenReceive = tempToken
-                //tokenReceive.amount = ""
-                isConvertRate = false
-
-                if isForceGetTradingInfo {
-                    self.action.send(.getTradingInfo)
-                }
+            if tokenPay.amount.doubleValue == 0 {
+                isForceGetTradingInfo = true
             }
+
+            tokenPay = tokenReceive
+            tokenPay.amount = ""
+            tokenReceive = tempToken
+            tokenReceive.amount = ""
+            isConvertRate = false
+
+            if isForceGetTradingInfo {
+                self.action.send(.getTradingInfo)
+            }
+
         case .setMaxAmount:
             isSwapExactIn = true
             if tokenPay.token.isTokenADA {
