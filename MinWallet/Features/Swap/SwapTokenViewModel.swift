@@ -616,9 +616,9 @@ extension SwapTokenViewModel {
 extension IosTradeEstimateQuery.Data.IosTradeEstimate {
     var priceImpactColor: (Color, Color) {
         guard let priceImpact = priceImpact else { return (.clear, .clear) }
-        if priceImpact < 0.02 {
+        if priceImpact < 2 {
             return (.colorInteractiveToneSuccess, .colorSurfaceSuccess)
-        } else if priceImpact > 0.05 {
+        } else if priceImpact > 5 {
             return (.colorInteractiveToneDanger, .colorSurfaceDanger)
         } else {
             return (.colorInteractiveToneWarning, .colorSurfaceWarningDefault)
