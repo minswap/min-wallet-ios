@@ -162,25 +162,27 @@ class SwapTokenViewModel: ObservableObject {
             self.action.send(.getTradingInfo)
 
         case .swapToken:
-            let tempToken = tokenPay
-            isSwapExactIn = true
-            var isForceGetTradingInfo: Bool = false
+            withAnimation {
+                let tempToken = tokenPay
+                //isSwapExactIn = !isSwapExactIn
+                var isForceGetTradingInfo: Bool = false
 
-            if tokenPay.amount.doubleValue == 0 {
-                isForceGetTradingInfo = true
+                if tokenPay.amount.doubleValue.isZero && tokenReceive.amount.doubleValue.isZero {
+                    isForceGetTradingInfo = true
+                }
+
+                tokenPay = tokenReceive
+                //tokenPay.amount = ""
+                tokenReceive = tempToken
+                //tokenReceive.amount = ""
+                isConvertRate = false
+
+                if isForceGetTradingInfo {
+                    self.action.send(.getTradingInfo)
+                }
             }
-
-            tokenPay = tokenReceive
-            tokenPay.amount = ""
-            tokenReceive = tempToken
-            tokenReceive.amount = ""
-            isConvertRate = false
-
-            if isForceGetTradingInfo {
-                self.action.send(.getTradingInfo)
-            }
-
         case .setMaxAmount:
+            isSwapExactIn = true
             if tokenPay.token.isTokenADA {
                 let maxAmount = tokenPay.token.amount - TokenManager.shared.minimumAdaValue
                 tokenPay.amount = maxAmount.formatSNumber(usesGroupingSeparator: false)
@@ -189,7 +191,9 @@ class SwapTokenViewModel: ObservableObject {
             }
 
         case .setHalfAmount:
-            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false)
+            isSwapExactIn = true
+            let amount = Double(Int((tokenPay.token.amount / 2) * pow(10.0, Double(tokenPay.token.decimals)))) / pow(10.0, Double(tokenPay.token.decimals))
+            tokenPay.amount = amount.formatSNumber(usesGroupingSeparator: false)
 
         case let .amountPayChanged(amount),
             let .amountReceiveChanged(amount):
