@@ -184,15 +184,14 @@ class SwapTokenViewModel: ObservableObject {
             isSwapExactIn = true
             if tokenPay.token.isTokenADA {
                 let maxAmount = tokenPay.token.amount - TokenManager.shared.minimumAdaValue
-                tokenPay.amount = maxAmount.formatSNumber(usesGroupingSeparator: false)
+                tokenPay.amount = maxAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
             } else {
-                tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false)
+                tokenPay.amount = tokenPay.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
             }
 
         case .setHalfAmount:
             isSwapExactIn = true
-            let amount = Double(Int((tokenPay.token.amount / 2) * pow(10.0, Double(tokenPay.token.decimals)))) / pow(10.0, Double(tokenPay.token.decimals))
-            tokenPay.amount = amount.formatSNumber(usesGroupingSeparator: false)
+            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: tokenPay.token.decimals)
 
         case let .amountPayChanged(amount),
             let .amountReceiveChanged(amount):
@@ -366,7 +365,7 @@ class SwapTokenViewModel: ObservableObject {
         }
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let input = IosTradeEstimateInput(
-            amount: amount.formatSNumber(usesGroupingSeparator: false),
+            amount: amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0),
             inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
             isApplied: swapSetting.predictSwapPrice,
             isSwapExactIn: isSwapExactIn,
@@ -377,10 +376,10 @@ class SwapTokenViewModel: ObservableObject {
 
         if isSwapExactIn {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenReceive.token.decimals)) ?? 0
-            tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber()
+            tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
         } else {
             let outputAmount = info?.estimateAmount?.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
-            tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber()
+            tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
         }
         withAnimation {
             isGettingTradeInfo = false
@@ -393,8 +392,8 @@ class SwapTokenViewModel: ObservableObject {
         guard let publicKey = UserInfo.shared.minWallet?.publicKey else { throw AppGeneralError.localErrorLocalized(message: "Public key not found") }
         guard let lpAsset = iosTradeEstimate.lpAssets.first else { throw AppGeneralError.localErrorLocalized(message: "No LP asset found") }
 
-        let amountPay = tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals).formatSNumber(usesGroupingSeparator: false)
-        let amountReceive = tokenReceive.amount.toSendBE(decimal: tokenReceive.token.decimals).formatSNumber(usesGroupingSeparator: false)
+        let amountPay = tokenPay.amount.toSendBE(decimal: tokenPay.token.decimals).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
+        let amountReceive = tokenReceive.amount.toSendBE(decimal: tokenReceive.token.decimals).formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
         let assetIndex = iosTradeEstimate.inputIndex.map({ String($0) }) ?? ""
         let assetOutIndex = iosTradeEstimate.outputIndex.map({ String($0) }) ?? ""
 
