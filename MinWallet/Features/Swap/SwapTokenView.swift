@@ -465,7 +465,7 @@ struct SwapTokenView: View {
                     .onTapGesture {
                         viewModel.isConvertRate.toggle()
                     }
-                Spacer()
+                Spacer(minLength: 0)
                 if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
                     let priceImpactColor = iosTradeEstimate.priceImpactColor
                     Text(priceImpact.formatSNumber() + "%")

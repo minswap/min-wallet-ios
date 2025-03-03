@@ -225,10 +225,10 @@ struct HomeView: View {
                 .padding(.vertical, Spacing.md)
                 .padding(.horizontal, Spacing.xl)
                 /*
-                 Carousel().frame(height: 98)
-
-                 .padding(.vertical, Spacing.md)
-                 .padding(.horizontal, Spacing.xl)
+                CarouselView().frame(height: 98)
+                    .padding(.top, Spacing.xl)
+                    .padding(.bottom, Spacing.md)
+                    .padding(.horizontal, Spacing.xl)
                  */
                 TokenListView(viewModel: viewModel)
                     .environmentObject(tokenManager)
@@ -287,7 +287,7 @@ struct HomeView: View {
             }
         }
         .onOpenURL { incomingURL in
-            //minswap://testnet-preprod.minswap.org/orders?s= 83ada93f2ecadf5bbff265d36ae14303b5e19303f5ae107629ebf1961a7e7f98
+            //https://testnet-preprod.minswap.org/orders?s=83ada93f2ecadf5bbff265d36ae14303b5e19303f5ae107629ebf1961a7e7f98
             handleIncomingURL(incomingURL)
         }
         .onAppear {
@@ -321,7 +321,7 @@ struct HomeView: View {
     }
 
     private func handleIncomingURL(_ url: URL) {
-        guard url.scheme == MinWalletConstant.minswapScheme else { return }
+        //guard url.scheme == MinWalletConstant.minswapScheme else { return }
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
 
         guard components.path == "/orders", let orderID = components.queryItems?.first(where: { $0.name == "s" })?.value else { return }

@@ -181,6 +181,7 @@ class SwapTokenViewModel: ObservableObject {
             }
 
         case .setMaxAmount:
+            isSwapExactIn = true
             if tokenPay.token.isTokenADA {
                 let maxAmount = tokenPay.token.amount - TokenManager.shared.minimumAdaValue
                 tokenPay.amount = maxAmount.formatSNumber(usesGroupingSeparator: false)
@@ -189,7 +190,9 @@ class SwapTokenViewModel: ObservableObject {
             }
 
         case .setHalfAmount:
-            tokenPay.amount = (tokenPay.token.amount / 2).formatSNumber(usesGroupingSeparator: false)
+            isSwapExactIn = true
+            let amount = Double(Int((tokenPay.token.amount / 2) * pow(10.0, Double(tokenPay.token.decimals)))) / pow(10.0, Double(tokenPay.token.decimals))
+            tokenPay.amount = amount.formatSNumber(usesGroupingSeparator: false)
 
         case let .amountPayChanged(amount),
             let .amountReceiveChanged(amount):
@@ -616,9 +619,9 @@ extension SwapTokenViewModel {
 extension IosTradeEstimateQuery.Data.IosTradeEstimate {
     var priceImpactColor: (Color, Color) {
         guard let priceImpact = priceImpact else { return (.clear, .clear) }
-        if priceImpact < 0.02 {
+        if priceImpact < 2 {
             return (.colorInteractiveToneSuccess, .colorSurfaceSuccess)
-        } else if priceImpact > 0.05 {
+        } else if priceImpact > 5 {
             return (.colorInteractiveToneDanger, .colorSurfaceDanger)
         } else {
             return (.colorInteractiveToneWarning, .colorSurfaceWarningDefault)
