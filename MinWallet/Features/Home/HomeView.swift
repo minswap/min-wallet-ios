@@ -324,13 +324,27 @@ struct HomeView: View {
         //guard url.scheme == MinWalletConstant.minswapScheme else { return }
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
 
-        guard components.path == "/orders", let orderID = components.queryItems?.first(where: { $0.name == "s" })?.value else { return }
-        fetchOrderDetail(order: orderID)
+        switch components.path {
+        case "/orders":
+            guard let orderID = components.queryItems?.first(where: { $0.name == "s" })?.value
+            else {
+                navigator.push(.orderHistory)
+                return
+            }
+
+            fetchOrderDetail(
+                order: orderID,
+                fallback: {
+                    navigator.push(.orderHistory)
+                })
+        default:
+            break
+        }
     }
 }
 
 extension HomeView {
-    private func fetchOrderDetail(order: String) {
+    private func fetchOrderDetail(order: String, fallback: (() -> Void)?) {
         guard let address = userInfo.minWallet?.address, !address.isEmpty else { return }
         Task {
             let input = OrderV2Input(
@@ -338,9 +352,17 @@ extension HomeView {
                 txId: .some(order)
             )
 
-            let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-            guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
-            navigator.push(.orderHistoryDetail(order: order, onReloadOrder: nil))
+            do {
+                let orderData = try await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
+                guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first
+                else {
+                    fallback?()
+                    return
+                }
+                navigator.push(.orderHistoryDetail(order: order, onReloadOrder: nil))
+            } catch {
+                fallback?()
+            }
         }
     }
 }

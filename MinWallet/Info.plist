@@ -41,6 +41,8 @@
 	<string>${MIN_PUBLIC_NETWORK_ID}</string>
 	<key>MIN_TRANSACTION_URL</key>
 	<string>${MIN_TRANSACTION_URL}</string>
+	<key>OneSignal_suppress_launch_urls</key>
+	<true/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Using Face ID to login</string>
 	<key>MIN_ADDRESS_PREFIX</key>

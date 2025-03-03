@@ -25,7 +25,13 @@ class SendTokenViewModel: ObservableObject {
 
     func setMaxAmount(item: WrapTokenSend) {
         guard let index = tokens.firstIndex(where: { $0.id == item.id }) else { return }
-        tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 15)
+        let decimals = tokens[index].token.decimals
+        if tokens[index].token.isTokenADA {
+            let maxAmount = item.token.amount - TokenManager.shared.minimumAdaValue
+            tokens[index].amount = maxAmount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: decimals)
+        } else {
+            tokens[index].amount = item.token.amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: decimals)
+        }
     }
 
     var tokensToSend: [WrapTokenSend] {
