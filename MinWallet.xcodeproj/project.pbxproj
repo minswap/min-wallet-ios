@@ -1615,6 +1615,8 @@
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MinWallet/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MinswapWallet;
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) camera use";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Using Face ID to login";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1664,6 +1666,8 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MinWallet/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MinswapWallet;
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) camera use";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Using Face ID to login";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
