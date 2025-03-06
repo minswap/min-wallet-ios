@@ -13,6 +13,8 @@ struct PolicyConfirmView: View {
 
     @State
     var screenType: ScreenType = .splash
+    @StateObject
+    private var webViewModel = WebViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -24,13 +26,12 @@ struct PolicyConfirmView: View {
             }
             .padding(.horizontal, Spacing.xl)
             .padding(.top, .xl)
-            ScrollView {
-                Text("policy_content")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseTent)
-                    .padding(.horizontal, Spacing.xl)
-                    .padding(.top, Spacing.xl)
-            }
+            ProgressView(value: webViewModel.progress, total: 1.0)
+                .progressViewStyle(LinearProgressViewStyle())
+                .padding(.horizontal, .xl)
+                .opacity(webViewModel.progress != 1 ? 1 : 0)
+            WebView(urlString: MinWalletConstant.minAboutURL + "/headless/privacy-policy", viewModel: webViewModel)
+                .padding(.top, Spacing.xl)
             CustomButton(
                 title: "Confirm",
                 variant: .primary,

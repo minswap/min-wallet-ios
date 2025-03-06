@@ -42,6 +42,10 @@ struct AboutView: View {
             }
             .frame(height: 52)
             .padding(.horizontal, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                navigator.push(.termOfService)
+            }
             /*
             Color.colorBorderPrimarySub.frame(height: 1)
                 .padding(.horizontal, .xl)

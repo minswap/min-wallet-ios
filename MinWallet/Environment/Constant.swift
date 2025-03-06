@@ -21,6 +21,7 @@ struct MinWalletConstant {
     static let IPFS_PREFIX = "ipfs://"
     static let IPFS_GATEWAY = "https://ipfs.minswap.org/ipfs/"
     static let suspiciousTokenURL = "https://raw.githubusercontent.com/cardano-galactic-police/suspicious-tokens/refs/heads/main/tokens.txt"
+    static let minAboutURL = GetInfoDictionaryString(for: "MIN_ABOUT_URL", true)
 
     private init() {
 

@@ -128,6 +128,8 @@ struct MainCoordinator: View {
                         OrderHistoryView().navigationBarHidden(true)
                     case .scanQR:
                         ScanQRView().navigationBarHidden(true)
+                    case .termOfService:
+                        TermOfServiceView().navigationBarHidden(true)
                     }
                 }
                 .navigationBarHidden(true)
