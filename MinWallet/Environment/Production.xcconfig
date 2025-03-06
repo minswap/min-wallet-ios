@@ -1,8 +1,8 @@
 #include "AppConfig.xcconfig"
 
 //TODO: Change url production ?
-MIN_URL      =
-MIN_PUBLIC_NETWORK_ID =
+MIN_URL      = https:\/\/minswap.org
+MIN_PUBLIC_NETWORK_ID = mainnet
 MIN_TRANSACTION_URL =
 MIN_HANDLE_ADA_NAME_URL =
 
@@ -12,3 +12,4 @@ MIN_LP_TOKEN = e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86
 MIN_ADA_TOKEN = lovelace
 MIN_ADA_CURRENCY = ₳
 MIN_ADDRESS_PREFIX = addr1
+MIN_ABOUT_URL = https:\/\/minswap.org

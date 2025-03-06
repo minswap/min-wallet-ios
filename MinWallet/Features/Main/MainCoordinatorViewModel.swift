@@ -33,6 +33,7 @@ extension MainCoordinatorViewModel {
         case orderHistoryDetail(order: OrderHistoryQuery.Data.Orders.WrapOrder, onReloadOrder: (() -> Void)?)
         case orderHistory
         case scanQR
+        case termOfService
     }
 }
 
@@ -148,7 +149,8 @@ extension MainCoordinatorViewModel.Screen: Identifiable {
             (.receiveToken, .receiveToken),
             (.searchToken, .searchToken),
             (.orderHistory, .orderHistory),
-            (.scanQR, .scanQR):
+            (.scanQR, .scanQR),
+            (.termOfService, .termOfService):
             return true
 
         case (.tokenDetail, .tokenDetail):

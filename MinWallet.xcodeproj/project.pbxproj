@@ -89,6 +89,8 @@
 		96580D292D673611003CEC4F /* GetScriptUtxosQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96580D282D673611003CEC4F /* GetScriptUtxosQuery.graphql */; };
 		96580D2B2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96580D2A2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql */; };
 		96580D2D2D674548003CEC4F /* OrderHistoryCancelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96580D2C2D674548003CEC4F /* OrderHistoryCancelView.swift */; };
+		965F02042D78971E00D68738 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965F02032D78971E00D68738 /* WebView.swift */; };
+		965F02062D78986D00D68738 /* TermOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965F02052D78986D00D68738 /* TermOfServiceView.swift */; };
 		966659FE2CF463AC0046A20E /* TokenDetailChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966659FD2CF463AC0046A20E /* TokenDetailChartView.swift */; };
 		96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966659FF2CF46D480046A20E /* TokenWithPrice.swift */; };
 		96665A022CF477490046A20E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96665A012CF477490046A20E /* HomeViewModel.swift */; };
@@ -307,6 +309,8 @@
 		96580D282D673611003CEC4F /* GetScriptUtxosQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetScriptUtxosQuery.graphql; sourceTree = "<group>"; };
 		96580D2A2D67368C003CEC4F /* CreateBulkOrdersMutation.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreateBulkOrdersMutation.graphql; sourceTree = "<group>"; };
 		96580D2C2D674548003CEC4F /* OrderHistoryCancelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCancelView.swift; sourceTree = "<group>"; };
+		965F02032D78971E00D68738 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		965F02052D78986D00D68738 /* TermOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermOfServiceView.swift; sourceTree = "<group>"; };
 		966659FD2CF463AC0046A20E /* TokenDetailChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDetailChartView.swift; sourceTree = "<group>"; };
 		966659FF2CF46D480046A20E /* TokenWithPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenWithPrice.swift; sourceTree = "<group>"; };
 		96665A012CF477490046A20E /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -536,6 +540,7 @@
 				966AFC002D44A2FE00E733A1 /* CustomTextField.swift */,
 				96F7FA0C2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift */,
 				96FEDC1B2D23E8E5006AD24F /* CustomFlowLayout.swift */,
+				965F02032D78971E00D68738 /* WebView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -727,6 +732,7 @@
 		9600DECA2CF18797005D997C /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
+				965F02052D78986D00D68738 /* TermOfServiceView.swift */,
 				9600DED12CF2B747005D997C /* PolicyConfirmView.swift */,
 				9600DED32CF2B757005D997C /* GettingStartedView.swift */,
 			);
@@ -1272,6 +1278,7 @@
 				966659FE2CF463AC0046A20E /* TokenDetailChartView.swift in Sources */,
 				9600DEAE2CF172C9005D997C /* Appearance.swift in Sources */,
 				96C139712D0AC61B00766399 /* UserInfo.swift in Sources */,
+				965F02042D78971E00D68738 /* WebView.swift in Sources */,
 				96FEDC0A2D238C7E006AD24F /* OrderHistoryDetailView.swift in Sources */,
 				966AFC452D473AF100E733A1 /* TokenFavourite.swift in Sources */,
 				965592512CFB3A0E00301DDB /* SelectTokenView.swift in Sources */,
@@ -1353,6 +1360,7 @@
 				960D6B302CFF562B0017AF29 /* EnterYourPasswordView.swift in Sources */,
 				96FEDC202D24F96F006AD24F /* OffsetObservingScrollView.swift in Sources */,
 				96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */,
+				965F02062D78986D00D68738 /* TermOfServiceView.swift in Sources */,
 				9655920C2CF824E000301DDB /* BiometricSetupView.swift in Sources */,
 				96F7FA0D2CFDBEAF00E2EF5B /* SeedPhraseTextField.swift in Sources */,
 				965592062CF8224700301DDB /* ReInputSeedPhraseView.swift in Sources */,
