@@ -32,8 +32,7 @@ extension TokenDetailView {
                     let chartSelected =
                         viewModel.chartDataSelected?.value
                         .formatNumber(
-                            prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
-                            suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                            suffix: Currency.ada.prefix,
                             font: .paragraphXSmall,
                             fontColor: .colorInteractiveTentPrimarySub) ?? "--"
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -91,8 +90,7 @@ extension TokenDetailView {
             let chartSelected =
                 viewModel.chartDataSelected?.value
                 .formatNumber(
-                    prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
-                    suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                    suffix: Currency.ada.prefix,
                     font: .titleH4,
                     fontColor: .colorBaseTent) ?? "-"
 
@@ -101,6 +99,20 @@ extension TokenDetailView {
                 .padding(.bottom, .xs)
                 .frame(height: 55)
             HStack(spacing: 4) {
+                let value: Double? = {
+                    guard let value = viewModel.chartDataSelected?.value else { return nil }
+                    return appSetting.currency == Currency.ada.rawValue ? value : (value * appSetting.currencyInADA)
+                }()
+                if let value = value {
+                    Text(
+                        value.formatNumber(
+                            prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
+                            suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
+                            font: .titleH7,
+                            fontColor: .colorBaseTent)
+                    )
+                    .padding(.horizontal, .xs)
+                }
                 if !viewModel.percent.isZero {
                     Text("\(abs(viewModel.percent).formatSNumber(maximumFractionDigits: 2))%")
                         .font(.labelSmallSecondary)
@@ -111,6 +123,7 @@ extension TokenDetailView {
                 }
             }
             .frame(height: 20)
+            .padding(.bottom, .xs)
         }
         .padding(.horizontal, .xl)
         .animation(.default, value: viewModel.chartDatas)
