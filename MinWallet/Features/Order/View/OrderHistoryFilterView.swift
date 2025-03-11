@@ -103,7 +103,7 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    
+
                     let statuses = ([allKey] + OrderV2Status.allCases.map({ $0.title })).map { $0.toString() }
                     FlexibleView(
                         data: statuses,
@@ -122,7 +122,7 @@ struct OrderHistoryFilterView: View {
                             statusSelected = title == allKey.toString() ? nil : action
                         }
                     }
-                    
+
                     /*
                     HStack(spacing: 8) {
                         TextSelectable(content: "All", selected: $statusSelected, value: nil)

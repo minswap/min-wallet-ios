@@ -131,7 +131,7 @@ extension OrderV2Status: @retroactive Identifiable {
             .colorSurfaceWarningDefault
         }
     }
-    
+
     public init?(title: String) {
         switch title {
         case OrderV2Status.created.title.toString():

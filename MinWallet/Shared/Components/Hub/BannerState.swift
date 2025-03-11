@@ -77,12 +77,12 @@ class BannerState: ObservableObject {
                         }
                     }
             }
-                .padding()
-                .background(.colorBaseBackground)
-                .clipped()
-                .cornerRadius(.lg)
-                .overlay(RoundedRectangle(cornerRadius: .lg).stroke(.colorBorderDangerSub, lineWidth: 1))
-                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.15), radius: 5, x: 0, y: 5)
+            .padding()
+            .background(.colorBaseBackground)
+            .clipped()
+            .cornerRadius(.lg)
+            .overlay(RoundedRectangle(cornerRadius: .lg).stroke(.colorBorderDangerSub, lineWidth: 1))
+            .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.15), radius: 5, x: 0, y: 5)
         )
     }
 
@@ -93,7 +93,7 @@ class BannerState: ObservableObject {
             }
         }
     }
-    
+
     func showBannerError(_ error: String) {
         self.infoContent = { [weak self] in
             guard let self = self else { return AnyView(Text("")) }
@@ -110,6 +110,6 @@ private extension VerticalAlignment {
             context[.top]
         }
     }
-    
+
     static let centerIconAlignment = VerticalAlignment(CenterIconAlignment.self)
 }
