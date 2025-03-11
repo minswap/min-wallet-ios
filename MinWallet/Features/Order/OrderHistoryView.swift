@@ -20,6 +20,8 @@ struct OrderHistoryView: View {
     var scrollOffset: CGPoint = .zero
     @State
     private var isShowSignContract: Bool = false
+    @StateObject
+    var filterViewModel: OrderHistoryFilterViewModel = .init()
 
     var body: some View {
         ZStack {
@@ -49,13 +51,8 @@ struct OrderHistoryView: View {
             }
         }
         .presentSheet(isPresented: $viewModel.showFilterView) {
-            let input = viewModel.input
             OrderHistoryFilterView(
-                contractTypeSelected: input.ammType.unwrapped?.value,
-                statusSelected: input.status.unwrapped?.value,
-                actionSelected: input.action.unwrapped?.value,
-                fromDate: input.fromDateTimeInterval,
-                toDate: input.toDateTimeInterval,
+                viewModel: filterViewModel,
                 onFilterSelected: { contractType, status, action, fromDate, toDate in
                     Task {
                         viewModel.contractTypeSelected = contractType

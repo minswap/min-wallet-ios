@@ -14,14 +14,15 @@ struct CarouselView: View {
         Data(title: "Join the latest IDO today?", description: "Get your tokens early"),
     ]
 
-    @State private var scrollIndex: Int = 0
+    @ObservedObject
+    var homeViewModel: HomeViewModel
 
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottomLeading) {
-                IndicatorView(count: data.count, scrollIndex: scrollIndex)
+                IndicatorView(count: data.count, scrollIndex: homeViewModel.scrollIndex)
                     .offset(x: Spacing.xl, y: -Spacing.xl)
-                TabView(selection: $scrollIndex) {
+                TabView(selection: $homeViewModel.scrollIndex) {
                     ForEach(0..<data.count, id: \.self) {
                         index in
                         let item = data[index]
@@ -47,11 +48,11 @@ struct CarouselView: View {
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                .onChange(of: scrollIndex) { newValue in
+                .onChange(of: homeViewModel.scrollIndex) { newValue in
                     if newValue == data.count {
-                        scrollIndex = 0
+                        homeViewModel.scrollIndex = 0
                     } else if newValue == -1 {
-                        scrollIndex = data.count - 1
+                        homeViewModel.scrollIndex = data.count - 1
                     }
                 }
             }
@@ -60,13 +61,6 @@ struct CarouselView: View {
                 RoundedRectangle(cornerRadius: BorderRadius._3xl).stroke(.colorBorderPrimarySub, lineWidth: 1)
             )
             .padding(0)
-        }
-        .onAppear {
-            Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
-                withAnimation {
-                    scrollIndex = (scrollIndex + 1) % data.count
-                }
-            }
         }
     }
 }
@@ -98,7 +92,7 @@ private struct IndicatorView: View {
 
 #Preview {
     VStack(spacing: 0) {
-        CarouselView()
+        CarouselView(homeViewModel: HomeViewModel())
             .frame(height: 98)
             .padding(.horizontal, .xl)
 

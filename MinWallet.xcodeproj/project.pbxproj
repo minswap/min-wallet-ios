@@ -152,6 +152,7 @@
 		96DEDE6C2D165E350035A100 /* MinWallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE732D126892003BF81F /* MinWallet.xcdatamodeld */; };
 		96DEDE6D2D1660EF0035A100 /* MinWallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE732D126892003BF81F /* MinWallet.xcdatamodeld */; };
 		96DEDE6E2D1660EF0035A100 /* MinWallet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 964FCE732D126892003BF81F /* MinWallet.xcdatamodeld */; };
+		96E3D2252D7FF8BD0082376B /* OrderHistoryFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E3D2242D7FF8BD0082376B /* OrderHistoryFilterViewModel.swift */; };
 		96ED4DA52D7057E100968C31 /* GetSkateAddressQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96ED4DA42D7057E100968C31 /* GetSkateAddressQuery.graphql */; };
 		96ED4DC52D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96ED4DC42D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql */; };
 		96F7A22A2D5A532200CD1D19 /* FLEX in Frameworks */ = {isa = PBXBuildFile; productRef = 96F7A2292D5A532200CD1D19 /* FLEX */; };
@@ -370,6 +371,7 @@
 		96DC05482CF752B500A78356 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		96DC054C2CF753CB00A78356 /* CreateNewWalletSeedPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewWalletSeedPhraseView.swift; sourceTree = "<group>"; };
 		96DC054E2CF75AFB00A78356 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
+		96E3D2242D7FF8BD0082376B /* OrderHistoryFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryFilterViewModel.swift; sourceTree = "<group>"; };
 		96ED4DA42D7057E100968C31 /* GetSkateAddressQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetSkateAddressQuery.graphql; sourceTree = "<group>"; };
 		96ED4DC42D7069AC00968C31 /* GetMinimumLovelaceQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetMinimumLovelaceQuery.graphql; sourceTree = "<group>"; };
 		96F7FA082CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreWalletImportFileView.swift; sourceTree = "<group>"; };
@@ -1008,6 +1010,7 @@
 			children = (
 				96FEDC122D23A4A4006AD24F /* OrderHistoryItemView.swift */,
 				96FEDC152D23AE33006AD24F /* OrderHistoryFilterView.swift */,
+				96E3D2242D7FF8BD0082376B /* OrderHistoryFilterViewModel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1347,6 +1350,7 @@
 				7B0080B69E81CABECF03244F /* TokenLogo.swift in Sources */,
 				963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */,
 				96FE0CF62CF36742008E4BFD /* TokenDetailBottomView.swift in Sources */,
+				96E3D2252D7FF8BD0082376B /* OrderHistoryFilterViewModel.swift in Sources */,
 				E92422734A5D6B793E704F95 /* TokenListItemView.swift in Sources */,
 				96FE0CFF2CF433E4008E4BFD /* AppBar.swift in Sources */,
 				96BD2A5B2D0D792100D81277 /* MinWalletService.swift in Sources */,
