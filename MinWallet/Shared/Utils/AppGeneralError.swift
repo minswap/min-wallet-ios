@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftyJSON
 
 
 enum AppGeneralError: LocalizedError {

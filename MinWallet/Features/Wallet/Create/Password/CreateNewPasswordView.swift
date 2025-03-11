@@ -20,6 +20,8 @@ struct CreateNewPasswordView: View {
     private var userInfo: UserInfo
     @EnvironmentObject
     private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
 
     @State
     private var password: String = ""
@@ -142,7 +144,7 @@ struct CreateNewPasswordView: View {
                         userInfo.saveWalletInfo(walletInfo: wallet)
                         navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                 case let .restoreWallet(fileContent, seedPhrase, nickName):
                     do {
@@ -162,7 +164,7 @@ struct CreateNewPasswordView: View {
                         userInfo.saveWalletInfo(walletInfo: wallet)
                         navigator.push(.restoreWallet(.createNewWalletSuccess))
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                 }
             }

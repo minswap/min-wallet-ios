@@ -131,6 +131,19 @@ extension OrderV2Status: @retroactive Identifiable {
             .colorSurfaceWarningDefault
         }
     }
+
+    public init?(title: String) {
+        switch title {
+        case OrderV2Status.created.title.toString():
+            self = .created
+        case OrderV2Status.cancelled.title.toString():
+            self = .cancelled
+        case OrderV2Status.batched.title.toString():
+            self = .batched
+        default:
+            self = .batched
+        }
+    }
 }
 
 extension ContractType: @retroactive Identifiable {

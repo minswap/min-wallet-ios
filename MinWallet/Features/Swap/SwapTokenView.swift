@@ -145,12 +145,10 @@ struct SwapTokenView: View {
                 .ignoresSafeArea()
         }
         .onAppear { [weak viewModel] in
-            viewModel?.hudState = hudState
-            //            print("SwapTokenView appear")
+            viewModel?.bannerState = bannerState
             viewModel?.subscribeCombine()
         }
         .onDisappear { [weak viewModel] in
-            //            print("SwapTokenView onDisappear")
             viewModel?.unsubscribeCombine()
         }
     }
@@ -568,7 +566,7 @@ struct SwapTokenView: View {
                     $isShowSignContract.showSheet()
                 }
             } catch {
-                hudState.showMsg(msg: error.localizedDescription)
+                bannerState.showBannerError(error.localizedDescription)
             }
         }
     }
@@ -596,7 +594,7 @@ struct SwapTokenView: View {
                  */
             } catch {
                 hudState.showLoading(false)
-                hudState.showMsg(msg: error.localizedDescription)
+                bannerState.showBannerError(error.localizedDescription)
             }
         }
     }

@@ -87,7 +87,7 @@ struct OrderHistoryView: View {
                             $isShowSignContract.showSheet()
                         }
                     } catch {
-                        hud.showMsg(title: "Error", msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                 }
             }
@@ -109,7 +109,7 @@ struct OrderHistoryView: View {
                 bannerState.showBanner(isShow: true)
             } catch {
                 hud.showLoading(false)
-                hud.showMsg(title: "Error", msg: error.localizedDescription)
+                bannerState.showBannerError(error.localizedDescription)
             }
         }
     }

@@ -22,20 +22,26 @@ struct TokenListView: View {
         VStack(alignment: .leading, spacing: 0) {
             if !tokenManager.normalTokens.isEmpty && !viewModel.showSkeleton {
                 HStack(spacing: 0) {
-                    ForEach(viewModel.tabTypes) { type in
-                        Text(type.title)
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(viewModel.tabType == type ? .colorInteractiveTentSecondaryDefault : .colorInteractiveTentPrimarySub)
-                            .frame(height: 28)
-                            .padding(.horizontal, .lg)
-                            .background(viewModel.tabType == type ? .colorSurfacePrimaryDefault : .clear)
-                            .cornerRadius(BorderRadius.full)
-                            .padding(.trailing, .lg)
-                            .layoutPriority(viewModel.tabType == type ? 998 : viewModel.tabType.layoutPriority)
-                            .onTapGesture {
-                                viewModel.tabType = type
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 0) {
+                            ForEach(viewModel.tabTypes) { type in
+                                Text(type.title)
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(viewModel.tabType == type ? .colorInteractiveTentSecondaryDefault : .colorInteractiveTentPrimarySub)
+                                    .frame(height: 28)
+                                    .padding(.horizontal, .lg)
+                                    .background(viewModel.tabType == type ? .colorSurfacePrimaryDefault : .clear)
+                                    .cornerRadius(BorderRadius.full)
+                                    .padding(.trailing, .lg)
+                                    .layoutPriority(viewModel.tabType == type ? 998 : viewModel.tabType.layoutPriority)
+                                    .onTapGesture {
+                                        viewModel.tabType = type
+                                    }
                             }
+                        }
                     }
+                    .disableBounces()
+                    .scrollIndicators(.hidden)
                     if viewModel.tabType == .yourToken || viewModel.tabType == .nft, !viewModel.tokens.isEmpty {
                         let suffix = viewModel.tabType == .yourToken ? "tokens" : "NFTs"
                         Spacer()

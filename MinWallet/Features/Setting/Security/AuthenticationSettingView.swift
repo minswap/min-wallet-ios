@@ -11,6 +11,8 @@ struct AuthenticationSettingView: View {
     private var userInfo: UserInfo
     @EnvironmentObject
     private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     private var isShowEnterYourPassword: Bool = false
     @FocusState
@@ -79,7 +81,7 @@ struct AuthenticationSettingView: View {
                                 try AppSetting.savePasswordToKeychain(username: AppSetting.USER_NAME, password: password)
                                 appSetting.authenticationType = .password
                             } catch {
-                                hudState.showMsg(msg: error.localizedDescription)
+                                bannerState.showBannerError(error.localizedDescription)
                             }
                         }
                         navigator.push(.securitySetting(.createPassword(onCreatePassSuccess: SecuritySetting.CreatePassSuccess(onCreatePassSuccess: createPasswordSuccess))))

@@ -73,7 +73,7 @@ class SwapTokenViewModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = []
 
-    var hudState: HUDState = .init()
+    var bannerState: BannerState = .init()
 
     deinit {
         print("Deinit SwapTokenViewModel")
@@ -106,7 +106,7 @@ class SwapTokenViewModel: ObservableObject {
                         try await self.handleAction(action)
                     } catch {
                         self.iosTradeEstimate = nil
-                        self.hudState.showMsg(title: "Error", msg: error.localizedDescription)
+                        self.bannerState.showBannerError(error.localizedDescription)
                     }
                 }
             }

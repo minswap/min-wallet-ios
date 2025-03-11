@@ -18,6 +18,8 @@ struct ChangePasswordView: View {
     private var hudState: HUDState
     @EnvironmentObject
     private var userInfo: UserInfo
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     private var oldPassword: String = ""
     @State
@@ -182,7 +184,7 @@ struct ChangePasswordView: View {
                             navigator.push(.changePasswordSuccess(.walletSetting))
                         }
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
 
                 }

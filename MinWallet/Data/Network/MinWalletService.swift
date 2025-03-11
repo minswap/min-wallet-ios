@@ -2,6 +2,7 @@ import Foundation
 import Apollo
 import MinWalletAPI
 import OSLog
+import SwiftyJSON
 
 
 class MinWalletService {
@@ -31,7 +32,7 @@ class MinWalletService {
                         continuation.resume(returning: response.data)
                     }
                 case let .failure(error):
-                    continuation.resume(throwing: error)
+                    continuation.resume(throwing: AppGeneralError.serverError(message: Self.extractError(error)))
                 }
             }
         }
@@ -55,7 +56,7 @@ class MinWalletService {
                         continuation.resume(returning: response.data)
                     }
                 case let .failure(error):
-                    continuation.resume(throwing: error)
+                    continuation.resume(throwing: AppGeneralError.serverError(message: Self.extractError(error)))
                 }
             }
         }
@@ -70,5 +71,18 @@ extension GraphQLOperation {
         return operation + variables
          */
         return String(describing: self)
+    }
+}
+
+
+extension MinWalletService {
+    private static func extractError(_ error: Error) -> String {
+        guard let error = error as? ResponseCodeInterceptor.ResponseCodeError else { return error.localizedDescription }
+        guard case let .invalidResponseCode(_, rawData) = error else { return error.localizedDescription }
+        guard let data = rawData else { return error.localizedDescription }
+        let json = JSON(data)
+        let messages: [String] = json["errors"].arrayValue.compactMap { json in json["message"].string }
+        guard !messages.isEmpty else { return error.localizedDescription }
+        return messages.joined(separator: ", ")
     }
 }

@@ -4,10 +4,11 @@ import FlowStacks
 
 struct RestoreWalletImportFileView: View {
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
-    var hudState: HUDState
-
+    private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     private var isShowing = false
     @State
@@ -110,7 +111,7 @@ struct RestoreWalletImportFileView: View {
                         guard url.startAccessingSecurityScopedResource() else { return }
                         self.fileContent = try String(contentsOf: url, encoding: .utf8)
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                     guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
                         let fileSize = attributes[.size] as? Int64
