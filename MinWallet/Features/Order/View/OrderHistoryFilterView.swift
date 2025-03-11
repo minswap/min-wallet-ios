@@ -288,6 +288,9 @@ struct OrderHistoryFilterView: View {
         .onAppear {
             enableDragGesture?(false)
         }
+        .onDisappear {
+            print("WTF")
+        }
     }
 }
 

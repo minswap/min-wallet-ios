@@ -184,7 +184,7 @@ struct ConfirmSendTokenView: View {
                             $isShowSignContract.showSheet()
                         }
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                 }
             }
@@ -227,7 +227,7 @@ struct ConfirmSendTokenView: View {
                 navigator.popToRoot()
             } catch {
                 hudState.showLoading(false)
-                hudState.showMsg(msg: error.localizedDescription)
+                bannerState.showBannerError(error.localizedDescription)
             }
         }
     }

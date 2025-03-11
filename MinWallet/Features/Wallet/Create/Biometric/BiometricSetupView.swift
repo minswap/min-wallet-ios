@@ -16,6 +16,8 @@ struct BiometricSetupView: View {
     private var userInfo: UserInfo
     @EnvironmentObject
     private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     var screenType: ScreenType
 
@@ -75,7 +77,7 @@ struct BiometricSetupView: View {
                         }
                         navigator.push(.createWallet(.createNewWalletSuccess))
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                         appSetting.authenticationType = .password
                     }
                 }

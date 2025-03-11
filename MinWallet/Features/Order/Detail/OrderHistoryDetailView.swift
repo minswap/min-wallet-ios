@@ -9,6 +9,8 @@ struct OrderHistoryDetailView: View {
     @EnvironmentObject
     private var hud: HUDState
     @EnvironmentObject
+    private var bannerState: BannerState
+    @EnvironmentObject
     private var userInfo: UserInfo
     @EnvironmentObject
     private var appSetting: AppSetting
@@ -108,7 +110,7 @@ struct OrderHistoryDetailView: View {
                             $isShowSignContract.showSheet()
                         }
                     } catch {
-                        hud.showMsg(title: "Error", msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                 }
             }
@@ -494,7 +496,7 @@ struct OrderHistoryDetailView: View {
                 hud.showLoading(false)
             } catch {
                 hud.showLoading(false)
-                hud.showMsg(title: "Error", msg: error.localizedDescription)
+                bannerState.showBannerError(error.localizedDescription)
             }
         }
     }

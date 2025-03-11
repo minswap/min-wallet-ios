@@ -11,6 +11,8 @@ struct EnterYourPasswordView: View {
     private var userInfo: UserInfo
     @EnvironmentObject
     private var hudState: HUDState
+    @EnvironmentObject
+    private var bannerState: BannerState
     @State
     private var password: String = ""
     @FocusState
@@ -103,7 +105,7 @@ struct EnterYourPasswordView: View {
                         onDismiss?()
                         appSetting.authenticationType = authenticationType
                     } catch {
-                        hudState.showMsg(msg: error.localizedDescription)
+                        bannerState.showBannerError(error.localizedDescription)
                     }
                 }
             }
