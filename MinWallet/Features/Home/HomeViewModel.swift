@@ -1,3 +1,4 @@
+import SwiftUI
 import Foundation
 import Combine
 import MinWalletAPI
@@ -15,6 +16,8 @@ class HomeViewModel: ObservableObject {
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
     var tabTypes: [TokenListView.TabType] = []
+    @Published
+    var scrollIndex: Int = 0
 
     private var input: TopAssetsInput = .init()
     private var searchAfter: [String]? = nil
@@ -44,6 +47,18 @@ class HomeViewModel: ObservableObject {
                     self.tabType = newValue
                     await self.getTokens()
                     self.tabTypes = (TokenManager.shared.yourTokens?.nfts ?? []).isEmpty ? [.market, .yourToken] : [.market, .yourToken, .nft]
+                }
+            }
+            .store(in: &cancellables)
+
+        Timer.publish(every: 5, on: .main, in: .common)
+            .autoconnect()
+            .throttle(for: .seconds(5), scheduler: RunLoop.main, latest: true)
+            .removeDuplicates()
+            .sink { [weak self] time in
+                guard let self = self else { return }
+                withAnimation {
+                    self.scrollIndex = (self.scrollIndex + 1) % 3
                 }
             }
             .store(in: &cancellables)
