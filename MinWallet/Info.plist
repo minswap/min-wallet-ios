@@ -17,16 +17,12 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>MIN_ABOUT_URL</key>
-	<string>${MIN_ABOUT_URL}</string>
 	<key>MIN_ADA_CURRENCY</key>
 	<string>${MIN_ADA_CURRENCY}</string>
 	<key>MIN_ADA_TOKEN</key>
 	<string>${MIN_ADA_TOKEN}</string>
-	<key>MIN_ADDRESS_PREFIX</key>
-	<string>${MIN_ADDRESS_PREFIX}</string>
-	<key>MIN_HANDLE_ADA_NAME_URL</key>
-	<string>${MIN_HANDLE_ADA_NAME_URL}</string>
+	<key>MIN_URL</key>
+	<string>${MIN_URL}</string>
 	<key>MIN_KEYCHAIN_ACCESS_GROUP</key>
 	<string>${MIN_KEYCHAIN_ACCESS_GROUP}</string>
 	<key>MIN_KEYCHAIN_SERVICE_NAME</key>
@@ -45,8 +41,14 @@
 	<string>${MIN_PUBLIC_NETWORK_ID}</string>
 	<key>MIN_TRANSACTION_URL</key>
 	<string>${MIN_TRANSACTION_URL}</string>
-	<key>MIN_URL</key>
-	<string>${MIN_URL}</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Using Face ID to login</string>
+	<key>MIN_ADDRESS_PREFIX</key>
+	<string>${MIN_ADDRESS_PREFIX}</string>
+	<key>MIN_HANDLE_ADA_NAME_URL</key>
+	<string>${MIN_HANDLE_ADA_NAME_URL}</string>
+	<key>MIN_ABOUT_URL</key>
+	<string>${MIN_ABOUT_URL}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>
@@ -62,5 +64,7 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) camera use</string>
 </dict>
 </plist>
