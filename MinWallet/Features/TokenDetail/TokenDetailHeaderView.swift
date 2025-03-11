@@ -101,13 +101,12 @@ extension TokenDetailView {
             HStack(spacing: 4) {
                 let value: Double? = {
                     guard let value = viewModel.chartDataSelected?.value else { return nil }
-                    return appSetting.currency == Currency.ada.rawValue ? value : (value * appSetting.currencyInADA)
+                    return value * appSetting.currencyInADA
                 }()
                 if let value = value {
                     Text(
                         value.formatNumber(
                             prefix: appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : "",
-                            suffix: appSetting.currency == Currency.ada.rawValue ? Currency.ada.prefix : "",
                             font: .titleH7,
                             fontColor: .colorBaseTent)
                     )

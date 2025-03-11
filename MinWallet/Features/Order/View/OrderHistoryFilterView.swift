@@ -103,6 +103,27 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
+                    
+                    let statuses = ([allKey] + OrderV2Status.allCases.map({ $0.title })).map { $0.toString() }
+                    FlexibleView(
+                        data: statuses,
+                        spacing: 0,
+                        alignment: .leading
+                    ) { title in
+                        let action = OrderV2Status(title: title)
+                        let isActionAll = title == allKey.toString()
+                        let content: LocalizedStringKey? = isActionAll ? allKey : action?.title
+                        return TextSelectable(
+                            content: content ?? allKey,
+                            selected: $statusSelected,
+                            value: isActionAll ? nil : action
+                        )
+                        .onTapGesture {
+                            statusSelected = title == allKey.toString() ? nil : action
+                        }
+                    }
+                    
+                    /*
                     HStack(spacing: 8) {
                         TextSelectable(content: "All", selected: $statusSelected, value: nil)
                             .onTapGesture {
@@ -119,7 +140,7 @@ struct OrderHistoryFilterView: View {
                         }
                         Spacer()
                     }
-
+*/
                     Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
                 }
                 .padding(.top, .lg)
