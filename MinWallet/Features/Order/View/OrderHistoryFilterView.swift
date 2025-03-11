@@ -9,20 +9,8 @@ import SwiftyAttributes
 struct OrderHistoryFilterView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
-    @State
-    var contractTypeSelected: ContractType?
-    @State
-    var statusSelected: OrderV2Status?
-    @State
-    var actionSelected: OrderV2Action?
-    @State
-    var fromDate: Date?
-    @State
-    var toDate: Date?
-    @State
-    private var showSelectFromDate: Bool = false
-    @State
-    private var showSelectToDate: Bool = false
+    @ObservedObject
+    var viewModel: OrderHistoryFilterViewModel
 
     @Environment(\.partialSheetDismiss)
     var onDismiss
@@ -48,7 +36,7 @@ struct OrderHistoryFilterView: View {
                 .font(.titleH5)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 60)
-            if !showSelectToDate && !showSelectFromDate {
+            if !viewModel.showSelectToDate && !viewModel.showSelectFromDate {
                 VStack(spacing: 0) {
                     Text("Contract")
                         .font(.labelSmallSecondary)
@@ -56,15 +44,15 @@ struct OrderHistoryFilterView: View {
                         .padding(.bottom, .md)
                     HStack(spacing: 8) {
                         let contractTypes: [ContractType] = [.dex, .dexV2, .stableswap]
-                        TextSelectable(content: "All", selected: $contractTypeSelected, value: nil)
+                        TextSelectable(content: "All", selected: $viewModel.contractTypeSelected, value: nil)
                             .onTapGesture {
-                                contractTypeSelected = nil
+                                viewModel.contractTypeSelected = nil
                             }
                         ForEach(0..<contractTypes.count, id: \.self) { index in
                             if let type = contractTypes[gk_safeIndex: index] {
-                                TextSelectable(content: type.title, selected: $contractTypeSelected, value: type)
+                                TextSelectable(content: type.title, selected: $viewModel.contractTypeSelected, value: type)
                                     .onTapGesture {
-                                        contractTypeSelected = type
+                                        viewModel.contractTypeSelected = type
                                     }
                             }
                         }
@@ -90,11 +78,11 @@ struct OrderHistoryFilterView: View {
                         let content: LocalizedStringKey? = isActionAll ? allKey : action?.titleFilter
                         TextSelectable(
                             content: content ?? allKey,
-                            selected: $actionSelected,
+                            selected: $viewModel.actionSelected,
                             value: isActionAll ? nil : action
                         )
                         .onTapGesture {
-                            actionSelected = title == allKey.toString() ? nil : action
+                            viewModel.actionSelected = title == allKey.toString() ? nil : action
                         }
                     }
                     .frame(height: height)
@@ -115,11 +103,11 @@ struct OrderHistoryFilterView: View {
                         let content: LocalizedStringKey? = isActionAll ? allKey : action?.title
                         return TextSelectable(
                             content: content ?? allKey,
-                            selected: $statusSelected,
+                            selected: $viewModel.statusSelected,
                             value: isActionAll ? nil : action
                         )
                         .onTapGesture {
-                            statusSelected = title == allKey.toString() ? nil : action
+                            viewModel.statusSelected = title == allKey.toString() ? nil : action
                         }
                     }
 
@@ -151,23 +139,23 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(formateDate(fromDate))
+                    Text(formateDate(viewModel.fromDate))
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorBaseTent)
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .overlay(
                             RoundedRectangle(cornerRadius: BorderRadius.full)
-                                .stroke(showSelectFromDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectFromDate ? 2 : 1)
+                                .stroke(viewModel.showSelectFromDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: viewModel.showSelectFromDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            guard !showSelectFromDate else {
-                                showSelectToDate = false
-                                showSelectFromDate = false
+                            guard !viewModel.showSelectFromDate else {
+                                viewModel.showSelectToDate = false
+                                viewModel.showSelectFromDate = false
                                 return
                             }
-                            showSelectToDate = false
-                            showSelectFromDate = true
+                            viewModel.showSelectToDate = false
+                            viewModel.showSelectFromDate = true
                         }
                 }
 
@@ -176,70 +164,70 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(formateDate(toDate))
+                    Text(formateDate(viewModel.toDate))
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorBaseTent)
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .overlay(
                             RoundedRectangle(cornerRadius: BorderRadius.full)
-                                .stroke(showSelectToDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: showSelectToDate ? 2 : 1)
+                                .stroke(viewModel.showSelectToDate ? .colorBorderPrimaryPressed : .colorBorderPrimaryDefault, lineWidth: viewModel.showSelectToDate ? 2 : 1)
                         )
                         .onTapGesture {
-                            guard !showSelectToDate else {
-                                showSelectToDate = false
-                                showSelectFromDate = false
+                            guard !viewModel.showSelectToDate else {
+                                viewModel.showSelectToDate = false
+                                viewModel.showSelectFromDate = false
                                 return
                             }
-                            showSelectToDate = true
-                            showSelectFromDate = false
+                            viewModel.showSelectToDate = true
+                            viewModel.showSelectFromDate = false
                         }
                 }
             }
-            .padding(.top, (showSelectToDate || showSelectFromDate) ? .lg : 0)
-            if !showSelectToDate && !showSelectFromDate {
+            .padding(.top, (viewModel.showSelectToDate || viewModel.showSelectFromDate) ? .lg : 0)
+            if !viewModel.showSelectToDate && !viewModel.showSelectFromDate {
                 Color.clear.frame(height: 1).padding(.vertical, .xl)
             }
-            if showSelectFromDate || showSelectToDate {
+            if viewModel.showSelectFromDate || viewModel.showSelectToDate {
                 let timeZone: TimeZone = appSetting.timeZone == AppSetting.TimeZone.utc.rawValue ? .gmt : .current
                 VStack(alignment: .center) {
-                    if showSelectFromDate {
+                    if viewModel.showSelectFromDate {
                         let fromDateBinding = Binding<Date>(
-                            get: { fromDate ?? Date() },
+                            get: { viewModel.fromDate ?? Date() },
                             set: { newValue in
-                                fromDate = newValue
+                                viewModel.fromDate = newValue
                             }
                         )
                         DatePicker(
                             " ",
                             selection: fromDateBinding,
-                            in: (toDate ?? Date()).adding(.year, value: -20)!...(toDate ?? Date()),
+                            in: (viewModel.toDate ?? Date()).adding(.year, value: -20)!...(viewModel.toDate ?? Date()),
                             displayedComponents: [.date]
                         )
                         .labelsHidden()
                         .datePickerStyle(.wheel)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                         .environment(\.timeZone, timeZone)
-                        .id(fromDate)
+                        .id(viewModel.fromDate)
                     }
-                    if showSelectToDate {
+                    if viewModel.showSelectToDate {
                         let toDateBinding = Binding<Date>(
-                            get: { toDate ?? Date() },
+                            get: { viewModel.toDate ?? Date() },
                             set: { newValue in
-                                toDate = newValue
+                                viewModel.toDate = newValue
                             }
                         )
                         DatePicker(
                             " ",
                             selection: toDateBinding,
-                            in: (fromDate ?? Date())...(fromDate ?? Date()).adding(.year, value: 20)!,
+                            in: (viewModel.fromDate ?? Date())...(viewModel.fromDate ?? Date()).adding(.year, value: 20)!,
                             displayedComponents: [.date]
                         )
                         .labelsHidden()
                         .datePickerStyle(.wheel)
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                         .environment(\.timeZone, timeZone)
-                        .id(toDate)
+                        .id(viewModel.toDate)
                     }
                 }
             }
@@ -250,34 +238,26 @@ struct OrderHistoryFilterView: View {
                     onFilterSelected?(nil, nil, nil, nil, nil)
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
-                        self.showSelectToDate = false
-                        self.showSelectFromDate = false
-                        self.contractTypeSelected = nil
-                        self.statusSelected = nil
-                        self.actionSelected = nil
-                        self.fromDate = nil
-                        self.toDate = nil
+
                     }
                 }
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
-                    if showSelectToDate || showSelectFromDate {
-                        if showSelectToDate && toDate == nil {
-                            toDate = Date().endOfDay
+                    if viewModel.showSelectToDate || viewModel.showSelectFromDate {
+                        if viewModel.showSelectToDate && viewModel.toDate == nil {
+                            viewModel.toDate = Date().endOfDay
                         }
-                        if showSelectFromDate && fromDate == nil {
-                            fromDate = Date().startOfDay
+                        if viewModel.showSelectFromDate && viewModel.fromDate == nil {
+                            viewModel.fromDate = Date().startOfDay
                         }
-                        showSelectToDate = false
-                        showSelectFromDate = false
+                        viewModel.showSelectToDate = false
+                        viewModel.showSelectFromDate = false
                         return
                     }
                     onDismiss?()
-                    fromDate = fromDate?.startOfDay
-                    toDate = toDate?.endOfDay
-                    //                    print("WTF \(fromDate) \(fromDate?.startOfDay) \(fromDate?.startOfDay.timeIntervalSince1970)")
-                    //                    print("WTF \(toDate?.endOfDay) \(toDate?.endOfDay.timeIntervalSince1970)")
-                    onFilterSelected?(contractTypeSelected, statusSelected, actionSelected, fromDate, toDate)
+                    viewModel.fromDate = viewModel.fromDate?.startOfDay
+                    viewModel.toDate = viewModel.toDate?.endOfDay
+                    onFilterSelected?(viewModel.contractTypeSelected, viewModel.statusSelected, viewModel.actionSelected, viewModel.fromDate, viewModel.toDate)
                 }
                 .frame(height: 56)
             }
@@ -288,15 +268,12 @@ struct OrderHistoryFilterView: View {
         .onAppear {
             enableDragGesture?(false)
         }
-        .onDisappear {
-            print("WTF")
-        }
     }
 }
 
 #Preview {
     VStack {
-        OrderHistoryFilterView()
+        OrderHistoryFilterView(viewModel: OrderHistoryFilterViewModel())
         Spacer()
     }
     .environmentObject(AppSetting.shared)

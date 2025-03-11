@@ -80,6 +80,7 @@ extension OrderHistoryView {
                         .fixSize(40)
                         .onTapGesture {
                             withAnimation {
+                                filterViewModel.bindData(vm: viewModel)
                                 viewModel.showFilterView = true
                             }
                         }
