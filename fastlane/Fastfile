@@ -23,7 +23,7 @@ lane :beta do
         "org.minswap.MinWallet.OneSignalNotificationServiceExtension" => "match AppStore org.minswap.MinWallet.OneSignalNotificationServiceExtension"
       }
     },
-    xcconfig: "MinWallet/Environment/Development.xcconfig"
+    xcconfig: "MinWallet/Environment/Production.xcconfig"
   )
   upload_to_testflight(skip_waiting_for_build_processing: true)
   clean_build_artifacts

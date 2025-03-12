@@ -1,7 +1,7 @@
 #include "AppConfig.xcconfig"
 
 //TODO: Change url production ?
-MIN_URL      = https:\/\/minswap.org
+MIN_URL      = https:\/\/monorepo-mainnet-staging.minswap.org
 MIN_PUBLIC_NETWORK_ID = mainnet
 MIN_TRANSACTION_URL = https:/\/\cardanoscan.io
 MIN_HANDLE_ADA_NAME_URL = https:/\/\api.handle.me\/handles
