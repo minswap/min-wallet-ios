@@ -11,23 +11,22 @@ class HomeViewModel: ObservableObject {
     @Published
     var tabType: TokenListView.TabType = .market
     @Published
-    private var tokensDic: [TokenListView.TabType: [TokenProtocol]] = [:]
-    @Published
     private var showSkeletonDic: [TokenListView.TabType: Bool] = [:]
     @Published
     var tabTypes: [TokenListView.TabType] = []
     @Published
     var scrollIndex: Int = 0
 
-    private var input: TopAssetsInput = .init()
-    private var searchAfter: [String]? = nil
-    private var hasLoadMoreDic: [TokenListView.TabType: Bool] = [:]
-    private var isFetching: [TokenListView.TabType: Bool] = [:]
-    private let limit: Int = 20
-
     private var cancellables: Set<AnyCancellable> = []
     private var timerReloadBalance: AnyCancellable?
     private var timerReloadMarket: AnyCancellable?
+
+    @Published
+    var marketViewModel: MarketViewModel = .init()
+    @Published
+    var yourTokenViewModel: YourTokenViewModel = .init(type: .yourToken)
+    @Published
+    var nftViewModel: YourTokenViewModel = .init(type: .nft)
 
     deinit {
         timerReloadBalance?.cancel()
@@ -44,7 +43,7 @@ class HomeViewModel: ObservableObject {
             .sink { [weak self] newValue in
                 guard let self = self else { return }
                 Task {
-                    self.tabType = newValue
+                    //self.tabType = newValue
                     await self.getTokens()
                     self.tabTypes = (TokenManager.shared.yourTokens?.nfts ?? []).isEmpty ? [.market, .yourToken] : [.market, .yourToken, .nft]
                 }
@@ -112,68 +111,23 @@ class HomeViewModel: ObservableObject {
     }
 
     private func getTokens(isLoadMore: Bool = false) async {
-        if showSkeletonDic[tabType] == nil {
-            showSkeletonDic[tabType] = !isLoadMore
+        timerReloadBalance?.cancel()
+        timerReloadMarket?.cancel()
+
+        if showSkeletonDic[.market] == nil {
+            showSkeletonDic[.market] = !isLoadMore
         }
-        self.isFetching[tabType] = true
 
         switch tabType {
         case .market:
-            input = TopAssetsInput()
-                .with({
-                    $0.limit = .some(limit)
-                    $0.onlyVerified = .some(false)
-                    $0.favoriteAssets = nil
-                    $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
-                    if isLoadMore, let searchAfter = searchAfter {
-                        $0.searchAfter = .some(searchAfter)
-                    }
-                })
-
-            async let tokenRaw = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
-            async let getPortfolioOverviewAndYourToken: Void? = try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
-
-            let results = await (tokenRaw, getPortfolioOverviewAndYourToken)
-            let tokens = results.0
-
-            let _tokens = tokens?.topAssets.topAssets ?? []
-            var currentTokens = tokensDic[tabType] ?? []
-            if isLoadMore {
-                currentTokens += _tokens
-            } else {
-                currentTokens = _tokens
-            }
-            self.tokensDic[tabType] = currentTokens
-            self.searchAfter = tokens?.topAssets.searchAfter
-            self.hasLoadMoreDic[tabType] = _tokens.count >= self.limit || self.searchAfter != nil
-            self.showSkeletonDic[tabType] = false
-            self.isFetching[tabType] = false
+            await marketViewModel.getTokens()
         case .yourToken:
-            try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
-            self.tokensDic[tabType] = [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
-            self.hasLoadMoreDic[tabType] = false
-            self.showSkeletonDic[tabType] = false
-            self.isFetching[tabType] = false
+            await yourTokenViewModel.getTokens()
         case .nft:
-            try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
-            self.tokensDic[tabType] = TokenManager.shared.yourTokens?.nfts ?? []
-            self.hasLoadMoreDic[tabType] = false
-            self.showSkeletonDic[tabType] = false
-            self.isFetching[tabType] = false
+            await nftViewModel.getTokens()
         }
-
+        showSkeletonDic[.market] = false
         createTimerReloadBalance()
-    }
-
-    func loadMoreData(item: TokenProtocol) {
-        guard (hasLoadMoreDic[tabType] ?? true), !(isFetching[tabType] ?? true) else { return }
-        let tokens = tokensDic[tabType] ?? []
-        let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)
-        if tokens.firstIndex(where: { $0.uniqueID == item.uniqueID }) == thresholdIndex {
-            Task {
-                await getTokens(isLoadMore: true)
-            }
-        }
     }
 
     static func generateTokenHash() {
@@ -194,10 +148,34 @@ class HomeViewModel: ObservableObject {
 
 extension HomeViewModel {
     var showSkeleton: Bool {
-        showSkeletonDic[tabType] ?? true
+        showSkeletonDic[.market] ?? true
     }
 
-    var tokens: [TokenProtocol] {
-        tokensDic[tabType] ?? []
+    var countToken: Int? {
+        switch tabType {
+        case .yourToken:
+            yourTokenViewModel.tokens.count
+        case .nft:
+            nftViewModel.tokens.count
+        default:
+            nil
+        }
+    }
+
+    func showSkeleton(tabType: TokenListView.TabType) {
+        switch tabType {
+        case .market:
+            if marketViewModel.showSkeleton == nil {
+                marketViewModel.showSkeleton = true
+            }
+        case .yourToken:
+            if yourTokenViewModel.showSkeleton == nil {
+                yourTokenViewModel.showSkeleton = true
+            }
+        case .nft:
+            if nftViewModel.showSkeleton == nil {
+                nftViewModel.showSkeleton = true
+            }
+        }
     }
 }

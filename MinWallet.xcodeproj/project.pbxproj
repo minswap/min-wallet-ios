@@ -50,6 +50,8 @@
 		960D6B362D013ABD0017AF29 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */; };
 		960D6B382D0144160017AF29 /* PasswordValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B372D0144150017AF29 /* PasswordValidation.swift */; };
 		960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */; };
+		960F1D4C2D8165F60035548D /* MarketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960F1D4B2D8165F60035548D /* MarketViewModel.swift */; };
+		960F1D4E2D8167E50035548D /* YourTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960F1D4D2D8167E50035548D /* YourTokenViewModel.swift */; };
 		96281EE62D662D2D0014EE5F /* IosTradeEstimateQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96281EE52D662D2D0014EE5F /* IosTradeEstimateQuery.graphql */; };
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		963456642D55AB0600C720AE /* bip0039.txt in Resources */ = {isa = PBXBuildFile; fileRef = 963456632D55AB0100C720AE /* bip0039.txt */; };
@@ -268,6 +270,8 @@
 		960D6B352D013ABD0017AF29 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		960D6B372D0144150017AF29 /* PasswordValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidation.swift; sourceTree = "<group>"; };
 		960D6B392D01A0610017AF29 /* PopupSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSheetModifier.swift; sourceTree = "<group>"; };
+		960F1D4B2D8165F60035548D /* MarketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketViewModel.swift; sourceTree = "<group>"; };
+		960F1D4D2D8167E50035548D /* YourTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourTokenViewModel.swift; sourceTree = "<group>"; };
 		96281EE52D662D2D0014EE5F /* IosTradeEstimateQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = IosTradeEstimateQuery.graphql; sourceTree = "<group>"; };
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
 		963456632D55AB0100C720AE /* bip0039.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = bip0039.txt; sourceTree = "<group>"; };
@@ -468,6 +472,8 @@
 				96FE0CEC2CF36032008E4BFD /* TokenListView.swift */,
 				2C84DBEF290DC9F64EA0880D /* TokenListItemView.swift */,
 				966AFC022D44E27400E733A1 /* SelectTokenListItemView.swift */,
+				960F1D4B2D8165F60035548D /* MarketViewModel.swift */,
+				960F1D4D2D8167E50035548D /* YourTokenViewModel.swift */,
 			);
 			path = TokenList;
 			sourceTree = "<group>";
@@ -1245,6 +1251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				965592122CF82C9F00301DDB /* CreateNewPasswordView.swift in Sources */,
+				960F1D4E2D8167E50035548D /* YourTokenViewModel.swift in Sources */,
 				96F7FA092CFDA8F300E2EF5B /* RestoreWalletImportFileView.swift in Sources */,
 				96813C822D094BDF00E5781E /* SwipeToDeleteModifier.swift in Sources */,
 				965591FF2CF810E800301DDB /* BiometricAuthentication.swift in Sources */,
@@ -1264,6 +1271,7 @@
 				96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */,
 				575157912CEB43FF004CD647 /* HomeView.swift in Sources */,
 				96DC053A2CF5B14F00A78356 /* AppSetting.swift in Sources */,
+				960F1D4C2D8165F60035548D /* MarketViewModel.swift in Sources */,
 				96665A022CF477490046A20E /* HomeViewModel.swift in Sources */,
 				960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */,
 				96FE0CF22CF366FC008E4BFD /* TokenDetailHeaderView.swift in Sources */,
