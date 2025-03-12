@@ -12,4 +12,4 @@ MIN_LP_TOKEN = e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d86
 MIN_ADA_TOKEN = lovelace
 MIN_ADA_CURRENCY = ₳
 MIN_ADDRESS_PREFIX = addr1
-MIN_ABOUT_URL = https:\/\/minswap.org
+MIN_ABOUT_URL = https:\/\/testnet-preprod.minswap.org
