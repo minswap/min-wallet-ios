@@ -9,12 +9,11 @@ struct PolicyConfirmView: View {
     }
 
     @EnvironmentObject
-    var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
-
+    private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
+    @EnvironmentObject
+    private var preloadWebVM: PreloadWebViewModel
     @State
     var screenType: ScreenType = .splash
-    @StateObject
-    private var webViewModel = WebViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,12 +25,14 @@ struct PolicyConfirmView: View {
             }
             .padding(.horizontal, Spacing.xl)
             .padding(.top, .xl)
-            ProgressView(value: webViewModel.progress, total: 1.0)
+            /*
+            ProgressView(value: preloadWebVM.progress, total: 1.0)
                 .progressViewStyle(LinearProgressViewStyle())
                 .padding(.horizontal, .xl)
-                .opacity(webViewModel.progress != 1 ? 1 : 0)
-            WebView(urlString: MinWalletConstant.minAboutURL + "/headless/privacy-policy", viewModel: webViewModel)
-                .padding(.top, Spacing.xl)
+                .opacity(preloadWebVM.progress != 1 ? 1 : 0)
+             */
+            PreloadWebViewPolicy(preloadWebVM: preloadWebVM)
+                .padding(.top, Spacing.md)
             CustomButton(
                 title: "Confirm",
                 variant: .primary,
