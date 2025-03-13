@@ -29,6 +29,7 @@ struct MinWalletApp: App {
     @StateObject var userInfo: UserInfo = UserInfo.shared
     @StateObject var hudState: HUDState = .init()
     @StateObject var bannerState: BannerState = .init()
+    @StateObject var policyVM: PreloadWebViewModel = .init()
 
     var body: some Scene {
         WindowGroup {
@@ -37,8 +38,10 @@ struct MinWalletApp: App {
                 .environmentObject(userInfo)
                 .environmentObject(hudState)
                 .environmentObject(bannerState)
+                .environmentObject(policyVM)
                 .environment(\.locale, .init(identifier: appSetting.language))
                 .onAppear {
+                    policyVM.preloadContent(urlString: MinWalletConstant.minAboutURL + "/headless/privacy-policy")
                     appSetting.initAppearanceStyle()
                 }
         }
