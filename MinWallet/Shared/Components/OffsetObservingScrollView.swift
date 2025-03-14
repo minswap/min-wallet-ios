@@ -39,6 +39,7 @@ struct OffsetObservingScrollView<Content: View>: View {
     var axes: Axis.Set = [.vertical]
     var showsIndicators = true
     @Binding var offset: CGPoint
+    var onRefreshable: (() async -> Void)?
     @ViewBuilder var content: () -> Content
 
     private let coordinateSpaceName = UUID()
@@ -60,5 +61,8 @@ struct OffsetObservingScrollView<Content: View>: View {
             )
         }
         .coordinateSpace(name: coordinateSpaceName)
+        .refreshable {
+            await onRefreshable?()
+        }
     }
 }

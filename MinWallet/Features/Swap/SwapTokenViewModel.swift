@@ -87,7 +87,10 @@ class SwapTokenViewModel: ObservableObject {
             let tokenWithAmount = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == tokenReceive.uniqueID }) ?? tokenReceive
             self.tokenReceive = WrapTokenSend(token: tokenWithAmount)
         } else {
-            let minTokenDefault = TokenDefault(symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""), tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""))
+            let minTokenDefault = TokenDefault(
+                symbol: String(MinWalletConstant.minToken.split(separator: ".").first ?? ""),
+                tName: String(MinWalletConstant.minToken.split(separator: ".").last ?? ""),
+                decimal: 6)
             let minToken = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == minTokenDefault.uniqueID })
             self.tokenReceive = WrapTokenSend(token: minToken ?? minTokenDefault)
         }

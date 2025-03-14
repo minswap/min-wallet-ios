@@ -161,7 +161,7 @@ class AppSetting: ObservableObject {
 
     func isSuspiciousToken(currencySymbol: String) async -> Bool {
         guard !currencySymbol.isEmpty else { return false }
-        guard suspiciousToken.isEmpty else { return false }
+        guard suspiciousToken.isEmpty else { return suspiciousToken.contains(currencySymbol) }
         guard let url = URL(string: MinWalletConstant.suspiciousTokenURL) else { return false }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
