@@ -48,8 +48,13 @@ class OrderHistoryViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func fetchData(showSkeleton: Bool = true) async {
-        self.showSkeleton = showSkeleton
+    func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
+        withAnimation {
+            self.showSkeleton = showSkeleton
+        }
+        if fromPullToRefresh {
+            try? await Task.sleep(for: .seconds(1))
+        }
         pagination = nil
         let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
         self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
@@ -57,7 +62,9 @@ class OrderHistoryViewModel: ObservableObject {
         if let cursor = orderData?.orders.cursor {
             self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
         }
-        self.showSkeleton = false
+        withAnimation {
+            self.showSkeleton = false
+        }
     }
 
     func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {

@@ -29,14 +29,14 @@ struct OrderHistoryView: View {
             VStack(alignment: .leading, spacing: 0) {
                 headerView
                     .padding(.top, .md)
-                OffsetObservingScrollView(offset: $scrollOffset) {
-                    contentView
-                }
-                .refreshable {
-                    Task {
-                        await viewModel.fetchData()
-                    }
-                }
+                OffsetObservingScrollView(
+                    offset: $scrollOffset,
+                    onRefreshable: {
+                        await viewModel.fetchData(fromPullToRefresh: true)
+                    },
+                    content: {
+                        contentView
+                    })
                 if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
                     CustomButton(title: "Swap") {
                         navigator.push(.swapToken(.swapToken(token: nil)))
