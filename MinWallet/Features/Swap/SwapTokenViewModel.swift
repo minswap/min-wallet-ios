@@ -612,7 +612,7 @@ extension SwapTokenViewModel {
             case let .insufficientBalance(name):
                 return "Insufficient \(name) balance"
             case let .notEnoughAmountInPool(name):
-                return "Not enough \(name) amount in pool)"
+                return "Not enough \(name) amount in pool"
             }
         }
     }

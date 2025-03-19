@@ -100,6 +100,14 @@ extension TokenManager {
     var normalTokens: [TokenProtocol] {
         return (yourTokens?.assets ?? []) + (yourTokens?.lpTokens ?? [])
     }
+
+    var nftTokens: [TokenProtocol] {
+        return yourTokens?.nfts ?? []
+    }
+
+    var hasTokenOrNFT: Bool {
+        return !normalTokens.isEmpty || !nftTokens.isEmpty
+    }
 }
 
 

@@ -45,7 +45,12 @@ class HomeViewModel: ObservableObject {
                 Task {
                     //self.tabType = newValue
                     await self.getTokens()
-                    self.tabTypes = (TokenManager.shared.yourTokens?.nfts ?? []).isEmpty ? [.market, .yourToken] : [.market, .yourToken, .nft]
+                    let tabTypes: [TokenListView.TabType?] = [
+                        .market,
+                        !TokenManager.shared.normalTokens.isEmpty ? .yourToken : nil,
+                        !TokenManager.shared.nftTokens.isEmpty ? .nft : nil,
+                    ]
+                    self.tabTypes = tabTypes.compactMap({ $0 })
                 }
             }
             .store(in: &cancellables)
