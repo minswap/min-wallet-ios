@@ -20,7 +20,7 @@ struct TokenListView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if !tokenManager.normalTokens.isEmpty && !viewModel.showSkeleton {
+            if tokenManager.hasTokenOrNFT && !viewModel.showSkeleton {
                 HStack(spacing: 0) {
                     ScrollView(.horizontal) {
                         HStack(spacing: 0) {
@@ -59,7 +59,7 @@ struct TokenListView: View {
                 .frame(height: 36)
                 .padding(.horizontal, .xl)
                 .padding(.bottom, .lg)
-            } else if tokenManager.normalTokens.isEmpty && !viewModel.showSkeleton {
+            } else if !tokenManager.hasTokenOrNFT && !viewModel.showSkeleton {
                 Text("Crypto prices")
                     .padding(.horizontal, .xl)
                     .font(.titleH6)

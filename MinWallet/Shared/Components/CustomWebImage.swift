@@ -39,16 +39,28 @@ struct CustomWebImage<Placeholder: View>: View {
         } else {
             WebImage(url: URL(string: url ?? "")) { image in
                 image
-                    .resizable()
-                    .scaledToFill()  // Fill the frame
+                    .centerCropped()
             } placeholder: {
                 placeholder()
             }
-            .indicator(.activity)  // Show loading activity indicator
+            .indicator(.activity)
             .transition(.fade(duration: 0.5))  // Smooth fade transition
             .aspectRatio(1, contentMode: .fit)
             .frame(maxWidth: .infinity)
             .clipped()
+        }
+    }
+}
+
+private extension Image {
+    func centerCropped() -> some View {
+        GeometryReader { geo in
+            self
+                .resizable()
+                .scaledToFill()
+                .frame(width: geo.size.width, height: geo.size.height)
+                .clipped()
+                .contentShape(Rectangle())
         }
     }
 }
