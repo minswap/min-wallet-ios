@@ -81,19 +81,6 @@ struct TokenListView: View {
                 } else if viewModel.tabTypes.contains(.nft) {
                     nftView.tag(TokenListView.TabType.nft)
                 }
-                /*
-                TabView(selection: $viewModel.tabType) {
-                    marketView.tag(TokenListView.TabType.market)
-                        .highPriorityGesture(DragGesture())
-                    yourTokenView.tag(TokenListView.TabType.yourToken)
-                        .highPriorityGesture(DragGesture())
-                    if viewModel.tabTypes.contains(.nft) {
-                        nftView.tag(TokenListView.TabType.nft)
-                            .highPriorityGesture(DragGesture())
-                    }
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                 */
             }
         }
     }
@@ -156,12 +143,9 @@ extension TokenListView {
     @ViewBuilder
     var marketView: some View {
         if viewModel.marketViewModel.showSkeleton ?? true {
-            ScrollView {
-                ForEach(0..<20, id: \.self) { index in
-                    TokenListItemSkeletonView()
-                }
+            ForEach(0..<20, id: \.self) { index in
+                TokenListItemSkeletonView()
             }
-            .scrollDisabled(true)
         } else if viewModel.marketViewModel.tokens.isEmpty {
             HStack {
                 Spacer(minLength: 0)
@@ -176,38 +160,33 @@ extension TokenListView {
             }
             .padding(.top, 50)
         } else {
-            ScrollView {
-                LazyVStack(
-                    spacing: 0,
-                    content: {
-                        let tokens: [TokenProtocol] = viewModel.marketViewModel.tokens
-                        ForEach(0..<tokens.count, id: \.self) { index in
-                            if let item = tokens[gk_safeIndex: index] {
-                                TokenListItemView(token: item, showSubPrice: false)
-                                    .contentShape(.rect)
-                                    .onAppear() {
-                                        viewModel.marketViewModel.loadMoreData(item: item)
-                                    }
-                                    .onTapGesture {
-                                        guard !item.isTokenADA else { return }
-                                        navigator.push(.tokenDetail(token: item))
-                                    }
-                            }
+            LazyVStack(
+                spacing: 0,
+                content: {
+                    let tokens: [TokenProtocol] = viewModel.marketViewModel.tokens
+                    ForEach(0..<tokens.count, id: \.self) { index in
+                        if let item = tokens[gk_safeIndex: index] {
+                            TokenListItemView(token: item, showSubPrice: false)
+                                .contentShape(.rect)
+                                .onAppear() {
+                                    viewModel.marketViewModel.loadMoreData(item: item)
+                                }
+                                .onTapGesture {
+                                    guard !item.isTokenADA else { return }
+                                    navigator.push(.tokenDetail(token: item))
+                                }
                         }
-                    })
-            }
+                    }
+                })
         }
     }
 
     @ViewBuilder
     var yourTokenView: some View {
         if (viewModel.yourTokenViewModel.showSkeleton ?? true) {
-            ScrollView {
-                ForEach(0..<20, id: \.self) { index in
-                    TokenListItemSkeletonView()
-                }
+            ForEach(0..<20, id: \.self) { index in
+                TokenListItemSkeletonView()
             }
-            .scrollDisabled(true)
         } else if viewModel.yourTokenViewModel.tokens.isEmpty {
             HStack {
                 Spacer(minLength: 0)
@@ -222,35 +201,30 @@ extension TokenListView {
             }
             .padding(.top, 50)
         } else {
-            ScrollView {
-                LazyVStack(
-                    spacing: 0,
-                    content: {
-                        let tokens: [TokenProtocol] = viewModel.yourTokenViewModel.tokens
-                        ForEach(0..<tokens.count, id: \.self) { index in
-                            if let item = tokens[gk_safeIndex: index] {
-                                TokenListItemView(token: item, showSubPrice: true)
-                                    .contentShape(.rect)
-                                    .onTapGesture {
-                                        guard !item.isTokenADA else { return }
-                                        navigator.push(.tokenDetail(token: item))
-                                    }
-                            }
+            LazyVStack(
+                spacing: 0,
+                content: {
+                    let tokens: [TokenProtocol] = viewModel.yourTokenViewModel.tokens
+                    ForEach(0..<tokens.count, id: \.self) { index in
+                        if let item = tokens[gk_safeIndex: index] {
+                            TokenListItemView(token: item, showSubPrice: true)
+                                .contentShape(.rect)
+                                .onTapGesture {
+                                    guard !item.isTokenADA else { return }
+                                    navigator.push(.tokenDetail(token: item))
+                                }
                         }
-                    })
-            }
+                    }
+                })
         }
     }
 
     @ViewBuilder
     var nftView: some View {
         if (viewModel.nftViewModel.showSkeleton ?? true) {
-            ScrollView {
-                ForEach(0..<20, id: \.self) { index in
-                    TokenListItemSkeletonView()
-                }
+            ForEach(0..<20, id: \.self) { index in
+                TokenListItemSkeletonView()
             }
-            .scrollDisabled(true)
         } else if viewModel.nftViewModel.tokens.isEmpty {
             HStack {
                 Spacer(minLength: 0)
@@ -265,52 +239,50 @@ extension TokenListView {
             }
             .padding(.top, 50)
         } else {
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: .xl) {
-                    let tokens: [TokenProtocol] = viewModel.nftViewModel.tokens
-                    ForEach(0..<tokens.count, id: \.self) { index in
-                        if let item = tokens[gk_safeIndex: index] {
-                            VStack(alignment: .leading, spacing: .md) {
-                                if item.isAdaHandleName {
-                                    ZStack(alignment: .center) {
-                                        Image(.icNftAdaHandle)
-                                            .resizable()
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .frame(maxWidth: .infinity)
-                                            .cornerRadius(.xl)
-                                        Text(item.tokenName.adaName)
-                                            .font(.labelMediumSecondary)
-                                            .foregroundStyle(.white)
-                                    }
-                                } else {
-                                    CustomWebImage(
-                                        url: item.buildNFTURL(),
-                                        placeholder: {
-                                            Image(nil)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .background(.colorSurfacePrimaryDefault)
-                                                .clipped()
-                                                .overlay {
-                                                    Image(.icNftPlaceholder)
-                                                        .fixSize(44)
-                                                }
-                                        }
-                                    )
-                                    .cornerRadius(.xl)
+            LazyVGrid(columns: columns, spacing: .xl) {
+                let tokens: [TokenProtocol] = viewModel.nftViewModel.tokens
+                ForEach(0..<tokens.count, id: \.self) { index in
+                    if let item = tokens[gk_safeIndex: index] {
+                        VStack(alignment: .leading, spacing: .md) {
+                            if item.isAdaHandleName {
+                                ZStack(alignment: .center) {
+                                    Image(.icNftAdaHandle)
+                                        .resizable()
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .frame(maxWidth: .infinity)
+                                        .cornerRadius(.xl)
+                                    Text(item.tokenName.adaName)
+                                        .font(.labelMediumSecondary)
+                                        .foregroundStyle(.white)
                                 }
-
-                                let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
-                                Text(name)
-                                    .lineLimit(1)
-                                    .font(.paragraphXMediumSmall)
-                                    .foregroundStyle(.colorBaseTent)
+                            } else {
+                                CustomWebImage(
+                                    url: item.buildNFTURL(),
+                                    placeholder: {
+                                        Image(nil)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .background(.colorSurfacePrimaryDefault)
+                                            .clipped()
+                                            .overlay {
+                                                Image(.icNftPlaceholder)
+                                                    .fixSize(44)
+                                            }
+                                    }
+                                )
+                                .cornerRadius(.xl)
                             }
+
+                            let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
+                            Text(name)
+                                .lineLimit(1)
+                                .font(.paragraphXMediumSmall)
+                                .foregroundStyle(.colorBaseTent)
                         }
                     }
                 }
-                .padding(.horizontal, 16)
             }
+            .padding(.horizontal, 16)
         }
     }
 }
