@@ -153,70 +153,59 @@ struct HomeView: View {
                     showSideMenu = true
                 }
             }
-            HStack(alignment: .center, spacing: 4) {
-                VStack(alignment: .leading, spacing: 2) {
-                    if !userInfo.adaHandleName.isBlank {
+            VStack(alignment: .leading, spacing: 2) {
+                if !userInfo.adaHandleName.isBlank {
+                    HStack(alignment: .center, spacing: .xs) {
                         Image(.icAdahandle)
                             .resizable()
                             .frame(width: 16, height: 16)
+                            .padding(.leading, -2)
                         Text(userInfo.adaHandleName)
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorInteractiveToneHighlight)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.1)
-                            .padding(.trailing, 4)
-                        Text(userInfo.walletName)
-                            .font(.paragraphXMediumSmall)
-                            .foregroundStyle(.colorInteractiveToneHighlight)
-                            .padding(.horizontal, .lg)
-                            .padding(.vertical, .xs)
-                            .background(
-                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
-                            )
-                            .frame(height: 20)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.1)
+                    }
+                } else {
+                    Text(userInfo.walletName)
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
+                        .lineLimit(1)
+                }
+                HStack(spacing: 4) {
+                    Text(userInfo.minWallet?.address.shortenAddress)
+                        .font(.paragraphXSmall)
+                        .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                    if isCopyAddress {
+                        Image(.icCheckMark)
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(.colorBaseSuccess)
+                            .frame(width: 16, height: 16)
                     } else {
-                        Text(userInfo.walletName)
-                            .font(.titleH7)
-                            .foregroundStyle(.colorBaseTent)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.1)
-                    }
-                    HStack(spacing: 4) {
-                        Text(userInfo.minWallet?.address.shortenAddress)
-                            .font(.paragraphXSmall)
-                            .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
-                        if isCopyAddress {
-                            Image(.icCheckMark)
-                                .resizable()
-                                .renderingMode(.template)
-                                .foregroundStyle(.colorBaseSuccess)
-                                .frame(width: 16, height: 16)
-                        } else {
-                            Image(.icCopy)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 16, height: 16)
-                        }
-                    }
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        UIPasteboard.general.string = userInfo.minWallet?.address
-                        withAnimation {
-                            isCopyAddress = true
-                        }
-                        DispatchQueue.main.asyncAfter(
-                            deadline: .now() + .seconds(2),
-                            execute: {
-                                withAnimation {
-                                    self.isCopyAddress = false
-                                }
-                            })
+                        Image(.icCopy)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 16, height: 16)
                     }
                 }
+                .contentShape(.rect)
+                .onTapGesture {
+                    UIPasteboard.general.string = userInfo.minWallet?.address
+                    withAnimation {
+                        isCopyAddress = true
+                    }
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + .seconds(2),
+                        execute: {
+                            withAnimation {
+                                self.isCopyAddress = false
+                            }
+                        })
+                }
             }
-            Spacer()
+            .padding(.leading, .xs)
+
+            Spacer(minLength: 0)
             Image(.icQrCode)
                 .resizable()
                 .scaledToFill()
