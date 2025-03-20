@@ -507,6 +507,23 @@ enum SocialLinks: String {
             return .icWebsite
         }
     }
+    
+    var order: Int {
+        switch self {
+        case .coinGecko:
+            0
+        case .coinMarketCap:
+            1
+        case .discord:
+            2
+        case .telegram:
+            3
+        case .twitter:
+            4
+        case .website:
+            5
+        }
+    }
 }
 
 extension RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Pool.PoolAsset {
