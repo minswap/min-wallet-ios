@@ -25,7 +25,7 @@ struct TokenLogoView: View {
     ) {
         self._currencySymbol = .constant(currencySymbol)
         self._tokenName = .constant(tokenName)
-        self.isVerified = isVerified
+        self._isVerified = .init(initialValue: isVerified)
         self._size = .init(initialValue: size)
     }
 
@@ -83,9 +83,8 @@ struct TokenLogoView: View {
     }
 
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
-        let baseUrl = "https://asset-logos-testnet.minswap.org"
         let path = "\(currencySymbol)\(tokenName)"
-        return "\(baseUrl)/\(path)"
+        return "\(MinWalletConstant.minAssetURL)/\(path)"
     }
 }
 
