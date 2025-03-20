@@ -13,8 +13,7 @@ struct CustomWebImage<Placeholder: View>: View {
         @ViewBuilder placeholder: @escaping () -> Placeholder = {
             Image(.ada)
                 .resizable()
-                .scaledToFill()
-                .background(.pink)
+                .scaledToFit()
                 .clipped()
         }
     ) {
@@ -27,8 +26,7 @@ struct CustomWebImage<Placeholder: View>: View {
         if let frameSize = frameSize {
             WebImage(url: URL(string: url ?? "")) { image in
                 image
-                    .resizable()
-                    .scaledToFill()  // Fill the frame
+                    .centerCropped()
             } placeholder: {
                 placeholder()
             }

@@ -13,3 +13,4 @@ MIN_ADA_TOKEN = lovelace
 MIN_ADA_CURRENCY = ₳
 MIN_ADDRESS_PREFIX = addr1
 MIN_ABOUT_URL = https:\/\/testnet-preprod.minswap.org
+MIN_ASSET_URL = https:\/\/asset-logos.minswap.org 
