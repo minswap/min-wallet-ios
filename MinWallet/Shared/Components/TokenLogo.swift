@@ -12,7 +12,7 @@ struct TokenLogoView: View {
     private var currencySymbol: String?
     @Binding
     private var tokenName: String?
-    @State
+    @Binding
     private var isVerified: Bool?
     @State
     private var size: CGSize = .init(width: 28, height: 28)
@@ -25,7 +25,7 @@ struct TokenLogoView: View {
     ) {
         self._currencySymbol = .constant(currencySymbol)
         self._tokenName = .constant(tokenName)
-        self._isVerified = .init(initialValue: isVerified)
+        self._isVerified = .constant(isVerified)
         self._size = .init(initialValue: size)
     }
 
