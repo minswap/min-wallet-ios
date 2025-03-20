@@ -120,7 +120,9 @@ class HomeViewModel: ObservableObject {
         timerReloadMarket?.cancel()
 
         if showSkeletonDic[.market] == nil {
-            showSkeletonDic[.market] = !isLoadMore
+            withAnimation {
+                showSkeletonDic[.market] = !isLoadMore
+            }
         }
 
         switch tabType {
@@ -131,7 +133,12 @@ class HomeViewModel: ObservableObject {
         case .nft:
             await nftViewModel.getTokens()
         }
-        showSkeletonDic[.market] = false
+
+        if showSkeletonDic[.market] == true {
+            withAnimation {
+                showSkeletonDic[.market] = false
+            }
+        }
         createTimerReloadBalance()
     }
 

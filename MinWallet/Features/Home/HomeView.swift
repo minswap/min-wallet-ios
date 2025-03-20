@@ -332,7 +332,8 @@ struct HomeView: View {
         }
         .padding(.vertical, Spacing.md)
         .padding(.horizontal, Spacing.xl)
-        CarouselView(homeViewModel: viewModel).frame(height: 98)
+        CarouselView(homeViewModel: viewModel, tokenManager: tokenManager)
+            .frame(height: 98)
             .padding(.top, Spacing.xl)
             .padding(.bottom, Spacing.md)
             .padding(.horizontal, Spacing.xl)
