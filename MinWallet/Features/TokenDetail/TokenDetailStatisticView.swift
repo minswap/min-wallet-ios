@@ -319,7 +319,7 @@ extension TokenDetailView {
                     .frame(height: 28)
                     .padding(.top, .xl)
                 let socialLinks = viewModel.token.socialLinks
-                let keys = socialLinks.map { $0.key }
+                let keys = socialLinks.map { $0.key }.sorted { $0.order < $1.order }
                 if !socialLinks.isEmpty {
                     FlexibleView(
                         data: keys,

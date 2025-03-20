@@ -154,33 +154,66 @@ struct HomeView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
-                if !userInfo.adaHandleName.isBlank {
-                    Image(.icAdahandle)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text(userInfo.adaHandleName)
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                        .padding(.trailing, 4)
-                    Text(userInfo.walletName)
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        .padding(.horizontal, .lg)
-                        .padding(.vertical, .xs)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
-                        )
-                        .frame(height: 20)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                } else {
-                    Text(userInfo.walletName)
-                        .font(.titleH7)
-                        .foregroundStyle(.colorBaseTent)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
+                VStack(alignment: .leading, spacing: 2) {
+                    if !userInfo.adaHandleName.isBlank {
+                        Image(.icAdahandle)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text(userInfo.adaHandleName)
+                            .font(.labelMediumSecondary)
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                            .padding(.trailing, 4)
+                        Text(userInfo.walletName)
+                            .font(.paragraphXMediumSmall)
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            .padding(.horizontal, .lg)
+                            .padding(.vertical, .xs)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceHighlightDefault)
+                            )
+                            .frame(height: 20)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    } else {
+                        Text(userInfo.walletName)
+                            .font(.titleH7)
+                            .foregroundStyle(.colorBaseTent)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    }
+                    HStack(spacing: 4) {
+                        Text(userInfo.minWallet?.address.shortenAddress)
+                            .font(.paragraphXSmall)
+                            .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
+                        if isCopyAddress {
+                            Image(.icCheckMark)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundStyle(.colorBaseSuccess)
+                                .frame(width: 16, height: 16)
+                        } else {
+                            Image(.icCopy)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 16, height: 16)
+                        }
+                    }
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        UIPasteboard.general.string = userInfo.minWallet?.address
+                        withAnimation {
+                            isCopyAddress = true
+                        }
+                        DispatchQueue.main.asyncAfter(
+                            deadline: .now() + .seconds(2),
+                            execute: {
+                                withAnimation {
+                                    self.isCopyAddress = false
+                                }
+                            })
+                    }
                 }
             }
             Spacer()
@@ -220,37 +253,6 @@ struct HomeView: View {
 
     private var walletAddressView: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack(spacing: 4) {
-                Text(userInfo.minWallet?.address.shortenAddress)
-                    .font(.paragraphXSmall)
-                    .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
-                if isCopyAddress {
-                    Image(.icCheckMark)
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(.colorBaseSuccess)
-                        .frame(width: 16, height: 16)
-                } else {
-                    Image(.icCopy)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 16, height: 16)
-                }
-            }
-            .contentShape(.rect)
-            .onTapGesture {
-                UIPasteboard.general.string = userInfo.minWallet?.address
-                withAnimation {
-                    isCopyAddress = true
-                }
-                DispatchQueue.main.asyncAfter(
-                    deadline: .now() + .seconds(2),
-                    execute: {
-                        withAnimation {
-                            self.isCopyAddress = false
-                        }
-                    })
-            }
             let prefix: String = appSetting.currency == Currency.usd.rawValue ? Currency.usd.prefix : ""
             let suffix: String = appSetting.currency == Currency.ada.rawValue ? " \(Currency.ada.prefix)" : ""
             HStack(alignment: .firstTextBaseline, spacing: 0) {
@@ -297,7 +299,7 @@ struct HomeView: View {
             }
         }
         .padding(.horizontal, .xl)
-        .padding(.top, .md)
+        .padding(.top, .lg)
         .padding(.bottom, .lg)
     }
 
@@ -330,7 +332,8 @@ struct HomeView: View {
         }
         .padding(.vertical, Spacing.md)
         .padding(.horizontal, Spacing.xl)
-        CarouselView(homeViewModel: viewModel).frame(height: 98)
+        CarouselView(homeViewModel: viewModel, tokenManager: tokenManager)
+            .frame(height: 98)
             .padding(.top, Spacing.xl)
             .padding(.bottom, Spacing.md)
             .padding(.horizontal, Spacing.xl)

@@ -68,7 +68,7 @@ struct DashedUnderlineText: View {
                     GeometryReader { geometry in
                         VStack {
                             Spacer()
-                            DashedLine(lineWidth: 0.7, dash: [4, 3], color: textColor)
+                            DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: textColor)
                                 .frame(height: 0.7)
                         }
                     }

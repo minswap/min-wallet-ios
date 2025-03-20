@@ -16,43 +16,67 @@ struct CarouselView: View {
 
     @ObservedObject
     var homeViewModel: HomeViewModel
+    @ObservedObject
+    var tokenManager: TokenManager
 
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottomLeading) {
-                IndicatorView(count: data.count, scrollIndex: homeViewModel.scrollIndex)
-                    .offset(x: Spacing.xl, y: -Spacing.xl)
-                TabView(selection: $homeViewModel.scrollIndex) {
-                    ForEach(0..<data.count, id: \.self) {
-                        index in
-                        let item = data[index]
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading) {
-                                Text(item.title)
-                                    .font(.labelMediumSecondary)
-                                    .foregroundStyle(.colorBaseTent)
-                                Spacer()
-                                    .frame(height: Spacing.xs)
-                                Text(item.description).font(.paragraphXSmall)
-                                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            }
-                            .padding(.top, Spacing.xl)
-                            .padding(.leading, Spacing.xl)
-
+                if !tokenManager.hasTokenOrNFT || homeViewModel.showSkeleton {
+                    HStack(alignment: .center) {
+                        VStack(alignment: .leading) {
+                            Text(data.first?.title)
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorBaseTent)
                             Spacer()
+                                .frame(height: Spacing.xs)
+                            Text(data.first?.description)
+                                .font(.paragraphXSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        }
+                        .padding(.leading, Spacing.xl)
 
-                            Image(.comingSoon).resizable()
-                                .frame(
-                                    width: 98, height: 98)
+                        Spacer()
+
+                        Image(.icFirstToken)
+                            .resizable()
+                            .frame(width: 61, height: 98)
+                    }
+                } else {
+                    IndicatorView(count: data.count, scrollIndex: homeViewModel.scrollIndex)
+                        .offset(x: Spacing.xl, y: -Spacing.xl)
+                    TabView(selection: $homeViewModel.scrollIndex) {
+                        ForEach(0..<data.count, id: \.self) {
+                            index in
+                            let item = data[index]
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading) {
+                                    Text(item.title)
+                                        .font(.labelMediumSecondary)
+                                        .foregroundStyle(.colorBaseTent)
+                                    Spacer()
+                                        .frame(height: Spacing.xs)
+                                    Text(item.description).font(.paragraphXSmall)
+                                        .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                }
+                                .padding(.top, Spacing.xl)
+                                .padding(.leading, Spacing.xl)
+
+                                Spacer()
+
+                                Image(.comingSoon).resizable()
+                                    .frame(
+                                        width: 98, height: 98)
+                            }
                         }
                     }
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                .onChange(of: homeViewModel.scrollIndex) { newValue in
-                    if newValue == data.count {
-                        homeViewModel.scrollIndex = 0
-                    } else if newValue == -1 {
-                        homeViewModel.scrollIndex = data.count - 1
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    .onChange(of: homeViewModel.scrollIndex) { newValue in
+                        if newValue == data.count {
+                            homeViewModel.scrollIndex = 0
+                        } else if newValue == -1 {
+                            homeViewModel.scrollIndex = data.count - 1
+                        }
                     }
                 }
             }
@@ -92,7 +116,7 @@ private struct IndicatorView: View {
 
 #Preview {
     VStack(spacing: 0) {
-        CarouselView(homeViewModel: HomeViewModel())
+        CarouselView(homeViewModel: HomeViewModel(), tokenManager: TokenManager.shared)
             .frame(height: 98)
             .padding(.horizontal, .xl)
 
