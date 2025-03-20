@@ -507,7 +507,7 @@ enum SocialLinks: String {
             return .icWebsite
         }
     }
-    
+
     var order: Int {
         switch self {
         case .coinGecko:
