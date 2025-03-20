@@ -49,6 +49,8 @@
 	<string>${MIN_HANDLE_ADA_NAME_URL}</string>
 	<key>MIN_ABOUT_URL</key>
 	<string>${MIN_ABOUT_URL}</string>
+	<key>MIN_ASSET_URL</key>
+	<string>${MIN_ASSET_URL}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>

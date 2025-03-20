@@ -76,7 +76,7 @@ struct TokenListItemView: View {
                                     guard !percentChange.isZero else { return .colorInteractiveTentPrimarySub }
                                     return percentChange > 0 ? .colorBaseSuccess : .colorBorderDangerDefault
                                 }()
-                                Text("\(percentChange.formatSNumber(maximumFractionDigits: 2))%")
+                                Text("\(abs(percentChange).formatSNumber(maximumFractionDigits: 2))%")
                                     .font(.labelSmallSecondary)
                                     .foregroundStyle(foregroundStyle)
                                 if !percentChange.isZero {

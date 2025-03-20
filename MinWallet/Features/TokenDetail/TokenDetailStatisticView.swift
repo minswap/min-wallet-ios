@@ -30,7 +30,7 @@ extension TokenDetailView {
                     DashedUnderlineText(text: "Avg. price change (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
                     if priceChange24h != 0 {
-                        Text(priceChange24h.formatSNumber(maximumFractionDigits: 2) + "%")
+                        Text(abs(priceChange24h).formatSNumber(maximumFractionDigits: 2) + "%")
                             .font(.labelSmallSecondary)
                             .foregroundStyle(priceChange24h > 0 ? .colorBaseSuccess : .colorBorderDangerDefault)
                         Image(priceChange24h > 0 ? .icUp : .icDown)
