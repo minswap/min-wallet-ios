@@ -22,7 +22,7 @@ extension OrderV2Action: @retroactive Identifiable {
         case .oco:
             "OCO"
         case .partialSwap:
-            "Partial fill"
+            "Partial Fill"
         case .stopLoss:
             "Stop loss"
         case .withdraw:
