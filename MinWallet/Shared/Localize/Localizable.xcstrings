@@ -416,6 +416,9 @@
     "Fd Market cap" : {
 
     },
+    "Fill History" : {
+
+    },
     "Filter" : {
 
     },
@@ -636,9 +639,6 @@
 
     },
     "Partial Fill" : {
-
-    },
-    "Partial swap" : {
 
     },
     "Password" : {
