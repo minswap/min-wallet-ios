@@ -64,22 +64,22 @@ extension TokenDetailView {
                     content = "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours."
                     $isShowToolTip.showSheet()
                 }
-                if viewModel.token.decimals > 0 {
-                    HStack {
-                        DashedUnderlineText(text: "Decimal", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
-                        Spacer()
-                        Text("\(viewModel.token.decimals)")
-                            .font(.labelMediumSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    }
-                    .frame(height: 40)
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        title = "Decimal"
-                        content = "It refers to the number of digits used after the decimal point for a specific token. It essentially dictates the smallest indivisible unit of that token."
-                        $isShowToolTip.showSheet()
-                    }
+                //if viewModel.token.decimals > 0 {
+                HStack {
+                    DashedUnderlineText(text: "Decimal", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                    Spacer()
+                    Text("\(viewModel.token.decimals)")
+                        .font(.labelMediumSecondary)
+                        .foregroundStyle(.colorBaseTent)
                 }
+                .frame(height: 40)
+                .contentShape(.rect)
+                .onTapGesture {
+                    title = "Decimal"
+                    content = "It refers to the number of digits used after the decimal point for a specific token. It essentially dictates the smallest indivisible unit of that token."
+                    $isShowToolTip.showSheet()
+                }
+                //}
                 HStack {
                     DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
@@ -200,43 +200,45 @@ extension TokenDetailView {
                         .foregroundStyle(.colorBaseTent)
                         .padding(.bottom, .xl)
                 }
-                HStack(spacing: 4) {
-                    Text("Token name")
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        .font(.paragraphSmall)
-                    Spacer()
-                    Text(viewModel.token.tokenName)
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(isCopiedTokenName ? .colorBaseSuccess : .colorBaseTent)
-                        .lineLimit(1)
-                    if isCopiedTokenName {
-                        Image(.icCheckMark)
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundStyle(.colorBaseSuccess)
-                            .frame(width: 16, height: 16)
-                    } else {
-                        Image(.icCopySeedPhrase)
-                            .resizable()
-                            .renderingMode(.template)
+                if !viewModel.token.tokenName.isEmpty {
+                    HStack(spacing: 4) {
+                        Text("Token name")
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            .frame(width: 16, height: 16)
+                            .font(.paragraphSmall)
+                        Spacer()
+                        Text(viewModel.token.tokenName)
+                            .font(.labelMediumSecondary)
+                            .foregroundStyle(isCopiedTokenName ? .colorBaseSuccess : .colorBaseTent)
+                            .lineLimit(1)
+                        if isCopiedTokenName {
+                            Image(.icCheckMark)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundStyle(.colorBaseSuccess)
+                                .frame(width: 16, height: 16)
+                        } else {
+                            Image(.icCopySeedPhrase)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .frame(width: 16, height: 16)
+                        }
                     }
-                }
-                .frame(height: 40)
-                .containerShape(.rect)
-                .onTapGesture {
-                    UIPasteboard.general.string = viewModel.token.tokenName
-                    withAnimation {
-                        isCopiedTokenName = true
+                    .frame(height: 40)
+                    .containerShape(.rect)
+                    .onTapGesture {
+                        UIPasteboard.general.string = viewModel.token.tokenName
+                        withAnimation {
+                            isCopiedTokenName = true
+                        }
+                        DispatchQueue.main.asyncAfter(
+                            deadline: .now() + .seconds(2),
+                            execute: {
+                                withAnimation {
+                                    self.isCopiedTokenName = false
+                                }
+                            })
                     }
-                    DispatchQueue.main.asyncAfter(
-                        deadline: .now() + .seconds(2),
-                        execute: {
-                            withAnimation {
-                                self.isCopiedTokenName = false
-                            }
-                        })
                 }
                 HStack(spacing: 4) {
                     Text("Policy ID")
