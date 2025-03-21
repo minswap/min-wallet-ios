@@ -465,6 +465,37 @@ struct OrderHistoryDetailView: View {
                         }
                 }
                 .padding(.top, .md)
+                if let fillHistories = order?.detail.fillHistories, !fillHistories.isEmpty {
+                    Color.colorBorderPrimarySub.frame(height: 1)
+                        .padding(.vertical, .xl)
+                    HStack(spacing: 4) {
+                        Text("Fill History")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                    }
+                    .padding(.bottom, .md)
+                    ForEach(fillHistories, id: \.self) { history in
+                        HStack(spacing: 4) {
+                            Text(history.input.amount.formatNumber(suffix: history.input.currency, roundingOffset: history.input.decimals ?? 6, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            Image(.icBack)
+                                .fixSize(.xl)
+                                .rotationEffect(.degrees(180))
+                            Text(history.output.amount.formatNumber(suffix: history.output.currency, roundingOffset: history.output.decimals ?? 6, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            Text("\(abs(history.percent).formatSNumber(maximumFractionDigits: 2))%")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveToneHighlight)
+                                .layoutPriority(9)
+                            Spacer(minLength: 0)
+                            Image(.icArrowUp)
+                                .fixSize(.xl)
+                                .onTapGesture {
+                                    history.txId.viewTransaction()
+                                }
+                        }
+                        .frame(height: 36)
+                    }
+                }
             }
         }
     }

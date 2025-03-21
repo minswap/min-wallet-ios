@@ -330,6 +330,46 @@ extension OrderHistoryQuery.Data.Orders {
             detail.minimumAmountPerSwap = json["minimumAmountPerSwap"]["$bigint"].doubleValue
             //TODO: maxHops or maxSwapTime
             detail.maxSwapTime = json["maxHops"].intValue
+
+            let totalInput = detail.inputs.map { $0.amount }.reduce(0, +)
+
+            detail.fillHistories = json["fillHistories"].arrayValue
+                .map({ history in
+                    func getTokenFromJson(input: JSON) -> OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token {
+                        let amount = input["amount"]["$bigint"].doubleValue
+                        let asset = input["asset"]["$asset"].stringValue
+                        let assetSplit = asset.split(separator: ".")
+                        let currencySymbol = String(assetSplit.first ?? "")
+                        let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
+
+                        let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
+                        let isVerified: Bool? = metaData?.isVerified
+                        let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
+
+                        let uniqueIDzz = uniqueID(symbol: currencySymbol, name: tokenName)
+                        let decimals: Int? = (uniqueIDzz == "lovelace" || uniqueIDzz.isEmpty) ? 6 : metaData?.decimals
+
+                        return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
+                            currencySymbol: currencySymbol,
+                            tokenName: tokenName,
+                            isVerified: isVerified,
+                            decimals: decimals,
+                            amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
+                            currency: currencySymbol == MinWalletConstant.lpToken ? "LP" : name
+                        )
+                    }
+
+                    let input = getTokenFromJson(input: history["input"])
+                    let output = getTokenFromJson(input: history["output"])
+                    let txId = history["txId"]["$bytes"].stringValue
+
+                    return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.FillHistory(
+                        id: UUID(),
+                        input: input,
+                        output: output,
+                        txId: txId,
+                        percent: totalInput != 0 ? (input.amount * 100 / totalInput) : 0)
+                })
         }
     }
 }
@@ -351,6 +391,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
         var routes: String = ""
         var minimumAmountPerSwap: Double = 0
         var maxSwapTime: Int = 0
+        var fillHistories: [FillHistory] = []
     }
 }
 
@@ -368,6 +409,14 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder.Detail {
         var currency: String = ""
         var limitAmount: Double = 0
         var stopAmount: Double = 0
+    }
+
+    struct FillHistory: Hashable, Identifiable {
+        var id: UUID = .init()
+        var input: Token = .init()
+        var output: Token = .init()
+        var txId: String = ""
+        var percent: Double = 0
     }
 }
 
