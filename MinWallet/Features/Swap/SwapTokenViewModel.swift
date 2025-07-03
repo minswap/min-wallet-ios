@@ -161,9 +161,6 @@ class SwapTokenViewModel: ObservableObject {
             }
             self.action.send(.getTradingInfo)
 
-        case .predictSwapPrice:
-            self.action.send(.getTradingInfo)
-
         case .swapToken:
             let tempToken = tokenPay
             isSwapExactIn = true
@@ -208,10 +205,6 @@ class SwapTokenViewModel: ObservableObject {
             await generateWarningInfo()
             await generateErrorInfo()
 
-        case .routeSorting,
-            .autoRouter,
-            .routeSelected:
-            break
         case let .showSelectToken(isTokenPay):
             selectTokenVM.selectToken(tokens: [isTokenPay ? tokenPay.token : tokenReceive.token])
             self.isSelectTokenPay = isTokenPay
@@ -248,67 +241,15 @@ class SwapTokenViewModel: ObservableObject {
 
         case .hiddenSelectToken:
             selectTokenVM.resetState()
+        default: break
         }
     }
-
-    /*
-    private func getRouting() async {
-        isLoadingRouting = true
-        let query = RoutedPoolsByPairQuery(
-            isApplied: swapSetting.predictSwapPrice,
-            pair: InputPair(
-                assetA: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
-                assetB: InputAsset(currencySymbol: tokenReceive.token.currencySymbol, tokenName: tokenReceive.token.tokenName)))
-
-        let routing = try? await MinWalletService.shared.fetch(query: query)
-        let pools = routing?.routedPoolsByPair.pools ?? []
-
-        var wrapRoutings = routing?.routedPoolsByPair.routings.map({ WrapRouting(routing: $0) }) ?? []
-
-        for (idx, routing) in wrapRoutings.enumerated() {
-            let uniqueIDLPAsset = routing.routing.routing.map { $0.currencySymbol + "." + $0.tokenName }
-            let poolsInRouting = pools.filter { uniqueIDLPAsset.contains($0.lpAsset.currencySymbol + "." + $0.lpAsset.tokenName) }
-            wrapRoutings[idx].pools = poolsInRouting
-            wrapRoutings[idx].calculateRoute(tokenX: self.tokenPay.token, tokenZ: self.tokenReceive.token, isAutoRoute: swapSetting.autoRouter)
-        }
-
-        switch swapSetting.routeSorting {
-        case .most:
-            wrapRoutings.sort { routingL, routingR in
-                let minTVLL = routingL.pools.compactMap { Double($0.tvlInAda ?? "") }.min() ?? 0
-                let minTVLR = routingR.pools.compactMap { Double($0.tvlInAda ?? "") }.min() ?? 0
-                return minTVLL > minTVLR
-            }
-        case .high:
-            //TODO: calculate sau
-            break
-        }
-
-        for (idx, _) in wrapRoutings.enumerated() {
-            let title: LocalizedStringKey = {
-                if idx == 0 {
-                    return swapSetting.routeSorting == .high ? "Best route" : "Most liquidity"
-                } else {
-                    return "Route \(idx + 1)"
-                }
-            }()
-
-            wrapRoutings[idx].title = title
-        }
-
-        self.wrapRoutings = wrapRoutings
-        isLoadingRouting = false
-    }
-     */
 
     private func generateWarningInfo() async {
         var warningInfo: [WarningInfo] = []
 
         if let priceImpact = iosTradeEstimate?.priceImpact, priceImpact >= 5 {
             warningInfo.append(.highPriceImpact(percent: "5"))
-        }
-        if swapSetting.isUnlimitedSlippage {
-            warningInfo.append(.unlimitedSlippageIsActivated)
         }
         if swapSetting.slippageSelectedValue() >= 50 {
             warningInfo.append(.unsafeSlippageTolerance(percent: "50"))
@@ -370,7 +311,7 @@ class SwapTokenViewModel: ObservableObject {
         let input = IosTradeEstimateInput(
             amount: amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0),
             inputAsset: InputAsset(currencySymbol: tokenPay.token.currencySymbol, tokenName: tokenPay.token.tokenName),
-            isApplied: swapSetting.predictSwapPrice,
+            isApplied: true,
             isSwapExactIn: isSwapExactIn,
             outputAsset: InputAsset(currencySymbol: tokenReceive.token.currencySymbol, tokenName: tokenReceive.token.tokenName))
 
@@ -512,8 +453,7 @@ class SwapTokenViewModel: ObservableObject {
 extension SwapTokenViewModel {
     enum Action {
         case autoRouter
-        case predictSwapPrice
-        case routeSorting
+        case safeMode
         case selectToken(token: TokenProtocol?)
         case routeSelected
         case setMaxAmount
@@ -535,8 +475,6 @@ extension SwapTokenViewModel {
     enum WarningInfo: Hashable {
         ///priceImpact >= IMPACT_TIERS[0] and settings.safeMode and hasExchange
         case highPriceImpact(percent: String)
-        ///useUnlimitedSlippage == true
-        case unlimitedSlippageIsActivated
         ///slippage >= UNSAFE_SLIPPAGE_TOLERANCE and safeMode
         case unsafeSlippageTolerance(percent: String)
         ///Token exists in FUNCTIONAL_ASSETS
@@ -558,8 +496,6 @@ extension SwapTokenViewModel {
             switch self {
             case .highPriceImpact:
                 "High price impact"
-            case .unlimitedSlippageIsActivated:
-                "Unlimited slippage is activated"
             case .unsafeSlippageTolerance:
                 "Unsafe slippage tolerance"
             case .functionalTokenPay, .functionalTokenReceive:
@@ -581,8 +517,6 @@ extension SwapTokenViewModel {
             switch self {
             case let .highPriceImpact(percent):
                 "Price impact is more than \(percent)%, make sure to check the price before submitting the transaction."
-            case .unlimitedSlippageIsActivated:
-                " The order will get executed with any available price and unlimited slippage. This could lead to an undesirable price due to price changes from previous orders and loss of virtually all funds. You can turn it off in Safe Mode settings."
             case let .unsafeSlippageTolerance(percent):
                 "Slippage tolerance is over \(percent)%. You can adjust it in trade "
             case let .functionalTokenPay(ticker, project),

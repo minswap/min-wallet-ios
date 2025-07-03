@@ -31,7 +31,7 @@ struct SwapTokenSettingView: View {
                 Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
                     .padding(.vertical, .md)
                 Text("Slippage Tolerance")
-                    .font(.paragraphXMediumSmall)
+                    .font(.labelSmallSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 20)
                 HStack(spacing: 0) {
@@ -75,7 +75,7 @@ struct SwapTokenSettingView: View {
                     .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                 }
                 .padding(.top, .md)
-                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) >= 50 && viewModel.swapSetting.slippageSelected == nil {
+                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) >= 50 && viewModel.swapSetting.slippageSelected == nil && viewModel.swapSetting.safeMode {
                     HStack(spacing: Spacing.md) {
                         Image(.icWarning)
                             .resizable()
@@ -97,95 +97,68 @@ struct SwapTokenSettingView: View {
                     )
                     .padding(.top, .xl)
                 }
-                HStack(spacing: .xl) {
-                    DashedUnderlineText(text: "Predict Swap Price", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            onShowToolTip?("Predict Swap Price", "Estimate swap price with processing orders.")
-                        }
+                HStack {
+                    Text("Liquidity Source")
+                        .font(.labelSmallSecondary)
+
                     Spacer()
-                    Toggle("", isOn: $viewModel.swapSetting.predictSwapPrice)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: viewModel.swapSetting.predictSwapPrice) { autoRouter in
-                            viewModel.action.send(.predictSwapPrice)
-                        }
-                }
-                .frame(height: 32)
-                .padding(.top, .lg)
-                .padding(.bottom, 24)
-                /*
-                DashedUnderlineText(text: "Route Sorting", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, .md)
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        onShowToolTip?("Route Sorting", "Choose how to sort routes: by most liquidity for stable transactions or by high return for maximum profitability.")
+
+                    HStack(spacing: .md) {
+                        Text("9/9")
+                            .font(.paragraphSmall)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: BorderRadius.full)
+                                    .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+                            )
+                        Image(.icArrowRightS)
                     }
-                HStack(spacing: .xs) {
-                    Text("Most liquidity")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(viewModel.swapSetting.routeSorting == .most ? .colorInteractiveToneTent : .colorBaseTent)
-                        .frame(height: 36)
-                        .padding(.horizontal, .lg)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(viewModel.swapSetting.routeSorting == .most ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
-                        )
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            guard viewModel.swapSetting.routeSorting != .most else { return }
-                            viewModel.swapSetting.routeSorting = .most
-                            viewModel.action.send(.routeSorting)
-                        }
-                    Text("High return")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(viewModel.swapSetting.routeSorting == .high ? .colorInteractiveToneTent : .colorBaseTent)
-                        .frame(height: 36)
-                        .padding(.horizontal, .lg)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(viewModel.swapSetting.routeSorting == .high ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
-                        )
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            guard viewModel.swapSetting.routeSorting != .high else { return }
-                            viewModel.swapSetting.routeSorting = .high
-                            viewModel.action.send(.routeSorting)
-                        }
-                    Spacer()
                 }
-                .padding(.bottom, .xl)
-                Color.colorBorderPrimarySub.frame(height: 1)
-                    .padding(.bottom, 20)
-                HStack(spacing: 4) {
-                    Image(.icArrowCircle)
-                        .resizable()
-                        .frame(width: .xl, height: .xl)
-                    Text("Auto Router")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorBaseTent)
-                    Text("Recommended")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveToneSuccess)
-                        .frame(height: 24)
-                        .padding(.horizontal, .lg)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
-                        )
-                    Spacer()
-                    Toggle("", isOn: $viewModel.swapSetting.autoRouter)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: viewModel.swapSetting.autoRouter) { autoRouter in
-                            viewModel.action.send(.autoRouter)
+                .padding(.top, .md)
+                .onTapGesture {
+                    // Handle tap action here
+                }
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.colorBorderPrimarySub)
+                    .padding(.top, .xl)
+                VStack(spacing: 4) {
+                    HStack {
+                        HStack(spacing: .md) {
+                            Image(.icShieldCheck)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text("Safe Mode")
+                                .font(.labelSmallSecondary)
+                                .foregroundColor(.colorBaseTent)
                         }
+                        Text("Recommended")
+                            .font(.labelSmallSecondary)
+                            .foregroundColor(.colorInteractiveToneSuccess)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full)
+                                    .fill(.colorSurfaceSuccess)
+                            )
+                        Spacer()
+                        Toggle("", isOn: $viewModel.swapSetting.safeMode)
+                            .toggleStyle(SwitchToggleStyle())
+                            .onChange(of: viewModel.swapSetting.safeMode) { safeMode in
+                                viewModel.action.send(.safeMode)
+                            }
+                    }
+
+                    Text("Prevent high price impact trades. Disable at your own risk.")
+                        .font(.paragraphSmall)
+                        .foregroundColor(.colorInteractiveTentPrimarySub)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(height: 24)
-                .padding(.bottom, 4)
-                HorizontalGeometryReader { width in
-                    TextLearnMoreSendTokenView(text: "When available, uses multiple pools for better liquidity and prices. ", textClickAble: "Learn more", preferredMaxLayoutWidth: width)
-                }
-                .padding(.bottom, 24)
-                 */
+                .padding(.top, .xl)
             }
             .padding(.horizontal, .xl)
+            .padding(.bottom, .xl)
             .background(content: {
                 RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
             })

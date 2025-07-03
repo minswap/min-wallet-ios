@@ -15,7 +15,7 @@ struct TermOfServiceView: View {
                 .padding(.horizontal, .xl)
                 .padding(.top, .md)
                 .opacity(webViewModel.progress != 1 ? 1 : 0)
-            WebView(urlString: MinWalletConstant.minAboutURL + "/headless/terms-of-service", viewModel: webViewModel)
+            WebView(urlString: MinWalletConstant.minPolicyURL + "/headless/terms-of-service", viewModel: webViewModel)
         }
         .modifier(
             BaseContentView(

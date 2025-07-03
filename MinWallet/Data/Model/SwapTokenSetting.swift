@@ -3,12 +3,10 @@ import MinWalletAPI
 
 
 struct SwapTokenSetting {
-    var predictSwapPrice: Bool = true
-    var routeSorting: RouteSorting = .most
+    var safeMode: Bool = true
     var autoRouter: Bool = true
     var slippageTolerance: String = ""
     var slippageSelected: SwapTokenSettingView.Slippage? = ._01
-    var isUnlimitedSlippage: Bool = false
 
     init() {}
 
@@ -19,13 +17,6 @@ struct SwapTokenSetting {
         }
 
         return slippageSelected.rawValue
-    }
-}
-
-extension SwapTokenSetting {
-    enum RouteSorting {
-        case most
-        case high
     }
 }
 

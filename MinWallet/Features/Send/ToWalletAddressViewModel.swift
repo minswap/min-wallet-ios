@@ -83,7 +83,7 @@ class ToWalletAddressViewModel: ObservableObject {
     private func resolveAdaName() async {
         do {
             let adaName = address.trimmingPrefix("$")
-            guard let url = URL(string: MinWalletConstant.handleAdaNameURL + "/" + adaName)
+            guard let url = URL(string: MinWalletConstant.adaHandleURL + "/" + adaName)
             else {
                 errorType = .handleResolvedError(msg: "Handle not found")
                 return

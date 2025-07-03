@@ -35,6 +35,7 @@
 		57F102B12C64CCA1000B3544 /* MinWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102B02C64CCA1000B3544 /* MinWalletUITests.swift */; };
 		57F102B32C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */; };
 		7B0080B69E81CABECF03244F /* TokenLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A6F7C6490456E5F226DC7F /* TokenLogo.swift */; };
+		81BA7E4F2E1628EC00B2CEF7 /* MinRestfulService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BA7E4E2E1628EC00B2CEF7 /* MinRestfulService.swift */; };
 		9600DEAE2CF172C9005D997C /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9600DEAC2CF172C9005D997C /* Appearance.swift */; };
 		9600DEBB2CF18092005D997C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9600DEBA2CF18092005D997C /* Localizable.xcstrings */; };
 		9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9600DEBC2CF181D6005D997C /* UserDataManager.swift */; };
@@ -254,6 +255,7 @@
 		57F102AC2C64CCA1000B3544 /* MinWalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinWalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57F102B02C64CCA1000B3544 /* MinWalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletUITests.swift; sourceTree = "<group>"; };
 		57F102B22C64CCA1000B3544 /* MinWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		81BA7E4E2E1628EC00B2CEF7 /* MinRestfulService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinRestfulService.swift; sourceTree = "<group>"; };
 		9600DEAC2CF172C9005D997C /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		9600DEBA2CF18092005D997C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		9600DEBC2CF181D6005D997C /* UserDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
@@ -694,6 +696,7 @@
 		9600DEC32CF1850D005D997C /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				81BA7E4E2E1628EC00B2CEF7 /* MinRestfulService.swift */,
 				96BD2A5A2D0D792100D81277 /* MinWalletService.swift */,
 			);
 			path = Network;
@@ -1304,6 +1307,7 @@
 				96DC05342CF5A87B00A78356 /* TimeZoneView.swift in Sources */,
 				965592482CFAEFD800301DDB /* Other.swift in Sources */,
 				965592532CFB3A2C00301DDB /* ToWalletAddressView.swift in Sources */,
+				81BA7E4F2E1628EC00B2CEF7 /* MinRestfulService.swift in Sources */,
 				960D6B292CFF194D0017AF29 /* CustomWebImage.swift in Sources */,
 				965592212CF97C6400301DDB /* RestoreWalletView.swift in Sources */,
 				96F7FA0B2CFDBA6E00E2EF5B /* TestView.swift in Sources */,

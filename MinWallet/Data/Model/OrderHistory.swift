@@ -230,7 +230,7 @@ extension OrderHistoryQuery.Data.Orders {
                         isVerified: isVerified,
                         decimals: decimals,
                         amount: amount / pow(10.0, Double(decimals ?? 0)),
-                        currency: currencySymbol == MinWalletConstant.lpToken ? "LP" : name)
+                        currency: currencySymbol == MinWalletConstant.lpV1CurrencySymbol ? "LP" : name)
                 })
             detail.outputs = json["outputs"].arrayValue
                 .map({ input in
@@ -257,7 +257,7 @@ extension OrderHistoryQuery.Data.Orders {
                         decimals: decimals,
                         amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
                         satisfiedAmount: satisfiedAmount / pow(10.0, Double(decimals ?? 0)),
-                        currency: currencySymbol == MinWalletConstant.lpToken ? "LP" : name,
+                        currency: currencySymbol == MinWalletConstant.lpV1CurrencySymbol ? "LP" : name,
                         limitAmount: limitAmount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
                         stopAmount: stopAmount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0)))
                     )
@@ -316,7 +316,7 @@ extension OrderHistoryQuery.Data.Orders {
                         tokenName: tokenName,
                         isVerified: isVerified,
                         amount: amount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
-                        currency: currencySymbol == MinWalletConstant.lpToken ? "LP" : name)
+                        currency: currencySymbol == MinWalletConstant.lpV1CurrencySymbol ? "LP" : name)
                 })
 
             let name = detail.inputs.map { $0.currency }.joined(separator: ", ") + " - " + detail.outputs.map({ $0.currency }).joined(separator: ",")
@@ -355,7 +355,7 @@ extension OrderHistoryQuery.Data.Orders {
                             isVerified: isVerified,
                             decimals: decimals,
                             amount: amount / pow(10.0, Double(currencySymbol == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
-                            currency: currencySymbol == MinWalletConstant.lpToken ? "LP" : name
+                            currency: currencySymbol == MinWalletConstant.lpV1CurrencySymbol ? "LP" : name
                         )
                     }
 

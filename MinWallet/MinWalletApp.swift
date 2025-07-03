@@ -41,7 +41,7 @@ struct MinWalletApp: App {
                 .environmentObject(policyVM)
                 .environment(\.locale, .init(identifier: appSetting.language))
                 .onAppear {
-                    policyVM.preloadContent(urlString: MinWalletConstant.minAboutURL + "/headless/privacy-policy")
+                    policyVM.preloadContent(urlString: MinWalletConstant.minPolicyURL + "/headless/privacy-policy")
                     appSetting.initAppearanceStyle()
                 }
         }

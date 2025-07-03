@@ -7,7 +7,7 @@ class UserInfo: ObservableObject {
 
     static let TOKEN_NAME_DEFAULT: [String: String] = [
         MinWalletConstant.adaToken: "ADA",
-        MinWalletConstant.lpToken: "LP",
+        MinWalletConstant.lpV1CurrencySymbol: "LP",
         MinWalletConstant.minToken: "MIN",
         MinWalletConstant.mintToken: "MINt",
     ]
