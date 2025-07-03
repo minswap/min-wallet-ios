@@ -205,6 +205,11 @@ class SwapTokenViewModel: ObservableObject {
             await generateWarningInfo()
             await generateErrorInfo()
 
+        case .autoRouter,
+            .routeSelected,
+            .safeMode:
+            break
+
         case let .showSelectToken(isTokenPay):
             selectTokenVM.selectToken(tokens: [isTokenPay ? tokenPay.token : tokenReceive.token])
             self.isSelectTokenPay = isTokenPay
@@ -241,7 +246,6 @@ class SwapTokenViewModel: ObservableObject {
 
         case .hiddenSelectToken:
             selectTokenVM.resetState()
-        default: break
         }
     }
 
