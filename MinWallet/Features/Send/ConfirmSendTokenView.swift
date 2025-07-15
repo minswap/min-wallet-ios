@@ -156,7 +156,7 @@ struct ConfirmSendTokenView: View {
                 navigator.popToRoot()
             } catch {
                 hudState.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
             }
         }
     }

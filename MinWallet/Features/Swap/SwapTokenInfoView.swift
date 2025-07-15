@@ -45,7 +45,8 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Price Impact", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
+                if let iosTradeEstimate = viewModel.iosTradeEstimate {
+                    let priceImpact = iosTradeEstimate.avgPriceImpact
                     let priceImpactColor = iosTradeEstimate.priceImpactColor
                     Text(priceImpact.formatSNumber() + "%")
                         .font(.labelMediumSecondary)
@@ -57,6 +58,7 @@ struct SwapTokenInfoView: View {
             .onTapGesture {
                 onShowToolTip?("Price impact", "This % indicates the potential effect your swap might have on the pool's price. A higher % suggests a more significant impact.")
             }
+            /* TODO: Cuongnv243 check sau
             HStack {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -68,6 +70,7 @@ struct SwapTokenInfoView: View {
             .onTapGesture {
                 onShowToolTip?("Liquidity Provider Fee", "1/6 of Liquidity Providers Fee going to MIN stakers?")
             }
+             */
             /*
             HStack {
                 DashedUnderlineText(text: "Batcher Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)

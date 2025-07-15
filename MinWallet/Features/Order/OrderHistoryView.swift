@@ -106,7 +106,7 @@ struct OrderHistoryView: View {
                 bannerState.showBanner(isShow: true)
             } catch {
                 hud.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
             }
         }
     }

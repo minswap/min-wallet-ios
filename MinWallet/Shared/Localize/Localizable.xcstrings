@@ -136,9 +136,6 @@
     "1 %@ = " : {
 
     },
-    "1/6 of Liquidity Providers Fee going to MIN stakers?" : {
-
-    },
     "2 %@" : {
 
     },
@@ -312,6 +309,9 @@
 
     },
     "Currency" : {
+
+    },
+    "Customized Routing" : {
 
     },
     "Dark" : {
@@ -539,9 +539,6 @@
     "Limit" : {
 
     },
-    "Liquidity Provider Fee" : {
-
-    },
     "Liquidity Source" : {
 
     },
@@ -597,9 +594,6 @@
 
     },
     "Nickname" : {
-
-    },
-    "No LP asset found" : {
 
     },
     "No results" : {
@@ -709,9 +703,6 @@
     "Privacy policy" : {
 
     },
-    "Public key not found" : {
-
-    },
     "Re-input your seed phrase" : {
 
     },
@@ -752,6 +743,9 @@
 
     },
     "Sample item 2" : {
+
+    },
+    "Save" : {
 
     },
     "Scam token" : {
@@ -915,9 +909,6 @@
 
     },
     "Transaction not exist" : {
-
-    },
-    "Transaction not found" : {
 
     },
     "Transaction Submitted" : {

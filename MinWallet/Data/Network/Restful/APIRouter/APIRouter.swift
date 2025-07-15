@@ -111,7 +111,7 @@ extension GAPIUploadRouter {
 
 // MARK: - Helper
 public
-    struct GAPIRouterCommon
+    struct APIRouterCommon
 {
     static var logAPIDurationThreshold: TimeInterval? = nil
     static var onLogAPIDuration: ((_ response: AFDataResponse<Data>) -> Void)?
@@ -123,9 +123,11 @@ public
         else {
             let error = [
                 jsonData["message"].stringValue,
+                jsonData["error"].stringValue,
                 jsonData["msg"].stringValue,
                 jsonData["data"].stringValue,
                 jsonData["system_message"].stringValue,
+                jsonData["errors"].arrayValue.compactMap({ $0["message"].string }).filter({ !$0.isEmpty }).joined(separator: ", ")
             ]
             .filter({ !$0.isEmpty })
             .removingDuplicates()
@@ -141,12 +143,12 @@ public
 extension Alamofire.AFDataResponse where Success == Data, Failure == AFError {
     @discardableResult
     func logAPIDuration() -> Self {
-        guard let threshold = GAPIRouterCommon.logAPIDurationThreshold,
+        guard let threshold = APIRouterCommon.logAPIDurationThreshold,
             let requestDuration = self.metrics?.taskInterval.duration,
             requestDuration >= threshold
         else { return self }
 
-        GAPIRouterCommon.onLogAPIDuration?(self)
+        APIRouterCommon.onLogAPIDuration?(self)
 
         return self
     }

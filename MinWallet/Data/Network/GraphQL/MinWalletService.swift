@@ -76,8 +76,21 @@ extension GraphQLOperation {
 
 
 extension MinWalletService {
-    private static func extractError(_ error: Error) -> String {
+    static func extractError(_ error: Error) -> String {
         guard let error = error as? ResponseCodeInterceptor.ResponseCodeError else { return error.localizedDescription }
+        guard case let .invalidResponseCode(_, rawData) = error else { return error.localizedDescription }
+        guard let data = rawData else { return error.localizedDescription }
+        let json = JSON(data)
+        let messages: [String] = json["errors"].arrayValue.compactMap { json in json["message"].string }
+        guard !messages.isEmpty else { return error.localizedDescription }
+        return messages.joined(separator: ", ")
+    }
+}
+
+extension Error {
+    //TODO: Cuongnv243 extract error
+    var rawError: String {
+        guard let error = self as? ResponseCodeInterceptor.ResponseCodeError else { return self.localizedDescription }
         guard case let .invalidResponseCode(_, rawData) = error else { return error.localizedDescription }
         guard let data = rawData else { return error.localizedDescription }
         let json = JSON(data)

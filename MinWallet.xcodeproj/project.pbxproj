@@ -121,7 +121,7 @@
 		96883CEC2E25E99200D5ED60 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CE12E25E99200D5ED60 /* APIRouter.swift */; };
 		96883CED2E25E99200D5ED60 /* DomainRetrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CE72E25E99200D5ED60 /* DomainRetrier.swift */; };
 		96883CEE2E25E99200D5ED60 /* DomainRetrier+APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CE82E25E99200D5ED60 /* DomainRetrier+APIRouter.swift */; };
-		96883CEF2E25E99200D5ED60 /* SwapAPIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CEB2E25E99200D5ED60 /* SwapAPIRouter.swift */; };
+		96883CEF2E25E99200D5ED60 /* SwapTokenAPIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CEB2E25E99200D5ED60 /* SwapTokenAPIRouter.swift */; };
 		96883CF02E25E99200D5ED60 /* DomainAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CE52E25E99200D5ED60 /* DomainAdapter.swift */; };
 		96883CF12E25E99200D5ED60 /* DomainAPIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CE62E25E99200D5ED60 /* DomainAPIRouter.swift */; };
 		96883CF22E25E99200D5ED60 /* APIRouterError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96883CE22E25E99200D5ED60 /* APIRouterError.swift */; };
@@ -135,6 +135,10 @@
 		9695528C2D51C9F400FAC352 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 9695528B2D51C9F400FAC352 /* CodeScanner */; };
 		96B467082CFC093400FA3211 /* SwapTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467072CFC093400FA3211 /* SwapTokenView.swift */; };
 		96B4670A2CFC095C00FA3211 /* SwapTokenSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */; };
+		96BB94882E26509E000D7739 /* EstimationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BB94872E26509E000D7739 /* EstimationRequest.swift */; };
+		96BB948B2E265263000D7739 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 96BB948A2E265263000D7739 /* ObjectMapper */; };
+		96BB948D2E2652C7000D7739 /* GKMapFromJSONToType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BB948C2E2652C7000D7739 /* GKMapFromJSONToType.swift */; };
+		96BB94912E265B89000D7739 /* BuildTxRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BB94902E265B89000D7739 /* BuildTxRequest.swift */; };
 		96BD2A482D0D644A00D81277 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 96BD2A472D0D644A00D81277 /* Apollo */; };
 		96BD2A562D0D6C6100D81277 /* TopAssetsQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */; };
 		96BD2A592D0D758700D81277 /* MinWalletAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 96BD2A582D0D758700D81277 /* MinWalletAPI */; };
@@ -365,7 +369,7 @@
 		96883CE62E25E99200D5ED60 /* DomainAPIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainAPIRouter.swift; sourceTree = "<group>"; };
 		96883CE72E25E99200D5ED60 /* DomainRetrier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainRetrier.swift; sourceTree = "<group>"; };
 		96883CE82E25E99200D5ED60 /* DomainRetrier+APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DomainRetrier+APIRouter.swift"; sourceTree = "<group>"; };
-		96883CEB2E25E99200D5ED60 /* SwapAPIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAPIRouter.swift; sourceTree = "<group>"; };
+		96883CEB2E25E99200D5ED60 /* SwapTokenAPIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenAPIRouter.swift; sourceTree = "<group>"; };
 		968C06F92D3B3EB300D81A33 /* PartialRoundedBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialRoundedBorder.swift; sourceTree = "<group>"; };
 		968C06FB2D3BDB3A00D81A33 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		968C06FD2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToWalletAddressViewModel.swift; sourceTree = "<group>"; };
@@ -373,6 +377,9 @@
 		96942AB82CFEB98E00E1E4CB /* TextLearnMoreSendTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLearnMoreSendTokenView.swift; sourceTree = "<group>"; };
 		96B467072CFC093400FA3211 /* SwapTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenView.swift; sourceTree = "<group>"; };
 		96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenSettingView.swift; sourceTree = "<group>"; };
+		96BB94872E26509E000D7739 /* EstimationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimationRequest.swift; sourceTree = "<group>"; };
+		96BB948C2E2652C7000D7739 /* GKMapFromJSONToType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKMapFromJSONToType.swift; sourceTree = "<group>"; };
+		96BB94902E265B89000D7739 /* BuildTxRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildTxRequest.swift; sourceTree = "<group>"; };
 		96BD2A512D0D65B300D81277 /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; path = schema.graphqls; sourceTree = "<group>"; };
 		96BD2A552D0D6C6100D81277 /* TopAssetsQuery.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TopAssetsQuery.graphql; sourceTree = "<group>"; };
 		96BD2A632D0E8F4C00D81277 /* AppConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
@@ -462,6 +469,7 @@
 				9651CAAC2D0677B5006C46DB /* SkeletonUI in Frameworks */,
 				96F7A22A2D5A532200CD1D19 /* FLEX in Frameworks */,
 				5761D7162D0ADFE800D2809A /* Mobile.xcframework in Frameworks */,
+				96BB948B2E265263000D7739 /* ObjectMapper in Frameworks */,
 				96FEDC232D253DCB006AD24F /* SwiftyJSON in Frameworks */,
 				96BD2A592D0D758700D81277 /* MinWalletAPI in Frameworks */,
 				57D403E12D408D18009DFAA7 /* OneSignalInAppMessages in Frameworks */,
@@ -737,6 +745,8 @@
 				963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */,
 				96C139702D0AC61B00766399 /* UserInfo.swift */,
 				9674CE462D36122400892636 /* SwapTokenSetting.swift */,
+				96BB94872E26509E000D7739 /* EstimationRequest.swift */,
+				96BB94902E265B89000D7739 /* BuildTxRequest.swift */,
 				960D6B372D0144150017AF29 /* PasswordValidation.swift */,
 				963ABCB82E25F12500A8A8F1 /* AggregatorSource.swift */,
 				966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */,
@@ -920,6 +930,7 @@
 				96883CE12E25E99200D5ED60 /* APIRouter.swift */,
 				96883CE22E25E99200D5ED60 /* APIRouterError.swift */,
 				96883CE32E25E99200D5ED60 /* Helpers.swift */,
+				96BB948C2E2652C7000D7739 /* GKMapFromJSONToType.swift */,
 			);
 			path = APIRouter;
 			sourceTree = "<group>";
@@ -938,7 +949,7 @@
 		96883CEA2E25E99200D5ED60 /* Restful */ = {
 			isa = PBXGroup;
 			children = (
-				96883CEB2E25E99200D5ED60 /* SwapAPIRouter.swift */,
+				96883CEB2E25E99200D5ED60 /* SwapTokenAPIRouter.swift */,
 				96883CDF2E25E98800D5ED60 /* MinWalletDomainAdapter.swift */,
 				96883CE42E25E99200D5ED60 /* APIRouter */,
 				96883CE92E25E99200D5ED60 /* Domains */,
@@ -1151,6 +1162,7 @@
 				9695528B2D51C9F400FAC352 /* CodeScanner */,
 				96F7A2292D5A532200CD1D19 /* FLEX */,
 				96883CF52E25EA6A00D5ED60 /* Alamofire */,
+				96BB948A2E265263000D7739 /* ObjectMapper */,
 			);
 			productName = MinWallet;
 			productReference = 57F102922C64CCA0000B3544 /* MinWallet.app */;
@@ -1240,6 +1252,7 @@
 				9695528A2D51C9F400FAC352 /* XCLocalSwiftPackageReference "CodeScanner" */,
 				96F7A2282D5A532200CD1D19 /* XCRemoteSwiftPackageReference "FLEX" */,
 				96883CF42E25EA6A00D5ED60 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				96BB94892E265263000D7739 /* XCRemoteSwiftPackageReference "ObjectMapper" */,
 			);
 			productRefGroup = 57F102932C64CCA0000B3544 /* Products */;
 			projectDirPath = "";
@@ -1332,6 +1345,7 @@
 				9600DED02CF18804005D997C /* MainCoordinatorViewModel.swift in Sources */,
 				968C06FC2D3BDB3A00D81A33 /* TokenManager.swift in Sources */,
 				9640BBD22D27C14900B0DC42 /* TokenDetailViewModel.swift in Sources */,
+				96BB94882E26509E000D7739 /* EstimationRequest.swift in Sources */,
 				96DC054F2CF75AFB00A78356 /* RoundedCorner.swift in Sources */,
 				96DC052E2CF57E3000A78356 /* PartialSheetViews.swift in Sources */,
 				96FEDC052D227CFD006AD24F /* EditNickNameView.swift in Sources */,
@@ -1389,6 +1403,7 @@
 				962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */,
 				96FEDC112D23A463006AD24F /* OrderHistoryView+Content.swift in Sources */,
 				96FE0CFA2CF423C2008E4BFD /* _FlexibleView.swift in Sources */,
+				96BB94912E265B89000D7739 /* BuildTxRequest.swift in Sources */,
 				96BD2A6A2D0ED06400D81277 /* Constant.swift in Sources */,
 				96FEDC162D23AE33006AD24F /* OrderHistoryFilterView.swift in Sources */,
 				96665A042CF4C60D0046A20E /* SideMenuView.swift in Sources */,
@@ -1396,7 +1411,7 @@
 				96883CEC2E25E99200D5ED60 /* APIRouter.swift in Sources */,
 				96883CED2E25E99200D5ED60 /* DomainRetrier.swift in Sources */,
 				96883CEE2E25E99200D5ED60 /* DomainRetrier+APIRouter.swift in Sources */,
-				96883CEF2E25E99200D5ED60 /* SwapAPIRouter.swift in Sources */,
+				96883CEF2E25E99200D5ED60 /* SwapTokenAPIRouter.swift in Sources */,
 				96883CF02E25E99200D5ED60 /* DomainAdapter.swift in Sources */,
 				96883CF12E25E99200D5ED60 /* DomainAPIRouter.swift in Sources */,
 				96883CF22E25E99200D5ED60 /* APIRouterError.swift in Sources */,
@@ -1425,6 +1440,7 @@
 				9600DEBD2CF181D6005D997C /* UserDataManager.swift in Sources */,
 				96DC05322CF5A6AF00A78356 /* CurrencyView.swift in Sources */,
 				96FEDC1A2D23C836006AD24F /* OrderHistory.swift in Sources */,
+				96BB948D2E2652C7000D7739 /* GKMapFromJSONToType.swift in Sources */,
 				968C06FA2D3B3EB300D81A33 /* PartialRoundedBorder.swift in Sources */,
 				96DC05472CF74EBD00A78356 /* CreateNewWalletView.swift in Sources */,
 				968C06FE2D3BE34E00D81A33 /* ToWalletAddressViewModel.swift in Sources */,
@@ -1992,6 +2008,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		96BB94892E265263000D7739 /* XCRemoteSwiftPackageReference "ObjectMapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tristanhimmelman/ObjectMapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.3;
+			};
+		};
 		96BD2A462D0D644900D81277 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -2067,6 +2091,11 @@
 		9695528B2D51C9F400FAC352 /* CodeScanner */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CodeScanner;
+		};
+		96BB948A2E265263000D7739 /* ObjectMapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96BB94892E265263000D7739 /* XCRemoteSwiftPackageReference "ObjectMapper" */;
+			productName = ObjectMapper;
 		};
 		96BD2A472D0D644A00D81277 /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -364,9 +364,10 @@ struct SwapTokenView: View {
                 }
                 .skeleton(with: true)
                 .frame(width: 56, height: 16)
-            } else if let assets = viewModel.iosTradeEstimate?.path, !assets.isEmpty {
+            } else if let assets = viewModel.iosTradeEstimate?.paths, !assets.isEmpty {
                 Image(.icStartRouting)
                     .padding(.trailing, 4)
+                /* TODO: cuongnv243 tinh sau
                 ForEach(0..<assets.count, id: \.self) { index in
                     if let asset = assets[gk_safeIndex: index] {
                         TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
@@ -380,6 +381,7 @@ struct SwapTokenView: View {
                         }
                     }
                 }
+                 */
             }
         }
         .padding(.horizontal, .xl)
@@ -464,7 +466,8 @@ struct SwapTokenView: View {
                         viewModel.isConvertRate.toggle()
                     }
                 Spacer(minLength: 0)
-                if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
+                if let iosTradeEstimate = viewModel.iosTradeEstimate {
+                    let priceImpact = iosTradeEstimate.avgPriceImpact
                     let priceImpactColor = iosTradeEstimate.priceImpactColor
                     Text(priceImpact.formatSNumber() + "%")
                         .font(.paragraphXMediumSmall)
@@ -594,7 +597,7 @@ struct SwapTokenView: View {
                  */
             } catch {
                 hudState.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
             }
         }
     }
