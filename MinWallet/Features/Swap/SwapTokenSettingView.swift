@@ -29,10 +29,8 @@ struct SwapTokenSettingView: View {
     var showCustomizedRoute: Bool = false
     
     var body: some View {
-        VStack(spacing: 8) {
+        ZStack {
             VStack(spacing: 0) {
-                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
-                    .padding(.vertical, .md)
                 Text("Slippage Tolerance")
                     .font(.labelSmallSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -103,9 +101,9 @@ struct SwapTokenSettingView: View {
                 HStack {
                     Text("Liquidity Source")
                         .font(.labelSmallSecondary)
-
+                    
                     Spacer()
-
+                    
                     HStack(spacing: .md) {
                         Text("9/9")
                             .font(.paragraphSmall)
@@ -120,7 +118,8 @@ struct SwapTokenSettingView: View {
                 }
                 .padding(.top, .md)
                 .onTapGesture {
-                    // Handle tap action here
+                    hideKeyboard()
+                    $showCustomizedRoute.showSheet()
                 }
                 Divider()
                     .frame(height: 1)
@@ -152,48 +151,46 @@ struct SwapTokenSettingView: View {
                                 viewModel.action.send(.safeMode)
                             }
                     }
-
+                    
                     Text("Prevent high price impact trades. Disable at your own risk.")
                         .font(.paragraphSmall)
                         .foregroundColor(.colorInteractiveTentPrimarySub)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.top, .xl)
+                Spacer()
+                Button(
+                    action: {
+                        onDismiss?()
+                    },
+                    label: {
+                        Text("Close")
+                            .font(.labelMediumSecondary)
+                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(content: {
+                                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
+                            })
+                    }
+                )
+                .frame(height: 56)
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, .xl)
-            .padding(.bottom, .xl)
-            .background(content: {
-                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-            })
-            Button(
-                action: {
-                    onDismiss?()
-                },
-                label: {
-                    Text("Close")
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(content: {
-                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-                        })
-                }
-            )
-            .frame(height: 56)
-            .buttonStyle(.plain)
+            .background(.colorBaseBackground)
+            .frame(minHeight: (UIScreen.current?.bounds.height ?? 0) * 0.83, maxHeight: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .presentSheetModifier()
+                //        .presentSheet(
+                //            isPresented: $showCustomizedRoute,
+                //            content: {
+                //                let excludedPools = viewModel.swapSetting.excludedPools.reduce([:]) { result, source in
+                //                    result.appending([source.id: source])
+                //                }
+                //                SwapTokenCustomizedRouteView(excludedSource: excludedPools)
+                //                    .environmentObject(viewModel)
+                //            }
+                //        )
         }
-        .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
-        .presentSheetModifier()
-        .presentSheet(
-            isPresented: $showCustomizedRoute,
-            content: {
-                let excludedPools = viewModel.swapSetting.excludedPools.reduce([:]) { result, source in
-                    result.appending([source.id: source])
-                }
-                SwapTokenCustomizedRouteView(excludedSource: excludedPools)
-                    .environmentObject(viewModel)
-            }
-        )
     }
 }
 

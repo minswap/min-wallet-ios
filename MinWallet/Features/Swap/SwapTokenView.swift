@@ -95,12 +95,10 @@ struct SwapTokenView: View {
                 }
             )
         }
-        /*
         .presentSheet(isPresented: $viewModel.isShowRouting) {
             SwapTokenRoutingView()
                 .environmentObject(viewModel)
         }
-         */
         .presentSheet(
             isPresented: $viewModel.isShowSelectToken,
             onDimiss: {
@@ -126,7 +124,6 @@ struct SwapTokenView: View {
                     $isShowToolTip.showSheet()
                 }, viewModel: viewModel
             )
-            .padding(.xl)
         }
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
@@ -340,7 +337,7 @@ struct SwapTokenView: View {
     @ViewBuilder
     private var routingView: some View {
         HStack(alignment: .center, spacing: 8) {
-            Text("Trade route")
+            Text("Your trade route")
                 .lineLimit(1)
                 .font(.paragraphXSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -365,23 +362,13 @@ struct SwapTokenView: View {
                 .skeleton(with: true)
                 .frame(width: 56, height: 16)
             } else if let assets = viewModel.iosTradeEstimate?.paths, !assets.isEmpty {
-                Image(.icStartRouting)
+                //TODO: Cuongnv243 tính splits, hop
+                Text("3 splits, 7 hops")
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorInteractiveToneHighlight)
+                Image(.icNext)
+                    .tint(.colorInteractiveToneHighlight)
                     .padding(.trailing, 4)
-                /* TODO: cuongnv243 tinh sau
-                ForEach(0..<assets.count, id: \.self) { index in
-                    if let asset = assets[gk_safeIndex: index] {
-                        TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
-                        if index != assets.count - 1 {
-                            Image(.icBack)
-                                .resizable()
-                                .renderingMode(.template)
-                                .rotationEffect(.degrees(180))
-                                .frame(width: 14, height: 14)
-                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                        }
-                    }
-                }
-                 */
             }
         }
         .padding(.horizontal, .xl)
@@ -389,6 +376,12 @@ struct SwapTokenView: View {
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
         .padding(.top, .md)
         .padding(.horizontal, .xl)
+        .contentShape(.rect)
+        .onTapGesture {
+            guard !viewModel.isGettingTradeInfo else { return }
+            hideKeyboard()
+            $viewModel.isShowRouting.showSheet()
+        }
         /*
             VStack(spacing: .lg) {
                 HStack(spacing: 4) {

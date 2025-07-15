@@ -139,6 +139,9 @@
     "2 %@" : {
 
     },
+    "3 splits, 7 hops" : {
+
+    },
     "9/9" : {
 
     },
@@ -902,13 +905,13 @@
     "Touch ID not available" : {
 
     },
-    "Trade route" : {
-
-    },
     "Trading fee" : {
 
     },
     "Transaction not exist" : {
+
+    },
+    "Transaction not found" : {
 
     },
     "Transaction Submitted" : {
@@ -1062,6 +1065,9 @@
 
     },
     "Your tokens" : {
+
+    },
+    "Your trade route" : {
 
     },
     "Your transaction has been submitted successfully" : {

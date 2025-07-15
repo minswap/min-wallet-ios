@@ -27,10 +27,8 @@ class SwapTokenViewModel: ObservableObject {
     var tokenReceive: WrapTokenSend
     @Published
     var isShowInfo: Bool = false
-    /*
     @Published
     var isShowRouting: Bool = false
-     */
     @Published
     var isShowSwapSetting: Bool = false
     @Published

@@ -10,7 +10,7 @@ enum SwapTokenAPIRouter: DomainAPIRouter {
     func path() -> String {
         switch self {
         case .estimate:
-            return "/aggregator/wallet"
+            return "/aggregator/estimate"
         case .buildTX:
             return "/aggregator/build-tx"
         case .signTX:
