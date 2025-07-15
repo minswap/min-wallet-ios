@@ -51,6 +51,8 @@
 	<string>${MIN_POLICY_URL}</string>
 	<key>MIN_ASSET_URL</key>
 	<string>${MIN_ASSET_URL}</string>
+	<key>MIN_AGG_URL</key>
+	<string>${MIN_AGG_URL}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>
