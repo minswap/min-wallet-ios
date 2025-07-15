@@ -32,7 +32,7 @@ enum SwapTokenAPIRouter: DomainAPIRouter {
             params["token_out"]         = req.token_out
             params["slippage"]          = req.slippage
             params["exclude_protocols"] = req.exclude_protocols.map({ $0.id })
-            params["allow_multi_hops"]  = req.allow_multi_hops
+            params["allow_multi_hops"]  = true
             params["partner"]           = ""
             params["amount_in_decimal"] = req.amount_in_decimal
 
@@ -43,7 +43,7 @@ enum SwapTokenAPIRouter: DomainAPIRouter {
             estimateJSON["token_out"]         = req.estimate.token_out
             estimateJSON["slippage"]          = req.estimate.slippage
             estimateJSON["exclude_protocols"] = req.estimate.exclude_protocols.map({ $0.id })
-            estimateJSON["allow_multi_hops"]  = req.estimate.allow_multi_hops
+            estimateJSON["allow_multi_hops"]  = true
             estimateJSON["partner"]           = req.estimate.partner
 
             params["sender"]            = req.sender

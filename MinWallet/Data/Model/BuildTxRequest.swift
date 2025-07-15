@@ -19,7 +19,7 @@ extension BuildTxRequest {
         var token_out: String = ""
         var slippage: Double = 0
         var exclude_protocols: [AggregatorSource] = []
-        var allow_multi_hops: Bool = false
+        var allow_multi_hops: Bool = true
         var partner: String = ""
         
         init() {}

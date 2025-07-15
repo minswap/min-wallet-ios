@@ -341,19 +341,6 @@ struct SwapTokenView: View {
                 .lineLimit(1)
                 .font(.paragraphXSmall)
                 .foregroundStyle(.colorInteractiveTentPrimarySub)
-            /*
-            let contractType = viewModel.iosTradeEstimate?.type.value
-            if !viewModel.isGettingTradeInfo, let contractType = contractType {
-                Text(contractType.title)
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(contractType.foregroundColor)
-                    .padding(.horizontal, .md)
-                    .frame(height: 20)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
-                    )
-            }
-             */
             Spacer(minLength: 0)
             if viewModel.isGettingTradeInfo {
                 HStack(spacing: 0) {
@@ -361,10 +348,10 @@ struct SwapTokenView: View {
                 }
                 .skeleton(with: true)
                 .frame(width: 56, height: 16)
-            } else if let assets = viewModel.iosTradeEstimate?.paths, !assets.isEmpty {
-                //TODO: Cuongnv243 tính splits, hop
-                Text("3 splits, 7 hops")
-                    .font(.labelSmallSecondary)
+            } else if let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty {
+                let splits = paths.count > 1 ? "\(paths.count) splits" : "\(paths.count) split"
+                Text(splits)
+                    .font(.paragraphSemi)
                     .foregroundStyle(.colorInteractiveToneHighlight)
                 Image(.icNext)
                     .tint(.colorInteractiveToneHighlight)
@@ -382,61 +369,6 @@ struct SwapTokenView: View {
             hideKeyboard()
             $viewModel.isShowRouting.showSheet()
         }
-        /*
-            VStack(spacing: .lg) {
-                HStack(spacing: 4) {
-                    Text("Select your route")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    Spacer()
-                    Image(.icDown)
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 16, height: 16)
-                        .tint(.colorBaseTent)
-                }
-                HStack(spacing: 8) {
-                    Text("Best route")
-                        .lineLimit(1)
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Text(contractType.title)
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(contractType.foregroundColor)
-                        .padding(.horizontal, .md)
-                        .frame(height: 20)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
-                        )
-                    Spacer()
-                    Image(.icStartRouting)
-                        .padding(.trailing, 4)
-                    ForEach(0..<assets.count, id: \.self) { index in
-                        if let asset = assets[gk_safeIndex: index] {
-                            TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
-                            if index != assets.count - 1 {
-                                Image(.icBack)
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .rotationEffect(.degrees(180))
-                                    .frame(width: 14, height: 14)
-                                    .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                            }
-                        }
-                    }
-                }
-            }
-            .padding(.xl)
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
-            .padding(.top, .md)
-            .padding(.horizontal, .xl)
-            .contentShape(.rect)
-            .onTapGesture {
-                guard !viewModel.isLoadingRouting else { return }
-                hideKeyboard()
-                $viewModel.isShowRouting.showSheet()
-            }
-             */
     }
 
     @ViewBuilder

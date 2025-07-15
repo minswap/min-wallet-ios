@@ -329,7 +329,7 @@ class SwapTokenViewModel: ObservableObject {
             $0.amount_in_decimal = false
         }
         
-        let jsonData = try await SwapTokenAPIRouter.estimate(request: EstimationRequest()).async_request()
+        let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
         let info = Mapper<EstimationResponse>().map(JSONObject: jsonData)
         self.iosTradeEstimate = info
         

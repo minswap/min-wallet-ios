@@ -9,7 +9,7 @@ struct EstimationRequest: Then {
     var token_out: String = ""
     var slippage: Double = 0
     var exclude_protocols: [AggregatorSource] = []
-    var allow_multi_hops: Bool = false
+    var allow_multi_hops: Bool = true
     var amount_in_decimal: Bool = false
     
     init() {}
@@ -48,6 +48,7 @@ struct EstimationResponse: Mappable {
         amountInDecimal <- map["amount_in_decimal"]
     }
 }
+
 struct SwapPath: Mappable {
     var lpToken: String = ""
     var tokenIn: String = ""

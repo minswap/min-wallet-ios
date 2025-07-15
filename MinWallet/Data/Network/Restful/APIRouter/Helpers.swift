@@ -50,7 +50,8 @@ func attempts<T>(
 // MARK: - Alamofire debug log
 extension Alamofire.Request {
     func debugLog(_ printFlag: Bool = false) -> Self {
-        if printFlag {
+        //TODO: cuongnv remove
+        if true {
             print(">>>> Request -LOG-START- >>>>")
             return cURLDescription { curl in
                 print(curl)
@@ -64,6 +65,7 @@ extension Alamofire.Request {
 extension Alamofire.DataResponse {
     @discardableResult
     func debugLog(_ printFlag: Bool = false) -> Self {
+        //TODO: cuongnv remove
         if true {
             print(">>>> Response -LOG-START- >>>>")
             print("==== Response Request: ", request?.url ?? "", " ====")
