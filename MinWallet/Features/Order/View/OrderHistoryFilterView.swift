@@ -38,27 +38,36 @@ struct OrderHistoryFilterView: View {
                 .frame(height: 60)
             if !viewModel.showSelectToDate && !viewModel.showSelectFromDate {
                 VStack(spacing: 0) {
-                    Text("Contract")
+                    Text("Protocol")
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    HStack(spacing: 8) {
-                        let contractTypes: [ContractType] = [.dex, .dexV2, .stableswap]
-                        TextSelectable(content: "All", selected: $viewModel.contractTypeSelected, value: nil)
-                            .onTapGesture {
-                                viewModel.contractTypeSelected = nil
-                            }
-                        ForEach(0..<contractTypes.count, id: \.self) { index in
-                            if let type = contractTypes[gk_safeIndex: index] {
-                                TextSelectable(content: type.title, selected: $viewModel.contractTypeSelected, value: type)
-                                    .onTapGesture {
-                                        viewModel.contractTypeSelected = type
-                                    }
-                            }
+                    let rawActionsP: [AggregatorSource] = [.Minswap, .MinswapV2, .MinswapStable, .SundaeSwapV3, .SundaeSwap, .Splash, .WingRidersV2, .WingRiders, .MuesliSwap]
+                    let allKeyP: LocalizedStringKey = "All"
+                    let actionsP: [String] = ([allKeyP] + rawActionsP.map({ $0.name })).map { $0.toString() }
+                    
+                    let heightz = calculateHeightFlowLayout(actions: actionsP)
+                    FlowLayout(
+                        mode: .vstack,
+                        items: actionsP,
+                        itemSpacing: 0
+                    ) { title in
+                        let action = AggregatorSource(title: title)
+                        let isActionAll = title == allKeyP.toString()
+                        let content: LocalizedStringKey? = isActionAll ? allKeyP : action?.name
+                        TextSelectable(
+                            content: content ?? allKeyP,
+                            selected: $viewModel.protocolSelected,
+                            value: isActionAll ? nil : action
+                        )
+                        .onTapGesture {
+                            viewModel.protocolSelected = title == allKeyP.toString() ? nil : action
                         }
-                        Spacer()
                     }
-                    Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
+                    .frame(height: heightz)
+                    Color.colorBorderPrimarySub.frame(height: 1)
+                        .padding(.top, .md)
+                        .padding(.bottom, .xl)
                     Text("Action")
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)

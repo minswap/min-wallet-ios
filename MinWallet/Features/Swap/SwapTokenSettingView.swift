@@ -98,34 +98,33 @@ struct SwapTokenSettingView: View {
                     )
                     .padding(.top, .xl)
                 }
-                HStack {
-                    Text("Liquidity Source")
-                        .font(.labelSmallSecondary)
+                
+                HStack(spacing: .xl) {
+                    DashedUnderlineText(text: "Liquidity Source", textColor: .colorBaseTent, font: .labelSmallSecondary)
                     
                     Spacer()
                     
-                    HStack(spacing: .md) {
-                        Text("9/9")
-                            .font(.paragraphSmall)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 4)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: BorderRadius.full)
-                                    .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
-                            )
-                        Image(.icArrowRight)
-                    }
+                    let count = String(AggregatorSource.allCases.count - viewModel.swapSetting.excludedPools.count) + "/" + String(AggregatorSource.allCases.count)
+                    Text(count)
+                        .foregroundStyle(.colorBaseTent)
+                        .font(.paragraphSmall)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: BorderRadius.full)
+                                .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+                        )
+                    Image(.icNext)
                 }
-                .padding(.top, .md)
+                .frame(height: 32)
+                .padding(.top, .xl)
                 .onTapGesture {
                     hideKeyboard()
                     $showCustomizedRoute.showSheet()
                 }
-                Divider()
-                    .frame(height: 1)
-                    .background(Color.colorBorderPrimarySub)
-                    .padding(.top, .xl)
-                VStack(spacing: 4) {
+                Color.colorBorderPrimaryDefault.frame(height: 1)
+                    .padding(.vertical, .xl)
+                VStack(spacing: .xs) {
                     HStack {
                         HStack(spacing: .md) {
                             Image(.icShieldCheck)
@@ -157,7 +156,6 @@ struct SwapTokenSettingView: View {
                         .foregroundColor(.colorInteractiveTentPrimarySub)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.top, .xl)
                 Spacer()
                 Button(
                     action: {
@@ -180,16 +178,16 @@ struct SwapTokenSettingView: View {
             .background(.colorBaseBackground)
             .frame(minHeight: (UIScreen.current?.bounds.height ?? 0) * 0.83, maxHeight: (UIScreen.current?.bounds.height ?? 0) * 0.83)
             .presentSheetModifier()
-                //        .presentSheet(
-                //            isPresented: $showCustomizedRoute,
-                //            content: {
-                //                let excludedPools = viewModel.swapSetting.excludedPools.reduce([:]) { result, source in
-                //                    result.appending([source.id: source])
-                //                }
-                //                SwapTokenCustomizedRouteView(excludedSource: excludedPools)
-                //                    .environmentObject(viewModel)
-                //            }
-                //        )
+            .presentSheet(
+                isPresented: $showCustomizedRoute,
+                content: {
+                    let excludedPools = viewModel.swapSetting.excludedPools.reduce([:]) { result, source in
+                        result.appending([source.rawId: source])
+                    }
+                    SwapTokenCustomizedRouteView(excludedSource: excludedPools)
+                        .environmentObject(viewModel)
+                }
+            )
         }
     }
 }

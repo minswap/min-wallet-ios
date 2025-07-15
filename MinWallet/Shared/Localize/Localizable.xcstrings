@@ -139,12 +139,6 @@
     "2 %@" : {
 
     },
-    "3 splits" : {
-
-    },
-    "9/9" : {
-
-    },
     "124.64 A" : {
 
     },
@@ -284,9 +278,6 @@
     "Confirmation" : {
 
     },
-    "Contract" : {
-
-    },
     "Copied" : {
 
     },
@@ -423,6 +414,9 @@
 
     },
     "For projects" : {
+
+    },
+    "For the best possible rates, this setting should be turned off if you are not familiar with it" : {
 
     },
     "Forgot password" : {
@@ -581,7 +575,19 @@
     "minswap" : {
 
     },
+    "Minswap Stable" : {
+
+    },
+    "Minswap V1" : {
+
+    },
+    "Minswap V2" : {
+
+    },
     "Minwallet is a secure and user-friendly wallet built directly into Minswap for seamless token swapping and management." : {
+
+    },
+    "MuesliSwap" : {
 
     },
     "My balance" : {
@@ -706,6 +712,9 @@
     "Privacy policy" : {
 
     },
+    "Protocol" : {
+
+    },
     "Re-input your seed phrase" : {
 
     },
@@ -766,6 +775,9 @@
     "Seedphrase" : {
 
     },
+    "Select All (%lld)" : {
+
+    },
     "Select method to restore your wallet:" : {
 
     },
@@ -805,6 +817,15 @@
     "Something went wrong!" : {
 
     },
+    "Spectrum" : {
+
+    },
+    "Splash" : {
+
+    },
+    "Splash Stable" : {
+
+    },
     "Stableswap" : {
 
     },
@@ -818,6 +839,12 @@
 
     },
     "Stop loss" : {
+
+    },
+    "Sundae V1" : {
+
+    },
+    "Sundae V3" : {
 
     },
     "Suspicious token" : {
@@ -977,6 +1004,9 @@
     "Volume (24h) is the amount of the asset that has been traded on Minswap during the past 24 hours." : {
 
     },
+    "VyFinance" : {
+
+    },
     "Wallet not found" : {
 
     },
@@ -984,6 +1014,18 @@
 
     },
     "When you set the appearance to default, theme app will be depended on device settings." : {
+
+    },
+    "Wingriders Stable V1" : {
+
+    },
+    "Wingriders Stable V2" : {
+
+    },
+    "Wingriders V1" : {
+
+    },
+    "Wingriders V2" : {
 
     },
     "Withdraw" : {

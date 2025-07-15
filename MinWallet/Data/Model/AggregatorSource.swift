@@ -1,7 +1,9 @@
-import Foundation
+import SwiftUI
 
 
-enum AggregatorSource: Int, CaseIterable {
+enum AggregatorSource: Int, CaseIterable, Identifiable {
+    var id: String { UUID().uuidString }
+    
     case MinswapV2
     case Minswap
     case MinswapStable
@@ -17,7 +19,7 @@ enum AggregatorSource: Int, CaseIterable {
     case WingRidersStableV1
     case WingRidersStableV2
 
-    var name: String {
+    var name: LocalizedStringKey {
         switch self {
         case .MinswapV2:
             "Minswap V2"
@@ -92,7 +94,7 @@ enum AggregatorSource: Int, CaseIterable {
         }
     }
     
-    var id: String {
+    var rawId: String {
         switch self {
             case .MinswapV2:
                 "MinswapV2"
@@ -122,6 +124,41 @@ enum AggregatorSource: Int, CaseIterable {
                 "Spectrum"
             case .SplashStable:
                 "SplashStable"
+        }
+    }
+    
+    public init?(title: String) {
+        switch title {
+        case AggregatorSource.MinswapV2.name.toString():
+            self = .MinswapV2
+        case AggregatorSource.Minswap.name.toString():
+            self = .Minswap
+        case AggregatorSource.MinswapStable.name.toString():
+            self = .MinswapStable
+        case AggregatorSource.MuesliSwap.name.toString():
+            self = .MuesliSwap
+        case AggregatorSource.Splash.name.toString():
+            self = .Splash
+        case AggregatorSource.SplashStable.name.toString():
+            self = .SplashStable
+        case AggregatorSource.Spectrum.name.toString():
+            self = .Spectrum
+        case AggregatorSource.SundaeSwapV3.name.toString():
+            self = .SundaeSwapV3
+        case AggregatorSource.SundaeSwap.name.toString():
+            self = .SundaeSwap
+        case AggregatorSource.VyFinance.name.toString():
+            self = .VyFinance
+        case AggregatorSource.WingRidersV2.name.toString():
+            self = .WingRidersV2
+        case AggregatorSource.WingRiders.name.toString():
+            self = .WingRiders
+        case AggregatorSource.WingRidersStableV1.name.toString():
+            self = .WingRidersStableV1
+        case AggregatorSource.WingRidersStableV2.name.toString():
+            self = .WingRidersStableV2
+        default:
+            self = .Minswap
         }
     }
 }

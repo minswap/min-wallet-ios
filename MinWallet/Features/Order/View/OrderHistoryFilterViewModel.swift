@@ -5,6 +5,9 @@ import MinWalletAPI
 class OrderHistoryFilterViewModel: ObservableObject {
     @Published
     var contractTypeSelected: ContractType?
+    //TODO: cuongnv check protocol
+    @Published
+    var protocolSelected: AggregatorSource?
     @Published
     var statusSelected: OrderV2Status?
     @Published

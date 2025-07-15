@@ -76,6 +76,20 @@ struct OrderHistoryItemView: View {
                     }
                 }
             }
+            //TODO: Cuongnv check protocol
+            HStack(alignment: .top, spacing: .xs) {
+                Text("Protocol")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Spacer()
+                Image(AggregatorSource.MinswapV2.image)
+                    .fixSize(20)
+                Text(AggregatorSource.MinswapV2.name)
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
+            }
             if let order = order, let warningContent = order.overSlippageWarning, order.order?.status.value == .created {
                 HStack(spacing: Spacing.md) {
                     Image(.icWarningYellow)
