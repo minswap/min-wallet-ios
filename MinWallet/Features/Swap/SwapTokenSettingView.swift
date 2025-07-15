@@ -113,7 +113,7 @@ struct SwapTokenSettingView: View {
                                 RoundedRectangle(cornerRadius: BorderRadius.full)
                                     .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
                             )
-                        Image(.icArrowRightS)
+                        Image(.icArrowRight)
                     }
                 }
                 .padding(.top, .md)

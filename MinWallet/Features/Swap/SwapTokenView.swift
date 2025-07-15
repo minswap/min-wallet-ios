@@ -336,7 +336,7 @@ struct SwapTokenView: View {
 
     @ViewBuilder
     private var routingView: some View {
-        HStack(alignment: .center, spacing: 8) {
+        HStack(alignment: .center, spacing: 4) {
             Text("Your trade route")
                 .lineLimit(1)
                 .font(.paragraphXSmall)
@@ -353,13 +353,11 @@ struct SwapTokenView: View {
                 Text(splits)
                     .font(.paragraphSemi)
                     .foregroundStyle(.colorInteractiveToneHighlight)
-                Image(.icNext)
-                    .tint(.colorInteractiveToneHighlight)
-                    .padding(.trailing, 4)
+                Image(.icArrowRight)
             }
         }
         .padding(.horizontal, .xl)
-        .frame(height: 48)
+        .frame(height: 52)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
         .padding(.top, .md)
         .padding(.horizontal, .xl)
