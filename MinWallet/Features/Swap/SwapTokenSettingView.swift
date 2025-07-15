@@ -25,6 +25,9 @@ struct SwapTokenSettingView: View {
     @ObservedObject
     var viewModel: SwapTokenViewModel
 
+    @State
+    var showCustomizedRoute: Bool = false
+    
     var body: some View {
         VStack(spacing: 8) {
             VStack(spacing: 0) {
@@ -179,7 +182,18 @@ struct SwapTokenSettingView: View {
             .frame(height: 56)
             .buttonStyle(.plain)
         }
-        .fixedSize(horizontal: false, vertical: true)
+        .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+        .presentSheetModifier()
+        .presentSheet(
+            isPresented: $showCustomizedRoute,
+            content: {
+                let excludedPools = viewModel.swapSetting.excludedPools.reduce([:]) { result, source in
+                    result.appending([source.id: source])
+                }
+                SwapTokenCustomizedRouteView(excludedSource: excludedPools)
+                    .environmentObject(viewModel)
+            }
+        )
     }
 }
 

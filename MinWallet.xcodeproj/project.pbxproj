@@ -56,6 +56,8 @@
 		962BFACF2CFC5675003B1042 /* SearchTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962BFACE2CFC5675003B1042 /* SearchTokenView.swift */; };
 		963456642D55AB0600C720AE /* bip0039.txt in Resources */ = {isa = PBXBuildFile; fileRef = 963456632D55AB0100C720AE /* bip0039.txt */; };
 		963ABCB72E25EBD300A8A8F1 /* MinWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ABCB52E25EBD300A8A8F1 /* MinWalletService.swift */; };
+		963ABCB92E25F12500A8A8F1 /* AggregatorSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ABCB82E25F12500A8A8F1 /* AggregatorSource.swift */; };
+		963ABCBB2E25F3A400A8A8F1 /* SwapTokenCustomizeRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ABCBA2E25F3A400A8A8F1 /* SwapTokenCustomizeRouteView.swift */; };
 		963D21912D1E5EA7002E258E /* AppSetting+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21902D1E5EA7002E258E /* AppSetting+Currency.swift */; };
 		963D21942D1FAC40002E258E /* TokenProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963D21932D1FAC40002E258E /* TokenProtocol.swift */; };
 		9640BBD22D27C14900B0DC42 /* TokenDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9640BBD12D27C14900B0DC42 /* TokenDetailViewModel.swift */; };
@@ -286,6 +288,8 @@
 		962BFACE2CFC5675003B1042 /* SearchTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTokenView.swift; sourceTree = "<group>"; };
 		963456632D55AB0100C720AE /* bip0039.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = bip0039.txt; sourceTree = "<group>"; };
 		963ABCB52E25EBD300A8A8F1 /* MinWalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinWalletService.swift; sourceTree = "<group>"; };
+		963ABCB82E25F12500A8A8F1 /* AggregatorSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregatorSource.swift; sourceTree = "<group>"; };
+		963ABCBA2E25F3A400A8A8F1 /* SwapTokenCustomizeRouteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenCustomizeRouteView.swift; sourceTree = "<group>"; };
 		963D218D2D1D3A2E002E258E /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		963D218E2D1D3A34002E258E /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		963D218F2D1E5DE7002E258E /* AdaPrice.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AdaPrice.graphql; sourceTree = "<group>"; };
@@ -734,6 +738,7 @@
 				96C139702D0AC61B00766399 /* UserInfo.swift */,
 				9674CE462D36122400892636 /* SwapTokenSetting.swift */,
 				960D6B372D0144150017AF29 /* PasswordValidation.swift */,
+				963ABCB82E25F12500A8A8F1 /* AggregatorSource.swift */,
 				966921012D102B3D00D503B7 /* MinWallet+Mapper.swift */,
 				966AFC442D473AF100E733A1 /* TokenFavourite.swift */,
 			);
@@ -946,6 +951,7 @@
 			children = (
 				96679BD22D2E765A00C9AE26 /* SwapTokenInfoView.swift */,
 				96679BD42D2E7FC600C9AE26 /* SwapTokenRoutingView.swift */,
+				963ABCBA2E25F3A400A8A8F1 /* SwapTokenCustomizeRouteView.swift */,
 				96B467092CFC095C00FA3211 /* SwapTokenSettingView.swift */,
 				96D109152D5F25CA00BA5D05 /* SwapTokenToolTipView.swift */,
 				96B467072CFC093400FA3211 /* SwapTokenView.swift */,
@@ -1337,6 +1343,7 @@
 				960F1D4C2D8165F60035548D /* MarketViewModel.swift in Sources */,
 				96665A022CF477490046A20E /* HomeViewModel.swift in Sources */,
 				960D6B3A2D01A0610017AF29 /* PopupSheetModifier.swift in Sources */,
+				963ABCBB2E25F3A400A8A8F1 /* SwapTokenCustomizeRouteView.swift in Sources */,
 				96FE0CF22CF366FC008E4BFD /* TokenDetailHeaderView.swift in Sources */,
 				96883CE02E25E98800D5ED60 /* MinWalletDomainAdapter.swift in Sources */,
 				5718EB1A2CEDE5BA00CDE34D /* View+Ext.swift in Sources */,
@@ -1400,6 +1407,7 @@
 				96FE0CF42CF3672E008E4BFD /* TokenDetailStatisticView.swift in Sources */,
 				9674CE472D36122400892636 /* SwapTokenSetting.swift in Sources */,
 				960D6B332CFFEBB70017AF29 /* UIDevice+Ext.swift in Sources */,
+				963ABCB92E25F12500A8A8F1 /* AggregatorSource.swift in Sources */,
 				96665A002CF46D480046A20E /* TokenWithPrice.swift in Sources */,
 				966AFC052D450EDD00E733A1 /* ConfirmSendTokenViewModel.swift in Sources */,
 				96FEDC1C2D23E8E5006AD24F /* CustomFlowLayout.swift in Sources */,

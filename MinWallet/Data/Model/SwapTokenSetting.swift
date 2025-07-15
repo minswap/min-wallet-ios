@@ -7,7 +7,8 @@ struct SwapTokenSetting {
     var autoRouter: Bool = true
     var slippageTolerance: String = ""
     var slippageSelected: SwapTokenSettingView.Slippage? = ._01
-
+    var excludedPools: [AggregatorSource] = []
+    
     init() {}
 
     func slippageSelectedValue() -> Double {
