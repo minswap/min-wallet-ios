@@ -129,12 +129,3 @@ fileprivate struct WidthPreferenceKey: PreferenceKey, Equatable {
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
     }
 }
-
-#Preview {
-    VStack {
-        SwapTokenSettingView(viewModel: SwapTokenViewModel(tokenReceive: nil))
-            .padding(16)
-        Spacer()
-    }
-    .background(Color.black)
-}

@@ -3,9 +3,6 @@ import FlowStacks
 
 
 struct SwapTokenCustomizedRouteView: View {
-    @EnvironmentObject
-    private var viewModel: SwapTokenViewModel
-
     @Environment(\.partialSheetDismiss)
     private var onDismiss
 
@@ -15,9 +12,10 @@ struct SwapTokenCustomizedRouteView: View {
     ]
     
     private let items: [AggregatorSource] = AggregatorSource.allCases
+    @Binding
+    var excludedSource: [String: AggregatorSource]
     
-    @State
-    var excludedSource: [String: AggregatorSource] = [:]
+    var onSave: (() -> Void)?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -62,8 +60,8 @@ struct SwapTokenCustomizedRouteView: View {
                 }
                 .frame(height: 56)
                 CustomButton(title: "Save") {
+                    onSave?()
                     onDismiss?()
-                    viewModel.swapSetting.excludedPools = Array(excludedSource.values)
                 }
                 .frame(height: 56)
             }
@@ -81,18 +79,42 @@ private struct SwapTokenCustomizedRouteItemView: View {
     @Binding var excludedSource: [String: AggregatorSource]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: .xl) {
+        VStack(alignment: .leading, spacing: .md) {
             HStack(spacing: 4) {
-                Image(.icChecked)
+                let size = CGSize(width: 20, height: 20)
+                ZStack {
+                    Group {
+                        Image(source.image)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                    .frame(width: size.width, height: size.height)
+                    .clipShape(Circle())
+                    if source.isLocked {
+                        Circle()
+                            .fill(.colorBaseBackground)
+                            .frame(width: size.width * 16 / 28, height: size.width * 16 / 28)
+                            .overlay(
+                                Image(.icLocked)
+                                    .resizable()
+                                    .frame(width: size.width * 12 / 28, height: size.width * 12 / 28)
+                            )
+                            .overlay(
+                                Circle()
+                                    .stroke(.colorSurfacePrimarySub, lineWidth: 1)
+                            )
+                            .position(x: size.width - 2, y: size.width - 2)
+                    }
+                }
+                .frame(width: size.width, height: size.height)
                 Spacer()
                 if excludedSource[source.rawId] == nil || source.isLocked {
                     Image(.icChecked)
                 }
             }
             Text(source.name)
-                .font(.paragraphXSmall)
+                .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
-                .padding(.horizontal, .md)
                 .frame(height: 20)
         }
         .padding(.xl)
@@ -106,10 +128,11 @@ private struct SwapTokenCustomizedRouteItemView: View {
                 excludedSource.removeValue(forKey: source.rawId)
             }
         }
+        .padding(.top, 2)
     }
 }
 
 #Preview {
-    SwapTokenCustomizedRouteView()
+    SwapTokenCustomizedRouteView(excludedSource: .constant([:]))
         .environmentObject(SwapTokenViewModel(tokenReceive: nil))
 }

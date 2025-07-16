@@ -98,17 +98,6 @@ extension APIRouter {
     }
 }
 
-// MARK: - APIRouter for multipart formdata
-protocol GAPIUploadRouter: APIRouter {
-    func appendParametersToFormData(_ formData: MultipartFormData)
-}
-
-extension GAPIUploadRouter {
-    func method() -> Alamofire.HTTPMethod { .post }
-    func parameters() -> Alamofire.Parameters { [:] }
-}
-
-
 // MARK: - Helper
 public
     struct APIRouterCommon
@@ -240,37 +229,6 @@ extension APIRouter {
                     with: try adaptedAsURLRequest()
                 )
                 .debugLog(debugRequest)
-                .serializingData().response
-                .debugLog(debugResponse)
-                .logAPIDuration()
-        }
-        .mapError({ _errorNormalize($0) })
-        .tryMap({ try JSON(data: $0) })
-        .result.get()
-    }
-}
-
-extension GAPIUploadRouter {
-    func async_uploadRequest(
-        sessionManager: Session = Session.default,
-        updateProgress: ((Progress) -> Void)? = nil,
-        debugRequest: Bool = false,
-        debugResponse: Bool = false
-    ) async throws -> JSON {
-        try await _async_requestWithRetry {
-            await sessionManager
-                .upload(
-                    multipartFormData: { (formData) in
-                        appendParametersToFormData(formData)
-                    },
-                    to: adaptedFullURL,
-                    method: method(),
-                    headers: adaptedHeaders()
-                )
-                .debugLog(debugRequest)
-                .uploadProgress {
-                    updateProgress?($0)
-                }
                 .serializingData().response
                 .debugLog(debugResponse)
                 .logAPIDuration()

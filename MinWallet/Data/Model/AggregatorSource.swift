@@ -52,36 +52,20 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
         }
     }
 
-    var image: String {
+    var image: ImageResource {
         switch self {
-        case .MinswapV2:
-            "Minswap V2"
-        case .Minswap:
-            "Minswap V1"
-        case .MinswapStable:
-            "Minswap Stable"
+        case .MinswapV2, .Minswap, .MinswapStable:
+                .min
         case .MuesliSwap:
-            "MuesliSwap"
-        case .Splash:
-            "Splash"
-        case .SundaeSwapV3:
-            "Sundae V3"
-        case .SundaeSwap:
-            "Sundae V1"
+                .icMuliswap
+        case .Splash, .SplashStable, .Spectrum:
+                .icSplashLogo
+        case .SundaeSwapV3, .SundaeSwap:
+                .icSundae
         case .VyFinance:
-            "VyFinance"
-        case .WingRidersV2:
-            "Wingriders V2"
-        case .WingRiders:
-            "Wingriders V1"
-        case .WingRidersStableV1:
-            "Wingriders Stable V1"
-        case .WingRidersStableV2:
-            "Wingriders Stable V2"
-        case .Spectrum:
-            "Spectrum"
-        case .SplashStable:
-            "Splash Stable"
+                .icVyfinance
+        case .WingRidersV2, .WingRiders, .WingRidersStableV1, .WingRidersStableV2:
+                .icWingriders
         }
     }
 

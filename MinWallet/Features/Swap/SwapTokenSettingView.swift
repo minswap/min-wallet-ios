@@ -22,11 +22,14 @@ struct SwapTokenSettingView: View {
 
     @Environment(\.partialSheetDismiss)
     var onDismiss
-    @ObservedObject
-    var viewModel: SwapTokenViewModel
-
     @State
     var showCustomizedRoute: Bool = false
+    @Binding 
+    var swapTokenSetting: SwapTokenSetting
+    @State
+    var excludedPoolsCached: [String: AggregatorSource] = [:]
+
+    var onSave: (() -> Void)?
     
     var body: some View {
         ZStack {
@@ -40,31 +43,29 @@ struct SwapTokenSettingView: View {
                         if let splippage = slippages[gk_safeIndex: index] {
                             Text("\(splippage.rawValue.formatSNumber())%")
                                 .font(.labelSmallSecondary)
-                                .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
+                                .foregroundStyle(splippage == swapTokenSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
                                 .fixedSize(horizontal: true, vertical: false)
                                 .frame(height: 36)
                                 .padding(.horizontal, .lg)
                                 .background(content: {
-                                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == viewModel.swapSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
+                                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == swapTokenSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
                                 })
                                 .contentShape(.rect)
                                 .onTapGesture {
-                                    viewModel.swapSetting.slippageSelected = splippage
-                                    viewModel.action.send(.recheckUnSafeSlippage)
+                                    swapTokenSetting.slippageSelected = splippage
                                 }
                             Spacer()
                         }
                     }
                     HStack(spacing: .md) {
-                        TextField("", text: $viewModel.swapSetting.slippageTolerance)
+                        TextField("", text: $swapTokenSetting.slippageTolerance)
                             .keyboardType(.decimalPad)
-                            .placeholder("Custom", when: viewModel.swapSetting.slippageTolerance.isEmpty)
+                            .placeholder("Custom", when: swapTokenSetting.slippageTolerance.isEmpty)
                             .focused($isFocus)
                             .lineLimit(1)
-                            .onChange(of: viewModel.swapSetting.slippageTolerance) { newValue in
-                                viewModel.swapSetting.slippageTolerance = AmountTextField.formatCurrency(newValue, minValue: 0, maxValue: maxValue, minimumFractionDigits: 4)
-                                viewModel.swapSetting.slippageSelected = nil
-                                viewModel.action.send(.recheckUnSafeSlippage)
+                            .onChange(of: swapTokenSetting.slippageTolerance) { newValue in
+                                swapTokenSetting.slippageTolerance = AmountTextField.formatCurrency(newValue, minValue: 0, maxValue: maxValue, minimumFractionDigits: 4)
+                                swapTokenSetting.slippageSelected = nil
                             }
                         Text("%")
                             .font(.labelMediumSecondary)
@@ -76,7 +77,7 @@ struct SwapTokenSettingView: View {
                     .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                 }
                 .padding(.top, .md)
-                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) >= 50 && viewModel.swapSetting.slippageSelected == nil && viewModel.swapSetting.safeMode {
+                if (Double(swapTokenSetting.slippageTolerance) ?? 0) >= 50 && swapTokenSetting.slippageSelected == nil && swapTokenSetting.safeMode {
                     HStack(spacing: Spacing.md) {
                         Image(.icWarning)
                             .resizable()
@@ -104,7 +105,9 @@ struct SwapTokenSettingView: View {
                     
                     Spacer()
                     
-                    let count = String(AggregatorSource.allCases.count - viewModel.swapSetting.excludedPools.count) + "/" + String(AggregatorSource.allCases.count)
+                    let count = String(AggregatorSource.allCases.count - swapTokenSetting.excludedPools.count) + "/" + String(
+                        AggregatorSource.allCases.count
+                    )
                     Text(count)
                         .foregroundStyle(.colorBaseTent)
                         .font(.paragraphSmall)
@@ -144,10 +147,10 @@ struct SwapTokenSettingView: View {
                                     .fill(.colorSurfaceSuccess)
                             )
                         Spacer()
-                        Toggle("", isOn: $viewModel.swapSetting.safeMode)
+                        Toggle("", isOn: $swapTokenSetting.safeMode)
                             .toggleStyle(SwitchToggleStyle())
-                            .onChange(of: viewModel.swapSetting.safeMode) { safeMode in
-                                viewModel.action.send(.safeMode)
+                            .onChange(of: swapTokenSetting.safeMode) { safeMode in
+                                
                             }
                     }
                     
@@ -157,44 +160,45 @@ struct SwapTokenSettingView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 Spacer()
-                Button(
-                    action: {
-                        onDismiss?()
-                    },
-                    label: {
-                        Text("Close")
-                            .font(.labelMediumSecondary)
-                            .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(content: {
-                                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-                            })
-                    }
-                )
+                CustomButton(title: "Save") {
+                    onSave?()
+                    onDismiss?()
+                }
                 .frame(height: 56)
-                .buttonStyle(.plain)
             }
             .padding(.horizontal, .xl)
             .background(.colorBaseBackground)
-            .frame(minHeight: (UIScreen.current?.bounds.height ?? 0) * 0.83, maxHeight: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
             .presentSheetModifier()
             .presentSheet(
                 isPresented: $showCustomizedRoute,
-                content: {
-                    let excludedPools = viewModel.swapSetting.excludedPools.reduce([:]) { result, source in
+                onDimiss: {
+                    excludedPoolsCached = swapTokenSetting.excludedPools.reduce([:]) { result, source in
                         result.appending([source.rawId: source])
                     }
-                    SwapTokenCustomizedRouteView(excludedSource: excludedPools)
-                        .environmentObject(viewModel)
+                },
+                content: {
+                    SwapTokenCustomizedRouteView(
+                        excludedSource: $excludedPoolsCached,
+                        onSave: { 
+                            self.swapTokenSetting.excludedPools = Array(excludedPoolsCached.values)
+                        })
                 }
             )
+        }
+        .onAppear { 
+            print("WTF ??? onAppear")
+        }
+        .onDisappear { 
+            print("WTF ??? onDisappear")
+
         }
     }
 }
 
 #Preview {
     VStack {
-        SwapTokenSettingView(viewModel: SwapTokenViewModel(tokenReceive: nil))
+        SwapTokenSettingView(swapTokenSetting: .constant(.init()))
             .padding(16)
         Spacer()
     }

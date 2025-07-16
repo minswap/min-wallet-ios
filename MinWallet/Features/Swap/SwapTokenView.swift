@@ -29,6 +29,8 @@ struct SwapTokenView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
+    @State
+    var swapSettingCached: SwapTokenSetting = .init()
 
     init(viewModel: SwapTokenViewModel) {
         _viewModel = .init(wrappedValue: viewModel)
@@ -116,13 +118,20 @@ struct SwapTokenView: View {
             }
         )
         .ignoresSafeArea(.keyboard)
-        .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
+        .presentSheet(isPresented: $viewModel.isShowSwapSetting, onDimiss: {
+            swapSettingCached = viewModel.swapSetting
+        }) {
             SwapTokenSettingView(
                 onShowToolTip: { title, content in
                     self.content = content
                     self.title = title
                     $isShowToolTip.showSheet()
-                }, viewModel: viewModel
+                },
+                swapTokenSetting: $swapSettingCached,
+                onSave: {
+                    viewModel.swapSetting = swapSettingCached
+                    viewModel.action.send(.getTradingInfo)
+                }
             )
         }
         .presentSheet(isPresented: $isShowSignContract) {
