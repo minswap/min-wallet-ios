@@ -369,7 +369,3 @@ extension String {
         self.replacingOccurrences(of: ".", with: "")
     }
 }
-
-#Preview {
-    TestView()
-}

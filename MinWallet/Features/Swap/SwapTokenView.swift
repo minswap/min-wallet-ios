@@ -394,6 +394,7 @@ struct SwapTokenView: View {
         .contentShape(.rect)
         .onTapGesture {
             guard !viewModel.isGettingTradeInfo else { return }
+            guard let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty else { return }
             hideKeyboard()
             $viewModel.isShowRouting.showSheet()
         }
