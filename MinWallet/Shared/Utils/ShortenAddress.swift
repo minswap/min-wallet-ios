@@ -354,6 +354,22 @@ extension Dictionary {
     }
 }
 
+extension String {
+    ///xxxx -> xxx.yyy
+    var toPolicyIdWithDot: String {
+        guard self.count >= 56 else { return self}
+        
+        let policyIdHex = String(self.prefix(56))
+        let tokenNameHex = String(self.dropFirst(56))
+        
+        return policyIdHex + "." + tokenNameHex
+    }
+    
+    var toPolicyIdWithoutDot: String {
+        self.replacingOccurrences(of: ".", with: "")
+    }
+}
+
 #Preview {
     TestView()
 }

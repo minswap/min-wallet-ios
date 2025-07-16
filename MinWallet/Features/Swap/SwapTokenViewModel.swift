@@ -313,7 +313,6 @@ class SwapTokenViewModel: ObservableObject {
     }
     
     private func getTradingInfo(amount: Double) async throws {
-        guard amount > 0 else { return }
         workItem?.cancel()
         
         withAnimation {
@@ -335,6 +334,8 @@ class SwapTokenViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10), execute: workItem!)
         }
         
+        guard amount > 0 else { return }
+        
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let request = EstimationRequest().with {
             $0.amount = amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
@@ -342,7 +343,6 @@ class SwapTokenViewModel: ObservableObject {
             $0.token_out = isSwapExactIn ? tokenReceive.token.currencySymbol : tokenPay.token.currencySymbol
             $0.slippage = swapSetting.slippageSelectedValue()
             $0.exclude_protocols = swapSetting.excludedPools
-            $0.allow_multi_hops = false
             $0.amount_in_decimal = false
         }
         
@@ -370,8 +370,6 @@ class SwapTokenViewModel: ObservableObject {
             $0.token_out = iosTradeEstimate.tokenOut
             $0.slippage = swapSetting.slippageSelectedValue()
             $0.exclude_protocols = swapSetting.excludedPools
-            //TODO: cuongnv243 check sau
-            $0.allow_multi_hops = false
             $0.partner = ""
         }
         

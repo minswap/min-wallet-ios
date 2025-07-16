@@ -118,6 +118,15 @@ extension TokenManager {
         guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: txRaw)
         else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
         
+        let data = try await MinWalletService.shared.mutation(mutation: FinalizeAndSubmitMutation(input: InputFinalizeAndSubmit(tx: txRaw, witnessSet: witnessSet)))
+        return data?.finalizeAndSubmit
+    }
+    
+    static func finalizeAndSubmitV2(txRaw: String) async throws -> String? {
+        guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
+        guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: txRaw)
+        else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
+        
         let jsonData = try await SwapTokenAPIRouter.signTX(cbor: txRaw, witness_set: witnessSet).async_request()
         return jsonData["tx_id"].string
     }
