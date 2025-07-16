@@ -8,6 +8,9 @@ import ObjectMapper
 @MainActor
 class SwapTokenViewModel: ObservableObject {
 
+    //10s call estimate
+    private static let TIME_INTERVAL: TimeInterval = 10
+    
     private let functionalToken: String = "a04ce7a52545e5e33c2867e148898d9e667a69602285f6a1298f9d68"
     private let functionalName: String = "Liqwid Finance"
     private let migrateTokens = [
@@ -74,6 +77,8 @@ class SwapTokenViewModel: ObservableObject {
 
     var bannerState: BannerState = .init()
 
+    private var workItem: DispatchWorkItem?
+    
     deinit {
         print("Deinit SwapTokenViewModel")
     }
@@ -306,8 +311,11 @@ class SwapTokenViewModel: ObservableObject {
             }
         }
     }
-
+    
     private func getTradingInfo(amount: Double) async throws {
+        guard amount > 0 else { return }
+        workItem?.cancel()
+        
         withAnimation {
             isGettingTradeInfo = true
         }
@@ -316,6 +324,15 @@ class SwapTokenViewModel: ObservableObject {
             withAnimation {
                 isGettingTradeInfo = false
             }
+            
+            workItem = DispatchWorkItem() { [weak self] in
+                guard let self = self else { return }
+                Task {
+                    try await self.getTradingInfo(amount: amount)
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10), execute: workItem!)
         }
         
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
