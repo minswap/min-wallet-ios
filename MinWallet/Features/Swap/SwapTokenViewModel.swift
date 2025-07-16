@@ -339,15 +339,15 @@ class SwapTokenViewModel: ObservableObject {
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let request = EstimationRequest().with {
             $0.amount = amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
-            $0.token_in = isSwapExactIn ? tokenPay.token.currencySymbol : tokenReceive.token.currencySymbol
-            $0.token_out = isSwapExactIn ? tokenReceive.token.currencySymbol : tokenPay.token.currencySymbol
+            $0.token_in = (isSwapExactIn ? tokenPay.token.uniqueID : tokenReceive.token.uniqueID).toPolicyIdWithoutDot
+            $0.token_out = (isSwapExactIn ? tokenReceive.token.uniqueID : tokenPay.token.uniqueID).toPolicyIdWithoutDot
             $0.slippage = swapSetting.slippageSelectedValue()
             $0.exclude_protocols = swapSetting.excludedPools
             $0.amount_in_decimal = false
         }
         
         let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
-        let info = Mapper<EstimationResponse>().map(JSONObject: jsonData)
+        let info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
         self.iosTradeEstimate = info
         
         if isSwapExactIn {
