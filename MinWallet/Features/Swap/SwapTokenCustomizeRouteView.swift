@@ -34,11 +34,11 @@ struct SwapTokenCustomizedRouteView: View {
                     .foregroundStyle(.colorBaseTent)
                     .frame(height: 24)
                 Text("For the best possible rates, this setting should be turned off if you are not familiar with it")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
             }
             .padding(.xl)
-            .frame(width: .infinity)
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(.colorBorderPrimaryTer, lineWidth: 2))
             .padding(.horizontal, .xl)
             .padding(.bottom, .xl)

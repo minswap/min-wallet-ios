@@ -331,7 +331,7 @@ class SwapTokenViewModel: ObservableObject {
                 }
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10), execute: workItem!)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Self.TIME_INTERVAL), execute: workItem!)
         }
         
         guard amount > 0 else { return }
@@ -357,7 +357,6 @@ class SwapTokenViewModel: ObservableObject {
             let outputAmount = info?.amountOut.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
             tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
         }
-       
     }
 
     func swapToken() async throws -> String {
@@ -387,11 +386,7 @@ class SwapTokenViewModel: ObservableObject {
     }
 
     var minimumMaximumAmount: Double {
-        if isSwapExactIn {
-            (1 / (1 + swapSetting.slippageSelectedValue() / 100)) * tokenReceive.amount.doubleValue
-        } else {
-            (1 + swapSetting.slippageSelectedValue() / 100) * tokenPay.amount.doubleValue
-        }
+        iosTradeEstimate?.minAmountOut.gkDoubleValue ?? 0
     }
 
     var enableSwap: Bool {
@@ -543,7 +538,6 @@ extension IosTradeEstimateQuery.Data.IosTradeEstimate {
 
 extension EstimationResponse {
     var priceImpactColor: (Color, Color) {
-        guard avgPriceImpact == 0 else { return (.clear, .clear) }
         if avgPriceImpact < 2 {
             return (.colorInteractiveToneSuccess, .colorSurfaceSuccess)
         } else if avgPriceImpact > 5 {

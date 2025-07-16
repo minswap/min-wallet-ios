@@ -24,6 +24,7 @@ struct EstimationResponse: Mappable {
     var minAmountOut: String = ""
     var totalLpFee: String = ""
     var totalDexFee: String = ""
+    var aggregatorFee: String = ""
     var deposits: String = ""
     var avgPriceImpact: Double = 0.0
     var paths: [[SwapPath]] = []
@@ -41,6 +42,7 @@ struct EstimationResponse: Mappable {
         minAmountOut    <- map["min_amount_out"]
         totalLpFee      <- map["total_lp_fee"]
         totalDexFee     <- map["total_dex_fee"]
+        aggregatorFee   <- map["aggregator_fee"]
         deposits        <- map["deposits"]
         avgPriceImpact  <- (map["avg_price_impact"], 
                             GKMapFromJSONToDouble)

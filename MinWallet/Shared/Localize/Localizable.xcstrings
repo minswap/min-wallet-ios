@@ -136,9 +136,6 @@
     "1 %@ = " : {
 
     },
-    "2 %@" : {
-
-    },
     "124.64 A" : {
 
     },
@@ -330,6 +327,9 @@
 
     },
     "Details" : {
+
+    },
+    "DEX's Fees" : {
 
     },
     "Disconnect" : {
@@ -536,6 +536,9 @@
     "Limit" : {
 
     },
+    "Liquidity Provider Fee" : {
+
+    },
     "Liquidity Source" : {
 
     },
@@ -727,6 +730,9 @@
     "Recommended" : {
 
     },
+    "Refundable deposit" : {
+
+    },
     "Reset" : {
 
     },
@@ -785,6 +791,9 @@
 
     },
     "Send" : {
+
+    },
+    "Service Fee" : {
 
     },
     "Set up nickname" : {
@@ -859,6 +868,12 @@
     "Terms of service" : {
 
     },
+    "The DEX fees includes the batcher fee and network fee required to process your transaction on the blockchain. These fees are necessary to ensure your trade is executed and confirmed by the network." : {
+
+    },
+    "The fee paid to liquidity providers for facilitating your trade. This fee is deducted from your input amount and distributed to users who supply assets to the liquidity pool." : {
+
+    },
     "The market cap if the total supply was in circulation. Fully Diluted Market Cap = Current Price x Total Supply." : {
 
     },
@@ -874,13 +889,16 @@
     "The seed phrase is only stored on your phone, and Minswap has no access to it to help you retrieve it" : {
 
     },
+    "The service fee is charged for routing your trade through multiple liquidity sources to find the best price. The fee is calculated as the greater of 0.85₳ or --% of your trade amount." : {
+
+    },
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
 
     },
     "This % indicates the potential effect your swap might have on the pool's price. A higher % suggests a more significant impact." : {
 
     },
-    "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled." : {
+    "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled" : {
 
     },
     "This project token is migrated to a new token, you can exchange your old token on %@ app. The new token has policyID %@ and tokenName %@." : {

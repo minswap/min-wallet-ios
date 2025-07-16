@@ -392,7 +392,7 @@ struct SwapTokenView: View {
                 if let iosTradeEstimate = viewModel.iosTradeEstimate {
                     let priceImpact = iosTradeEstimate.avgPriceImpact
                     let priceImpactColor = iosTradeEstimate.priceImpactColor
-                    Text(priceImpact.formatSNumber() + "%")
+                    Text(priceImpact.formatSNumber(maximumFractionDigits: 4) + "%")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(priceImpactColor.0)
                         .padding(.horizontal, .md)
