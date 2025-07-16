@@ -84,7 +84,7 @@ struct SwapPath: Mappable, Identifiable {
     var deposits: String = ""
     var priceImpact: Double = 0.0
     var poolId: String = ""
-    var protocolName: String = ""
+    var protocolName: String = "Kaz"
     
     init() {}
     
