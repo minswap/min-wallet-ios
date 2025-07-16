@@ -106,6 +106,13 @@ public
     static var onLogAPIDuration: ((_ response: AFDataResponse<Data>) -> Void)?
 
     static func parseDefaultErrorMessage(_ jsonData: JSON, alternateMessageIfEmptyError: String = APIRouterError.GenericError) throws {
+        if jsonData["error"].exists() {
+            let error = jsonData["error"].stringValue
+            let message = jsonData["message"].string ?? error
+            
+            throw APIRouterError.serverError(message: message)
+        }
+        /*
         let success = jsonData["success"].bool ?? jsonData["status"].bool
 
         guard success == true
@@ -124,7 +131,7 @@ public
 
             throw APIRouterError.serverError(message: !error.isEmpty ? error : alternateMessageIfEmptyError)
         }
-
+        */
         return
     }
 }

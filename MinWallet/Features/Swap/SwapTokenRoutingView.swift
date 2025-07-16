@@ -5,46 +5,31 @@ import FlowStacks
 struct SwapTokenRoutingView: View {
     @EnvironmentObject
     private var viewModel: SwapTokenViewModel
-
+    
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-
-    @State
-    private var estimationResponse: EstimationResponse = .fakeData
-    @State
-    private var decimalIn: Int = 6
-    @State
-    private var decimalOut: Int = 6
     
     @State
     private var popoverTarget: UUID?
     @State
     private var idWithProtocolName: [UUID?: String] = [:]
-    
-    @Namespace private var nsPopover
-    
-    private func showPopover(target: UUID, protocolName: String) {
-        if popoverTarget != nil {
-            popoverTarget = nil
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                popoverTarget = target
-            }
-        } else {
-            popoverTarget = target
-        }
-        idWithProtocolName[target] = protocolName
-    }
+    @Namespace
+    private var nsPopover
     
     @ViewBuilder
     private var customPopover: some View {
         if let popoverTarget {
             Text("Via \(idWithProtocolName[popoverTarget] ?? "")")
-                .padding(12)
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorTextTooltip)
+                .padding(.vertical, .md)
+                .padding(.horizontal, 14)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.systemGray6))
-                        .shadow(radius: 5)
+                    RoundedRectangle(cornerRadius: .md)
+                        .fill(Color(.colorBackgroundTooltip))
                 )
+                .foregroundColor(.colorBackgroundTooltip)
+                .offset(y: 4)
                 .matchedGeometryEffect(
                     id: popoverTarget,
                     in: nsPopover,
@@ -70,6 +55,7 @@ struct SwapTokenRoutingView: View {
                 ScrollView {
                     LazyVStack(spacing: 0) {
                         tokenInOutView
+                        let estimationResponse: EstimationResponse = viewModel.iosTradeEstimate ?? .init()
                         ForEach(0..<estimationResponse.paths.count, id: \.self) { index in
                             let splits = estimationResponse.paths[index]
                             let estimationResponse = estimationResponse
@@ -93,10 +79,12 @@ struct SwapTokenRoutingView: View {
                                             RoundedRectangle(cornerRadius: BorderRadius.full)
                                                 .stroke(.colorBaseTent, lineWidth: 1)
                                         )
-
+                                    
                                     DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
                                         .frame(height: 0.7)
                                     Image(.icSplitArrow)
+                                        .resizable()
+                                        .frame(width: 5, height: 6)
                                         .padding(.trailing, 1)
                                     ForEach(0..<splits.count, id: \.self) { index in
                                         HStack(spacing: 0) {
@@ -111,21 +99,23 @@ struct SwapTokenRoutingView: View {
                                                         tokenName: tokenDefault.tokenName,
                                                         isVerified: false,
                                                         forceVerified: true,
-                                                        size: .init(width: 22, height: 22)
+                                                        size: .init(width: 20, height: 20)
                                                     )
                                                 )
                                                 .overlay(
                                                     Circle()
-                                                        .stroke(.colorCircle, lineWidth: 1)
+                                                        .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
                                                 )
                                                 .containerShape(.rect)
                                                 .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName ) }
-                                              
+                                                .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .bottom)
+                                            
                                             DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
                                                 .frame(height: 0.7)
                                             Image(.icSplitArrow)
+                                                .resizable()
+                                                .frame(width: 5, height: 6)
                                                 .padding(.trailing, 1)
-                                                .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .topLeading)
                                         }
                                     }
                                 }
@@ -138,12 +128,6 @@ struct SwapTokenRoutingView: View {
                                 }
                                 .frame(width: 28)
                             }
-
-//                            SwapTokenRoutingItemView(
-//                                splits: estimationResponse.paths[index],
-//                                estimationResponse: estimationResponse,
-//                                percent: estimationResponse.percents[gk_safeIndex: index] ?? 100
-//                            )
                         }
                         bottomView
                             .padding(.top, 2)
@@ -173,6 +157,9 @@ struct SwapTokenRoutingView: View {
     
     private var tokenInOutView: some View {
         HStack(spacing: 8) {
+            let estimationResponse: EstimationResponse = viewModel.iosTradeEstimate ?? .init()
+            let decimalIn = viewModel.isSwapExactIn ? viewModel.tokenPay.token.decimals : viewModel.tokenReceive.token.decimals
+            let decimalOut = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.decimals : viewModel.tokenPay.token.decimals
             TokenInOutView(token: estimationResponse.tokenIn, amount: estimationResponse.amountIn.toExact(decimal: decimalIn))
             Spacer(minLength: 0)
             TokenInOutView(token: estimationResponse.tokenOut, amount: estimationResponse.amountOut.toExact(decimal: decimalOut), isLeading: false)
@@ -196,81 +183,20 @@ struct SwapTokenRoutingView: View {
             .frame(width: 28)
         }
     }
-}
-
-
-private struct SwapTokenRoutingItemView: View {
-    @State
-    var splits: [SwapPath] = []
-    @State
-    var estimationResponse: EstimationResponse = .init()
-    @State
-    var percent: Double = 0
     
-    var body: some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .center, spacing: 0) {
-                Rectangle()
-                    .fill(.colorInteractiveTentPrimarySub)
-                    .frame(width: 1, height: .infinity)
+    private func showPopover(target: UUID, protocolName: String) {
+        if popoverTarget != nil {
+            popoverTarget = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                popoverTarget = target
             }
-            .frame(width: 28)
-            
-            HStack(spacing: 0) {
-                Text("\(abs(percent).formatSNumber(maximumFractionDigits: 2))%")
-                    .foregroundStyle(.colorBaseTent)
-                    .font(.paragraphXMediumSmall)
-                    .padding(.horizontal, 12)
-                    .frame(height: 24)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: BorderRadius.full)
-                            .stroke(.colorBaseTent, lineWidth: 1)
-                    )
-                dashView
-                ForEach(0..<splits.count, id: \.self) { index in
-                    HStack(spacing: 0) {
-                        let split = splits[index]
-                        let tokenDefault = split.tokenOut.tokenDefault
-                        Circle()
-                            .fill(.colorBaseBackground)
-                            .frame(width: 24, height: 24)
-                            .overlay(
-                                TokenLogoView(
-                                    currencySymbol: tokenDefault.currencySymbol,
-                                    tokenName: tokenDefault.tokenName,
-                                    isVerified: false,
-                                    forceVerified: true,
-                                    size: .init(width: 22, height: 22)
-                                )
-                            )
-                            .overlay(
-                                Circle()
-                                    .stroke(.colorCircle, lineWidth: 1)
-                            )
-                            .containerShape(.rect)
-                            .onTapGesture {
-                                //TODO cuongnv243 show protocol
-                            }
-                        dashView
-                    }
-                }
-            }
-            .padding(.vertical, 32)
-            VStack(alignment: .center, spacing: 0) {
-                Rectangle()
-                    .fill(.colorInteractiveTentPrimarySub)
-                    .frame(width: 1, height: .infinity)
-            }
-            .frame(width: 28)
+        } else {
+            popoverTarget = target
         }
-    }
-    
-    @ViewBuilder
-    var dashView: some View {
-        DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
-            .frame(height: 0.7)
-        Image(.icSplitArrow)
-            .padding(.trailing, 1)
+        idWithProtocolName[target] = protocolName
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            popoverTarget = nil
+        }
     }
 }
 

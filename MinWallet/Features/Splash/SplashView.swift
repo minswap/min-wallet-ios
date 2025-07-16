@@ -36,8 +36,6 @@ struct SplashView: View {
                     default:
                         EmptyView()
                     }
-//                    SwapTokenRoutingView()
-//                    TestView()
                 }
             }
             .onAppear(perform: {

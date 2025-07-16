@@ -30,7 +30,8 @@ struct EstimationResponse: Mappable, Then {
     var paths: [[SwapPath]] = []
     var amountInDecimal: Bool = false
     var percents: [Double] = []
-    init() {}
+    
+    init() { }
     
     init?(map: Map) {}
     

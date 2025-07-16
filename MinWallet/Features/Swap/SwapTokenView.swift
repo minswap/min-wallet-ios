@@ -316,6 +316,7 @@ struct SwapTokenView: View {
                     .font(.titleH4)
                     .foregroundStyle(.colorBaseTent)
                     .focused($focusedField, equals: .receive)
+                    .disabled(true)
                 }
                 Spacer(minLength: 0)
                 HStack(alignment: .center, spacing: .md) {
@@ -366,37 +367,39 @@ struct SwapTokenView: View {
 
     @ViewBuilder
     private var routingView: some View {
-        HStack(alignment: .center, spacing: 4) {
-            Text("Your trade route")
-                .lineLimit(1)
-                .font(.paragraphXSmall)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
-            Spacer(minLength: 0)
-            if viewModel.isGettingTradeInfo {
-                HStack(spacing: 0) {
-                    Text("")
+        if viewModel.iosTradeEstimate != nil {
+            HStack(alignment: .center, spacing: 4) {
+                Text("Your trade route")
+                    .lineLimit(1)
+                    .font(.paragraphXSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Spacer(minLength: 0)
+                if viewModel.isGettingTradeInfo {
+                    HStack(spacing: 0) {
+                        Text("")
+                    }
+                    .skeleton(with: true)
+                    .frame(width: 56, height: 16)
+                } else if let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty {
+                    let splits = paths.count > 1 ? "\(paths.count) splits" : "\(paths.count) split"
+                    Text(splits)
+                        .font(.paragraphSemi)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+                    Image(.icArrowRight)
                 }
-                .skeleton(with: true)
-                .frame(width: 56, height: 16)
-            } else if let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty {
-                let splits = paths.count > 1 ? "\(paths.count) splits" : "\(paths.count) split"
-                Text(splits)
-                    .font(.paragraphSemi)
-                    .foregroundStyle(.colorInteractiveToneHighlight)
-                Image(.icArrowRight)
             }
-        }
-        .padding(.horizontal, .xl)
-        .frame(height: 52)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
-        .padding(.top, .md)
-        .padding(.horizontal, .xl)
-        .contentShape(.rect)
-        .onTapGesture {
-            guard !viewModel.isGettingTradeInfo else { return }
-            guard let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty else { return }
-            hideKeyboard()
-            $viewModel.isShowRouting.showSheet()
+            .padding(.horizontal, .xl)
+            .frame(height: 52)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
+            .padding(.top, .md)
+            .padding(.horizontal, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                guard !viewModel.isGettingTradeInfo else { return }
+                guard let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty else { return }
+                hideKeyboard()
+                $viewModel.isShowRouting.showSheet()
+            }
         }
     }
 

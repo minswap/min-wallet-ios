@@ -9,7 +9,7 @@ import ObjectMapper
 class SwapTokenViewModel: ObservableObject {
 
     //10s call estimate
-    private static let TIME_INTERVAL: TimeInterval = 10
+    private static let TIME_INTERVAL: Int = 10
     
     private let functionalToken: String = "a04ce7a52545e5e33c2867e148898d9e667a69602285f6a1298f9d68"
     private let functionalName: String = "Liqwid Finance"
@@ -344,6 +344,7 @@ class SwapTokenViewModel: ObservableObject {
         }
         
         let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
+        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
         let info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
         self.iosTradeEstimate = info
         
@@ -377,7 +378,7 @@ class SwapTokenViewModel: ObservableObject {
         }
         
         let jsonData = try await SwapTokenAPIRouter.buildTX(request: request).async_request()
-        
+        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
         guard let tx = jsonData["cbor"].string, !tx.isEmpty else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
         return tx
     }

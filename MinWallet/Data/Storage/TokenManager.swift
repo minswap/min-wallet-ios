@@ -128,6 +128,7 @@ extension TokenManager {
         else { throw AppGeneralError.localErrorLocalized(message: "Sign transaction failed") }
         
         let jsonData = try await SwapTokenAPIRouter.signTX(cbor: txRaw, witness_set: witnessSet).async_request()
+        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
         return jsonData["tx_id"].string
     }
 }
