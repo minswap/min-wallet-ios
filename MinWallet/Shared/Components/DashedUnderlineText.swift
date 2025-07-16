@@ -78,7 +78,7 @@ struct DashedUnderlineText: View {
 }
 
 
-private struct DashedLine: View {
+struct DashedLine: View {
     var lineWidth: CGFloat = 0.7
     var dash: [CGFloat] = [6, 3]  // Dash length and gap
     var color: Color = .black

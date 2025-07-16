@@ -368,4 +368,11 @@ extension String {
     var toPolicyIdWithoutDot: String {
         self.replacingOccurrences(of: ".", with: "")
     }
+    
+    var tokenDefault: TokenProtocol {
+        let policyIdWithDot = toPolicyIdWithDot.split(separator: ".")
+        let currencySymbol: String = String(policyIdWithDot.first ?? "")
+        let tokenName: String  = String(policyIdWithDot.last ?? "")
+        return TokenDefault(symbol: currencySymbol, tName: tokenName)
+    }
 }

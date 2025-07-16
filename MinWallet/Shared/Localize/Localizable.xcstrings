@@ -136,7 +136,7 @@
     "1 %@ = " : {
 
     },
-    "124.64 A" : {
+    "65%" : {
 
     },
     "A wallet name must be 3-40 characters" : {
@@ -787,9 +787,6 @@
     "Select method to restore your wallet:" : {
 
     },
-    "Select route" : {
-
-    },
     "Send" : {
 
     },
@@ -924,9 +921,6 @@
 
     },
     "To wallet address:" : {
-
-    },
-    "togle" : {
 
     },
     "Token migration" : {

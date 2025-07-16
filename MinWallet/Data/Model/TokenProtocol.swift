@@ -29,6 +29,7 @@ extension TokenProtocol {
     var adaName: String {
         guard ticker.isBlank else { return ticker }
         if currencySymbol == MinWalletConstant.lpV1CurrencySymbol { return "LP" }
+        if currencySymbol == MinWalletConstant.adaToken { return "ADA" }
         return UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? tokenName.adaName ?? ""
     }
 

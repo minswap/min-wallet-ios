@@ -16,7 +16,7 @@ struct EstimationRequest: Then {
 }
 
 
-struct EstimationResponse: Mappable {
+struct EstimationResponse: Mappable, Then {
     var tokenIn: String = ""
     var tokenOut: String = ""
     var amountIn: String = ""
@@ -29,7 +29,7 @@ struct EstimationResponse: Mappable {
     var avgPriceImpact: Double = 0.0
     var paths: [[SwapPath]] = []
     var amountInDecimal: Bool = false
-    
+    var percents: [Double] = []
     init() {}
     
     init?(map: Map) {}
@@ -48,13 +48,34 @@ struct EstimationResponse: Mappable {
                             GKMapFromJSONToDouble)
         paths           <- map["paths"]
         amountInDecimal <- map["amount_in_decimal"]
+        
+        calculatePercentSwapPath()
+    }
+    
+    private mutating func calculatePercentSwapPath() {
+        
+        let totalAmountIn = max(amountIn.gkDoubleValue, 1)
+        percents = paths.map({ path in
+            let amountIn = path.first?.amountIn.gkDoubleValue ?? 0.0
+            return (amountIn / totalAmountIn) * 100
+        })
+        /* TODO: cuongnv test sau
+        if let percent = percents[gk_safeIndex: paths.count - 1] {
+            let sumAll = percents.reduce(0.0, +)
+            if sumAll != 100 {
+                percents[paths.count - 1]  = 
+            }
+        }
+         */
     }
 }
 
-struct SwapPath: Mappable {
+struct SwapPath: Mappable, Identifiable {
+    var id: UUID = .init()
+    
     var lpToken: String = ""
     var tokenIn: String = ""
-    var tokenOut: String = ""
+    var tokenOut: String = "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
     var amountIn: String = ""
     var amountOut: String = ""
     var minAmountOut: String = ""
@@ -118,3 +139,25 @@ struct SwapPath: Mappable {
     "amount_in_decimal": true
 }
 */
+
+
+extension EstimationResponse {
+    static var fakeData: EstimationResponse {
+        EstimationResponse().with { 
+            $0.tokenIn = "lovelace"
+            $0.amountIn = "100"
+            $0.amountOut = "2000"
+            $0.tokenOut = "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
+            $0.paths = SwapPath.fakeData
+        }
+    }
+}
+extension SwapPath {
+    static var fakeData: [[SwapPath]] {
+        [
+            [SwapPath(), SwapPath()],
+            [SwapPath(), SwapPath()],
+            [SwapPath(), SwapPath()],
+        ]
+    }
+}
