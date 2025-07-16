@@ -36,12 +36,9 @@ class SwapTokenViewModel: ObservableObject {
     var isShowSwapSetting: Bool = false
     @Published
     var isShowSelectReceiveToken: Bool = false
-    /*
     @Published
-    var wrapRoutings: [WrapRouting] = []
-    @Published
-    var routingSelected: WrapRouting? = nil
-     */
+    var isShowCustomizedRoute: Bool = false
+    
     @Published
     var warningInfo: [WarningInfo] = []
     @Published

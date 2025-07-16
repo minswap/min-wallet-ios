@@ -18,17 +18,15 @@ struct SwapTokenSettingView: View {
 
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
 
-    let maxValue: Double = 100.0  // Define the maximum value
+    private let maxValue: Double = 100.0  // Define the maximum value
 
     @Environment(\.partialSheetDismiss)
-    var onDismiss
-    @State
-    var showCustomizedRoute: Bool = false
+    private var onDismiss
+    @Binding
+    var showCustomizedRoute: Bool
     @Binding 
     var swapTokenSetting: SwapTokenSetting
-    @State
-    var excludedPoolsCached: [String: AggregatorSource] = [:]
-
+    
     var onSave: (() -> Void)?
     
     var body: some View {
@@ -165,40 +163,19 @@ struct SwapTokenSettingView: View {
                     onDismiss?()
                 }
                 .frame(height: 56)
+                .padding(.bottom, .md)
             }
             .padding(.horizontal, .xl)
             .background(.colorBaseBackground)
             .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
             .presentSheetModifier()
-            .presentSheet(
-                isPresented: $showCustomizedRoute,
-                onDimiss: {
-                    excludedPoolsCached = swapTokenSetting.excludedPools.reduce([:]) { result, source in
-                        result.appending([source.rawId: source])
-                    }
-                },
-                content: {
-                    SwapTokenCustomizedRouteView(
-                        excludedSource: $excludedPoolsCached,
-                        onSave: { 
-                            self.swapTokenSetting.excludedPools = Array(excludedPoolsCached.values)
-                        })
-                }
-            )
-        }
-        .onAppear { 
-            print("WTF ??? onAppear")
-        }
-        .onDisappear { 
-            print("WTF ??? onDisappear")
-
         }
     }
 }
 
 #Preview {
     VStack {
-        SwapTokenSettingView(swapTokenSetting: .constant(.init()))
+        SwapTokenSettingView(showCustomizedRoute: .constant(false), swapTokenSetting: .constant(.init()))
             .padding(16)
         Spacer()
     }

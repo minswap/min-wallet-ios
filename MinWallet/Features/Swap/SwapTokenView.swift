@@ -29,9 +29,12 @@ struct SwapTokenView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
+    
     @State
-    var swapSettingCached: SwapTokenSetting = .init()
-
+    private var swapSettingCached: SwapTokenSetting = .init()
+    @State
+    private var excludedPoolsCached: [String: AggregatorSource] = [:]
+    
     init(viewModel: SwapTokenViewModel) {
         _viewModel = .init(wrappedValue: viewModel)
     }
@@ -64,7 +67,7 @@ struct SwapTokenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
+                
                 Button("Done") {
                     hideKeyboard()
                 }
@@ -117,23 +120,26 @@ struct SwapTokenView: View {
                 .presentSheetModifier()
             }
         )
+        .presentSheet(
+            isPresented: $viewModel.isShowSwapSetting,
+            onDimiss: {
+                swapSettingCached = viewModel.swapSetting
+            }, content: {
+                SwapTokenSettingView(
+                    onShowToolTip: { title, content in
+                        self.content = content
+                        self.title = title
+                        $isShowToolTip.showSheet()
+                    },
+                    showCustomizedRoute: $viewModel.isShowCustomizedRoute,
+                    swapTokenSetting: $swapSettingCached,
+                    onSave: {
+                        viewModel.swapSetting = swapSettingCached
+                        viewModel.action.send(.getTradingInfo)
+                    }
+                ) 
+            }) 
         .ignoresSafeArea(.keyboard)
-        .presentSheet(isPresented: $viewModel.isShowSwapSetting, onDimiss: {
-            swapSettingCached = viewModel.swapSetting
-        }) {
-            SwapTokenSettingView(
-                onShowToolTip: { title, content in
-                    self.content = content
-                    self.title = title
-                    $isShowToolTip.showSheet()
-                },
-                swapTokenSetting: $swapSettingCached,
-                onSave: {
-                    viewModel.swapSetting = swapSettingCached
-                    viewModel.action.send(.getTradingInfo)
-                }
-            )
-        }
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
                 onSignSuccess: {
@@ -150,6 +156,21 @@ struct SwapTokenView: View {
                 })
                 .ignoresSafeArea()
         }
+        .presentSheet(
+            isPresented: $viewModel.isShowCustomizedRoute,
+            onDimiss: {
+                excludedPoolsCached = swapSettingCached.excludedPools.reduce([:]) { result, source in
+                    result.appending([source.rawId: source])
+                }
+            },
+            content: {
+                SwapTokenCustomizedRouteView(
+                    excludedSource: $excludedPoolsCached,
+                    onSave: { 
+                        self.swapSettingCached.excludedPools = Array(excludedPoolsCached.values)
+                    })
+            }
+        )
         .onAppear { [weak viewModel] in
             viewModel?.bannerState = bannerState
             viewModel?.subscribeCombine()

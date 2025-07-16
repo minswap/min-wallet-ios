@@ -67,6 +67,7 @@ struct SwapTokenCustomizedRouteView: View {
             }
             .padding(.horizontal, .xl)
             .padding(.top, ._3xl)
+            .padding(.bottom, .md)
         }
         .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
         .presentSheetModifier()
