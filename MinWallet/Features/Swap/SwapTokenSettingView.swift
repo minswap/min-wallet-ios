@@ -4,27 +4,27 @@ import SwiftUI
 struct SwapTokenSettingView: View {
     enum Slippage: Double, CaseIterable, Identifiable {
         var id: String { UUID().uuidString }
-
+        
         case _01 = 0.1
         case _05 = 0.5
         case _1 = 1
         case _2 = 2
     }
-
+    
     @State
     private var slippages: [Slippage] = Slippage.allCases
     @FocusState
     private var isFocus: Bool
-
+    
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
-
+    
     private let maxValue: Double = 100.0  // Define the maximum value
-
+    
     @Environment(\.partialSheetDismiss)
     private var onDismiss
     @Binding
     var showCustomizedRoute: Bool
-    @Binding 
+    @Binding
     var swapTokenSetting: SwapTokenSetting
     
     var onSave: (() -> Void)?
@@ -103,9 +103,11 @@ struct SwapTokenSettingView: View {
                     
                     Spacer()
                     
-                    let count = String(AggregatorSource.allCases.count - swapTokenSetting.excludedPools.count) + "/" + String(
-                        AggregatorSource.allCases.count
-                    )
+                    let count =
+                        String(AggregatorSource.allCases.count - swapTokenSetting.excludedPools.count) + "/"
+                        + String(
+                            AggregatorSource.allCases.count
+                        )
                     Text(count)
                         .foregroundStyle(.colorBaseTent)
                         .font(.paragraphSmall)

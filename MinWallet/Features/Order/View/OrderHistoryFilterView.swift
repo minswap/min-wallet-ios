@@ -11,14 +11,14 @@ struct OrderHistoryFilterView: View {
     private var appSetting: AppSetting
     @ObservedObject
     var viewModel: OrderHistoryFilterViewModel
-
+    
     @Environment(\.partialSheetDismiss)
     var onDismiss
     @Environment(\.enableDragGesture)
     var enableDragGesture
-
+    
     var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
-
+    
     private func formateDate(_ date: Date?) -> String {
         guard let date = date else { return "Select date" }
         let formatter = DateFormatter()
@@ -29,7 +29,7 @@ struct OrderHistoryFilterView: View {
         }
         return formatter.string(from: date)
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Filter")
@@ -75,7 +75,7 @@ struct OrderHistoryFilterView: View {
                     let rawAction: [OrderV2Action] = [.market, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
                     let allKey: LocalizedStringKey = "All"
                     let actions: [String] = ([allKey] + rawAction.map({ $0.titleFilter })).map { $0.toString() }
-
+                    
                     let height = calculateHeightFlowLayout(actions: actions)
                     FlowLayout(
                         mode: .vstack,
@@ -100,7 +100,7 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-
+                    
                     let statuses = ([allKey] + OrderV2Status.allCases.map({ $0.title })).map { $0.toString() }
                     FlexibleView(
                         data: statuses,
@@ -119,7 +119,7 @@ struct OrderHistoryFilterView: View {
                             viewModel.statusSelected = title == allKey.toString() ? nil : action
                         }
                     }
-
+                    
                     /*
                     HStack(spacing: 8) {
                         TextSelectable(content: "All", selected: $statusSelected, value: nil)
@@ -137,7 +137,7 @@ struct OrderHistoryFilterView: View {
                         }
                         Spacer()
                     }
-*/
+                    */
                     Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
                 }
                 .padding(.top, .lg)
@@ -167,7 +167,7 @@ struct OrderHistoryFilterView: View {
                             viewModel.showSelectFromDate = true
                         }
                 }
-
+                
                 VStack(alignment: .leading, spacing: 4) {
                     Text("To")
                         .font(.labelSmallSecondary)
@@ -240,14 +240,14 @@ struct OrderHistoryFilterView: View {
                     }
                 }
             }
-
+            
             HStack(spacing: .xl) {
                 CustomButton(title: "Reset", variant: .secondary) {
                     onDismiss?()
                     onFilterSelected?(nil, nil, nil, nil, nil)
-
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
-
+                        
                     }
                 }
                 .frame(height: 56)
@@ -292,7 +292,7 @@ private struct TextSelectable<T: Equatable>: View {
     @State var content: LocalizedStringKey = "All"
     @Binding var selected: T?
     @State var value: T?
-
+    
     var body: some View {
         Text(content)
             .font(.labelSmallSecondary)

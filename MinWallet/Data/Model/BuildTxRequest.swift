@@ -5,7 +5,7 @@ import Then
 
 struct BuildTxRequest: Then {
     var sender: String = ""
-    var min_amount_out: String = "" 
+    var min_amount_out: String = ""
     var amount_in_decimal: Bool = false
     var estimate: Estimate = Estimate()
     

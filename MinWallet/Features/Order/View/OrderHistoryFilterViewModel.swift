@@ -20,9 +20,9 @@ class OrderHistoryFilterViewModel: ObservableObject {
     var showSelectFromDate: Bool = false
     @Published
     var showSelectToDate: Bool = false
-
+    
     init() {}
-
+    
     func reset() {
         showSelectToDate = false
         showSelectFromDate = false
@@ -32,7 +32,7 @@ class OrderHistoryFilterViewModel: ObservableObject {
         fromDate = nil
         toDate = nil
     }
-
+    
     func bindData(vm: OrderHistoryViewModel) {
         let input = vm.input
         contractTypeSelected = input.ammType.unwrapped?.value

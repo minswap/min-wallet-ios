@@ -32,24 +32,24 @@ struct TokenLogoView: View {
         self._forceVerified = .constant(forceVerified)
         self._size = .init(initialValue: size)
     }
-
+    
     private var uniqueID: String {
         let currencySymbol = currencySymbol ?? ""
         let tokenName = tokenName ?? ""
         if currencySymbol.isEmpty && tokenName.isEmpty {
             return ""
         }
-
+        
         if currencySymbol.isEmpty {
             return tokenName
         }
-
+        
         if tokenName.isEmpty {
             return currencySymbol
         }
         return currencySymbol + "." + tokenName
     }
-
+    
     var body: some View {
         ZStack {
             Group {
@@ -85,7 +85,7 @@ struct TokenLogoView: View {
         }
         .frame(width: size.width, height: size.height)
     }
-
+    
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let path = "\(currencySymbol)\(tokenName)"
         return "\(MinWalletConstant.minAssetURL)/\(path)"
@@ -98,5 +98,5 @@ struct TokenLogoView: View {
         //            .frame(width: 28, height: 28)
     }
     .background(.pink)
-
+    
 }

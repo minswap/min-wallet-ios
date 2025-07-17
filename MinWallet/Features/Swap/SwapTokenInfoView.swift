@@ -7,10 +7,10 @@ struct SwapTokenInfoView: View {
     private var onDismiss
     @ObservedObject
     var viewModel: SwapTokenViewModel
-
+    
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
     var onSwap: (() -> Void)?
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Details")
@@ -28,7 +28,7 @@ struct SwapTokenInfoView: View {
                         .toExact(decimal: Double(decimal))
                         .formatNumber(suffix: tokenName, roundingOffset: nil, font: .labelMediumSecondary, fontColor: .colorBaseTent)
                 )
-                    .lineLimit(1)
+                .lineLimit(1)
             }
             .padding(.top, .lg)
             .contentShape(.rect)
@@ -67,7 +67,7 @@ struct SwapTokenInfoView: View {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
                 let decimal: Int = {
-                    viewModel.isSwapExactIn ? viewModel.tokenPay.token.decimals : viewModel.tokenReceive.token.decimals 
+                    viewModel.isSwapExactIn ? viewModel.tokenPay.token.decimals : viewModel.tokenReceive.token.decimals
                 }()
                 let currentSymbol: String = {
                     viewModel.isSwapExactIn ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName
@@ -78,7 +78,7 @@ struct SwapTokenInfoView: View {
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("Liquidity Provider Fee","The fee paid to liquidity providers for facilitating your trade. This fee is deducted from your input amount and distributed to users who supply assets to the liquidity pool.")
+                onShowToolTip?("Liquidity Provider Fee", "The fee paid to liquidity providers for facilitating your trade. This fee is deducted from your input amount and distributed to users who supply assets to the liquidity pool.")
             }
             HStack {
                 DashedUnderlineText(text: "Service Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -89,7 +89,7 @@ struct SwapTokenInfoView: View {
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("Service Fee","The service fee is charged for routing your trade through multiple liquidity sources to find the best price. The fee is calculated as the greater of 0.85₳ or --% of your trade amount.")
+                onShowToolTip?("Service Fee", "The service fee is charged for routing your trade through multiple liquidity sources to find the best price. The fee is calculated as the greater of 0.85₳ or --% of your trade amount.")
             }
             HStack {
                 DashedUnderlineText(text: "DEX's Fees", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -100,7 +100,7 @@ struct SwapTokenInfoView: View {
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("DEX's Fees","The DEX fees includes the batcher fee and network fee required to process your transaction on the blockchain. These fees are necessary to ensure your trade is executed and confirmed by the network.")
+                onShowToolTip?("DEX's Fees", "The DEX fees includes the batcher fee and network fee required to process your transaction on the blockchain. These fees are necessary to ensure your trade is executed and confirmed by the network.")
             }
             HStack {
                 DashedUnderlineText(text: "Refundable deposit", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
@@ -112,7 +112,7 @@ struct SwapTokenInfoView: View {
             .padding(.bottom, 40)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("Refundable deposit","This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled")
+                onShowToolTip?("Refundable deposit", "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled")
             }
             /*
             HStack {

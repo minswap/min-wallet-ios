@@ -5,7 +5,7 @@ import FlowStacks
 struct SwapTokenCustomizedRouteView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-
+    
     private let columns = [
         GridItem(.flexible(), spacing: .xl),
         GridItem(.flexible(), spacing: .xl),
@@ -52,7 +52,7 @@ struct SwapTokenCustomizedRouteView: View {
                 }
                 .padding(.horizontal, .xl)
             }
-             
+            
             Spacer(minLength: 0)
             HStack(spacing: 16) {
                 CustomButton(title: "Cancel", variant: .secondary) {

@@ -8,7 +8,7 @@ typealias ContractType = AMMType
 
 extension OrderV2Action: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .deposit:
@@ -33,7 +33,7 @@ extension OrderV2Action: @retroactive Identifiable {
             "Zap out"
         }
     }
-
+    
     var titleFilter: LocalizedStringKey {
         switch self {
         case .deposit:
@@ -58,7 +58,7 @@ extension OrderV2Action: @retroactive Identifiable {
             ""
         }
     }
-
+    
     public init?(title: String) {
         switch title {
         case OrderV2Action.deposit.titleFilter.toString():
@@ -87,7 +87,7 @@ extension OrderV2Action: @retroactive Identifiable {
 
 extension OrderV2Status: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .batched:
@@ -98,7 +98,7 @@ extension OrderV2Status: @retroactive Identifiable {
             "Pending"
         }
     }
-
+    
     var foregroundColor: Color {
         switch self {
         case .batched:
@@ -109,7 +109,7 @@ extension OrderV2Status: @retroactive Identifiable {
             .colorInteractiveToneWarning
         }
     }
-
+    
     var foregroundCircleColor: Color {
         switch self {
         case .batched:
@@ -120,7 +120,7 @@ extension OrderV2Status: @retroactive Identifiable {
             .colorInteractiveToneWarningSub
         }
     }
-
+    
     var backgroundColor: Color {
         switch self {
         case .batched:
@@ -131,7 +131,7 @@ extension OrderV2Status: @retroactive Identifiable {
             .colorSurfaceWarningDefault
         }
     }
-
+    
     public init?(title: String) {
         switch title {
         case OrderV2Status.created.title.toString():
@@ -148,7 +148,7 @@ extension OrderV2Status: @retroactive Identifiable {
 
 extension ContractType: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .dex:
@@ -159,7 +159,7 @@ extension ContractType: @retroactive Identifiable {
             "Stableswap"
         }
     }
-
+    
     var backgroundColor: Color {
         switch self {
         case .dex:
@@ -170,7 +170,7 @@ extension ContractType: @retroactive Identifiable {
             .colorDecorativeLeaf
         }
     }
-
+    
     var foregroundColor: Color {
         switch self {
         case .dex:
@@ -188,12 +188,12 @@ extension OrderHistoryQuery.Data.Orders {
         let id: UUID = UUID()
         var order: OrderHistoryQuery.Data.Orders.Order?
         var detail: Detail = .init()
-
+        
         init(order: OrderHistoryQuery.Data.Orders.Order?) {
             self.order = order
             let json = JSON(parseJSON: order?.details ?? "")
             let linkedPools = order?.linkedPools ?? []
-
+            
             func uniqueID(symbol: String?, name: String?) -> String {
                 let symbol = symbol ?? ""
                 let name = name ?? ""
@@ -208,7 +208,7 @@ extension OrderHistoryQuery.Data.Orders {
                 }
                 return symbol + "." + name
             }
-
+            
             detail.isKillable = json["isKillable"].int
             detail.inputs = json["inputs"].arrayValue
                 .map({ input in
@@ -217,13 +217,13 @@ extension OrderHistoryQuery.Data.Orders {
                     let assetSplit = asset.split(separator: ".")
                     let currencySymbol = String(assetSplit.first ?? "")
                     let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
-
+                    
                     let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                     let isVerified: Bool? = metaData?.isVerified
                     let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
                     let uniqueIDzz = uniqueID(symbol: currencySymbol, name: tokenName)
                     let decimals: Int? = (uniqueIDzz == "lovelace" || uniqueIDzz.isEmpty) ? 6 : metaData?.decimals
-
+                    
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
@@ -242,14 +242,14 @@ extension OrderHistoryQuery.Data.Orders {
                     let assetSplit = asset.split(separator: ".")
                     let currencySymbol = String(assetSplit.first ?? "")
                     let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
-
+                    
                     let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                     let isVerified: Bool? = metaData?.isVerified
                     let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
-
+                    
                     let uniqueIDzz = uniqueID(symbol: currencySymbol, name: tokenName)
                     let decimals: Int? = (uniqueIDzz == "lovelace" || uniqueIDzz.isEmpty) ? 6 : metaData?.decimals
-
+                    
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                         currencySymbol: currencySymbol,
                         tokenName: tokenName,
@@ -277,9 +277,9 @@ extension OrderHistoryQuery.Data.Orders {
 
                     let metaData = assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
                     let lpMetaData = lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata
-
+                    
                     let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? lpMetaData?.ticker ?? ""
-
+                    
                     let decimals: Int? =
                         assets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
                         ?? lpAssets.first { ($0.currencySymbol + "." + $0.tokenName) == asset }?.metadata?.decimals
@@ -291,7 +291,7 @@ extension OrderHistoryQuery.Data.Orders {
                         amount: amount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
                         currency: name)
                 })
-
+            
             detail.changeAmount = json["change_amount"].arrayValue
                 .map({ input in
                     let amount = input["amount"]["$bigint"].doubleValue
@@ -318,7 +318,7 @@ extension OrderHistoryQuery.Data.Orders {
                         amount: amount / pow(10.0, Double(uniqueID(symbol: currencySymbol, name: tokenName) == UserInfo.TOKEN_ADA ? 6 : (decimals ?? 0))),
                         currency: currencySymbol == MinWalletConstant.lpV1CurrencySymbol ? "LP" : name)
                 })
-
+            
             let name = detail.inputs.map { $0.currency }.joined(separator: ", ") + " - " + detail.outputs.map({ $0.currency }).joined(separator: ",")
             detail.name = name
             detail.depositAda = json["depositAda"]["$bigint"].doubleValue
@@ -330,9 +330,9 @@ extension OrderHistoryQuery.Data.Orders {
             detail.minimumAmountPerSwap = json["minimumAmountPerSwap"]["$bigint"].doubleValue
             //TODO: maxHops or maxSwapTime
             detail.maxSwapTime = json["maxHops"].intValue
-
+            
             let totalInput = detail.inputs.map { $0.amount }.reduce(0, +)
-
+            
             detail.fillHistories = json["fillHistories"].arrayValue
                 .map({ history in
                     func getTokenFromJson(input: JSON) -> OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token {
@@ -341,14 +341,14 @@ extension OrderHistoryQuery.Data.Orders {
                         let assetSplit = asset.split(separator: ".")
                         let currencySymbol = String(assetSplit.first ?? "")
                         let tokenName: String? = assetSplit.count > 1 ? String(assetSplit.last ?? "") : nil
-
+                        
                         let metaData: OrderHistoryQuery.Data.Orders.Order.LinkedPool.Asset.Metadata? = linkedPools.flatMap { $0.assets }.first { uniqueID(symbol: $0.currencySymbol, name: $0.tokenName) == asset }?.metadata
                         let isVerified: Bool? = metaData?.isVerified
                         let name: String = metaData?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID(symbol: currencySymbol, name: tokenName)] ?? tokenName?.adaName ?? tokenName ?? ""
-
+                        
                         let uniqueIDzz = uniqueID(symbol: currencySymbol, name: tokenName)
                         let decimals: Int? = (uniqueIDzz == "lovelace" || uniqueIDzz.isEmpty) ? 6 : metaData?.decimals
-
+                        
                         return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.Token(
                             currencySymbol: currencySymbol,
                             tokenName: tokenName,
@@ -358,11 +358,11 @@ extension OrderHistoryQuery.Data.Orders {
                             currency: currencySymbol == MinWalletConstant.lpV1CurrencySymbol ? "LP" : name
                         )
                     }
-
+                    
                     let input = getTokenFromJson(input: history["input"])
                     let output = getTokenFromJson(input: history["output"])
                     let txId = history["txId"]["$bytes"].stringValue
-
+                    
                     return OrderHistoryQuery.Data.Orders.WrapOrder.Detail.FillHistory(
                         id: UUID(),
                         input: input,
@@ -410,7 +410,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder.Detail {
         var limitAmount: Double = 0
         var stopAmount: Double = 0
     }
-
+    
     struct FillHistory: Hashable, Identifiable {
         var id: UUID = .init()
         var input: Token = .init()
@@ -422,22 +422,22 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder.Detail {
 
 extension OrderHistoryQuery.Data.Orders.WrapOrder {
     static let TYPE_SHOW_ROUTER: [OrderV2Action] = [OrderV2Action.market, .limit, .stopLoss, .oco, .partialSwap]
-
+    
     var isShowRouter: Bool {
         guard let action = order?.action.value else { return false }
         return OrderHistoryQuery.Data.Orders.WrapOrder.TYPE_SHOW_ROUTER.contains(action)
     }
-
+    
     var overSlippageWarning: AttributedString? {
         guard let order = order, let overSlippage = order.overSlippage else { return nil }
-
+        
         let inputTicker: String = detail.inputs.first?.currency ?? ""
         let inputAmount: Double = detail.inputs.first?.amount ?? 0
         let decimalsIn: Double = Double(detail.inputs.first?.decimals ?? 0)
         //let outputAmount: Double = detail.outputs.first?.amount ?? 0
         let outputTicker: String = detail.outputs.first?.currency ?? ""
         let decimalsOut: Double = Double(detail.outputs.first?.decimals ?? 0)
-
+        
         var attr: [AttributedString?] = []
         switch overSlippage.__typename {
         case "SwapExactInOverSlippageDetail":
@@ -575,11 +575,11 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
 
         case "DepositOverSlippageDetail":
             guard order.action.value != .oco else { return nil }
-
+            
             let currentAmount = overSlippage.asDepositOverSlippageDetail?.receivedLPAmount.toExact(decimal: decimalsOut)
             let inputATicker: String = detail.inputs.prefix(detail.inputs.count - 1).map { $0.currency }.joined(separator: ", ")
             let inputBTicker: String = detail.inputs.last?.currency ?? ""
-
+            
             attr = [
                 AttributedString(key: "Your attempt to deposit ").build(),
                 AttributedString(inputATicker).build(font: .paragraphXSemiSmall, color: .colorInteractiveToneWarning),
@@ -628,7 +628,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
                 })
 
             let receivedAmounts = order.overSlippage?.asWithdrawOverSlippageDetail?.receivedAmounts ?? []
-
+            
             let rates: [AttributedString] = receivedAmounts.enumerated()
                 .compactMap({ (index, amount) in
                     guard let output = detail.outputs[gk_safeIndex: index] else { return nil }
@@ -664,7 +664,7 @@ extension OrderHistoryQuery.Data.Orders.WrapOrder {
         default:
             return nil
         }
-
+        
         attr = attr.compactMap { $0 }
         var raw = AttributedString()
         attr.forEach { r in

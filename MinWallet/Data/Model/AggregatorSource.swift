@@ -18,7 +18,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
     case WingRiders
     case WingRidersStableV1
     case WingRidersStableV2
-
+    
     var name: LocalizedStringKey {
         switch self {
         case .MinswapV2:
@@ -51,24 +51,24 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
             "Splash Stable"
         }
     }
-
+    
     var image: ImageResource {
         switch self {
         case .MinswapV2, .Minswap, .MinswapStable:
-                .min
+            .min
         case .MuesliSwap:
-                .icMuliswap
+            .icMuliswap
         case .Splash, .SplashStable, .Spectrum:
-                .icSplashLogo
+            .icSplashLogo
         case .SundaeSwapV3, .SundaeSwap:
-                .icSundae
+            .icSundae
         case .VyFinance:
-                .icVyfinance
+            .icVyfinance
         case .WingRidersV2, .WingRiders, .WingRidersStableV1, .WingRidersStableV2:
-                .icWingriders
+            .icWingriders
         }
     }
-
+    
     var isLocked: Bool {
         switch self {
         case .MinswapV2, .Minswap, .MinswapStable:
@@ -80,34 +80,34 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
     
     var rawId: String {
         switch self {
-            case .MinswapV2:
-                "MinswapV2"
-            case .Minswap:
-                "Minswap"
-            case .MinswapStable:
-                "MinswapStable"
-            case .MuesliSwap:
-                "MuesliSwap"
-            case .Splash:
-                "Splash"
-            case .SundaeSwapV3:
-                "SundaeSwapV3"
-            case .SundaeSwap:
-                "SundaeSwap"
-            case .VyFinance:
-                "VyFinance"
-            case .WingRidersV2:
-                "WingRidersV2"
-            case .WingRiders:
-                "WingRiders"
-            case .WingRidersStableV1:
-                "WingRidersStableV1"
-            case .WingRidersStableV2:
-                "WingRidersStableV2"
-            case .Spectrum:
-                "Spectrum"
-            case .SplashStable:
-                "SplashStable"
+        case .MinswapV2:
+            "MinswapV2"
+        case .Minswap:
+            "Minswap"
+        case .MinswapStable:
+            "MinswapStable"
+        case .MuesliSwap:
+            "MuesliSwap"
+        case .Splash:
+            "Splash"
+        case .SundaeSwapV3:
+            "SundaeSwapV3"
+        case .SundaeSwap:
+            "SundaeSwap"
+        case .VyFinance:
+            "VyFinance"
+        case .WingRidersV2:
+            "WingRidersV2"
+        case .WingRiders:
+            "WingRiders"
+        case .WingRidersStableV1:
+            "WingRidersStableV1"
+        case .WingRidersStableV2:
+            "WingRidersStableV2"
+        case .Spectrum:
+            "Spectrum"
+        case .SplashStable:
+            "SplashStable"
         }
     }
     

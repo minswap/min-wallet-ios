@@ -2,10 +2,11 @@ import Foundation
 import ObjectMapper
 
 public
-extension Mapper {
+    extension Mapper
+{
     func gk_mapArrayOrNull(JSONObject: Any?) -> [N]? {
         guard JSONObject != nil, !(JSONObject is NSNull)
-            else { return [] }
+        else { return [] }
         
         return mapArray(JSONObject: JSONObject)
     }
@@ -20,47 +21,49 @@ extension Mapper {
 }
 
 public
-class GKMapFromJSONToType<T>: TransformType {
+    class GKMapFromJSONToType<T>: TransformType
+{
     public typealias Object = T
-    public typealias JSON   = Any
+    public typealias JSON = Any
     
     private let fromJSON: (Any?) -> T?
     
     public init(fromJSON: @escaping (Any?) -> T?) {
         self.fromJSON = fromJSON
     }
-
+    
     open func transformFromJSON(_ value: Any?) -> T? {
         return fromJSON(value)
     }
-
+    
     open func transformToJSON(_ value: T?) -> JSON? {
         return value
     }
 }
 
 public let GKMapFromJSONToDouble = GKMapFromJSONToType<Double>(fromJSON: gk_getDoubleForValue)
-public let GKMapFromJSONToInt    = GKMapFromJSONToType<Int>(fromJSON: gk_getIntForValue)
+public let GKMapFromJSONToInt = GKMapFromJSONToType<Int>(fromJSON: gk_getIntForValue)
 public let GKMapFromJSONToString = GKMapFromJSONToType<String>(fromJSON: gk_getStringForValue)
-public let GKMapFromJSONToBool   = GKMapFromJSONToType<Bool>(fromJSON: gk_getBoolForValue)
+public let GKMapFromJSONToBool = GKMapFromJSONToType<Bool>(fromJSON: gk_getBoolForValue)
 
 public
-class GKMapBetweenJSONAndType<J, T>: TransformType {
+    class GKMapBetweenJSONAndType<J, T>: TransformType
+{
     public typealias Object = T
-    public typealias JSON   = J
+    public typealias JSON = J
     
     private let fromJSON: (Any?) -> T?
-    private let toJSON  : (T?) -> J?
+    private let toJSON: (T?) -> J?
     
     public init(fromJSON: @escaping (Any?) -> T?, toJSON: @escaping (T?) -> J?) {
         self.fromJSON = fromJSON
-        self.toJSON   = toJSON
+        self.toJSON = toJSON
     }
-
+    
     open func transformFromJSON(_ value: Any?) -> T? {
         return fromJSON(value)
     }
-
+    
     open func transformToJSON(_ value: T?) -> J? {
         return toJSON(value)
     }
@@ -125,8 +128,9 @@ public func gk_getBoolForValue(_ input: Any?) -> Bool? {
 
 public func gk_getLatitudeForValue(_ input: Any?) -> Double? {
     guard let jsonString = gk_getStringForValue(input),
-          !jsonString.isBlank,
-          let latValue = gk_getDoubleForValue(input) else {
+        !jsonString.isBlank,
+        let latValue = gk_getDoubleForValue(input)
+    else {
         return nil
     }
     return max(-90.0, min(latValue, 90.0))
@@ -134,8 +138,9 @@ public func gk_getLatitudeForValue(_ input: Any?) -> Double? {
 
 public func gk_getLongitudeForValue(_ input: Any?) -> Double? {
     guard let jsonString = gk_getStringForValue(input),
-          !jsonString.isBlank,
-          let lngValue = gk_getDoubleForValue(input) else {
+        !jsonString.isBlank,
+        let lngValue = gk_getDoubleForValue(input)
+    else {
         return nil
     }
     return max(-180.0, min(lngValue, 180.0))

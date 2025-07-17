@@ -5,7 +5,7 @@ import Then
 
 struct EstimationRequest: Then {
     var amount: String = ""
-    var token_in: String = "" 
+    var token_in: String = ""
     var token_out: String = ""
     var slippage: Double = 0
     var exclude_protocols: [AggregatorSource] = []
@@ -31,23 +31,25 @@ struct EstimationResponse: Mappable, Then {
     var amountInDecimal: Bool = false
     var percents: [Double] = []
     
-    init() { }
+    init() {}
     
     init?(map: Map) {}
     
     mutating func mapping(map: Map) {
-        tokenIn         <- map["token_in"]
-        tokenOut        <- map["token_out"]
-        amountIn        <- map["amount_in"]
-        amountOut       <- map["amount_out"]
-        minAmountOut    <- map["min_amount_out"]
-        totalLpFee      <- map["total_lp_fee"]
-        totalDexFee     <- map["total_dex_fee"]
-        aggregatorFee   <- map["aggregator_fee"]
-        deposits        <- map["deposits"]
-        avgPriceImpact  <- (map["avg_price_impact"], 
-                            GKMapFromJSONToDouble)
-        paths           <- map["paths"]
+        tokenIn <- map["token_in"]
+        tokenOut <- map["token_out"]
+        amountIn <- map["amount_in"]
+        amountOut <- map["amount_out"]
+        minAmountOut <- map["min_amount_out"]
+        totalLpFee <- map["total_lp_fee"]
+        totalDexFee <- map["total_dex_fee"]
+        aggregatorFee <- map["aggregator_fee"]
+        deposits <- map["deposits"]
+        avgPriceImpact <- (
+            map["avg_price_impact"],
+            GKMapFromJSONToDouble
+        )
+        paths <- map["paths"]
         amountInDecimal <- map["amount_in_decimal"]
         
         calculatePercentSwapPath()
@@ -64,7 +66,7 @@ struct EstimationResponse: Mappable, Then {
         if let percent = percents[gk_safeIndex: paths.count - 1] {
             let sumAll = percents.reduce(0.0, +)
             if sumAll != 100 {
-                percents[paths.count - 1]  = 
+                percents[paths.count - 1]  =
             }
         }
          */
@@ -89,21 +91,21 @@ struct SwapPath: Mappable, Identifiable {
     
     init() {}
     
-    init?(map: Map) { }
+    init?(map: Map) {}
     
     mutating func mapping(map: Map) {
-        lpToken         <- map["lp_token"]
-        tokenIn         <- map["token_in"]
-        tokenOut        <- map["token_out"]
-        amountIn        <- map["amount_in"]
-        amountOut       <- map["amount_out"]
-        minAmountOut    <- map["min_amount_out"]
-        lpFee           <- map["lp_fee"]
-        dexFee          <- map["dex_fee"]
-        deposits        <- map["deposits"]
-        priceImpact     <- map["price_impact"]
-        poolId          <- map["pool_id"]
-        protocolName    <- map["protocol"]
+        lpToken <- map["lp_token"]
+        tokenIn <- map["token_in"]
+        tokenOut <- map["token_out"]
+        amountIn <- map["amount_in"]
+        amountOut <- map["amount_out"]
+        minAmountOut <- map["min_amount_out"]
+        lpFee <- map["lp_fee"]
+        dexFee <- map["dex_fee"]
+        deposits <- map["deposits"]
+        priceImpact <- map["price_impact"]
+        poolId <- map["pool_id"]
+        protocolName <- map["protocol"]
     }
 }
 
@@ -144,13 +146,14 @@ struct SwapPath: Mappable, Identifiable {
 
 extension EstimationResponse {
     static var fakeData: EstimationResponse {
-        EstimationResponse().with { 
-            $0.tokenIn = "lovelace"
-            $0.amountIn = "100"
-            $0.amountOut = "2000"
-            $0.tokenOut = "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
-            $0.paths = SwapPath.fakeData
-        }
+        EstimationResponse()
+            .with {
+                $0.tokenIn = "lovelace"
+                $0.amountIn = "100"
+                $0.amountOut = "2000"
+                $0.tokenOut = "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
+                $0.paths = SwapPath.fakeData
+            }
     }
 }
 extension SwapPath {

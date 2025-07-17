@@ -75,7 +75,7 @@ extension Alamofire.DataResponse {
                     print("Error: Response isn't JSON Object")
                     return self
                 }
-
+                
                 if !JSONSerialization.isValidJSONObject(value) {
                     print("Error: Response isn't JSON Object")
                 } else if let jsonData = try? JSONSerialization.data(withJSONObject: value as AnyObject, options: [.prettyPrinted]),
@@ -90,7 +90,7 @@ extension Alamofire.DataResponse {
             }
             print(">>>> Response -LOG-END- >>>>")
         }
-
+        
         return self
     }
 }
@@ -100,14 +100,14 @@ extension Array where Element: Hashable {
     func removingDuplicates() -> [Element] {
         var uniqueSet = Set<Element>()
         var result = Array<Element>()
-
+        
         for (_, el) in self.enumerated() {
             if !uniqueSet.contains(el) {
                 uniqueSet.insert(el)
                 result.append(el)
             }
         }
-
+        
         return result
     }
 }

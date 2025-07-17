@@ -41,7 +41,7 @@ struct SwapTokenRoutingView: View {
                 .zIndex(1)
         }
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Your trade route")
@@ -107,7 +107,7 @@ struct SwapTokenRoutingView: View {
                                                         .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
                                                 )
                                                 .containerShape(.rect)
-                                                .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName ) }
+                                                .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName) }
                                                 .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .bottom)
                                             
                                             DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
@@ -160,10 +160,10 @@ struct SwapTokenRoutingView: View {
             let estimationResponse: EstimationResponse = viewModel.iosTradeEstimate ?? .init()
             let decimalIn = viewModel.isSwapExactIn ? viewModel.tokenPay.token.decimals : viewModel.tokenReceive.token.decimals
             let decimalOut = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.decimals : viewModel.tokenPay.token.decimals
-            let tokenIn: Binding<String> = .constant(estimationResponse.tokenIn) 
-            let tokenOut: Binding<String> = .constant(estimationResponse.tokenOut) 
-            let amountIn: Binding<Double> = .constant(estimationResponse.amountIn.toExact(decimal: decimalIn)) 
-            let amountOut: Binding<Double> = .constant(estimationResponse.amountOut.toExact(decimal: decimalOut)) 
+            let tokenIn: Binding<String> = .constant(estimationResponse.tokenIn)
+            let tokenOut: Binding<String> = .constant(estimationResponse.tokenOut)
+            let amountIn: Binding<Double> = .constant(estimationResponse.amountIn.toExact(decimal: decimalIn))
+            let amountOut: Binding<Double> = .constant(estimationResponse.amountOut.toExact(decimal: decimalOut))
             TokenInOutView(token: tokenIn, amount: amountIn)
             Spacer(minLength: 0)
             TokenInOutView(token: tokenOut, amount: amountOut, isLeading: false)
@@ -263,4 +263,3 @@ private struct TokenInOutView: View {
     SwapTokenRoutingView()
         .environmentObject(SwapTokenViewModel(tokenReceive: nil))
 }
-

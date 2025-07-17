@@ -24,11 +24,11 @@ struct MinWalletConstant {
     static let minPolicyURL = GetInfoDictionaryString(for: "MIN_POLICY_URL", true)
     static let minAssetURL = GetInfoDictionaryString(for: "MIN_ASSET_URL", true)
     static let minAggURL = GetInfoDictionaryString(for: "MIN_AGG_URL", true)
-
+    
     private init() {
-
+        
     }
-
+    
 }
 
 

@@ -5,9 +5,9 @@ import MinWalletAPI
 struct OrderHistoryItemView: View {
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
-
+    
     var onCancelItem: (() -> Void)?
-
+    
     var body: some View {
         VStack(spacing: .lg) {
             tokenView
@@ -108,11 +108,11 @@ struct OrderHistoryItemView: View {
                 /*
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-
+                
                     }
                     .frame(height: 36)
                     CustomButton(title: "Update") {
-
+                
                     }
                     .frame(height: 36)
                 }
@@ -141,11 +141,11 @@ struct OrderHistoryItemView: View {
                 }
                 .frame(height: 36)
             }
-
+            
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }
-
+    
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
@@ -191,5 +191,5 @@ struct OrderHistoryItemView: View {
             .padding(.horizontal, .xl)
         Spacer()
     }
-
+    
 }

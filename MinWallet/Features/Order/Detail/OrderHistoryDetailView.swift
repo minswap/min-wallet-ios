@@ -23,7 +23,7 @@ struct OrderHistoryDetailView: View {
     @State
     private var isShowSignContract: Bool = false
     var onReloadOrder: (() -> Void)?
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -83,7 +83,7 @@ struct OrderHistoryDetailView: View {
                     .frame(height: 56)
                     /*
                     CustomButton(title: "Update") {
-
+                    
                     }
                     .frame(height: 56)
                      */
@@ -123,7 +123,7 @@ struct OrderHistoryDetailView: View {
             )
         }
     }
-
+    
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
@@ -172,7 +172,7 @@ struct OrderHistoryDetailView: View {
             .lineLimit(1)
         }
     }
-
+    
     private var inputInfoView: some View {
         HStack(alignment: .timelineAlignment, spacing: .xl) {
             VStack(spacing: 0) {
@@ -255,7 +255,7 @@ struct OrderHistoryDetailView: View {
             }
         }
     }
-
+    
     private var executeInfoView: some View {
         HStack(alignment: .timelineAlignment, spacing: .xl) {
             VStack(spacing: 0) {
@@ -359,7 +359,7 @@ struct OrderHistoryDetailView: View {
             .padding(.bottom, .xl)
         }
     }
-
+    
     private var outputInfoView: some View {
         HStack(alignment: .timelineAlignment, spacing: .xl) {
             VStack(spacing: 0) {
@@ -499,7 +499,7 @@ struct OrderHistoryDetailView: View {
             }
         }
     }
-
+    
     private func cancelOrder() async throws {
         guard let order = order else { return }
         let txId = order.order?.txIn.txId ?? ""
@@ -511,13 +511,13 @@ struct OrderHistoryDetailView: View {
             publicKey: UserInfo.shared.minWallet?.publicKey ?? "",
             type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
         let _ = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input))
-
+        
         let orderV2Input = OrderV2Input(address: userInfo.minWallet?.address ?? "", txId: .some(order.order?.txIn.txId ?? ""))
         let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: orderV2Input))
         guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
         self.order = order
     }
-
+    
     private func authenticationSuccess() {
         Task {
             do {
@@ -540,7 +540,7 @@ fileprivate extension VerticalAlignment {
             context[.top]
         }
     }
-
+    
     static let timelineAlignment = VerticalAlignment(TimelineAlignment.self)
 }
 

@@ -17,11 +17,11 @@ struct ConfirmSendTokenView: View {
     private var isCopyAddress: Bool = false
     @StateObject
     private var viewModel: ConfirmSendTokenViewModel
-
+    
     init(viewModel: ConfirmSendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -48,7 +48,7 @@ struct ConfirmSendTokenView: View {
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
                     }
-
+                    
                     Color.colorBorderPrimarySub
                         .frame(height: 1)
                         .padding(.horizontal, .xl)
@@ -135,7 +135,7 @@ struct ConfirmSendTokenView: View {
             )
         }
     }
-
+    
     private func authenticationSuccess() {
         Task {
             do {
