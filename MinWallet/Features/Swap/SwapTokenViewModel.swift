@@ -350,6 +350,7 @@ class SwapTokenViewModel: ObservableObject {
         let info: EstimationResponse?
         if amount > 0 {
             let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
+            try APIRouterCommon.parseDefaultErrorMessage(jsonData)
             info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
         } else {
             info = nil

@@ -78,7 +78,7 @@ struct SwapPath: Mappable, Identifiable {
     
     var lpToken: String = ""
     var tokenIn: String = ""
-    var tokenOut: String = "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
+    var tokenOut: String = ""
     var amountIn: String = ""
     var amountOut: String = ""
     var minAmountOut: String = ""
@@ -87,7 +87,7 @@ struct SwapPath: Mappable, Identifiable {
     var deposits: String = ""
     var priceImpact: Double = 0.0
     var poolId: String = ""
-    var protocolName: String = "Kaz"
+    var protocolName: String = ""
     
     init() {}
     
@@ -106,62 +106,5 @@ struct SwapPath: Mappable, Identifiable {
         priceImpact <- map["price_impact"]
         poolId <- map["pool_id"]
         protocolName <- map["protocol"]
-    }
-}
-
-
-/*
-{
-    "token_in": "lovelace",
-    "token_out": "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e",
-    "amount_in": "1",
-    "amount_out": "36.706439",
-    "min_amount_out": "36.523819",
-    "total_lp_fee": "0.003",
-    "total_dex_fee": "0.9",
-    "deposits": "2",
-    "avg_price_impact": 0.30014266734933054,
-    "paths": [
-        [
-            {
-            "lp_token": "e4214b7cce62ac6fbba385d164df48e157eae5863521b4b67ca71d866aa2153e1ae896a95539c9d62f76cedcdabdcdf144e564b8955f609d660cf6a2",
-            "token_in": "lovelace",
-            "token_out": "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e",
-            "amount_in": "1",
-            "amount_out": "36.706439",
-            "min_amount_out": "36.523819",
-            "lp_fee": "0.003",
-            "dex_fee": "0.9",
-            "deposits": "2",
-            "price_impact": 0.30014266734933054,
-            "pool_id": "lovelace.29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e",
-            "protocol": "Minswap"
-            }
-        ]
-    ],
-    "amount_in_decimal": true
-}
-*/
-
-
-extension EstimationResponse {
-    static var fakeData: EstimationResponse {
-        EstimationResponse()
-            .with {
-                $0.tokenIn = "lovelace"
-                $0.amountIn = "100"
-                $0.amountOut = "2000"
-                $0.tokenOut = "29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e"
-                $0.paths = SwapPath.fakeData
-            }
-    }
-}
-extension SwapPath {
-    static var fakeData: [[SwapPath]] {
-        [
-            [SwapPath(), SwapPath()],
-            [SwapPath(), SwapPath()],
-            [SwapPath(), SwapPath()],
-        ]
     }
 }

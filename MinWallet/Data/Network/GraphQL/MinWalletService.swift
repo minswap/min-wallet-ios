@@ -88,7 +88,6 @@ extension MinWalletService {
 }
 
 extension Error {
-    //TODO: Cuongnv243 extract error
     var rawError: String {
         guard let error = self as? ResponseCodeInterceptor.ResponseCodeError else { return self.localizedDescription }
         guard case let .invalidResponseCode(_, rawData) = error else { return error.localizedDescription }

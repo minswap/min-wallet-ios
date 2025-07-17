@@ -69,7 +69,7 @@ struct SwapTokenRoutingView: View {
                                 }
                                 .frame(width: 28)
                                 
-                                HStack(spacing: 0) {
+                                HStack(alignment: .center, spacing: 0) {
                                     Text("\(abs(percent).formatSNumber(maximumFractionDigits: 2))%")
                                         .foregroundStyle(.colorBaseTent)
                                         .font(.paragraphXMediumSmall)
@@ -79,15 +79,11 @@ struct SwapTokenRoutingView: View {
                                             RoundedRectangle(cornerRadius: BorderRadius.full)
                                                 .stroke(.colorBaseTent, lineWidth: 1)
                                         )
-                                    
-                                    DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
-                                        .frame(height: 0.7)
-                                    Image(.icSplitArrow)
-                                        .resizable()
-                                        .frame(width: 5, height: 6)
-                                        .padding(.trailing, 1)
                                     ForEach(0..<splits.count, id: \.self) { index in
                                         HStack(spacing: 0) {
+                                            if index == 0 {
+                                                DashedLineView()
+                                            }
                                             let split = splits[index]
                                             let tokenDefault = split.tokenOut.tokenDefault
                                             Circle()
@@ -110,12 +106,7 @@ struct SwapTokenRoutingView: View {
                                                 .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName) }
                                                 .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .bottom)
                                             
-                                            DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
-                                                .frame(height: 0.7)
-                                            Image(.icSplitArrow)
-                                                .resizable()
-                                                .frame(width: 5, height: 6)
-                                                .padding(.trailing, 1)
+                                            DashedLineView()
                                         }
                                     }
                                 }
@@ -198,9 +189,20 @@ struct SwapTokenRoutingView: View {
             popoverTarget = target
         }
         idWithProtocolName[target] = protocolName
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             popoverTarget = nil
         }
+    }
+}
+
+private struct DashedLineView: View {
+    var body: some View {
+        DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
+            .frame(height: 0.7)
+        Image(.icSplitArrow)
+            .resizable()
+            .frame(width: 5, height: 6)
+            .padding(.trailing, 1)
     }
 }
 
