@@ -160,6 +160,5 @@ private struct UITextViewWrapper: UIViewRepresentable {
             placeHolderText: "Enter address or ADAHandle",
             onCommit: {}
         )
-        
     }
 }
