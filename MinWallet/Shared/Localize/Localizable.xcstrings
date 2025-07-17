@@ -862,18 +862,6 @@
     "Terms of service" : {
 
     },
-    "Text 1" : {
-
-    },
-    "Text 2" : {
-
-    },
-    "Text 3" : {
-
-    },
-    "Text 145454545" : {
-
-    },
     "The DEX fees includes the batcher fee and network fee required to process your transaction on the blockchain. These fees are necessary to ensure your trade is executed and confirmed by the network." : {
 
     },
@@ -930,6 +918,9 @@
 
     },
     "To wallet address:" : {
+
+    },
+    "togle" : {
 
     },
     "Token migration" : {
