@@ -2,12 +2,12 @@ import SwiftUI
 
 
 struct OrderHistoryCancelView: View {
-
+    
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-
+    
     var onCancelOrder: (() -> Void)?
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Warning")
@@ -30,7 +30,7 @@ struct OrderHistoryCancelView: View {
                 .lineSpacing(2)
                 .padding(.top, .lg)
                 .padding(.horizontal, .xl)
-
+            
             HStack(spacing: .xl) {
                 CustomButton(title: "Dismiss", variant: .secondary) {
                     onDismiss?()
@@ -57,7 +57,7 @@ struct OrderHistoryCancelView: View {
         }
         .presentSheetModifier()
     }
-
+    
 }
 #Preview {
     VStack {
