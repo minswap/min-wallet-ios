@@ -7,18 +7,18 @@ import OneSignalFramework
 
 @MainActor
 class YourTokenViewModel: ObservableObject {
-
+    
     @Published
     var tokens: [TokenProtocol] = []
     @Published
     var showSkeleton: Bool? = nil
-
+    
     private let type: TokenListView.TabType
-
+    
     init(type: TokenListView.TabType) {
         self.type = type
     }
-
+    
     func getTokens() async {
         if showSkeleton == nil {
             showSkeleton = true

@@ -17,20 +17,20 @@ class OrderHistoryViewModel: ObservableObject {
     var orders: [OrderHistoryQuery.Data.Orders.WrapOrder] = []
     @Published
     var showSkeleton: Bool = true
-
+    
     private var cancellables: Set<AnyCancellable> = []
-
+    
     var contractTypeSelected: ContractType?
     var statusSelected: OrderV2Status?
     var actionSelected: OrderV2Action?
     var fromDate: Date?
     var toDate: Date?
-
+    
     private var pagination: OrderPaginationCursorInput?
     private var hasLoadMore: Bool = true
-
+    
     var orderToCancel: OrderHistoryQuery.Data.Orders.WrapOrder? = nil
-
+    
     init() {
         $keyword
             .removeDuplicates()
@@ -47,7 +47,7 @@ class OrderHistoryViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
-
+    
     func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
         withAnimation {
             self.showSkeleton = showSkeleton
@@ -66,7 +66,7 @@ class OrderHistoryViewModel: ObservableObject {
             self.showSkeleton = false
         }
     }
-
+    
     func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
         guard hasLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
@@ -74,7 +74,7 @@ class OrderHistoryViewModel: ObservableObject {
             Task {
                 let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
                 let _orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-
+                
                 self.orders += _orders
                 self.hasLoadMore = !_orders.isEmpty
                 if let cursor = orderData?.orders.cursor {
@@ -83,7 +83,7 @@ class OrderHistoryViewModel: ObservableObject {
             }
         }
     }
-
+    
     var input: OrderV2Input {
         let address = UserInfo.shared.minWallet?.address ?? ""
         //let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
@@ -102,7 +102,7 @@ class OrderHistoryViewModel: ObservableObject {
             txId: !keyword.isBlank && isTxID ? .some(keyword) : nil
         )
     }
-
+    
     func cancelOrder() async throws {
         guard let order = orderToCancel else { return }
         let txId = order.order?.txIn.txId ?? ""
@@ -126,7 +126,7 @@ extension OrderV2Input {
         let fromDateTime = (Double(fromDate) ?? 0) / 1000
         return fromDateTime > 0 ? Date(timeIntervalSince1970: fromDateTime) : nil
     }
-
+    
     var toDateTimeInterval: Date? {
         guard let toDate = toDate.unwrapped, !toDate.isEmpty else { return nil }
         let toDateTime = (Double(toDate) ?? 0) / 1000

@@ -5,11 +5,11 @@ struct SwipeToDeleteModifier: ViewModifier {
     @Binding var offset: CGFloat
     @Binding var isDeleted: Bool
     @GestureState private var isDragging = false
-
+    
     @State var height: CGFloat = 68
-
+    
     let onDelete: () -> Void
-
+    
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {

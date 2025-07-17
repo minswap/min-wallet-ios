@@ -10,7 +10,7 @@ struct Token: Then, Hashable {
     var project: String = ""
     var decimals: Int = 6
     var isVerified: Bool = false
-
+    
     var url: URL?
 }
 
