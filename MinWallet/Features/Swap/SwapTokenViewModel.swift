@@ -248,6 +248,16 @@ class SwapTokenViewModel: ObservableObject {
 
         case .hiddenSelectToken:
             selectTokenVM.resetState()
+                
+        case .cancelTimeInterval:
+            workItem?.cancel()
+        case .startTimeInterval:
+            workItem?.cancel()
+            workItem = DispatchWorkItem() { [weak self] in
+                guard let self = self else { return }
+                self.action.send(.getTradingInfo)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Self.TIME_INTERVAL), execute: workItem!)
         }
     }
     
@@ -320,20 +330,6 @@ class SwapTokenViewModel: ObservableObject {
             withAnimation {
                 isGettingTradeInfo = false
             }
-            
-            workItem = DispatchWorkItem() { [weak self] in
-                guard let self = self else { return }
-                Task {
-                    do {
-                        try await self.getTradingInfo(amount: amount)
-                    } catch {
-                        self.iosTradeEstimate = nil
-                        self.bannerState.showBannerError(error.rawError)
-                    }
-                }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Self.TIME_INTERVAL), execute: workItem!)
         }
         
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
@@ -349,9 +345,15 @@ class SwapTokenViewModel: ObservableObject {
         
         let info: EstimationResponse?
         if amount > 0 {
-            let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
-            try APIRouterCommon.parseDefaultErrorMessage(jsonData)
-            info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
+            do {
+                let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
+                try APIRouterCommon.parseDefaultErrorMessage(jsonData)
+                info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
+            } catch {
+                info = nil
+                workItem?.cancel()
+                throw error
+            }
         } else {
             info = nil
         }
@@ -364,6 +366,8 @@ class SwapTokenViewModel: ObservableObject {
             let outputAmount = info?.amountOut.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
             tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
         }
+        
+        self.action.send(.startTimeInterval)
     }
     
     func swapToken() async throws -> String {
@@ -445,6 +449,8 @@ extension SwapTokenViewModel {
         case resetSwap
         case reloadBalance
         case hiddenSelectToken
+        case cancelTimeInterval
+        case startTimeInterval
     }
 }
 

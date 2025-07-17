@@ -270,11 +270,6 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
-                /*
-                Text("$0.0")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
@@ -346,11 +341,6 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
-                /*
-                Text("$0.0")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
@@ -520,6 +510,7 @@ struct SwapTokenView: View {
         guard !viewModel.tokenPay.amount.doubleValue.isZero, !viewModel.tokenReceive.amount.doubleValue.isZero else { return }
         Task {
             do {
+                viewModel.action.send(.cancelTimeInterval)
                 switch appSetting.authenticationType {
                 case .biometric:
                     try await appSetting.reAuthenticateUser()
@@ -528,6 +519,7 @@ struct SwapTokenView: View {
                     $isShowSignContract.showSheet()
                 }
             } catch {
+                viewModel.action.send(.startTimeInterval)
                 bannerState.showBannerError(error.localizedDescription)
             }
         }
@@ -547,16 +539,10 @@ struct SwapTokenView: View {
                 }
                 bannerState.showBanner(isShow: true)
                 viewModel.action.send(.resetSwap)
-                /*
-                TokenManager.shared.reloadBalance.send(())
-                if appSetting.rootScreen != .home {
-                    appSetting.rootScreen = .home
-                }
-                navigator.popToRoot()
-                 */
             } catch {
                 hudState.showLoading(false)
                 bannerState.showBannerError(error.rawError)
+                viewModel.action.send(.startTimeInterval)
             }
         }
     }
