@@ -56,20 +56,11 @@ struct EstimationResponse: Mappable, Then {
     }
     
     private mutating func calculatePercentSwapPath() {
-        
         let totalAmountIn = max(amountIn.gkDoubleValue, 1)
         percents = paths.map({ path in
             let amountIn = path.first?.amountIn.gkDoubleValue ?? 0.0
             return (amountIn / totalAmountIn) * 100
         })
-        /* TODO: cuongnv test sau
-        if let percent = percents[gk_safeIndex: paths.count - 1] {
-            let sumAll = percents.reduce(0.0, +)
-            if sumAll != 100 {
-                percents[paths.count - 1]  =
-            }
-        }
-         */
     }
 }
 

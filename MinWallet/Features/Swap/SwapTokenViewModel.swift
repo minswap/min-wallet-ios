@@ -248,7 +248,7 @@ class SwapTokenViewModel: ObservableObject {
 
         case .hiddenSelectToken:
             selectTokenVM.resetState()
-                
+
         case .cancelTimeInterval:
             workItem?.cancel()
         case .startTimeInterval:

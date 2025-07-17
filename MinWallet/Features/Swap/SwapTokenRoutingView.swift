@@ -15,32 +15,8 @@ struct SwapTokenRoutingView: View {
     private var idWithProtocolName: [UUID?: String] = [:]
     @Namespace
     private var nsPopover
-    
-    @ViewBuilder
-    private var customPopover: some View {
-        if let popoverTarget {
-            Text("Via \(idWithProtocolName[popoverTarget] ?? "")")
-                .font(.paragraphXSmall)
-                .foregroundStyle(.colorTextTooltip)
-                .padding(.vertical, .md)
-                .padding(.horizontal, 14)
-                .background(
-                    RoundedRectangle(cornerRadius: .md)
-                        .fill(Color(.colorBackgroundTooltip))
-                )
-                .foregroundColor(.colorBackgroundTooltip)
-                .offset(y: 4)
-                .matchedGeometryEffect(
-                    id: popoverTarget,
-                    in: nsPopover,
-                    properties: .position,
-                    anchor: .top,
-                    isSource: false
-                )
-                .transition(.opacity.combined(with: .scale))
-                .zIndex(1)
-        }
-    }
+    @State
+    private var workItem: DispatchWorkItem?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -79,34 +55,44 @@ struct SwapTokenRoutingView: View {
                                             RoundedRectangle(cornerRadius: BorderRadius.full)
                                                 .stroke(.colorBaseTent, lineWidth: 1)
                                         )
-                                    ForEach(0..<splits.count, id: \.self) { index in
+                                    GeometryReader { geometry in
+                                        let circleWidth: CGFloat = 24
+                                        let circleCount = splits.count
+                                        let dashCount = circleCount + 1
+                                        
+                                        let totalDashWidth = geometry.size.width - (CGFloat(circleCount) * circleWidth)
+                                        let dashWidth = (dashCount > 0 ? totalDashWidth / CGFloat(dashCount) : 0)
                                         HStack(spacing: 0) {
-                                            if index == 0 {
-                                                DashedLineView()
-                                            }
-                                            let split = splits[index]
-                                            let tokenDefault = split.tokenOut.tokenDefault
-                                            Circle()
-                                                .fill(.colorBaseBackground)
-                                                .frame(width: 24, height: 24)
-                                                .overlay(
-                                                    TokenLogoView(
-                                                        currencySymbol: tokenDefault.currencySymbol,
-                                                        tokenName: tokenDefault.tokenName,
-                                                        isVerified: false,
-                                                        forceVerified: true,
-                                                        size: .init(width: 20, height: 20)
-                                                    )
-                                                )
-                                                .overlay(
+                                            ForEach(0..<splits.count, id: \.self) { index in
+                                                HStack(spacing: 0) {
+                                                    if index == 0 {
+                                                        DashedLineView().frame(minWidth: dashWidth, maxWidth: dashWidth)
+                                                    }
+                                                    let split = splits[index]
+                                                    let tokenDefault = split.tokenOut.tokenDefault
                                                     Circle()
-                                                        .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
-                                                )
-                                                .containerShape(.rect)
-                                                .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName) }
-                                                .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .bottom)
-                                            
-                                            DashedLineView()
+                                                        .fill(.colorBaseBackground)
+                                                        .frame(width: circleWidth, height: 24)
+                                                        .overlay(
+                                                            TokenLogoView(
+                                                                currencySymbol: tokenDefault.currencySymbol,
+                                                                tokenName: tokenDefault.tokenName,
+                                                                isVerified: false,
+                                                                forceVerified: true,
+                                                                size: .init(width: 20, height: 20)
+                                                            )
+                                                        )
+                                                        .overlay(
+                                                            Circle()
+                                                                .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+                                                        )
+                                                        .containerShape(.rect)
+                                                        .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName) }
+                                                        .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .bottom)
+                                                    
+                                                    DashedLineView().frame(minWidth: dashWidth, maxWidth: dashWidth)
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -179,7 +165,38 @@ struct SwapTokenRoutingView: View {
         }
     }
     
+    @ViewBuilder
+    private var customPopover: some View {
+        if let popoverTarget {
+            Text("Via \(idWithProtocolName[popoverTarget] ?? "")")
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorTextTooltip)
+                .padding(.vertical, .md)
+                .padding(.horizontal, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: .md)
+                        .fill(Color(.colorBackgroundTooltip))
+                )
+                .foregroundColor(.colorBackgroundTooltip)
+                .offset(y: 4)
+                .matchedGeometryEffect(
+                    id: popoverTarget,
+                    in: nsPopover,
+                    properties: .position,
+                    anchor: .top,
+                    isSource: false
+                )
+                .transition(.opacity.combined(with: .scale))
+                .zIndex(1)
+        }
+    }
+    
     private func showPopover(target: UUID, protocolName: String) {
+        workItem?.cancel()
+        workItem = DispatchWorkItem(block: {
+            self.popoverTarget = nil
+        })
+        
         if popoverTarget != nil {
             popoverTarget = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
@@ -189,20 +206,20 @@ struct SwapTokenRoutingView: View {
             popoverTarget = target
         }
         idWithProtocolName[target] = protocolName
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            popoverTarget = nil
-        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: workItem!)
     }
 }
 
 private struct DashedLineView: View {
     var body: some View {
-        DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
-            .frame(height: 0.7)
-        Image(.icSplitArrow)
-            .resizable()
-            .frame(width: 5, height: 6)
-            .padding(.trailing, 1)
+        HStack(spacing: 0) {
+            DashedLine(lineWidth: 0.7, dash: [2.5, 2.5], color: .colorInteractiveTentPrimarySub)
+                .frame(height: 0.7)
+            Image(.icSplitArrow)
+                .resizable()
+                .frame(width: 5, height: 6)
+                .padding(.trailing, 1)
+        }
     }
 }
 
@@ -236,10 +253,12 @@ private struct TokenInOutView: View {
                 Text(amount.formatNumber(suffix: tokenDefault.adaName))
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorBaseTent)
+                    .minimumScaleFactor(0.7)
             } else {
                 Text(amount.formatNumber(suffix: tokenDefault.adaName))
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorBaseTent)
+                    .minimumScaleFactor(0.7)
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 28, height: 28)

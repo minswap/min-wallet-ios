@@ -32,7 +32,7 @@ jobs:
           cache-workspaces: rust
           target: aarch64-apple-ios-sim,aarch64-apple-ios
       - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode_16.2.app
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
       - name: Build rust
         run: cd rust && ./build.sh
       - name: Build and test
