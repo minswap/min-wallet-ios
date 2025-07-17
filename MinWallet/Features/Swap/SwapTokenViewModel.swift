@@ -331,8 +331,6 @@ class SwapTokenViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Self.TIME_INTERVAL), execute: workItem!)
         }
         
-        guard amount > 0 else { return }
-        
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let request = EstimationRequest().with {
             $0.amount = amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
@@ -343,9 +341,13 @@ class SwapTokenViewModel: ObservableObject {
             $0.amount_in_decimal = false
         }
         
-        let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
-        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
-        let info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
+        let info: EstimationResponse?
+        if amount > 0 {
+            let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
+            info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
+        } else {
+            info = nil
+        }
         self.iosTradeEstimate = info
         
         if isSwapExactIn {

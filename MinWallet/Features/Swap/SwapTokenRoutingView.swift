@@ -160,9 +160,13 @@ struct SwapTokenRoutingView: View {
             let estimationResponse: EstimationResponse = viewModel.iosTradeEstimate ?? .init()
             let decimalIn = viewModel.isSwapExactIn ? viewModel.tokenPay.token.decimals : viewModel.tokenReceive.token.decimals
             let decimalOut = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.decimals : viewModel.tokenPay.token.decimals
-            TokenInOutView(token: estimationResponse.tokenIn, amount: estimationResponse.amountIn.toExact(decimal: decimalIn))
+            let tokenIn: Binding<String> = .constant(estimationResponse.tokenIn) 
+            let tokenOut: Binding<String> = .constant(estimationResponse.tokenOut) 
+            let amountIn: Binding<Double> = .constant(estimationResponse.amountIn.toExact(decimal: decimalIn)) 
+            let amountOut: Binding<Double> = .constant(estimationResponse.amountOut.toExact(decimal: decimalOut)) 
+            TokenInOutView(token: tokenIn, amount: amountIn)
             Spacer(minLength: 0)
-            TokenInOutView(token: estimationResponse.tokenOut, amount: estimationResponse.amountOut.toExact(decimal: decimalOut), isLeading: false)
+            TokenInOutView(token: tokenOut, amount: amountOut, isLeading: false)
         }
     }
     
@@ -201,10 +205,10 @@ struct SwapTokenRoutingView: View {
 }
 
 private struct TokenInOutView: View {
-    @State
-    var token: String = ""
-    @State
-    var amount: Double = 0
+    @Binding
+    var token: String
+    @Binding
+    var amount: Double
     @State
     var isLeading: Bool = true
     
