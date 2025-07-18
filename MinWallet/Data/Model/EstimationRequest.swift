@@ -59,8 +59,14 @@ struct EstimationResponse: Mappable, Then {
         let totalAmountIn = max(amountIn.gkDoubleValue, 1)
         percents = paths.map({ path in
             let amountIn = path.first?.amountIn.gkDoubleValue ?? 0.0
-            return (amountIn / totalAmountIn) * 100
+            let percent = ((amountIn / totalAmountIn) * 100)
+            return Double(round(100 * percent) / 100)
         })
+        
+        let tempPercents : Double = percents.dropLast().reduce(0, +)
+        for (index, _) in percents.enumerated() where index == percents.count - 1 {
+            percents[index] = 100 - tempPercents
+        }
     }
 }
 
@@ -96,6 +102,9 @@ struct SwapPath: Mappable, Identifiable {
         deposits <- map["deposits"]
         priceImpact <- map["price_impact"]
         poolId <- map["pool_id"]
-        protocolName <- map["protocol"]
+        protocolName <- (map["protocol"], GKMapFromJSONToType(fromJSON: { json in
+            guard let stringValue = json as? String else { return "" }
+            return AggregatorSource(rawId: stringValue)?.name.toString() ?? ""
+        }))
     }
 }

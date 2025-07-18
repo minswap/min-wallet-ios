@@ -373,6 +373,6 @@ extension String {
         let policyIdWithDot = toPolicyIdWithDot.split(separator: ".")
         let currencySymbol: String = String(policyIdWithDot.first ?? "")
         let tokenName: String = String(policyIdWithDot.last ?? "")
-        return TokenDefault(symbol: currencySymbol, tName: tokenName)
+        return TokenDefault(symbol: currencySymbol, tName: policyIdWithDot.count == 2 ? tokenName : "")
     }
 }

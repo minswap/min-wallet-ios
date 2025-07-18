@@ -243,6 +243,7 @@ private struct TokenInOutView: View {
                             currencySymbol: tokenDefault.currencySymbol,
                             tokenName: tokenDefault.tokenName,
                             isVerified: false,
+                            forceVerified: true,
                             size: .init(width: 24, height: 24)
                         )
                     )
@@ -254,11 +255,13 @@ private struct TokenInOutView: View {
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorBaseTent)
                     .minimumScaleFactor(0.7)
+                    .multilineTextAlignment(.leading)
             } else {
                 Text(amount.formatNumber(suffix: tokenDefault.adaName))
                     .font(.paragraphXMediumSmall)
                     .foregroundStyle(.colorBaseTent)
                     .minimumScaleFactor(0.7)
+                    .multilineTextAlignment(.trailing)
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: 28, height: 28)

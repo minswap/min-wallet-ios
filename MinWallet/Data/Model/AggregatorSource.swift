@@ -145,4 +145,38 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
             self = .Minswap
         }
     }
+    public init?(rawId: String) {
+        switch rawId {
+            case AggregatorSource.MinswapV2.rawId:
+                self = .MinswapV2
+            case AggregatorSource.Minswap.rawId:
+                self = .Minswap
+            case AggregatorSource.MinswapStable.rawId:
+                self = .MinswapStable
+            case AggregatorSource.MuesliSwap.rawId:
+                self = .MuesliSwap
+            case AggregatorSource.Splash.rawId:
+                self = .Splash
+            case AggregatorSource.SplashStable.rawId:
+                self = .SplashStable
+            case AggregatorSource.Spectrum.rawId:
+                self = .Spectrum
+            case AggregatorSource.SundaeSwapV3.rawId:
+                self = .SundaeSwapV3
+            case AggregatorSource.SundaeSwap.rawId:
+                self = .SundaeSwap
+            case AggregatorSource.VyFinance.rawId:
+                self = .VyFinance
+            case AggregatorSource.WingRidersV2.rawId:
+                self = .WingRidersV2
+            case AggregatorSource.WingRiders.rawId:
+                self = .WingRiders
+            case AggregatorSource.WingRidersStableV1.rawId:
+                self = .WingRidersStableV1
+            case AggregatorSource.WingRidersStableV2.rawId:
+                self = .WingRidersStableV2
+            default:
+                self = .Minswap
+        }
+    }
 }

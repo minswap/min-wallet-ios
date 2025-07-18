@@ -3,6 +3,7 @@ import Combine
 import MinWalletAPI
 import Then
 import ObjectMapper
+import SwiftyJSON
 
 
 @MainActor
@@ -76,13 +77,7 @@ class SwapTokenViewModel: ObservableObject {
     
     private var workItem: DispatchWorkItem?
     
-    deinit {
-        print("Deinit SwapTokenViewModel")
-    }
-    
     init(tokenReceive: TokenProtocol?) {
-        print("Init SwapTokenViewModel")
-        
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
         if let tokenReceive = tokenReceive {
             let tokenWithAmount = TokenManager.shared.yourTokens?.assets.first(where: { $0.uniqueID == tokenReceive.uniqueID }) ?? tokenReceive
@@ -325,13 +320,7 @@ class SwapTokenViewModel: ObservableObject {
         withAnimation {
             isGettingTradeInfo = true
         }
-        
-        defer {
-            withAnimation {
-                isGettingTradeInfo = false
-            }
-        }
-        
+        print("WTF start \(amount)")
         let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
         let request = EstimationRequest()
             .with {
@@ -352,6 +341,9 @@ class SwapTokenViewModel: ObservableObject {
             } catch {
                 info = nil
                 workItem?.cancel()
+                withAnimation {
+                    isGettingTradeInfo = false
+                }
                 throw error
             }
         } else {
@@ -367,6 +359,10 @@ class SwapTokenViewModel: ObservableObject {
             tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
         }
         
+        withAnimation {
+            isGettingTradeInfo = false
+        }
+        print("WTF end \(amount)")
         self.action.send(.startTimeInterval)
     }
     
