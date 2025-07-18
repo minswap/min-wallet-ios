@@ -4,17 +4,17 @@ import MinWalletAPI
 
 @MainActor
 class ConfirmSendTokenViewModel: ObservableObject {
-
+    
     @Published
     var tokens: [WrapTokenSend] = []
     @Published
     var address: String = ""
-
+    
     init(tokens: [WrapTokenSend], address: String) {
         self.tokens = tokens
         self.address = address
     }
-
+    
     func sendTokens() async throws -> String {
         let receiver = address
         let sender = UserInfo.shared.minWallet?.address ?? ""

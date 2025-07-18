@@ -5,7 +5,7 @@ import MinWalletAPI
 
 extension OrderHistoryView {
     static let heightOrder: CGFloat = 60
-
+    
     var contentView: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("")
@@ -70,7 +70,7 @@ extension OrderHistoryView {
             Spacer()
         }
     }
-
+    
     var emptyOrders: some View {
         VStack(alignment: .center, spacing: 16) {
             Image(.icEmptyOrder)
@@ -83,7 +83,7 @@ extension OrderHistoryView {
                 .foregroundStyle(.colorBaseTent)
         }
     }
-
+    
     var emptySearch: some View {
         VStack(alignment: .center, spacing: 16) {
             Image(.icEmptyResult)

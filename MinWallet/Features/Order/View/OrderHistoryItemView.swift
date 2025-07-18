@@ -5,9 +5,9 @@ import MinWalletAPI
 struct OrderHistoryItemView: View {
     @State
     var order: OrderHistoryQuery.Data.Orders.WrapOrder?
-
+    
     var onCancelItem: (() -> Void)?
-
+    
     var body: some View {
         VStack(spacing: .lg) {
             tokenView
@@ -76,6 +76,20 @@ struct OrderHistoryItemView: View {
                     }
                 }
             }
+            //TODO: Cuongnv check protocol
+            HStack(alignment: .top, spacing: .xs) {
+                Text("Protocol")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Spacer()
+                Image(AggregatorSource.MinswapV2.image)
+                    .fixSize(20)
+                Text(AggregatorSource.MinswapV2.name)
+                    .font(.labelSmallSecondary)
+                    .foregroundStyle(.colorBaseTent)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
+            }
             if let order = order, let warningContent = order.overSlippageWarning, order.order?.status.value == .created {
                 HStack(spacing: Spacing.md) {
                     Image(.icWarningYellow)
@@ -94,11 +108,11 @@ struct OrderHistoryItemView: View {
                 /*
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-
+                
                     }
                     .frame(height: 36)
                     CustomButton(title: "Update") {
-
+                
                     }
                     .frame(height: 36)
                 }
@@ -127,11 +141,11 @@ struct OrderHistoryItemView: View {
                 }
                 .frame(height: 36)
             }
-
+            
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }
-
+    
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
@@ -177,5 +191,5 @@ struct OrderHistoryItemView: View {
             .padding(.horizontal, .xl)
         Spacer()
     }
-
+    
 }
