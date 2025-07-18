@@ -52,12 +52,6 @@ class SwapTokenViewModel: ObservableObject {
     var isSwapExactIn: Bool = true
     @Published
     var iosTradeEstimate: EstimationResponse?
-    
-    let action: PassthroughSubject<Action, Never> = .init()
-    /*
-    @Published
-    var isLoadingRouting: Bool = true
-     */
     @Published
     var isGettingTradeInfo: Bool = true
     @Published
@@ -71,11 +65,13 @@ class SwapTokenViewModel: ObservableObject {
     var isShowSelectToken: Bool = false
     var isSelectTokenPay: Bool = true
     
+    let action: PassthroughSubject<Action, Never> = .init()
     private var cancellables: Set<AnyCancellable> = []
     
     var bannerState: BannerState = .init()
     
     private var workItem: DispatchWorkItem?
+    private var tradeInfoTask: Task<(), any Error>?
     
     init(tokenReceive: TokenProtocol?) {
         tokenPay = WrapTokenSend(token: TokenManager.shared.tokenAda)
@@ -138,6 +134,8 @@ class SwapTokenViewModel: ObservableObject {
     func unsubscribeCombine() {
         cancellables.forEach({ $0.cancel() })
         cancellables = []
+        tradeInfoTask?.cancel()
+        workItem?.cancel()
     }
     
     private func handleAction(_ action: Action) async throws {
@@ -192,15 +190,11 @@ class SwapTokenViewModel: ObservableObject {
 
         case let .amountPayChanged(amount),
             let .amountReceiveChanged(amount):
-            try await getTradingInfo(amount: amount)
-            await generateWarningInfo()
-            await generateErrorInfo()
+            getTradingInfo(amount: amount)
 
         case .getTradingInfo:
             let amount = isSwapExactIn ? tokenPay.amount : tokenReceive.amount
-            try await getTradingInfo(amount: amount.doubleValue)
-            await generateWarningInfo()
-            await generateErrorInfo()
+            getTradingInfo(amount: amount.doubleValue)
 
         case .autoRouter,
             .routeSelected,
@@ -238,7 +232,7 @@ class SwapTokenViewModel: ObservableObject {
             
             if isReloadSelectToken {
                 selectTokenVM.getTokens()
-                await generateErrorInfo()
+                generateErrorInfo()
             }
 
         case .hiddenSelectToken:
@@ -256,6 +250,7 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     private func generateWarningInfo() async {
         var warningInfo: [WarningInfo] = []
         
@@ -299,7 +294,8 @@ class SwapTokenViewModel: ObservableObject {
         self.isExpand = [:]
     }
     
-    private func generateErrorInfo() async {
+    @MainActor
+    private func generateErrorInfo() {
         let payAmount = tokenPay.amount.doubleValue
         let receiveAmount = tokenReceive.amount.doubleValue
         errorInfo = nil
@@ -314,56 +310,85 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
     
-    private func getTradingInfo(amount: Double) async throws {
+    private func getTradingInfo(amount: Double) {
         workItem?.cancel()
-        
-        withAnimation {
-            isGettingTradeInfo = true
-        }
-        print("WTF start \(amount)")
-        let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
-        let request = EstimationRequest()
-            .with {
-                $0.amount = amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
-                $0.token_in = (isSwapExactIn ? tokenPay.token.uniqueID : tokenReceive.token.uniqueID).toPolicyIdWithoutDot
-                $0.token_out = (isSwapExactIn ? tokenReceive.token.uniqueID : tokenPay.token.uniqueID).toPolicyIdWithoutDot
-                $0.slippage = swapSetting.slippageSelectedValue()
-                $0.exclude_protocols = swapSetting.excludedPools
-                $0.amount_in_decimal = false
-            }
-        
-        let info: EstimationResponse?
-        if amount > 0 {
+        tradeInfoTask?.cancel()
+        tradeInfoTask = Task { [weak self] in
+            guard let self = self else { return }
             do {
-                let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
-                try APIRouterCommon.parseDefaultErrorMessage(jsonData)
-                info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
-            } catch {
-                info = nil
-                workItem?.cancel()
-                withAnimation {
-                    isGettingTradeInfo = false
+                await MainActor.run {
+                    withAnimation {
+                        self.isGettingTradeInfo = true
+                    }
                 }
-                throw error
+                
+                let amount = amount * pow(10, Double(isSwapExactIn ? tokenPay.token.decimals : tokenReceive.token.decimals))
+                let request = EstimationRequest()
+                    .with {
+                        $0.amount = amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0)
+                        $0.token_in = (self.isSwapExactIn ? self.tokenPay.token.uniqueID : self.tokenReceive.token.uniqueID).toPolicyIdWithoutDot
+                        $0.token_out = (self.isSwapExactIn ? self.tokenReceive.token.uniqueID : self.tokenPay.token.uniqueID).toPolicyIdWithoutDot
+                        $0.slippage = self.swapSetting.slippageSelectedValue()
+                        $0.exclude_protocols = self.swapSetting.excludedPools
+                        $0.amount_in_decimal = false
+                    }
+                
+                let info: EstimationResponse?
+                if amount > 0 {
+                    do {
+                        let jsonData = try await SwapTokenAPIRouter.estimate(request: request).async_request()
+                        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
+                        info = Mapper<EstimationResponse>().map(JSON: jsonData.dictionaryObject ?? [:])
+                    } catch {
+                        if Task.isCancelled { return }
+                        info = nil
+                        self.workItem?.cancel()
+                        
+                        await self.processResultTradingInfo(info: info)
+                        
+                        throw error
+                    }
+                } else {
+                    info = nil
+                }
+                
+                try Task.checkCancellation()
+                
+                await self.processResultTradingInfo(info: info)
+                
+                await MainActor.run {
+                    self.action.send(.startTimeInterval)
+                }
+            } catch is CancellationError {
+                print("Task cancelled")
+            } catch {
+                await MainActor.run {
+                    self.bannerState.showBannerError(error.rawError)
+                }
             }
-        } else {
-            info = nil
         }
-        self.iosTradeEstimate = info
+    }
+    
+    private func processResultTradingInfo(info: EstimationResponse?) async {
+        await MainActor.run {
+            self.iosTradeEstimate = info
+            if self.isSwapExactIn {
+                let outputAmount = info?.amountOut.toExact(decimal: Double(self.tokenReceive.token.decimals)) ?? 0
+                self.tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: self.tokenReceive.token.decimals)
+            } else {
+                let outputAmount = info?.amountOut.toExact(decimal: Double(self.tokenPay.token.decimals)) ?? 0
+                self.tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: self.tokenReceive.token.decimals)
+            }
+        }
         
-        if isSwapExactIn {
-            let outputAmount = info?.amountOut.toExact(decimal: Double(tokenReceive.token.decimals)) ?? 0
-            tokenReceive.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
-        } else {
-            let outputAmount = info?.amountOut.toExact(decimal: Double(tokenPay.token.decimals)) ?? 0
-            tokenPay.amount = outputAmount == 0 ? "" : outputAmount.formatSNumber(maximumFractionDigits: tokenReceive.token.decimals)
-        }
+        await generateWarningInfo()
+        generateErrorInfo()
         
-        withAnimation {
-            isGettingTradeInfo = false
+        await MainActor.run {
+            withAnimation {
+                self.isGettingTradeInfo = false
+            }
         }
-        print("WTF end \(amount)")
-        self.action.send(.startTimeInterval)
     }
     
     func swapToken() async throws -> String {
