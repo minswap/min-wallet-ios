@@ -17,11 +17,11 @@ struct ConfirmSendTokenView: View {
     private var isCopyAddress: Bool = false
     @StateObject
     private var viewModel: ConfirmSendTokenViewModel
-
+    
     init(viewModel: ConfirmSendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -48,7 +48,7 @@ struct ConfirmSendTokenView: View {
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
                     }
-
+                    
                     Color.colorBorderPrimarySub
                         .frame(height: 1)
                         .padding(.horizontal, .xl)
@@ -99,77 +99,6 @@ struct ConfirmSendTokenView: View {
                         .foregroundStyle(isCopyAddress ? .colorBaseSuccess : .colorInteractiveTentPrimarySub)
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
-                    /*
-                    VStack(alignment: .leading, spacing: 0) {
-                        HStack {
-                            Text("Select your route")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            Spacer()
-                        }
-                        .padding(.horizontal, .xl)
-                        .padding(.top, .xl)
-                        HStack {
-                            Text("Best router")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorBaseTent)
-                            Spacer()
-                        }
-                        .padding(.horizontal, .xl)
-                        .padding(.top, .lg)
-                        Color.colorBorderPrimarySub
-                            .frame(height: 1)
-                            .padding(.vertical, .xl)
-                        HStack(spacing: 4) {
-                            Text("Transaction Id")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            Spacer()
-                            Text("178b...ac17")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorBaseTent)
-                            Image(.icCopy)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                        }
-                        .padding(.horizontal, .xl)
-                        .padding(.bottom, .lg)
-                        HStack(spacing: 4) {
-                            Text("Tx Size")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            Spacer()
-                            Text("11817")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorBaseTent)
-                        }
-                        .padding(.horizontal, .xl)
-                        .padding(.bottom, .lg)
-                        HStack(spacing: 4) {
-                            Text("Fee")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            Spacer()
-                            Text("0.3 \(Currency.ada.prefix)")
-                                .font(.paragraphSmall)
-                                .foregroundStyle(.colorBaseTent)
-                        }
-                        .padding(.horizontal, .xl)
-                        .padding(.bottom, .xl)
-
-                        Text("A small fee (max 0.3\(Currency.ada.prefix) may be deducted from your batcher fee for automatically cancellation.")
-                            .font(.paragraphXMediumSmall)
-                            .foregroundStyle(.colorInteractiveToneWarning)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.md)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(.colorSurfaceWarningDefault))
-                            .padding(.horizontal, .xl)
-                            .padding(.bottom, .xl)
-                    }
-                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
-                    .padding(.xl)
-                     */
                 }
             }
             Spacer()
@@ -206,7 +135,7 @@ struct ConfirmSendTokenView: View {
             )
         }
     }
-
+    
     private func authenticationSuccess() {
         Task {
             do {
@@ -227,7 +156,7 @@ struct ConfirmSendTokenView: View {
                 navigator.popToRoot()
             } catch {
                 hudState.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
             }
         }
     }

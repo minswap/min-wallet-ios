@@ -12,7 +12,7 @@ struct MainCoordinator: View {
     private var bannerState: BannerState
     @EnvironmentObject
     private var hudState: HUDState
-
+    
     var body: some View {
         FlowStack($viewModel.routes, withNavigation: true) {
             SplashView()

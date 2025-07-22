@@ -22,7 +22,7 @@ struct OrderHistoryView: View {
     private var isShowSignContract: Bool = false
     @StateObject
     var filterViewModel: OrderHistoryFilterViewModel = .init()
-
+    
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -90,7 +90,7 @@ struct OrderHistoryView: View {
             }
         }
     }
-
+    
     private func authenticationSuccess() {
         Task {
             do {
@@ -106,7 +106,7 @@ struct OrderHistoryView: View {
                 bannerState.showBanner(isShow: true)
             } catch {
                 hud.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
             }
         }
     }

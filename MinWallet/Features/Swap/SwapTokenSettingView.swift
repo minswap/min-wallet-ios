@@ -3,35 +3,37 @@ import SwiftUI
 
 struct SwapTokenSettingView: View {
     enum Slippage: Double, CaseIterable, Identifiable {
-        var id: String { UUID().uuidString }
-
+        var id: Double { self.rawValue }
+        
         case _01 = 0.1
         case _05 = 0.5
         case _1 = 1
         case _2 = 2
     }
-
+    
     @State
     private var slippages: [Slippage] = Slippage.allCases
     @FocusState
     private var isFocus: Bool
-
+    
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
-
-    let maxValue: Double = 100.0  // Define the maximum value
-
+    
+    private let maxValue: Double = 100.0  // Define the maximum value
+    
     @Environment(\.partialSheetDismiss)
-    var onDismiss
-    @ObservedObject
-    var viewModel: SwapTokenViewModel
-
+    private var onDismiss
+    @Binding
+    var showCustomizedRoute: Bool
+    @Binding
+    var swapTokenSetting: SwapTokenSetting
+    
+    var onSave: (() -> Void)?
+    
     var body: some View {
-        VStack(spacing: 8) {
+        ZStack {
             VStack(spacing: 0) {
-                Color.colorBorderPrimaryDefault.frame(width: 36, height: 4).cornerRadius(2, corners: .allCorners)
-                    .padding(.vertical, .md)
                 Text("Slippage Tolerance")
-                    .font(.paragraphXMediumSmall)
+                    .font(.labelSmallSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 20)
                 HStack(spacing: 0) {
@@ -39,31 +41,29 @@ struct SwapTokenSettingView: View {
                         if let splippage = slippages[gk_safeIndex: index] {
                             Text("\(splippage.rawValue.formatSNumber())%")
                                 .font(.labelSmallSecondary)
-                                .foregroundStyle(splippage == viewModel.swapSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
+                                .foregroundStyle(splippage == swapTokenSetting.slippageSelected ? .colorBaseBackground : .colorBaseTent)
                                 .fixedSize(horizontal: true, vertical: false)
                                 .frame(height: 36)
                                 .padding(.horizontal, .lg)
                                 .background(content: {
-                                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == viewModel.swapSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
+                                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(splippage == swapTokenSetting.slippageSelected ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
                                 })
                                 .contentShape(.rect)
                                 .onTapGesture {
-                                    viewModel.swapSetting.slippageSelected = splippage
-                                    viewModel.action.send(.recheckUnSafeSlippage)
+                                    swapTokenSetting.slippageSelected = splippage
                                 }
                             Spacer()
                         }
                     }
                     HStack(spacing: .md) {
-                        TextField("", text: $viewModel.swapSetting.slippageTolerance)
+                        TextField("", text: $swapTokenSetting.slippageTolerance)
                             .keyboardType(.decimalPad)
-                            .placeholder("Custom", when: viewModel.swapSetting.slippageTolerance.isEmpty)
+                            .placeholder("Custom", when: swapTokenSetting.slippageTolerance.isEmpty)
                             .focused($isFocus)
                             .lineLimit(1)
-                            .onChange(of: viewModel.swapSetting.slippageTolerance) { newValue in
-                                viewModel.swapSetting.slippageTolerance = AmountTextField.formatCurrency(newValue, minValue: 0, maxValue: maxValue, minimumFractionDigits: 4)
-                                viewModel.swapSetting.slippageSelected = nil
-                                viewModel.action.send(.recheckUnSafeSlippage)
+                            .onChange(of: swapTokenSetting.slippageTolerance) { newValue in
+                                swapTokenSetting.slippageTolerance = AmountTextField.formatCurrency(newValue, minValue: 0, maxValue: maxValue, minimumFractionDigits: 4)
+                                swapTokenSetting.slippageSelected = nil
                             }
                         Text("%")
                             .font(.labelMediumSecondary)
@@ -75,7 +75,7 @@ struct SwapTokenSettingView: View {
                     .overlay(RoundedRectangle(cornerRadius: BorderRadius.full).stroke(.colorBorderPrimaryDefault, lineWidth: 1))
                 }
                 .padding(.top, .md)
-                if (Double(viewModel.swapSetting.slippageTolerance) ?? 0) >= 50 && viewModel.swapSetting.slippageSelected == nil {
+                if (Double(swapTokenSetting.slippageTolerance) ?? 0) >= 50 && swapTokenSetting.slippageSelected == nil && swapTokenSetting.safeMode {
                     HStack(spacing: Spacing.md) {
                         Image(.icWarning)
                             .resizable()
@@ -97,122 +97,84 @@ struct SwapTokenSettingView: View {
                     )
                     .padding(.top, .xl)
                 }
+                
                 HStack(spacing: .xl) {
-                    DashedUnderlineText(text: "Predict Swap Price", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            onShowToolTip?("Predict Swap Price", "Estimate swap price with processing orders.")
-                        }
+                    DashedUnderlineText(text: "Liquidity Source", textColor: .colorBaseTent, font: .labelSmallSecondary)
+                    
                     Spacer()
-                    Toggle("", isOn: $viewModel.swapSetting.predictSwapPrice)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: viewModel.swapSetting.predictSwapPrice) { autoRouter in
-                            viewModel.action.send(.predictSwapPrice)
-                        }
+                    
+                    let count =
+                        String(AggregatorSource.allCases.count - swapTokenSetting.excludedPools.count) + "/"
+                        + String(
+                            AggregatorSource.allCases.count
+                        )
+                    Text(count)
+                        .foregroundStyle(.colorBaseTent)
+                        .font(.paragraphSmall)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: BorderRadius.full)
+                                .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
+                        )
+                    Image(.icNext)
                 }
                 .frame(height: 32)
-                .padding(.top, .lg)
-                .padding(.bottom, 24)
-                /*
-                DashedUnderlineText(text: "Route Sorting", textColor: .colorBaseTent, font: .paragraphXMediumSmall)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, .md)
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        onShowToolTip?("Route Sorting", "Choose how to sort routes: by most liquidity for stable transactions or by high return for maximum profitability.")
+                .padding(.top, .xl)
+                .onTapGesture {
+                    hideKeyboard()
+                    $showCustomizedRoute.showSheet()
+                }
+                Color.colorBorderPrimaryDefault.frame(height: 1)
+                    .padding(.vertical, .xl)
+                VStack(spacing: .xs) {
+                    HStack {
+                        HStack(spacing: .md) {
+                            Image(.icShieldCheck)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text("Safe Mode")
+                                .font(.labelSmallSecondary)
+                                .foregroundColor(.colorBaseTent)
+                        }
+                        Text("Recommended")
+                            .font(.labelSmallSecondary)
+                            .foregroundColor(.colorInteractiveToneSuccess)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full)
+                                    .fill(.colorSurfaceSuccess)
+                            )
+                        Spacer()
+                        Toggle("", isOn: $swapTokenSetting.safeMode)
+                            .toggleStyle(SwitchToggleStyle())
                     }
-                HStack(spacing: .xs) {
-                    Text("Most liquidity")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(viewModel.swapSetting.routeSorting == .most ? .colorInteractiveToneTent : .colorBaseTent)
-                        .frame(height: 36)
-                        .padding(.horizontal, .lg)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(viewModel.swapSetting.routeSorting == .most ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
-                        )
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            guard viewModel.swapSetting.routeSorting != .most else { return }
-                            viewModel.swapSetting.routeSorting = .most
-                            viewModel.action.send(.routeSorting)
-                        }
-                    Text("High return")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(viewModel.swapSetting.routeSorting == .high ? .colorInteractiveToneTent : .colorBaseTent)
-                        .frame(height: 36)
-                        .padding(.horizontal, .lg)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(viewModel.swapSetting.routeSorting == .high ? .colorInteractiveTentSecondaryDefault : .colorSurfacePrimaryDefault)
-                        )
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            guard viewModel.swapSetting.routeSorting != .high else { return }
-                            viewModel.swapSetting.routeSorting = .high
-                            viewModel.action.send(.routeSorting)
-                        }
-                    Spacer()
+                    
+                    Text("Prevent high price impact trades. Disable at your own risk.")
+                        .font(.paragraphSmall)
+                        .foregroundColor(.colorInteractiveTentPrimarySub)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.bottom, .xl)
-                Color.colorBorderPrimarySub.frame(height: 1)
-                    .padding(.bottom, 20)
-                HStack(spacing: 4) {
-                    Image(.icArrowCircle)
-                        .resizable()
-                        .frame(width: .xl, height: .xl)
-                    Text("Auto Router")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorBaseTent)
-                    Text("Recommended")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveToneSuccess)
-                        .frame(height: 24)
-                        .padding(.horizontal, .lg)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfaceSuccess)
-                        )
-                    Spacer()
-                    Toggle("", isOn: $viewModel.swapSetting.autoRouter)
-                        .toggleStyle(SwitchToggleStyle())
-                        .onChange(of: viewModel.swapSetting.autoRouter) { autoRouter in
-                            viewModel.action.send(.autoRouter)
-                        }
+                Spacer()
+                CustomButton(title: "Save") {
+                    onSave?()
+                    onDismiss?()
                 }
-                .frame(height: 24)
-                .padding(.bottom, 4)
-                HorizontalGeometryReader { width in
-                    TextLearnMoreSendTokenView(text: "When available, uses multiple pools for better liquidity and prices. ", textClickAble: "Learn more", preferredMaxLayoutWidth: width)
-                }
-                .padding(.bottom, 24)
-                 */
+                .frame(height: 56)
+                .padding(.bottom, .md)
             }
             .padding(.horizontal, .xl)
-            .background(content: {
-                RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-            })
-            Button(
-                action: {
-                    onDismiss?()
-                },
-                label: {
-                    Text("Close")
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(content: {
-                            RoundedRectangle(cornerRadius: 24).fill(Color.colorBaseBackground)
-                        })
-                }
-            )
-            .frame(height: 56)
-            .buttonStyle(.plain)
+            .background(.colorBaseBackground)
+            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.83)
+            .presentSheetModifier()
         }
-        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
 #Preview {
     VStack {
-        SwapTokenSettingView(viewModel: SwapTokenViewModel(tokenReceive: nil))
+        SwapTokenSettingView(showCustomizedRoute: .constant(false), swapTokenSetting: .constant(.init()))
             .padding(16)
         Spacer()
     }

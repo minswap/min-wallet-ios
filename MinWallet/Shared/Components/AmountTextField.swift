@@ -6,7 +6,7 @@ struct AmountTextField: View {
     @Binding var minValue: Double
     @Binding var maxValue: Double?
     @State var fontPlaceHolder: Font = .paragraphSmall
-
+    
     var body: some View {
         TextField("", text: $value)
             .placeholder("0.0", font: fontPlaceHolder, when: value.isEmpty)
@@ -18,26 +18,26 @@ struct AmountTextField: View {
                 value = AmountTextField.formatCurrency(newValue, minValue: minValue, maxValue: maxValue)
             }
     }
-
+    
     static func formatCurrency(_ input: String, minValue: Double, maxValue: Double?, minimumFractionDigits: Int? = nil) -> String {
         var input = input
         if input.count > 1 && input.last == "," {
             input = String(input.dropLast(1)) + "."
         }
-
+        
         let cleanedInput = input.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
-
+        
         let components = cleanedInput.components(separatedBy: ".")
         var wholeNumber = components[0]
         var fractionalPart = components.count > 1 ? ".\(components[1])" : ""
-
+        
         if !wholeNumber.isEmpty {
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
             formatter.groupingSeparator = ","
             formatter.decimalSeparator = "."
             formatter.maximumFractionDigits = 0
-
+            
             if let number = Int(wholeNumber), let formatted = formatter.string(from: NSNumber(value: number)) {
                 wholeNumber = formatted
             }
@@ -45,13 +45,13 @@ struct AmountTextField: View {
                 wholeNumber = formatted
             }
         }
-
+        
         if let minimumFractionDigits = minimumFractionDigits {
             fractionalPart = String(fractionalPart.prefix(minimumFractionDigits + 1))
         }
-
+        
         let formattedValue = wholeNumber + fractionalPart
-
+        
         if let doubleValue = Double(formattedValue.replacingOccurrences(of: ",", with: "")), !input.isBlank, doubleValue > 0 {
             let clampedValue: Double = {
                 guard let maxValue = maxValue else { return max(doubleValue, minValue) }
@@ -62,7 +62,7 @@ struct AmountTextField: View {
                 return clampedValue.formatSNumber()
             }
         }
-
+        
         return formattedValue
     }
 }

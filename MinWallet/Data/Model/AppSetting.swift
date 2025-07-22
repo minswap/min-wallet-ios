@@ -5,76 +5,76 @@ import OneSignalFramework
 
 class AppSetting: ObservableObject {
     static let USER_NAME = "minWallet"
-
+    
     static let shared: AppSetting = .init()
-
+    
     var extraSafeArea: CGFloat {
         safeArea > 44 ? 32 : 12
     }
-
+    
     lazy var biometricAuthentication: BiometricAuthentication = .init()
-
+    
     let objectWillChange = PassthroughSubject<Void, Never>()
-
+    
     var safeArea: CGFloat = UIApplication.safeArea.top
     var swipeEnabled = true
-
+    
     var rootScreen: MainCoordinatorViewModel.Screen = .policy(.splash)
     {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("first_time", defaultValue: true)
     var isFirstTimeRunApp: Bool {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("enable_audio", defaultValue: false)
     var enableAudio: Bool {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("enable_notification", defaultValue: true)
     var enableNotification: Bool {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("language", defaultValue: Language.english.rawValue)
     var language: String {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("currency", defaultValue: Currency.usd.rawValue)
     var currency: String {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("timezone", defaultValue: TimeZone.local.rawValue)
     var timeZone: String {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("userInterfaceStyle", defaultValue: Appearance.system.rawValue)
     var userInterfaceStyle: Int {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     /*
     @UserDefault("enable_notification", defaultValue: false)
     var enableNotification: Bool {
@@ -83,33 +83,33 @@ class AppSetting: ObservableObject {
         }
     }
      */
-
+    
     @UserDefault("enable_biometric", defaultValue: false)
     private var enableBiometric: Bool {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("security_type", defaultValue: 0)
     private var securityType: Int {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     @UserDefault("is_login", defaultValue: false)
     var isLogin: Bool {
         willSet {
             objectWillChange.send()
         }
     }
-
+    
     var authenticationType: AuthenticationType {
         get { AuthenticationType(rawValue: securityType) ?? .biometric }
         set { securityType = newValue.rawValue }
     }
-
+    
     var currencyInADA: Double = 1 {
         willSet {
             Task {
@@ -119,7 +119,7 @@ class AppSetting: ObservableObject {
             }
         }
     }
-
+    
     lazy var bip0039: [String] = {
         guard let fileURL = Bundle.main.url(forResource: "bip0039", withExtension: "txt") else { return [] }
         do {
@@ -130,20 +130,20 @@ class AppSetting: ObservableObject {
     }()
 
     private lazy var suspiciousToken: [String] = []
-
+    
     private init() {
         if enableBiometric {
             enableBiometric = biometricAuthentication.canEvaluatePolicy()
         }
-
+        
         rootScreen = isLogin ? .home : (isFirstTimeRunApp ? .policy(.splash) : .gettingStarted)
-
+        
         getAdaPrice()
     }
-
+    
     @MainActor func deleteAccount() {
         isLogin = false
-
+        
         TokenManager.reset()
         try? AppSetting.deletePasswordToKeychain(username: AppSetting.USER_NAME)
         UserDataManager.shared.tokenRecentSearch = []
@@ -151,14 +151,14 @@ class AppSetting: ObservableObject {
         UserDataManager.shared.notificationGenerateAuthHash = nil
         OneSignal.Notifications.clearAll()
         OneSignal.logout()
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             self.authenticationType = .biometric
             self.enableNotification = true
             self.timeZone = TimeZone.local.rawValue
         }
     }
-
+    
     func isSuspiciousToken(currencySymbol: String) async -> Bool {
         guard !currencySymbol.isEmpty else { return false }
         guard suspiciousToken.isEmpty else { return suspiciousToken.contains(currencySymbol) }
@@ -180,7 +180,7 @@ extension AppSetting {
     var appearance: Appearance {
         Appearance(rawValue: userInterfaceStyle) ?? .system
     }
-
+    
     func initAppearanceStyle() {
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             windowScene.windows.forEach { window in
@@ -197,7 +197,7 @@ extension AppSetting {
             }
         }
     }
-
+    
     func applyAppearanceStyle(_ selectedAppearance: Appearance) {
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             windowScene.windows.forEach { window in
@@ -232,7 +232,7 @@ extension AppSetting {
             return UserDefaults.standard.string(forKey: username) ?? ""
         }
     }
-
+    
     static func savePasswordToKeychain(username: String, password: String) throws {
         do {
             let passwordItem = GKeychainStore(
@@ -240,13 +240,13 @@ extension AppSetting {
                 key: username,
                 accessGroup: MinWalletConstant.keyChainAccessGroup
             )
-
+            
             try passwordItem.save(password)
         } catch {
             UserDefaults.standard.set(password, forKey: username)
         }
     }
-
+    
     static func deletePasswordToKeychain(username: String) throws {
         do {
             let passwordItem = GKeychainStore(
@@ -254,19 +254,19 @@ extension AppSetting {
                 key: username,
                 accessGroup: MinWalletConstant.keyChainAccessGroup
             )
-
+            
             try passwordItem.deleteItem()
             UserDefaults.standard.removeObject(forKey: username)
         } catch {
             UserDefaults.standard.removeObject(forKey: username)
         }
     }
-
+    
     func reAuthenticateUser() async throws {
         biometricAuthentication = .init()
         try await biometricAuthentication.authenticateUser()
     }
-
+    
     var password: String {
         switch authenticationType {
         case .password:

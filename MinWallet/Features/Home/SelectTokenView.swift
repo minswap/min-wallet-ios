@@ -9,14 +9,14 @@ struct SelectTokenView: View {
         case sendToken
         case swapToken
     }
-
+    
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @FocusState
     private var isFocus: Bool
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-
+    
     init(
         viewModel: SelectTokenViewModel,
         onSelectToken: (([TokenProtocol]) -> Void)?
@@ -24,12 +24,12 @@ struct SelectTokenView: View {
         self._viewModel = .init(wrappedValue: viewModel)
         self.onSelectToken = onSelectToken
     }
-
+    
     @StateObject
     private var viewModel: SelectTokenViewModel
-
+    
     var onSelectToken: (([TokenProtocol]) -> Void)?
-
+    
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -67,7 +67,7 @@ struct SelectTokenView: View {
         }
         .background(.colorBaseBackground)
     }
-
+    
     @ViewBuilder
     private var headerView: some View {
         HStack(spacing: .lg) {
@@ -94,7 +94,7 @@ struct SelectTokenView: View {
             .frame(height: 60)
             .padding(.horizontal, .xl)
     }
-
+    
     private var contentView: some View {
         VStack(spacing: .md) {
             HStack(spacing: .md) {

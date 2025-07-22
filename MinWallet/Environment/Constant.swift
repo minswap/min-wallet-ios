@@ -4,13 +4,13 @@ import Foundation
 struct MinWalletConstant {
     static let minURL = GetInfoDictionaryString(for: "MIN_URL", true)
     static let transactionURL = GetInfoDictionaryString(for: "MIN_TRANSACTION_URL", true)
-    static let handleAdaNameURL = GetInfoDictionaryString(for: "MIN_HANDLE_ADA_NAME_URL", true)
+    static let adaHandleURL = GetInfoDictionaryString(for: "MIN_ADA_HANDLE_URL", true)
     static let keyChainService = GetInfoDictionaryString(for: "MIN_KEYCHAIN_SERVICE_NAME")
     static let keyChainAccessGroup = GetInfoDictionaryString(for: "MIN_KEYCHAIN_ACCESS_GROUP")
     static let passDefaultForFaceID = GetInfoDictionaryString(for: "MIN_PASS_DEFAULT_FOR_FACE_ID")
     static let networkID = GetInfoDictionaryString(for: "MIN_PUBLIC_NETWORK_ID")
     static let minToken = GetInfoDictionaryString(for: "MIN_MIN_TOKEN")
-    static let lpToken = GetInfoDictionaryString(for: "MIN_LP_TOKEN")
+    static let lpV1CurrencySymbol = GetInfoDictionaryString(for: "MIN_CURRENCY_SYMBOL_LP_V1")
     static let adaToken = GetInfoDictionaryString(for: "MIN_ADA_TOKEN")
     static let mintToken = GetInfoDictionaryString(for: "MIN_MINT_TOKEN")
     static let adaCurrency = GetInfoDictionaryString(for: "MIN_ADA_CURRENCY")
@@ -21,13 +21,14 @@ struct MinWalletConstant {
     static let IPFS_PREFIX = "ipfs://"
     static let IPFS_GATEWAY = "https://ipfs.minswap.org/ipfs/"
     static let suspiciousTokenURL = "https://raw.githubusercontent.com/cardano-galactic-police/suspicious-tokens/refs/heads/main/tokens.txt"
-    static let minAboutURL = GetInfoDictionaryString(for: "MIN_ABOUT_URL", true)
+    static let minPolicyURL = GetInfoDictionaryString(for: "MIN_POLICY_URL", true)
     static let minAssetURL = GetInfoDictionaryString(for: "MIN_ASSET_URL", true)
-
+    static let minAggURL = GetInfoDictionaryString(for: "MIN_AGG_URL", true)
+    
     private init() {
-
+        
     }
-
+    
 }
 
 

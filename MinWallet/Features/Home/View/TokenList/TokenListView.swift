@@ -9,15 +9,15 @@ struct TokenListView: View {
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
     private var tokenManager: TokenManager
-
+    
     @ObservedObject
     var viewModel: HomeViewModel
-
+    
     private let columns = [
         GridItem(.flexible(), spacing: .xl),
         GridItem(.flexible(), spacing: .xl),
     ]
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if tokenManager.hasTokenOrNFT && !viewModel.showSkeleton {
@@ -97,7 +97,7 @@ extension TokenListView {
     static let marketUUID = UUID()
     static let yourTokenUUID = UUID()
     static let nftUUID = UUID()
-
+    
     enum TabType: Int, CaseIterable, Identifiable {
         var id: UUID {
             switch self {
@@ -109,11 +109,11 @@ extension TokenListView {
                 return nftUUID
             }
         }
-
+        
         case market = 0
         case yourToken = 1
         case nft = 2
-
+        
         var title: LocalizedStringKey {
             switch self {
             case .market:
@@ -124,7 +124,7 @@ extension TokenListView {
                 "Your NFTs"
             }
         }
-
+        
         var layoutPriority: Double {
             switch self {
             case .market:
@@ -180,7 +180,7 @@ extension TokenListView {
                 })
         }
     }
-
+    
     @ViewBuilder
     var yourTokenView: some View {
         if (viewModel.yourTokenViewModel.showSkeleton ?? true) {
@@ -218,7 +218,7 @@ extension TokenListView {
                 })
         }
     }
-
+    
     @ViewBuilder
     var nftView: some View {
         if (viewModel.nftViewModel.showSkeleton ?? true) {
@@ -272,7 +272,7 @@ extension TokenListView {
                                 )
                                 .cornerRadius(.xl)
                             }
-
+                            
                             let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
                             Text(name)
                                 .lineLimit(1)

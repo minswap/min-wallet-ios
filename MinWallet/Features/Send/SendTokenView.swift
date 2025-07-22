@@ -7,12 +7,12 @@ struct SendTokenView: View {
         case scanQRCode(address: String)
         case normal
     }
-
+    
     enum Focusable: Hashable {
         case none
         case row(id: String)
     }
-
+    
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
@@ -27,11 +27,11 @@ struct SendTokenView: View {
     private var viewModel: SendTokenViewModel
     @State
     private var isShowSelectToken: Bool = false
-
+    
     init(viewModel: SendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -53,7 +53,7 @@ struct SendTokenView: View {
                                 .font(.labelMediumSecondary)
                                 .foregroundStyle(.colorInteractiveToneHighlight)
                                 .onTapGesture {
-
+                        
                                 }
                             Image(.ada)
                                 .resizable()
@@ -146,7 +146,7 @@ struct SendTokenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
+                
                 Button("Done") {
                     hideKeyboard()
                 }
