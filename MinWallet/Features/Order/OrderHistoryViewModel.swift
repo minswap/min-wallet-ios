@@ -17,7 +17,7 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var keyword: String = ""
     @Published
-    var orders: [OrderHistoryQuery.Data.Orders.WrapOrder] = []
+    var orders: [OrderHistory] = []
     @Published
     var showSkeleton: Bool = true
 
@@ -31,7 +31,7 @@ class OrderHistoryViewModel: ObservableObject {
 
     private var pagination: Pagination = .init()
 
-    var orderToCancel: OrderHistoryQuery.Data.Orders.WrapOrder? = nil
+    var orderToCancel: OrderHistory? = nil
 
     init() {
         $keyword
@@ -58,36 +58,36 @@ class OrderHistoryViewModel: ObservableObject {
             try? await Task.sleep(for: .seconds(1))
         }
         pagination = pagination.with({ $0.isFetching = true })
-        /*
-        let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-        self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-        self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
-        if let cursor = orderData?.orders.cursor {
-            self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
-        }
-         */
+        let orders = await getOrderHistory()
+        let cursorID = orders.last?.id ?? ""
+        pagination = pagination.with({ 
+            $0.isFetching = false
+            $0.hasMore = orders.count >= pagination.limit
+            $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
+        })
+        
         withAnimation {
             self.showSkeleton = false
         }
     }
 
-    func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
+    func loadMoreData(order: OrderHistory) {
         guard pagination.readyToLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
-        /*
         if orders.firstIndex(of: order) == thresholdIndex {
             Task {
-                let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-                let _orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
+                pagination = pagination.with({ $0.isFetching = true })
+                let _orders = await getOrderHistory()
                 
                 self.orders += _orders
-                self.hasLoadMore = !_orders.isEmpty
-                if let cursor = orderData?.orders.cursor {
-                    self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
-                }
+                let cursorID = _orders.last?.id ?? ""
+                pagination = pagination.with({ 
+                    $0.isFetching = false
+                    $0.hasMore = _orders.count >= pagination.limit
+                    $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
+                })
             }
         }
-         */
     }
 
     var input: OrderHistory.Request {
@@ -110,10 +110,12 @@ class OrderHistoryViewModel: ObservableObject {
         })
     }
 
+    //TODO: cuongnv check txID ?
     func cancelOrder() async throws {
+        /*
         guard let order = orderToCancel else { return }
-        let txId = order.order?.txIn.txId ?? ""
-        let txIndex = order.order?.txIn.txIndex ?? 0
+        let txId = order.createdTxId
+        let txIndex = order.createdTxIndex
         let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
         let input: InputCancelBulkOrders = InputCancelBulkOrders(
             changeAddress: UserInfo.shared.minWallet?.address ?? "",
@@ -124,6 +126,7 @@ class OrderHistoryViewModel: ObservableObject {
         let _ = try await TokenManager.finalizeAndSubmit(txRaw: txRaw.cancelBulkOrders)
         await fetchData(showSkeleton: false)
         orderToCancel = nil
+         */
     }
 }
 

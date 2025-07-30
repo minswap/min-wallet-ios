@@ -3,7 +3,7 @@ import ObjectMapper
 import Then
 
 extension OrderHistory {
-    struct Asset: Then {
+    struct Asset: Then, Hashable {
         var tokenId: String = ""
         var logo: String = ""
         var ticker: String = ""

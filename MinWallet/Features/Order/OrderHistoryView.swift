@@ -95,7 +95,8 @@ struct OrderHistoryView: View {
         Task {
             do {
                 hud.showLoading(true)
-                let finalID = viewModel.orderToCancel?.order?.txIn.txId
+                    //TODO: cuongnv
+                let finalID = viewModel.orderToCancel?.createdTxId
                 try await viewModel.cancelOrder()
                 hud.showLoading(false)
                 bannerState.infoContent = {

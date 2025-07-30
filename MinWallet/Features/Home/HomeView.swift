@@ -2,6 +2,8 @@ import SwiftUI
 import FlowStacks
 import MinWalletAPI
 import OneSignalFramework
+import ObjectMapper
+import SwiftyJSON
 
 
 struct HomeView: View {
@@ -355,14 +357,15 @@ extension HomeView {
     private func fetchOrderDetail(order: String, fallback: (() -> Void)?) {
         guard let address = userInfo.minWallet?.address, !address.isEmpty else { return }
         Task {
-            let input = OrderV2Input(
-                address: address,
-                txId: .some(order)
-            )
+            let input = OrderHistory.Request().with { 
+                $0.ownerAddress = address
+                $0.txId  = order 
+            }
             
             do {
-                let orderData = try await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-                guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first
+                let jsonData = try await OrderAPIRouter.getOrders(request: .init()).async_request()
+                let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayValue)
+                guard let order = orders?.first
                 else {
                     fallback?()
                     return

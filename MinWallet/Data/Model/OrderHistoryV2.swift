@@ -11,8 +11,8 @@ public enum OrderV2Status: String, EnumType {
 }
 */
 
-struct OrderHistory: Then {
-    var id: String = "11636247"
+struct OrderHistory: Then, Identifiable, Hashable {
+    var id: String = ""
     var status: OrderV2Status?
     var createdTxId: String = ""
     var createdTxIndex: Int = 0
@@ -27,9 +27,9 @@ struct OrderHistory: Then {
     var updatedTxId: String = ""
     var aggregatorSource: AggregatorSource?
     
-    var assetA: Asset?
-    var assetB: Asset?
-    var detail: Detail?
+    var assetA: Asset = .init()
+    var assetB: Asset = .init()
+    var detail: Detail = .init()
     
     init() {}
 }
@@ -60,5 +60,25 @@ extension OrderHistory: Mappable {
         assetA <- map["asset_a"]
         assetB <- map["asset_b"]
         detail <- map["details"]
+    }
+}
+
+
+extension OrderHistory {
+    var name: String {
+        switch detail.direction {
+            case .aToB:
+                return assetA.ticker + "_" + assetB.ticker
+            case .bToA:
+                return assetB.ticker + "_" + assetA.ticker
+        }
+    }
+    
+    var inputAsset: Asset {
+        detail.direction == .aToB ? assetA : assetB
+    }
+    
+    var outputAsset: Asset {
+        detail.direction == .aToB ? assetB : assetA
     }
 }

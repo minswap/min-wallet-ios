@@ -21,7 +21,7 @@ extension OrderHistory {
         case donation = "DONATION"
     }
 
-    struct Detail: Then {
+    struct Detail: Then, Hashable {
         var orderType: OrderType = .partialSwap
         var direction: Direction = .aToB
         var inputAmount: Double = 0 
@@ -30,11 +30,12 @@ extension OrderHistory {
         var tradingFee: Double = 0
         var fillOrKill: Bool = false
         var routes: [Route] = []
-
+        var expireAt: String? = nil
+        
         init() { }
     }
     
-    struct Route: Then {
+    struct Route: Then, Hashable {
         var lpAssetId: String = ""
         var assets: [Asset] = []
         
@@ -54,6 +55,7 @@ extension OrderHistory.Detail: Mappable {
         minimumAmount <- (map["minimum_amount"], GKMapFromJSONToDouble)
         fillOrKill <- map["fill_or_kill"]
         routes <- map["routes"]
+        expireAt <- map["expire_at"]
     }
 }
 
