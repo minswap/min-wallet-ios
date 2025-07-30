@@ -180,3 +180,24 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
         }
     }
 }
+
+extension AggregatorSource {
+    var nameVersion: String {
+        let pattern = #"V\d+"#
+        if let range = rawId.range(of: pattern, options: .regularExpression) {
+            return String(rawId[range])
+        }
+        return "V1"
+    }
+}
+
+//TODO: cuongnv extract color
+extension String {
+    var foregroundColor: Color? {
+        .clear
+    }
+    
+    var backgroundColor: Color? {
+        .clear
+    }
+}

@@ -310,9 +310,16 @@ extension String {
         return self.doubleValue * pow(10.0, Double(decimal))
     }
 }
+
 extension Double {
     func toExact(decimal: Double?) -> Double {
         return self / pow(10.0, decimal ?? 0)
+    }
+}
+
+extension Double {
+    func toExact(decimal: Int?) -> Double {
+        return self / pow(10.0, Double(decimal ?? 0))
     }
 }
 
