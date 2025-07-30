@@ -6,7 +6,7 @@ import SwiftyJSON
 
 typealias ContractType = AMMType
 
-extension OrderV2Action: @retroactive Identifiable {
+extension OrderHistory.OrderType: Identifiable {
     public var id: String { UUID().uuidString }
     
     var title: LocalizedStringKey {
@@ -17,14 +17,14 @@ extension OrderV2Action: @retroactive Identifiable {
             "Donation"
         case .limit:
             "Limit"
-        case .market:
+        case .swap:
             "Market"
         case .oco:
             "OCO"
         case .partialSwap:
             "Partial Fill"
         case .stopLoss:
-            "Stop loss"
+            "Stop"
         case .withdraw:
             "Withdraw"
         case .zapIn:
@@ -40,7 +40,7 @@ extension OrderV2Action: @retroactive Identifiable {
             "Deposit"
         case .limit:
             "Limit"
-        case .market:
+            case .swap:
             "Market"
         case .oco:
             "OCO"
@@ -61,23 +61,23 @@ extension OrderV2Action: @retroactive Identifiable {
     
     public init?(title: String) {
         switch title {
-        case OrderV2Action.deposit.titleFilter.toString():
+        case OrderHistory.OrderType.deposit.titleFilter.toString():
             self = .deposit
-        case OrderV2Action.limit.titleFilter.toString():
+        case OrderHistory.OrderType.limit.titleFilter.toString():
             self = .limit
-        case OrderV2Action.market.titleFilter.toString():
-            self = .market
-        case OrderV2Action.oco.titleFilter.toString():
+        case OrderHistory.OrderType.swap.titleFilter.toString():
+                self = .swap
+        case OrderHistory.OrderType.oco.titleFilter.toString():
             self = .oco
-        case OrderV2Action.partialSwap.titleFilter.toString():
+        case OrderHistory.OrderType.partialSwap.titleFilter.toString():
             self = .partialSwap
-        case OrderV2Action.stopLoss.titleFilter.toString():
+        case OrderHistory.OrderType.stopLoss.titleFilter.toString():
             self = .stopLoss
-        case OrderV2Action.withdraw.titleFilter.toString():
+        case OrderHistory.OrderType.withdraw.titleFilter.toString():
             self = .withdraw
-        case OrderV2Action.zapIn.titleFilter.toString():
+        case OrderHistory.OrderType.zapIn.titleFilter.toString():
             self = .zapIn
-        case OrderV2Action.zapOut.titleFilter.toString():
+        case OrderHistory.OrderType.zapOut.titleFilter.toString():
             self = .zapOut
         default:
             self = .deposit

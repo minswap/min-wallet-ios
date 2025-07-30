@@ -23,15 +23,19 @@ struct OrderHistory: Then {
     var ownerAddress: String = ""
     var ownerIdent: String = ""
     //"2025-07-28T07:40:15.000Z"
-    var updatedAt: String?  = nil
+    var updatedAt: String? = nil
     var updatedTxId: String = ""
-    var aggregatorSource: AggregatorSource? 
+    var aggregatorSource: AggregatorSource?
+    
+    var assetA: Asset?
+    var assetB: Asset?
+    var detail: Detail?
     
     init() {}
 }
 
 extension OrderHistory: Mappable {
-    init?(map: Map) { }
+    init?(map: Map) {}
     
     mutating func mapping(map: Map) {
         id <- (map["id"], GKMapFromJSONToString)
@@ -46,9 +50,15 @@ extension OrderHistory: Mappable {
         ownerIdent <- map["owner_ident"]
         updatedAt <- map["updated_at"]
         updatedTxId <- map["updated_tx_id"]
-        aggregatorSource <- (map["aggregatorSource"], GKMapFromJSONToType(fromJSON: { json in
-            guard let source = json as? String, !source.isEmpty else { return nil }
-            return .init(rawId: source)
-        }))
+        aggregatorSource <- (
+            map["aggregatorSource"],
+            GKMapFromJSONToType(fromJSON: { json in
+                guard let source = json as? String, !source.isEmpty else { return nil }
+                return .init(rawId: source)
+            })
+        )
+        assetA <- map["asset_a"]
+        assetB <- map["asset_b"]
+        detail <- map["details"]
     }
 }

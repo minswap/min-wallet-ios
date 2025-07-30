@@ -17,7 +17,7 @@ struct OrderHistoryFilterView: View {
     @Environment(\.enableDragGesture)
     var enableDragGesture
     
-    var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
+    var onFilterSelected: ((OrderV2Status?, AggregatorSource?, OrderHistory.OrderType?, Date?, Date?) -> Void)?
     
     private func formateDate(_ date: Date?) -> String {
         guard let date = date else { return "Select date" }
@@ -72,7 +72,7 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    let rawAction: [OrderV2Action] = [.market, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
+                    let rawAction: [OrderHistory.OrderType] = [.swap, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
                     let allKey: LocalizedStringKey = "All"
                     let actions: [String] = ([allKey] + rawAction.map({ $0.titleFilter })).map { $0.toString() }
                     
@@ -82,7 +82,7 @@ struct OrderHistoryFilterView: View {
                         items: actions,
                         itemSpacing: 0
                     ) { title in
-                        let action = OrderV2Action(title: title)
+                        let action = OrderHistory.OrderType(title: title)
                         let isActionAll = title == allKey.toString()
                         let content: LocalizedStringKey? = isActionAll ? allKey : action?.titleFilter
                         TextSelectable(
@@ -266,7 +266,7 @@ struct OrderHistoryFilterView: View {
                     onDismiss?()
                     viewModel.fromDate = viewModel.fromDate?.startOfDay
                     viewModel.toDate = viewModel.toDate?.endOfDay
-                    onFilterSelected?(viewModel.contractTypeSelected, viewModel.statusSelected, viewModel.actionSelected, viewModel.fromDate, viewModel.toDate)
+                    onFilterSelected?(viewModel.statusSelected, viewModel.protocolSelected, viewModel.actionSelected, viewModel.fromDate, viewModel.toDate)
                 }
                 .frame(height: 56)
             }

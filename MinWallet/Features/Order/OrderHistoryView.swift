@@ -53,11 +53,11 @@ struct OrderHistoryView: View {
         .presentSheet(isPresented: $viewModel.showFilterView) {
             OrderHistoryFilterView(
                 viewModel: filterViewModel,
-                onFilterSelected: { contractType, status, action, fromDate, toDate in
+                onFilterSelected: { status, source, action, fromDate, toDate in
                     Task {
-                        viewModel.contractTypeSelected = contractType
                         viewModel.statusSelected = status
-                        viewModel.actionSelected = action
+                        viewModel.orderType = action
+                        viewModel.source = source
                         viewModel.fromDate = fromDate
                         viewModel.toDate = toDate
                         await viewModel.fetchData()

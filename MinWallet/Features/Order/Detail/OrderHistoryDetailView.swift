@@ -42,9 +42,11 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
+                        /* TODO: cuongnv243
                         Text(order?.order?.action.value?.title)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
+                         */
                     }
                     .padding(.horizontal, .xl)
                     .frame(height: 36)

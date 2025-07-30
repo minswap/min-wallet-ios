@@ -178,9 +178,11 @@ struct OrderHistoryItemView: View {
                 .minimumScaleFactor(0.1)
                 .padding(.trailing)
             Spacer()
+            /* TODO: cuongnv
             Text(order?.order?.action.value?.title)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
+             */
         }
     }
 }

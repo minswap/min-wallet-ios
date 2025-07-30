@@ -1,6 +1,9 @@
 import SwiftUI
 import MinWalletAPI
 import Combine
+import SwiftyJSON
+import ObjectMapper
+import Then
 
 
 @MainActor
@@ -17,37 +20,36 @@ class OrderHistoryViewModel: ObservableObject {
     var orders: [OrderHistoryQuery.Data.Orders.WrapOrder] = []
     @Published
     var showSkeleton: Bool = true
-    
+
     private var cancellables: Set<AnyCancellable> = []
-    
-    var contractTypeSelected: ContractType?
+
     var statusSelected: OrderV2Status?
-    var actionSelected: OrderV2Action?
+    var orderType: OrderHistory.OrderType?
+    var source: AggregatorSource?
     var fromDate: Date?
     var toDate: Date?
-    
-    private var pagination: OrderPaginationCursorInput?
-    private var hasLoadMore: Bool = true
-    
+
+    private var pagination: Pagination = .init()
+
     var orderToCancel: OrderHistoryQuery.Data.Orders.WrapOrder? = nil
-    
+
     init() {
         $keyword
             .removeDuplicates()
             .debounce(
-                for: .milliseconds(400),
-                scheduler: DispatchQueue.main
-            )
+            for: .milliseconds(400),
+            scheduler: DispatchQueue.main
+        )
             .sink(receiveValue: { [weak self] value in
-                guard let self = self else { return }
-                Task {
-                    self.keyword = value
-                    await self.fetchData()
-                }
-            })
+            guard let self = self else { return }
+            Task {
+                self.keyword = value
+                await self.fetchData()
+            }
+        })
             .store(in: &cancellables)
     }
-    
+
     func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
         withAnimation {
             self.showSkeleton = showSkeleton
@@ -55,21 +57,24 @@ class OrderHistoryViewModel: ObservableObject {
         if fromPullToRefresh {
             try? await Task.sleep(for: .seconds(1))
         }
-        pagination = nil
+        pagination = pagination.with({ $0.isFetching = true })
+        /*
         let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
         self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
         self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
         if let cursor = orderData?.orders.cursor {
             self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
         }
+         */
         withAnimation {
             self.showSkeleton = false
         }
     }
-    
+
     func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
-        guard hasLoadMore else { return }
+        guard pagination.readyToLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
+        /*
         if orders.firstIndex(of: order) == thresholdIndex {
             Task {
                 let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
@@ -82,27 +87,29 @@ class OrderHistoryViewModel: ObservableObject {
                 }
             }
         }
+         */
     }
-    
-    var input: OrderV2Input {
+
+    var input: OrderHistory.Request {
         let address = UserInfo.shared.minWallet?.address ?? ""
         //let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
         let keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         //ce7c194517fc3d82569a2abff6b9ad93ea83b079016577cd5ac436ed6c6edeb2
         let isTxID = keyword.count == 64
-        return OrderV2Input(
-            action: actionSelected != nil ? .some(.case(actionSelected!)) : nil,
-            address: address,
-            ammType: contractTypeSelected != nil ? .some(.case(contractTypeSelected!)) : nil,
-            asset: !keyword.isBlank && !isTxID ? .some(keyword) : nil,
-            fromDate: fromDate != nil ? .some(String(Int(fromDate!.timeIntervalSince1970 * 1000))) : nil,
-            pagination: pagination != nil ? .some(pagination!) : nil,
-            status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
-            toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000 - 1)) : nil,
-            txId: !keyword.isBlank && isTxID ? .some(keyword) : nil
-        )
+        return OrderHistory.Request().with({
+            $0.ownerAddress = address
+            $0.txId = !keyword.isBlank && isTxID ? keyword : nil
+            $0.token = !keyword.isBlank && !isTxID ? keyword : nil
+            $0.toTime = fromDate != nil ? String(Int(fromDate!.timeIntervalSince1970 * 1000)) : nil
+            $0.status = statusSelected
+            $0.source = source
+            $0.type = orderType
+            $0.toTime = toDate != nil ? String(toDate!.timeIntervalSince1970 * 1000 - 1) : nil
+            $0.limit = pagination.limit
+            $0.cursor = pagination.cursor
+        })
     }
-    
+
     func cancelOrder() async throws {
         guard let order = orderToCancel else { return }
         let txId = order.order?.txIn.txId ?? ""
@@ -120,16 +127,47 @@ class OrderHistoryViewModel: ObservableObject {
     }
 }
 
-extension OrderV2Input {
+extension OrderHistory.Request {
     var fromDateTimeInterval: Date? {
-        guard let fromDate = fromDate.unwrapped, !fromDate.isEmpty else { return nil }
+        guard let fromDate = fromTime, !fromDate.isEmpty else { return nil }
         let fromDateTime = (Double(fromDate) ?? 0) / 1000
         return fromDateTime > 0 ? Date(timeIntervalSince1970: fromDateTime) : nil
     }
-    
+
     var toDateTimeInterval: Date? {
-        guard let toDate = toDate.unwrapped, !toDate.isEmpty else { return nil }
+        guard let toDate = toTime, !toDate.isEmpty else { return nil }
         let toDateTime = (Double(toDate) ?? 0) / 1000
         return toDateTime > 0 ? Date(timeIntervalSince1970: toDateTime) : nil
+    }
+}
+
+extension OrderHistoryViewModel {
+    private func getOrderHistory() async -> [OrderHistory] {
+        do {
+            let jsonData = try await OrderAPIRouter.getOrders(request: .init()).async_request()
+            let order = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayValue)
+            return order ?? []
+        } catch {
+            return []
+        }
+    }
+}
+extension OrderHistoryViewModel {
+    struct Pagination: Then {
+        var cursor: Int?
+        var limit: Int = 20
+        var hasMore: Bool = true
+        var isFetching: Bool = false
+
+        var readyToLoadMore: Bool {
+            return !isFetching && hasMore
+        }
+        init() { }
+
+        mutating func reset() {
+            isFetching = false
+            hasMore = true
+            cursor = nil
+        }
     }
 }
