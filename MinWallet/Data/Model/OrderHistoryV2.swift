@@ -63,7 +63,7 @@ extension OrderHistory: Mappable {
         updatedAt <- map["updated_at"]
         updatedTxId <- map["updated_tx_id"]
         aggregatorSource <- (
-            map["aggregatorSource"],
+            map["protocol"],
             GKMapFromJSONToType(fromJSON: { json in
                 guard let source = json as? String, !source.isEmpty else { return nil }
                 return .init(rawId: source)
@@ -126,7 +126,7 @@ extension OrderHistory {
             case .deposit:
                 return "\(assetA.adaName), \(assetB.adaName) - \(detail.lpAsset?.adaName ?? "")"
             case .withdraw:
-                return "\(detail.lpAsset?.adaName ?? "") - \(assetA.adaName), \(assetB.adaName))"
+                return "\(detail.lpAsset?.adaName ?? "") - \(assetA.adaName), \(assetB.adaName)"
             case .zapIn:
                 return "\(detail.inputAsset?.adaName ?? "") - \(detail.lpAsset?.adaName ?? "")"
             case .zapOut:

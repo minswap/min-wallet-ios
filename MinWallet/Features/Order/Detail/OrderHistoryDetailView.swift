@@ -127,19 +127,20 @@ struct OrderHistoryDetailView: View {
                     TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
                 }
             }
-            let nameVersion = order.aggregatorSource?.nameVersion
-            Text(order.aggregatorSource?.name)
-                .font(.paragraphXMediumSmall)
-                .foregroundStyle(nameVersion?.foregroundColor ?? .colorInteractiveToneHighlight)
-                .padding(.horizontal, .md)
-                .padding(.vertical, .xs)
-                .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(nameVersion?.backgroundColor ?? .colorSurfaceHighlightDefault)
-                )
-                .frame(height: 20)
-                .lineLimit(1)
-                .minimumScaleFactor(0.1)
-                .padding(.trailing)
+            if let nameVersion = order.aggregatorSource?.nameVersion, !nameVersion.isBlank {
+                Text(order.aggregatorSource?.name)
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(nameVersion.foregroundColor ?? .colorInteractiveToneHighlight)
+                    .padding(.horizontal, .md)
+                    .padding(.vertical, .xs)
+                    .background(
+                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(nameVersion.backgroundColor ?? .colorSurfaceHighlightDefault)
+                    )
+                    .frame(height: 20)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
+                    .padding(.trailing)
+            }
             Spacer()
             HStack(spacing: 4) {
                 Circle().frame(width: 4, height: 4)

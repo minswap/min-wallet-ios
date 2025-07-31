@@ -198,13 +198,35 @@ extension AggregatorSource {
     }
 }
 
-//TODO: cuongnv extract color
+
 extension String {
     var foregroundColor: Color? {
-        .clear
+        switch self {
+        case "V1":
+            return .colorDecorativeYellowSub
+        case "V2":
+            return .colorDecorativeBrandSub
+        case "V3":
+            return .colorDecorativeRoseSub
+        case "Stable":
+            return .colorDecorativeLeafSub
+        default:
+            return nil
+        }
     }
     
     var backgroundColor: Color? {
-        .clear
+        switch self {
+        case "V1":
+            return .colorDecorativeYellowDefault
+        case "V2":
+            return .colorBrandRiver
+        case "V3":
+            return .colorDecorativeRoseDefault
+        case "Stable":
+            return .colorDecorativeLeaf
+        default:
+            return nil
+        }
     }
 }

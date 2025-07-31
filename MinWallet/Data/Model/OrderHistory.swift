@@ -28,9 +28,9 @@ extension OrderHistory.OrderType: Identifiable {
         case .withdraw:
             "Withdraw"
         case .zapIn:
-            "Zap in"
+            "Zap In"
         case .zapOut:
-            "Zap out"
+            "Zap Out"
         }
     }
     
@@ -51,9 +51,9 @@ extension OrderHistory.OrderType: Identifiable {
         case .withdraw:
             "Withdraw"
         case .zapIn:
-            "Zap in"
+            "Zap In"
         case .zapOut:
-            "Zap out"
+            "Zap Out"
         default:
             ""
         }

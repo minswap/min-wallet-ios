@@ -425,6 +425,9 @@
     "Insufficient %@ balance" : {
 
     },
+    "Interacted with" : {
+
+    },
     "Invalid address" : {
 
     },
@@ -1034,10 +1037,10 @@
     "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.You can adjust this by setting percentage of Slippage Tolerance" : {
 
     },
-    "Zap in" : {
+    "Zap In" : {
 
     },
-    "Zap out" : {
+    "Zap Out" : {
 
     },
     "zzz" : {

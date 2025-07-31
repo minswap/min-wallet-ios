@@ -78,7 +78,7 @@ struct OrderHistoryItemView: View {
             }
             if let source = order?.aggregatorSource {
                 HStack(alignment: .top, spacing: .xs) {
-                    Text("Protocol")
+                    Text("Interacted with")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
@@ -138,19 +138,20 @@ struct OrderHistoryItemView: View {
                     TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
                 }
             }
-            let version = order?.aggregatorSource?.nameVersion ?? "V1"
-            Text(version)
-                .font(.paragraphXMediumSmall)
-                .foregroundStyle(version.foregroundColor ?? .colorInteractiveToneHighlight)
-                .padding(.horizontal, .md)
-                .padding(.vertical, .xs)
-                .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(version.backgroundColor ?? .colorSurfaceHighlightDefault)
-                )
-                .frame(height: 20)
-                .lineLimit(1)
-                .minimumScaleFactor(0.1)
-                .padding(.trailing)
+            if let version = order?.aggregatorSource?.nameVersion, !version.isBlank {
+                Text(version)
+                    .font(.paragraphXMediumSmall)
+                    .foregroundStyle(version.foregroundColor ?? .colorInteractiveToneHighlight)
+                    .padding(.horizontal, .md)
+                    .padding(.vertical, .xs)
+                    .background(
+                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(version.backgroundColor ?? .colorSurfaceHighlightDefault)
+                    )
+                    .frame(height: 20)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
+                    .padding(.trailing)
+            }
             Spacer()
             Text(order?.detail.orderType.title)
                 .font(.labelMediumSecondary)
