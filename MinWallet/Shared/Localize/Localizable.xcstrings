@@ -10,6 +10,9 @@
     " / 40" : {
 
     },
+    " %@" : {
+
+    },
     " Trading %@ token on Minswap may lead to a loss of underlying assets on %@." : {
       "localizations" : {
         "en" : {
@@ -57,6 +60,9 @@
           }
         }
       }
+    },
+    "1 %@ = " : {
+
     },
     "A wallet name must be 3-40 characters" : {
 
@@ -288,6 +294,9 @@
 
     },
     "Executed batcher fee" : {
+
+    },
+    "Executed price" : {
 
     },
     "Execution information" : {
@@ -659,6 +668,9 @@
 
     },
     "Risk score" : {
+
+    },
+    "Route" : {
 
     },
     "Safe Mode" : {

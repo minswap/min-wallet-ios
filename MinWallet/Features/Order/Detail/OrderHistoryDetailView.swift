@@ -303,19 +303,18 @@ struct OrderHistoryDetailView: View {
                         .foregroundStyle(.colorBaseTent)
                 }
                 .padding(.vertical, .md)
-                //TODO: cuongnv
-//                if order?.isShowRouter == true {
-//                    HStack(spacing: 4) {
-//                        Text("Route")
-//                            .font(.paragraphSmall)
-//                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-//                        Spacer()
-//                        Text(order.detail.routes)
-//                            .font(.labelSmallSecondary)
-//                            .foregroundStyle(.colorBaseTent)
-//                    }
-//                    .padding(.top, .md)
-//                }
+                if order.isShowRouter {
+                    HStack(spacing: 4) {
+                        Text("Route")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                        Text(order.routing)
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    }
+                    .padding(.top, .md)
+                }
                 if let expiredAt = order.detail.expireAt, !expiredAt.isEmpty, order.status == .created {
                     HStack(spacing: 4) {
                         Text("Expires at")
@@ -379,30 +378,25 @@ struct OrderHistoryDetailView: View {
                 }
                 .padding(.vertical, .md)
                 .padding(.top, .md)
-                //TODO: cuongnv sho route
-//                if order.isShowRouter {
-//                    HStack(spacing: 4) {
-//                        Text("Executed price")
-//                            .font(.paragraphSmall)
-//                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-//                        Spacer()
-//                        let inputName = order?.detail.inputs.first?.currency ?? ""
-//                        let inputAmount: Double = order?.detail.inputs.first?.amount ?? 1
-//                        let outputName = order?.detail.outputs.first?.currency ?? ""
-//                        let outputAmount: Double = order?.detail.outputs.first?.amount ?? 1
-//                        let rate = pow(outputAmount / (inputAmount == 0 ? 1 : inputAmount), isExchangeRate ? 1 : -1)
-//                        Text("1 \(isExchangeRate ? inputName : outputName) = ")
-//                            .font(.labelSmallSecondary)
-//                            .foregroundColor(.colorBaseTent) + Text(rate.formatNumber(font: .labelSmallSecondary, fontColor: .colorBaseTent)) + Text(" \(!isExchangeRate ? inputName : outputName)").font(.labelSmallSecondary).foregroundColor(.colorBaseTent)
-//                        Image(.icExecutePrice)
-//                            .fixSize(.xl)
-//                    }
-//                    .padding(.vertical, .md)
-//                    .contentShape(.rect)
-//                    .onTapGesture {
-//                        isExchangeRate.toggle()
-//                    }
-//                }
+                if order.isShowRouter, let input = order.input, let output = order.output {
+                    HStack(spacing: 4) {
+                        Text("Executed price")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                        let rate = pow(output.amount / (input.amount == 0 ? 1 : input.amount), isExchangeRate ? 1 : -1)
+                        Text("1 \(isExchangeRate ? input.asset.adaName : output.asset.adaName) = ")
+                            .font(.labelSmallSecondary)
+                            .foregroundColor(.colorBaseTent) + Text(rate.formatNumber(font: .labelSmallSecondary, fontColor: .colorBaseTent)) + Text(" \(!isExchangeRate ? input.asset.adaName : output.asset.adaName)").font(.labelSmallSecondary).foregroundColor(.colorBaseTent)
+                        Image(.icExecutePrice)
+                            .fixSize(.xl)
+                    }
+                    .padding(.vertical, .md)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        isExchangeRate.toggle()
+                    }
+                }
                 if let changeAmount = order.changeAmountAsset {
                     HStack(alignment: .top) {
                         Text("Change amount")
