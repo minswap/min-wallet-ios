@@ -66,6 +66,7 @@ class OrderHistoryViewModel: ObservableObject {
             $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
         })
         
+        self.orders = orders
         withAnimation {
             self.showSkeleton = false
         }
@@ -147,8 +148,8 @@ extension OrderHistory.Request {
 extension OrderHistoryViewModel {
     private func getOrderHistory() async -> [OrderHistory] {
         do {
-            let jsonData = try await OrderAPIRouter.getOrders(request: .init()).async_request()
-            let order = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayValue)
+            let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
+            let order = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:])
             return order ?? []
         } catch {
             return []
