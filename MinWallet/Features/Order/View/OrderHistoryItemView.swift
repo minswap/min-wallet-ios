@@ -37,14 +37,13 @@ struct OrderHistoryItemView: View {
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
+                let inputs = order?.inputAsset ?? []
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text(
-                        order?.detail.inputAmount
-                            .toExact(decimal: order?.inputAsset.decimals)
-                            .formatNumber(suffix: order?.inputAsset.ticker ?? "", font: .labelSmallSecondary, fontColor: .colorBaseTent) ?? AttributedString()
-                    )
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
+                    ForEach(inputs, id: \.self) { input in
+                        Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    }
                 }
             }
             HStack(alignment: .top) {
@@ -59,21 +58,20 @@ struct OrderHistoryItemView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
                 } else {
+                    let outputs = order?.outputAsset ?? []
                     VStack(alignment: .trailing, spacing: 4) {
-                        if order?.detail.executedAmount == .zero {
-                            Text("--")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseTent)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
-                        } else {
-                            Text(
-                                order?.detail.executedAmount
-                                    .toExact(decimal: order?.outputAsset.decimals)
-                                    .formatNumber(suffix: order?.outputAsset.ticker ?? "", font: .labelSmallSecondary, fontColor: .colorBaseTent) ?? AttributedString()
-                            )
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                        ForEach(outputs, id: \.self) { output in
+                            if output.amount == .zero {
+                                Text("--")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorBaseTent)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            } else {
+                                Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            }
                         }
                     }
                 }
@@ -124,13 +122,10 @@ struct OrderHistoryItemView: View {
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
-                let input = order?.inputAsset.tokenId.tokenDefault ?? TokenDefault(symbol: "", tName: "")
-                TokenLogoView(
-                    currencySymbol: input.currencySymbol,
-                    tokenName: input.tokenName,
-                    isVerified: order?.inputAsset.isVerified ?? false,
-                    size: .init(width: 24, height: 24)
-                )
+                let inputs = order?.inputAsset ?? []
+                ForEach(inputs, id: \.self) { input in
+                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified, size: .init(width: 24, height: 24))
+                }
             }
             Image(.icBack)
                 .resizable()
@@ -138,13 +133,10 @@ struct OrderHistoryItemView: View {
                 .frame(width: 16, height: 16)
                 .padding(.horizontal, 2)
             HStack(spacing: -4) {
-                let output = order?.outputAsset.tokenId.tokenDefault ?? TokenDefault(symbol: "", tName: "")
-                TokenLogoView(
-                    currencySymbol: output.currencySymbol,
-                    tokenName: output.tokenName,
-                    isVerified: order?.outputAsset.isVerified ?? false,
-                    size: .init(width: 24, height: 24)
-                )
+                let outputs = order?.outputAsset ?? []
+                ForEach(outputs, id: \.self) { output in
+                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
+                }
             }
             let version = order?.aggregatorSource?.nameVersion ?? "V1"
             Text(version)

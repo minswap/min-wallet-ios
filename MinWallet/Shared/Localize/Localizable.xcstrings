@@ -13,9 +13,6 @@
     " / 40" : {
 
     },
-    " %@" : {
-
-    },
     " and " : {
 
     },
@@ -132,9 +129,6 @@
           }
         }
       }
-    },
-    "1 %@ = " : {
-
     },
     "A wallet name must be 3-40 characters" : {
 
@@ -368,9 +362,6 @@
     "Executed batcher fee" : {
 
     },
-    "Executed price" : {
-
-    },
     "Execution information" : {
 
     },
@@ -399,9 +390,6 @@
 
     },
     "Fd Market cap" : {
-
-    },
-    "Fill History" : {
 
     },
     "Filter" : {
@@ -740,9 +728,6 @@
 
     },
     "Risk score" : {
-
-    },
-    "Route" : {
 
     },
     "Safe Mode" : {
