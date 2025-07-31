@@ -45,10 +45,7 @@ struct EstimationResponse: Mappable, Then {
         totalDexFee <- map["total_dex_fee"]
         aggregatorFee <- map["aggregator_fee"]
         deposits <- map["deposits"]
-        avgPriceImpact <- (
-            map["avg_price_impact"],
-            GKMapFromJSONToDouble
-        )
+        avgPriceImpact <- (map["avg_price_impact"], GKMapFromJSONToDouble)
         paths <- map["paths"]
         amountInDecimal <- map["amount_in_decimal"]
         

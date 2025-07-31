@@ -1,6 +1,8 @@
 import Foundation
 import ObjectMapper
 import Then
+import SwiftyJSON
+
 
 extension OrderHistory {
     enum Direction: String {
@@ -46,12 +48,14 @@ extension OrderHistory {
         var receiveAmount: Double = 0
         var lpAmount: Double = 0
         var swapAmount: Double = 0
+        var filledAmount: Double = 0
         
         var maxSwapTime: Int = 0
         var tradingFee: Double = 0
         var fillOrKill: Bool = false
         var routes: [Route] = []
         var expireAt: String? = nil
+        var fillHistory: [FillHistory] = []
         
         init() { }
     }
@@ -62,8 +66,35 @@ extension OrderHistory {
         
         init() {}
     }
+    
+    struct FillHistory: Then, Hashable, Identifiable {
+        var id: String {
+            batchedTxId
+        }
+        
+        var input: InputOutput =  .init()
+        var output: InputOutput =  .init()
+        
+        var inputAmount: Double = 0
+        var outputAmount: Double = 0
+        var batchedTxId: String = ""
+        var batchedAt: String = ""
+        var percent: Double = 0
+        
+        init() {}
+    }
 }
 
+extension OrderHistory.FillHistory: Mappable {
+    init?(map: Map) { }
+    
+    mutating func mapping(map: Map) {
+        inputAmount <- (map["input_amount"], GKMapFromJSONToDouble)
+        outputAmount <- (map["output_amount"], GKMapFromJSONToDouble)
+        batchedTxId <- map["batched_tx_id"]
+        batchedAt <- map["batched_at"]
+    }
+}
 extension OrderHistory.Detail: Mappable {
     init?(map: Map) { }
 
@@ -91,11 +122,14 @@ extension OrderHistory.Detail: Mappable {
         lpAmount <- (map["lp_amount"], GKMapFromJSONToDouble)
         swapAmount <- (map["swap_amount"], GKMapFromJSONToDouble)
         receiveAmount <- (map["receive_amount"], GKMapFromJSONToDouble)
+        filledAmount <- (map["filled_amount"], GKMapFromJSONToDouble)
         
         fillOrKill <- map["fill_or_kill"]
         routes <- map["routes"]
         expireAt <- map["expire_at"]
         maxSwapTime <- (map["max_swap_time"], GKMapFromJSONToInt)
+        
+        fillHistory <- map["fill_history"]
     }
 }
 

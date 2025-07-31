@@ -201,7 +201,7 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text((order.depositAda.toExact(decimal: 6).formatSNumber(maximumFractionDigits: 15) ?? "") + " " + Currency.ada.prefix)
+                    Text((order.depositAda.toExact(decimal: 6).formatSNumber(maximumFractionDigits: 15)) + " " + Currency.ada.prefix)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
@@ -298,7 +298,7 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text(((order.batcherFee ?? 0) / 1_000_000).formatSNumber(maximumFractionDigits: 15) + " " + Currency.ada.prefix)
+                    Text(((order.batcherFee) / 1_000_000).formatSNumber(maximumFractionDigits: 15) + " " + Currency.ada.prefix)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
@@ -446,38 +446,38 @@ struct OrderHistoryDetailView: View {
                         }
                 }
                 .padding(.top, .md)
-                //TODO: cuongnv check sau
-//                if let fillHistories = order?.detail.fillHistories, !fillHistories.isEmpty {
-//                    Color.colorBorderPrimarySub.frame(height: 1)
-//                        .padding(.vertical, .xl)
-//                    HStack(spacing: 4) {
-//                        Text("Fill History")
-//                            .font(.paragraphSmall)
-//                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-//                        Spacer()
-//                    }
-//                    .padding(.bottom, .md)
-//                    ForEach(fillHistories, id: \.self) { history in
-//                        HStack(spacing: 4) {
-//                            Text(history.input.amount.formatNumber(suffix: history.input.currency, roundingOffset: history.input.decimals ?? 6, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-//                            Image(.icBack)
-//                                .fixSize(.xl)
-//                                .rotationEffect(.degrees(180))
-//                            Text(history.output.amount.formatNumber(suffix: history.output.currency, roundingOffset: history.output.decimals ?? 6, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-//                            Text("\(abs(history.percent).formatSNumber(maximumFractionDigits: 2))%")
-//                                .font(.paragraphSmall)
-//                                .foregroundStyle(.colorInteractiveToneHighlight)
-//                                .layoutPriority(9)
-//                            Spacer(minLength: 0)
-//                            Image(.icArrowUp)
-//                                .fixSize(.xl)
-//                                .onTapGesture {
-//                                    history.txId.viewTransaction()
-//                                }
-//                        }
-//                        .frame(height: 36)
-//                    }
-//                }
+                let fillHistories = order.detail.fillHistory
+                if !fillHistories.isEmpty {
+                    Color.colorBorderPrimarySub.frame(height: 1)
+                        .padding(.vertical, .xl)
+                    HStack(spacing: 4) {
+                        Text("Fill History")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                    }
+                    .padding(.bottom, .md)
+                    ForEach(fillHistories, id: \.self) { history in
+                        HStack(spacing: 4) {
+                            Text(history.input.amount.formatNumber(suffix: history.input.currency, roundingOffset: history.input.decimals, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            Image(.icBack)
+                                .fixSize(.xl)
+                                .rotationEffect(.degrees(180))
+                            Text(history.output.amount.formatNumber(suffix: history.output.currency, roundingOffset: history.output.decimals, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            Text("\(abs(history.percent).formatSNumber(maximumFractionDigits: 2))%")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveToneHighlight)
+                                .layoutPriority(9)
+                            Spacer(minLength: 0)
+                            Image(.icArrowUp)
+                                .fixSize(.xl)
+                                .onTapGesture {
+                                    history.batchedTxId.viewTransaction()
+                                }
+                        }
+                        .frame(height: 36)
+                    }
+                }
             }
         }
     }

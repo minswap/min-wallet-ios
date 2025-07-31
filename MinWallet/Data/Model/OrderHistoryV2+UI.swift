@@ -11,6 +11,8 @@ extension OrderHistory {
         var asset: Asset = .init()
         var amount: Double = 0
         
+        init() {}
+        
         init(asset: Asset?, amount: Double) {
             self.asset = asset ?? .init()
             self.amount = amount.toExact(decimal: asset?.decimals ?? 0)
@@ -30,6 +32,10 @@ extension OrderHistory.InputOutput {
     
     var tokenName: String {
         asset.token?.tokenName ?? ""
+    }
+    
+    var decimals: Int {
+        asset.token?.decimals ?? 0
     }
     
     var isVerified: Bool {

@@ -31,6 +31,13 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var assetB: Asset = .init()
     var detail: Detail = .init()
 
+    //Mapping UI
+    var name: String = ""
+    var inputAsset: [InputOutput] = []
+    var outputAsset: [InputOutput] = []
+    var tradingFeeAsset: InputOutput?
+    var changeAmountAsset: InputOutput?
+    
     init() { }
 }
 
@@ -60,131 +67,164 @@ extension OrderHistory: Mappable {
         assetA <- map["asset_a"]
         assetB <- map["asset_b"]
         detail <- map["details"]
+        
+        let totalAmountIn = max(detail.inputAmount, 1)
+        detail.fillHistory = detail.fillHistory.compactMap({ inputOutput in
+            switch detail.orderType {
+                case .partialSwap:
+                    var percent = ((inputOutput.inputAmount / totalAmountIn) * 100)
+                    percent = Double(round(100 * percent) / 100)
+                    switch detail.direction {
+                        case .aToB:
+                            return inputOutput.with { 
+                                $0.input = InputOutput(asset: assetA, amount:inputOutput.inputAmount)
+                                $0.output = InputOutput(asset: assetB, amount:inputOutput.outputAmount)
+                                $0.percent = percent
+                            }
+                        case .bToA:
+                            return inputOutput.with { 
+                                $0.input = InputOutput(asset: assetB, amount:inputOutput.inputAmount)
+                                $0.output = InputOutput(asset: assetA, amount:inputOutput.outputAmount)
+                                $0.percent = percent
+                            }
+                        default:
+                            return nil
+                    }
+                default:
+                    return nil
+            }
+        })
+        
+        let tempPercents: Double = detail.fillHistory.map({ $0.percent }).dropLast().reduce(0, +)
+        for (index, _) in detail.fillHistory.enumerated() where index == detail.fillHistory.count - 1 {
+            detail.fillHistory[index].percent = 100 - tempPercents
+        }
     }
 }
 
 
 extension OrderHistory {
-    var name: String {
-        switch detail.orderType {
-        case .swap, .limit, .stopLoss, .partialSwap, .oco:
-            switch detail.direction {
-            case .aToB:
-                return assetA.adaName + " - " + assetB.adaName
-            case .bToA:
-                return assetB.adaName + " - " + assetA.adaName
-            default:
-                return ""
+    private mutating func mappingUI() {
+        name = {
+            switch detail.orderType {
+                case .swap, .limit, .stopLoss, .partialSwap, .oco:
+                    switch detail.direction {
+                        case .aToB:
+                            return assetA.adaName + " - " + assetB.adaName
+                        case .bToA:
+                            return assetB.adaName + " - " + assetA.adaName
+                        default:
+                            return ""
+                    }
+                case .deposit:
+                    return "\(assetA.adaName), \(assetB.adaName) - \(detail.lpAsset?.adaName ?? "")"
+                case .withdraw:
+                    return "\(detail.lpAsset?.adaName ?? "") - \(assetA.adaName), \(assetB.adaName))"
+                case .zapIn:
+                    return "\(detail.inputAsset?.adaName ?? "") - \(detail.lpAsset?.adaName ?? "")"
+                case .zapOut:
+                    return "\(detail.lpAsset?.adaName ?? "") - \(detail.receiveAsset?.adaName ?? "")"
+                case .donation:
+                    return ""
             }
-        case .deposit:
-            return "\(assetA.adaName), \(assetB.adaName) - \(detail.lpAsset?.adaName ?? "")"
-        case .withdraw:
-            return "\(detail.lpAsset?.adaName ?? "") - \(assetA.adaName), \(assetB.adaName))"
-        case .zapIn:
-            return "\(detail.inputAsset?.adaName ?? "") - \(detail.lpAsset?.adaName ?? "")"
-        case .zapOut:
-            return "\(detail.lpAsset?.adaName ?? "") - \(detail.receiveAsset?.adaName ?? "")"
-        case .donation:
-            return ""
-        }
-    }
-
-    var inputAsset: [InputOutput] {
-        switch detail.orderType {
-        case .swap, .limit, .stopLoss, .partialSwap, .oco:
-            switch detail.direction {
-            case .aToB:
-                return [InputOutput.init(asset: assetA, amount: detail.inputAmount)]
-            case .bToA:
-                return [InputOutput.init(asset: assetB, amount: detail.inputAmount)]
-            default:
-                return []
+        }()
+        
+        inputAsset  = {
+            switch detail.orderType {
+                case .swap, .limit, .stopLoss, .partialSwap, .oco:
+                    switch detail.direction {
+                        case .aToB:
+                            return [InputOutput.init(asset: assetA, amount: detail.inputAmount)]
+                        case .bToA:
+                            return [InputOutput.init(asset: assetB, amount: detail.inputAmount)]
+                        default:
+                            return []
+                    }
+                case .deposit:
+                    return [InputOutput(asset: assetA, amount: detail.depositAmountA), InputOutput(asset: assetB, amount: detail.depositAmountB)]
+                case .withdraw:
+                    return [InputOutput(asset: detail.lpAsset, amount: detail.withdrawLpAmount)]
+                case .zapIn:
+                    return [InputOutput(asset: detail.inputAsset, amount: detail.inputAmount)]
+                case .zapOut:
+                    return [InputOutput(asset: detail.lpAsset, amount: detail.lpAmount)]
+                case .donation:
+                    return []
             }
-        case .deposit:
-            return [InputOutput(asset: assetA, amount: detail.depositAmountA), InputOutput(asset: assetB, amount: detail.depositAmountB)]
-        case .withdraw:
-            return [InputOutput(asset: detail.lpAsset, amount: detail.withdrawLpAmount)]
-        case .zapIn:
-            return [InputOutput(asset: detail.inputAsset, amount: detail.inputAmount)]
-        case .zapOut:
-            return [InputOutput(asset: detail.lpAsset, amount: detail.lpAmount)]
-        case .donation:
-            return []
-        }
-    }
-
-    var outputAsset: [InputOutput] {
-        switch detail.orderType {
-        case .swap, .limit, .stopLoss, .partialSwap, .oco:
-            switch detail.direction {
-            case .aToB:
-                return [InputOutput.init(asset: assetA, amount: detail.executedAmount)]
-            case .bToA:
-                return [InputOutput.init(asset: assetB, amount: detail.executedAmount)]
-            default:
-                return []
+        }()
+        
+        outputAsset = {
+            switch detail.orderType {
+                case .swap, .limit, .stopLoss, .partialSwap, .oco:
+                    switch detail.direction {
+                        case .aToB:
+                            return [InputOutput.init(asset: assetA, amount: detail.executedAmount)]
+                        case .bToA:
+                            return [InputOutput.init(asset: assetB, amount: detail.executedAmount)]
+                        default:
+                            return []
+                    }
+                case .deposit:
+                    return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount)]
+                case .withdraw:
+                    return [InputOutput(asset: assetA, amount: detail.receiveAmountA), InputOutput(asset: assetB, amount: detail.receiveAmountB)]
+                case .zapIn:
+                    return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount)]
+                case .zapOut:
+                    return [InputOutput(asset: detail.receiveAsset, amount: detail.receiveAmount)]
+                case .donation:
+                    return []
             }
-        case .deposit:
-            return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount)]
-        case .withdraw:
-            return [InputOutput(asset: assetA, amount: detail.receiveAmountA), InputOutput(asset: assetB, amount: detail.receiveAmountB)]
-        case .zapIn:
-            return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount)]
-        case .zapOut:
-            return [InputOutput(asset: detail.receiveAsset, amount: detail.receiveAmount)]
-        case .donation:
-            return []
-        }
+        }()
+        
+        tradingFeeAsset = {
+            switch detail.orderType {
+                case .swap, .limit, .stopLoss, .partialSwap, .oco:
+                    switch detail.direction {
+                        case .aToB:
+                            return detail.tradingFee > 0 ? InputOutput(asset: assetA, amount: detail.tradingFee) : nil
+                        case .bToA:
+                            return detail.tradingFee > 0 ? InputOutput(asset: assetB, amount: detail.tradingFee) : nil
+                        default:
+                            return nil
+                    }
+                case .deposit:
+                    return nil
+                case .withdraw:
+                    return nil
+                case .zapIn:
+                    return detail.tradingFee > 0 ? InputOutput(asset: assetA, amount: detail.tradingFee) : nil
+                case .zapOut:
+                    return detail.tradingFee > 0 ? InputOutput(asset: assetB, amount: detail.tradingFee) : nil
+                case .donation:
+                    return nil
+            }
+        }()
+        
+        changeAmountAsset =  {
+            switch detail.orderType {
+                case .swap, .limit, .stopLoss, .partialSwap, .oco:
+                    switch detail.direction {
+                        case .aToB:
+                            return detail.changeAmount > 0 ? InputOutput(asset: assetA, amount: detail.changeAmount) : nil
+                        case .bToA:
+                            return detail.changeAmount > 0 ? InputOutput(asset: assetB, amount: detail.changeAmount) : nil
+                        default:
+                            return nil
+                    }
+                case .deposit:
+                    return nil
+                case .withdraw:
+                    return nil
+                case .zapIn:
+                    return detail.changeAmount > 0 ? InputOutput(asset: detail.inputAsset, amount: detail.changeAmount) : nil
+                case .zapOut:
+                    return nil
+                case .donation:
+                    return nil
+            }
+        }()
     }
-
-    var tradingFeeAsset: InputOutput? {
-        switch detail.orderType {
-            case .swap, .limit, .stopLoss, .partialSwap, .oco:
-                switch detail.direction {
-                    case .aToB:
-                        return detail.tradingFee > 0 ? InputOutput(asset: assetA, amount: detail.tradingFee) : nil
-                    case .bToA:
-                        return detail.tradingFee > 0 ? InputOutput(asset: assetB, amount: detail.tradingFee) : nil
-                    default:
-                        return nil
-                }
-            case .deposit:
-                return nil
-            case .withdraw:
-                return nil
-            case .zapIn:
-                return detail.tradingFee > 0 ? InputOutput(asset: assetA, amount: detail.tradingFee) : nil
-            case .zapOut:
-                return detail.tradingFee > 0 ? InputOutput(asset: assetB, amount: detail.tradingFee) : nil
-            case .donation:
-                return nil
-        }
-    }
-
-    var changeAmountAsset: InputOutput? {
-        switch detail.orderType {
-            case .swap, .limit, .stopLoss, .partialSwap, .oco:
-                switch detail.direction {
-                    case .aToB:
-                        return detail.changeAmount > 0 ? InputOutput(asset: assetA, amount: detail.changeAmount) : nil
-                    case .bToA:
-                        return detail.changeAmount > 0 ? InputOutput(asset: assetB, amount: detail.changeAmount) : nil
-                    default:
-                        return nil
-                }
-            case .deposit:
-                return nil
-            case .withdraw:
-                return nil
-            case .zapIn:
-                return detail.changeAmount > 0 ? InputOutput(asset: detail.inputAsset, amount: detail.changeAmount) : nil
-            case .zapOut:
-                return nil
-            case .donation:
-                return nil
-        }
-    }
-
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
 
     var isShowRouter: Bool {
