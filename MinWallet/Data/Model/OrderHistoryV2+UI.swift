@@ -10,12 +10,14 @@ extension OrderHistory {
         
         var asset: Asset = .init()
         var amount: Double = 0
+        var minimumAmount: Double = 0
         
         init() {}
         
-        init(asset: Asset?, amount: Double) {
+        init(asset: Asset?, amount: Double, minimumAmount: Double = 0) {
             self.asset = asset ?? .init()
             self.amount = amount.toExact(decimal: asset?.decimals ?? 0)
+            self.minimumAmount = minimumAmount.toExact(decimal: asset?.decimals ?? 0)
         }
     }
 }

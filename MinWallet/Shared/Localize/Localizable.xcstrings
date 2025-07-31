@@ -245,9 +245,6 @@
     "Deposit" : {
 
     },
-    "Deposit ADA" : {
-
-    },
     "Details" : {
 
     },
@@ -290,10 +287,10 @@
     "Error while restoring wallet" : {
 
     },
-    "Estimated batcher fee" : {
+    "Estimated execution fee" : {
 
     },
-    "Executed batcher fee" : {
+    "Executed fee" : {
 
     },
     "Executed price" : {
@@ -327,6 +324,9 @@
 
     },
     "Fd Market cap" : {
+
+    },
+    "Fill Histories" : {
 
     },
     "Fill History" : {
@@ -461,6 +461,9 @@
     "Limit" : {
 
     },
+    "Limit amount" : {
+
+    },
     "Liquidity Provider Fee" : {
 
     },
@@ -488,6 +491,9 @@
     "Max" : {
 
     },
+    "Max swap times" : {
+
+    },
     "Minimum receive" : {
 
     },
@@ -498,6 +504,9 @@
 
     },
     "Minimum Send" : {
+
+    },
+    "Minimum swap amount" : {
 
     },
     "minswap" : {
@@ -779,6 +788,9 @@
 
     },
     "Swap" : {
+
+    },
+    "Swap amount" : {
 
     },
     "Tap to reveal seed phrase" : {

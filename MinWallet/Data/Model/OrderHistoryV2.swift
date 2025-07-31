@@ -172,7 +172,7 @@ extension OrderHistory {
                     return nil
                 }
             default:
-                return nil
+                return InputOutput(asset: assetA, amount: detail.inputAmount)
             }
         }()
 
@@ -181,20 +181,20 @@ extension OrderHistory {
             case .swap, .limit, .stopLoss, .partialSwap, .oco:
                 switch detail.direction {
                 case .aToB:
-                    return [InputOutput.init(asset: assetB, amount: detail.executedAmount)]
+                    return [InputOutput.init(asset: assetB, amount: detail.executedAmount, minimumAmount: detail.minimumAmount)]
                 case .bToA:
-                    return [InputOutput.init(asset: assetA, amount: detail.executedAmount)]
+                    return [InputOutput.init(asset: assetA, amount: detail.executedAmount, minimumAmount: detail.minimumAmount)]
                 default:
                     return []
                 }
             case .deposit:
-                return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount)]
+                return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount, minimumAmount: detail.minimumAmount)]
             case .withdraw:
-                return [InputOutput(asset: assetA, amount: detail.receiveAmountA), InputOutput(asset: assetB, amount: detail.receiveAmountB)]
+                return [InputOutput(asset: assetA, amount: detail.receiveAmountA, minimumAmount: detail.minimumAmountA), InputOutput(asset: assetB, amount: detail.receiveAmountB, minimumAmount: detail.minimumAmountB)]
             case .zapIn:
-                return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount)]
+                return [InputOutput(asset: detail.lpAsset, amount: detail.receiveLpAmount, minimumAmount: detail.minimumAmount)]
             case .zapOut:
-                return [InputOutput(asset: detail.receiveAsset, amount: detail.receiveAmount)]
+                return [InputOutput(asset: detail.receiveAsset, amount: detail.receiveAmount, minimumAmount: detail.minimumAmount)]
             case .donation:
                 return []
             }
@@ -211,8 +211,10 @@ extension OrderHistory {
                 default:
                     return nil
                 }
+            case .zapIn:
+                return InputOutput.init(asset: assetB, amount: detail.executedAmount)
             default:
-                return nil
+                return InputOutput.init(asset: assetB, amount: detail.executedAmount)
             }
         }()
 
@@ -244,12 +246,23 @@ extension OrderHistory {
             return detail.changeAmount > 0 ? InputOutput(asset: detail.isChangeAssetA ? assetA : assetB, amount: detail.changeAmount) : nil
         }()
 
-        routing = detail.routes.flatMap({ $0.assets }).map({ $0.adaName }).joined(separator: " -> ")
+        routing = {
+            switch detail.orderType {
+            case .partialSwap:
+                return (input?.asset.adaName ?? "") + " > " + (output?.asset.adaName ?? "")
+            default:
+                return detail.routes.flatMap({ $0.assets }).map({ $0.adaName }).joined(separator: " > ")
+            }
+        }()
     }
 
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
 
     var isShowRouter: Bool {
         OrderHistory.TYPE_SHOW_ROUTER.contains(detail.orderType)
+    }
+    
+    var isShowExecutedPrice: Bool {
+        ![.zapOut, .deposit, .withdraw].contains(detail.orderType)
     }
 }
