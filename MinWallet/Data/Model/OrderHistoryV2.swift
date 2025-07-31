@@ -99,6 +99,8 @@ extension OrderHistory: Mappable {
         for (index, _) in detail.fillHistory.enumerated() where index == detail.fillHistory.count - 1 {
             detail.fillHistory[index].percent = 100 - tempPercents
         }
+        
+        mappingUI()
     }
 }
 
@@ -158,9 +160,9 @@ extension OrderHistory {
                 case .swap, .limit, .stopLoss, .partialSwap, .oco:
                     switch detail.direction {
                         case .aToB:
-                            return [InputOutput.init(asset: assetA, amount: detail.executedAmount)]
-                        case .bToA:
                             return [InputOutput.init(asset: assetB, amount: detail.executedAmount)]
+                        case .bToA:
+                            return [InputOutput.init(asset: assetA, amount: detail.executedAmount)]
                         default:
                             return []
                     }

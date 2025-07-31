@@ -42,7 +42,8 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    let rawActionsP: [AggregatorSource] = [.Minswap, .MinswapV2, .MinswapStable, .SundaeSwapV3, .SundaeSwap, .Splash, .WingRidersV2, .WingRiders, .MuesliSwap]
+                    //let rawActionsP: [AggregatorSource] = [.Minswap, .MinswapV2, .MinswapStable, .SundaeSwapV3, .SundaeSwap, .Splash, .WingRidersV2, .WingRiders, .MuesliSwap]
+                    let rawActionsP: [AggregatorSource] = AggregatorSource.allCases
                     let allKeyP: LocalizedStringKey = "All"
                     let actionsP: [String] = ([allKeyP] + rawActionsP.map({ $0.name })).map { $0.toString() }
                     
