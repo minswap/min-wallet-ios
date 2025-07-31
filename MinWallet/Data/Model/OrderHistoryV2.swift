@@ -23,8 +23,8 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var ownerAddress: String = ""
     var ownerIdent: String = ""
     //"2025-07-28T07:40:15.000Z"
-    var updatedAt: String? = nil
-    var updatedTxId: String = ""
+    var updatedAt: String?
+    var updatedTxId: String?
     var aggregatorSource: AggregatorSource?
     
     var assetA: Asset = .init()
@@ -66,11 +66,26 @@ extension OrderHistory: Mappable {
 
 extension OrderHistory {
     var name: String {
-        switch detail.direction {
-            case .aToB:
-                return assetA.ticker + "_" + assetB.ticker
-            case .bToA:
-                return assetB.ticker + "_" + assetA.ticker
+        switch detail.orderType {
+            case .swap, .limit,  .stopLoss, .partialSwap, .oco:
+                switch detail.direction {
+                    case .aToB:
+                        return assetA.adaName + " - " + assetB.adaName
+                    case .bToA:
+                        return assetB.adaName + " - " + assetA.adaName
+                    default:
+                        return ""
+                }
+            case .deposit:
+                return "\(assetA.adaName), \(assetB.adaName) - \(detail.lpAsset?.adaName ?? "")"
+            case .withdraw:
+                return "\(detail.lpAsset?.adaName ?? "") - \(assetA.adaName), \(assetB.adaName))"
+            case .zapIn:
+                return "\(assetA.adaName) - \(detail.lpAsset?.adaName ?? "")"
+            case .zapOut:
+                return "\(detail.lpAsset?.adaName ?? "") - \(assetA.adaName)"
+            case .donation:
+                return ""
         }
     }
     
@@ -80,5 +95,11 @@ extension OrderHistory {
     
     var outputAsset: Asset {
         detail.direction == .aToB ? assetB : assetA
+    }
+    
+    static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
+    
+    var isShowRouter: Bool {
+        OrderHistory.TYPE_SHOW_ROUTER.contains(detail.orderType)
     }
 }

@@ -15,7 +15,7 @@ struct OrderHistoryDetailView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @State
-    var order: OrderHistoryQuery.Data.Orders.WrapOrder?
+    var order: OrderHistory = .init()
     @State
     private var isExchangeRate: Bool = true
     @State
@@ -31,7 +31,7 @@ struct OrderHistoryDetailView: View {
                     tokenView
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
-                    Text(order?.detail.name)
+                    Text(order.name)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .padding(.top, .md)
@@ -42,41 +42,23 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
-                        /* TODO: cuongnv243
-                        Text(order?.order?.action.value?.title)
+                        Text(order.detail.orderType.title)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
-                         */
                     }
                     .padding(.horizontal, .xl)
                     .frame(height: 36)
                     .padding(.top, .md)
-                    if let order = order, let warningContent = order.overSlippageWarning, order.order?.status.value == .created {
-                        HStack(spacing: Spacing.md) {
-                            Image(.icWarningYellow)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                            Text(warningContent)
-                                .lineLimit(nil)
-                        }
-                        .padding(.md)
-                        .background(
-                            RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
-                        )
-                        .frame(minHeight: 32)
-                        .padding(.top, .xl)
-                        .padding(.horizontal, .xl)
-                    }
                     Color.colorBorderPrimarySub.frame(height: 1)
                         .padding(.xl)
                     inputInfoView.padding(.horizontal, .xl)
                     executeInfoView.padding(.horizontal, .xl)
-                    if order?.order?.status.value != .created {
+                    if order.status != .created {
                         outputInfoView.padding(.horizontal, .xl)
                     }
                 }
             }
-            if order?.order?.status.value == .created {
+            if order.status == .created {
                 Spacer()
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
@@ -129,10 +111,8 @@ struct OrderHistoryDetailView: View {
     private var tokenView: some View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
-                let inputs = order?.detail.inputs ?? []
-                ForEach(inputs, id: \.self) { input in
-                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified)
-                }
+                let input = order.inputAsset.tokenId.tokenDefault
+                TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: order.inputAsset.isVerified)
             }
             Image(.icBack)
                 .resizable()
@@ -140,18 +120,17 @@ struct OrderHistoryDetailView: View {
                 .frame(width: 16, height: 16)
                 .padding(.horizontal, 2)
             HStack(spacing: -4) {
-                let outputs = order?.detail.outputs ?? []
-                ForEach(outputs, id: \.self) { output in
-                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
-                }
+                let output = order.outputAsset.tokenId.tokenDefault
+                TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: order.outputAsset.isVerified)
             }
-            Text(order?.order?.type.value?.title)
+            let nameVersion = order.aggregatorSource?.nameVersion
+            Text(order.aggregatorSource?.name)
                 .font(.paragraphXMediumSmall)
-                .foregroundStyle(order?.order?.type.value?.foregroundColor ?? .colorInteractiveToneHighlight)
+                .foregroundStyle(nameVersion?.foregroundColor ?? .colorInteractiveToneHighlight)
                 .padding(.horizontal, .md)
                 .padding(.vertical, .xs)
                 .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.order?.type.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(nameVersion?.backgroundColor ?? .colorSurfaceHighlightDefault)
                 )
                 .frame(height: 20)
                 .lineLimit(1)
@@ -160,15 +139,15 @@ struct OrderHistoryDetailView: View {
             Spacer()
             HStack(spacing: 4) {
                 Circle().frame(width: 4, height: 4)
-                    .foregroundStyle(order?.order?.status.value?.foregroundCircleColor ?? .clear)
-                Text(order?.order?.status.value?.title)
+                    .foregroundStyle(order.status?.foregroundCircleColor ?? .clear)
+                Text(order.status?.title)
                     .font(.paragraphXMediumSmall)
-                    .foregroundStyle(order?.order?.status.value?.foregroundColor ?? .colorInteractiveToneHighlight)
+                    .foregroundStyle(order.status?.foregroundColor ?? .colorInteractiveToneHighlight)
             }
             .padding(.horizontal, .lg)
             .padding(.vertical, .xs)
             .background(
-                RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.order?.status.value?.backgroundColor ?? .colorSurfaceHighlightDefault)
+                RoundedRectangle(cornerRadius: BorderRadius.full).fill(order.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
             )
             .frame(height: 20)
             .lineLimit(1)
@@ -202,13 +181,14 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    let inputs = order?.detail.inputs ?? []
                     VStack(alignment: .trailing, spacing: 4) {
-                        ForEach(inputs, id: \.self) { input in
-                            Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
-                        }
+                        Text(
+                            order.detail.inputAmount
+                                .toExact(decimal: order.inputAsset.decimals)
+                                .formatNumber(suffix: order.inputAsset.ticker, font: .labelSmallSecondary, fontColor: .colorBaseTent)
+                        )
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
                     }
                 }
                 .padding(.vertical, .md)
@@ -218,7 +198,7 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text(((order?.detail.depositAda ?? 0) / 1_000_000).formatSNumber(maximumFractionDigits: 15) + " " + Currency.ada.prefix)
+                    Text((order.depositAda.toExact(decimal: 6).formatSNumber(maximumFractionDigits: 15) ?? "") + " " + Currency.ada.prefix)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
@@ -269,7 +249,7 @@ struct OrderHistoryDetailView: View {
                         computeValue: { dimension in
                             dimension[VerticalAlignment.center]
                         })
-                if order?.order?.status.value != .created {
+                if order.status != .created {
                     Color.colorBorderPrimaryDefault.frame(width: 1)
                 }
             }
@@ -287,28 +267,32 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    let outputs = order?.detail.outputs ?? []
+                    let output = order.outputAsset
                     VStack(alignment: .trailing, spacing: 4) {
-                        ForEach(outputs, id: \.self) { output in
-                            Text(output.satisfiedAmount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                .lineLimit(1)
-                        }
+                        Text(
+                            order.detail.minimumAmount
+                                .toExact(decimal: output.decimals)
+                                .formatNumber(suffix: output.ticker, font: .labelSmallSecondary, fontColor: .colorBaseTent)
+                        )
+                            .lineLimit(1)
                     }
                 }
                 .padding(.vertical, .md)
                 .padding(.top, .md)
-                let tradingFees = order?.detail.tradingFee ?? []
-                if !tradingFees.isEmpty {
+                let tradingFees = order.detail.tradingFee
+                if !tradingFees.isZero {
                     HStack(alignment: .top) {
                         Text("Trading fee")
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
                         VStack(alignment: .trailing, spacing: 4) {
-                            ForEach(tradingFees, id: \.self) { output in
-                                Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                    .lineLimit(1)
-                            }
+                            Text(
+                                tradingFees
+                                    .toExact(decimal: order.outputAsset.decimals)
+                                    .formatNumber(suffix: order.outputAsset.ticker, font: .labelSmallSecondary, fontColor: .colorBaseTent)
+                            )
+                                .lineLimit(1)
                         }
                     }
                     .padding(.vertical, .md)
@@ -388,51 +372,56 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    let outputs = order?.detail.outputs ?? []
+                    let output = order.outputAsset
                     VStack(alignment: .trailing, spacing: 4) {
-                        ForEach(outputs, id: \.self) { output in
-                            Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseSuccess))
-                                .lineLimit(1)
-                        }
+                        Text(
+                            order.detail.executedAmount
+                                .toExact(decimal: output.decimals)
+                                .formatNumber(suffix: output.ticker, font: .labelSmallSecondary, fontColor: .colorBaseSuccess)
+                        )
+                            .lineLimit(1)
                     }
                 }
                 .padding(.vertical, .md)
                 .padding(.top, .md)
-                if order?.isShowRouter == true {
-                    HStack(spacing: 4) {
-                        Text("Executed price")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        Spacer()
-                        let inputName = order?.detail.inputs.first?.currency ?? ""
-                        let inputAmount: Double = order?.detail.inputs.first?.amount ?? 1
-                        let outputName = order?.detail.outputs.first?.currency ?? ""
-                        let outputAmount: Double = order?.detail.outputs.first?.amount ?? 1
-                        let rate = pow(outputAmount / (inputAmount == 0 ? 1 : inputAmount), isExchangeRate ? 1 : -1)
-                        Text("1 \(isExchangeRate ? inputName : outputName) = ")
-                            .font(.labelSmallSecondary)
-                            .foregroundColor(.colorBaseTent) + Text(rate.formatNumber(font: .labelSmallSecondary, fontColor: .colorBaseTent)) + Text(" \(!isExchangeRate ? inputName : outputName)").font(.labelSmallSecondary).foregroundColor(.colorBaseTent)
-                        Image(.icExecutePrice)
-                            .fixSize(.xl)
-                    }
-                    .padding(.vertical, .md)
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        isExchangeRate.toggle()
-                    }
-                }
-                let changeAmount = order?.detail.changeAmount ?? []
-                if !changeAmount.isEmpty {
+                //TODO: cuongnv sho route
+//                if order.isShowRouter {
+//                    HStack(spacing: 4) {
+//                        Text("Executed price")
+//                            .font(.paragraphSmall)
+//                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+//                        Spacer()
+//                        let inputName = order?.detail.inputs.first?.currency ?? ""
+//                        let inputAmount: Double = order?.detail.inputs.first?.amount ?? 1
+//                        let outputName = order?.detail.outputs.first?.currency ?? ""
+//                        let outputAmount: Double = order?.detail.outputs.first?.amount ?? 1
+//                        let rate = pow(outputAmount / (inputAmount == 0 ? 1 : inputAmount), isExchangeRate ? 1 : -1)
+//                        Text("1 \(isExchangeRate ? inputName : outputName) = ")
+//                            .font(.labelSmallSecondary)
+//                            .foregroundColor(.colorBaseTent) + Text(rate.formatNumber(font: .labelSmallSecondary, fontColor: .colorBaseTent)) + Text(" \(!isExchangeRate ? inputName : outputName)").font(.labelSmallSecondary).foregroundColor(.colorBaseTent)
+//                        Image(.icExecutePrice)
+//                            .fixSize(.xl)
+//                    }
+//                    .padding(.vertical, .md)
+//                    .contentShape(.rect)
+//                    .onTapGesture {
+//                        isExchangeRate.toggle()
+//                    }
+//                }
+                let changeAmount = order.detail.changeAmount
+                if !changeAmount.isZero {
                     HStack(alignment: .top) {
                         Text("Change amount")
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
                         VStack(alignment: .trailing, spacing: 4) {
-                            ForEach(changeAmount, id: \.self) { output in
-                                Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                    .lineLimit(1)
-                            }
+                            Text(
+                                changeAmount
+                                    .toExact(decimal: order.outputAsset.decimals)
+                                    .formatNumber(suffix: order.outputAsset.ticker, font: .labelSmallSecondary, fontColor: .colorBaseTent)
+                            )
+                                .lineLimit(1)
                         }
                     }
                     .padding(.vertical, .md)
@@ -442,28 +431,28 @@ struct OrderHistoryDetailView: View {
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text(((order?.detail.depositAda ?? 0) / 1_000_000).formatSNumber(maximumFractionDigits: 15) + " " + Currency.ada.prefix)
+                    Text(((order.depositAda) / 1_000_000).formatSNumber(maximumFractionDigits: 15) + " " + Currency.ada.prefix)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                 }
                 .padding(.vertical, .md)
                 HStack(spacing: 4) {
-                    Text(order?.order?.status.value == .batched ? "Batched at" : "Cancelled at")
+                    Text(order.status == .batched ? "Batched at" : "Cancelled at")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
                     Spacer()
-                    Text(order?.order?.updatedAt?.formattedDateGMT)
+                    Text(order.updatedAt?.formattedDateGMT)
                         .underline()
                         .baselineOffset(4)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .onTapGesture {
-                            order?.order?.updatedTxId?.viewTransaction()
+                            order.updatedTxId?.viewTransaction()
                         }
                     Image(.icArrowUp)
                         .fixSize(.xl)
                         .onTapGesture {
-                            order?.order?.updatedTxId?.viewTransaction()
+                            order.updatedTxId?.viewTransaction()
                         }
                 }
                 .padding(.top, .md)
@@ -502,7 +491,9 @@ struct OrderHistoryDetailView: View {
         }
     }
     
+    //TODO: cuongnv cancel sau
     private func cancelOrder() async throws {
+        /*
         guard let order = order else { return }
         let txId = order.order?.txIn.txId ?? ""
         let txIndex = order.order?.txIn.txIndex ?? 0
@@ -518,6 +509,7 @@ struct OrderHistoryDetailView: View {
         let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: orderV2Input))
         guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
         self.order = order
+         */
     }
     
     private func authenticationSuccess() {

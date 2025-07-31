@@ -123,9 +123,7 @@ struct MainCoordinator: View {
                             ForgotPasswordView(screenType: .enterPassword).navigationBarHidden(true)
                         }
                     case let .orderHistoryDetail(order, onReloadOrder):
-                            //TODO: cuongnv
-                        //OrderHistoryDetailView(order: order, onReloadOrder: onReloadOrder).navigationBarHidden(true)
-                            OrderHistoryView().navigationBarHidden(true)
+                        OrderHistoryDetailView(order: order, onReloadOrder: onReloadOrder).navigationBarHidden(true)
                     case .orderHistory:
                         OrderHistoryView().navigationBarHidden(true)
                     case .scanQR:

@@ -6,12 +6,15 @@ extension OrderHistory {
     struct Asset: Then, Hashable {
         var tokenId: String = ""
         var logo: String = ""
-        var ticker: String = ""
+        private var ticker: String = ""
         var isVerified: Bool = false
         var priceByAda: Double = 0
         var project_name: String = ""
         var decimals: Int = 0
 
+        var adaName: String = ""
+        var token: TokenDefault?
+        
         init() { }
     }
 }
@@ -27,5 +30,17 @@ extension OrderHistory.Asset: Mappable {
         priceByAda <- (map["price_by_ada"], GKMapFromJSONToDouble)
         project_name <- map["project_name"]
         decimals <- (map["decimals"], GKMapFromJSONToInt)
+        
+        adaName = {
+            if !ticker.isBlank { return ticker }
+            return tokenId.tokenDefault.adaName
+        }()
+        
+        token = (tokenId.tokenDefault as? TokenDefault)?.with({ 
+            $0.mDecimals = decimals
+            $0.mIsVerified = isVerified
+            $0.mTicker = ticker
+            $0.minName = project_name
+        })
     }
 }

@@ -125,7 +125,12 @@ struct OrderHistoryItemView: View {
         HStack(spacing: .xs) {
             HStack(spacing: -4) {
                 let input = order?.inputAsset.tokenId.tokenDefault ?? TokenDefault(symbol: "", tName: "")
-                TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified, size: .init(width: 24, height: 24))
+                TokenLogoView(
+                    currencySymbol: input.currencySymbol,
+                    tokenName: input.tokenName,
+                    isVerified: order?.inputAsset.isVerified ?? false,
+                    size: .init(width: 24, height: 24)
+                )
             }
             Image(.icBack)
                 .resizable()
@@ -134,7 +139,12 @@ struct OrderHistoryItemView: View {
                 .padding(.horizontal, 2)
             HStack(spacing: -4) {
                 let output = order?.outputAsset.tokenId.tokenDefault ?? TokenDefault(symbol: "", tName: "")
-                TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
+                TokenLogoView(
+                    currencySymbol: output.currencySymbol,
+                    tokenName: output.tokenName,
+                    isVerified: order?.outputAsset.isVerified ?? false,
+                    size: .init(width: 24, height: 24)
+                )
             }
             let version = order?.aggregatorSource?.nameVersion ?? "V1"
             Text(version)

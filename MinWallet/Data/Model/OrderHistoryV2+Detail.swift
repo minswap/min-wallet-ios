@@ -22,11 +22,16 @@ extension OrderHistory {
     }
 
     struct Detail: Then, Hashable {
+        var lpAsset: Asset?
         var orderType: OrderType = .partialSwap
-        var direction: Direction = .aToB
+        var direction: Direction?
         var inputAmount: Double = 0 
         var executedAmount: Double = 0
         var minimumAmount: Double = 0
+        var limitAmount: Double = 0
+        var minSwapAmount: Double = 0
+        var changeAmount: Double = 0
+        var maxSwapTime: Int = 0
         var tradingFee: Double = 0
         var fillOrKill: Bool = false
         var routes: [Route] = []
@@ -36,7 +41,7 @@ extension OrderHistory {
     }
     
     struct Route: Then, Hashable {
-        var lpAssetId: String = ""
+        var lpAsset: TokenDefault?
         var assets: [Asset] = []
         
         init() {}
@@ -48,14 +53,19 @@ extension OrderHistory.Detail: Mappable {
 
     mutating func mapping(map: Map) {
         orderType <- map["order_type"]
+        lpAsset <- map["lp_asset"]
         direction <- map["direction"]
         inputAmount <- (map["input_amount"], GKMapFromJSONToDouble)
         executedAmount <- (map["executed_amount"], GKMapFromJSONToDouble)
         tradingFee <- (map["trading_fee"], GKMapFromJSONToDouble)
         minimumAmount <- (map["minimum_amount"], GKMapFromJSONToDouble)
+        changeAmount <- (map["change_amount"], GKMapFromJSONToDouble)
+        limitAmount <- (map["limit_amount"], GKMapFromJSONToDouble)
+        minSwapAmount <- (map["min_swap_amount"], GKMapFromJSONToDouble)
         fillOrKill <- map["fill_or_kill"]
         routes <- map["routes"]
         expireAt <- map["expire_at"]
+        maxSwapTime <- (map["max_swap_time"], GKMapFromJSONToInt)
     }
 }
 
@@ -65,6 +75,6 @@ extension OrderHistory.Route: Mappable {
     
     mutating func mapping(map: Map) {
         assets <- map["assets"]
-        lpAssetId <- (map["lp_asset.token_id"], GKMapFromJSONToString)
+        lpAsset <- map["lp_asset"]
     }
 }
