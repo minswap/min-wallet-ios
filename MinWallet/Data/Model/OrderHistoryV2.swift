@@ -241,27 +241,7 @@ extension OrderHistory {
         }()
 
         changeAmountAsset = {
-            switch detail.orderType {
-            case .swap, .limit, .stopLoss, .partialSwap, .oco:
-                switch detail.direction {
-                case .aToB:
-                    return detail.changeAmount > 0 ? InputOutput(asset: assetA, amount: detail.changeAmount) : nil
-                case .bToA:
-                    return detail.changeAmount > 0 ? InputOutput(asset: assetB, amount: detail.changeAmount) : nil
-                default:
-                    return nil
-                }
-            case .deposit:
-                return nil
-            case .withdraw:
-                return nil
-            case .zapIn:
-                return detail.changeAmount > 0 ? InputOutput(asset: detail.inputAsset, amount: detail.changeAmount) : nil
-            case .zapOut:
-                return nil
-            case .donation:
-                return nil
-            }
+            return detail.changeAmount > 0 ? InputOutput(asset: detail.isChangeAssetA ? assetA : assetB, amount: detail.changeAmount) : nil
         }()
 
         routing = detail.routes.flatMap({ $0.assets }).map({ $0.adaName }).joined(separator: " -> ")

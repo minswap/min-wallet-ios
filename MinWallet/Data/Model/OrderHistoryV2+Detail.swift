@@ -56,6 +56,7 @@ extension OrderHistory {
         var routes: [Route] = []
         var expireAt: String? = nil
         var fillHistory: [FillHistory] = []
+        var isChangeAssetA: Bool = false
         
         init() { }
     }
@@ -130,6 +131,7 @@ extension OrderHistory.Detail: Mappable {
         maxSwapTime <- (map["max_swap_time"], GKMapFromJSONToInt)
         
         fillHistory <- map["fill_history"]
+        isChangeAssetA <- map["is_change_asset_a"]
     }
 }
 
