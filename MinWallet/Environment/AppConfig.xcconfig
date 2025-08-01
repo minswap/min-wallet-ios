@@ -7,7 +7,7 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 MIN_PRODUCT_NAME      = MinWallet
-MIN_PRODUCT_BUNDLE_ID = org.minswap.MinWalletzzz
+MIN_PRODUCT_BUNDLE_ID = org.minswap.MinWallet
 MIN_DEVELOPMENT_TEAM  = 3FM7JRXRKW
 MIN_CODE_SIGN_ENTITLEMENTS = MinWallet/Environment/MinWallet.entitlements
 
