@@ -62,7 +62,9 @@ struct OffsetObservingScrollView<Content: View>: View {
         }
         .coordinateSpace(name: coordinateSpaceName)
         .refreshable {
-            await onRefreshable?()
+            Task {
+                await onRefreshable?()
+            }
         }
     }
 }

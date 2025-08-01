@@ -62,7 +62,8 @@ class OrderHistoryViewModel: ObservableObject {
         let cursorID = orders.last?.id ?? ""
         pagination = pagination.with({ 
             $0.isFetching = false
-            $0.hasMore = orders.count >= pagination.limit
+            //$0.hasMore = orders.count >= pagination.limit
+            $0.hasMore = !orders.isEmpty
             $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
         })
         
@@ -75,7 +76,7 @@ class OrderHistoryViewModel: ObservableObject {
     func loadMoreData(order: OrderHistory) {
         guard pagination.readyToLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
-        if orders.firstIndex(of: order) == thresholdIndex {
+        if orders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
             Task {
                 pagination = pagination.with({ $0.isFetching = true })
                 let _orders = await getOrderHistory()
@@ -84,7 +85,8 @@ class OrderHistoryViewModel: ObservableObject {
                 let cursorID = _orders.last?.id ?? ""
                 pagination = pagination.with({ 
                     $0.isFetching = false
-                    $0.hasMore = _orders.count >= pagination.limit
+                    //$0.hasMore = _orders.count >= pagination.limit
+                    $0.hasMore = !_orders.isEmpty
                     $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
                 })
             }
