@@ -246,14 +246,7 @@ extension OrderHistory {
             return detail.changeAmount > 0 ? InputOutput(asset: detail.isChangeAssetA ? assetA : assetB, amount: detail.changeAmount) : nil
         }()
 
-        routing = {
-            switch detail.orderType {
-            case .partialSwap:
-                return (input?.asset.adaName ?? "") + " > " + (output?.asset.adaName ?? "")
-            default:
-                return detail.routes.flatMap({ $0.assets }).map({ $0.adaName }).joined(separator: " > ")
-            }
-        }()
+        routing = buildRouting()
     }
 
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
@@ -263,6 +256,41 @@ extension OrderHistory {
     }
     
     var isShowExecutedPrice: Bool {
-        ![.zapOut, .deposit, .withdraw].contains(detail.orderType)
+        ![.zapOut, .deposit, .withdraw, .zapIn].contains(detail.orderType)
+    }
+}
+
+extension OrderHistory {
+    private func buildRouting() -> String {
+        let routeStart: String = {
+            switch detail.direction {
+                case .aToB: return assetA.adaName
+                case .bToA: return assetB.adaName
+                default: return assetA.adaName
+            } 
+        }()
+        let routeEnd: String = {
+            switch detail.direction {
+                case .aToB: return assetB.adaName
+                case .bToA: return assetA.adaName
+                default: return assetB.adaName
+            } 
+        }()
+        var routes: [[String]] = detail.routes.map { route in
+            route.assets.map { $0.adaName }
+        }
+        
+        guard !routes.isEmpty else { return "\(routeStart) > \(routeEnd)"}
+        
+        var nodes: [String] = [routeStart]
+        while !routes.isEmpty {
+            guard let nodesStart = nodes.last else { break }
+            guard let routeNext = routes.first(where: {  $0.contains(nodesStart)  }) else { break }
+            routes.removeAll { $0 == routeNext }
+            let nodeEnd = routeNext.first { $0 != nodesStart } ?? ""
+            nodes.append(nodeEnd)
+        }
+        
+        return nodes.filter { !$0.isBlank }.joined(separator: " > ")
     }
 }

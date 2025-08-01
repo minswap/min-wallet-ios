@@ -57,7 +57,9 @@ class OrderHistoryViewModel: ObservableObject {
         if fromPullToRefresh {
             try? await Task.sleep(for: .seconds(1))
         }
-        pagination = pagination.with({ $0.isFetching = true })
+        pagination = Pagination().with({ 
+            $0.isFetching = true
+        })
         let orders = await getOrderHistory()
         let cursorID = orders.last?.id ?? ""
         pagination = pagination.with({ 

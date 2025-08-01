@@ -19,6 +19,8 @@ struct OrderHistoryDetailView: View {
     @State
     private var isExchangeRate: Bool = true
     @State
+    private var isExchangeLimitRate: Bool = true
+    @State
     private var showCancelOrder: Bool = false
     @State
     private var isShowSignContract: Bool = false
@@ -325,12 +327,42 @@ struct OrderHistoryDetailView: View {
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
-                            Text(order.detail.swapAmount.toExact(decimal: order.input?.decimals).formatNumber(suffix: order.input?.currency ?? "", font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                            Text(
+                                order.detail.swapAmount
+                                    .toExact(decimal: order.detail.orderType == .zapIn ? order.input?.decimals : order.output?.decimals)
+                                    .formatNumber(
+                                        suffix: order.detail.orderType == .zapIn  ? (order.input?.currency ?? "") : (order.output?.currency ?? ""),
+                                        font: .labelSmallSecondary,
+                                        fontColor: .colorBaseTent
+                                    )
+                            )
                                 .lineLimit(1)
                         }
                         .padding(.vertical, .md)
                     }
                     
+                    if order.detail.orderType == .limit, let input = order.input, let output = order.output, order.detail.minimumAmount > 0 {
+                        HStack(spacing: 4) {
+                            Text("Limit price")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            Spacer()
+                            let rate = pow(
+                                order.detail.minimumAmount.toExact(decimal: output.decimals) / (input.amount == 0 ? 1 : input.amount),
+                                isExchangeLimitRate ? 1 : -1
+                            )
+                            Text("1 \(isExchangeLimitRate ? input.asset.adaName : output.asset.adaName) = ")
+                                .font(.labelSmallSecondary)
+                                .foregroundColor(.colorBaseTent) + Text(rate.formatNumber(font: .labelSmallSecondary, fontColor: .colorBaseTent)) + Text(" \(!isExchangeLimitRate ? input.asset.adaName : output.asset.adaName)").font(.labelSmallSecondary).foregroundColor(.colorBaseTent)
+                            Image(.icExecutePrice)
+                                .fixSize(.xl)
+                        }
+                        .padding(.vertical, .md)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            isExchangeLimitRate.toggle()
+                        }
+                    }
                     HStack(alignment: .top) {
                         Text(order.detail.orderType == .limit ? "Limit amount" : "Minimum receive")
                             .font(.paragraphSmall)
