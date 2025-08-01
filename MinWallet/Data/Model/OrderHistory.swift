@@ -40,7 +40,7 @@ extension OrderHistory.OrderType: Identifiable {
             "Deposit"
         case .limit:
             "Limit"
-            case .swap:
+        case .swap:
             "Market"
         case .oco:
             "OCO"
@@ -66,7 +66,7 @@ extension OrderHistory.OrderType: Identifiable {
         case OrderHistory.OrderType.limit.titleFilter.toString():
             self = .limit
         case OrderHistory.OrderType.swap.titleFilter.toString():
-                self = .swap
+            self = .swap
         case OrderHistory.OrderType.oco.titleFilter.toString():
             self = .oco
         case OrderHistory.OrderType.partialSwap.titleFilter.toString():

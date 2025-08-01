@@ -4,21 +4,21 @@ import Alamofire
 
 enum OrderAPIRouter: DomainAPIRouter {
     case getOrders(request: OrderHistory.Request)
-
+    
     func path() -> String {
         switch self {
         case .getOrders:
             return "/aggregator/orders"
         }
     }
-
+    
     func method() -> HTTPMethod {
         return .post
     }
-
+    
     func parameters() -> Parameters {
         var params = Parameters()
-
+        
         switch self {
         case let .getOrders(request):
             params["owner_address"] = request.ownerAddress

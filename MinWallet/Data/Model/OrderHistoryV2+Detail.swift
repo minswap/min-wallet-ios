@@ -22,14 +22,14 @@ extension OrderHistory {
         case zapOut = "ZAP_OUT"
         case donation = "DONATION"
     }
-
+    
     struct Detail: Then, Hashable {
         var lpAsset: Asset?
         var inputAsset: Asset?
         var receiveAsset: Asset?
         var orderType: OrderType = .partialSwap
         var direction: Direction?
-        var inputAmount: Double = 0 
+        var inputAmount: Double = 0
         var executedAmount: Double = 0
         var minimumAmount: Double = 0
         var limitAmount: Double = 0
@@ -58,7 +58,7 @@ extension OrderHistory {
         var fillHistory: [FillHistory] = []
         var isChangeAssetA: Bool = false
         
-        init() { }
+        init() {}
     }
     
     struct Route: Then, Hashable {
@@ -73,8 +73,8 @@ extension OrderHistory {
             batchedTxId
         }
         
-        var input: InputOutput =  .init()
-        var output: InputOutput =  .init()
+        var input: InputOutput = .init()
+        var output: InputOutput = .init()
         
         var inputAmount: Double = 0
         var outputAmount: Double = 0
@@ -87,7 +87,7 @@ extension OrderHistory {
 }
 
 extension OrderHistory.FillHistory: Mappable {
-    init?(map: Map) { }
+    init?(map: Map) {}
     
     mutating func mapping(map: Map) {
         inputAmount <- (map["input_amount"], GKMapFromJSONToDouble)
@@ -97,8 +97,8 @@ extension OrderHistory.FillHistory: Mappable {
     }
 }
 extension OrderHistory.Detail: Mappable {
-    init?(map: Map) { }
-
+    init?(map: Map) {}
+    
     mutating func mapping(map: Map) {
         orderType <- map["order_type"]
         lpAsset <- map["lp_asset"]
@@ -137,7 +137,7 @@ extension OrderHistory.Detail: Mappable {
 
 
 extension OrderHistory.Route: Mappable {
-    init?(map: Map) { }
+    init?(map: Map) {}
     
     mutating func mapping(map: Map) {
         assets <- map["assets"]

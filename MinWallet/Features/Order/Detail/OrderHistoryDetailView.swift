@@ -284,7 +284,8 @@ struct OrderHistoryDetailView: View {
                         .timelineAlignment,
                         computeValue: { dimension in
                             dimension[VerticalAlignment.center]
-                        })
+                        }
+                    )
                     .padding(.bottom, .md)
                 if order.detail.orderType == .partialSwap {
                     if order.detail.limitAmount > 0 {
@@ -331,12 +332,12 @@ struct OrderHistoryDetailView: View {
                                 order.detail.swapAmount
                                     .toExact(decimal: order.detail.orderType == .zapIn ? order.input?.decimals : order.output?.decimals)
                                     .formatNumber(
-                                        suffix: order.detail.orderType == .zapIn  ? (order.input?.currency ?? "") : (order.output?.currency ?? ""),
+                                        suffix: order.detail.orderType == .zapIn ? (order.input?.currency ?? "") : (order.output?.currency ?? ""),
                                         font: .labelSmallSecondary,
                                         fontColor: .colorBaseTent
                                     )
                             )
-                                .lineLimit(1)
+                            .lineLimit(1)
                         }
                         .padding(.vertical, .md)
                     }
@@ -391,7 +392,7 @@ struct OrderHistoryDetailView: View {
                     }
                     .padding(.vertical, .md)
                 }
-                if  order.status == .batched {
+                if order.status == .batched {
                     HStack {
                         Text("Executed fee")
                             .font(.paragraphSmall)
@@ -462,7 +463,8 @@ struct OrderHistoryDetailView: View {
                         .timelineAlignment,
                         computeValue: { dimension in
                             dimension[VerticalAlignment.center]
-                        })
+                        }
+                    )
                     .padding(.bottom, .md)
                 if order.status == .batched {
                     HStack(alignment: .top) {

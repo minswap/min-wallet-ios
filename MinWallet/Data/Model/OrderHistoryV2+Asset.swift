@@ -11,17 +11,17 @@ extension OrderHistory {
         var priceByAda: Double = 0
         var project_name: String = ""
         var decimals: Int = 0
-
+        
         var adaName: String = ""
         var token: TokenDefault?
         
-        init() { }
+        init() {}
     }
 }
 
 extension OrderHistory.Asset: Mappable {
-    init?(map: Map) { }
-
+    init?(map: Map) {}
+    
     mutating func mapping(map: Map) {
         tokenId <- map["token_id"]
         logo <- map["logo"]
@@ -36,11 +36,12 @@ extension OrderHistory.Asset: Mappable {
             return tokenId.tokenDefault.adaName
         }()
         
-        token = (tokenId.tokenDefault as? TokenDefault)?.with({ 
-            $0.mDecimals = decimals
-            $0.mIsVerified = isVerified
-            $0.mTicker = ticker
-            $0.minName = project_name
-        })
+        token = (tokenId.tokenDefault as? TokenDefault)?
+            .with({
+                $0.mDecimals = decimals
+                $0.mIsVerified = isVerified
+                $0.mTicker = ticker
+                $0.minName = project_name
+            })
     }
 }

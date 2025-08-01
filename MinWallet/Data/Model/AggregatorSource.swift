@@ -184,16 +184,16 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
 extension AggregatorSource {
     var nameVersion: String {
         switch self {
-            case .MinswapV2, .WingRidersV2, .WingRidersStableV2:
-                return "V2"
-            case .Minswap, .SundaeSwap, .WingRidersStableV1, .WingRiders:
-                return "V1"
-            case .MinswapStable, .SplashStable:
-                return "Stable" 
-            case .MuesliSwap, .Splash, .Spectrum, .VyFinance:
-                return ""
-            case .SundaeSwapV3:
-                return "V3"
+        case .MinswapV2, .WingRidersV2, .WingRidersStableV2:
+            return "V2"
+        case .Minswap, .SundaeSwap, .WingRidersStableV1, .WingRiders:
+            return "V1"
+        case .MinswapStable, .SplashStable:
+            return "Stable"
+        case .MuesliSwap, .Splash, .Spectrum, .VyFinance:
+            return ""
+        case .SundaeSwapV3:
+            return "V3"
         }
     }
 }

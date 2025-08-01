@@ -26,29 +26,29 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var updatedAt: String?
     var updatedTxId: String?
     var aggregatorSource: AggregatorSource?
-
+    
     var assetA: Asset = .init()
     var assetB: Asset = .init()
     var detail: Detail = .init()
-
+    
     //Mapping UI
     var name: String = ""
     var inputAsset: [InputOutput] = []
     var outputAsset: [InputOutput] = []
     var tradingFeeAsset: InputOutput?
     var changeAmountAsset: InputOutput?
-
+    
     //Show routing...
     var routing: String = ""
     var input: InputOutput?
     var output: InputOutput?
-
-    init() { }
+    
+    init() {}
 }
 
 extension OrderHistory: Mappable {
-    init?(map: Map) { }
-
+    init?(map: Map) {}
+    
     mutating func mapping(map: Map) {
         id <- (map["id"], GKMapFromJSONToString)
         status <- map["status"]
@@ -72,7 +72,7 @@ extension OrderHistory: Mappable {
         assetA <- map["asset_a"]
         assetB <- map["asset_b"]
         detail <- map["details"]
-
+        
         let totalAmountIn = max(detail.inputAmount, 1)
         detail.fillHistory = detail.fillHistory.compactMap({ inputOutput in
             switch detail.orderType {
@@ -99,12 +99,12 @@ extension OrderHistory: Mappable {
                 return nil
             }
         })
-
+        
         let tempPercents: Double = detail.fillHistory.map({ $0.percent }).dropLast().reduce(0, +)
         for (index, _) in detail.fillHistory.enumerated() where index == detail.fillHistory.count - 1 {
             detail.fillHistory[index].percent = 100 - tempPercents
         }
-
+        
         mappingUI()
     }
 }
@@ -135,7 +135,7 @@ extension OrderHistory {
                 return ""
             }
         }()
-
+        
         inputAsset = {
             switch detail.orderType {
             case .swap, .limit, .stopLoss, .partialSwap, .oco:
@@ -159,7 +159,7 @@ extension OrderHistory {
                 return []
             }
         }()
-
+        
         input = {
             switch detail.orderType {
             case .swap, .limit, .stopLoss, .partialSwap, .oco:
@@ -175,7 +175,7 @@ extension OrderHistory {
                 return InputOutput(asset: assetA, amount: detail.inputAmount)
             }
         }()
-
+        
         outputAsset = {
             switch detail.orderType {
             case .swap, .limit, .stopLoss, .partialSwap, .oco:
@@ -199,7 +199,7 @@ extension OrderHistory {
                 return []
             }
         }()
-
+        
         output = {
             switch detail.orderType {
             case .swap, .limit, .stopLoss, .partialSwap, .oco:
@@ -217,7 +217,7 @@ extension OrderHistory {
                 return InputOutput.init(asset: assetB, amount: detail.executedAmount)
             }
         }()
-
+        
         tradingFeeAsset = {
             switch detail.orderType {
             case .swap, .limit, .stopLoss, .partialSwap, .oco:
@@ -241,16 +241,16 @@ extension OrderHistory {
                 return nil
             }
         }()
-
+        
         changeAmountAsset = {
             return detail.changeAmount > 0 ? InputOutput(asset: detail.isChangeAssetA ? assetA : assetB, amount: detail.changeAmount) : nil
         }()
-
+        
         routing = buildRouting()
     }
-
+    
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
-
+    
     var isShowRouter: Bool {
         OrderHistory.TYPE_SHOW_ROUTER.contains(detail.orderType)
     }
@@ -264,28 +264,28 @@ extension OrderHistory {
     private func buildRouting() -> String {
         let routeStart: String = {
             switch detail.direction {
-                case .aToB: return assetA.adaName
-                case .bToA: return assetB.adaName
-                default: return assetA.adaName
-            } 
+            case .aToB: return assetA.adaName
+            case .bToA: return assetB.adaName
+            default: return assetA.adaName
+            }
         }()
         let routeEnd: String = {
             switch detail.direction {
-                case .aToB: return assetB.adaName
-                case .bToA: return assetA.adaName
-                default: return assetB.adaName
-            } 
+            case .aToB: return assetB.adaName
+            case .bToA: return assetA.adaName
+            default: return assetB.adaName
+            }
         }()
         var routes: [[String]] = detail.routes.map { route in
             route.assets.map { $0.adaName }
         }
-        
-        guard !routes.isEmpty else { return "\(routeStart) > \(routeEnd)"}
+
+        guard !routes.isEmpty else { return "\(routeStart) > \(routeEnd)" }
         
         var nodes: [String] = [routeStart]
         while !routes.isEmpty {
             guard let nodesStart = nodes.last else { break }
-            guard let routeNext = routes.first(where: {  $0.contains(nodesStart)  }) else { break }
+            guard let routeNext = routes.first(where: { $0.contains(nodesStart) }) else { break }
             routes.removeAll { $0 == routeNext }
             let nodeEnd = routeNext.first { $0 != nodesStart } ?? ""
             nodes.append(nodeEnd)

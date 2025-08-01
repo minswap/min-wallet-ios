@@ -357,10 +357,11 @@ extension HomeView {
     private func fetchOrderDetail(order: String, fallback: (() -> Void)?) {
         guard let address = userInfo.minWallet?.address, !address.isEmpty else { return }
         Task {
-            let input = OrderHistory.Request().with { 
-                $0.ownerAddress = address
-                $0.txId  = order 
-            }
+            let input = OrderHistory.Request()
+                .with {
+                    $0.ownerAddress = address
+                    $0.txId = order
+                }
             
             do {
                 let jsonData = try await OrderAPIRouter.getOrders(request: .init()).async_request()
