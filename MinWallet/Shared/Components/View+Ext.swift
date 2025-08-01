@@ -19,6 +19,12 @@ struct DisableBouncesModifier: ViewModifier {
 }
 
 extension View {
+    /// Overlays a placeholder view on top of the current view when a condition is met.
+    /// - Parameters:
+    ///   - shouldShow: A Boolean value that determines whether the placeholder is visible.
+    ///   - alignment: The alignment for the placeholder within the overlay. Defaults to `.leading`.
+    ///   - placeholder: A view builder that provides the placeholder content.
+    /// - Returns: A view that displays the placeholder when `shouldShow` is true.
     func placeholder<Content: View>(
         when shouldShow: Bool,
         alignment: Alignment = .leading,
@@ -31,6 +37,13 @@ extension View {
         }
     }
     
+    /// Overlays a text placeholder on the view when a condition is met.
+    /// - Parameters:
+    ///   - text: The placeholder text to display.
+    ///   - font: The font to use for the placeholder text. Defaults to `.paragraphSmall`.
+    ///   - shouldShow: A Boolean value that determines whether the placeholder is visible.
+    ///   - alignment: The alignment for the placeholder within the view. Defaults to `.leading`.
+    /// - Returns: A view with the placeholder text overlayed when `shouldShow` is true.
     func placeholder(
         _ text: String,
         font: Font = .paragraphSmall,
@@ -53,6 +66,7 @@ struct DismissingKeyboard: ViewModifier {
 
 extension View {
     
+    /// Dismisses the keyboard by resigning the first responder status from the current input field.
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
@@ -84,6 +98,9 @@ extension UIApplication {
 }
 
 extension Binding where Value == String {
+    /// Limits the length of the bound string to a specified maximum.
+    /// - Parameter limit: The maximum allowed number of characters.
+    /// - Returns: The binding with its value truncated to the specified length if necessary.
     func max(_ limit: Int) -> Self {
         if self.wrappedValue.count > limit {
             self.wrappedValue = String(self.wrappedValue.prefix(limit))

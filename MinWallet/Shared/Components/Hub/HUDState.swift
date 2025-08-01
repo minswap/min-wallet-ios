@@ -19,6 +19,12 @@ class HUDState: ObservableObject {
     
     init() {}
     
+    /// Displays a message HUD with the specified title, message, OK button title, and optional action.
+    /// - Parameters:
+    ///   - title: The title to display in the HUD. Defaults to "Notice".
+    ///   - msg: The message content to display.
+    ///   - okTitle: The title for the OK button. Defaults to "Got it".
+    ///   - onAction: An optional closure to execute when the user acknowledges the HUD.
     func showMsg(
         title: LocalizedStringKey = "Notice",
         msg: String,
@@ -32,6 +38,8 @@ class HUDState: ObservableObject {
         self.isPresented = true
     }
     
+    /// Animates the display or hiding of the loading indicator.
+    /// - Parameter isShow: A Boolean value indicating whether to show (`true`) or hide (`false`) the loading indicator.
     func showLoading(_ isShow: Bool) {
         withAnimation {
             isShowLoading = isShow

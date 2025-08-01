@@ -10,6 +10,9 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
     
     var onDimiss: (() -> Void)?
     
+    /// Composes the view hierarchy for presenting a modal sheet with a blurred background, drag-to-dismiss gesture, and environment-based control.
+    /// - Parameter content: The underlying content view to display beneath the modal.
+    /// - Returns: A view that overlays the modal sheet and background blur when presented, supporting tap and drag gestures for dismissal.
     func body(content: Content) -> some View {
         ZStack {
             content
@@ -70,6 +73,13 @@ private struct ModalTypeView<Modal: View>: ViewModifier {
 }
 
 extension View {
+    /// Presents a custom modal sheet over the view with optional drag-to-dismiss and configurable height.
+    /// - Parameters:
+    ///   - isPresented: Binding that controls whether the sheet is shown.
+    ///   - height: Optional height for the modal sheet. If nil, the sheet sizes to its content.
+    ///   - onDimiss: Optional closure called when the sheet is dismissed.
+    ///   - content: A closure that returns the modal sheet's content.
+    /// - Returns: A view with the modal sheet presentation applied.
     func presentSheet<Modal: View>(
         isPresented: Binding<Bool>,
         height: CGFloat? = nil,
@@ -86,6 +96,7 @@ extension View {
         )
     }
     
+    /// Applies a standardized sheet appearance modifier to the view, adding a drag handle and rounded top corners.
     func presentSheetModifier() -> some View {
         modifier(PresentSheetModifier())
     }

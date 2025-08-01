@@ -22,6 +22,9 @@ struct ViewFirstAppearModifier: ViewModifier {
         self.action = action
     }
     
+    /// Modifies the view to execute the stored action only the first time the view appears.
+    /// - Parameter content: The original view content.
+    /// - Returns: The modified view that triggers the action on its first appearance.
     func body(content: Content) -> some View {
         content.onAppear {
             if didAppearBefore == false {

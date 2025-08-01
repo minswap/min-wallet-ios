@@ -86,6 +86,11 @@ struct TokenLogoView: View {
         .frame(width: size.width, height: size.height)
     }
     
+    /// Constructs a URL string for a token image by combining the currency symbol and token name with a base asset URL.
+    /// - Parameters:
+    ///   - currencySymbol: The symbol representing the token's currency.
+    ///   - tokenName: The name of the token.
+    /// - Returns: A string containing the full URL to the token's image asset.
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let path = "\(currencySymbol)\(tokenName)"
         return "\(MinWalletConstant.minAssetURL)/\(path)"

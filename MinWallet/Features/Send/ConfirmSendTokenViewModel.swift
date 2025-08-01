@@ -15,6 +15,9 @@ class ConfirmSendTokenViewModel: ObservableObject {
         self.address = address
     }
     
+    /// Sends the specified tokens to the recipient address asynchronously.
+    /// - Throws: An error if the transaction cannot be created or sent.
+    /// - Returns: The raw transaction string upon successful token transfer.
     func sendTokens() async throws -> String {
         let receiver = address
         let sender = UserInfo.shared.minWallet?.address ?? ""

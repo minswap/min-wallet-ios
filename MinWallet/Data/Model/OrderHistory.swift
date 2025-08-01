@@ -184,7 +184,11 @@ extension ContractType: @retroactive Identifiable {
 }
 
 extension AttributedString {
-    //paragraphXSemiSmall
+    /// Returns a copy of the attributed string with the specified font and foreground color applied.
+    /// - Parameters:
+    ///   - font: The font to apply. Defaults to `.paragraphXSmall`.
+    ///   - color: The foreground color to apply. Defaults to `.colorInteractiveToneWarning`.
+    /// - Returns: A new `AttributedString` with the given font and color.
     func build(font: Font = .paragraphXSmall, color: Color = .colorInteractiveToneWarning) -> AttributedString {
         var attribute = self
         attribute.font = font

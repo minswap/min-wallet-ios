@@ -10,6 +10,9 @@ struct SwipeToDeleteModifier: ViewModifier {
     
     let onDelete: () -> Void
     
+    /// Constructs the swipe-to-delete UI, layering a delete background and interactive content with drag gesture handling.
+    /// - Parameter content: The view content to display in the swipeable row.
+    /// - Returns: A view that supports swipe-to-delete interaction, including animated offset, delete action, and visual feedback.
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {

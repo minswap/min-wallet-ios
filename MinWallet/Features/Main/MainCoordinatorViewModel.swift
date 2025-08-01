@@ -72,10 +72,12 @@ enum SendTokenScreen: Hashable, Identifiable {
     
     var id: UUID { UUID() }
     
+    /// Hashes the unique identifier of the instance into the provided hasher.
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
     
+    /// Returns a Boolean value indicating whether two `SendTokenScreen` instances represent the same screen type, ignoring associated values.
     static func == (lhs: SendTokenScreen, rhs: SendTokenScreen) -> Bool {
         switch (lhs, rhs) {
         case (.sendToken, .sendToken),
@@ -94,10 +96,12 @@ enum SwapTokenScreen: Hashable, Identifiable {
     
     case swapToken(token: TokenProtocol?)
     
+    /// Hashes the unique identifier of the instance into the provided hasher.
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
     
+    /// Returns true if both `SwapTokenScreen` instances represent the same screen type, regardless of associated values.
     static func == (lhs: SwapTokenScreen, rhs: SwapTokenScreen) -> Bool {
         switch (lhs, rhs) {
         case (.swapToken, .swapToken):
@@ -122,10 +126,12 @@ extension SecuritySetting {
             self.onCreatePassSuccess = onCreatePassSuccess
         }
         
+        /// Returns true if both `CreatePassSuccess` instances have the same unique identifier.
         static func == (lhs: SecuritySetting.CreatePassSuccess, rhs: SecuritySetting.CreatePassSuccess) -> Bool {
             lhs.id == rhs.id
         }
         
+        /// Hashes the unique identifier of the screen into the provided hasher.
         func hash(into hasher: inout Hasher) {
             hasher.combine(id)
         }
@@ -135,10 +141,16 @@ extension SecuritySetting {
 extension MainCoordinatorViewModel.Screen: Identifiable {
     var id: UUID { UUID() }
     
+    /// Hashes the unique identifier of the instance into the provided hasher.
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
     
+    /// Determines whether two `MainCoordinatorViewModel.Screen` values represent the same screen, considering both the case and associated values where applicable.
+    /// - Parameters:
+    ///   - lhs: The first screen to compare.
+    ///   - rhs: The second screen to compare.
+    /// - Returns: `true` if both screens are considered equal; otherwise, `false`.
     static func == (lhs: MainCoordinatorViewModel.Screen, rhs: MainCoordinatorViewModel.Screen) -> Bool {
         switch (lhs, rhs) {
         case (.home, .home),

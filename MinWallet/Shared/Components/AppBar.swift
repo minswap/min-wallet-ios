@@ -13,6 +13,9 @@ struct BaseContentView: ViewModifier {
     var actionRight: (() -> Void)?
     var ignoreSafeArea: Bool = false
     
+    /// Constructs the visual layout for the base content view, including a customizable action bar and content area.
+    /// - Parameter content: The main content to display below the action bar.
+    /// - Returns: A view with a header containing optional left and right action buttons, a title or custom title view, and a content area that can optionally ignore safe area insets.
     func body(content: Content) -> some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -89,7 +92,8 @@ struct BaseContentView: ViewModifier {
         }
     }
     
-    static func text() -> some View { Text("zzz") }
+    /// Returns a `Text` view displaying the string "zzz".
+static func text() -> some View { Text("zzz") }
 }
 
 #Preview {

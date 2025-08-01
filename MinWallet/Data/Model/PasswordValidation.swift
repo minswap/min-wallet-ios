@@ -11,6 +11,9 @@ enum PasswordValidation: String, CaseIterable, Identifiable {
 }
 
 extension PasswordValidation {
+    /// Returns the list of password validation criteria satisfied by the given password.
+    /// - Parameter password: The password string to evaluate.
+    /// - Returns: An array of `PasswordValidation` cases that the password meets.
     static func validateInput(password: String) -> [PasswordValidation] {
         var validationMatched: [PasswordValidation] = []
         if password.count >= 12 {

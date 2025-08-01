@@ -5,6 +5,9 @@ struct PartialRoundedBorder: Shape {
     let cornerRadius: CGFloat
     let lineWidth: CGFloat
     
+    /// Creates a path for a border with rounded top corners and short vertical lines at the top-left and top-right edges.
+    /// - Parameter rect: The rectangle in which to draw the border.
+    /// - Returns: A `Path` representing the partial rounded border shape.
     func path(in rect: CGRect) -> Path {
         var path = Path()
         
@@ -48,6 +51,9 @@ struct RoundedCorners: Shape {
     var bl: CGFloat = 0
     var br: CGFloat = 0
     
+    /// Creates a rectangular path with independently rounded corners.
+    /// - Parameter rect: The rectangle in which to draw the shape.
+    /// - Returns: A `Path` representing a rectangle with each corner rounded according to its specified radius. Each radius is clamped to at most half the rectangle's width or height.
     func path(in rect: CGRect) -> Path {
         var path = Path()
         

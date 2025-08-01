@@ -16,6 +16,8 @@ class SendTokenViewModel: ObservableObject {
         self.screenType = screenType
     }
     
+    /// Updates the tokens array with new tokens, preserving existing amounts for tokens with matching unique IDs.
+    /// - Parameter tokens: The new list of tokens to include.
     func addToken(tokens: [TokenProtocol]) {
         let currentAmountWithToken = self.tokens.reduce([:]) { result, wrapToken in
             result.appending([wrapToken.uniqueID: wrapToken.amount])
@@ -23,6 +25,10 @@ class SendTokenViewModel: ObservableObject {
         self.tokens = tokens.map { WrapTokenSend(token: $0, amount: currentAmountWithToken[$0.uniqueID] ?? "") }
     }
     
+    /// Sets the maximum transferable amount for the specified token item in the tokens array.
+    /// - Parameter item: The token item for which to set the maximum amount.
+    /// 
+    /// For ADA tokens, subtracts the minimum required ADA value before setting the amount. For other tokens, sets the amount to the token's full available amount, formatted according to its decimal precision.
     func setMaxAmount(item: WrapTokenSend) {
         guard let index = tokens.firstIndex(where: { $0.id == item.id }) else { return }
         let decimals = tokens[index].token.decimals

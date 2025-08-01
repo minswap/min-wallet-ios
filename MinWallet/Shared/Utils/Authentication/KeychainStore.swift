@@ -30,7 +30,9 @@ public
         self.accessGroup = accessGroup
     }
     
-    // MARK: Keychain access
+    /// Retrieves the string value associated with the current keychain item.
+    /// - Throws: `KeychainError.noPassword` if no item is found, `KeychainError.unexpectedPasswordData` if the data cannot be parsed, or `KeychainError.unhandledError` for other keychain errors.
+    /// - Returns: The stored string value for the specified service, key, and access group.
     
     public
         func read() throws -> String
@@ -65,6 +67,11 @@ public
         return value
     }
     
+    /// Saves a string value to the keychain for the current service and key.
+    /// 
+    /// If an item already exists for the key, its value is updated; otherwise, a new item is created.
+    /// - Parameter value: The string value to store in the keychain.
+    /// - Throws: `KeychainError.unhandledError` if the operation fails for reasons other than a missing item.
     public
         func save(_ value: String) throws
     {
@@ -100,6 +107,9 @@ public
         }
     }
     
+    /// Changes the key (account attribute) of the keychain item to a new key name.
+    /// - Parameter newKeyName: The new key name to assign to the keychain item.
+    /// - Throws: `KeychainError.unhandledError` if the keychain update fails for reasons other than the item not being found.
     mutating
         func renameKey(_ newKeyName: String) throws
     {
@@ -116,6 +126,8 @@ public
         self.key = newKeyName
     }
     
+    /// Removes the keychain item associated with the current service, key, and access group.
+    /// - Throws: `KeychainError.unhandledError` if the deletion fails for reasons other than the item not being found.
     func deleteItem() throws {
         // Delete the existing item from the keychain.
         let query = Self.keychainQuery(withService: service, key: self.key, accessGroup: accessGroup)
@@ -125,6 +137,12 @@ public
         guard status == noErr || status == errSecItemNotFound else { throw KeychainError.unhandledError(status: status) }
     }
     
+    /// Retrieves all keychain items for the specified service and optional access group.
+    /// - Parameters:
+    ///   - service: The keychain service identifier to query.
+    ///   - accessGroup: The access group for shared keychain access, if applicable.
+    /// - Returns: An array of `GKeychainStore` instances representing each found item.
+    /// - Throws: `KeychainError.unhandledError` if a keychain error occurs, or `KeychainError.unexpectedItemData` if the item data cannot be parsed.
     static
         func valueItems(forService service: String, accessGroup: String? = nil) throws -> [GKeychainStore]
     {
@@ -161,7 +179,12 @@ public
         return valueItems
     }
     
-    // MARK: Convenience
+    /// Constructs a keychain query dictionary for a generic password item with the specified service, optional key, and optional access group.
+    /// - Parameters:
+    ///   - service: The keychain service identifier.
+    ///   - key: The optional account key for the keychain item.
+    ///   - accessGroup: The optional access group for shared keychain access.
+    /// - Returns: A dictionary suitable for use in keychain operations.
     
     private static
         func keychainQuery(withService service: String, key: String? = nil, accessGroup: String? = nil) -> [String: AnyObject]

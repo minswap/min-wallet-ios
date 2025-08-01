@@ -91,6 +91,7 @@ struct OrderHistoryView: View {
         }
     }
     
+    /// Handles successful authentication by canceling the selected order, updating UI loading states, and displaying a banner with transaction details or error information.
     private func authenticationSuccess() {
         Task {
             do {

@@ -11,6 +11,8 @@ struct SwapTokenSetting {
     
     init() {}
     
+    /// Returns the selected slippage value as a Double.
+    /// If a predefined slippage option is selected, its value is returned; otherwise, the custom slippage tolerance string is converted to a Double.
     func slippageSelectedValue() -> Double {
         guard let slippageSelected = slippageSelected
         else {
@@ -33,6 +35,11 @@ struct WrapRouting: Identifiable {
         self.routing = routing
     }
     
+    /// Calculates and updates the sequence of pool assets involved in the routing path based on the provided input and output tokens and the routing mode.
+    /// - Parameters:
+    ///   - tokenX: The input token for the swap route.
+    ///   - tokenZ: The output token for the swap route.
+    ///   - isAutoRoute: Indicates whether to use automatic routing logic. If false, only pools directly containing the input and output tokens are considered; if true, pools are chained stepwise to form a complete route.
     mutating func calculateRoute(tokenX: TokenProtocol?, tokenZ: TokenProtocol?, isAutoRoute: Bool) {
         var assets: [RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Pool.PoolAsset?] = []
         

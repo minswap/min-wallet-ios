@@ -41,6 +41,9 @@ public struct FlowLayout<RefreshBinding, Data: Collection, ItemView: View>: View
         }
     }
     
+    /// Arranges the provided items in a flow layout within the given geometry, wrapping items to new lines as needed and dynamically measuring the total height.
+    /// - Parameter g: The geometry proxy representing the available layout space.
+    /// - Returns: A view that displays the items in a flow layout and updates the total height via a background height reader.
     private func content(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero

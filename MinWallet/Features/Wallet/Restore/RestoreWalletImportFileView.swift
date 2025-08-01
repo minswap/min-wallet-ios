@@ -128,6 +128,9 @@ struct RestoreWalletImportFileView: View {
         }
     }
     
+    /// Converts a byte count into a human-readable file size string using the largest appropriate unit (bytes, KB, MB, GB, or TB), rounded to the nearest whole number.
+    /// - Parameter bytes: The file size in bytes.
+    /// - Returns: A formatted string representing the file size with the appropriate unit.
     private func formatFileSize(bytes: Int64) -> String {
         let units = ["bytes", "KB", "MB", "GB", "TB"]
         var value = Double(bytes)

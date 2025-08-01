@@ -28,6 +28,8 @@ struct _FlexibleView<Data: Collection, Content: View>: View where Data.Element: 
         }
     }
     
+    /// Arranges elements into rows based on their measured sizes and the available width.
+    /// - Returns: An array of rows, where each row is an array of elements that fit within the available width.
     func computeRows() -> [[Data.Element]] {
         var rows: [[Data.Element]] = [[]]
         var currentRow = 0

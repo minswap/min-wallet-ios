@@ -89,6 +89,7 @@ extension OrderHistory {
 extension OrderHistory.FillHistory: Mappable {
     init?(map: Map) {}
     
+    /// Maps JSON fields to the corresponding properties of the `FillHistory` struct using custom transformations for numeric values.
     mutating func mapping(map: Map) {
         inputAmount <- (map["input_amount"], GKMapFromJSONToDouble)
         outputAmount <- (map["output_amount"], GKMapFromJSONToDouble)
@@ -99,6 +100,9 @@ extension OrderHistory.FillHistory: Mappable {
 extension OrderHistory.Detail: Mappable {
     init?(map: Map) {}
     
+    /// Maps the properties of the `OrderHistory.Detail` struct from a JSON map.
+    /// 
+    /// Populates all order detail fields, including assets, amounts, order parameters, routing, expiration, and fill history, using the provided mapping context. Numeric values are converted as needed for type safety.
     mutating func mapping(map: Map) {
         orderType <- map["order_type"]
         lpAsset <- map["lp_asset"]
@@ -139,6 +143,7 @@ extension OrderHistory.Detail: Mappable {
 extension OrderHistory.Route: Mappable {
     init?(map: Map) {}
     
+    /// Maps the `assets` and `lpAsset` properties from the provided JSON map.
     mutating func mapping(map: Map) {
         assets <- map["assets"]
         lpAsset <- map["lp_asset"]

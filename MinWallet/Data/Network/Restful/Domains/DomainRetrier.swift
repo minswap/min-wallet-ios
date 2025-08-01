@@ -35,7 +35,9 @@ protocol GDomainTokenRefresher {
 }
 
 extension GDomainTokenRefresher {
-    // default ko có luồng chủ động refresh
+    /// Determines whether a token refresh is required before making the specified API call.
+    /// - Parameter endpoint: The API endpoint to be accessed.
+    /// - Returns: `.doesNotRequireRefresh`, indicating that a token refresh is not needed by default.
     func shouldRefreshTokenIfRequired(endpoint: APIRouter) -> RequiresRefreshResult {
         return .doesNotRequireRefresh
     }
@@ -73,20 +75,33 @@ class GDomainAuthRetrier {
         self.refreshWindow = refreshWindow
     }
     
+    /// Determines whether a token refresh is required before making a request to the specified API endpoint.
+    /// - Parameter endpoint: The API endpoint to evaluate.
+    /// - Returns: A `RequiresRefreshResult` indicating if a token refresh is needed, and if so, whether a delay should be applied.
     func shouldRefreshTokenIfRequired(endpoint: APIRouter) -> RequiresRefreshResult {
         domainRefreshRetrier.shouldRefreshTokenIfRequired(endpoint: endpoint)
     }
     
+    /// Determines whether a request should be retried due to an authentication error, considering the availability of a refresh token.
+    /// - Parameters:
+    ///   - endpoint: The API endpoint being called.
+    ///   - response: The HTTP response received, if any.
+    ///   - data: The response data, if any.
+    /// - Returns: A `RetryResult` indicating whether the request should be retried. If a retry is required but no refresh token is available, returns `.doNotRetry`.
     func shouldRetryDueToAuthenticationError(endpoint: APIRouter, response: HTTPURLResponse?, data: Data?) throws -> RetryResult {
         let retryResult = try domainRefreshRetrier.shouldRetry(endpoint: endpoint, response: response, data: data)
         if retryResult.retryRequired, domainRefreshRetrier.refreshToken.isEmpty { return .doNotRetry }
         return retryResult
     }
     
+    /// Initiates a token refresh operation, ensuring concurrency control and rate limiting.
+    /// - Throws: An error if the refresh operation fails or if excessive refresh attempts are detected.
     func refresh() async throws -> Void {
         return try await _refresh()
     }
     
+    /// Performs a token refresh operation with concurrency control and rate limiting.
+    /// - Throws: `APIRouterError.excessiveRefresh` if refresh attempts exceed the allowed rate, or any error thrown during the refresh process.
     func _refresh() async throws -> Void {
         guard !isRefreshExcessive() else {
             throw APIRouterError.excessiveRefresh
@@ -110,6 +125,8 @@ class GDomainAuthRetrier {
         return try await task.value
     }
     
+    /// Determines whether the number of token refresh attempts within the configured refresh window exceeds the allowed maximum.
+    /// - Returns: `true` if the refresh attempt limit has been reached within the specified interval; otherwise, `false`.
     func isRefreshExcessive() -> Bool {
         guard let refreshWindow = self.refreshWindow else { return false }
         
@@ -130,6 +147,8 @@ class GDomainRefreshRetrierNoOpDefault: GDomainRetrier, GDomainTokenRefresher {
     
     static var sharedAuthRetrier = GDomainAuthRetrier(domainRefreshRetrier: GDomainRefreshRetrierNoOpDefault())
     
+    /// Determines whether a request should be retried based on the HTTP response.
+    /// - Returns: `.doNotRetryWithError` with a `serverUnauthenticated` error if the response status code is 401; otherwise, `.doNotRetry`.
     func shouldRetry(endpoint: APIRouter, response: HTTPURLResponse?, data: Data?) throws -> RetryResult {
         guard let response = response,
             response.statusCode == 401  // 403?
@@ -141,10 +160,13 @@ class GDomainRefreshRetrierNoOpDefault: GDomainRetrier, GDomainTokenRefresher {
         ""
     }
     
+    /// Throws an error indicating that token refresh is not implemented.
     func requestRefreshToken() async throws {
         throw APIRouterError.localError(message: APIRouterError.GenericError)
     }
     
+    /// Returns a publisher that immediately fails with an error indicating token refresh is not implemented.
+    /// - Returns: A publisher that fails with a local error for unimplemented token refresh functionality.
     func requestRefreshToken() -> AnyPublisher<Void, Error> {
         Fail<Void, Error>(error: APIRouterError.localError(message: "Token refresh not implemented"))
             .eraseToAnyPublisher()

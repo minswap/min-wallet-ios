@@ -22,6 +22,9 @@ extension OrderHistory {
 extension OrderHistory.Asset: Mappable {
     init?(map: Map) {}
     
+    /// Maps JSON data from the provided map to the properties of the `Asset` struct.
+    ///
+    /// Populates asset fields such as identifiers, display information, verification status, pricing, and token details from the mapped JSON values. The `adaName` is set to the ticker if available, otherwise derived from the token ID. The `token` property is initialized and updated with the mapped values.
     mutating func mapping(map: Map) {
         tokenId <- map["token_id"]
         logo <- map["logo"]

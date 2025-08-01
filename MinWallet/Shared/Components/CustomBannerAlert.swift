@@ -14,6 +14,9 @@ private struct CustomBannerAlertModifier<InfoContent: View>: ViewModifier {
         self.infoContent = infoContent
     }
     
+    /// Overlays a banner alert at the top of the view when `isShowing` is true.
+    /// 
+    /// The banner displays custom content provided by `infoContent`, appears with a top-edge transition, and automatically dismisses after 4 seconds or when tapped. The banner overlays the existing content and is sized to fit the screen width minus extra-large padding.
     func body(content: Content) -> some View {
         ZStack(alignment: .top) {
             content
@@ -63,6 +66,7 @@ private struct LoadingViewModifier: ViewModifier {
         _isShowing = isShowing
     }
     
+    /// Returns a view that overlays a blue circular progress indicator when loading is active, hiding the underlying content.
     func body(content: Content) -> some View {
         ZStack {
             content.opacity(isShowing ? 0 : 1)
@@ -90,6 +94,9 @@ private struct ProgressViewModifier: ViewModifier {
         _isShowing = isShowing
     }
     
+    /// Overlays the view with a semi-transparent background and a large blue progress indicator when active.
+    /// - Parameter content: The underlying view content.
+    /// - Returns: The modified view with a modal-style progress overlay when `isShowing` is true.
     func body(content: Content) -> some View {
         content
             .overlay {

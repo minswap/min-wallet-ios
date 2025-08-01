@@ -116,13 +116,18 @@ private struct ShareSheet: UIViewControllerRepresentable {
     var items: [Any]
     var excludedActivityTypes: [UIActivity.ActivityType]? = nil
     
+    /// Creates and returns a UIActivityViewController configured with the provided items and excluded activity types.
+    /// - Parameter context: The context for coordinating with SwiftUI.
+    /// - Returns: A configured UIActivityViewController instance for sharing content.
     func makeUIViewController(context: Context) -> UIActivityViewController {
         let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
         controller.excludedActivityTypes = excludedActivityTypes
         return controller
     }
     
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+    /// Updates the presented UIActivityViewController.
+/// This implementation does not perform any updates since the share sheet does not require dynamic changes after creation.
+func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 #Preview {

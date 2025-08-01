@@ -200,6 +200,13 @@ extension TokenDetailView {
         }
     }
     
+    /// Updates the selected chart data index based on a drag location within the chart.
+    /// - Parameters:
+    ///   - proxy: The chart proxy used to convert view coordinates to chart values.
+    ///   - location: The location of the drag gesture in the view's coordinate space.
+    ///   - geometry: The geometry proxy for resolving view layout.
+    /// 
+    /// Determines the closest data point to the drag location and updates the selected index in the view model.
     private func updateSelectedIndex(using proxy: ChartProxy, at location: CGPoint, in geometry: GeometryProxy) {
         let xPosition = location.x - geometry[proxy.plotAreaFrame].origin.x
         guard let date: Date = proxy.value(atX: xPosition) else { return }
@@ -211,6 +218,7 @@ extension TokenDetailView {
         viewModel.selectedIndex = closestIndex
     }
     
+    /// Triggers a medium impact haptic feedback.
     private func triggerVibration() {
         // Trigger a haptic feedback when the long press begins
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
@@ -220,6 +228,12 @@ extension TokenDetailView {
 }
 
 extension Date {
+    /// Returns a new date by adding a specified value of a calendar component to the current date.
+    /// - Parameters:
+    ///   - component: The calendar component to add (e.g., day, month, year).
+    ///   - value: The amount to add to the component.
+    ///   - calendar: The calendar to use for the calculation. Defaults to the current calendar.
+    /// - Returns: A new date with the added component value, or `nil` if the calculation fails.
     func adding(_ component: Calendar.Component, value: Int, using calendar: Calendar = .current) -> Date? {
         return calendar.date(byAdding: component, value: value, to: self)
     }

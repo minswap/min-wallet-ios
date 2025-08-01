@@ -61,6 +61,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
     @Binding var calculatedHeight: CGFloat
     var onDone: (() -> Void)?
     
+    /// Creates and configures a UITextView with dynamic font, color, placeholder label, and user interaction settings for use in SwiftUI.
+    /// - Parameter context: The context containing the coordinator for delegate callbacks.
+    /// - Returns: A configured UITextView instance with placeholder support.
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
@@ -94,6 +97,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         return textView
     }
     
+    /// Updates the UITextView's content, user interaction state, and placeholder visibility, and recalculates its dynamic height to reflect the current binding values.
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.text = text
         uiView.isUserInteractionEnabled = enableTextView
@@ -101,6 +105,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
         UITextViewWrapper.recalculateHeight(view: uiView, result: $calculatedHeight)
     }
     
+    /// Calculates the required height for the given view based on its content and updates the provided binding if the height has changed.
+    /// - Parameters:
+    ///   - view: The view whose height should be recalculated.
+    ///   - result: A binding to the height value that will be updated if a change is detected.
     fileprivate static func recalculateHeight(view: UIView, result: Binding<CGFloat>) {
         let newSize = view.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         if result.wrappedValue != newSize.height {
@@ -110,6 +118,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
     }
     
+    /// Creates and returns a coordinator to manage UITextView delegate callbacks and synchronize state between the UIKit text view and SwiftUI bindings.
+    /// - Returns: A `Coordinator` instance configured with the parent wrapper, dynamic height binding, and optional completion handler.
     func makeCoordinator() -> Coordinator {
         Coordinator(self, height: $calculatedHeight, onDone: onDone)
     }
@@ -125,12 +135,15 @@ private struct UITextViewWrapper: UIViewRepresentable {
             self.onDone = onDone
         }
         
+        /// Updates the bound text, manages placeholder visibility, and recalculates the dynamic height when the text view's content changes.
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
             parent.updatePlaceholder(textView)
             UITextViewWrapper.recalculateHeight(view: textView, result: calculatedHeight)
         }
         
+        /// Handles the return key press in the text view, triggering the completion closure and dismissing the keyboard.
+        /// - Returns: `false` to prevent insertion of a newline character when the return key is pressed; otherwise, `true` to allow text changes.
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
             if text == "\n" {
                 onDone?()
@@ -141,6 +154,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
     }
     
+    /// Updates the visibility of the placeholder label in the given text view based on whether the text is empty.
+    /// - Parameter textView: The UITextView containing the placeholder label.
     func updatePlaceholder(_ textView: UITextView) {
         if let placeholderLabel = textView.viewWithTag(999) as? UILabel {
             placeholderLabel.isHidden = !text.isEmpty

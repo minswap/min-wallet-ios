@@ -7,6 +7,7 @@ enum SwapTokenAPIRouter: DomainAPIRouter {
     case buildTX(request: BuildTxRequest)
     case signTX(cbor: String, witness_set: String)
     
+    /// Returns the API endpoint path corresponding to the current swap token operation case.
     func path() -> String {
         switch self {
         case .estimate:
@@ -18,10 +19,13 @@ enum SwapTokenAPIRouter: DomainAPIRouter {
         }
     }
     
+    /// Returns the HTTP method used for all swap token API requests, which is always POST.
     func method() -> HTTPMethod {
         return .post
     }
     
+    /// Constructs and returns the parameters dictionary for the current API request case.
+    /// - Returns: A dictionary of parameters tailored to the specific swap token API operation (estimate, build transaction, or sign transaction).
     func parameters() -> Parameters {
         var params = Parameters()
         

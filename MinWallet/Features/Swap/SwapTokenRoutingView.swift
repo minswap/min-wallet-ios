@@ -191,6 +191,10 @@ struct SwapTokenRoutingView: View {
         }
     }
     
+    /// Displays a popover for the specified token icon, showing the associated protocol name, and schedules its automatic dismissal after 2 seconds.
+    /// - Parameters:
+    ///   - target: The UUID of the token icon to display the popover for.
+    ///   - protocolName: The protocol name to show in the popover.
     private func showPopover(target: UUID, protocolName: String) {
         workItem?.cancel()
         workItem = DispatchWorkItem(block: {

@@ -4,6 +4,13 @@ import Combine
 import SwiftyJSON
 
 
+/// Executes an asynchronous throwing operation, retrying up to a specified maximum count with a delay between attempts if an error occurs.
+/// - Parameters:
+///   - maximumRetryCount: The maximum number of attempts to execute the operation. Defaults to 1 (no retries).
+///   - delayBeforeRetry: The delay between retry attempts. Defaults to 2 seconds.
+///   - body: The asynchronous throwing closure to execute.
+/// - Returns: The result of the successful operation.
+/// - Throws: The last error encountered if all retry attempts fail.
 func attempts<T>(
     maximumRetryCount: Int = 1,
     delayBeforeRetry: DispatchTimeInterval = .seconds(2),
@@ -24,6 +31,14 @@ func attempts<T>(
     return try await attempt()
 }
 
+/// Executes an asynchronous throwing operation with retry logic, retrying only if the error satisfies a given condition.
+/// - Parameters:
+///   - maximumRetryCount: The maximum number of attempts to perform.
+///   - delayBeforeRetry: The delay between retry attempts.
+///   - errorCondition: A closure that determines whether an encountered error should trigger a retry.
+///   - body: The asynchronous throwing operation to execute.
+/// - Returns: The result of the successful operation.
+/// - Throws: The last encountered error if the maximum retry count is reached or the error does not satisfy the retry condition.
 func attempts<T>(
     maximumRetryCount: Int = 1,
     delayBeforeRetry: DispatchTimeInterval = .seconds(2),
@@ -49,6 +64,9 @@ func attempts<T>(
 
 // MARK: - Alamofire debug log
 extension Alamofire.Request {
+    /// Prints the cURL representation of the request for debugging if `printFlag` is true.
+    /// - Parameter printFlag: If true, outputs the cURL command to the console.
+    /// - Returns: The original request instance for method chaining.
     func debugLog(_ printFlag: Bool = false) -> Self {
         if printFlag {
             print(">>>> Request -LOG-START- >>>>")
@@ -62,6 +80,9 @@ extension Alamofire.Request {
 }
 
 extension Alamofire.DataResponse {
+    /// Prints detailed debug information about the response, including the request URL and a pretty-printed JSON body if available, when `printFlag` is true.
+    /// - Parameter printFlag: If true, prints debug output for the response.
+    /// - Returns: The response instance, allowing for method chaining.
     @discardableResult
     func debugLog(_ printFlag: Bool = false) -> Self {
         if printFlag {

@@ -10,6 +10,9 @@ struct PopupSheetModifier<SheetContent: View>: ViewModifier {
     let onDismiss: (() -> Void)?
     let content: () -> SheetContent
     
+    /// Wraps the input view in a sheet that presents custom content with a dynamically measured height.
+    /// - Parameter content: The base view to which the sheet is attached.
+    /// - Returns: A view with a sheet that adapts its height to the content and calls `onDismiss` when dismissed.
     func body(content: Content) -> some View {
         content
             .sheet(isPresented: $isPresented, onDismiss: onDismiss) {

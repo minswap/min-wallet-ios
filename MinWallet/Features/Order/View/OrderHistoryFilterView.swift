@@ -19,6 +19,9 @@ struct OrderHistoryFilterView: View {
     
     var onFilterSelected: ((OrderV2Status?, AggregatorSource?, OrderHistory.OrderType?, Date?, Date?) -> Void)?
     
+    /// Formats an optional date as a string in "dd-MM-YYYY" format, using UTC if specified in app settings.
+    /// - Parameter date: The date to format, or `nil`.
+    /// - Returns: The formatted date string, or "Select date" if the input is `nil`.
     private func formateDate(_ date: Date?) -> String {
         guard let date = date else { return "Select date" }
         let formatter = DateFormatter()

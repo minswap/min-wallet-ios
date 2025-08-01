@@ -580,7 +580,10 @@ struct OrderHistoryDetailView: View {
         }
     }
     
-    //TODO: cuongnv cancel sau
+    /// Cancels the current order asynchronously.
+    /// 
+    /// This function is currently disabled. When enabled, it will attempt to cancel the associated order by preparing the necessary input data, sending a cancellation mutation, and refreshing the order information from the server.
+    /// - Throws: An error if the cancellation or data fetching process fails.
     private func cancelOrder() async throws {
         /*
         guard let order = order else { return }
@@ -601,6 +604,8 @@ struct OrderHistoryDetailView: View {
          */
     }
     
+    /// Handles post-authentication actions by attempting to cancel the order, refreshing order data, and updating UI state. 
+    /// Displays loading indicators and error banners as appropriate.
     private func authenticationSuccess() {
         Task {
             do {
@@ -619,6 +624,9 @@ struct OrderHistoryDetailView: View {
 
 fileprivate extension VerticalAlignment {
     struct TimelineAlignment: AlignmentID {
+        /// Returns the top edge value from the given view dimensions context.
+        /// - Parameter context: The view dimensions context to query.
+        /// - Returns: The value corresponding to the top edge.
         static func defaultValue(in context: ViewDimensions) -> CGFloat {
             context[.top]
         }

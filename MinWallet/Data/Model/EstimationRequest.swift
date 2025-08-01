@@ -35,6 +35,8 @@ struct EstimationResponse: Mappable, Then {
     
     init?(map: Map) {}
     
+    /// Maps JSON keys to the properties of `EstimationResponse`.
+    /// - Parameter map: The mapping object containing JSON data.
     mutating func mapping(map: Map) {
         tokenIn <- map["token_in"]
         tokenOut <- map["token_out"]
@@ -52,6 +54,7 @@ struct EstimationResponse: Mappable, Then {
         calculatePercentSwapPath()
     }
     
+    /// Calculates the percentage contribution of each swap path's input amount relative to the total input amount, ensuring the percentages sum to 100%.
     private mutating func calculatePercentSwapPath() {
         let totalAmountIn = max(amountIn.gkDoubleValue, 1)
         percents = paths.map({ path in
@@ -87,6 +90,8 @@ struct SwapPath: Mappable, Identifiable {
     
     init?(map: Map) {}
     
+    /// Maps JSON keys to the properties of the `SwapPath` struct during deserialization.
+    /// - Parameter map: The mapping object containing JSON data.
     mutating func mapping(map: Map) {
         lpToken <- map["lp_token"]
         tokenIn <- map["token_in"]

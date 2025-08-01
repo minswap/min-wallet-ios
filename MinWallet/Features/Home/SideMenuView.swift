@@ -13,6 +13,9 @@ public struct SideMenu<MenuContent: View>: ViewModifier {
         self.menuContent = menuContent
     }
     
+    /// Constructs the view hierarchy for the side menu, overlaying the menu content and blur effect over the main content and handling gestures to show or hide the menu.
+    /// - Parameter content: The main content view to display behind the side menu.
+    /// - Returns: A view that presents the side menu with interactive drag and tap gestures.
     public func body(content: Content) -> some View {
         let drag = DragGesture()
             .onEnded { event in

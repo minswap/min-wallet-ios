@@ -330,6 +330,8 @@ struct HomeView: View {
             .padding(.horizontal, Spacing.xl)
     }
     
+    /// Handles incoming URLs by parsing their path and query parameters to determine navigation actions.
+    /// - Parameter url: The URL to be handled. Navigates to order details if an order ID is present in the `/orders` path; otherwise, navigates to the order history screen.
     private func handleIncomingURL(_ url: URL) {
         //guard url.scheme == MinWalletConstant.minswapScheme else { return }
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
@@ -354,6 +356,10 @@ struct HomeView: View {
 }
 
 extension HomeView {
+    /// Fetches order details for the specified order ID and navigates to the order detail screen if found.
+    /// - Parameters:
+    ///   - order: The order ID to fetch details for.
+    ///   - fallback: An optional closure executed if the order is not found or an error occurs.
     private func fetchOrderDetail(order: String, fallback: (() -> Void)?) {
         guard let address = userInfo.minWallet?.address, !address.isEmpty else { return }
         Task {
@@ -387,11 +393,14 @@ extension HomeView {
 }
 
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    /// Sets the navigation controller's interactive pop gesture recognizer delegate to enable custom swipe-back behavior.
     override open func viewDidLoad() {
         super.viewDidLoad()
         interactivePopGestureRecognizer?.delegate = self
     }
     
+    /// Determines whether the interactive pop gesture should begin based on the swipe setting and navigation stack.
+    /// - Returns: `true` if swipe navigation is enabled and there is more than one view controller on the stack; otherwise, `false`.
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if AppSetting.shared.swipeEnabled {
             return viewControllers.count > 1

@@ -36,6 +36,9 @@ extension TokenFavourite: Codable {
         adaName = try container.decode(String.self, forKey: .adaName)
     }
     
+    /// Encodes the TokenFavourite instance into the provided encoder.
+    /// - Parameter encoder: The encoder to write data to.
+    /// - Throws: An error if any value fails to encode.
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(dateAdded, forKey: .dateAdded)

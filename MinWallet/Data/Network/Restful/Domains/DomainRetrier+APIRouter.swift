@@ -5,6 +5,10 @@ import Combine
 
 // MARK: - Logic refresh token
 extension APIRouter {
+    /// Executes a network request with automatic token refresh and retry logic.
+    /// - Parameter body: An asynchronous closure that performs the network request and returns an `AFDataResponse<T>`.
+    /// - Returns: The network response, with token refresh and retry applied if required.
+    /// - Throws: An error if the request fails or if token refresh or retry logic encounters an error.
     func _async_requestWithRetry<T>(
         _ body: @escaping () async throws -> AFDataResponse<T>
     ) async throws -> AFDataResponse<T> {

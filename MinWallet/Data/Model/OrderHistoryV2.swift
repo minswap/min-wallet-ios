@@ -49,6 +49,8 @@ struct OrderHistory: Then, Identifiable, Hashable {
 extension OrderHistory: Mappable {
     init?(map: Map) {}
     
+    /// Maps JSON data from the provided map to the properties of the `OrderHistory` instance, including nested objects and computed fill history for partial swaps.
+    /// - Note: This method also processes fill history percentages for partial swaps and updates UI-related properties by invoking `mappingUI()`.
     mutating func mapping(map: Map) {
         id <- (map["id"], GKMapFromJSONToString)
         status <- map["status"]
@@ -111,6 +113,9 @@ extension OrderHistory: Mappable {
 
 
 extension OrderHistory {
+    /// Populates UI-related properties of the order based on its type and direction.
+    /// 
+    /// This method sets display fields such as `name`, `inputAsset`, `outputAsset`, `input`, `output`, `tradingFeeAsset`, `changeAmountAsset`, and `routing` by interpreting the order's details and involved assets. The resulting values are tailored for use in UI components, reflecting the structure and flow of the order for various order types (e.g., swap, limit, deposit, withdraw, zap, donation).
     private mutating func mappingUI() {
         name = {
             switch detail.orderType {
@@ -261,6 +266,8 @@ extension OrderHistory {
 }
 
 extension OrderHistory {
+    /// Builds a string representing the asset routing path for the order, showing the sequence of asset names from the starting asset to the ending asset through all route nodes.
+    /// - Returns: A string describing the routing path, with asset names separated by " > ". If no routes exist, returns a direct path from start to end.
     private func buildRouting() -> String {
         let routeStart: String = {
             switch detail.direction {

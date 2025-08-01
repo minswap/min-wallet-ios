@@ -504,6 +504,9 @@ struct SwapTokenView: View {
         }
     }
     
+    /// Initiates the token swap process after validating input and trade information.
+    /// Performs user authentication based on app settings before proceeding with the swap or presenting the contract signing sheet.
+    /// Displays an error banner and restarts the trade info timer if authentication fails.
     private func processingSwapToken() {
         hideKeyboard()
         guard !viewModel.isGettingTradeInfo, viewModel.errorInfo == nil, viewModel.iosTradeEstimate != nil else { return }
@@ -525,6 +528,9 @@ struct SwapTokenView: View {
         }
     }
     
+    /// Executes the token swap operation, submits the transaction, and updates UI state based on the result.
+    /// 
+    /// Initiates the swap process via the view model, finalizes and submits the transaction, and displays a success banner with an option to view the transaction. On failure, hides the loading indicator, shows an error banner, and restarts the trade info refresh interval.
     private func swapTokenSuccess() {
         Task {
             do {

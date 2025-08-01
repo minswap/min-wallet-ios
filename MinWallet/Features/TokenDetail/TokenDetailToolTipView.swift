@@ -51,6 +51,8 @@ struct TokenDetailToolTipView: View {
         .fixedSize(horizontal: false, vertical: true)
     }
     
+    /// Creates an attributed string for the Xerberus risk score disclaimer, combining informational text with a highlighted, underlined "User Agreement." link.
+    /// - Returns: An attributed string containing the disclaimer and user agreement, styled for display in the tooltip.
     private func generateContentRiskScore() -> AttributedString {
         let local: LocalizedStringKey = "Powered by Xerberus. This is for informational purposes only and is not intended to be used as financial advice. "
         let localAgreement: LocalizedStringKey = "User Agreement."

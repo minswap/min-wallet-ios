@@ -52,6 +52,10 @@ class SearchTokenViewModel: ObservableObject {
         recentSearch = UserDataManager.shared.tokenRecentSearch
     }
     
+    /// Fetches tokens based on the current search keyword and pagination state.
+    /// - Parameter isLoadMore: Indicates whether to load additional tokens for pagination. Defaults to `false`.
+    ///
+    /// If the search keyword is blank, retrieves favorite tokens and resets related UI state. Otherwise, fetches tokens matching the keyword from the backend, updating the token list and pagination information accordingly. Updates UI loading indicators and prevents concurrent fetches.
     func getTokens(isLoadMore: Bool = false) {
         showSkeleton = !isLoadMore
         isFetching = true
@@ -96,6 +100,8 @@ class SearchTokenViewModel: ObservableObject {
         }
     }
     
+    /// Loads additional tokens when the specified item is near the end of the current token list and more data is available.
+    /// - Parameter item: The token item used to determine if more data should be loaded.
     func loadMoreData(item: TopAssetsQuery.Data.TopAssets.TopAsset) {
         guard hasLoadMore, !isFetching, !keyword.isBlank else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -2)
@@ -104,11 +110,14 @@ class SearchTokenViewModel: ObservableObject {
         }
     }
     
+    /// Clears the recent search history and updates persistent storage accordingly.
     func clearRecentSearch() {
         recentSearch = []
         UserDataManager.shared.tokenRecentSearch = []
     }
     
+    /// Adds a keyword to the recent search list, ensuring it is trimmed, unique, and most recent.
+    /// - Parameter keyword: The search term to add to the recent search history.
     func addRecentSearch(keyword: String) {
         var recentSearch = recentSearch
         recentSearch.insert(keyword.trimmingCharacters(in: .whitespacesAndNewlines), at: 0)
@@ -117,6 +126,8 @@ class SearchTokenViewModel: ObservableObject {
         UserDataManager.shared.tokenRecentSearch = self.recentSearch
     }
     
+    /// Removes a favorite token at the specified index and updates related UI state.
+    /// - Parameter index: The index of the favorite token to remove. If the index is invalid, no action is taken.
     func deleteTokenFav(at index: Int) {
         guard let item = tokensFav[gk_safeIndex: index] else { return }
         let tokensFav = tokensFav.filter { $0.uniqueID != item.uniqueID }
@@ -126,6 +137,8 @@ class SearchTokenViewModel: ObservableObject {
         UserInfo.shared.tokenFavSelected(token: item, isAdd: false)
     }
     
+    /// Asynchronously fetches detailed data for all favorite tokens.
+    /// - Returns: An array of successfully retrieved favorite tokens. Tokens that fail to fetch are omitted from the result.
     private func getTokenFav() async -> [TokenProtocol] {
         let tokens = await withTaskGroup(of: TokenProtocol?.self) { taskGroup in
             let tokens = UserInfo.shared.tokensFav
@@ -146,6 +159,9 @@ class SearchTokenViewModel: ObservableObject {
         return tokens.compactMap { $0 }
     }
     
+    /// Asynchronously fetches detailed token data for a given favorite token.
+    /// - Parameter token: The favorite token for which to retrieve detailed information.
+    /// - Returns: The detailed token data if the fetch succeeds; otherwise, nil.
     private func fetchToken(for token: TokenFavourite) async -> TopAssetQuery.Data.TopAsset? {
         do {
             let asset = try await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))

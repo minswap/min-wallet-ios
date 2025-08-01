@@ -50,6 +50,10 @@ class OrderHistoryViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Fetches the latest order history data asynchronously, applying current filters and resetting pagination state.
+    /// - Parameters:
+    ///   - showSkeleton: Whether to display a loading skeleton during the fetch.
+    ///   - fromPullToRefresh: Indicates if the fetch was triggered by a pull-to-refresh action.
     func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
         withAnimation {
             self.showSkeleton = showSkeleton
@@ -76,6 +80,8 @@ class OrderHistoryViewModel: ObservableObject {
         }
     }
     
+    /// Loads additional order history data when the user scrolls near the end of the current list.
+    /// - Parameter order: The order used to determine if more data should be loaded based on its position in the list.
     func loadMoreData(order: OrderHistory) {
         guard pagination.readyToLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
@@ -117,7 +123,10 @@ class OrderHistoryViewModel: ObservableObject {
             })
     }
     
-    //TODO: cuongnv
+    /// Cancels the currently selected order asynchronously.
+    /// 
+    /// This method is currently disabled and contains only commented-out logic for order cancellation. When enabled, it would attempt to cancel the selected order and refresh the order history upon success.
+    /// - Throws: An error if the cancellation process fails (when enabled).
     func cancelOrder() async throws {
         /*
         guard let order = orderToCancel else { return }
@@ -152,6 +161,8 @@ extension OrderHistory.Request {
 }
 
 extension OrderHistoryViewModel {
+    /// Asynchronously fetches order history data using the current input filters.
+    /// - Returns: An array of `OrderHistory` objects, or an empty array if the request fails or no data is found.
     private func getOrderHistory() async -> [OrderHistory] {
         do {
             let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
@@ -174,6 +185,7 @@ extension OrderHistoryViewModel {
         }
         init() {}
         
+        /// Resets the pagination state to its initial values, clearing the cursor and enabling further data loading.
         mutating func reset() {
             isFetching = false
             hasMore = true

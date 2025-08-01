@@ -26,6 +26,14 @@ extension String {
         trimmingCharacters(in: .whitespacesAndNewlines) == ""
     }
     
+    /// Generates a QR code image from the string, optionally overlaying a centered image with customizable size, padding, and background color.
+    /// - Parameters:
+    ///   - centerImage: An optional image to display at the center of the QR code.
+    ///   - centerImageSize: The size of the center image. Defaults to 38x38 points.
+    ///   - size: The overall size of the generated QR code image.
+    ///   - padding: The padding around the center image. Defaults to 10 points.
+    ///   - centerBackgroundColor: An optional background color drawn as a circle behind the center image.
+    /// - Returns: A `UIImage` containing the generated QR code with the optional center image, or `nil` if QR code generation fails.
     func generateQRCode(
         centerImage: UIImage?,
         centerImageSize: CGSize = .init(width: 38, height: 38),
@@ -90,6 +98,11 @@ extension String {
 
 
 extension UITapGestureRecognizer {
+    /// Determines whether a tap gesture occurred within a specified character range of a UILabel's attributed text.
+    /// - Parameters:
+    ///   - label: The UILabel containing the attributed text.
+    ///   - targetRange: The range of characters to check for the tap location.
+    /// - Returns: `true` if the tap was within the specified character range; otherwise, `false`.
     func didTapAttributedTextInLabel(label: UILabel, inRange targetRange: NSRange) -> Bool {
         // Create instances of NSLayoutManager, NSTextContainer and NSTextStorage
         let layoutManager = NSLayoutManager()

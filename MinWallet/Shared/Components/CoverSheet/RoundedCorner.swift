@@ -10,6 +10,9 @@ struct RoundedCorner: Shape {
         self.corners = corners
     }
     
+    /// Creates a path for a rectangle with selectively rounded corners.
+    /// - Parameter rect: The rectangle in which to draw the path.
+    /// - Returns: A Path representing the rectangle with the specified corners rounded.
     func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
         return Path(path.cgPath)

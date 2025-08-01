@@ -121,6 +121,9 @@ struct ScanQRView: View {
         .ignoresSafeArea()
     }
     
+    /// Checks the current camera authorization status and updates permission-related state flags accordingly.
+    /// If access is not determined, requests camera permission and updates state based on the user's response.
+    /// Shows an alert if permission is denied or restricted.
     private func checkCameraPermission() {
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         
@@ -173,6 +176,9 @@ private struct QRScanOverlay: View {
 }
 
 private struct CornerShape: Shape {
+    /// Creates a path with decorative rounded corners for use as a QR scan overlay border.
+    /// - Parameter rect: The rectangle in which to draw the corner shapes.
+    /// - Returns: A `Path` outlining the four corners with lines and rounded edges.
     func path(in rect: CGRect) -> Path {
         var path = Path()
         

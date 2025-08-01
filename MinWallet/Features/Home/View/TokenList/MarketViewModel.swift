@@ -23,6 +23,10 @@ class MarketViewModel: ObservableObject {
     
     private var isFirstTime: Bool = true
     
+    /// Fetches a list of tokens from the market API, supporting initial load and pagination.
+    /// - Parameter isLoadMore: Indicates whether to load additional tokens for pagination. Defaults to `false`.
+    ///
+    /// On the first call, also fetches portfolio overview data concurrently. Updates the tokens list, pagination state, and loading indicators accordingly.
     func getTokens(isLoadMore: Bool = false) async {
         if showSkeleton == nil {
             showSkeleton = true
@@ -68,6 +72,8 @@ class MarketViewModel: ObservableObject {
         isFirstTime = false
     }
     
+    /// Triggers loading of additional tokens when the specified item is near the end of the current list.
+    /// - Parameter item: The token used to determine if more data should be loaded.
     func loadMoreData(item: TokenProtocol) {
         guard hasLoadMore, !isFetching else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -5)

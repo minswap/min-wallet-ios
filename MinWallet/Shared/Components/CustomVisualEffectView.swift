@@ -6,6 +6,8 @@ struct VisualEffectBlurView: UIViewRepresentable {
     var tintAlpha: CGFloat = 0.3
     var blurRadius: CGFloat = 4
     
+    /// Creates and configures a `CustomVisualEffectView` with the specified tint alpha and blur radius for use in SwiftUI.
+    /// - Returns: A `CustomVisualEffectView` instance with black tint color, the given tint alpha, and blur radius.
     func makeUIView(context: Context) -> CustomVisualEffectView {
         let visualEffectView = CustomVisualEffectView()
         
@@ -16,7 +18,8 @@ struct VisualEffectBlurView: UIViewRepresentable {
         return visualEffectView
     }
     
-    func updateUIView(_ uiView: CustomVisualEffectView, context: Context) {}
+    /// Updates the state of the provided custom blur view. No action is performed in this implementation.
+func updateUIView(_ uiView: CustomVisualEffectView, context: Context) {}
 }
 
 
@@ -182,12 +185,17 @@ public class CustomVisualEffectView: UIVisualEffectView {
 
 private extension CustomVisualEffectView {
     
-    /// Returns the value for the key on the blurEffect.
+    /// Retrieves a value of the specified type from the blur effect using the provided key.
+    /// - Parameter key: The key representing the property to access.
+    /// - Returns: The value associated with the key, cast to the expected type.
     func _value<T>(forKey key: Key) -> T {
         return blurEffect.value(forKeyPath: key.rawValue) as! T
     }
     
-    /// Sets the value for the key on the blurEffect.
+    /// Sets a value for a specified blur effect property using key-value coding.
+    /// - Parameters:
+    ///   - value: The value to assign to the blur effect property.
+    ///   - key: The property key to update.
     func _setValue<T>(_ value: T, forKey key: Key) {
         blurEffect.setValue(value, forKeyPath: key.rawValue)
         if #available(iOS 14, *) {

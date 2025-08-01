@@ -74,6 +74,7 @@ class TokenDetailViewModel: ObservableObject {
         checkTokenValid()
     }
     
+    /// Asynchronously fetches and updates the top asset details for the current token.
     private func getTokenDetail() {
         Task {
             let asset = try? await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
@@ -81,6 +82,9 @@ class TokenDetailViewModel: ObservableObject {
         }
     }
     
+    /// Fetches and updates the price chart data for the current token and selected chart period.
+    /// 
+    /// If the liquidity pool asset (`lpAsset`) is not already set, it is fetched first. The method then retrieves price chart data for the token, maps it into `LineChartData` objects, and updates the `chartDatas` and `selectedIndex` properties accordingly.
     private func getPriceChart() async {
         if lpAsset == nil {
             let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
@@ -105,6 +109,7 @@ class TokenDetailViewModel: ObservableObject {
         self.selectedIndex = max(0, self.chartDatas.count - 1)
     }
     
+    /// Asynchronously fetches and updates the risk score category for the current token.
     private func getRickScore() {
         Task {
             let riskScore = try? await MinWalletService.shared.fetch(query: RiskScoreOfAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
@@ -112,12 +117,16 @@ class TokenDetailViewModel: ObservableObject {
         }
     }
     
+    /// Asynchronously checks if the current token is suspicious and updates the `isSuspiciousToken` property.
     private func checkTokenValid() {
         Task {
             isSuspiciousToken = await AppSetting.shared.isSuspiciousToken(currencySymbol: token.currencySymbol)
         }
     }
     
+    /// Formats a date as a string based on the current chart period.
+    /// - Parameter value: The date to format.
+    /// - Returns: A formatted date string appropriate for the selected chart period, or a blank string if no chart data is available.
     func formatDate(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()
@@ -137,6 +146,9 @@ class TokenDetailViewModel: ObservableObject {
         return inputFormatter.string(from: value)
     }
     
+    /// Formats a date for chart annotation based on the current chart period.
+    /// - Parameter value: The date to format.
+    /// - Returns: A formatted date string suitable for chart annotations, or a blank string if no chart data is available.
     func formatDateAnnotation(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()

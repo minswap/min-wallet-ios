@@ -19,6 +19,13 @@ struct AmountTextField: View {
             }
     }
     
+    /// Formats a currency input string by sanitizing, grouping, and clamping its value within specified bounds.
+    /// - Parameters:
+    ///   - input: The raw string input representing a currency amount.
+    ///   - minValue: The minimum allowed numeric value.
+    ///   - maxValue: The optional maximum allowed numeric value.
+    ///   - minimumFractionDigits: The optional minimum number of fraction digits to retain.
+    /// - Returns: A formatted currency string with grouping separators and enforced value constraints.
     static func formatCurrency(_ input: String, minValue: Double, maxValue: Double?, minimumFractionDigits: Int? = nil) -> String {
         var input = input
         if input.count > 1 && input.last == "," {

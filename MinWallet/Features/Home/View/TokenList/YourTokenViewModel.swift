@@ -19,6 +19,7 @@ class YourTokenViewModel: ObservableObject {
         self.type = type
     }
     
+    /// Asynchronously fetches and updates the list of tokens based on the current tab type, managing the loading state for the UI.
     func getTokens() async {
         if showSkeleton == nil {
             showSkeleton = true

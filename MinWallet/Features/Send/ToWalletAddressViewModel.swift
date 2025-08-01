@@ -33,6 +33,8 @@ class ToWalletAddressViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Attempts to resolve an ADA Handle name if the current error state indicates it has not been resolved.
+    /// Sets the checking state during the asynchronous resolution process.
     func checkAddress() {
         guard case .handleNotResolved = errorType else { return }
         Task {
@@ -42,6 +44,7 @@ class ToWalletAddressViewModel: ObservableObject {
         }
     }
     
+    /// Resets the view model's state, clearing all input, error, and resolved address information.
     func reset() {
         errorType = nil
         isChecking = nil
@@ -49,6 +52,10 @@ class ToWalletAddressViewModel: ObservableObject {
         address = ""
     }
     
+    /// Validates the provided address string as either a Cardano wallet address or an ADA Handle name.
+    /// - Parameter newAddress: The address string to validate.
+    /// 
+    /// Sets the `errorType` property to indicate validation errors or unresolved ADA Handles. If the address is valid, clears any existing error state.
     private func validateAddress(newAddress: String) {
         errorType = nil
         guard !address.isEmpty else { return }
@@ -80,6 +87,9 @@ class ToWalletAddressViewModel: ObservableObject {
         }
     }
     
+    /// Attempts to resolve the current ADA Handle name to a Cardano wallet address using a remote API.
+    ///
+    /// If successful, updates the `adaAddress` property with the resolved name and address, clears the input address, and resets any error state. If resolution fails or an error occurs, sets the appropriate error type with a descriptive message.
     private func resolveAdaName() async {
         do {
             let adaName = address.trimmingPrefix("$")

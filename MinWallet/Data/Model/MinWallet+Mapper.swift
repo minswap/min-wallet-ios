@@ -12,6 +12,9 @@ extension MinWallet: Codable {
         publicKey = try container.decode(String.self, forKey: .publicKey)
     }
     
+    /// Encodes the MinWallet properties into the given encoder.
+    /// - Parameter encoder: The encoder to write data to.
+    /// - Throws: An error if encoding any property fails.
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(walletName, forKey: .walletName)

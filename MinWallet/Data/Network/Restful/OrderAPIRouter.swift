@@ -5,6 +5,7 @@ import Alamofire
 enum OrderAPIRouter: DomainAPIRouter {
     case getOrders(request: OrderHistory.Request)
     
+    /// Returns the API endpoint path for the current order-related request case.
     func path() -> String {
         switch self {
         case .getOrders:
@@ -12,10 +13,13 @@ enum OrderAPIRouter: DomainAPIRouter {
         }
     }
     
+    /// Returns the HTTP method used for the API request, which is always POST.
     func method() -> HTTPMethod {
         return .post
     }
     
+    /// Constructs and returns the parameters dictionary for the API request based on the associated `OrderHistory.Request`.
+    /// - Returns: A dictionary of parameters including mandatory and optional fields required for fetching order history.
     func parameters() -> Parameters {
         var params = Parameters()
         

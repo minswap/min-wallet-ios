@@ -50,6 +50,9 @@ class TokenManager: ObservableObject {
     
     private init() {}
     
+    /// Fetches and updates the portfolio overview metrics for the current wallet address.
+    /// 
+    /// Retrieves net ADA value, 24-hour PnL, and ADA value from the backend service, converting values from lovelace to ADA. Updates related properties for UI consumption. No action is taken if the user is not logged in or the wallet address is invalid.
     private func getPortfolioOverview() async -> Void {
         guard AppSetting.shared.isLogin else { return }
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
@@ -61,6 +64,8 @@ class TokenManager: ObservableObject {
         tokenAda.netSubValue = adaValue
     }
     
+    /// Concurrently fetches the portfolio overview, wallet token data, and minimum ADA value, updating relevant properties and notifying subscribers upon completion.
+    /// - Throws: Propagates errors from any of the asynchronous fetch operations.
     func getPortfolioOverviewAndYourToken() async throws -> Void {
         isLoadingPortfolioOverviewAndYourToken = true
         async let getPortfolioOverviewAsync: Void = getPortfolioOverview()
@@ -72,6 +77,9 @@ class TokenManager: ObservableObject {
         reloadBalance.send(())
     }
     
+    /// Fetches and updates the minimum ADA value required for the current wallet address.
+    ///
+    /// Attempts to retrieve the minimum lovelace value for the user's wallet address and updates `minimumAdaValue` accordingly. If the fetch fails or the address is unavailable, sets `minimumAdaValue` to zero.
     private func fetchMinimumAdaValue() async throws -> Void {
         do {
             guard let address = UserInfo.shared.minWallet?.address else { return }
@@ -84,10 +92,14 @@ class TokenManager: ObservableObject {
 }
 
 extension TokenManager {
+    /// Resets the TokenManager singleton instance to a new state.
     static func reset() {
         TokenManager.shared = .init()
     }
     
+    /// Fetches and caches the wallet's token positions, including normal tokens, LP tokens, and NFTs.
+    /// - Returns: The wallet's asset positions, or `nil` if unavailable.
+    /// - Throws: An error if the token fetch operation fails.
     @discardableResult
     private static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
         let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
@@ -112,7 +124,10 @@ extension TokenManager {
 
 
 extension TokenManager {
-    ///Tx raw -> tx ID
+    /// Signs and submits a raw transaction using the current wallet credentials.
+    /// - Parameter txRaw: The raw transaction data to be signed and submitted.
+    /// - Returns: The transaction ID if submission is successful; otherwise, `nil`.
+    /// - Throws: An error if the wallet is not found, signing fails, or the submission encounters an error.
     static func finalizeAndSubmit(txRaw: String) async throws -> String? {
         guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
         guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: txRaw)
@@ -122,6 +137,10 @@ extension TokenManager {
         return data?.finalizeAndSubmit
     }
     
+    /// Signs and submits a raw transaction using the wallet credentials and an external API endpoint.
+    /// - Parameter txRaw: The raw transaction data in CBOR format.
+    /// - Returns: The transaction ID if submission is successful; otherwise, `nil`.
+    /// - Throws: An error if the wallet is not found, signing fails, or the API response indicates an error.
     static func finalizeAndSubmitV2(txRaw: String) async throws -> String? {
         guard let wallet = UserInfo.shared.minWallet else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
         guard let witnessSet = signTx(wallet: wallet, password: AppSetting.shared.password, accountIndex: wallet.accountIndex, txRaw: txRaw)

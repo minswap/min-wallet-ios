@@ -68,6 +68,8 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Sets up and manages periodic timers to automatically refresh token and market data based on the current tab and user login state.
+    /// Cancels any existing timers before creating new ones. The balance timer triggers data reloads for the active tab at a fixed interval, while the market timer periodically refreshes market data only when the market tab is selected. Timers are canceled if the user logs out or if data is already loading.
     private func createTimerReloadBalance() {
         timerReloadBalance?.cancel()
         timerReloadBalance = Timer.publish(every: TokenManager.TIME_RELOAD_BALANCE, on: .main, in: .common)
@@ -115,6 +117,10 @@ class HomeViewModel: ObservableObject {
             }
     }
     
+    /// Fetches token data for the currently selected tab, managing loading states and refresh timers.
+    /// - Parameter isLoadMore: Indicates whether the fetch is for loading additional data.
+    /// 
+    /// Cancels existing balance and market reload timers, displays a loading skeleton if appropriate, fetches tokens for the active tab, hides the skeleton after completion, and restarts the balance reload timer.
     private func getTokens(isLoadMore: Bool = false) async {
         timerReloadBalance?.cancel()
         timerReloadMarket?.cancel()
@@ -142,6 +148,9 @@ class HomeViewModel: ObservableObject {
         createTimerReloadBalance()
     }
     
+    /// Generates and stores a notification authentication hash for the user's wallet, and logs in to OneSignal if notifications are enabled.
+    /// 
+    /// This method asynchronously fetches a notification auth hash and stake address for the current user's wallet. If both are valid and notifications are enabled, it stores the auth hash and logs in to OneSignal using the stake address and token.
     static func generateTokenHash() {
         guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
         Task {
@@ -174,6 +183,8 @@ extension HomeViewModel {
         }
     }
     
+    /// Ensures the loading skeleton is displayed for the specified tab if it is not already set.
+    /// - Parameter tabType: The tab for which to show the loading skeleton.
     func showSkeleton(tabType: TokenListView.TabType) {
         switch tabType {
         case .market:

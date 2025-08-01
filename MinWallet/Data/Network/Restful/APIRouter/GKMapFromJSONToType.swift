@@ -4,6 +4,9 @@ import ObjectMapper
 public
     extension Mapper
 {
+    /// Maps a JSON object to an array of model objects, returning an empty array if the input is nil or NSNull.
+    /// - Parameter JSONObject: The JSON object to map.
+    /// - Returns: An array of mapped objects, or an empty array if the input is nil or NSNull.
     func gk_mapArrayOrNull(JSONObject: Any?) -> [N]? {
         guard JSONObject != nil, !(JSONObject is NSNull)
         else { return [] }
@@ -11,6 +14,9 @@ public
         return mapArray(JSONObject: JSONObject)
     }
     
+    /// Maps JSON data to an object of type `N`.
+    /// - Parameter JSONData: The JSON data to be deserialized and mapped.
+    /// - Returns: An instance of type `N` if deserialization and mapping succeed; otherwise, nil.
     func gk_map(JSONData: Data) -> N? {
         if let JSON = (try? JSONSerialization.jsonObject(with: JSONData, options: [])) as? [String: Any] {
             return map(JSON: JSON)
@@ -32,10 +38,16 @@ public
         self.fromJSON = fromJSON
     }
     
+    /// Transforms a JSON value into the target type using the provided conversion closure.
+    /// - Parameter value: The JSON value to be transformed.
+    /// - Returns: The transformed value of type `T`, or `nil` if conversion fails.
     open func transformFromJSON(_ value: Any?) -> T? {
         return fromJSON(value)
     }
     
+    /// Returns the provided value without transformation.
+    /// - Parameter value: The value to be converted to JSON.
+    /// - Returns: The value as-is, suitable for JSON serialization.
     open func transformToJSON(_ value: T?) -> JSON? {
         return value
     }
@@ -60,16 +72,25 @@ public
         self.toJSON = toJSON
     }
     
+    /// Transforms a JSON value into the target type using the provided conversion closure.
+    /// - Parameter value: The JSON value to be transformed.
+    /// - Returns: The transformed value of type `T`, or `nil` if conversion fails.
     open func transformFromJSON(_ value: Any?) -> T? {
         return fromJSON(value)
     }
     
+    /// Transforms a value of type `T` to its JSON representation of type `J`.
+    /// - Parameter value: The value to be transformed.
+    /// - Returns: The JSON representation of the value, or nil if the transformation fails.
     open func transformToJSON(_ value: T?) -> J? {
         return toJSON(value)
     }
 }
 
 
+/// Converts the input value to a `Double` if possible.
+/// - Parameter input: The value to convert, which may be an `Int`, `Double`, or `String`.
+/// - Returns: The converted `Double` value, or `nil` if conversion is not possible.
 public func gk_getDoubleForValue(_ input: Any?) -> Double? {
     switch input {
     case let value as Int:
@@ -83,6 +104,9 @@ public func gk_getDoubleForValue(_ input: Any?) -> Double? {
     }
 }
 
+/// Converts the input to an `Int` if possible.
+/// - Parameter input: The value to convert, which may be an `Int`, `Double`, or `String`.
+/// - Returns: The integer representation of the input, or `nil` if conversion is not possible.
 public func gk_getIntForValue(_ input: Any?) -> Int? {
     switch input {
     case let value as Int:
@@ -96,6 +120,9 @@ public func gk_getIntForValue(_ input: Any?) -> Int? {
     }
 }
 
+/// Converts the input value to a `String` if it is an `Int64`, `Int`, `Double`, or `String`.
+/// - Parameter input: The value to convert.
+/// - Returns: The string representation of the input, or `nil` if the input is not a supported type.
 public func gk_getStringForValue(_ input: Any?) -> String? {
     switch input {
     case let value as Int64:
@@ -111,6 +138,11 @@ public func gk_getStringForValue(_ input: Any?) -> String? {
     }
 }
 
+/// Converts the input value to a `Bool` if possible.
+/// 
+/// Accepts `Bool`, `Int`, `Double`, or `String` types. For numeric types, zero is `false` and nonzero is `true`. For strings, empty string, "0", or "false" (case-insensitive) are `false`; all other values are `true`.
+/// - Parameter input: The value to convert.
+/// - Returns: The corresponding `Bool` value, or `nil` if conversion is not possible.
 public func gk_getBoolForValue(_ input: Any?) -> Bool? {
     switch input {
     case let value as Bool:
@@ -126,6 +158,9 @@ public func gk_getBoolForValue(_ input: Any?) -> Bool? {
     }
 }
 
+/// Converts the input to a latitude value as a `Double`, clamped between -90 and 90.
+/// - Parameter input: The value to convert, which may be a number or string.
+/// - Returns: The latitude as a `Double` within the valid range, or `nil` if the input is blank or invalid.
 public func gk_getLatitudeForValue(_ input: Any?) -> Double? {
     guard let jsonString = gk_getStringForValue(input),
         !jsonString.isBlank,
@@ -136,6 +171,9 @@ public func gk_getLatitudeForValue(_ input: Any?) -> Double? {
     return max(-90.0, min(latValue, 90.0))
 }
 
+/// Converts the input to a longitude value as a `Double` within the range -180 to 180.
+/// - Parameter input: The value to convert, which may be a number or string.
+/// - Returns: The longitude as a `Double` if the input is valid and within range; otherwise, `nil`.
 public func gk_getLongitudeForValue(_ input: Any?) -> Double? {
     guard let jsonString = gk_getStringForValue(input),
         !jsonString.isBlank,

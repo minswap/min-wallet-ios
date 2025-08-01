@@ -136,6 +136,9 @@ struct ConfirmSendTokenView: View {
         }
     }
     
+    /// Handles the successful authentication flow by sending tokens, finalizing and submitting the transaction, updating UI states, and navigating to the home screen.
+    /// 
+    /// If an error occurs during the process, hides the loading indicator and displays an error banner.
     private func authenticationSuccess() {
         Task {
             do {

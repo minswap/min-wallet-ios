@@ -47,12 +47,16 @@ class BiometricAuthentication {
     
     init() {}
     
+    /// Determines whether biometric or device owner authentication is available on the device.
+    /// - Returns: `true` if authentication can be evaluated; otherwise, `false`.
     @discardableResult
     func canEvaluatePolicy() -> Bool {
         var error: NSError?
         return context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
     }
     
+    /// Initiates biometric authentication and invokes the completion handler with an LAError if authentication fails, or nil on success.
+    /// - Parameter completion: A closure called on the main thread with an optional LAError indicating the result of authentication.
     private func authenticateUser(completion: @escaping ((_ error: LAError?) -> Void)) {
         context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.loginReason.toString()) { (success, error) in
             DispatchQueue.main.async {
@@ -66,6 +70,9 @@ class BiometricAuthentication {
         }
     }
     
+    /// Performs biometric authentication asynchronously.
+    /// 
+    /// Initiates biometric authentication and suspends until the user completes authentication or an error occurs. Throws a localized error if authentication fails.
     func authenticateUser() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             self.authenticateUser { error in

@@ -42,6 +42,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
     @Binding var calculatedHeight: CGFloat
     var onDone: (() -> Void)?
     
+    /// Creates and configures a UITextView with a custom placeholder label for use in SwiftUI.
+    /// - Parameter context: The context provided by SwiftUI for coordinating updates.
+    /// - Returns: A UITextView instance set up with delegate, font, placeholder, and other properties suitable for multiline seed phrase input.
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
@@ -75,6 +78,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         return textView
     }
     
+    /// Updates the UITextView's attributed text with color-coded segments, manages placeholder visibility, and recalculates the dynamic height based on content.
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.attributedText = context.coordinator.getAttributedText(from: text, typingColor: typingColor, completedColor: completedColor)
         updatePlaceholder(uiView)
@@ -83,6 +87,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
     }
     
+    /// Calculates the required height for the given view based on its content and updates the provided binding if the height has changed.
+    /// - Parameters:
+    ///   - view: The UIView whose height should be measured.
+    ///   - result: A binding to the height value that will be updated if a change is detected.
     fileprivate static func recalculateHeight(view: UIView, result: Binding<CGFloat>) {
         let newSize = view.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         if result.wrappedValue != newSize.height {
@@ -92,6 +100,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
     }
     
+    /// Creates and returns a coordinator to manage UITextView delegate methods and dynamic height updates.
     func makeCoordinator() -> Coordinator {
         Coordinator(self, height: $calculatedHeight, onDone: onDone)
     }
@@ -107,6 +116,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
             self.onDone = onDone
         }
         
+        /// Handles changes to the text view's content by sanitizing input, updating the bound text, applying color-coded formatting, managing placeholder visibility, and recalculating the dynamic height.
         func textViewDidChange(_ textView: UITextView) {
             let sanitizedText = sanitizeInput(textView.text ?? "")
             
@@ -119,6 +129,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
             UITextViewWrapper.recalculateHeight(view: textView, result: calculatedHeight)
         }
         
+        /// Handles text changes in the UITextView, triggering the onDone closure and dismissing the keyboard when the return key is pressed.
+        /// - Returns: `false` to prevent insertion of a newline character when return is pressed; otherwise, `true` to allow the text change.
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
             if text == "\n" {
                 onDone?()
@@ -128,14 +140,21 @@ private struct UITextViewWrapper: UIViewRepresentable {
             return true
         }
         
-        // Sanitize input to remove extra spaces
+        /// Normalizes whitespace in the input text by collapsing consecutive spaces and newlines into single spaces, removing leading and trailing whitespace, and preserving a trailing space if present in the original text.
+        /// - Parameter text: The input string to sanitize.
+        /// - Returns: The sanitized string with normalized spacing, suitable for seed phrase entry.
         private func sanitizeInput(_ text: String) -> String {
             let components = text.components(separatedBy: .whitespacesAndNewlines)
             let filteredComponents = components.filter { !$0.isEmpty }
             return filteredComponents.joined(separator: " ") + (text.last == " " ? " " : "")
         }
         
-        // Generate attributed text with the desired coloring
+        /// Returns an attributed string with color-coded and styled segments for a seed phrase input.
+        /// - Parameters:
+        ///   - text: The input seed phrase text.
+        ///   - typingColor: The color applied to the word currently being typed (last word if not followed by a space).
+        ///   - completedColor: The color applied to completed words (those followed by a space).
+        /// - Returns: An attributed string with appropriate color and font styling applied to each word segment.
         func getAttributedText(from text: String, typingColor: UIColor, completedColor: UIColor) -> NSAttributedString {
             let attributedString = NSMutableAttributedString(string: text)
             
@@ -156,6 +175,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
     }
     
+    /// Updates the visibility of the placeholder label in the given UITextView based on whether the text is empty.
+    /// - Parameter textView: The UITextView containing the placeholder label.
     func updatePlaceholder(_ textView: UITextView) {
         if let placeholderLabel = textView.viewWithTag(999) as? UILabel {
             placeholderLabel.isHidden = !text.isEmpty

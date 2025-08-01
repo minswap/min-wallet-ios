@@ -27,6 +27,7 @@ private extension PositionObservingView {
     enum PreferenceKey: SwiftUI.PreferenceKey {
         static var defaultValue: CGPoint { .zero }
         
+        /// No-op reduce function; does not combine multiple CGPoint values for the preference key.
         static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
             // No-op
         }

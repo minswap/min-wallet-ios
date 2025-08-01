@@ -103,6 +103,10 @@ class SelectTokenViewModel: ObservableObject {
         }
     }
     
+    /// Fetches and updates the list of tokens based on the current screen type, search keyword, and pagination state.
+    /// - Parameter isLoadMore: Indicates whether to load additional tokens for pagination (default is `false`).
+    ///
+    /// For `.initSelectedToken` and `.sendToken` screen types, filters tokens locally by the search keyword and updates the displayed list. For `.swapToken`, fetches tokens from a remote service with support for pagination and search. Updates loading and pagination state accordingly.
     func getTokens(isLoadMore: Bool = false) {
         Task {
             do {
@@ -170,6 +174,8 @@ class SelectTokenViewModel: ObservableObject {
         }
     }
     
+    /// Loads additional tokens when the specified item is near the end of the current list in swap token mode.
+    /// - Parameter item: The token item used to determine if more data should be loaded.
     func loadMoreData(item: TokenProtocol) {
         guard case .swapToken = screenType else { return }
         guard hasLoadMore, !isFetching else { return }
@@ -179,6 +185,9 @@ class SelectTokenViewModel: ObservableObject {
         }
     }
     
+    /// Toggles the selection state of a token based on the current screen type.
+    /// - Parameter token: The token to be toggled.
+    /// - Note: For `.initSelectedToken` and `.sendToken` screen types, the ADA token cannot be selected. For `.swapToken`, only one token can be selected at a time.
     func toggleSelected(token: TokenProtocol) {
         switch screenType {
         case .initSelectedToken, .sendToken:
@@ -194,6 +203,8 @@ class SelectTokenViewModel: ObservableObject {
         }
     }
     
+    /// Sets the selected tokens and updates their cached indices.
+    /// - Parameter tokens: The array of tokens to mark as selected.
     func selectToken(tokens: [TokenProtocol]) {
         tokensSelected = tokens.compactMap({ $0 })
             .reduce(
@@ -207,6 +218,7 @@ class SelectTokenViewModel: ObservableObject {
             }
     }
     
+    /// Resets the view model's state by clearing the search keyword and triggering a scroll-to-top action with a brief delay.
     func resetState() {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in
             guard let self = self else { return }

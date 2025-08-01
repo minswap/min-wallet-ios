@@ -31,6 +31,8 @@ class UserInfo: ObservableObject {
         self.readTokenFav()
     }
     
+    /// Saves the provided wallet information to persistent storage and updates the current wallet state.
+    /// - Parameter walletInfo: The wallet information to be saved.
     func saveWalletInfo(walletInfo: MinWallet) {
         guard let encoded = try? JSONEncoder().encode(walletInfo) else { return }
         UserDefaults.standard.set(encoded, forKey: Self.MIN_WALLET_KEY)
@@ -38,6 +40,7 @@ class UserInfo: ObservableObject {
         self.minWallet = walletInfo
     }
     
+    /// Removes all stored user wallet and favorite token data, resetting the account state.
     func deleteAccount() {
         minWallet = nil
         adaHandleName = ""
@@ -45,6 +48,7 @@ class UserInfo: ObservableObject {
         UserDefaults.standard.removeObject(forKey: UserDataManager.TOKEN_FAVORITE)
     }
     
+    /// Loads the user's wallet information from UserDefaults and assigns it to the `minWallet` property if decoding succeeds.
     private func readMinWallet() {
         guard let wallet = UserDefaults.standard.object(forKey: Self.MIN_WALLET_KEY) as? Data,
             let minWallet = try? JSONDecoder().decode(MinWallet.self, from: wallet)
@@ -64,6 +68,10 @@ class UserInfo: ObservableObject {
         return "\(first5Characters)...\(last5Characters)"
     }
     
+    /// Adds or removes a token from the favorites list based on the specified action.
+    /// - Parameters:
+    ///   - token: The token to add or remove from favorites.
+    ///   - isAdd: If `true`, the token is added to favorites; if `false`, it is removed.
     func tokenFavSelected(token: TokenProtocol, isAdd: Bool) {
         if isAdd {
             self.tokensFav.insert(
@@ -80,6 +88,7 @@ class UserInfo: ObservableObject {
         saveTokenFav()
     }
     
+    /// Loads the list of favorite tokens from persistent storage and updates the `tokensFav` property, sorting the tokens by most recently added.
     private func readTokenFav() {
         guard let savedData = UserDefaults.standard.object(forKey: UserDataManager.TOKEN_FAVORITE) as? Data,
             let tokens = try? JSONDecoder().decode([TokenFavourite].self, from: savedData)
@@ -87,6 +96,7 @@ class UserInfo: ObservableObject {
         self.tokensFav = tokens.sorted(by: { $0.dateAdded > $1.dateAdded })
     }
     
+    /// Saves the current list of favorite tokens to UserDefaults as a JSON-encoded array.
     private func saveTokenFav() {
         guard let encoded = try? JSONEncoder().encode(tokensFav) else { return }
         UserDefaults.standard.set(encoded, forKey: UserDataManager.TOKEN_FAVORITE)

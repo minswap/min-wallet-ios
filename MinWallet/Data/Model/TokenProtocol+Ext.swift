@@ -611,10 +611,16 @@ struct TokenDefault: TokenProtocol, Hashable, Then {
 }
 
 extension TokenProtocol {
+    /// Determines whether the given string is an IPFS URL by checking for the IPFS prefix.
+    /// - Parameter ipfs: The string to check.
+    /// - Returns: `true` if the string starts with the IPFS prefix; otherwise, `false`.
     private func isIPFSUrl(_ ipfs: String) -> Bool {
         return ipfs.hasPrefix(MinWalletConstant.IPFS_PREFIX)
     }
     
+    /// Converts an IPFS URL to a gateway-accessible URL.
+    /// - Parameter ipfsUrl: The original IPFS URL string.
+    /// - Returns: A gateway URL if the input contains a valid IPFS hash; otherwise, nil.
     private func buildIPFSFromUrl(_ ipfsUrl: String) -> String? {
         guard let data = ipfsUrl.components(separatedBy: MinWalletConstant.IPFS_PREFIX).last else {
             return nil
@@ -622,6 +628,7 @@ extension TokenProtocol {
         return MinWalletConstant.IPFS_GATEWAY + data
     }
     
+    /// Returns an IPFS gateway URL for the NFT image if the image URL uses the IPFS protocol; otherwise, returns nil.
     func buildNFTURL() -> String? {
         isIPFSUrl(nftImage) ? buildIPFSFromUrl(nftImage) : nil
     }

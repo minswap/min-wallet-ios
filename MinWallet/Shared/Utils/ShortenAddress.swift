@@ -106,11 +106,13 @@ extension String {
         self.range(of: MinWalletConstant.adaHandleRegex, options: .regularExpression) != nil
     }
     
+    /// Opens the transaction details page for the current string, interpreted as a transaction ID, in the system browser. If the string is not a valid transaction ID, no action is taken.
     func viewTransaction() {
         guard let url = URL(string: MinWalletConstant.transactionURL + "/transaction/" + self) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
+    /// Opens the string as a URL in the system browser if it is a valid URL.
     func openURL() {
         guard let url = URL(string: self) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -126,6 +128,11 @@ extension Data {
 
 
 extension Double {
+    /// Formats the double as a decimal string with optional grouping separators and a specified maximum number of fraction digits.
+    /// - Parameters:
+    ///   - usesGroupingSeparator: Whether to include grouping separators (e.g., commas) in the formatted string. Defaults to true.
+    ///   - maximumFractionDigits: The maximum number of digits to display after the decimal point. Defaults to 15.
+    /// - Returns: The formatted number as a string.
     func formatSNumber(usesGroupingSeparator: Bool = true, maximumFractionDigits: Int = 15) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -137,6 +144,15 @@ extension Double {
         return formatter.string(from: NSNumber(value: self)) ?? ""
     }
     
+    /// Formats the double as an attributed string with optional prefix, suffix, font, color, and abbreviation for large values.
+    /// - Parameters:
+    ///   - prefix: A string to prepend to the formatted number.
+    ///   - suffix: A string to append after the formatted number.
+    ///   - roundingOffset: The number of decimal digits to display after leading zeros in the fractional part; if `nil`, shows all digits.
+    ///   - font: The font to apply to the formatted string.
+    ///   - fontColor: The color to apply to the formatted string.
+    ///   - isFormatK: If `true`, abbreviates values in millions or billions with "M" or "B".
+    /// - Returns: An attributed string representing the formatted number with specified styling and formatting options.
     func formatNumber(
         prefix: String = "",
         suffix: String = "",
@@ -266,26 +282,41 @@ extension Double {
 
 extension NSAttributedString {
     
+    /// Returns the width required to render the attributed string when constrained to a specified height.
+    /// - Parameter height: The maximum height available for rendering.
+    /// - Returns: The calculated width needed to display the entire attributed string within the given height.
     func gkWidth(consideringHeight height: CGFloat) -> CGFloat {
         let size = self.gkSize(consideringHeight: height)
         return size.width
     }
     
+    /// Returns the height required to render the attributed string within the specified width.
+    /// - Parameter width: The maximum allowed width for rendering.
+    /// - Returns: The height needed to display the attributed string.
     func gkHeight(consideringWidth width: CGFloat) -> CGFloat {
         let size = self.gkSize(consideringWidth: width)
         return size.height
     }
     
+    /// Calculates the size required to render the attributed string within a fixed height.
+    /// - Parameter height: The height constraint for rendering.
+    /// - Returns: The size needed to display the attributed string without clipping, given the specified height.
     func gkSize(consideringHeight height: CGFloat) -> CGSize {
         let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
         return self.gkSize(consideringRect: constraintRect)
     }
     
+    /// Calculates the size required to render the attributed string within a specified width.
+    /// - Parameter width: The maximum allowed width for rendering.
+    /// - Returns: The size needed to display the attributed string without truncation, constrained by the given width.
     func gkSize(consideringWidth width: CGFloat) -> CGSize {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
         return self.gkSize(consideringRect: constraintRect)
     }
     
+    /// Calculates the size required to render the attributed string within the specified rectangle size constraints.
+    /// - Parameter size: The maximum allowed size for rendering.
+    /// - Returns: The size that fits the attributed string within the given constraints.
     func gkSize(consideringRect size: CGSize) -> CGSize {
         let rect =
             self.boundingRect(
@@ -302,28 +333,45 @@ extension String {
     func toExact(decimal: Double) -> Double {
         return self.doubleValue / pow(10.0, decimal)
     }
+    /// Returns the value divided by 10 raised to the specified decimal power.
+    /// - Parameter decimal: The number of decimal places to shift.
+    /// - Returns: The adjusted value as a `Double`.
     func toExact(decimal: Int) -> Double {
         return self.doubleValue / pow(10.0, Double(decimal))
     }
     
+    /// Converts the string to a double and multiplies it by 10 raised to the specified decimal power.
+    /// - Parameter decimal: The exponent to use for scaling the value.
+    /// - Returns: The scaled double value, or 0 if the string cannot be converted to a double.
     func toSendBE(decimal: Int) -> Double {
         return self.doubleValue * pow(10.0, Double(decimal))
     }
 }
 
 extension Double {
+    /// Returns the value divided by 10 raised to the specified decimal power.
+    /// - Parameter decimal: The number of decimal places to shift. If `nil`, no division is performed.
+    /// - Returns: The adjusted value after dividing by 10 to the given decimal power.
     func toExact(decimal: Double?) -> Double {
         return self / pow(10.0, decimal ?? 0)
     }
 }
 
 extension Double {
+    /// Returns the value divided by 10 raised to the specified decimal power.
+    /// - Parameter decimal: The number of decimal places to shift. If `nil`, no division is performed.
+    /// - Returns: The adjusted value after dividing by 10 to the power of `decimal`.
     func toExact(decimal: Int?) -> Double {
         return self / pow(10.0, Double(decimal ?? 0))
     }
 }
 
 extension String {
+    /// Converts the string to a price value and returns a tuple containing the numeric value and a formatted attributed string based on the app's currency setting.
+    /// - Parameters:
+    ///   - appSetting: The application settings containing currency and conversion rate information.
+    ///   - isFormatK: Whether to abbreviate large numbers with 'K', 'M', or 'B' in the formatted string.
+    /// - Returns: A tuple with the price as a `Double` and its formatted representation as an `AttributedString`.
     func getPriceValue(appSetting: AppSetting, isFormatK: Bool = false) -> (value: Double, attribute: AttributedString) {
         let price = Double(self) ?? 0
         switch appSetting.currency {
@@ -348,14 +396,21 @@ extension Double {
 }
 
 extension Dictionary {
+    /// Merges the contents of another dictionary into this dictionary, overwriting existing values with those from the given dictionary.
+    /// - Parameter other: The dictionary whose key-value pairs will be added or used to update this dictionary.
     @inlinable mutating func append(_ other: [Key: Value]) {
         return self.merge(other, uniquingKeysWith: { $1 })
     }
     
+    /// Returns a new dictionary by merging the current dictionary with another, overwriting values for any duplicate keys with those from the provided dictionary.
+    /// - Parameter other: The dictionary to merge into the current dictionary.
+    /// - Returns: A new dictionary containing the combined key-value pairs. Values from the `other` dictionary overwrite those from the current dictionary for duplicate keys.
     @inlinable func appending(_ other: [Key: Value]) -> [Key: Value] {
         return self.merging(other, uniquingKeysWith: { $1 })
     }
     
+    /// Returns a new dictionary by merging two dictionaries, with values from the right-hand dictionary overwriting those from the left for duplicate keys.
+    /// - Returns: A dictionary containing the combined key-value pairs.
     static func + (lhs: [Key: Value], rhs: [Key: Value]) -> [Key: Value] {
         return lhs.appending(rhs)
     }

@@ -3,6 +3,7 @@ import Alamofire
 
 
 extension DomainAPIRouter {
+    /// Returns the shared instance of `MinWalletDomainAdapter` as the domain adapter.
     func domainAdapter() -> DomainAdapter? {
         MinWalletDomainAdapter.shared
     }
@@ -28,6 +29,11 @@ fileprivate class MinWalletDomainAdapter: DomainAdapter {
         return requestHeader
     }
     
+    /// Merges default HTTP headers with the provided headers, giving precedence to the provided values.
+    /// - Parameters:
+    ///   - context: Optional context for header adaptation (not used in this implementation).
+    ///   - headers: The HTTP headers to merge with the defaults.
+    /// - Returns: The combined set of HTTP headers.
     func adaptHeaders(context: DomainHeadersContext?, headers: HTTPHeaders) -> HTTPHeaders {
         var mergedHeaders = defaultAdditionalHeaders
         headers.forEach { mergedHeaders[$0.name] = $0.value }

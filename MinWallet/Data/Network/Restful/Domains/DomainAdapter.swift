@@ -11,6 +11,9 @@ protocol DomainAdapter {
 }
 
 extension DomainAdapter {
+    /// Returns the default HTTP headers for a request, optionally using the provided context.
+    /// - Parameter context: Optional contextual information for customizing the headers.
+    /// - Returns: The default HTTP headers, potentially adapted based on the context.
     func defaultHeaders(context: DomainHeadersContext?) -> HTTPHeaders {
         adaptHeaders(context: context, headers: .init())
     }
@@ -26,6 +29,11 @@ public
 {
     var baseURLString: String = ""
     var accessToken: String = ""
+    /// Returns the provided HTTP headers without modification.
+    /// - Parameters:
+    ///   - context: Optional contextual information for header adaptation.
+    ///   - headers: The original HTTP headers to be adapted.
+    /// - Returns: The unmodified HTTP headers.
     func adaptHeaders(context: DomainHeadersContext?, headers: HTTPHeaders) -> HTTPHeaders {
         headers
     }

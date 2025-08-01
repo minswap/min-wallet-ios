@@ -91,6 +91,9 @@ class SwapTokenViewModel: ObservableObject {
         action.send(.getTradingInfo)
     }
     
+    /// Subscribes to Combine publishers to handle user actions, token amount changes, and balance reload events.
+    /// 
+    /// Sets up reactive listeners for the action subject, token amount changes with debouncing, and balance reload notifications, triggering appropriate actions and updates within the view model. Cancels any existing subscriptions before establishing new ones.
     func subscribeCombine() {
         unsubscribeCombine()
         action
@@ -131,6 +134,7 @@ class SwapTokenViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Cancels all active Combine subscriptions and ongoing asynchronous tasks related to trade information updates.
     func unsubscribeCombine() {
         cancellables.forEach({ $0.cancel() })
         cancellables = []
@@ -138,6 +142,8 @@ class SwapTokenViewModel: ObservableObject {
         workItem?.cancel()
     }
     
+    /// Handles user and system actions related to token swapping, updating state, triggering trade info fetches, managing token selection, and controlling periodic refresh logic.
+    /// - Parameter action: The action to process, which may update tokens, amounts, warnings, errors, or UI state.
     private func handleAction(_ action: Action) async throws {
         switch action {
         case .resetSwap:
@@ -250,6 +256,8 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
     
+    /// Asynchronously generates and updates the list of swap-related warnings based on current tokens, slippage, price impact, and token metadata.
+    /// - Note: Updates the `warningInfo` and resets the expansion state.
     @MainActor
     private func generateWarningInfo() async {
         var warningInfo: [WarningInfo] = []
@@ -294,6 +302,10 @@ class SwapTokenViewModel: ObservableObject {
         self.isExpand = [:]
     }
     
+    /// Updates the error information based on the current swap direction and token amounts.
+    ///
+    /// Sets an error if the pay amount exceeds the available balance when swapping exact in,
+    /// or if the receive amount exceeds the available pool amount when swapping exact out.
     @MainActor
     private func generateErrorInfo() {
         let payAmount = tokenPay.amount.doubleValue
@@ -310,6 +322,10 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
     
+    /// Fetches and processes trade estimation information for a given token amount.
+    /// 
+    /// Cancels any ongoing estimation tasks, sends a new estimation request to the swap API, parses the response, and updates the UI state accordingly. If the amount is zero or an error occurs, processes the result as nil and displays an error banner if needed.
+    /// - Parameter amount: The amount of the token to estimate for the swap.
     private func getTradingInfo(amount: Double) {
         workItem?.cancel()
         tradeInfoTask?.cancel()
@@ -369,6 +385,8 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
     
+    /// Updates the view model's state with the provided trade estimation result, adjusts token amounts, and triggers warning and error generation.
+    /// - Parameter info: The trade estimation response to process.
     private func processResultTradingInfo(info: EstimationResponse?) async {
         await MainActor.run {
             self.iosTradeEstimate = info
@@ -391,6 +409,9 @@ class SwapTokenViewModel: ObservableObject {
         }
     }
     
+    /// Builds and returns a CBOR-encoded transaction string for swapping tokens using the current trade estimate and user wallet.
+    /// - Returns: The CBOR-encoded transaction string for the swap.
+    /// - Throws: An error if the wallet is not found, the transaction cannot be built, or if the API returns an error.
     func swapToken() async throws -> String {
         guard let iosTradeEstimate = iosTradeEstimate else { return "" }
         guard let address: String = UserInfo.shared.minWallet?.address else { throw AppGeneralError.localErrorLocalized(message: "Wallet not found") }
