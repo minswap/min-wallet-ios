@@ -5,13 +5,12 @@ import MinWalletAPI
 class OrderHistoryFilterViewModel: ObservableObject {
     @Published
     var contractTypeSelected: ContractType?
-    //TODO: cuongnv check protocol
     @Published
     var protocolSelected: AggregatorSource?
     @Published
     var statusSelected: OrderV2Status?
     @Published
-    var actionSelected: OrderV2Action?
+    var actionSelected: OrderHistory.OrderType?
     @Published
     var fromDate: Date?
     @Published
@@ -36,9 +35,9 @@ class OrderHistoryFilterViewModel: ObservableObject {
     
     func bindData(vm: OrderHistoryViewModel) {
         let input = vm.input
-        contractTypeSelected = input.ammType.unwrapped?.value
-        statusSelected = input.status.unwrapped?.value
-        actionSelected = input.action.unwrapped?.value
+        statusSelected = input.status
+        actionSelected = input.type
+        protocolSelected = input.source
         fromDate = input.fromDateTimeInterval
         toDate = input.toDateTimeInterval
     }

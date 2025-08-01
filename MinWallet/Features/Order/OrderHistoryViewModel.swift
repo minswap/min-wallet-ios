@@ -1,6 +1,9 @@
 import SwiftUI
 import MinWalletAPI
 import Combine
+import SwiftyJSON
+import ObjectMapper
+import Then
 
 
 @MainActor
@@ -14,22 +17,21 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var keyword: String = ""
     @Published
-    var orders: [OrderHistoryQuery.Data.Orders.WrapOrder] = []
+    var orders: [OrderHistory] = []
     @Published
     var showSkeleton: Bool = true
     
     private var cancellables: Set<AnyCancellable> = []
     
-    var contractTypeSelected: ContractType?
     var statusSelected: OrderV2Status?
-    var actionSelected: OrderV2Action?
+    var orderType: OrderHistory.OrderType?
+    var source: AggregatorSource?
     var fromDate: Date?
     var toDate: Date?
     
-    private var pagination: OrderPaginationCursorInput?
-    private var hasLoadMore: Bool = true
+    private var pagination: Pagination = .init()
     
-    var orderToCancel: OrderHistoryQuery.Data.Orders.WrapOrder? = nil
+    var orderToCancel: OrderHistory? = nil
     
     init() {
         $keyword
@@ -55,58 +57,72 @@ class OrderHistoryViewModel: ObservableObject {
         if fromPullToRefresh {
             try? await Task.sleep(for: .seconds(1))
         }
-        pagination = nil
-        let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-        self.orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
-        self.hasLoadMore = !(orderData?.orders.orders ?? []).isEmpty
-        if let cursor = orderData?.orders.cursor {
-            self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
-        }
+        pagination = Pagination()
+            .with({
+                $0.isFetching = true
+            })
+        let orders = await getOrderHistory()
+        let cursorID = orders.last?.id ?? ""
+        pagination = pagination.with({
+            $0.isFetching = false
+            //$0.hasMore = orders.count >= pagination.limit
+            $0.hasMore = !orders.isEmpty
+            $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
+        })
+        
+        self.orders = orders
         withAnimation {
             self.showSkeleton = false
         }
     }
     
-    func loadMoreData(order: OrderHistoryQuery.Data.Orders.WrapOrder) {
-        guard hasLoadMore else { return }
+    func loadMoreData(order: OrderHistory) {
+        guard pagination.readyToLoadMore else { return }
         let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
-        if orders.firstIndex(of: order) == thresholdIndex {
+        if orders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
             Task {
-                let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: input))
-                let _orders = orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []
+                pagination = pagination.with({ $0.isFetching = true })
+                let _orders = await getOrderHistory()
                 
                 self.orders += _orders
-                self.hasLoadMore = !_orders.isEmpty
-                if let cursor = orderData?.orders.cursor {
-                    self.pagination = OrderPaginationCursorInput(stableswap: .some(cursor.stableswap ?? "0"), v1: .some(cursor.v1 ?? "0"), v2: .some(cursor.v2 ?? "0"))
-                }
+                let cursorID = _orders.last?.id ?? ""
+                pagination = pagination.with({
+                    $0.isFetching = false
+                    //$0.hasMore = _orders.count >= pagination.limit
+                    $0.hasMore = !_orders.isEmpty
+                    $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
+                })
             }
         }
     }
     
-    var input: OrderV2Input {
+    var input: OrderHistory.Request {
         let address = UserInfo.shared.minWallet?.address ?? ""
         //let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
         let keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         //ce7c194517fc3d82569a2abff6b9ad93ea83b079016577cd5ac436ed6c6edeb2
         let isTxID = keyword.count == 64
-        return OrderV2Input(
-            action: actionSelected != nil ? .some(.case(actionSelected!)) : nil,
-            address: address,
-            ammType: contractTypeSelected != nil ? .some(.case(contractTypeSelected!)) : nil,
-            asset: !keyword.isBlank && !isTxID ? .some(keyword) : nil,
-            fromDate: fromDate != nil ? .some(String(Int(fromDate!.timeIntervalSince1970 * 1000))) : nil,
-            pagination: pagination != nil ? .some(pagination!) : nil,
-            status: statusSelected != nil ? .some(.case(statusSelected!)) : nil,
-            toDate: toDate != nil ? .some(String(toDate!.timeIntervalSince1970 * 1000 - 1)) : nil,
-            txId: !keyword.isBlank && isTxID ? .some(keyword) : nil
-        )
+        return OrderHistory.Request()
+            .with({
+                $0.ownerAddress = address
+                $0.txId = !keyword.isBlank && isTxID ? keyword : nil
+                $0.token = !keyword.isBlank && !isTxID ? keyword : nil
+                $0.toTime = fromDate != nil ? String(Int(fromDate!.timeIntervalSince1970 * 1000)) : nil
+                $0.status = statusSelected
+                $0.source = source
+                $0.type = orderType
+                $0.toTime = toDate != nil ? String(toDate!.timeIntervalSince1970 * 1000 - 1) : nil
+                $0.limit = pagination.limit
+                $0.cursor = pagination.cursor
+            })
     }
     
+    //TODO: cuongnv
     func cancelOrder() async throws {
+        /*
         guard let order = orderToCancel else { return }
-        let txId = order.order?.txIn.txId ?? ""
-        let txIndex = order.order?.txIn.txIndex ?? 0
+        let txId = order.createdTxId
+        let txIndex = order.createdTxIndex
         let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
         let input: InputCancelBulkOrders = InputCancelBulkOrders(
             changeAddress: UserInfo.shared.minWallet?.address ?? "",
@@ -117,19 +133,51 @@ class OrderHistoryViewModel: ObservableObject {
         let _ = try await TokenManager.finalizeAndSubmit(txRaw: txRaw.cancelBulkOrders)
         await fetchData(showSkeleton: false)
         orderToCancel = nil
+         */
     }
 }
 
-extension OrderV2Input {
+extension OrderHistory.Request {
     var fromDateTimeInterval: Date? {
-        guard let fromDate = fromDate.unwrapped, !fromDate.isEmpty else { return nil }
+        guard let fromDate = fromTime, !fromDate.isEmpty else { return nil }
         let fromDateTime = (Double(fromDate) ?? 0) / 1000
         return fromDateTime > 0 ? Date(timeIntervalSince1970: fromDateTime) : nil
     }
     
     var toDateTimeInterval: Date? {
-        guard let toDate = toDate.unwrapped, !toDate.isEmpty else { return nil }
+        guard let toDate = toTime, !toDate.isEmpty else { return nil }
         let toDateTime = (Double(toDate) ?? 0) / 1000
         return toDateTime > 0 ? Date(timeIntervalSince1970: toDateTime) : nil
+    }
+}
+
+extension OrderHistoryViewModel {
+    private func getOrderHistory() async -> [OrderHistory] {
+        do {
+            let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
+            let order = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:])
+            return order ?? []
+        } catch {
+            return []
+        }
+    }
+}
+extension OrderHistoryViewModel {
+    struct Pagination: Then {
+        var cursor: Int?
+        var limit: Int = 20
+        var hasMore: Bool = true
+        var isFetching: Bool = false
+        
+        var readyToLoadMore: Bool {
+            return !isFetching && hasMore
+        }
+        init() {}
+        
+        mutating func reset() {
+            isFetching = false
+            hasMore = true
+            cursor = nil
+        }
     }
 }

@@ -544,7 +544,7 @@ extension RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Routing.Routing {
     }
 }
 
-struct TokenDefault: TokenProtocol {
+struct TokenDefault: TokenProtocol, Hashable, Then {
     var currencySymbol: String {
         symbol
     }
@@ -553,9 +553,9 @@ struct TokenDefault: TokenProtocol {
         tName
     }
     
-    var isVerified: Bool { false }
+    var isVerified: Bool { mIsVerified }
     
-    var ticker: String { "" }
+    var ticker: String { mTicker }
     
     var projectName: String { minName }
     
@@ -578,9 +578,11 @@ struct TokenDefault: TokenProtocol {
     var symbol: String = ""
     var tName: String = ""
     var minName: String = ""
+    var mTicker: String = ""
     var netValue: Double = 0
     var netSubValue: Double = 0
     var mDecimals: Int = 0
+    var mIsVerified: Bool = false
     var amount: Double {
         netValue
     }
@@ -588,6 +590,8 @@ struct TokenDefault: TokenProtocol {
     var hasMetaData: Bool {
         true
     }
+    
+    init() {}
     
     init(
         symbol: String,

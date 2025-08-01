@@ -180,3 +180,53 @@ enum AggregatorSource: Int, CaseIterable, Identifiable {
         }
     }
 }
+
+extension AggregatorSource {
+    var nameVersion: String {
+        switch self {
+        case .MinswapV2, .WingRidersV2, .WingRidersStableV2:
+            return "V2"
+        case .Minswap, .SundaeSwap, .WingRidersStableV1, .WingRiders:
+            return "V1"
+        case .MinswapStable, .SplashStable:
+            return "Stable"
+        case .MuesliSwap, .Splash, .Spectrum, .VyFinance:
+            return ""
+        case .SundaeSwapV3:
+            return "V3"
+        }
+    }
+}
+
+
+extension String {
+    var foregroundColor: Color? {
+        switch self {
+        case "V1":
+            return .colorDecorativeYellowSub
+        case "V2":
+            return .colorDecorativeBrandSub
+        case "V3":
+            return .colorDecorativeRoseSub
+        case "Stable":
+            return .colorDecorativeLeafSub
+        default:
+            return nil
+        }
+    }
+    
+    var backgroundColor: Color? {
+        switch self {
+        case "V1":
+            return .colorDecorativeYellowDefault
+        case "V2":
+            return .colorBrandRiver
+        case "V3":
+            return .colorDecorativeRoseDefault
+        case "Stable":
+            return .colorDecorativeLeaf
+        default:
+            return nil
+        }
+    }
+}
