@@ -32,10 +32,11 @@ struct OrderHistoryItemView: View {
                 .frame(height: 20)
                 .lineLimit(1)
             }
-            HStack(alignment: .top) {
+            HStack(alignment: .top, spacing: 0) {
                 Text("You paid")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
+                    .padding(.trailing, .xs)
                 Spacer()
                 let inputs = order?.inputAsset ?? []
                 VStack(alignment: .trailing, spacing: 4) {
@@ -44,6 +45,13 @@ struct OrderHistoryItemView: View {
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
                     }
+                }
+                if let extraPaid = order?.extraPaid, !extraPaid.isEmpty {
+                    Text(" · \(extraPaid)")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                 }
             }
             HStack(alignment: .top) {

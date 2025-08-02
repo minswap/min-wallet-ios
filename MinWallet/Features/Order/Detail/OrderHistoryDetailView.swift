@@ -61,7 +61,7 @@ struct OrderHistoryDetailView: View {
                                 .fixSize(20)
                             Text(source.name)
                                 .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseTent)
+                                .foregroundStyle(.colorInteractiveToneHighlight)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
                         }
@@ -102,7 +102,7 @@ struct OrderHistoryDetailView: View {
                 })
         )
         .presentSheet(isPresented: $showCancelOrder) {
-            OrderHistoryCancelView {
+            OrderHistoryConfirmCancelView {
                 Task {
                     do {
                         switch appSetting.authenticationType {
@@ -173,7 +173,6 @@ struct OrderHistoryDetailView: View {
             .background(
                 RoundedRectangle(cornerRadius: BorderRadius.full).fill(order.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
             )
-            .frame(height: 20)
             .lineLimit(1)
         }
     }

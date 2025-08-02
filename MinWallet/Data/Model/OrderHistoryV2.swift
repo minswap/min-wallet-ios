@@ -13,7 +13,7 @@ public enum OrderV2Status: String, EnumType {
 
 struct OrderHistory: Then, Identifiable, Hashable {
     var id: String = ""
-    var status: OrderV2Status?
+    var status: OrderV2Status? = .batched
     var createdTxId: String = ""
     var createdTxIndex: Int = 0
     var createdBlockId: String = ""
@@ -25,7 +25,7 @@ struct OrderHistory: Then, Identifiable, Hashable {
     //"2025-07-28T07:40:15.000Z"
     var updatedAt: String?
     var updatedTxId: String?
-    var aggregatorSource: AggregatorSource?
+    var aggregatorSource: AggregatorSource? = .Minswap
     
     var assetA: Asset = .init()
     var assetB: Asset = .init()
@@ -42,8 +42,13 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var routing: String = ""
     var input: InputOutput?
     var output: InputOutput?
+    //TODO: cuongnv check extra paid
+    var extraPaid: String = "50%"
+    var orderAttribute: AttributedString?
     
-    init() {}
+    init() {
+        mappingUI()
+    }
 }
 
 extension OrderHistory: Mappable {
@@ -247,6 +252,24 @@ extension OrderHistory {
         }()
         
         routing = buildRouting()
+        
+        //TODO: cuongnv update
+        var attr: [AttributedString?] = []
+        let decimalsIn = 2
+        attr = [
+            AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
+            1.5.formatNumber(suffix: "MIN", roundingOffset: decimalsIn, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+            AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
+            0.9.formatNumber(suffix: "ADA", roundingOffset: decimalsIn, font: .labelSmallSecondary, fontColor: .colorBaseTent)
+        ]
+        attr = attr.compactMap { $0 }
+        var raw = AttributedString()
+        attr.forEach { r in
+            guard let r = r else { return }
+            raw += r
+        }
+        
+        orderAttribute = raw
     }
     
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]

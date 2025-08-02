@@ -7,10 +7,16 @@
     " " : {
 
     },
+    " · %@" : {
+
+    },
     " / 40" : {
 
     },
     " %@" : {
+
+    },
+    " for " : {
 
     },
     " Trading %@ token on Minswap may lead to a loss of underlying assets on %@." : {
@@ -27,6 +33,9 @@
 
     },
     "--%" : {
+
+    },
+    "#1" : {
 
     },
     "%" : {
@@ -144,6 +153,9 @@
 
     },
     "Cancel" : {
+
+    },
+    "Cancel Orders" : {
 
     },
     "Cancelled" : {
@@ -566,6 +578,9 @@
     "Old Password" : {
 
     },
+    "on" : {
+
+    },
     "Open Settings" : {
 
     },
@@ -656,6 +671,9 @@
 
     },
     "Re-input your seed phrase" : {
+
+    },
+    "Read it before cancelling" : {
 
     },
     "Receive" : {
@@ -793,6 +811,9 @@
     "Swap" : {
 
     },
+    "Swap " : {
+
+    },
     "Swap amount" : {
 
     },
@@ -824,6 +845,9 @@
 
     },
     "The service fee is charged for routing your trade through multiple liquidity sources to find the best price. The fee is calculated as the greater of 0.85₳ or --% of your trade amount." : {
+
+    },
+    "The service fee will be refunded if no split has been filled" : {
 
     },
     "The Weighted Arithmetic Mean of all ADA-%@ pools." : {
@@ -990,6 +1014,9 @@
 
     },
     "You are disconnecting your wallet?" : {
+
+    },
+    "You can cancel only 1 type per time - p1, p2" : {
 
     },
     "You currently have notifications turned off for this application. You can open Setting to re-enable them." : {

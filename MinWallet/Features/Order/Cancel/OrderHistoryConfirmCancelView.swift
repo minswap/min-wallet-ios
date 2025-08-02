@@ -1,7 +1,7 @@
 import SwiftUI
 
 
-struct OrderHistoryCancelView: View {
+struct OrderHistoryConfirmCancelView: View {
     
     @Environment(\.partialSheetDismiss)
     private var onDismiss
@@ -62,6 +62,6 @@ struct OrderHistoryCancelView: View {
 #Preview {
     VStack {
         Spacer()
-        OrderHistoryCancelView()
+        OrderHistoryConfirmCancelView()
     }
 }

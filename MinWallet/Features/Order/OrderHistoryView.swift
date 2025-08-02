@@ -73,7 +73,7 @@ struct OrderHistoryView: View {
             )
         }
         .presentSheet(isPresented: $viewModel.showCancelOrder) {
-            OrderHistoryCancelView {
+            OrderHistoryConfirmCancelView {
                 Task {
                     do {
                         switch appSetting.authenticationType {
