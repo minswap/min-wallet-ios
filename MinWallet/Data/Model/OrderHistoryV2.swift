@@ -13,7 +13,7 @@ public enum OrderV2Status: String, EnumType {
 
 struct OrderHistory: Then, Identifiable, Hashable {
     var id: String = ""
-    var status: OrderV2Status? = .batched
+    var status: OrderV2Status? = .created
     var createdTxId: String = ""
     var createdTxIndex: Int = 0
     var createdBlockId: String = ""

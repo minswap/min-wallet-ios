@@ -23,8 +23,16 @@ struct OrderHistoryDetailView: View {
     @State
     private var showCancelOrder: Bool = false
     @State
+    private var showCancelOrderList: Bool = false
+    @State
     private var isShowSignContract: Bool = false
     var onReloadOrder: (() -> Void)?
+    
+    //Cancel
+    @State
+    var orders: [OrderHistory] = [.init().with({ $0.id = "1" }), .init().with({ $0.id = "2" })]
+    @State
+    private var orderSelected: [String: OrderHistory] = [:]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -70,6 +78,9 @@ struct OrderHistoryDetailView: View {
                     }
                     Color.colorBorderPrimarySub.frame(height: 1)
                         .padding(.xl)
+                    ordersStateInfo
+                        .padding(.top, .md)
+                        .padding(.bottom, 16 + 8)
                     inputInfoView.padding(.horizontal, .xl)
                     executeInfoView.padding(.horizontal, .xl)
                     if order.status != .created {
@@ -81,7 +92,8 @@ struct OrderHistoryDetailView: View {
                 Spacer()
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-                        $showCancelOrder.showSheet()
+                        //$showCancelOrder.showSheet()
+                        $showCancelOrderList.showSheet()
                     }
                     .frame(height: 56)
                     /*
@@ -117,6 +129,14 @@ struct OrderHistoryDetailView: View {
                     }
                 }
             }
+        }
+        .presentSheet(isPresented: $showCancelOrderList) {
+            OrderHistoryCancelView(
+                orders: $orders,
+                orderSelected: $orderSelected,
+                onCancelOrder: { _ in
+                    $showCancelOrder.showSheet()
+                })
         }
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
@@ -581,6 +601,8 @@ struct OrderHistoryDetailView: View {
     
     //TODO: cuongnv cancel sau
     private func cancelOrder() async throws {
+        let orders: [OrderHistory] = orderSelected.map({ _, value in value})
+        guard !orders.isEmpty else { return }
         /*
         guard let order = order else { return }
         let txId = order.order?.txIn.txId ?? ""
@@ -612,6 +634,35 @@ struct OrderHistoryDetailView: View {
                 bannerState.showBannerError(error.localizedDescription)
             }
         }
+    }
+    
+    private var ordersStateInfo: some View {
+        ScrollView(.horizontal) {
+            HStack(spacing: 0) {
+                ForEach(Array(orders.enumerated()), id: \.offset) { index, order in
+                    let isSelected: Binding<Bool> = .constant(orderSelected[order.id] != nil)
+                    OrderHistoryItemStatusView(
+                        number: index + 1,
+                        isShowStatus: true,
+                        isShowSelected: false,
+                        isSelected: isSelected,
+                        order: order
+                    )
+                    .padding(.leading, .xl)
+                    .padding(.bottom, 2)
+                    .frame(minWidth: (UIScreen.current?.bounds.width ?? 375) * 0.7)
+                    .contentShape(.rect)
+                    .onTapGesture {
+                        if orderSelected[order.id] == nil {
+                            orderSelected[order.id] = order
+                        } else {
+                            orderSelected.removeValue(forKey: order.id)
+                        }
+                    }
+                }
+            }
+        }
+        .scrollIndicators(.hidden)
     }
 }
 

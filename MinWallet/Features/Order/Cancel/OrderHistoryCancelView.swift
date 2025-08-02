@@ -5,10 +5,12 @@ struct OrderHistoryCancelView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
 
-    @State
-    var orders: [OrderHistory] = [.init().with({ $0.id = "1" }), .init().with({ $0.id = "2" })]
-    @State
-    private var orderSelected: [String: OrderHistory] = [:]
+    @Binding
+    var orders: [OrderHistory]
+    @Binding
+    var orderSelected: [String: OrderHistory]
+
+    var onCancelOrder: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -93,10 +95,10 @@ struct OrderHistoryCancelView: View {
                         backgroundColorDisable: .colorSurfaceDanger
                     )
                 ) {
-                    let orders: [OrderHistory] = orderSelected.map({ _, value in value})
-                    guard !orders.isEmpty else { return }
+                    guard !orderSelected.isEmpty else { return }
                     
                     onDismiss?()
+                    onCancelOrder?()
                 }
                     .frame(height: 56)
             }
@@ -111,7 +113,7 @@ struct OrderHistoryCancelView: View {
 
 #Preview {
     VStack {
-        OrderHistoryCancelView()
+        OrderHistoryCancelView(orders: .constant([]), orderSelected: .constant([:]))
             .environmentObject(AppSetting.shared)
     }
 }
