@@ -132,6 +132,17 @@ extension OrderV2Status: @retroactive Identifiable {
         }
     }
     
+    var number: Int {
+        switch self {
+            case .batched:
+                3
+            case .cancelled:
+                2
+            case .created:
+                1
+        }
+    }
+    
     public init?(title: String) {
         switch title {
         case OrderV2Status.created.title.toString():

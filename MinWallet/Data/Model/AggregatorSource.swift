@@ -1,7 +1,7 @@
 import SwiftUI
 
 
-enum AggregatorSource: Int, CaseIterable, Identifiable {
+enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     var id: Int { self.rawValue }
     
     case MinswapV2

@@ -19,6 +19,8 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var orders: [OrderHistory] = []
     @Published
+    var wrapOrders: [WrapOrderHistory] = []
+    @Published
     var showSkeleton: Bool = true
     
     private var cancellables: Set<AnyCancellable> = []
@@ -62,7 +64,7 @@ class OrderHistoryViewModel: ObservableObject {
                 $0.isFetching = true
             })
         let orders = await getOrderHistory()
-        let cursorID = orders.last?.id ?? ""
+        let cursorID = orders.last?.cursor ?? ""
         pagination = pagination.with({
             $0.isFetching = false
             //$0.hasMore = orders.count >= pagination.limit
@@ -70,7 +72,7 @@ class OrderHistoryViewModel: ObservableObject {
             $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
         })
         
-        self.orders = orders
+        self.wrapOrders = orders
         withAnimation {
             self.showSkeleton = false
         }
@@ -78,13 +80,13 @@ class OrderHistoryViewModel: ObservableObject {
     
     func loadMoreData(order: OrderHistory) {
         guard pagination.readyToLoadMore else { return }
-        let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
-        if orders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
+        let thresholdIndex = wrapOrders.index(orders.endIndex, offsetBy: -5)
+        if wrapOrders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
             Task {
                 pagination = pagination.with({ $0.isFetching = true })
                 let _orders = await getOrderHistory()
                 
-                self.orders += _orders
+                self.wrapOrders += _orders
                 let cursorID = _orders.last?.id ?? ""
                 pagination = pagination.with({
                     $0.isFetching = false
@@ -152,11 +154,15 @@ extension OrderHistory.Request {
 }
 
 extension OrderHistoryViewModel {
-    private func getOrderHistory() async -> [OrderHistory] {
+    private func getOrderHistory() async -> [WrapOrderHistory] {
         do {
             let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
-            let order = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:])
-            return order ?? []
+            let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:]) ?? []
+            let groupedOrders = Dictionary(grouping: orders, by: { $0.keyToGroup })
+            let wrapOrders = groupedOrders.map({ key,  orders in
+                return WrapOrderHistory(orders: orders, key: key)
+            })
+            return wrapOrders
         } catch {
             return []
         }

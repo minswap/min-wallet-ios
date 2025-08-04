@@ -134,7 +134,7 @@ struct OrderHistoryDetailView: View {
             OrderHistoryCancelView(
                 orders: $orders,
                 orderSelected: $orderSelected,
-                onCancelOrder: { _ in
+                onCancelOrder: { 
                     $showCancelOrder.showSheet()
                 })
         }

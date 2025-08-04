@@ -26,6 +26,7 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var updatedAt: String?
     var updatedTxId: String?
     var aggregatorSource: AggregatorSource? = .Minswap
+    var protocolSource: AggregatorSource? = .Minswap
     
     var assetA: Asset = .init()
     var assetB: Asset = .init()
@@ -68,6 +69,13 @@ extension OrderHistory: Mappable {
         updatedAt <- map["updated_at"]
         updatedTxId <- map["updated_tx_id"]
         aggregatorSource <- (
+            map["aggregator_source"],
+            GKMapFromJSONToType(fromJSON: { json in
+                guard let source = json as? String, !source.isEmpty else { return nil }
+                return .init(rawId: source)
+            })
+        )
+        protocolSource <- (
             map["protocol"],
             GKMapFromJSONToType(fromJSON: { json in
                 guard let source = json as? String, !source.isEmpty else { return nil }
@@ -315,5 +323,11 @@ extension OrderHistory {
         }
         
         return nodes.filter { !$0.isBlank }.joined(separator: " > ")
+    }
+}
+
+extension OrderHistory {
+    var keyToGroup: String {
+        return createdTxId + "_ " + (aggregatorSource?.rawId ?? "")
     }
 }
