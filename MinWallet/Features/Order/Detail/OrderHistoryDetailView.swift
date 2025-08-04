@@ -15,6 +15,8 @@ struct OrderHistoryDetailView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @State
+    var wrapOrder: WrapOrderHistory = .init()
+    @State
     var order: OrderHistory = .init()
     @State
     private var isExchangeRate: Bool = true
@@ -30,9 +32,9 @@ struct OrderHistoryDetailView: View {
     
     //Cancel
     @State
-    var orders: [OrderHistory] = [.init().with({ $0.id = "1" }), .init().with({ $0.id = "2" })]
+    var ordersCancel: [OrderHistory] = [.init().with({ $0.id = "1" }), .init().with({ $0.id = "2" })]
     @State
-    private var orderSelected: [String: OrderHistory] = [:]
+    private var orderCancelSelected: [String: OrderHistory] = [:]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -41,7 +43,7 @@ struct OrderHistoryDetailView: View {
                     tokenView
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
-                    Text(order.name)
+                    Text(wrapOrder.name)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .padding(.top, .md)
@@ -52,14 +54,14 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
-                        Text(order.detail.orderType.title)
+                        Text(wrapOrder.orderType.title)
                             .font(.labelSmallSecondary)
                             .foregroundStyle(.colorBaseTent)
                     }
                     .padding(.horizontal, .xl)
                     .frame(height: 36)
                     .padding(.top, .md)
-                    if let source = order.aggregatorSource {
+                    if let source = wrapOrder.source {
                         HStack(alignment: .top, spacing: .xs) {
                             Text("Interacted with")
                                 .font(.paragraphSmall)
@@ -132,8 +134,8 @@ struct OrderHistoryDetailView: View {
         }
         .presentSheet(isPresented: $showCancelOrderList) {
             OrderHistoryCancelView(
-                orders: $orders,
-                orderSelected: $orderSelected,
+                orders: $ordersCancel,
+                orderSelected: $orderCancelSelected,
                 onCancelOrder: { 
                     $showCancelOrder.showSheet()
                 })
@@ -601,7 +603,7 @@ struct OrderHistoryDetailView: View {
     
     //TODO: cuongnv cancel sau
     private func cancelOrder() async throws {
-        let orders: [OrderHistory] = orderSelected.map({ _, value in value})
+        let orders: [OrderHistory] = orderCancelSelected.map({ _, value in value})
         guard !orders.isEmpty else { return }
         /*
         guard let order = order else { return }
@@ -639,8 +641,8 @@ struct OrderHistoryDetailView: View {
     private var ordersStateInfo: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 0) {
-                ForEach(Array(orders.enumerated()), id: \.offset) { index, order in
-                    let isSelected: Binding<Bool> = .constant(orderSelected[order.id] != nil)
+                ForEach(Array(wrapOrder.orders.enumerated()), id: \.offset) { index, order in
+                    let isSelected: Binding<Bool> = .constant(self.order.id == order.id)
                     OrderHistoryItemStatusView(
                         number: index + 1,
                         isShowStatus: true,
@@ -653,11 +655,7 @@ struct OrderHistoryDetailView: View {
                     .frame(minWidth: (UIScreen.current?.bounds.width ?? 375) * 0.7)
                     .contentShape(.rect)
                     .onTapGesture {
-                        if orderSelected[order.id] == nil {
-                            orderSelected[order.id] = order
-                        } else {
-                            orderSelected.removeValue(forKey: order.id)
-                        }
+                        self.order = order
                     }
                 }
             }

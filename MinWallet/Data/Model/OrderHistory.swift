@@ -8,7 +8,7 @@ typealias ContractType = AMMType
 
 extension OrderHistory.OrderType: Identifiable {
     public var id: String { UUID().uuidString }
-    
+
     var title: LocalizedStringKey {
         switch self {
         case .deposit:
@@ -33,7 +33,7 @@ extension OrderHistory.OrderType: Identifiable {
             "Zap Out"
         }
     }
-    
+
     var titleFilter: LocalizedStringKey {
         switch self {
         case .deposit:
@@ -58,7 +58,7 @@ extension OrderHistory.OrderType: Identifiable {
             ""
         }
     }
-    
+
     public init?(title: String) {
         switch title {
         case OrderHistory.OrderType.deposit.titleFilter.toString():
@@ -83,11 +83,85 @@ extension OrderHistory.OrderType: Identifiable {
             self = .deposit
         }
     }
+
+    func titleWithStatus(_ status: OrderV2Status) -> LocalizedStringKey {
+        switch status {
+        case .batched:
+            switch self {
+            case .swap:
+                "Swapped"
+            case .limit:
+                "Limit"
+            case .oco:
+                "Oco"
+            case .stopLoss:
+                "Stop"
+            case .partialSwap:
+                "Partially Filled"
+            case .deposit:
+                "Deposited"
+            case .withdraw:
+                "Withdrawn"
+            case .zapIn:
+                "Zapped In"
+            case .zapOut:
+                "Zapped Out"
+            case .donation:
+                "Donated"
+            }
+        case .cancelled:
+            switch self {
+            case .swap:
+                "Swap Cancelled"
+            case .limit:
+                "Limit Cancelled"
+            case .oco:
+                "Oco Cancelled"
+            case .stopLoss:
+                "Stop Cancelled"
+            case .partialSwap:
+                "Partially Fill Cancelled"
+            case .deposit:
+                "Deposit Cancelled"
+            case .withdraw:
+                "Withdraw Cancelled"
+            case .zapIn:
+                "Zap In Cancelled"
+            case .zapOut:
+                "Zap Out Cancelled"
+            case .donation:
+                "Donation Cancelled"
+            }
+        case .created:
+            switch self {
+            case .swap:
+                "Swapping"
+            case .limit:
+                "Limiting"
+            case .oco:
+                "Oco"
+            case .stopLoss:
+                "Stopping"
+            case .partialSwap:
+                "Partially Filling"
+            case .deposit:
+                "Depositing"
+            case .withdraw:
+                "Withdrawing"
+            case .zapIn:
+                "Zapping In"
+            case .zapOut:
+                "Zapping Out"
+            case .donation:
+                "Donating"
+            }
+        }
+    }
 }
 
 extension OrderV2Status: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-    
+
     var title: LocalizedStringKey {
         switch self {
         case .batched:
@@ -98,51 +172,51 @@ extension OrderV2Status: @retroactive Identifiable {
             "Pending"
         }
     }
-    
+
     var foregroundColor: Color {
         switch self {
         case .batched:
-            .colorInteractiveToneSuccess
+                .colorInteractiveToneSuccess
         case .cancelled:
-            .colorInteractiveToneDanger
+                .colorInteractiveToneDanger
         case .created:
-            .colorInteractiveToneWarning
+                .colorInteractiveToneWarning
         }
     }
-    
+
     var foregroundCircleColor: Color {
         switch self {
         case .batched:
-            .colorInteractiveToneSuccessSub
+                .colorInteractiveToneSuccessSub
         case .cancelled:
-            .colorInteractiveToneDangerSub
+                .colorInteractiveToneDangerSub
         case .created:
-            .colorInteractiveToneWarningSub
+                .colorInteractiveToneWarningSub
         }
     }
-    
+
     var backgroundColor: Color {
         switch self {
         case .batched:
-            .colorSurfaceSuccess
+                .colorSurfaceSuccess
         case .cancelled:
-            .colorSurfaceDanger
+                .colorSurfaceDanger
         case .created:
-            .colorSurfaceWarningDefault
+                .colorSurfaceWarningDefault
         }
     }
-    
+
     var number: Int {
         switch self {
-            case .batched:
-                3
-            case .cancelled:
-                2
-            case .created:
-                1
+        case .batched:
+            3
+        case .cancelled:
+            2
+        case .created:
+            1
         }
     }
-    
+
     public init?(title: String) {
         switch title {
         case OrderV2Status.created.title.toString():
@@ -159,7 +233,7 @@ extension OrderV2Status: @retroactive Identifiable {
 
 extension ContractType: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-    
+
     var title: LocalizedStringKey {
         switch self {
         case .dex:
@@ -170,26 +244,26 @@ extension ContractType: @retroactive Identifiable {
             "Stableswap"
         }
     }
-    
+
     var backgroundColor: Color {
         switch self {
         case .dex:
-            .colorDecorativeYellowDefault
+                .colorDecorativeYellowDefault
         case .dexV2:
-            .colorBrandRiver
+                .colorBrandRiver
         case .stableswap:
-            .colorDecorativeLeaf
+                .colorDecorativeLeaf
         }
     }
-    
+
     var foregroundColor: Color {
         switch self {
         case .dex:
-            .colorDecorativeYellowSub
+                .colorDecorativeYellowSub
         case .dexV2:
-            .colorDecorativeBrandSub
+                .colorDecorativeBrandSub
         case .stableswap:
-            .colorDecorativeLeafSub
+                .colorDecorativeLeafSub
         }
     }
 }

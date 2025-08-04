@@ -4,6 +4,8 @@ import MinWalletAPI
 
 struct OrderHistoryItemView: View {
     @State
+    var wrapOrder: WrapOrderHistory?
+    @State
     var order: OrderHistory?
     
     var onCancelItem: (() -> Void)?

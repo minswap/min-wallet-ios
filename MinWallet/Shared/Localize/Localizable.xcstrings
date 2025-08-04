@@ -257,6 +257,15 @@
     "Deposit" : {
 
     },
+    "Deposit Cancelled" : {
+
+    },
+    "Deposited" : {
+
+    },
+    "Depositing" : {
+
+    },
     "Details" : {
 
     },
@@ -272,7 +281,16 @@
     "Dismiss" : {
 
     },
+    "Donated" : {
+
+    },
+    "Donating" : {
+
+    },
     "Donation" : {
+
+    },
+    "Donation Cancelled" : {
 
     },
     "Done" : {
@@ -476,7 +494,13 @@
     "Limit amount" : {
 
     },
+    "Limit Cancelled" : {
+
+    },
     "Limit price" : {
+
+    },
+    "Limiting" : {
 
     },
     "Liquidity Provider Fee" : {
@@ -569,7 +593,13 @@
     "Notification" : {
 
     },
+    "Oco" : {
+
+    },
     "OCO" : {
+
+    },
+    "Oco Cancelled" : {
 
     },
     "OK" : {
@@ -597,6 +627,15 @@
 
     },
     "Partial Fill" : {
+
+    },
+    "Partially Fill Cancelled" : {
+
+    },
+    "Partially Filled" : {
+
+    },
+    "Partially Filling" : {
 
     },
     "Password" : {
@@ -799,6 +838,12 @@
     "Stop" : {
 
     },
+    "Stop Cancelled" : {
+
+    },
+    "Stopping" : {
+
+    },
     "Sundae V1" : {
 
     },
@@ -815,6 +860,15 @@
 
     },
     "Swap amount" : {
+
+    },
+    "Swap Cancelled" : {
+
+    },
+    "Swapped" : {
+
+    },
+    "Swapping" : {
 
     },
     "Tap to reveal seed phrase" : {
@@ -1010,6 +1064,15 @@
     "Withdraw" : {
 
     },
+    "Withdraw Cancelled" : {
+
+    },
+    "Withdrawing" : {
+
+    },
+    "Withdrawn" : {
+
+    },
     "Yes, cancel" : {
 
     },
@@ -1082,7 +1145,25 @@
     "Zap In" : {
 
     },
+    "Zap In Cancelled" : {
+
+    },
     "Zap Out" : {
+
+    },
+    "Zap Out Cancelled" : {
+
+    },
+    "Zapped In" : {
+
+    },
+    "Zapped Out" : {
+
+    },
+    "Zapping In" : {
+
+    },
+    "Zapping Out" : {
 
     },
     "zzz" : {

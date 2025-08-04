@@ -21,7 +21,7 @@ extension OrderHistoryView {
                 ForEach(0..<20, id: \.self) { index in
                     TokenListItemSkeletonView(showLogo: false)
                 }
-            } else if viewModel.showSearch && viewModel.orders.isEmpty {
+            } else if viewModel.showSearch && viewModel.wrapOrders.isEmpty {
                 HStack {
                     Spacer()
                     emptySearch
@@ -30,7 +30,7 @@ extension OrderHistoryView {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 120)
                 .transition(.opacity)
-            } else if !viewModel.showSearch && viewModel.orders.isEmpty {
+            } else if !viewModel.showSearch && viewModel.wrapOrders.isEmpty {
                 HStack {
                     Spacer()
                     emptyOrders
@@ -41,12 +41,13 @@ extension OrderHistoryView {
                 .transition(.opacity)
             } else {
                 LazyVStack(spacing: 0) {
-                    ForEach(viewModel.orders) { order in
+                    ForEach(viewModel.wrapOrders) { order in
                         OrderHistoryItemView(
-                            order: order,
+                            wrapOrder: order,
                             onCancelItem: {
-                                viewModel.orderToCancel = order
-                                $viewModel.showCancelOrder.showSheet()
+                                //Todo: remove wrap order
+                                //viewModel.orderToCancel = order
+                                //$viewModel.showCancelOrder.showSheet()
                             }
                         )
                         .padding(.horizontal, .xl)
@@ -57,7 +58,7 @@ extension OrderHistoryView {
                         .onTapGesture {
                             navigator.push(
                                 .orderHistoryDetail(
-                                    order: order,
+                                    wrapOrder: order,
                                     onReloadOrder: {
                                         Task {
                                             await viewModel.fetchData(showSkeleton: false)

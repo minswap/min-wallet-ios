@@ -30,7 +30,7 @@ extension MainCoordinatorViewModel {
         case swapToken(_ screen: SwapTokenScreen)
         case searchToken
         case securitySetting(_ screen: SecuritySetting)
-        case orderHistoryDetail(order: OrderHistory, onReloadOrder: (() -> Void)?)
+        case orderHistoryDetail(wrapOrder: WrapOrderHistory, onReloadOrder: (() -> Void)?)
         case orderHistory
         case scanQR
         case termOfService

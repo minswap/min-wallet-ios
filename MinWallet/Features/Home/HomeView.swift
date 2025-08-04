@@ -364,14 +364,14 @@ extension HomeView {
                 }
             
             do {
-                let jsonData = try await OrderAPIRouter.getOrders(request: .init()).async_request()
+                let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
                 let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayValue)
                 guard let order = orders?.first
                 else {
                     fallback?()
                     return
                 }
-                navigator.push(.orderHistoryDetail(order: order, onReloadOrder: nil))
+                navigator.push(.orderHistoryDetail(wrapOrder: WrapOrderHistory(orders: [order], key: order.createdTxId), onReloadOrder: nil))
             } catch {
                 fallback?()
             }

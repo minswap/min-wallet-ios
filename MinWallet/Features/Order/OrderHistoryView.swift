@@ -37,7 +37,7 @@ struct OrderHistoryView: View {
                     content: {
                         contentView
                     })
-                if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
+                if !viewModel.showSearch && viewModel.wrapOrders.isEmpty && !viewModel.showSkeleton {
                     CustomButton(title: "Swap") {
                         navigator.push(.swapToken(.swapToken(token: nil)))
                     }

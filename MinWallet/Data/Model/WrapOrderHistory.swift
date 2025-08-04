@@ -1,9 +1,10 @@
 import Foundation
 import Then
 import SwiftUI
+import MinWalletAPI
 
 
-struct WrapOrderHistory: Then, Equatable {
+struct WrapOrderHistory: Then, Equatable, Identifiable {
     var id: String = ""
     var orders: [OrderHistory] = []
     
@@ -12,18 +13,45 @@ struct WrapOrderHistory: Then, Equatable {
     
     //For UI
     var name: String = ""
-    var aggregatorSource: AggregatorSource? = .Minswap
+    var orderType: OrderHistory.OrderType = .swap
     
-    init(orders: [OrderHistory] = [], key: String) {
+    var source: AggregatorSource? = .Minswap
+    var input: OrderHistory.InputOutput?
+    var output: OrderHistory.InputOutput?
+    var inputAsset: [OrderHistory.InputOutput] = []
+    var outputAsset: [OrderHistory.InputOutput] = []
+    var status: OrderV2Status = .batched
+    
+    init(orders: [OrderHistory] = [], key: String = "") {
         id = key
         cursor = orders.last?.id
         self.orders = orders.sorted(by: {
             ($0.status?.number ?? 0) < ($1.status?.number ?? 0)
         })
         
-        if let order = orders.first {
-            name = order.detail.orderType.title.toString() + " " + (order.status?.title.toString() ?? "")
-            aggregatorSource = order.aggregatorSource
-        }
+        status = {
+            guard orders.count > 1 else { return orders.first?.status ?? .created }
+            return orders.first { $0.status == .created } != nil ? .created : .batched
+        }()
+        
+        name = orders.first?.detail.orderType.titleWithStatus(status).toString() ?? ""
+        orderType = orders.first?.detail.orderType ?? .swap
+        source = orders.first?.aggregatorSource
+        input = orders.first?.input
+        output = orders.first?.output
+        
+        let inputs = Dictionary(grouping: orders.flatMap({ $0.inputAsset }), by: { $0.id })
+        let outputs = Dictionary(grouping: orders.flatMap({ $0.outputAsset }), by: { $0.id })
+        
+        inputAsset = inputs.map({ (key, values) in
+            let amount = values.map({ $0.amount }).reduce(0, +)
+            let minimumAmount = values.map({ $0.minimumAmount }).reduce(0, +)
+            return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount)
+        })
+        outputAsset = outputs.map({ (key, values) in
+            let amount = values.map({ $0.amount }).reduce(0, +)
+            let minimumAmount = values.map({ $0.minimumAmount }).reduce(0, +)
+            return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount)
+        })
     }
 }

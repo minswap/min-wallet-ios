@@ -19,42 +19,43 @@ struct OrderHistoryCancelView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 60)
                 .padding(.horizontal, .xl)
-            HStack(alignment: .top, spacing: Spacing.md) {
-                Image(.icWarningYellow)
-                    .resizable()
-                    .frame(width: 16, height: 16)
-                VStack(alignment: .leading, spacing: .xs) {
-                    Text("Read it before cancelling")
-                        .font(.paragraphSemi)
-                        .lineLimit(nil)
-                        .foregroundStyle(.colorInteractiveToneWarning)
-                    HStack(alignment: .top) {
-                        Circle().frame(width: 4, height: 4)
-                            .foregroundStyle(.colorInteractiveToneWarning)
-                            .padding(.top, 6)
-                        Text("The service fee will be refunded if no split has been filled")
-                            .font(.paragraphXSmall)
+            if orders.count != 1 {
+                HStack(alignment: .top, spacing: Spacing.md) {
+                    Image(.icWarningYellow)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                    VStack(alignment: .leading, spacing: .xs) {
+                        Text("Read it before cancelling")
+                            .font(.paragraphSemi)
                             .lineLimit(nil)
                             .foregroundStyle(.colorInteractiveToneWarning)
-                    }
-                    HStack(alignment: .top) {
-                        Circle().frame(width: 4, height: 4)
-                            .foregroundStyle(.colorInteractiveToneWarning)
-                            .padding(.top, 6)
-                        Text("You can cancel only 1 type per time - p1, p2")
-                            .font(.paragraphXSmall)
-                            .lineLimit(nil)
-                            .foregroundStyle(.colorInteractiveToneWarning)
+                        HStack(alignment: .top) {
+                            Circle().frame(width: 4, height: 4)
+                                .foregroundStyle(.colorInteractiveToneWarning)
+                                .padding(.top, 6)
+                            Text("The service fee will be refunded if no split has been filled")
+                                .font(.paragraphXSmall)
+                                .lineLimit(nil)
+                                .foregroundStyle(.colorInteractiveToneWarning)
+                        }
+                        HStack(alignment: .top) {
+                            Circle().frame(width: 4, height: 4)
+                                .foregroundStyle(.colorInteractiveToneWarning)
+                                .padding(.top, 6)
+                            Text("You can cancel only 1 type per time - p1, p2")
+                                .font(.paragraphXSmall)
+                                .lineLimit(nil)
+                                .foregroundStyle(.colorInteractiveToneWarning)
+                        }
                     }
                 }
-            }
                 .padding(.xl)
                 .frame(maxWidth: .infinity, minHeight: 32, alignment: .leading)
                 .background(
-                RoundedRectangle(cornerRadius: .xl).fill(.colorSurfaceWarningDefault)
-            )
+                    RoundedRectangle(cornerRadius: .xl).fill(.colorSurfaceWarningDefault)
+                )
                 .padding(.horizontal, .xl)
-
+            }
             ScrollView {
                 VStack(spacing: 10) {
                     ForEach(Array(orders.enumerated()), id: \.offset) { index, order in
@@ -167,7 +168,7 @@ struct OrderHistoryItemStatusView: View {
                     Text("on")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    if let source = order.aggregatorSource {
+                    if let source = order.protocolSource {
                         Image(source.image)
                             .fixSize(20)
                         Text(source.name)

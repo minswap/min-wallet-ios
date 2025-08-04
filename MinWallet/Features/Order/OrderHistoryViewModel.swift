@@ -17,8 +17,6 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var keyword: String = ""
     @Published
-    var orders: [OrderHistory] = []
-    @Published
     var wrapOrders: [WrapOrderHistory] = []
     @Published
     var showSkeleton: Bool = true
@@ -78,9 +76,9 @@ class OrderHistoryViewModel: ObservableObject {
         }
     }
     
-    func loadMoreData(order: OrderHistory) {
+    func loadMoreData(order: WrapOrderHistory) {
         guard pagination.readyToLoadMore else { return }
-        let thresholdIndex = wrapOrders.index(orders.endIndex, offsetBy: -5)
+        let thresholdIndex = wrapOrders.index(wrapOrders.endIndex, offsetBy: -5)
         if wrapOrders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
             Task {
                 pagination = pagination.with({ $0.isFetching = true })
