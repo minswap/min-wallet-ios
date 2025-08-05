@@ -13,7 +13,7 @@ public enum OrderV2Status: String, EnumType {
 
 struct OrderHistory: Then, Identifiable, Hashable {
     var id: String = ""
-    var status: OrderV2Status? = .created
+    var status: OrderV2Status?
     var createdTxId: String = ""
     var createdTxIndex: Int = 0
     var createdBlockId: String = ""
@@ -25,8 +25,8 @@ struct OrderHistory: Then, Identifiable, Hashable {
     //"2025-07-28T07:40:15.000Z"
     var updatedAt: String?
     var updatedTxId: String?
-    var aggregatorSource: AggregatorSource? = .Minswap
-    var protocolSource: AggregatorSource? = .Minswap
+    var aggregatorSource: AggregatorSource?
+    var protocolSource: AggregatorSource?
     
     var assetA: Asset = .init()
     var assetB: Asset = .init()
@@ -43,8 +43,6 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var routing: String = ""
     var input: InputOutput?
     var output: InputOutput?
-    //TODO: cuongnv check extra paid
-    var extraPaid: String = "50%"
     var orderAttribute: AttributedString?
     
     init() {
@@ -261,14 +259,12 @@ extension OrderHistory {
         
         routing = buildRouting()
         
-        //TODO: cuongnv update
         var attr: [AttributedString?] = []
-        let decimalsIn = 2
         attr = [
             AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
-            1.5.formatNumber(suffix: "MIN", roundingOffset: decimalsIn, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+            input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
             AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
-            0.9.formatNumber(suffix: "ADA", roundingOffset: decimalsIn, font: .labelSmallSecondary, fontColor: .colorBaseTent)
+            output?.amount.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent)
         ]
         attr = attr.compactMap { $0 }
         var raw = AttributedString()
@@ -328,6 +324,7 @@ extension OrderHistory {
 
 extension OrderHistory {
     var keyToGroup: String {
-        return createdTxId + "_ " + (aggregatorSource?.rawId ?? "")
+        guard let aggregatorSource = aggregatorSource else { return createdTxId + "_" + id }
+        return createdTxId + "_ " + aggregatorSource.rawId
     }
 }

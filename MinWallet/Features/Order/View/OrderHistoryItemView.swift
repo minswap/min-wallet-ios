@@ -29,8 +29,8 @@ struct OrderHistoryItemView: View {
                             .minimumScaleFactor(0.1)
                     }
                 }
-                if let extraPaid = order?.extraPaid, !extraPaid.isEmpty {
-                    Text(" · \(extraPaid)")
+                if let percent = wrapOrder?.percent, percent > 0  {
+                    Text(" · \(percent.formatSNumber(maximumFractionDigits: 2))%")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
                         .lineLimit(1)

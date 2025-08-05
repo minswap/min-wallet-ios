@@ -135,9 +135,9 @@ extension OrderV2Status: @retroactive Identifiable {
     var number: Int {
         switch self {
         case .batched:
-            3
-        case .cancelled:
             2
+        case .cancelled:
+            3
         case .created:
             1
         }

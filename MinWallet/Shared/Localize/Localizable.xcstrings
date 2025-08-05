@@ -7,7 +7,7 @@
     " " : {
 
     },
-    " · %@" : {
+    " · %@%%" : {
 
     },
     " / 40" : {
@@ -434,9 +434,6 @@
     "Insufficient %@ balance" : {
 
     },
-    "Interacted with" : {
-
-    },
     "Invalid address" : {
 
     },
@@ -582,9 +579,6 @@
 
     },
     "Optic ID" : {
-
-    },
-    "Order type" : {
 
     },
     "Orders" : {
@@ -897,6 +891,9 @@
 
     },
     "Total supply = Total coins created - coins that have been burned (if any) It is comparable to outstanding shares in the market." : {
+
+    },
+    "Total: %lld TXs" : {
 
     },
     "Touch ID" : {

@@ -20,8 +20,9 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
     var inputAsset: [OrderHistory.InputOutput] = []
     var outputAsset: [OrderHistory.InputOutput] = []
     var status: OrderV2Status = .batched
+    var percent: Double = 0
     
-    init(orders: [OrderHistory] = [], key: String = "") {
+    init(orders: [OrderHistory] =  [.init(), .init(), .init()], key: String = "") {
         id = key
         cursor = orders.last?.id
         self.orders = orders.sorted(by: {
@@ -51,5 +52,10 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
             let minimumAmount = values.map({ $0.minimumAmount }).reduce(0, +)
             return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount)
         })
+        
+        if orderType == .partialSwap && orders.count > 1 {
+            let orderCompleted = orders.filter({ $0.status == .batched }).count
+            percent = Double(orderCompleted) / Double(orders.count) * 100
+        }
     }
 }
