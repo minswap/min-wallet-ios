@@ -4,43 +4,24 @@ import MinWalletAPI
 
 struct OrderHistoryItemView: View {
     @State
-    var wrapOrder: WrapOrderHistory?
+    var wrapOrder: WrapOrderHistory? = .init()
     @State
     var order: OrderHistory?
     
     var onCancelItem: (() -> Void)?
     
     var body: some View {
-        VStack(spacing: .lg) {
+        VStack(spacing: 0) {
             tokenView
-                .padding(.top, .xl)
-            HStack {
-                Text(order?.name)
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorBaseTent)
-                Spacer()
-                HStack(spacing: 4) {
-                    Circle().frame(width: 4, height: 4)
-                        .foregroundStyle(order?.status?.foregroundCircleColor ?? .clear)
-                    Text(order?.status?.title)
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(order?.status?.foregroundColor ?? .colorInteractiveToneHighlight)
-                }
-                .padding(.horizontal, .lg)
-                .padding(.vertical, .xs)
-                .background(
-                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(order?.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
-                )
-                .frame(height: 20)
-                .lineLimit(1)
-            }
+                .frame(minHeight: 40)
+                .padding(.top, .md)
             HStack(alignment: .top, spacing: 0) {
                 Text("You paid")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                     .padding(.trailing, .xs)
                 Spacer()
-                let inputs = order?.inputAsset ?? []
+                let inputs = wrapOrder?.inputAsset ?? []
                 VStack(alignment: .trailing, spacing: 4) {
                     ForEach(inputs, id: \.self) { input in
                         Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
@@ -56,36 +37,53 @@ struct OrderHistoryItemView: View {
                         .minimumScaleFactor(0.1)
                 }
             }
+            .frame(minHeight: 36)
             HStack(alignment: .top) {
                 Text("You receive")
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
-                if order?.status == .cancelled {
+                if wrapOrder?.status == .cancelled {
                     Text("--")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
                 } else {
-                    let outputs = order?.outputAsset ?? []
+                    let outputs = wrapOrder?.outputAsset ?? []
                     VStack(alignment: .trailing, spacing: 4) {
                         ForEach(outputs, id: \.self) { output in
-                            if output.amount == .zero {
-                                Text("--")
-                                    .font(.labelSmallSecondary)
-                                    .foregroundStyle(.colorBaseTent)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.1)
-                            } else {
-                                Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.1)
-                            }
+                            Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
                         }
                     }
                 }
             }
+            .frame(minHeight: 36)
+            HStack {
+                Text("Status")
+                    .font(.paragraphSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Spacer()
+                HStack(spacing: 4) {
+                    Circle().frame(width: 4, height: 4)
+                        .foregroundStyle(wrapOrder?.status.foregroundCircleColor ?? .clear)
+                    Text(wrapOrder?.status.title)
+                        .font(.paragraphXMediumSmall)
+                        .foregroundStyle(wrapOrder?.status.foregroundColor ?? .colorInteractiveToneHighlight)
+                }
+                .padding(.horizontal, .lg)
+                .padding(.vertical, .xs)
+                .background(
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(wrapOrder?.status.backgroundColor ?? .colorSurfaceHighlightDefault)
+                )
+                .frame(height: 20)
+                .lineLimit(1)
+            }
+            .frame(height: 40)
+            .padding(.bottom, 9)
+            /*
             if let source = order?.aggregatorSource {
                 HStack(alignment: .top, spacing: .xs) {
                     Text("Interacted with")
@@ -124,17 +122,43 @@ struct OrderHistoryItemView: View {
                 }
                 .frame(height: 36)
             }
-            
+            */
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }
     
     private var tokenView: some View {
         HStack(spacing: .xs) {
-            HStack(spacing: -4) {
-                let inputs = order?.inputAsset ?? []
-                ForEach(inputs, id: \.self) { input in
-                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified, size: .init(width: 24, height: 24))
+            let inputs = wrapOrder?.inputAsset ?? []
+            if inputs.count == 1 {
+                TokenLogoView(
+                    currencySymbol: inputs.first?.currencySymbol,
+                    tokenName: inputs.first?.tokenName,
+                    isVerified: inputs.first?.isVerified,
+                    size: .init(width: 24, height: 24)
+                )
+            } else if let first = inputs.first, let last = inputs.last {
+                ZStack {
+                    TokenLogoView(
+                        currencySymbol: first.currencySymbol,
+                        tokenName: first.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask { 
+                        HalfCircleMask(isLeft: true)
+                    }
+                    TokenLogoView(
+                        currencySymbol: last.currencySymbol,
+                        tokenName: last.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask { 
+                        HalfCircleMask(isLeft: false)
+                    }
                 }
             }
             Image(.icBack)
@@ -142,30 +166,58 @@ struct OrderHistoryItemView: View {
                 .rotationEffect(.degrees(180))
                 .frame(width: 16, height: 16)
                 .padding(.horizontal, 2)
-            HStack(spacing: -4) {
-                let outputs = order?.outputAsset ?? []
-                ForEach(outputs, id: \.self) { output in
-                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
+            let outputs = wrapOrder?.outputAsset ?? []
+            if outputs.count == 1 {
+                TokenLogoView(
+                    currencySymbol: outputs.first?.currencySymbol,
+                    tokenName: outputs.first?.tokenName,
+                    isVerified: outputs.first?.isVerified,
+                    size: .init(width: 24, height: 24)
+                )
+            } else if let first = outputs.first, let last = outputs.last {
+                ZStack {
+                    TokenLogoView(
+                        currencySymbol: first.currencySymbol,
+                        tokenName: first.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask { 
+                        HalfCircleMask(isLeft: true)
+                    }
+                    TokenLogoView(
+                        currencySymbol: last.currencySymbol,
+                        tokenName: last.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask { 
+                        HalfCircleMask(isLeft: false)
+                    }
                 }
             }
-            if let version = order?.aggregatorSource?.nameVersion, !version.isBlank {
-                Text(version)
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(version.foregroundColor ?? .colorInteractiveToneHighlight)
-                    .padding(.horizontal, .md)
-                    .padding(.vertical, .xs)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(version.backgroundColor ?? .colorSurfaceHighlightDefault)
-                    )
-                    .frame(height: 20)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.1)
-                    .padding(.trailing)
-            }
             Spacer()
-            Text(order?.detail.orderType.title)
+            Text(wrapOrder?.orderType.title)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
+            Text("via")
+                .font(.labelMediumSecondary)
+                .foregroundStyle(.colorInteractiveTentPrimarySub)
+            if let source = wrapOrder?.source {
+                ZStack {
+                    Image(source.image)
+                        .fixSize(24)
+                    if wrapOrder?.orders.count != 1 {
+                        Image(.icAggrsource)
+                            .fixSize(16)
+                            .position(x: 2, y: 2)
+                    }
+                }
+                .frame(width: 24, height: 24)
+                .padding(.leading, wrapOrder?.orders.count == 1 ? 0 : 4)
+            }
         }
     }
 }

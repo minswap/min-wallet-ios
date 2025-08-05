@@ -43,12 +43,12 @@ struct OrderHistoryDetailView: View {
                     tokenView
                         .padding(.horizontal, .xl)
                         .padding(.top, .lg)
-                    Text(wrapOrder.name)
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                        .padding(.top, .md)
-                        .padding(.horizontal, .xl)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    Text(wrapOrder.name)
+//                        .font(.labelMediumSecondary)
+//                        .foregroundStyle(.colorBaseTent)
+//                        .padding(.top, .md)
+//                        .padding(.horizontal, .xl)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
                     HStack {
                         Text("Order type")
                             .font(.paragraphSmall)

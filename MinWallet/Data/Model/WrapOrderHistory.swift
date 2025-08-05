@@ -12,7 +12,6 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
     var cursor: String? = nil
     
     //For UI
-    var name: String = ""
     var orderType: OrderHistory.OrderType = .swap
     
     var source: AggregatorSource? = .Minswap
@@ -34,7 +33,6 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
             return orders.first { $0.status == .created } != nil ? .created : .batched
         }()
         
-        name = orders.first?.detail.orderType.titleWithStatus(status).toString() ?? ""
         orderType = orders.first?.detail.orderType ?? .swap
         source = orders.first?.aggregatorSource
         input = orders.first?.input

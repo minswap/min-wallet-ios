@@ -100,3 +100,32 @@ struct TokenLogoView: View {
     .background(.pink)
     
 }
+
+
+struct HalfCircleMask: Shape {
+    let isLeft: Bool
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) / 2
+        
+        if isLeft {
+            path.addArc(center: center,
+                        radius: radius,
+                        startAngle: .degrees(90),
+                        endAngle: .degrees(270),
+                        clockwise: true)
+        } else {
+            path.addArc(center: center,
+                        radius: radius,
+                        startAngle: .degrees(270),
+                        endAngle: .degrees(90),
+                        clockwise: true)
+        }
+        path.addLine(to: center)
+        path.closeSubpath()
+        
+        return path
+    }
+}
