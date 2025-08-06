@@ -6,30 +6,32 @@ struct SwipeToDeleteModifier: ViewModifier {
     @Binding var isDeleted: Bool
     @GestureState private var isDragging = false
     
-    @State var height: CGFloat = 68
+    @Binding
+    var height: CGFloat
     
     @State
     var image: ImageResource = .icDelete
     
     let onDelete: () -> Void
     
+    @State
+    private var isAppear: Bool = false 
+    
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {
-                // Background (Delete Action)
                 HStack {
                     Spacer()
                     Image(image)
                         .resizable()
-                        .frame(width: 20, height: 20)
-                        .padding(.trailing, ._3xl)
+                        .frame(width: image == .icDelete ?  20 : 36, height: image == .icDelete ?  20 : 36)
+                        .padding(.trailing, image == .icDelete ? ._3xl : .xl) 
                         .onTapGesture {
                             onDelete()
                         }
                 }
                 .frame(height: geometry.size.height - 4)
-                .background(Color.colorInteractiveDangerDefault)
-                // Foreground (Content)
+                .background(isAppear ? Color.colorInteractiveDangerDefault : .clear)
                 content
                     .background(.colorBaseBackground)
                     .cornerRadius(offset < 0 ? 12 : 0, corners: [.topRight, .bottomRight])
@@ -54,6 +56,11 @@ struct SwipeToDeleteModifier: ViewModifier {
             //.animation(.easeInOut(duration: 0.2), value: offset)
         }
         .frame(height: height)
+        .onFirstAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                isAppear = true
+            }
+        }
     }
 }
 
@@ -61,6 +68,15 @@ extension View {
     func swipeToDelete(offset: Binding<CGFloat>, 
                        isDeleted: Binding<Bool>, 
                        height: CGFloat, 
+                       image: ImageResource = .icDelete, 
+                       onDelete: @escaping () -> Void) -> some View {
+        modifier(
+            SwipeToDeleteModifier(offset: offset, isDeleted: isDeleted, height: .constant(height), image: image, onDelete: onDelete)
+        )
+    }
+    func swipeToDelete(offset: Binding<CGFloat>, 
+                       isDeleted: Binding<Bool>, 
+                       height: Binding<CGFloat>,
                        image: ImageResource = .icDelete, 
                        onDelete: @escaping () -> Void) -> some View {
         modifier(SwipeToDeleteModifier(offset: offset, isDeleted: isDeleted, height: height, image: image, onDelete: onDelete))

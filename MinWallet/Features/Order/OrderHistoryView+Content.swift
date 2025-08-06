@@ -60,30 +60,32 @@ extension OrderHistoryView {
                                 viewModel.isDeleted[index] = value
                             }
                         )
-                        if order.status == .created { 
+                        
+                        let onCancelItem: () -> Void = {
+                            
+                        }
+                        
+                        let onAppear: () -> Void = {
+                            viewModel.loadMoreData(order: order)
+                        }
+                        
+                        if order.status == .created && heightOrder[order.id] != nil {
+                            let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0) 
                             OrderHistoryItemView(
                                 wrapOrder: order,
-                                onCancelItem: {
-                                        //Todo: remove wrap order
-                                        //viewModel.orderToCancel = order
-                                        //$viewModel.showCancelOrder.showSheet()
-                                }
+                                onCancelItem: onCancelItem
                             )
                             .padding(.horizontal, .xl)
                             .contentShape(.rect)
                             .swipeToDelete(
                                 offset: offsetBinding,
                                 isDeleted: deleteBinding,
-                                height: 200,  
+                                height: bindingHeight, 
                                 image: .icCancelOrder,
-                                onDelete: {
-                                        //viewModel.deleteTokenFav(at: index)
-                                }
+                                onDelete: onCancelItem
                             )
                             .zIndex(Double(index) * -1)
-                            .onAppear {
-                                viewModel.loadMoreData(order: order)
-                            }
+                            .onAppear(perform: onAppear)
                             .onTapGesture {
                                 navigator.push(
                                     .orderHistoryDetail(
@@ -97,17 +99,20 @@ extension OrderHistoryView {
                         } else {
                             OrderHistoryItemView(
                                 wrapOrder: order,
-                                onCancelItem: {
-                                        //Todo: remove wrap order
-                                        //viewModel.orderToCancel = order
-                                        //$viewModel.showCancelOrder.showSheet()
-                                }
+                                onCancelItem: onCancelItem
                             )
                             .padding(.horizontal, .xl)
                             .contentShape(.rect)
-                            .onAppear {
-                                viewModel.loadMoreData(order: order)
+                            .background(
+                                GeometryReader { geo in
+                                    Color.clear
+                                        .preference(key: SizePreferenceKey.self, value: geo.size)
+                                }
+                            )
+                            .onPreferenceChange(SizePreferenceKey.self) { newSize in
+                                heightOrder[order.id] = newSize.height
                             }
+                            .onAppear(perform: onAppear)
                             .onTapGesture {
                                 navigator.push(
                                     .orderHistoryDetail(

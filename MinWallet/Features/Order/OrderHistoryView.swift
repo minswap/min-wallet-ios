@@ -22,6 +22,8 @@ struct OrderHistoryView: View {
     private var isShowSignContract: Bool = false
     @StateObject
     var filterViewModel: OrderHistoryFilterViewModel = .init()
+    @State
+    var heightOrder: [String: CGFloat] = [:]
     
     var body: some View {
         ZStack {
