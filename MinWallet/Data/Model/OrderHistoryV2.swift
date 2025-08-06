@@ -25,7 +25,7 @@ struct OrderHistory: Then, Identifiable, Hashable {
     //"2025-07-28T07:40:15.000Z"
     var updatedAt: String?
     var updatedTxId: String?
-    var aggregatorSource: AggregatorSource?
+    var aggregatorSource: AggrSource?
     var protocolSource: AggregatorSource?
     
     var assetA: Asset = .init()
@@ -66,13 +66,7 @@ extension OrderHistory: Mappable {
         ownerIdent <- map["owner_ident"]
         updatedAt <- map["updated_at"]
         updatedTxId <- map["updated_tx_id"]
-        aggregatorSource <- (
-            map["aggregator_source"],
-            GKMapFromJSONToType(fromJSON: { json in
-                guard let source = json as? String, !source.isEmpty else { return nil }
-                return .init(rawId: source)
-            })
-        )
+        aggregatorSource <- map["aggregator_source"]
         protocolSource <- (
             map["protocol"],
             GKMapFromJSONToType(fromJSON: { json in
@@ -325,6 +319,6 @@ extension OrderHistory {
 extension OrderHistory {
     var keyToGroup: String {
         guard let aggregatorSource = aggregatorSource else { return createdTxId + "_" + id }
-        return createdTxId + "_ " + aggregatorSource.rawId
+        return createdTxId + "_ " + aggregatorSource.rawValue
     }
 }

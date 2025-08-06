@@ -14,7 +14,7 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
     //For UI
     var orderType: OrderHistory.OrderType = .swap
     
-    var source: AggregatorSource? = .Minswap
+    var source: AggrSource?
     var input: OrderHistory.InputOutput?
     var output: OrderHistory.InputOutput?
     var inputAsset: [OrderHistory.InputOutput] = []

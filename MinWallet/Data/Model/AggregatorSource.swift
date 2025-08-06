@@ -3,7 +3,7 @@ import SwiftUI
 
 enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     var id: Int { self.rawValue }
-    
+
     case MinswapV2
     case Minswap
     case MinswapStable
@@ -18,7 +18,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     case WingRiders
     case WingRidersStableV1
     case WingRidersStableV2
-    
+
     var name: LocalizedStringKey {
         switch self {
         case .MinswapV2:
@@ -51,24 +51,24 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             "Splash Stable"
         }
     }
-    
+
     var image: ImageResource {
         switch self {
         case .MinswapV2, .Minswap, .MinswapStable:
-            .min
+                .min
         case .MuesliSwap:
-            .icMuliswap
+                .icMuliswap
         case .Splash, .SplashStable, .Spectrum:
-            .icSplashLogo
+                .icSplashLogo
         case .SundaeSwapV3, .SundaeSwap:
-            .icSundae
+                .icSundae
         case .VyFinance:
-            .icVyfinance
+                .icVyfinance
         case .WingRidersV2, .WingRiders, .WingRidersStableV1, .WingRidersStableV2:
-            .icWingriders
+                .icWingriders
         }
     }
-    
+
     var isLocked: Bool {
         switch self {
         case .MinswapV2, .Minswap, .MinswapStable:
@@ -77,7 +77,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             false
         }
     }
-    
+
     var rawId: String {
         switch self {
         case .MinswapV2:
@@ -110,7 +110,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             "SplashStable"
         }
     }
-    
+
     public init?(title: String) {
         switch title {
         case AggregatorSource.MinswapV2.name.toString():
@@ -214,7 +214,7 @@ extension String {
             return nil
         }
     }
-    
+
     var backgroundColor: Color? {
         switch self {
         case "V1":
@@ -229,4 +229,29 @@ extension String {
             return nil
         }
     }
+}
+
+
+enum AggrSource: String {
+    case Minswap = "MINSWAP"
+    case SteelSwap = "STEELSWAP"
+    case DexHunter = "DEX_HUNTER"
+    case MuesliSwap = "MUESLISWAP"
+    case Cardexscan = "CARDEXSCAN"
+
+    var image: ImageResource {
+        switch self {
+        case .Minswap:
+                .min
+        case .SteelSwap:
+                .min
+        case .DexHunter:
+                .min
+        case .MuesliSwap:
+                .min
+        case .Cardexscan:
+                .min
+        }
+    }
+
 }

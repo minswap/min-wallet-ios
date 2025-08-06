@@ -202,10 +202,10 @@ struct OrderHistoryItemView: View {
             Text(wrapOrder?.orderType.title)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
-            Text("via")
-                .font(.labelMediumSecondary)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
             if let source = wrapOrder?.source {
+                Text("via")
+                    .font(.labelMediumSecondary)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
                 ZStack {
                     Image(source.image)
                         .fixSize(24)

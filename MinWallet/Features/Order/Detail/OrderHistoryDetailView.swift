@@ -35,6 +35,17 @@ struct OrderHistoryDetailView: View {
     @State
     private var orderCancelSelected: [String: OrderHistory] = [:]
     
+    ///Show popover
+    @State
+    private var popoverTarget: UUID?
+    @State
+    private var idWithProtocolName: [UUID?: String] = [:]
+    @Namespace
+    private var nsPopover
+    @State
+    private var workItem: DispatchWorkItem?
+    private let uuidAggSource = UUID()
+    
     private var hasOnlyOneOrderCancel: Bool {
         wrapOrder.orders.count == 1  && wrapOrder.orders.first?.status == .created
     }
@@ -43,95 +54,103 @@ struct OrderHistoryDetailView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    tokenView
-                        .padding(.horizontal, .xl)
-                        .padding(.top, .lg)
-                    HStack(alignment: .top, spacing: 0) {
-                        Text("You paid")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                            .padding(.trailing, .xs)
-                        Spacer()
-                        let inputs = wrapOrder.inputAsset
-                        VStack(alignment: .trailing, spacing: 4) {
-                            ForEach(inputs, id: \.self) { input in
-                                Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.1)
-                            }
-                        }
-                        if wrapOrder.percent > 0  {
-                            Text(" · \(wrapOrder.percent.formatSNumber(maximumFractionDigits: 2))%")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorInteractiveToneHighlight)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
-                        }
-                    }
-                    .frame(minHeight: 36)
-                    .padding(.horizontal, .xl)
-                    HStack(alignment: .top) {
-                        Text("You receive")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        Spacer()
-                        if wrapOrder.status == .cancelled {
-                            Text("--")
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseTent)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
-                        } else {
-                            let outputs = wrapOrder.outputAsset
+            ZStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        tokenView
+                            .padding(.horizontal, .xl)
+                            .padding(.top, .lg)
+                        HStack(alignment: .top, spacing: 0) {
+                            Text("You paid")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .padding(.trailing, .xs)
+                            Spacer()
+                            let inputs = wrapOrder.inputAsset
                             VStack(alignment: .trailing, spacing: 4) {
-                                ForEach(outputs, id: \.self) { output in
-                                    Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                ForEach(inputs, id: \.self) { input in
+                                    Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                 }
                             }
+                            if wrapOrder.percent > 0  {
+                                Text(" · \(wrapOrder.percent.formatSNumber(maximumFractionDigits: 2))%")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorInteractiveToneHighlight)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            }
                         }
-                    }
-                    .frame(minHeight: 36)
-                    .padding(.horizontal, .xl)
-                    HStack {
-                        Text("Status")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        Spacer()
-                        HStack(spacing: 4) {
-                            Circle().frame(width: 4, height: 4)
-                                .foregroundStyle(wrapOrder.status.foregroundCircleColor)
-                            Text(wrapOrder.status.title)
-                                .font(.paragraphXMediumSmall)
-                                .foregroundStyle(wrapOrder.status.foregroundColor)
+                        .frame(minHeight: 36)
+                        .padding(.horizontal, .xl)
+                        HStack(alignment: .top) {
+                            Text("You receive")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            Spacer()
+                            if wrapOrder.status == .cancelled {
+                                Text("--")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorBaseTent)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            } else {
+                                let outputs = wrapOrder.outputAsset
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    ForEach(outputs, id: \.self) { output in
+                                        Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.1)
+                                    }
+                                }
+                            }
                         }
-                        .padding(.horizontal, .lg)
-                        .padding(.vertical, .xs)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(wrapOrder.status.backgroundColor)
-                        )
-                        .frame(height: 20)
-                        .lineLimit(1)
-                    }
-                    .frame(height: 40)
-                    .padding(.horizontal, .xl)
-                    Color.colorBorderPrimarySub.frame(height: 1)
-                        .padding(.xl)
-                    if wrapOrder.orders.count > 1 {
-                        ordersStateInfo
-                            .padding(.top, .md)
-                            .padding(.bottom, 16 + 8)
-                    }
-                    inputInfoView.padding(.horizontal, .xl)
-                    executeInfoView.padding(.horizontal, .xl)
-                    if order.status != .created {
-                        outputInfoView.padding(.horizontal, .xl)
+                        .frame(minHeight: 36)
+                        .padding(.horizontal, .xl)
+                        HStack {
+                            Text("Status")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            Spacer()
+                            HStack(spacing: 4) {
+                                Circle().frame(width: 4, height: 4)
+                                    .foregroundStyle(wrapOrder.status.foregroundCircleColor)
+                                Text(wrapOrder.status.title)
+                                    .font(.paragraphXMediumSmall)
+                                    .foregroundStyle(wrapOrder.status.foregroundColor)
+                            }
+                            .padding(.horizontal, .lg)
+                            .padding(.vertical, .xs)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(wrapOrder.status.backgroundColor)
+                            )
+                            .frame(height: 20)
+                            .lineLimit(1)
+                        }
+                        .frame(height: 40)
+                        .padding(.horizontal, .xl)
+                        Color.colorBorderPrimarySub.frame(height: 1)
+                            .padding(.xl)
+                        if wrapOrder.orders.count > 1 {
+                            ordersStateInfo
+                                .padding(.top, .md)
+                                .padding(.bottom, 16 + 8)
+                        }
+                        inputInfoView.padding(.horizontal, .xl)
+                        executeInfoView.padding(.horizontal, .xl)
+                        if order.status != .created {
+                            outputInfoView.padding(.horizontal, .xl)
+                        }
                     }
                 }
+                customPopover
             }
+            .containerShape(.rect)
+            .onTapGesture {
+                popoverTarget = nil
+            }
+            
             if wrapOrder.status == .created {
                 Spacer()
                 HStack(spacing: .xl) {
@@ -277,10 +296,10 @@ struct OrderHistoryDetailView: View {
             Text(wrapOrder.orderType.title)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
-            Text("via")
-                .font(.labelMediumSecondary)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
             if let source = wrapOrder.source {
+                Text("via")
+                    .font(.labelMediumSecondary)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
                 ZStack {
                     Image(source.image)
                         .fixSize(24)
@@ -292,6 +311,9 @@ struct OrderHistoryDetailView: View {
                 }
                 .frame(width: 24, height: 24)
                 .padding(.leading, wrapOrder.orders.count == 1 ? 0 : 4)
+                .contentShape(.rect)
+                .onTapGesture { showPopover(target: uuidAggSource, protocolName: source.rawValue) }
+                .matchedGeometryEffect(id: uuidAggSource, in: nsPopover, anchor: .bottom)
             }
         }
         .frame(height: 40)
@@ -786,6 +808,51 @@ fileprivate extension VerticalAlignment {
     static let timelineAlignment = VerticalAlignment(TimelineAlignment.self)
 }
 
+extension OrderHistoryDetailView {
+    @ViewBuilder
+    private var customPopover: some View {
+        if let popoverTarget {
+            Text("Via \(idWithProtocolName[popoverTarget] ?? "")")
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorTextTooltip)
+                .padding(.vertical, .md)
+                .padding(.horizontal, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: .md)
+                        .fill(Color(.colorBackgroundTooltip))
+                )
+                .foregroundColor(.colorBackgroundTooltip)
+                .offset(y: 10)
+                .matchedGeometryEffect(
+                    id: popoverTarget,
+                    in: nsPopover,
+                    properties: .position,
+                    anchor: .trailing,
+                    isSource: false
+                )
+                .transition(.opacity.combined(with: .scale))
+                .zIndex(1)
+        }
+    }
+    
+    private func showPopover(target: UUID, protocolName: String) {
+        workItem?.cancel()
+        workItem = DispatchWorkItem(block: {
+            self.popoverTarget = nil
+        })
+        
+        if popoverTarget != nil {
+            popoverTarget = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                popoverTarget = target
+            }
+        } else {
+            popoverTarget = target
+        }
+        idWithProtocolName[target] = protocolName
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: workItem!)
+    }
+}
 #Preview {
     OrderHistoryDetailView()
 }
