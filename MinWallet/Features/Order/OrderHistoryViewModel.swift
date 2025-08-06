@@ -20,6 +20,10 @@ class OrderHistoryViewModel: ObservableObject {
     var wrapOrders: [WrapOrderHistory] = []
     @Published
     var showSkeleton: Bool = true
+    @Published
+    var isDeleted: [Bool] = []
+    @Published
+    var offsets: [CGFloat] = []
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -71,6 +75,9 @@ class OrderHistoryViewModel: ObservableObject {
         })
         
         self.wrapOrders = orders
+        self.isDeleted = self.wrapOrders.map({ _ in false })
+        self.offsets = self.wrapOrders.map({ _ in 0 })
+        
         withAnimation {
             self.showSkeleton = false
         }
@@ -92,6 +99,8 @@ class OrderHistoryViewModel: ObservableObject {
                     $0.hasMore = !_orders.isEmpty
                     $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
                 })
+                self.isDeleted = self.wrapOrders.map({ _ in false })
+                self.offsets = self.wrapOrders.map({ _ in 0 })
             }
         }
     }

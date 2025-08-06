@@ -41,29 +41,83 @@ extension OrderHistoryView {
                 .transition(.opacity)
             } else {
                 LazyVStack(spacing: 0) {
-                    ForEach(viewModel.wrapOrders) { order in
-                        OrderHistoryItemView(
-                            wrapOrder: order,
-                            onCancelItem: {
-                                //Todo: remove wrap order
-                                //viewModel.orderToCancel = order
-                                //$viewModel.showCancelOrder.showSheet()
+                    ForEach(Array(viewModel.wrapOrders.enumerated()), id: \.offset) { index, order in
+                        let offsetBinding = Binding<CGFloat>(
+                            get: {
+                                viewModel.offsets[gk_safeIndex: index] ?? 0
+                            },
+                            set: { value in
+                                guard index >= 0, index < viewModel.offsets.count else { return }
+                                viewModel.offsets[index] = value
                             }
                         )
-                        .padding(.horizontal, .xl)
-                        .contentShape(.rect)
-                        .onAppear {
-                            viewModel.loadMoreData(order: order)
-                        }
-                        .onTapGesture {
-                            navigator.push(
-                                .orderHistoryDetail(
-                                    wrapOrder: order,
-                                    onReloadOrder: {
-                                        Task {
-                                            await viewModel.fetchData(showSkeleton: false)
-                                        }
-                                    }))
+                        let deleteBinding = Binding<Bool>(
+                            get: {
+                                viewModel.isDeleted[gk_safeIndex: index] ?? false
+                            },
+                            set: { value in
+                                guard index >= 0, index < viewModel.isDeleted.count else { return }
+                                viewModel.isDeleted[index] = value
+                            }
+                        )
+                        if order.status == .created { 
+                            OrderHistoryItemView(
+                                wrapOrder: order,
+                                onCancelItem: {
+                                        //Todo: remove wrap order
+                                        //viewModel.orderToCancel = order
+                                        //$viewModel.showCancelOrder.showSheet()
+                                }
+                            )
+                            .padding(.horizontal, .xl)
+                            .contentShape(.rect)
+                            .swipeToDelete(
+                                offset: offsetBinding,
+                                isDeleted: deleteBinding,
+                                height: 200,  
+                                image: .icCancelOrder,
+                                onDelete: {
+                                        //viewModel.deleteTokenFav(at: index)
+                                }
+                            )
+                            .zIndex(Double(index) * -1)
+                            .onAppear {
+                                viewModel.loadMoreData(order: order)
+                            }
+                            .onTapGesture {
+                                navigator.push(
+                                    .orderHistoryDetail(
+                                        wrapOrder: order,
+                                        onReloadOrder: {
+                                            Task {
+                                                await viewModel.fetchData(showSkeleton: false)
+                                            }
+                                        }))
+                            }
+                        } else {
+                            OrderHistoryItemView(
+                                wrapOrder: order,
+                                onCancelItem: {
+                                        //Todo: remove wrap order
+                                        //viewModel.orderToCancel = order
+                                        //$viewModel.showCancelOrder.showSheet()
+                                }
+                            )
+                            .padding(.horizontal, .xl)
+                            .contentShape(.rect)
+                            .onAppear {
+                                viewModel.loadMoreData(order: order)
+                            }
+                            .onTapGesture {
+                                navigator.push(
+                                    .orderHistoryDetail(
+                                        wrapOrder: order,
+                                        onReloadOrder: {
+                                            Task {
+                                                await viewModel.fetchData(showSkeleton: false)
+                                            }
+                                        }))
+                            }
                         }
                     }
                 }

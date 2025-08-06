@@ -8,6 +8,9 @@ struct SwipeToDeleteModifier: ViewModifier {
     
     @State var height: CGFloat = 68
     
+    @State
+    var image: ImageResource = .icDelete
+    
     let onDelete: () -> Void
     
     func body(content: Content) -> some View {
@@ -16,7 +19,7 @@ struct SwipeToDeleteModifier: ViewModifier {
                 // Background (Delete Action)
                 HStack {
                     Spacer()
-                    Image(.icDelete)
+                    Image(image)
                         .resizable()
                         .frame(width: 20, height: 20)
                         .padding(.trailing, ._3xl)
@@ -55,8 +58,12 @@ struct SwipeToDeleteModifier: ViewModifier {
 }
 
 extension View {
-    func swipeToDelete(offset: Binding<CGFloat>, isDeleted: Binding<Bool>, height: CGFloat, onDelete: @escaping () -> Void) -> some View {
-        modifier(SwipeToDeleteModifier(offset: offset, isDeleted: isDeleted, height: height, onDelete: onDelete))
+    func swipeToDelete(offset: Binding<CGFloat>, 
+                       isDeleted: Binding<Bool>, 
+                       height: CGFloat, 
+                       image: ImageResource = .icDelete, 
+                       onDelete: @escaping () -> Void) -> some View {
+        modifier(SwipeToDeleteModifier(offset: offset, isDeleted: isDeleted, height: height, image: image, onDelete: onDelete))
     }
 }
 
