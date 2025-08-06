@@ -196,7 +196,6 @@ struct OrderHistoryDetailView: View {
                 }
             }
         }
-        
         .presentSheet(
             isPresented: $showCancelOrderList,
             onDimiss: {

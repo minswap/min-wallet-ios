@@ -35,7 +35,17 @@ class OrderHistoryViewModel: ObservableObject {
     
     private var pagination: Pagination = .init()
     
-    var orderToCancel: OrderHistory? = nil
+    @Published
+    var orderCancelSelected: [String: OrderHistory] = [:]
+    @Published
+    var showCancelOrderList: Bool = false
+    @Published
+    var orderCancel: WrapOrderHistory?
+    
+    var hasOnlyOneOrderCancel: Bool {
+        guard let orderCancel = orderCancel else { return false }
+        return orderCancel.orders.count == 1  && orderCancel.orders.first?.status == .created
+    }
     
     init() {
         $keyword
@@ -55,9 +65,9 @@ class OrderHistoryViewModel: ObservableObject {
     }
     
     func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
-        withAnimation {
+//        withAnimation {
             self.showSkeleton = showSkeleton
-        }
+//        }
         if fromPullToRefresh {
             try? await Task.sleep(for: .seconds(1))
         }

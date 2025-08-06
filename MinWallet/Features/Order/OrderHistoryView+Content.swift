@@ -62,67 +62,56 @@ extension OrderHistoryView {
                         )
                         
                         let onCancelItem: () -> Void = {
-                            
+                            viewModel.orderCancel = order
+                            if viewModel.hasOnlyOneOrderCancel {
+                                $viewModel.showCancelOrder.showSheet()
+                            } else {
+                                $viewModel.showCancelOrderList.showSheet()
+                            }
                         }
                         
                         let onAppear: () -> Void = {
                             viewModel.loadMoreData(order: order)
                         }
                         
-                        if order.status == .created && heightOrder[order.id] != nil {
-                            let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0) 
-                            OrderHistoryItemView(
-                                wrapOrder: order,
-                                onCancelItem: onCancelItem
-                            )
-                            .padding(.horizontal, .xl)
-                            .contentShape(.rect)
-                            .swipeToDelete(
-                                offset: offsetBinding,
-                                isDeleted: deleteBinding,
-                                height: bindingHeight, 
-                                image: .icCancelOrder,
-                                onDelete: onCancelItem
-                            )
-                            .zIndex(Double(index) * -1)
-                            .onAppear(perform: onAppear)
-                            .onTapGesture {
-                                navigator.push(
-                                    .orderHistoryDetail(
-                                        wrapOrder: order,
-                                        onReloadOrder: {
-                                            Task {
-                                                await viewModel.fetchData(showSkeleton: false)
-                                            }
-                                        }))
+                        let onTapGesture: () -> Void = {
+                            navigator.push(
+                                .orderHistoryDetail(
+                                    wrapOrder: order,
+                                    onReloadOrder: {
+                                        Task {
+                                            await viewModel.fetchData(showSkeleton: false)
+                                        }
+                                    }))
+                        }
+                        let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0) 
+                        OrderHistoryItemView(
+                            wrapOrder: order,
+                            onCancelItem: onCancelItem
+                        )
+                        .padding(.horizontal, .xl)
+                        .contentShape(.rect)
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear
+                                    .preference(key: SizePreferenceKey.self, value: geo.size)
                             }
-                        } else {
-                            OrderHistoryItemView(
-                                wrapOrder: order,
-                                onCancelItem: onCancelItem
-                            )
-                            .padding(.horizontal, .xl)
-                            .contentShape(.rect)
-                            .background(
-                                GeometryReader { geo in
-                                    Color.clear
-                                        .preference(key: SizePreferenceKey.self, value: geo.size)
-                                }
-                            )
-                            .onPreferenceChange(SizePreferenceKey.self) { newSize in
-                                heightOrder[order.id] = newSize.height
-                            }
-                            .onAppear(perform: onAppear)
-                            .onTapGesture {
-                                navigator.push(
-                                    .orderHistoryDetail(
-                                        wrapOrder: order,
-                                        onReloadOrder: {
-                                            Task {
-                                                await viewModel.fetchData(showSkeleton: false)
-                                            }
-                                        }))
-                            }
+                        )
+                        .onPreferenceChange(SizePreferenceKey.self) { newSize in
+                            heightOrder[order.id] = newSize.height
+                        }
+                        .swipeToDelete(
+                            offset: offsetBinding,
+                            isDeleted: deleteBinding,
+                            enableDrag: .constant(order.status == .created),
+                            height: bindingHeight, 
+                            image: .icCancelOrder,
+                            onDelete: onCancelItem
+                        )
+                        .zIndex(Double(index) * -1)
+                        .onAppear(perform: onAppear)
+                        .onTapGesture {
+                            onTapGesture()
                         }
                     }
                 }
