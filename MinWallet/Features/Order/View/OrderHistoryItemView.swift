@@ -29,7 +29,7 @@ struct OrderHistoryItemView: View {
                             .minimumScaleFactor(0.1)
                     }
                 }
-                if let percent = wrapOrder?.percent, percent > 0  {
+                if let percent = wrapOrder?.percent, percent > 0 {
                     Text(" · \(percent.formatSNumber(maximumFractionDigits: 2))%")
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorInteractiveToneHighlight)
@@ -146,7 +146,7 @@ struct OrderHistoryItemView: View {
                         forceVerified: true,
                         size: .init(width: 24, height: 24)
                     )
-                    .mask { 
+                    .mask {
                         HalfCircleMask(isLeft: true)
                     }
                     TokenLogoView(
@@ -156,7 +156,7 @@ struct OrderHistoryItemView: View {
                         forceVerified: true,
                         size: .init(width: 24, height: 24)
                     )
-                    .mask { 
+                    .mask {
                         HalfCircleMask(isLeft: false)
                     }
                 }
@@ -183,7 +183,7 @@ struct OrderHistoryItemView: View {
                         forceVerified: true,
                         size: .init(width: 24, height: 24)
                     )
-                    .mask { 
+                    .mask {
                         HalfCircleMask(isLeft: true)
                     }
                     TokenLogoView(
@@ -193,7 +193,7 @@ struct OrderHistoryItemView: View {
                         forceVerified: true,
                         size: .init(width: 24, height: 24)
                     )
-                    .mask { 
+                    .mask {
                         HalfCircleMask(isLeft: false)
                     }
                 }

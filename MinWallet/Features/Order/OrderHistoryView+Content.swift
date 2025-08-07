@@ -69,11 +69,11 @@ extension OrderHistoryView {
                                 $viewModel.showCancelOrderList.showSheet()
                             }
                         }
-                        
+
                         let onAppear: () -> Void = {
                             viewModel.loadMoreData(order: order)
                         }
-                        
+
                         let onTapGesture: () -> Void = {
                             navigator.push(
                                 .orderHistoryDetail(
@@ -84,7 +84,7 @@ extension OrderHistoryView {
                                         }
                                     }))
                         }
-                        let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0) 
+                        let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0)
                         OrderHistoryItemView(
                             wrapOrder: order,
                             onCancelItem: onCancelItem
@@ -104,7 +104,7 @@ extension OrderHistoryView {
                             offset: offsetBinding,
                             isDeleted: deleteBinding,
                             enableDrag: .constant(order.status == .created),
-                            height: bindingHeight, 
+                            height: bindingHeight,
                             image: .icCancelOrder,
                             onDelete: onCancelItem
                         )

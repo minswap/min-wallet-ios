@@ -47,7 +47,7 @@ struct OrderHistoryDetailView: View {
     private let uuidAggSource = UUID()
     
     private var hasOnlyOneOrderCancel: Bool {
-        wrapOrder.orders.count == 1  && wrapOrder.orders.first?.status == .created
+        wrapOrder.orders.count == 1 && wrapOrder.orders.first?.status == .created
     }
     
     var onReloadOrder: (() -> Void)?
@@ -74,7 +74,7 @@ struct OrderHistoryDetailView: View {
                                         .minimumScaleFactor(0.1)
                                 }
                             }
-                            if wrapOrder.percent > 0  {
+                            if wrapOrder.percent > 0 {
                                 Text(" · \(wrapOrder.percent.formatSNumber(maximumFractionDigits: 2))%")
                                     .font(.labelSmallSecondary)
                                     .foregroundStyle(.colorInteractiveToneHighlight)
@@ -290,7 +290,7 @@ struct OrderHistoryDetailView: View {
                     }
                 }
             }
-           
+            
             Spacer()
             Text(wrapOrder.orderType.title)
                 .font(.labelMediumSecondary)
@@ -722,7 +722,7 @@ struct OrderHistoryDetailView: View {
     
     //TODO: cuongnv cancel sau
     private func cancelOrder() async throws {
-        let orders: [OrderHistory] = hasOnlyOneOrderCancel ?  wrapOrder.orders : orderCancelSelected.map({ _, value in value})
+        let orders: [OrderHistory] = hasOnlyOneOrderCancel ? wrapOrder.orders : orderCancelSelected.map({ _, value in value })
         guard !orders.isEmpty else { return }
         /*
         guard let order = order else { return }
@@ -769,7 +769,7 @@ struct OrderHistoryDetailView: View {
                     RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
                 )
                 .frame(height: 24)
-                        .padding(.horizontal, .xl)
+                .padding(.horizontal, .xl)
             ScrollView(.horizontal) {
                 HStack(spacing: 0) {
                     ForEach(Array(wrapOrder.orders.enumerated()), id: \.offset) { index, order in

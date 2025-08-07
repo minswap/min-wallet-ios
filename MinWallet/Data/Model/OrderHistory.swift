@@ -11,83 +11,83 @@ extension OrderHistory.OrderType: Identifiable {
     
     var title: LocalizedStringKey {
         switch self {
-            case .deposit:
-                "Deposit"
-            case .donation:
-                "Donation"
-            case .limit:
-                "Limit"
-            case .swap:
-                "Market"
-            case .oco:
-                "OCO"
-            case .partialSwap:
-                "Partial Fill"
-            case .stopLoss:
-                "Stop"
-            case .withdraw:
-                "Withdraw"
-            case .zapIn:
-                "Zap In"
-            case .zapOut:
-                "Zap Out"
+        case .deposit:
+            "Deposit"
+        case .donation:
+            "Donation"
+        case .limit:
+            "Limit"
+        case .swap:
+            "Market"
+        case .oco:
+            "OCO"
+        case .partialSwap:
+            "Partial Fill"
+        case .stopLoss:
+            "Stop"
+        case .withdraw:
+            "Withdraw"
+        case .zapIn:
+            "Zap In"
+        case .zapOut:
+            "Zap Out"
         }
     }
     
     var titleFilter: LocalizedStringKey {
         switch self {
-            case .deposit:
-                "Deposit"
-            case .limit:
-                "Limit"
-            case .swap:
-                "Market"
-            case .oco:
-                "OCO"
-            case .partialSwap:
-                "Partial Fill"
-            case .stopLoss:
-                "Stop"
-            case .withdraw:
-                "Withdraw"
-            case .zapIn:
-                "Zap In"
-            case .zapOut:
-                "Zap Out"
-            default:
-                ""
+        case .deposit:
+            "Deposit"
+        case .limit:
+            "Limit"
+        case .swap:
+            "Market"
+        case .oco:
+            "OCO"
+        case .partialSwap:
+            "Partial Fill"
+        case .stopLoss:
+            "Stop"
+        case .withdraw:
+            "Withdraw"
+        case .zapIn:
+            "Zap In"
+        case .zapOut:
+            "Zap Out"
+        default:
+            ""
         }
     }
     
     public init?(title: String) {
         switch title {
-            case OrderHistory.OrderType.deposit.titleFilter.toString():
-                self = .deposit
-            case OrderHistory.OrderType.limit.titleFilter.toString():
-                self = .limit
-            case OrderHistory.OrderType.swap.titleFilter.toString():
-                self = .swap
-            case OrderHistory.OrderType.oco.titleFilter.toString():
-                self = .oco
-            case OrderHistory.OrderType.partialSwap.titleFilter.toString():
-                self = .partialSwap
-            case OrderHistory.OrderType.stopLoss.titleFilter.toString():
-                self = .stopLoss
-            case OrderHistory.OrderType.withdraw.titleFilter.toString():
-                self = .withdraw
-            case OrderHistory.OrderType.zapIn.titleFilter.toString():
-                self = .zapIn
-            case OrderHistory.OrderType.zapOut.titleFilter.toString():
-                self = .zapOut
-            default:
-                self = .deposit
+        case OrderHistory.OrderType.deposit.titleFilter.toString():
+            self = .deposit
+        case OrderHistory.OrderType.limit.titleFilter.toString():
+            self = .limit
+        case OrderHistory.OrderType.swap.titleFilter.toString():
+            self = .swap
+        case OrderHistory.OrderType.oco.titleFilter.toString():
+            self = .oco
+        case OrderHistory.OrderType.partialSwap.titleFilter.toString():
+            self = .partialSwap
+        case OrderHistory.OrderType.stopLoss.titleFilter.toString():
+            self = .stopLoss
+        case OrderHistory.OrderType.withdraw.titleFilter.toString():
+            self = .withdraw
+        case OrderHistory.OrderType.zapIn.titleFilter.toString():
+            self = .zapIn
+        case OrderHistory.OrderType.zapOut.titleFilter.toString():
+            self = .zapOut
+        default:
+            self = .deposit
         }
     }
 }
 
 extension OrderV2Status: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .batched:
@@ -98,40 +98,40 @@ extension OrderV2Status: @retroactive Identifiable {
             "Pending"
         }
     }
-
+    
     var foregroundColor: Color {
         switch self {
         case .batched:
-                .colorInteractiveToneSuccess
+            .colorInteractiveToneSuccess
         case .cancelled:
-                .colorInteractiveToneDanger
+            .colorInteractiveToneDanger
         case .created:
-                .colorInteractiveToneWarning
+            .colorInteractiveToneWarning
         }
     }
-
+    
     var foregroundCircleColor: Color {
         switch self {
         case .batched:
-                .colorInteractiveToneSuccessSub
+            .colorInteractiveToneSuccessSub
         case .cancelled:
-                .colorInteractiveToneDangerSub
+            .colorInteractiveToneDangerSub
         case .created:
-                .colorInteractiveToneWarningSub
+            .colorInteractiveToneWarningSub
         }
     }
-
+    
     var backgroundColor: Color {
         switch self {
         case .batched:
-                .colorSurfaceSuccess
+            .colorSurfaceSuccess
         case .cancelled:
-                .colorSurfaceDanger
+            .colorSurfaceDanger
         case .created:
-                .colorSurfaceWarningDefault
+            .colorSurfaceWarningDefault
         }
     }
-
+    
     var number: Int {
         switch self {
         case .batched:
@@ -142,7 +142,7 @@ extension OrderV2Status: @retroactive Identifiable {
             1
         }
     }
-
+    
     public init?(title: String) {
         switch title {
         case OrderV2Status.created.title.toString():
@@ -159,7 +159,7 @@ extension OrderV2Status: @retroactive Identifiable {
 
 extension ContractType: @retroactive Identifiable {
     public var id: String { UUID().uuidString }
-
+    
     var title: LocalizedStringKey {
         switch self {
         case .dex:
@@ -170,26 +170,26 @@ extension ContractType: @retroactive Identifiable {
             "Stableswap"
         }
     }
-
+    
     var backgroundColor: Color {
         switch self {
         case .dex:
-                .colorDecorativeYellowDefault
+            .colorDecorativeYellowDefault
         case .dexV2:
-                .colorBrandRiver
+            .colorBrandRiver
         case .stableswap:
-                .colorDecorativeLeaf
+            .colorDecorativeLeaf
         }
     }
-
+    
     var foregroundColor: Color {
         switch self {
         case .dex:
-                .colorDecorativeYellowSub
+            .colorDecorativeYellowSub
         case .dexV2:
-                .colorDecorativeBrandSub
+            .colorDecorativeBrandSub
         case .stableswap:
-                .colorDecorativeLeafSub
+            .colorDecorativeLeafSub
         }
     }
 }

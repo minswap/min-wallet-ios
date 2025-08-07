@@ -4,14 +4,14 @@ import SwiftUI
 struct OrderHistoryCancelView: View {
     @Environment(\.partialSheetDismiss)
     private var onDismiss
-
+    
     @Binding
     var orders: [OrderHistory]
     @Binding
     var orderSelected: [String: OrderHistory]
-
+    
     var onCancelOrder: (() -> Void)?
-
+    
     var body: some View {
         VStack(spacing: 0) {
             Text("Cancel Orders")
@@ -67,9 +67,9 @@ struct OrderHistoryCancelView: View {
                             isSelected: isSelected,
                             order: order
                         )
-                            .padding(.horizontal, .xl)
-                            .contentShape(.rect)
-                            .onTapGesture {
+                        .padding(.horizontal, .xl)
+                        .contentShape(.rect)
+                        .onTapGesture {
                             if orderSelected[order.id] == nil {
                                 orderSelected[order.id] = order
                             } else {
@@ -78,14 +78,14 @@ struct OrderHistoryCancelView: View {
                         }
                     }
                 }
-                    .padding(.top, .xl)
+                .padding(.top, .xl)
             }
             Spacer(minLength: 0)
             HStack(spacing: .xl) {
                 CustomButton(title: "Cancel", variant: .secondary) {
                     onDismiss?()
                 }
-                    .frame(height: 56)
+                .frame(height: 56)
                 CustomButton(
                     title: "Confirm",
                     variant: .other(
@@ -101,14 +101,14 @@ struct OrderHistoryCancelView: View {
                     onDismiss?()
                     onCancelOrder?()
                 }
-                    .frame(height: 56)
+                .frame(height: 56)
             }
-                .padding(.top, 24)
-                .padding(.horizontal, .xl)
-                .padding(.bottom, .md)
+            .padding(.top, 24)
+            .padding(.horizontal, .xl)
+            .padding(.bottom, .md)
         }
-            .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.8)
-            .presentSheetModifier()
+        .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.8)
+        .presentSheetModifier()
     }
 }
 
@@ -131,7 +131,7 @@ struct OrderHistoryItemStatusView: View {
     var isSelected: Bool
     @State
     var order: OrderHistory = .init()
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: .xl) {
             HStack(alignment: .center) {
@@ -147,12 +147,12 @@ struct OrderHistoryItemStatusView: View {
                             .font(.paragraphXMediumSmall)
                             .foregroundStyle(order.status?.foregroundColor ?? .colorInteractiveToneHighlight)
                     }
-                        .padding(.horizontal, .lg)
-                        .padding(.vertical, .xs)
-                        .background(
+                    .padding(.horizontal, .lg)
+                    .padding(.vertical, .xs)
+                    .background(
                         RoundedRectangle(cornerRadius: BorderRadius.full).fill(order.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
                     )
-                        .lineLimit(1)
+                    .lineLimit(1)
                 }
                 if isShowSelected && isSelected {
                     Image(isSelected ? .icChecked : .icUnchecked)
@@ -179,9 +179,9 @@ struct OrderHistoryItemStatusView: View {
                 }
             }
         }
-            .padding(.xl)
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(isSelected ? .colorInteractiveToneHighlight : .colorBorderPrimaryTer, lineWidth: 2))
-            .contentShape(.rect)
-            .padding(.top, 2)
+        .padding(.xl)
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(isSelected ? .colorInteractiveToneHighlight : .colorBorderPrimaryTer, lineWidth: 2))
+        .contentShape(.rect)
+        .padding(.top, 2)
     }
 }

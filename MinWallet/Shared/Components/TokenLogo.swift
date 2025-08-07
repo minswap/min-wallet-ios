@@ -111,17 +111,19 @@ struct HalfCircleMask: Shape {
         let radius = min(rect.width, rect.height) / 2
         
         if isLeft {
-            path.addArc(center: center,
-                        radius: radius,
-                        startAngle: .degrees(90),
-                        endAngle: .degrees(270),
-                        clockwise: true)
+            path.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .degrees(90),
+                endAngle: .degrees(270),
+                clockwise: true)
         } else {
-            path.addArc(center: center,
-                        radius: radius,
-                        startAngle: .degrees(270),
-                        endAngle: .degrees(90),
-                        clockwise: true)
+            path.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .degrees(270),
+                endAngle: .degrees(90),
+                clockwise: true)
         }
         path.addLine(to: center)
         path.closeSubpath()

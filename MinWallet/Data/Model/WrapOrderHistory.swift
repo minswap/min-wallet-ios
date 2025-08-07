@@ -22,7 +22,7 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
     var status: OrderV2Status = .batched
     var percent: Double = 0
     
-    init(orders: [OrderHistory] =  [.init(), .init(), .init()], key: String = "") {
+    init(orders: [OrderHistory] = [], key: String = "") {
         id = key
         cursor = orders.last?.id
         self.orders = orders.sorted(by: {

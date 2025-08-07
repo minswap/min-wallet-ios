@@ -44,7 +44,7 @@ class OrderHistoryViewModel: ObservableObject {
     
     var hasOnlyOneOrderCancel: Bool {
         guard let orderCancel = orderCancel else { return false }
-        return orderCancel.orders.count == 1  && orderCancel.orders.first?.status == .created
+        return orderCancel.orders.count == 1 && orderCancel.orders.first?.status == .created
     }
     
     init() {
@@ -65,9 +65,9 @@ class OrderHistoryViewModel: ObservableObject {
     }
     
     func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
-//        withAnimation {
-            self.showSkeleton = showSkeleton
-//        }
+        //        withAnimation {
+        self.showSkeleton = showSkeleton
+        //        }
         if fromPullToRefresh {
             try? await Task.sleep(for: .seconds(1))
         }
@@ -116,8 +116,8 @@ class OrderHistoryViewModel: ObservableObject {
     }
     
     var input: OrderHistory.Request {
-//        let address = UserInfo.shared.minWallet?.address ?? ""
-        let address = "addr1q8rzzzrr58pa85p2ca8sxxgptf6sdtcxp2drx8cg4lxqml5w3z9f2vttuvt48p3ddxq74x95gh8ngwqsddk5nsmrfkwqjkwhpt"
+        let address = UserInfo.shared.minWallet?.address ?? ""
+        //        let address = "addr1q8rzzzrr58pa85p2ca8sxxgptf6sdtcxp2drx8cg4lxqml5w3z9f2vttuvt48p3ddxq74x95gh8ngwqsddk5nsmrfkwqjkwhpt"
         let keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         //ce7c194517fc3d82569a2abff6b9ad93ea83b079016577cd5ac436ed6c6edeb2
         let isTxID = keyword.count == 64
@@ -176,7 +176,7 @@ extension OrderHistoryViewModel {
             let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
             let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:]) ?? []
             let groupedOrders = Dictionary(grouping: orders, by: { $0.keyToGroup })
-            let wrapOrders = groupedOrders.map({ key,  orders in
+            let wrapOrders = groupedOrders.map({ key, orders in
                 return WrapOrderHistory(orders: orders, key: key)
             })
             return wrapOrders
