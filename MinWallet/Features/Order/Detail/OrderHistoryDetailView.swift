@@ -15,6 +15,8 @@ struct OrderHistoryDetailView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
     @State
+    var wrapOrder: WrapOrderHistory = .init()
+    @State
     var order: OrderHistory = .init()
     @State
     private var isExchangeRate: Bool = true
@@ -23,65 +25,141 @@ struct OrderHistoryDetailView: View {
     @State
     private var showCancelOrder: Bool = false
     @State
+    private var showCancelOrderList: Bool = false
+    @State
     private var isShowSignContract: Bool = false
+    
+    //Cancel
+    @State
+    var ordersCancel: [OrderHistory] = []
+    @State
+    private var orderCancelSelected: [String: OrderHistory] = [:]
+    
+    ///Show popover
+    @State
+    private var popoverTarget: UUID?
+    @State
+    private var idWithProtocolName: [UUID?: String] = [:]
+    @Namespace
+    private var nsPopover
+    @State
+    private var workItem: DispatchWorkItem?
+    private let uuidAggSource = UUID()
+    
+    private var hasOnlyOneOrderCancel: Bool {
+        wrapOrder.orders.count == 1 && wrapOrder.orders.first?.status == .created
+    }
+    
     var onReloadOrder: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    tokenView
+            ZStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        tokenView
+                            .padding(.horizontal, .xl)
+                            .padding(.top, .lg)
+                        HStack(alignment: .top, spacing: 0) {
+                            Text("You paid")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                .padding(.trailing, .xs)
+                            Spacer()
+                            let inputs = wrapOrder.inputAsset
+                            VStack(alignment: .trailing, spacing: 4) {
+                                ForEach(inputs, id: \.self) { input in
+                                    Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.1)
+                                }
+                            }
+                            if wrapOrder.percent > 0 {
+                                Text(" · \(wrapOrder.percent.formatSNumber(maximumFractionDigits: 2))%")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorInteractiveToneHighlight)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            }
+                        }
+                        .frame(minHeight: 36)
                         .padding(.horizontal, .xl)
-                        .padding(.top, .lg)
-                    Text(order.name)
-                        .font(.labelMediumSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                        .padding(.top, .md)
-                        .padding(.horizontal, .xl)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack {
-                        Text("Order type")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        Spacer()
-                        Text(order.detail.orderType.title)
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                    }
-                    .padding(.horizontal, .xl)
-                    .frame(height: 36)
-                    .padding(.top, .md)
-                    if let source = order.aggregatorSource {
-                        HStack(alignment: .top, spacing: .xs) {
-                            Text("Interacted with")
+                        HStack(alignment: .top) {
+                            Text("You receive")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
-                            Image(source.image)
-                                .fixSize(20)
-                            Text(source.name)
-                                .font(.labelSmallSecondary)
-                                .foregroundStyle(.colorBaseTent)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                            if wrapOrder.status == .cancelled {
+                                Text("--")
+                                    .font(.labelSmallSecondary)
+                                    .foregroundStyle(.colorBaseTent)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            } else {
+                                let outputs = wrapOrder.outputAsset
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    ForEach(outputs, id: \.self) { output in
+                                        Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.1)
+                                    }
+                                }
+                            }
                         }
+                        .frame(minHeight: 36)
                         .padding(.horizontal, .xl)
-                        .frame(height: 36)
-                    }
-                    Color.colorBorderPrimarySub.frame(height: 1)
-                        .padding(.xl)
-                    inputInfoView.padding(.horizontal, .xl)
-                    executeInfoView.padding(.horizontal, .xl)
-                    if order.status != .created {
-                        outputInfoView.padding(.horizontal, .xl)
+                        HStack {
+                            Text("Status")
+                                .font(.paragraphSmall)
+                                .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            Spacer()
+                            HStack(spacing: 4) {
+                                Circle().frame(width: 4, height: 4)
+                                    .foregroundStyle(wrapOrder.status.foregroundCircleColor)
+                                Text(wrapOrder.status.title)
+                                    .font(.paragraphXMediumSmall)
+                                    .foregroundStyle(wrapOrder.status.foregroundColor)
+                            }
+                            .padding(.horizontal, .lg)
+                            .padding(.vertical, .xs)
+                            .background(
+                                RoundedRectangle(cornerRadius: BorderRadius.full).fill(wrapOrder.status.backgroundColor)
+                            )
+                            .frame(height: 20)
+                            .lineLimit(1)
+                        }
+                        .frame(height: 40)
+                        .padding(.horizontal, .xl)
+                        Color.colorBorderPrimarySub.frame(height: 1)
+                            .padding(.xl)
+                        if wrapOrder.orders.count > 1 {
+                            ordersStateInfo
+                                .padding(.top, .md)
+                                .padding(.bottom, 16 + 8)
+                        }
+                        inputInfoView.padding(.horizontal, .xl)
+                        executeInfoView.padding(.horizontal, .xl)
+                        if order.status != .created {
+                            outputInfoView.padding(.horizontal, .xl)
+                        }
                     }
                 }
+                customPopover
             }
-            if order.status == .created {
+            .containerShape(.rect)
+            .onTapGesture {
+                popoverTarget = nil
+            }
+            
+            if wrapOrder.status == .created {
                 Spacer()
                 HStack(spacing: .xl) {
                     CustomButton(title: "Cancel", variant: .secondary) {
-                        $showCancelOrder.showSheet()
+                        if hasOnlyOneOrderCancel {
+                            $showCancelOrder.showSheet()
+                        } else {
+                            $showCancelOrderList.showSheet()
+                        }
                     }
                     .frame(height: 56)
                     /*
@@ -102,7 +180,7 @@ struct OrderHistoryDetailView: View {
                 })
         )
         .presentSheet(isPresented: $showCancelOrder) {
-            OrderHistoryCancelView {
+            OrderHistoryConfirmCancelView {
                 Task {
                     do {
                         switch appSetting.authenticationType {
@@ -118,6 +196,20 @@ struct OrderHistoryDetailView: View {
                 }
             }
         }
+        .presentSheet(
+            isPresented: $showCancelOrderList,
+            onDimiss: {
+                orderCancelSelected = [:]
+            },
+            content: {
+                OrderHistoryCancelView(
+                    orders: $ordersCancel,
+                    orderSelected: $orderCancelSelected,
+                    onCancelOrder: {
+                        $showCancelOrder.showSheet()
+                    })
+            }
+        )
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
                 onSignSuccess: {
@@ -129,10 +221,36 @@ struct OrderHistoryDetailView: View {
     
     private var tokenView: some View {
         HStack(spacing: .xs) {
-            HStack(spacing: -4) {
-                let inputs = order.inputAsset
-                ForEach(inputs, id: \.self) { input in
-                    TokenLogoView(currencySymbol: input.currencySymbol, tokenName: input.tokenName, isVerified: input.isVerified)
+            let inputs = wrapOrder.inputAsset
+            if inputs.count == 1 {
+                TokenLogoView(
+                    currencySymbol: inputs.first?.currencySymbol,
+                    tokenName: inputs.first?.tokenName,
+                    isVerified: inputs.first?.isVerified,
+                    size: .init(width: 24, height: 24)
+                )
+            } else if let first = inputs.first, let last = inputs.last {
+                ZStack {
+                    TokenLogoView(
+                        currencySymbol: first.currencySymbol,
+                        tokenName: first.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask {
+                        HalfCircleMask(isLeft: true)
+                    }
+                    TokenLogoView(
+                        currencySymbol: last.currencySymbol,
+                        tokenName: last.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask {
+                        HalfCircleMask(isLeft: false)
+                    }
                 }
             }
             Image(.icBack)
@@ -140,42 +258,64 @@ struct OrderHistoryDetailView: View {
                 .rotationEffect(.degrees(180))
                 .frame(width: 16, height: 16)
                 .padding(.horizontal, 2)
-            HStack(spacing: -4) {
-                let outputs = order.outputAsset
-                ForEach(outputs, id: \.self) { output in
-                    TokenLogoView(currencySymbol: output.currencySymbol, tokenName: output.tokenName, isVerified: output.isVerified, size: .init(width: 24, height: 24))
+            let outputs = wrapOrder.outputAsset
+            if outputs.count == 1 {
+                TokenLogoView(
+                    currencySymbol: outputs.first?.currencySymbol,
+                    tokenName: outputs.first?.tokenName,
+                    isVerified: outputs.first?.isVerified,
+                    size: .init(width: 24, height: 24)
+                )
+            } else if let first = outputs.first, let last = outputs.last {
+                ZStack {
+                    TokenLogoView(
+                        currencySymbol: first.currencySymbol,
+                        tokenName: first.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask {
+                        HalfCircleMask(isLeft: true)
+                    }
+                    TokenLogoView(
+                        currencySymbol: last.currencySymbol,
+                        tokenName: last.tokenName,
+                        isVerified: false,
+                        forceVerified: true,
+                        size: .init(width: 24, height: 24)
+                    )
+                    .mask {
+                        HalfCircleMask(isLeft: false)
+                    }
                 }
             }
-            if let nameVersion = order.aggregatorSource?.nameVersion, !nameVersion.isBlank {
-                Text(nameVersion)
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(nameVersion.foregroundColor ?? .colorInteractiveToneHighlight)
-                    .padding(.horizontal, .md)
-                    .padding(.vertical, .xs)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(nameVersion.backgroundColor ?? .colorSurfaceHighlightDefault)
-                    )
-                    .frame(height: 20)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.1)
-                    .padding(.trailing)
-            }
+            
             Spacer()
-            HStack(spacing: 4) {
-                Circle().frame(width: 4, height: 4)
-                    .foregroundStyle(order.status?.foregroundCircleColor ?? .clear)
-                Text(order.status?.title)
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(order.status?.foregroundColor ?? .colorInteractiveToneHighlight)
+            Text(wrapOrder.orderType.title)
+                .font(.labelMediumSecondary)
+                .foregroundStyle(.colorBaseTent)
+            if let source = wrapOrder.source {
+                Text("via")
+                    .font(.labelMediumSecondary)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                ZStack {
+                    Image(source.image)
+                        .fixSize(24)
+                    if wrapOrder.orders.count != 1 {
+                        Image(.icAggrsource)
+                            .fixSize(16)
+                            .position(x: 2, y: 2)
+                    }
+                }
+                .frame(width: 24, height: 24)
+                .padding(.leading, wrapOrder.orders.count == 1 ? 0 : 4)
+                .contentShape(.rect)
+                .onTapGesture { showPopover(target: uuidAggSource, protocolName: source.rawValue) }
+                .matchedGeometryEffect(id: uuidAggSource, in: nsPopover, anchor: .bottom)
             }
-            .padding(.horizontal, .lg)
-            .padding(.vertical, .xs)
-            .background(
-                RoundedRectangle(cornerRadius: BorderRadius.full).fill(order.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
-            )
-            .frame(height: 20)
-            .lineLimit(1)
         }
+        .frame(height: 40)
     }
     
     private var inputInfoView: some View {
@@ -582,6 +722,8 @@ struct OrderHistoryDetailView: View {
     
     //TODO: cuongnv cancel sau
     private func cancelOrder() async throws {
+        let orders: [OrderHistory] = hasOnlyOneOrderCancel ? wrapOrder.orders : orderCancelSelected.map({ _, value in value })
+        guard !orders.isEmpty else { return }
         /*
         guard let order = order else { return }
         let txId = order.order?.txIn.txId ?? ""
@@ -614,6 +756,44 @@ struct OrderHistoryDetailView: View {
             }
         }
     }
+    
+    @ViewBuilder
+    private var ordersStateInfo: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Total: \(wrapOrder.orders.count) TXs")
+                .font(.paragraphXMediumSmall)
+                .foregroundStyle(.colorBaseTent)
+                .padding(.horizontal, .lg)
+                .padding(.vertical, .xs)
+                .background(
+                    RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+                )
+                .frame(height: 24)
+                .padding(.horizontal, .xl)
+            ScrollView(.horizontal) {
+                HStack(spacing: 0) {
+                    ForEach(Array(wrapOrder.orders.enumerated()), id: \.offset) { index, order in
+                        let isSelected: Binding<Bool> = .constant(self.order.id == order.id)
+                        OrderHistoryItemStatusView(
+                            number: index + 1,
+                            isShowStatus: true,
+                            isShowSelected: false,
+                            isSelected: isSelected,
+                            order: order
+                        )
+                        .padding(.leading, .xl)
+                        .padding(.bottom, 2)
+                        .frame(minWidth: (UIScreen.current?.bounds.width ?? 375) * 0.7)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            self.order = order
+                        }
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
+        }
+    }
 }
 
 
@@ -627,6 +807,51 @@ fileprivate extension VerticalAlignment {
     static let timelineAlignment = VerticalAlignment(TimelineAlignment.self)
 }
 
+extension OrderHistoryDetailView {
+    @ViewBuilder
+    private var customPopover: some View {
+        if let popoverTarget {
+            Text("Via \(idWithProtocolName[popoverTarget] ?? "")")
+                .font(.paragraphXSmall)
+                .foregroundStyle(.colorTextTooltip)
+                .padding(.vertical, .md)
+                .padding(.horizontal, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: .md)
+                        .fill(Color(.colorBackgroundTooltip))
+                )
+                .foregroundColor(.colorBackgroundTooltip)
+                .offset(y: 10)
+                .matchedGeometryEffect(
+                    id: popoverTarget,
+                    in: nsPopover,
+                    properties: .position,
+                    anchor: .trailing,
+                    isSource: false
+                )
+                .transition(.opacity.combined(with: .scale))
+                .zIndex(1)
+        }
+    }
+    
+    private func showPopover(target: UUID, protocolName: String) {
+        workItem?.cancel()
+        workItem = DispatchWorkItem(block: {
+            self.popoverTarget = nil
+        })
+        
+        if popoverTarget != nil {
+            popoverTarget = nil
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                popoverTarget = target
+            }
+        } else {
+            popoverTarget = target
+        }
+        idWithProtocolName[target] = protocolName
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: workItem!)
+    }
+}
 #Preview {
     OrderHistoryDetailView()
 }

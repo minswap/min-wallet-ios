@@ -25,7 +25,8 @@ struct OrderHistory: Then, Identifiable, Hashable {
     //"2025-07-28T07:40:15.000Z"
     var updatedAt: String?
     var updatedTxId: String?
-    var aggregatorSource: AggregatorSource?
+    var aggregatorSource: AggrSource?
+    var protocolSource: AggregatorSource?
     
     var assetA: Asset = .init()
     var assetB: Asset = .init()
@@ -42,8 +43,11 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var routing: String = ""
     var input: InputOutput?
     var output: InputOutput?
+    var orderAttribute: AttributedString?
     
-    init() {}
+    init() {
+        mappingUI()
+    }
 }
 
 extension OrderHistory: Mappable {
@@ -62,7 +66,8 @@ extension OrderHistory: Mappable {
         ownerIdent <- map["owner_ident"]
         updatedAt <- map["updated_at"]
         updatedTxId <- map["updated_tx_id"]
-        aggregatorSource <- (
+        aggregatorSource <- map["aggregator_source"]
+        protocolSource <- (
             map["protocol"],
             GKMapFromJSONToType(fromJSON: { json in
                 guard let source = json as? String, !source.isEmpty else { return nil }
@@ -247,6 +252,22 @@ extension OrderHistory {
         }()
         
         routing = buildRouting()
+        
+        var attr: [AttributedString?] = []
+        attr = [
+            AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
+            input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+            AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
+            output?.amount.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+        ]
+        attr = attr.compactMap { $0 }
+        var raw = AttributedString()
+        attr.forEach { r in
+            guard let r = r else { return }
+            raw += r
+        }
+        
+        orderAttribute = raw
     }
     
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
@@ -292,5 +313,12 @@ extension OrderHistory {
         }
         
         return nodes.filter { !$0.isBlank }.joined(separator: " > ")
+    }
+}
+
+extension OrderHistory {
+    var keyToGroup: String {
+        guard let aggregatorSource = aggregatorSource else { return createdTxId + "_" + id }
+        return createdTxId + "_ " + aggregatorSource.rawValue
     }
 }

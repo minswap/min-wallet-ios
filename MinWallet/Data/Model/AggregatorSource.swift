@@ -1,7 +1,7 @@
 import SwiftUI
 
 
-enum AggregatorSource: Int, CaseIterable, Identifiable {
+enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     var id: Int { self.rawValue }
     
     case MinswapV2
@@ -229,4 +229,29 @@ extension String {
             return nil
         }
     }
+}
+
+
+enum AggrSource: String {
+    case Minswap = "MINSWAP"
+    case SteelSwap = "STEELSWAP"
+    case DexHunter = "DEX_HUNTER"
+    case MuesliSwap = "MUESLISWAP"
+    case Cardexscan = "CARDEXSCAN"
+    
+    var image: ImageResource {
+        switch self {
+        case .Minswap:
+            .min
+        case .SteelSwap:
+            .min
+        case .DexHunter:
+            .min
+        case .MuesliSwap:
+            .min
+        case .Cardexscan:
+            .min
+        }
+    }
+    
 }

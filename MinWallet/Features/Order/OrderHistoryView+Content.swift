@@ -21,7 +21,7 @@ extension OrderHistoryView {
                 ForEach(0..<20, id: \.self) { index in
                     TokenListItemSkeletonView(showLogo: false)
                 }
-            } else if viewModel.showSearch && viewModel.orders.isEmpty {
+            } else if viewModel.showSearch && viewModel.wrapOrders.isEmpty {
                 HStack {
                     Spacer()
                     emptySearch
@@ -30,7 +30,7 @@ extension OrderHistoryView {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 120)
                 .transition(.opacity)
-            } else if !viewModel.showSearch && viewModel.orders.isEmpty {
+            } else if !viewModel.showSearch && viewModel.wrapOrders.isEmpty {
                 HStack {
                     Spacer()
                     emptyOrders
@@ -41,28 +41,77 @@ extension OrderHistoryView {
                 .transition(.opacity)
             } else {
                 LazyVStack(spacing: 0) {
-                    ForEach(viewModel.orders) { order in
-                        OrderHistoryItemView(
-                            order: order,
-                            onCancelItem: {
-                                viewModel.orderToCancel = order
-                                $viewModel.showCancelOrder.showSheet()
+                    ForEach(Array(viewModel.wrapOrders.enumerated()), id: \.offset) { index, order in
+                        let offsetBinding = Binding<CGFloat>(
+                            get: {
+                                viewModel.offsets[gk_safeIndex: index] ?? 0
+                            },
+                            set: { value in
+                                guard index >= 0, index < viewModel.offsets.count else { return }
+                                viewModel.offsets[index] = value
                             }
                         )
-                        .padding(.horizontal, .xl)
-                        .contentShape(.rect)
-                        .onAppear {
+                        let deleteBinding = Binding<Bool>(
+                            get: {
+                                viewModel.isDeleted[gk_safeIndex: index] ?? false
+                            },
+                            set: { value in
+                                guard index >= 0, index < viewModel.isDeleted.count else { return }
+                                viewModel.isDeleted[index] = value
+                            }
+                        )
+                        
+                        let onCancelItem: () -> Void = {
+                            viewModel.orderCancel = order
+                            if viewModel.hasOnlyOneOrderCancel {
+                                $viewModel.showCancelOrder.showSheet()
+                            } else {
+                                $viewModel.showCancelOrderList.showSheet()
+                            }
+                        }
+
+                        let onAppear: () -> Void = {
                             viewModel.loadMoreData(order: order)
                         }
-                        .onTapGesture {
+
+                        let onTapGesture: () -> Void = {
                             navigator.push(
                                 .orderHistoryDetail(
-                                    order: order,
+                                    wrapOrder: order,
                                     onReloadOrder: {
                                         Task {
                                             await viewModel.fetchData(showSkeleton: false)
                                         }
                                     }))
+                        }
+                        let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0)
+                        OrderHistoryItemView(
+                            wrapOrder: order,
+                            onCancelItem: onCancelItem
+                        )
+                        .padding(.horizontal, .xl)
+                        .contentShape(.rect)
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear
+                                    .preference(key: SizePreferenceKey.self, value: geo.size)
+                            }
+                        )
+                        .onPreferenceChange(SizePreferenceKey.self) { newSize in
+                            heightOrder[order.id] = newSize.height
+                        }
+                        .swipeToDelete(
+                            offset: offsetBinding,
+                            isDeleted: deleteBinding,
+                            enableDrag: .constant(order.status == .created),
+                            height: bindingHeight,
+                            image: .icCancelOrder,
+                            onDelete: onCancelItem
+                        )
+                        .zIndex(Double(index) * -1)
+                        .onAppear(perform: onAppear)
+                        .onTapGesture {
+                            onTapGesture()
                         }
                     }
                 }

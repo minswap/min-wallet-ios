@@ -22,6 +22,8 @@ struct OrderHistoryView: View {
     private var isShowSignContract: Bool = false
     @StateObject
     var filterViewModel: OrderHistoryFilterViewModel = .init()
+    @State
+    var heightOrder: [String: CGFloat] = [:]
     
     var body: some View {
         ZStack {
@@ -37,7 +39,7 @@ struct OrderHistoryView: View {
                     content: {
                         contentView
                     })
-                if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
+                if !viewModel.showSearch && viewModel.wrapOrders.isEmpty && !viewModel.showSkeleton {
                     CustomButton(title: "Swap") {
                         navigator.push(.swapToken(.swapToken(token: nil)))
                     }
@@ -72,8 +74,22 @@ struct OrderHistoryView: View {
                 }
             )
         }
+        .presentSheet(
+            isPresented: $viewModel.showCancelOrderList,
+            onDimiss: {
+                viewModel.orderCancelSelected = [:]
+            },
+            content: {
+                OrderHistoryCancelView(
+                    orders: .constant(viewModel.orderCancel?.orders.filter({ $0.status == .created }) ?? []),
+                    orderSelected: $viewModel.orderCancelSelected,
+                    onCancelOrder: {
+                        $viewModel.showCancelOrder.showSheet()
+                    })
+            }
+        )
         .presentSheet(isPresented: $viewModel.showCancelOrder) {
-            OrderHistoryCancelView {
+            OrderHistoryConfirmCancelView {
                 Task {
                     do {
                         switch appSetting.authenticationType {
@@ -92,6 +108,7 @@ struct OrderHistoryView: View {
     }
     
     private func authenticationSuccess() {
+        /* TODO: cuongnv243 cancel order
         Task {
             do {
                 hud.showLoading(true)
@@ -109,6 +126,7 @@ struct OrderHistoryView: View {
                 bannerState.showBannerError(error.rawError)
             }
         }
+         */
     }
 }
 

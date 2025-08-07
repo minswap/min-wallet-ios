@@ -17,9 +17,13 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var keyword: String = ""
     @Published
-    var orders: [OrderHistory] = []
+    var wrapOrders: [WrapOrderHistory] = []
     @Published
     var showSkeleton: Bool = true
+    @Published
+    var isDeleted: [Bool] = []
+    @Published
+    var offsets: [CGFloat] = []
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -31,7 +35,17 @@ class OrderHistoryViewModel: ObservableObject {
     
     private var pagination: Pagination = .init()
     
-    var orderToCancel: OrderHistory? = nil
+    @Published
+    var orderCancelSelected: [String: OrderHistory] = [:]
+    @Published
+    var showCancelOrderList: Bool = false
+    @Published
+    var orderCancel: WrapOrderHistory?
+    
+    var hasOnlyOneOrderCancel: Bool {
+        guard let orderCancel = orderCancel else { return false }
+        return orderCancel.orders.count == 1 && orderCancel.orders.first?.status == .created
+    }
     
     init() {
         $keyword
@@ -51,9 +65,9 @@ class OrderHistoryViewModel: ObservableObject {
     }
     
     func fetchData(showSkeleton: Bool = true, fromPullToRefresh: Bool = false) async {
-        withAnimation {
-            self.showSkeleton = showSkeleton
-        }
+        //        withAnimation {
+        self.showSkeleton = showSkeleton
+        //        }
         if fromPullToRefresh {
             try? await Task.sleep(for: .seconds(1))
         }
@@ -62,7 +76,7 @@ class OrderHistoryViewModel: ObservableObject {
                 $0.isFetching = true
             })
         let orders = await getOrderHistory()
-        let cursorID = orders.last?.id ?? ""
+        let cursorID = orders.last?.cursor ?? ""
         pagination = pagination.with({
             $0.isFetching = false
             //$0.hasMore = orders.count >= pagination.limit
@@ -70,21 +84,24 @@ class OrderHistoryViewModel: ObservableObject {
             $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
         })
         
-        self.orders = orders
+        self.wrapOrders = orders
+        self.isDeleted = self.wrapOrders.map({ _ in false })
+        self.offsets = self.wrapOrders.map({ _ in 0 })
+        
         withAnimation {
             self.showSkeleton = false
         }
     }
     
-    func loadMoreData(order: OrderHistory) {
+    func loadMoreData(order: WrapOrderHistory) {
         guard pagination.readyToLoadMore else { return }
-        let thresholdIndex = orders.index(orders.endIndex, offsetBy: -5)
-        if orders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
+        let thresholdIndex = wrapOrders.index(wrapOrders.endIndex, offsetBy: -5)
+        if wrapOrders.firstIndex(where: { $0.id == order.id }) == thresholdIndex {
             Task {
                 pagination = pagination.with({ $0.isFetching = true })
                 let _orders = await getOrderHistory()
                 
-                self.orders += _orders
+                self.wrapOrders += _orders
                 let cursorID = _orders.last?.id ?? ""
                 pagination = pagination.with({
                     $0.isFetching = false
@@ -92,13 +109,15 @@ class OrderHistoryViewModel: ObservableObject {
                     $0.hasMore = !_orders.isEmpty
                     $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
                 })
+                self.isDeleted = self.wrapOrders.map({ _ in false })
+                self.offsets = self.wrapOrders.map({ _ in 0 })
             }
         }
     }
     
     var input: OrderHistory.Request {
         let address = UserInfo.shared.minWallet?.address ?? ""
-        //let address = "addr_test1qzjd7yhl8d8aezz0spg4zghgtn7rx7zun7fkekrtk2zvw9vsxg93khf9crelj4wp6kkmyvarlrdvtq49akzc8g58w9cqhx3qeu"
+        //        let address = "addr1q8rzzzrr58pa85p2ca8sxxgptf6sdtcxp2drx8cg4lxqml5w3z9f2vttuvt48p3ddxq74x95gh8ngwqsddk5nsmrfkwqjkwhpt"
         let keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         //ce7c194517fc3d82569a2abff6b9ad93ea83b079016577cd5ac436ed6c6edeb2
         let isTxID = keyword.count == 64
@@ -152,11 +171,15 @@ extension OrderHistory.Request {
 }
 
 extension OrderHistoryViewModel {
-    private func getOrderHistory() async -> [OrderHistory] {
+    private func getOrderHistory() async -> [WrapOrderHistory] {
         do {
             let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
-            let order = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:])
-            return order ?? []
+            let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:]) ?? []
+            let groupedOrders = Dictionary(grouping: orders, by: { $0.keyToGroup })
+            let wrapOrders = groupedOrders.map({ key, orders in
+                return WrapOrderHistory(orders: orders, key: key)
+            })
+            return wrapOrders
         } catch {
             return []
         }

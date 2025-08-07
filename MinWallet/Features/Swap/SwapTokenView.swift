@@ -87,6 +87,7 @@ struct SwapTokenView: View {
                     $viewModel.isShowSwapSetting.showSheet()
                 })
         )
+        .modifier(DismissingKeyboard())
         .presentSheet(isPresented: $viewModel.isShowInfo) {
             SwapTokenInfoView(
                 viewModel: viewModel,
