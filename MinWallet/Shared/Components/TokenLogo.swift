@@ -16,36 +16,40 @@ struct TokenLogoView: View {
     private var isVerified: Bool?
     @State
     private var size: CGSize = .init(width: 28, height: 28)
-
+    @Binding
+    private var forceVerified: Bool
+    
     init(
         currencySymbol: String? = nil,
         tokenName: String? = nil,
         isVerified: Bool? = nil,
+        forceVerified: Bool = false,
         size: CGSize = .init(width: 28, height: 28)
     ) {
         self._currencySymbol = .constant(currencySymbol)
         self._tokenName = .constant(tokenName)
         self._isVerified = .constant(isVerified)
+        self._forceVerified = .constant(forceVerified)
         self._size = .init(initialValue: size)
     }
-
+    
     private var uniqueID: String {
         let currencySymbol = currencySymbol ?? ""
         let tokenName = tokenName ?? ""
         if currencySymbol.isEmpty && tokenName.isEmpty {
             return ""
         }
-
+        
         if currencySymbol.isEmpty {
             return tokenName
         }
-
+        
         if tokenName.isEmpty {
             return currencySymbol
         }
         return currencySymbol + "." + tokenName
     }
-
+    
     var body: some View {
         ZStack {
             Group {
@@ -63,7 +67,7 @@ struct TokenLogoView: View {
             }
             .frame(width: size.width, height: size.height)
             .clipShape(Circle())
-            if isVerified == true || Self.TOKEN_IMAGE_DEFAULT[uniqueID] != nil {
+            if isVerified == true || (Self.TOKEN_IMAGE_DEFAULT[uniqueID] != nil && !forceVerified) {
                 Circle()
                     .fill(.colorBaseBackground)
                     .frame(width: size.width * 16 / 28, height: size.width * 16 / 28)
@@ -81,7 +85,7 @@ struct TokenLogoView: View {
         }
         .frame(width: size.width, height: size.height)
     }
-
+    
     private func buildImageURL(currencySymbol: String, tokenName: String) -> String {
         let path = "\(currencySymbol)\(tokenName)"
         return "\(MinWalletConstant.minAssetURL)/\(path)"
@@ -94,5 +98,36 @@ struct TokenLogoView: View {
         //            .frame(width: 28, height: 28)
     }
     .background(.pink)
+    
+}
 
+
+struct HalfCircleMask: Shape {
+    let isLeft: Bool
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) / 2
+        
+        if isLeft {
+            path.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .degrees(90),
+                endAngle: .degrees(270),
+                clockwise: true)
+        } else {
+            path.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .degrees(270),
+                endAngle: .degrees(90),
+                clockwise: true)
+        }
+        path.addLine(to: center)
+        path.closeSubpath()
+        
+        return path
+    }
 }

@@ -11,14 +11,14 @@ struct OrderHistoryFilterView: View {
     private var appSetting: AppSetting
     @ObservedObject
     var viewModel: OrderHistoryFilterViewModel
-
+    
     @Environment(\.partialSheetDismiss)
     var onDismiss
     @Environment(\.enableDragGesture)
     var enableDragGesture
-
-    var onFilterSelected: ((ContractType?, OrderV2Status?, OrderV2Action?, Date?, Date?) -> Void)?
-
+    
+    var onFilterSelected: ((OrderV2Status?, AggregatorSource?, OrderHistory.OrderType?, Date?, Date?) -> Void)?
+    
     private func formateDate(_ date: Date?) -> String {
         guard let date = date else { return "Select date" }
         let formatter = DateFormatter()
@@ -29,7 +29,7 @@ struct OrderHistoryFilterView: View {
         }
         return formatter.string(from: date)
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Filter")
@@ -38,42 +38,52 @@ struct OrderHistoryFilterView: View {
                 .frame(height: 60)
             if !viewModel.showSelectToDate && !viewModel.showSelectFromDate {
                 VStack(spacing: 0) {
-                    Text("Contract")
+                    Text("Protocol")
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    HStack(spacing: 8) {
-                        let contractTypes: [ContractType] = [.dex, .dexV2, .stableswap]
-                        TextSelectable(content: "All", selected: $viewModel.contractTypeSelected, value: nil)
-                            .onTapGesture {
-                                viewModel.contractTypeSelected = nil
-                            }
-                        ForEach(0..<contractTypes.count, id: \.self) { index in
-                            if let type = contractTypes[gk_safeIndex: index] {
-                                TextSelectable(content: type.title, selected: $viewModel.contractTypeSelected, value: type)
-                                    .onTapGesture {
-                                        viewModel.contractTypeSelected = type
-                                    }
-                            }
+                    //let rawActionsP: [AggregatorSource] = [.Minswap, .MinswapV2, .MinswapStable, .SundaeSwapV3, .SundaeSwap, .Splash, .WingRidersV2, .WingRiders, .MuesliSwap]
+                    let rawActionsP: [AggregatorSource] = AggregatorSource.allCases
+                    let allKeyP: LocalizedStringKey = "All"
+                    let actionsP: [String] = ([allKeyP] + rawActionsP.map({ $0.name })).map { $0.toString() }
+                    
+                    let heightz = calculateHeightFlowLayout(actions: actionsP)
+                    FlowLayout(
+                        mode: .vstack,
+                        items: actionsP,
+                        itemSpacing: 0
+                    ) { title in
+                        let action = AggregatorSource(title: title)
+                        let isActionAll = title == allKeyP.toString()
+                        let content: LocalizedStringKey? = isActionAll ? allKeyP : action?.name
+                        TextSelectable(
+                            content: content ?? allKeyP,
+                            selected: $viewModel.protocolSelected,
+                            value: isActionAll ? nil : action
+                        )
+                        .onTapGesture {
+                            viewModel.protocolSelected = title == allKeyP.toString() ? nil : action
                         }
-                        Spacer()
                     }
-                    Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
+                    .frame(height: heightz)
+                    Color.colorBorderPrimarySub.frame(height: 1)
+                        .padding(.top, .md)
+                        .padding(.bottom, .xl)
                     Text("Action")
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-                    let rawAction: [OrderV2Action] = [.market, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
+                    let rawAction: [OrderHistory.OrderType] = [.swap, .limit, .zapIn, .zapOut, .deposit, .withdraw, .oco, .stopLoss, .partialSwap]
                     let allKey: LocalizedStringKey = "All"
                     let actions: [String] = ([allKey] + rawAction.map({ $0.titleFilter })).map { $0.toString() }
-
+                    
                     let height = calculateHeightFlowLayout(actions: actions)
                     FlowLayout(
                         mode: .vstack,
                         items: actions,
                         itemSpacing: 0
                     ) { title in
-                        let action = OrderV2Action(title: title)
+                        let action = OrderHistory.OrderType(title: title)
                         let isActionAll = title == allKey.toString()
                         let content: LocalizedStringKey? = isActionAll ? allKey : action?.titleFilter
                         TextSelectable(
@@ -91,7 +101,7 @@ struct OrderHistoryFilterView: View {
                         .font(.labelSmallSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, .md)
-
+                    
                     let statuses = ([allKey] + OrderV2Status.allCases.map({ $0.title })).map { $0.toString() }
                     FlexibleView(
                         data: statuses,
@@ -110,7 +120,7 @@ struct OrderHistoryFilterView: View {
                             viewModel.statusSelected = title == allKey.toString() ? nil : action
                         }
                     }
-
+                    
                     /*
                     HStack(spacing: 8) {
                         TextSelectable(content: "All", selected: $statusSelected, value: nil)
@@ -128,7 +138,7 @@ struct OrderHistoryFilterView: View {
                         }
                         Spacer()
                     }
-*/
+                    */
                     Color.colorBorderPrimarySub.frame(height: 1).padding(.vertical, .xl)
                 }
                 .padding(.top, .lg)
@@ -158,7 +168,7 @@ struct OrderHistoryFilterView: View {
                             viewModel.showSelectFromDate = true
                         }
                 }
-
+                
                 VStack(alignment: .leading, spacing: 4) {
                     Text("To")
                         .font(.labelSmallSecondary)
@@ -231,14 +241,14 @@ struct OrderHistoryFilterView: View {
                     }
                 }
             }
-
+            
             HStack(spacing: .xl) {
                 CustomButton(title: "Reset", variant: .secondary) {
                     onDismiss?()
                     onFilterSelected?(nil, nil, nil, nil, nil)
-
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
-
+                        
                     }
                 }
                 .frame(height: 56)
@@ -257,7 +267,7 @@ struct OrderHistoryFilterView: View {
                     onDismiss?()
                     viewModel.fromDate = viewModel.fromDate?.startOfDay
                     viewModel.toDate = viewModel.toDate?.endOfDay
-                    onFilterSelected?(viewModel.contractTypeSelected, viewModel.statusSelected, viewModel.actionSelected, viewModel.fromDate, viewModel.toDate)
+                    onFilterSelected?(viewModel.statusSelected, viewModel.protocolSelected, viewModel.actionSelected, viewModel.fromDate, viewModel.toDate)
                 }
                 .frame(height: 56)
             }
@@ -283,7 +293,7 @@ private struct TextSelectable<T: Equatable>: View {
     @State var content: LocalizedStringKey = "All"
     @Binding var selected: T?
     @State var value: T?
-
+    
     var body: some View {
         Text(content)
             .font(.labelSmallSecondary)

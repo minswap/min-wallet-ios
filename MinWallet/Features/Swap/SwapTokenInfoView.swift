@@ -7,10 +7,10 @@ struct SwapTokenInfoView: View {
     private var onDismiss
     @ObservedObject
     var viewModel: SwapTokenViewModel
-
+    
     var onShowToolTip: ((_ title: LocalizedStringKey, _ content: LocalizedStringKey) -> Void)?
     var onSwap: (() -> Void)?
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Details")
@@ -22,8 +22,13 @@ struct SwapTokenInfoView: View {
                 DashedUnderlineText(text: viewModel.isSwapExactIn ? "Minimum Received" : "Minimum Send", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer(minLength: 0)
                 let tokenName = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.adaName : viewModel.tokenPay.adaName
-                Text(viewModel.minimumMaximumAmount.formatNumber(suffix: tokenName, roundingOffset: nil, font: .labelMediumSecondary, fontColor: .colorBaseTent))
-                    .lineLimit(1)
+                let decimal = viewModel.isSwapExactIn ? viewModel.tokenReceive.token.decimals : viewModel.tokenPay.token.decimals
+                Text(
+                    viewModel.minimumMaximumAmount
+                        .toExact(decimal: Double(decimal))
+                        .formatNumber(suffix: tokenName, roundingOffset: nil, font: .labelMediumSecondary, fontColor: .colorBaseTent)
+                )
+                .lineLimit(1)
             }
             .padding(.top, .lg)
             .contentShape(.rect)
@@ -45,9 +50,10 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Price Impact", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
+                if let iosTradeEstimate = viewModel.iosTradeEstimate {
+                    let priceImpact = iosTradeEstimate.avgPriceImpact
                     let priceImpactColor = iosTradeEstimate.priceImpactColor
-                    Text(priceImpact.formatSNumber() + "%")
+                    Text(priceImpact.formatSNumber(maximumFractionDigits: 4) + "%")
                         .font(.labelMediumSecondary)
                         .foregroundStyle(priceImpactColor.0)
                 }
@@ -60,39 +66,55 @@ struct SwapTokenInfoView: View {
             HStack {
                 DashedUnderlineText(text: "Liquidity Provider Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                let fee = viewModel.iosTradeEstimate?.lpFee?.toExact(decimal: viewModel.tokenPay.token.decimals) ?? 0
+                let decimal: Int = {
+                    viewModel.isSwapExactIn ? viewModel.tokenPay.token.decimals : viewModel.tokenReceive.token.decimals
+                }()
+                let currentSymbol: String = {
+                    viewModel.isSwapExactIn ? viewModel.tokenPay.token.adaName : viewModel.tokenReceive.token.adaName
+                }()
+                let fee = viewModel.iosTradeEstimate?.totalLpFee.toExact(decimal: decimal) ?? 0
+                Text(fee.formatNumber(suffix: currentSymbol, font: .labelMediumSecondary, fontColor: .colorBaseTent))
+            }
+            .padding(.top, .xl)
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Liquidity Provider Fee", "The fee paid to liquidity providers for facilitating your trade. This fee is deducted from your input amount and distributed to users who supply assets to the liquidity pool.")
+            }
+            HStack {
+                DashedUnderlineText(text: "Service Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                Spacer()
+                let fee = viewModel.iosTradeEstimate?.aggregatorFee.toExact(decimal: TokenManager.shared.tokenAda.decimals) ?? 0
                 Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary, fontColor: .colorBaseTent))
             }
             .padding(.top, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("Liquidity Provider Fee", "1/6 of Liquidity Providers Fee going to MIN stakers?")
+                onShowToolTip?("Service Fee", "The service fee is charged for routing your trade through multiple liquidity sources to find the best price. The fee is calculated as the greater of 0.85₳ or --% of your trade amount.")
             }
-            /*
             HStack {
-                DashedUnderlineText(text: "Batcher Fee", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                DashedUnderlineText(text: "DEX's Fees", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
-                Text("2 \(Currency.ada.prefix)")
-                    .strikethrough()
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                Text("1.5 \(Currency.ada.prefix)")
-                    .font(.labelMediumSecondary)
-                    .foregroundStyle(.colorInteractiveToneHighlight)
+                let fee = viewModel.iosTradeEstimate?.totalDexFee.toExact(decimal: TokenManager.shared.tokenAda.decimals) ?? 0
+                Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary, fontColor: .colorBaseTent))
             }
             .padding(.top, .xl)
-            .padding(.bottom, .xs)
             .contentShape(.rect)
             .onTapGesture {
-                onShowToolTip?("Batcher Fee", "Fee paid for the service of off-chain Laminar batcher to process transactions.")
+                onShowToolTip?("DEX's Fees", "The DEX fees includes the batcher fee and network fee required to process your transaction on the blockchain. These fees are necessary to ensure your trade is executed and confirmed by the network.")
             }
-            Text("Want a discount?")
-                .font(.paragraphXSmall)
-                .foregroundStyle(.colorInteractiveToneHighlight)
-                .onTapGesture {
-                    "https://docs.minswap.org/min-token/usdmin-tokenomics/trading-fee-discount".openURL()
-                }
-             */
+            HStack {
+                DashedUnderlineText(text: "Refundable deposit", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
+                Spacer()
+                let fee = viewModel.iosTradeEstimate?.deposits.toExact(decimal: TokenManager.shared.tokenAda.decimals) ?? 0
+                Text(fee.formatNumber(suffix: Currency.ada.prefix, font: .labelMediumSecondary, fontColor: .colorBaseTent))
+            }
+            .padding(.top, .xl)
+            .padding(.bottom, 40)
+            .contentShape(.rect)
+            .onTapGesture {
+                onShowToolTip?("Refundable deposit", "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled")
+            }
+            /*
             HStack {
                 DashedUnderlineText(text: "Deposit ADA", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                 Spacer()
@@ -106,6 +128,7 @@ struct SwapTokenInfoView: View {
             .onTapGesture {
                 onShowToolTip?("Deposit ADA", "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled.")
             }
+             */
             let combinedBinding = Binding<Bool>(
                 get: { viewModel.enableSwap },
                 set: { _ in }

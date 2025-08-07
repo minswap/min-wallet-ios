@@ -6,17 +6,17 @@ import MinWalletAPI
 struct TokenListItemView: View {
     @EnvironmentObject
     private var appSetting: AppSetting
-
+    
     let token: TokenProtocol?
     let showSubPrice: Bool
     let showBottomLine: Bool
-
+    
     init(token: TokenProtocol?, showSubPrice: Bool = false, showBottomLine: Bool = true) {
         self.token = token
         self.showSubPrice = showSubPrice
         self.showBottomLine = showBottomLine
     }
-
+    
     var body: some View {
         HStack(spacing: .xl) {
             TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
@@ -54,7 +54,7 @@ struct TokenListItemView: View {
                         .lineLimit(1)
                         .padding(.trailing, .md)
                     Spacer()
-
+                    
                     if showSubPrice {
                         let subPrice: Double = token?.subPriceValue ?? 0
                         let subPriceValue: AttributedString = {
@@ -101,7 +101,7 @@ struct TokenListItemView: View {
 struct TokenListItemSkeletonView: View {
     @State
     var showLogo: Bool = true
-
+    
     var body: some View {
         HStack(spacing: .xl) {
             if showLogo {

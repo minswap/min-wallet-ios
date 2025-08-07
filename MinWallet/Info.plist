@@ -27,8 +27,8 @@
 	<string>${MIN_KEYCHAIN_ACCESS_GROUP}</string>
 	<key>MIN_KEYCHAIN_SERVICE_NAME</key>
 	<string>${MIN_KEYCHAIN_SERVICE_NAME}</string>
-	<key>MIN_LP_TOKEN</key>
-	<string>${MIN_LP_TOKEN}</string>
+	<key>MIN_CURRENCY_SYMBOL_LP_V1</key>
+	<string>${MIN_CURRENCY_SYMBOL_LP_V1}</string>
 	<key>MIN_MINT_TOKEN</key>
 	<string>${MIN_MINT_TOKEN}</string>
 	<key>MIN_MIN_TOKEN</key>
@@ -45,12 +45,14 @@
 	<string>Using Face ID to login</string>
 	<key>MIN_ADDRESS_PREFIX</key>
 	<string>${MIN_ADDRESS_PREFIX}</string>
-	<key>MIN_HANDLE_ADA_NAME_URL</key>
-	<string>${MIN_HANDLE_ADA_NAME_URL}</string>
-	<key>MIN_ABOUT_URL</key>
-	<string>${MIN_ABOUT_URL}</string>
+	<key>MIN_ADA_HANDLE_URL</key>
+	<string>${MIN_ADA_HANDLE_URL}</string>
+	<key>MIN_POLICY_URL</key>
+	<string>${MIN_POLICY_URL}</string>
 	<key>MIN_ASSET_URL</key>
 	<string>${MIN_ASSET_URL}</string>
+	<key>MIN_AGG_URL</key>
+	<string>${MIN_AGG_URL}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>

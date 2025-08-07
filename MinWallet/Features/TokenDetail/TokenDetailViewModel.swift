@@ -5,9 +5,9 @@ import Combine
 
 @MainActor
 class TokenDetailViewModel: ObservableObject {
-
+    
     var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .oneYear]
-
+    
     @Published
     var token: TokenProtocol!
     @Published
@@ -32,25 +32,25 @@ class TokenDetailViewModel: ObservableObject {
     var isLoadingPriceChart: Bool = true
     @Published
     var isInteracting = false
-
+    
     private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
-
+    
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
         return chartDatas[gk_safeIndex: selectedIndex]
     }
-
+    
     var percent: Double {
         guard let selectedIndex = selectedIndex, !chartDatas.isEmpty else { return 0 }
         guard let current = chartDatas[gk_safeIndex: selectedIndex]?.value, let previous = chartDatas[gk_safeIndex: selectedIndex - 1]?.value else { return 0 }
         return (current - previous) / previous * 100
     }
-
+    
     private var cancellables: Set<AnyCancellable> = []
-
+    
     init(token: TokenProtocol = TokenProtocolDefault()) {
         self.token = token
-
+        
         $chartPeriod
             .removeDuplicates()
             .sink { [weak self] newData in
@@ -66,28 +66,28 @@ class TokenDetailViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-
+        
         isFav = UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == token.uniqueID })
-
+        
         getTokenDetail()
         getRickScore()
         checkTokenValid()
     }
-
+    
     private func getTokenDetail() {
         Task {
             let asset = try? await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
             self.topAsset = asset?.topAsset
         }
     }
-
+    
     private func getPriceChart() async {
         if lpAsset == nil {
             let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
             let poolByPair = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
             self.lpAsset = poolByPair?.poolsByPairs.first?.lpAsset
         }
-
+        
         let input = PriceChartInput(
             assetIn: InputAsset(currencySymbol: "", tokenName: ""),
             assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName),
@@ -104,20 +104,20 @@ class TokenDetailViewModel: ObservableObject {
         self.chartDatas = chartDatas ?? []
         self.selectedIndex = max(0, self.chartDatas.count - 1)
     }
-
+    
     private func getRickScore() {
         Task {
             let riskScore = try? await MinWalletService.shared.fetch(query: RiskScoreOfAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
             self.riskCategory = riskScore?.riskScoreOfAsset
         }
     }
-
+    
     private func checkTokenValid() {
         Task {
             isSuspiciousToken = await AppSetting.shared.isSuspiciousToken(currencySymbol: token.currencySymbol)
         }
     }
-
+    
     func formatDate(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()
@@ -136,7 +136,7 @@ class TokenDetailViewModel: ObservableObject {
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
     }
-
+    
     func formatDateAnnotation(value: Date) -> String {
         guard !chartDatas.isEmpty else { return " " }
         let inputFormatter = DateFormatter()
@@ -161,7 +161,7 @@ extension ChartPeriod: @retroactive Identifiable {
     public var id: UUID {
         UUID()
     }
-
+    
     var title: String {
         switch self {
         case .oneDay:

@@ -21,17 +21,17 @@ class SelectTokenViewModel: ObservableObject {
     @Published
     var scrollToTop: Bool = false
     var searchAfter: [String]? = nil
-
+    
     private var hasLoadMore: Bool = true
     private var isFetching: Bool = true
-
+    
     private var cancellables: Set<AnyCancellable> = []
     private var cachedIndex: [String: Int] = [:]
-
+    
     private var rawTokens: [TokenProtocol] {
         [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
     }
-
+    
     init(
         tokensSelected: [TokenProtocol?] = [],
         screenType: SelectTokenView.ScreenType,
@@ -68,7 +68,7 @@ class SelectTokenViewModel: ObservableObject {
                 case .initSelectedToken,
                     .sendToken:
                     let rawTokens = self.rawTokens
-
+                    
                     let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
                     let _tokens =
                         keyword.isBlank
@@ -87,10 +87,10 @@ class SelectTokenViewModel: ObservableObject {
                 case .swapToken:
                     self.getTokens()
                 }
-
+                
             }
             .store(in: &cancellables)
-
+        
         switch screenType {
         case .initSelectedToken, .sendToken:
             if rawTokens.count <= 1 {
@@ -102,13 +102,13 @@ class SelectTokenViewModel: ObservableObject {
             self.getTokens()
         }
     }
-
+    
     func getTokens(isLoadMore: Bool = false) {
         Task {
             do {
                 showSkeleton = !isLoadMore
                 isFetching = true
-
+                
                 var _tokens: [TokenProtocol] = []
                 if !isLoadMore {
                     //let _ = try await TokenManager.getYourToken()
@@ -129,7 +129,7 @@ class SelectTokenViewModel: ObservableObject {
                 } else {
                     _tokens = self.tokens.map({ $0.token })
                 }
-
+                
                 switch screenType {
                 case .initSelectedToken:
                     self.hasLoadMore = false
@@ -159,7 +159,7 @@ class SelectTokenViewModel: ObservableObject {
                         self.tokens = (_tokens + _assets).map({ WrapTokenProtocol(token: $0) })
                     }
                 }
-
+                
                 self.showSkeleton = false
                 self.isFetching = false
             } catch {
@@ -169,7 +169,7 @@ class SelectTokenViewModel: ObservableObject {
             }
         }
     }
-
+    
     func loadMoreData(item: TokenProtocol) {
         guard case .swapToken = screenType else { return }
         guard hasLoadMore, !isFetching else { return }
@@ -178,7 +178,7 @@ class SelectTokenViewModel: ObservableObject {
             getTokens(isLoadMore: true)
         }
     }
-
+    
     func toggleSelected(token: TokenProtocol) {
         switch screenType {
         case .initSelectedToken, .sendToken:
@@ -193,7 +193,7 @@ class SelectTokenViewModel: ObservableObject {
             tokensSelected[token.uniqueID] = token
         }
     }
-
+    
     func selectToken(tokens: [TokenProtocol]) {
         tokensSelected = tokens.compactMap({ $0 })
             .reduce(
@@ -206,7 +206,7 @@ class SelectTokenViewModel: ObservableObject {
                 self.cachedIndex[token.uniqueID] = idx
             }
     }
-
+    
     func resetState() {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in
             guard let self = self else { return }

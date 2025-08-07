@@ -8,7 +8,7 @@ struct SwapTokenView: View {
         case pay
         case receive
     }
-
+    
     @EnvironmentObject
     private var navigator: FlowNavigator<MainCoordinatorViewModel.Screen>
     @EnvironmentObject
@@ -29,11 +29,16 @@ struct SwapTokenView: View {
     var content: LocalizedStringKey = ""
     @State
     var title: LocalizedStringKey = ""
-
+    
+    @State
+    private var swapSettingCached: SwapTokenSetting = .init()
+    @State
+    private var excludedPoolsCached: [String: AggregatorSource] = [:]
+    
     init(viewModel: SwapTokenViewModel) {
         _viewModel = .init(wrappedValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -62,7 +67,7 @@ struct SwapTokenView: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-
+                
                 Button("Done") {
                     hideKeyboard()
                 }
@@ -82,6 +87,7 @@ struct SwapTokenView: View {
                     $viewModel.isShowSwapSetting.showSheet()
                 })
         )
+        .modifier(DismissingKeyboard())
         .presentSheet(isPresented: $viewModel.isShowInfo) {
             SwapTokenInfoView(
                 viewModel: viewModel,
@@ -95,12 +101,10 @@ struct SwapTokenView: View {
                 }
             )
         }
-        /*
         .presentSheet(isPresented: $viewModel.isShowRouting) {
             SwapTokenRoutingView()
                 .environmentObject(viewModel)
         }
-         */
         .presentSheet(
             isPresented: $viewModel.isShowSelectToken,
             onDimiss: {
@@ -117,17 +121,28 @@ struct SwapTokenView: View {
                 .presentSheetModifier()
             }
         )
+        .presentSheet(
+            isPresented: $viewModel.isShowSwapSetting,
+            onDimiss: {
+                swapSettingCached = viewModel.swapSetting
+            },
+            content: {
+                SwapTokenSettingView(
+                    onShowToolTip: { title, content in
+                        self.content = content
+                        self.title = title
+                        $isShowToolTip.showSheet()
+                    },
+                    showCustomizedRoute: $viewModel.isShowCustomizedRoute,
+                    swapTokenSetting: $swapSettingCached,
+                    onSave: {
+                        viewModel.swapSetting = swapSettingCached
+                        viewModel.action.send(.getTradingInfo)
+                    }
+                )
+            }
+        )
         .ignoresSafeArea(.keyboard)
-        .presentSheet(isPresented: $viewModel.isShowSwapSetting) {
-            SwapTokenSettingView(
-                onShowToolTip: { title, content in
-                    self.content = content
-                    self.title = title
-                    $isShowToolTip.showSheet()
-                }, viewModel: viewModel
-            )
-            .padding(.xl)
-        }
         .presentSheet(isPresented: $isShowSignContract) {
             SignContractView(
                 onSignSuccess: {
@@ -144,6 +159,21 @@ struct SwapTokenView: View {
                 })
                 .ignoresSafeArea()
         }
+        .presentSheet(
+            isPresented: $viewModel.isShowCustomizedRoute,
+            onDimiss: {
+                excludedPoolsCached = swapSettingCached.excludedPools.reduce([:]) { result, source in
+                    result.appending([source.rawId: source])
+                }
+            },
+            content: {
+                SwapTokenCustomizedRouteView(
+                    excludedSource: $excludedPoolsCached,
+                    onSave: {
+                        self.swapSettingCached.excludedPools = Array(excludedPoolsCached.values)
+                    })
+            }
+        )
         .onAppear { [weak viewModel] in
             viewModel?.bannerState = bannerState
             viewModel?.subscribeCombine()
@@ -152,7 +182,7 @@ struct SwapTokenView: View {
             viewModel?.unsubscribeCombine()
         }
     }
-
+    
     @ViewBuilder
     private var contentView: some View {
         tokenPayView
@@ -170,7 +200,7 @@ struct SwapTokenView: View {
         routingView
         warningView
     }
-
+    
     @ViewBuilder
     private var tokenPayView: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -241,11 +271,6 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
-                /*
-                Text("$0.0")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
@@ -261,7 +286,7 @@ struct SwapTokenView: View {
         .padding(.horizontal, .xl)
         .padding(.top, .lg)
     }
-
+    
     @ViewBuilder
     private var tokenReceiveView: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -289,6 +314,7 @@ struct SwapTokenView: View {
                     .font(.titleH4)
                     .foregroundStyle(.colorBaseTent)
                     .focused($focusedField, equals: .receive)
+                    .disabled(true)
                 }
                 Spacer(minLength: 0)
                 HStack(alignment: .center, spacing: .md) {
@@ -316,11 +342,6 @@ struct SwapTokenView: View {
                 }
             }
             HStack(alignment: .center, spacing: 4) {
-                /*
-                Text("$0.0")
-                    .font(.paragraphSmall)
-                    .foregroundStyle(.colorInteractiveTentPrimarySub)
-                 */
                 Spacer()
                 Image(.icWallet)
                     .resizable()
@@ -336,114 +357,45 @@ struct SwapTokenView: View {
         .padding(.horizontal, .xl)
         .padding(.top, .xs)
     }
-
+    
     @ViewBuilder
     private var routingView: some View {
-        HStack(alignment: .center, spacing: 8) {
-            Text("Trade route")
-                .lineLimit(1)
-                .font(.paragraphXSmall)
-                .foregroundStyle(.colorInteractiveTentPrimarySub)
-            /*
-            let contractType = viewModel.iosTradeEstimate?.type.value
-            if !viewModel.isGettingTradeInfo, let contractType = contractType {
-                Text(contractType.title)
-                    .font(.paragraphXMediumSmall)
-                    .foregroundStyle(contractType.foregroundColor)
-                    .padding(.horizontal, .md)
-                    .frame(height: 20)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
-                    )
-            }
-             */
-            Spacer(minLength: 0)
-            if viewModel.isGettingTradeInfo {
-                HStack(spacing: 0) {
-                    Text("")
-                }
-                .skeleton(with: true)
-                .frame(width: 56, height: 16)
-            } else if let assets = viewModel.iosTradeEstimate?.path, !assets.isEmpty {
-                Image(.icStartRouting)
-                    .padding(.trailing, 4)
-                ForEach(0..<assets.count, id: \.self) { index in
-                    if let asset = assets[gk_safeIndex: index] {
-                        TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
-                        if index != assets.count - 1 {
-                            Image(.icBack)
-                                .resizable()
-                                .renderingMode(.template)
-                                .rotationEffect(.degrees(180))
-                                .frame(width: 14, height: 14)
-                                .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                        }
+        if viewModel.iosTradeEstimate != nil {
+            HStack(alignment: .center, spacing: 4) {
+                Text("Your trade route")
+                    .lineLimit(1)
+                    .font(.paragraphXSmall)
+                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                Spacer(minLength: 0)
+                if viewModel.isGettingTradeInfo {
+                    HStack(spacing: 0) {
+                        Text("")
                     }
+                    .skeleton(with: true)
+                    .frame(width: 56, height: 16)
+                } else if let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty {
+                    let splits = paths.count > 1 ? "\(paths.count) splits" : "\(paths.count) split"
+                    Text(splits)
+                        .font(.paragraphSemi)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+                    Image(.icArrowRight)
                 }
             }
-        }
-        .padding(.horizontal, .xl)
-        .frame(height: 48)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
-        .padding(.top, .md)
-        .padding(.horizontal, .xl)
-        /*
-            VStack(spacing: .lg) {
-                HStack(spacing: 4) {
-                    Text("Select your route")
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    Spacer()
-                    Image(.icDown)
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 16, height: 16)
-                        .tint(.colorBaseTent)
-                }
-                HStack(spacing: 8) {
-                    Text("Best route")
-                        .lineLimit(1)
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                    Text(contractType.title)
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(contractType.foregroundColor)
-                        .padding(.horizontal, .md)
-                        .frame(height: 20)
-                        .background(
-                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(contractType.backgroundColor)
-                        )
-                    Spacer()
-                    Image(.icStartRouting)
-                        .padding(.trailing, 4)
-                    ForEach(0..<assets.count, id: \.self) { index in
-                        if let asset = assets[gk_safeIndex: index] {
-                            TokenLogoView(currencySymbol: asset.currencySymbol, tokenName: asset.tokenName, isVerified: false, size: .init(width: 16, height: 16))
-                            if index != assets.count - 1 {
-                                Image(.icBack)
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .rotationEffect(.degrees(180))
-                                    .frame(width: 14, height: 14)
-                                    .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                            }
-                        }
-                    }
-                }
-            }
-            .padding(.xl)
+            .padding(.horizontal, .xl)
+            .frame(height: 52)
             .overlay(RoundedRectangle(cornerRadius: 12).stroke(.colorBorderPrimarySub, lineWidth: 1))
             .padding(.top, .md)
             .padding(.horizontal, .xl)
             .contentShape(.rect)
             .onTapGesture {
-                guard !viewModel.isLoadingRouting else { return }
+                guard !viewModel.isGettingTradeInfo else { return }
+                guard let paths = viewModel.iosTradeEstimate?.paths, !paths.isEmpty else { return }
                 hideKeyboard()
                 $viewModel.isShowRouting.showSheet()
             }
-             */
+        }
     }
-
+    
     @ViewBuilder
     private var bottomView: some View {
         let payAmount = viewModel.tokenPay.amount.doubleValue
@@ -464,9 +416,10 @@ struct SwapTokenView: View {
                         viewModel.isConvertRate.toggle()
                     }
                 Spacer(minLength: 0)
-                if let iosTradeEstimate = viewModel.iosTradeEstimate, let priceImpact = iosTradeEstimate.priceImpact {
+                if let iosTradeEstimate = viewModel.iosTradeEstimate {
+                    let priceImpact = iosTradeEstimate.avgPriceImpact
                     let priceImpactColor = iosTradeEstimate.priceImpactColor
-                    Text(priceImpact.formatSNumber() + "%")
+                    Text(priceImpact.formatSNumber(maximumFractionDigits: 4) + "%")
                         .font(.paragraphXMediumSmall)
                         .foregroundStyle(priceImpactColor.0)
                         .padding(.horizontal, .md)
@@ -528,7 +481,7 @@ struct SwapTokenView: View {
             }
         }
     }
-
+    
     @ViewBuilder
     private var warningView: some View {
         if !viewModel.warningInfo.isEmpty {
@@ -551,13 +504,14 @@ struct SwapTokenView: View {
             .padding(.top, .md)
         }
     }
-
+    
     private func processingSwapToken() {
         hideKeyboard()
         guard !viewModel.isGettingTradeInfo, viewModel.errorInfo == nil, viewModel.iosTradeEstimate != nil else { return }
         guard !viewModel.tokenPay.amount.doubleValue.isZero, !viewModel.tokenReceive.amount.doubleValue.isZero else { return }
         Task {
             do {
+                viewModel.action.send(.cancelTimeInterval)
                 switch appSetting.authenticationType {
                 case .biometric:
                     try await appSetting.reAuthenticateUser()
@@ -566,17 +520,18 @@ struct SwapTokenView: View {
                     $isShowSignContract.showSheet()
                 }
             } catch {
+                viewModel.action.send(.startTimeInterval)
                 bannerState.showBannerError(error.localizedDescription)
             }
         }
     }
-
+    
     private func swapTokenSuccess() {
         Task {
             do {
                 hudState.showLoading(true)
                 let txRaw = try await viewModel.swapToken()
-                let finalID = try await TokenManager.finalizeAndSubmit(txRaw: txRaw)
+                let finalID = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
                 hudState.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
@@ -585,16 +540,10 @@ struct SwapTokenView: View {
                 }
                 bannerState.showBanner(isShow: true)
                 viewModel.action.send(.resetSwap)
-                /*
-                TokenManager.shared.reloadBalance.send(())
-                if appSetting.rootScreen != .home {
-                    appSetting.rootScreen = .home
-                }
-                navigator.popToRoot()
-                 */
             } catch {
                 hudState.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
+                viewModel.action.send(.startTimeInterval)
             }
         }
     }
@@ -610,12 +559,12 @@ struct WarningItemView: View {
     let waringInfo: SwapTokenViewModel.WarningInfo
     @Binding
     var isExpand: Bool
-
+    
     init(waringInfo: SwapTokenViewModel.WarningInfo, isExpand: Binding<Bool>) {
         self.waringInfo = waringInfo
         self._isExpand = isExpand
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: Spacing.md) {

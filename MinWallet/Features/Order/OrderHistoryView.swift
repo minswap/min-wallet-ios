@@ -22,7 +22,9 @@ struct OrderHistoryView: View {
     private var isShowSignContract: Bool = false
     @StateObject
     var filterViewModel: OrderHistoryFilterViewModel = .init()
-
+    @State
+    var heightOrder: [String: CGFloat] = [:]
+    
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
@@ -37,7 +39,7 @@ struct OrderHistoryView: View {
                     content: {
                         contentView
                     })
-                if !viewModel.showSearch && viewModel.orders.isEmpty && !viewModel.showSkeleton {
+                if !viewModel.showSearch && viewModel.wrapOrders.isEmpty && !viewModel.showSkeleton {
                     CustomButton(title: "Swap") {
                         navigator.push(.swapToken(.swapToken(token: nil)))
                     }
@@ -53,11 +55,11 @@ struct OrderHistoryView: View {
         .presentSheet(isPresented: $viewModel.showFilterView) {
             OrderHistoryFilterView(
                 viewModel: filterViewModel,
-                onFilterSelected: { contractType, status, action, fromDate, toDate in
+                onFilterSelected: { status, source, action, fromDate, toDate in
                     Task {
-                        viewModel.contractTypeSelected = contractType
                         viewModel.statusSelected = status
-                        viewModel.actionSelected = action
+                        viewModel.orderType = action
+                        viewModel.source = source
                         viewModel.fromDate = fromDate
                         viewModel.toDate = toDate
                         await viewModel.fetchData()
@@ -72,8 +74,22 @@ struct OrderHistoryView: View {
                 }
             )
         }
+        .presentSheet(
+            isPresented: $viewModel.showCancelOrderList,
+            onDimiss: {
+                viewModel.orderCancelSelected = [:]
+            },
+            content: {
+                OrderHistoryCancelView(
+                    orders: .constant(viewModel.orderCancel?.orders.filter({ $0.status == .created }) ?? []),
+                    orderSelected: $viewModel.orderCancelSelected,
+                    onCancelOrder: {
+                        $viewModel.showCancelOrder.showSheet()
+                    })
+            }
+        )
         .presentSheet(isPresented: $viewModel.showCancelOrder) {
-            OrderHistoryCancelView {
+            OrderHistoryConfirmCancelView {
                 Task {
                     do {
                         switch appSetting.authenticationType {
@@ -90,12 +106,13 @@ struct OrderHistoryView: View {
             }
         }
     }
-
+    
     private func authenticationSuccess() {
+        /* TODO: cuongnv243 cancel order
         Task {
             do {
                 hud.showLoading(true)
-                let finalID = viewModel.orderToCancel?.order?.txIn.txId
+                let finalID = viewModel.orderToCancel?.createdTxId
                 try await viewModel.cancelOrder()
                 hud.showLoading(false)
                 bannerState.infoContent = {
@@ -106,9 +123,10 @@ struct OrderHistoryView: View {
                 bannerState.showBanner(isShow: true)
             } catch {
                 hud.showLoading(false)
-                bannerState.showBannerError(error.localizedDescription)
+                bannerState.showBannerError(error.rawError)
             }
         }
+         */
     }
 }
 
