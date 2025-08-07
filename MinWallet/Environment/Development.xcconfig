@@ -1,6 +1,6 @@
 #include "AppConfig.xcconfig"
 
-MIN_URL      = https:\/\/dev-3.minswap.org
+MIN_URL      = https:\/\/dev-2.minswap.org
 MIN_PUBLIC_NETWORK_ID = mainnet
 MIN_TRANSACTION_URL = https:/\/\cardanoscan.io
 MIN_ADA_HANDLE_URL = https:/\/\api.handle.me\/handles
