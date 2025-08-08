@@ -61,6 +61,6 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
         
         let heightInputAsset = CGFloat(max(inputAsset.count * 20 + (inputAsset.count - 1) * 4, 36))
         let heightOutputAsset = CGFloat(max(outputAsset.count * 20 + (outputAsset.count - 1) * 4, 36))
-        heightSize = 170 - 36 * 2 + heightInputAsset + heightOutputAsset
+        heightSize = max(170, 170 - 36 * 2 + heightInputAsset + heightOutputAsset)
     }
 }

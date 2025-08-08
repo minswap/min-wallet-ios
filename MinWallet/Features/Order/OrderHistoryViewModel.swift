@@ -199,3 +199,41 @@ extension OrderHistoryViewModel {
         }
     }
 }
+
+
+extension OrderHistoryViewModel {
+    static func getOrders(orders: [OrderHistory]) async -> [OrderHistory] {
+        let tokens = await withTaskGroup(of: OrderHistory?.self) { taskGroup in
+            var results: [OrderHistory?] = []
+            
+            for item in orders {
+                taskGroup.addTask {
+                    await OrderHistoryViewModel.fetchOrder(by: item)
+                }
+            }
+            
+            for await result in taskGroup {
+                results.append(result)
+            }
+            
+            return results
+        }
+        return tokens.compactMap { $0 }
+    }
+    
+    private static func fetchOrder(by order: OrderHistory) async -> OrderHistory? {
+        let input = OrderHistory.Request()
+            .with {
+                $0.ownerAddress = UserInfo.shared.minWallet?.address ?? ""
+                $0.txId = order.createdTxId
+            }
+        
+        do {
+            let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
+            let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayValue)
+            return orders?.first { $0.id == order.id } ?? order
+        } catch {
+            return order
+        }
+    }
+}

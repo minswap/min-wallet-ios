@@ -68,6 +68,7 @@ extension OrderHistoryView {
                             } else {
                                 $viewModel.showCancelOrderList.showSheet()
                             }
+                            viewModel.offsets[index] = 0
                         }
 
                         let onAppear: () -> Void = {

@@ -35,7 +35,7 @@ struct SwipeToDeleteModifier: ViewModifier {
                             }
                     }
                     .frame(height: geometry.size.height - 4)
-                    .background(Color.colorInteractiveDangerDefault)
+                    .background(offset == 0 ? .clear : Color.colorInteractiveDangerDefault)
                 }
                 content
                     .background(.colorBaseBackground)

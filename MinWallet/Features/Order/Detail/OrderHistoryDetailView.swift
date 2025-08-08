@@ -724,22 +724,38 @@ struct OrderHistoryDetailView: View {
         }
     }
     
-    private func cancelOrder() async throws -> String {
-        let orders: [OrderHistory] = hasOnlyOneOrderCancel ? wrapOrder.orders : orderCancelSelected.map({ _, value in value })
+    private func cancelOrder() async throws -> String? {
+        var orders: [OrderHistory] = hasOnlyOneOrderCancel ? wrapOrder.orders : orderCancelSelected.map({ _, value in value })
         let jsonData = try await OrderAPIRouter.cancelOrder(address: userInfo.minWallet?.address ?? "", orders: orders).async_request()
         try APIRouterCommon.parseDefaultErrorMessage(jsonData)
+        
         guard let tx = jsonData["cbor"].string, !tx.isEmpty else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
-        return tx
+        let finalID = try await TokenManager.finalizeAndSubmitV2(txRaw: tx)
+        
+        orders = await OrderHistoryViewModel.getOrders(orders: orders)
+        let wrapOrders = wrapOrder.orders.map({ history in
+            orders.first { $0.id == history.id } ?? history
+        })
+        
+        self.wrapOrder = .init(orders: wrapOrders, key: self.wrapOrder.id)
+        self.order = orders.first(where: { $0.id == self.order.id }) ?? self.order
+        
+        return finalID
     }
     
     private func authenticationSuccess() {
         Task {
             do {
                 hud.showLoading(true)
-                let txRaw = try await cancelOrder()
-                _ = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
+                let finalID = try await cancelOrder()
                 onReloadOrder?()
                 hud.showLoading(false)
+                bannerState.infoContent = {
+                    bannerState.infoContentDefault(onViewTransaction: {
+                        finalID?.viewTransaction()
+                    })
+                }
+                bannerState.showBanner(isShow: true)
             } catch {
                 hud.showLoading(false)
                 bannerState.showBannerError(error.localizedDescription)
