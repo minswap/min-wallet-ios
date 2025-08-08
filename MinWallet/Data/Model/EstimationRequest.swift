@@ -81,7 +81,7 @@ struct SwapPath: Mappable, Identifiable {
     var deposits: String = ""
     var priceImpact: Double = 0.0
     var poolId: String = ""
-    var protocolName: String = ""
+    var source: AggregatorSource = .Minswap
     
     init() {}
     
@@ -99,12 +99,13 @@ struct SwapPath: Mappable, Identifiable {
         deposits <- map["deposits"]
         priceImpact <- map["price_impact"]
         poolId <- map["pool_id"]
-        protocolName <- (
+        source <- (
             map["protocol"],
             GKMapFromJSONToType(fromJSON: { json in
-                guard let stringValue = json as? String else { return "" }
-                return AggregatorSource(rawId: stringValue)?.name.toString() ?? ""
+                guard let stringValue = json as? String else { return .Minswap }
+                return AggregatorSource(rawId: stringValue)
             })
         )
+        
     }
 }
