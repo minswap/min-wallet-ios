@@ -76,11 +76,13 @@ struct OrderHistoryView: View {
             isPresented: $viewModel.showCancelOrderList,
             onDimiss: {
                 viewModel.orderCancelSelected = [:]
+                viewModel.orderCancelCanSelect = [:]
             },
             content: {
                 OrderHistoryCancelView(
                     orders: .constant(viewModel.orderCancel?.orders.filter({ $0.status == .created }) ?? []),
                     orderSelected: $viewModel.orderCancelSelected,
+                    orderCanSelect: $viewModel.orderCancelCanSelect,
                     onCancelOrder: {
                         $viewModel.showCancelOrder.showSheet()
                     })

@@ -34,6 +34,8 @@ struct OrderHistoryDetailView: View {
     var ordersCancel: [OrderHistory] = []
     @State
     private var orderCancelSelected: [String: OrderHistory] = [:]
+    @State
+    private var orderCancelCanSelect: [String: OrderHistory] = [:]
     
     ///Show popover
     @State
@@ -200,11 +202,13 @@ struct OrderHistoryDetailView: View {
             isPresented: $showCancelOrderList,
             onDimiss: {
                 orderCancelSelected = [:]
+                orderCancelCanSelect = [:]
             },
             content: {
                 OrderHistoryCancelView(
                     orders: $ordersCancel,
                     orderSelected: $orderCancelSelected,
+                    orderCanSelect: $orderCancelCanSelect,
                     onCancelOrder: {
                         $showCancelOrder.showSheet()
                     })
@@ -733,7 +737,7 @@ struct OrderHistoryDetailView: View {
             do {
                 hud.showLoading(true)
                 let txRaw = try await cancelOrder()
-                let finalID = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
+                _ = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
                 onReloadOrder?()
                 hud.showLoading(false)
             } catch {
@@ -765,6 +769,7 @@ struct OrderHistoryDetailView: View {
                             isShowStatus: true,
                             isShowSelected: false,
                             isSelected: isSelected,
+                            isCanSelect: .constant(true),
                             order: order
                         )
                         .padding(.leading, .xl)

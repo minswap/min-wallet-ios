@@ -38,6 +38,8 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var orderCancelSelected: [String: OrderHistory] = [:]
     @Published
+    var orderCancelCanSelect: [String: OrderHistory] = [:]
+    @Published
     var showCancelOrderList: Bool = false
     @Published
     var orderCancel: WrapOrderHistory?
@@ -136,7 +138,7 @@ class OrderHistoryViewModel: ObservableObject {
             })
     }
     
-    func cancelOrder() async throws -> String {
+    func cancelOrder() async throws -> String? {
         let orders: [OrderHistory] = hasOnlyOneOrderCancel ? (orderCancel?.orders ?? []) : orderCancelSelected.map({ _, value in value })
         let jsonData = try await OrderAPIRouter.cancelOrder(address: UserInfo.shared.minWallet?.address ?? "", orders: orders).async_request()
         try APIRouterCommon.parseDefaultErrorMessage(jsonData)
@@ -145,7 +147,7 @@ class OrderHistoryViewModel: ObservableObject {
         await fetchData(showSkeleton: false)
         orderCancelSelected = [:]
         orderCancel = nil
-        return finalID ?? ""
+        return finalID
     }
 }
 

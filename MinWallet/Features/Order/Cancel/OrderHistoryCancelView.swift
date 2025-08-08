@@ -9,6 +9,8 @@ struct OrderHistoryCancelView: View {
     var orders: [OrderHistory]
     @Binding
     var orderSelected: [String: OrderHistory]
+    @Binding
+    var orderCanSelect: [String: OrderHistory]
     
     var onCancelOrder: (() -> Void)?
     
@@ -60,21 +62,25 @@ struct OrderHistoryCancelView: View {
                 VStack(spacing: 10) {
                     ForEach(Array(orders.enumerated()), id: \.offset) { index, order in
                         let isSelected: Binding<Bool> = .constant(orderSelected[order.id] != nil)
+                        let isCanSelect: Binding<Bool> = .constant(orderCanSelect[order.id] != nil)
                         OrderHistoryItemStatusView(
                             number: index + 1,
                             isShowStatus: false,
                             isShowSelected: true,
                             isSelected: isSelected,
+                            isCanSelect: isCanSelect,
                             order: order
                         )
                         .padding(.horizontal, .xl)
                         .contentShape(.rect)
                         .onTapGesture {
+                            guard orderCanSelect[order.id] != nil else { return }
                             if orderSelected[order.id] == nil {
                                 orderSelected[order.id] = order
                             } else {
                                 orderSelected.removeValue(forKey: order.id)
                             }
+                            orderCanSelect = updateSelectableOrders(orders, selected: orderSelected)
                         }
                     }
                 }
@@ -110,12 +116,72 @@ struct OrderHistoryCancelView: View {
         .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.8)
         .presentSheetModifier()
     }
+    
+    private func updateSelectableOrders(_ orders: [OrderHistory], selected: [String: OrderHistory]) -> [String: OrderHistory] {
+        let selectedCount = selected.count
+        let selectedVersions = Set(selected.map({ _, value in value }).compactMap { plutusVersion($0.protocolSource) })
+        let splashSelectedCount = selected.map({ (key, value: OrderHistory) in value })
+            .filter {
+                guard let protocolSource = $0.protocolSource else { return false }
+                return SPLASH_ORDERS.contains(protocolSource)
+            }
+            .count
+        
+        var orderCanSelect: [String: OrderHistory] = [:]
+        
+        orders.forEach { order in
+            var canSelect = true
+            
+            if selected[order.id] != nil {
+                canSelect = true
+            } else if selectedCount >= 6 {
+                canSelect = false
+            } else if selectedVersions.count > 1 {
+                canSelect = false
+            } else if let ver = plutusVersion(order.protocolSource),
+                let selVer = selectedVersions.first,
+                ver != selVer
+            {
+                canSelect = false
+            } else if let protocolSource = order.protocolSource, SPLASH_ORDERS.contains(protocolSource),
+                splashSelectedCount >= 1
+            {
+                canSelect = false
+            } else {
+                canSelect = true
+            }
+            
+            if canSelect {
+                orderCanSelect[order.id] = order
+            }
+        }
+        return orderCanSelect
+    }
+    
+    private let PLUTUS_V1: Set<AggregatorSource> = [
+        .Minswap, .SundaeSwap, .VyFinance, .WingRiders, .WingRidersStableV1,
+    ]
+
+    private let PLUTUS_V2: Set<AggregatorSource> = [
+        .MinswapStable, .MinswapV2, .MuesliSwap, .Spectrum, .Splash, .SplashStable,
+        .SundaeSwapV3, .WingRidersStableV2, .WingRidersV2,
+    ]
+
+    private let SPLASH_ORDERS: Set<AggregatorSource> = [
+        .Splash, .SplashStable, .Spectrum,
+    ]
+
+    private func plutusVersion(_ src: AggregatorSource?) -> Int? {
+        guard let src else { return nil }
+        if PLUTUS_V1.contains(src) { return 1 }
+        if PLUTUS_V2.contains(src) { return 2 }
+        return nil
+    }
 }
 
 #Preview {
     VStack {
-        OrderHistoryCancelView(orders: .constant([]), orderSelected: .constant([:]))
-            .environmentObject(AppSetting.shared)
+        OrderHistoryCancelView(orders: .constant([]), orderSelected: .constant([:]), orderCanSelect: .constant([:]))
     }
 }
 
@@ -129,6 +195,8 @@ struct OrderHistoryItemStatusView: View {
     var isShowSelected: Bool = false
     @Binding
     var isSelected: Bool
+    @Binding
+    var isCanSelect: Bool
     @State
     var order: OrderHistory = .init()
     
