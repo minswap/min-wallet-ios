@@ -106,12 +106,10 @@ struct OrderHistoryView: View {
     }
     
     private func authenticationSuccess() {
-        /* TODO: cuongnv243 cancel order
         Task {
             do {
                 hud.showLoading(true)
-                let finalID = viewModel.orderToCancel?.createdTxId
-                try await viewModel.cancelOrder()
+                let finalID = try await viewModel.cancelOrder()
                 hud.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
@@ -124,7 +122,6 @@ struct OrderHistoryView: View {
                 bannerState.showBannerError(error.rawError)
             }
         }
-         */
     }
 }
 

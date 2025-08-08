@@ -136,23 +136,16 @@ class OrderHistoryViewModel: ObservableObject {
             })
     }
     
-    //TODO: cuongnv
-    func cancelOrder() async throws {
-        /*
-        guard let order = orderToCancel else { return }
-        let txId = order.createdTxId
-        let txIndex = order.createdTxIndex
-        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
-        let input: InputCancelBulkOrders = InputCancelBulkOrders(
-            changeAddress: UserInfo.shared.minWallet?.address ?? "",
-            orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
-            publicKey: UserInfo.shared.minWallet?.publicKey ?? "",
-            type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
-        guard let txRaw = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input)) else { throw AppGeneralError.localErrorLocalized(message: "Cancel order failed") }
-        let _ = try await TokenManager.finalizeAndSubmit(txRaw: txRaw.cancelBulkOrders)
+    func cancelOrder() async throws -> String {
+        let orders: [OrderHistory] = hasOnlyOneOrderCancel ? (orderCancel?.orders ?? []) : orderCancelSelected.map({ _, value in value })
+        let jsonData = try await OrderAPIRouter.cancelOrder(address: UserInfo.shared.minWallet?.address ?? "", orders: orders).async_request()
+        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
+        guard let txRaw = jsonData["cbor"].string, !txRaw.isEmpty else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
+        let finalID = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
         await fetchData(showSkeleton: false)
-        orderToCancel = nil
-         */
+        orderCancelSelected = [:]
+        orderCancel = nil
+        return finalID ?? ""
     }
 }
 

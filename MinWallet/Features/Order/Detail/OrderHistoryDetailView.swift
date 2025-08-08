@@ -720,34 +720,20 @@ struct OrderHistoryDetailView: View {
         }
     }
     
-    //TODO: cuongnv cancel sau
-    private func cancelOrder() async throws {
+    private func cancelOrder() async throws -> String {
         let orders: [OrderHistory] = hasOnlyOneOrderCancel ? wrapOrder.orders : orderCancelSelected.map({ _, value in value })
-        guard !orders.isEmpty else { return }
-        /*
-        guard let order = order else { return }
-        let txId = order.order?.txIn.txId ?? ""
-        let txIndex = order.order?.txIn.txIndex ?? 0
-        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
-        let input: InputCancelBulkOrders = InputCancelBulkOrders(
-            changeAddress: userInfo.minWallet?.address ?? "",
-            orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
-            publicKey: UserInfo.shared.minWallet?.publicKey ?? "",
-            type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
-        let _ = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input))
-        
-        let orderV2Input = OrderV2Input(address: userInfo.minWallet?.address ?? "", txId: .some(order.order?.txIn.txId ?? ""))
-        let orderData = try? await MinWalletService.shared.fetch(query: OrderHistoryQuery(ordersInput2: orderV2Input))
-        guard let order = (orderData?.orders.orders.map({ OrderHistoryQuery.Data.Orders.WrapOrder(order: $0) }) ?? []).first else { return }
-        self.order = order
-         */
+        let jsonData = try await OrderAPIRouter.cancelOrder(address: userInfo.minWallet?.address ?? "", orders: orders).async_request()
+        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
+        guard let tx = jsonData["cbor"].string, !tx.isEmpty else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
+        return tx
     }
     
     private func authenticationSuccess() {
         Task {
             do {
                 hud.showLoading(true)
-                try await cancelOrder()
+                let txRaw = try await cancelOrder()
+                let finalID = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
                 onReloadOrder?()
                 hud.showLoading(false)
             } catch {
