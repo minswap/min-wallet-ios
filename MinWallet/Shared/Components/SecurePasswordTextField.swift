@@ -15,6 +15,7 @@ struct SecurePasswordTextField: View {
                 .keyboardType(.asciiCapable)
                 .submitLabel(.done)
                 .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
                 .placeholder(placeHolder, when: visibleInput.isEmpty)
                 .foregroundStyle(.colorBaseTent)
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 50))

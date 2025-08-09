@@ -27,6 +27,10 @@ struct SendTokenView: View {
     private var viewModel: SendTokenViewModel
     @State
     private var isShowSelectToken: Bool = false
+    @State
+    private var ignoresKeyboard: Bool = false
+    @State
+    private var keyboardHeight: CGFloat = 0
     
     init(viewModel: SendTokenViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
@@ -72,7 +76,7 @@ struct SendTokenView: View {
                             let item = $item.wrappedValue
                             HStack(spacing: .md) {
                                 let minValueBinding = Binding<Double>(
-                                    get: { pow(10, Double(item.token.decimals) * -1) },
+                                    get: { pow(10, Double(item.token.isTokenADA ? 6 : item.token.decimals) * -1) },
                                     set: { _ in }
                                 )
                                 let maxValueBinding = Binding<Double?>(
@@ -107,6 +111,7 @@ struct SendTokenView: View {
                             action: {
                                 hideKeyboard()
                                 viewModel.selectTokenVM.selectToken(tokens: viewModel.tokens.map({ $0.token }))
+                                ignoresKeyboard = true
                                 $isShowSelectToken.showSheet()
                             },
                             label: {
@@ -130,18 +135,21 @@ struct SendTokenView: View {
                 get: { viewModel.isValidTokenToSend },
                 set: { _ in }
             )
-            CustomButton(title: "Next", isEnable: combinedBinding) {
-                let tokens = viewModel.tokensToSend
-                guard !tokens.isEmpty else { return }
-                switch viewModel.screenType {
-                case .scanQRCode(let address):
-                    navigator.push(.sendToken(.confirm(tokens: tokens, address: address)))
-                case .normal:
-                    navigator.push(.sendToken(.toWallet(tokens: tokens)))
+            
+            if keyboardHeight == 0 {
+                CustomButton(title: "Next", isEnable: combinedBinding) {
+                    let tokens = viewModel.tokensToSend
+                    guard !tokens.isEmpty else { return }
+                    switch viewModel.screenType {
+                    case .scanQRCode(let address):
+                        navigator.push(.sendToken(.confirm(tokens: tokens, address: address)))
+                    case .normal:
+                        navigator.push(.sendToken(.toWallet(tokens: tokens)))
+                    }
                 }
+                .frame(height: 56)
+                .padding(.horizontal, .xl)
             }
-            .frame(height: 56)
-            .padding(.horizontal, .xl)
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -169,6 +177,7 @@ struct SendTokenView: View {
         .presentSheet(
             isPresented: $isShowSelectToken,
             onDimiss: {
+                ignoresKeyboard = false
                 viewModel.selectTokenVM.resetState()
             },
             content: {
@@ -182,8 +191,38 @@ struct SendTokenView: View {
                 .presentSheetModifier()
             }
         )
-        .ignoresSafeArea(.keyboard)
+        .applyKeyboardSafeArea(ignores: ignoresKeyboard)
         .modifier(DismissingKeyboard())
+        .onAppear {
+            subscribeToKeyboard()
+        }
+        .onDisappear {
+            unsubscribeFromKeyboard()
+        }
+    }
+    
+    private func subscribeToKeyboard() {
+        NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillShowNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                self.keyboardHeight = keyboardFrame.height
+            }
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillHideNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            self.keyboardHeight = 0
+        }
+    }
+    
+    private func unsubscribeFromKeyboard() {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

@@ -131,3 +131,14 @@ extension View {
         }
     }
 }
+
+extension View {
+    @ViewBuilder
+    func applyKeyboardSafeArea(ignores: Bool) -> some View {
+        if ignores {
+            self.ignoresSafeArea(.keyboard)
+        } else {
+            self
+        }
+    }
+}
