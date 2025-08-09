@@ -27,6 +27,7 @@ struct OrderHistoryItemView: View {
                         Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
+                            .frame(height: 20)
                     }
                 }
                 if let percent = wrapOrder?.percent, percent > 0 {
@@ -56,6 +57,7 @@ struct OrderHistoryItemView: View {
                             Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
+                                .frame(height: 20)
                         }
                     }
                 }

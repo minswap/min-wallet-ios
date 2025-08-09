@@ -38,6 +38,8 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var orderCancelSelected: [String: OrderHistory] = [:]
     @Published
+    var orderCancelCanSelect: [String: OrderHistory] = [:]
+    @Published
     var showCancelOrderList: Bool = false
     @Published
     var orderCancel: WrapOrderHistory?
@@ -136,23 +138,16 @@ class OrderHistoryViewModel: ObservableObject {
             })
     }
     
-    //TODO: cuongnv
-    func cancelOrder() async throws {
-        /*
-        guard let order = orderToCancel else { return }
-        let txId = order.createdTxId
-        let txIndex = order.createdTxIndex
-        let info = try await MinWalletService.shared.fetch(query: GetScriptUtxosQuery(txIns: [txId + "#\(txIndex)"]))
-        let input: InputCancelBulkOrders = InputCancelBulkOrders(
-            changeAddress: UserInfo.shared.minWallet?.address ?? "",
-            orders: [InputCancelOrder(rawDatum: info?.getScriptUtxos?.first?.rawDatum ?? "", utxo: info?.getScriptUtxos?.first?.rawUtxo ?? "")],
-            publicKey: UserInfo.shared.minWallet?.publicKey ?? "",
-            type: order.order?.type.value == .dex ? .case(.orderV1) : .case(.orderV2AndStableswap))
-        guard let txRaw = try await MinWalletService.shared.mutation(mutation: CancelBulkOrdersMutation(input: input)) else { throw AppGeneralError.localErrorLocalized(message: "Cancel order failed") }
-        let _ = try await TokenManager.finalizeAndSubmit(txRaw: txRaw.cancelBulkOrders)
+    func cancelOrder() async throws -> String? {
+        let orders: [OrderHistory] = hasOnlyOneOrderCancel ? (orderCancel?.orders ?? []) : orderCancelSelected.map({ _, value in value })
+        let jsonData = try await OrderAPIRouter.cancelOrder(address: UserInfo.shared.minWallet?.address ?? "", orders: orders).async_request()
+        try APIRouterCommon.parseDefaultErrorMessage(jsonData)
+        guard let txRaw = jsonData["cbor"].string, !txRaw.isEmpty else { throw AppGeneralError.localErrorLocalized(message: "Transaction not found") }
+        let finalID = try await TokenManager.finalizeAndSubmitV2(txRaw: txRaw)
         await fetchData(showSkeleton: false)
-        orderToCancel = nil
-         */
+        orderCancelSelected = [:]
+        orderCancel = nil
+        return finalID
     }
 }
 
@@ -201,6 +196,44 @@ extension OrderHistoryViewModel {
             isFetching = false
             hasMore = true
             cursor = nil
+        }
+    }
+}
+
+
+extension OrderHistoryViewModel {
+    static func getOrders(orders: [OrderHistory]) async -> [OrderHistory] {
+        let tokens = await withTaskGroup(of: OrderHistory?.self) { taskGroup in
+            var results: [OrderHistory?] = []
+            
+            for item in orders {
+                taskGroup.addTask {
+                    await OrderHistoryViewModel.fetchOrder(by: item)
+                }
+            }
+            
+            for await result in taskGroup {
+                results.append(result)
+            }
+            
+            return results
+        }
+        return tokens.compactMap { $0 }
+    }
+    
+    private static func fetchOrder(by order: OrderHistory) async -> OrderHistory? {
+        let input = OrderHistory.Request()
+            .with {
+                $0.ownerAddress = UserInfo.shared.minWallet?.address ?? ""
+                $0.txId = order.createdTxId
+            }
+        
+        do {
+            let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
+            let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayValue)
+            return orders?.first { $0.id == order.id } ?? order
+        } catch {
+            return order
         }
     }
 }

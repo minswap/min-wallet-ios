@@ -22,8 +22,6 @@ struct OrderHistoryView: View {
     private var isShowSignContract: Bool = false
     @StateObject
     var filterViewModel: OrderHistoryFilterViewModel = .init()
-    @State
-    var heightOrder: [String: CGFloat] = [:]
     
     var body: some View {
         ZStack {
@@ -78,11 +76,13 @@ struct OrderHistoryView: View {
             isPresented: $viewModel.showCancelOrderList,
             onDimiss: {
                 viewModel.orderCancelSelected = [:]
+                viewModel.orderCancelCanSelect = [:]
             },
             content: {
                 OrderHistoryCancelView(
                     orders: .constant(viewModel.orderCancel?.orders.filter({ $0.status == .created }) ?? []),
                     orderSelected: $viewModel.orderCancelSelected,
+                    orderCanSelect: $viewModel.orderCancelCanSelect,
                     onCancelOrder: {
                         $viewModel.showCancelOrder.showSheet()
                     })
@@ -108,12 +108,10 @@ struct OrderHistoryView: View {
     }
     
     private func authenticationSuccess() {
-        /* TODO: cuongnv243 cancel order
         Task {
             do {
                 hud.showLoading(true)
-                let finalID = viewModel.orderToCancel?.createdTxId
-                try await viewModel.cancelOrder()
+                let finalID = try await viewModel.cancelOrder()
                 hud.showLoading(false)
                 bannerState.infoContent = {
                     bannerState.infoContentDefault(onViewTransaction: {
@@ -126,7 +124,6 @@ struct OrderHistoryView: View {
                 bannerState.showBannerError(error.rawError)
             }
         }
-         */
     }
 }
 

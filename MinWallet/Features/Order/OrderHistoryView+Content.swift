@@ -68,6 +68,7 @@ extension OrderHistoryView {
                             } else {
                                 $viewModel.showCancelOrderList.showSheet()
                             }
+                            viewModel.offsets[index] = 0
                         }
 
                         let onAppear: () -> Void = {
@@ -84,27 +85,17 @@ extension OrderHistoryView {
                                         }
                                     }))
                         }
-                        let bindingHeight: Binding<CGFloat> = .constant(heightOrder[order.id] ?? 0)
                         OrderHistoryItemView(
                             wrapOrder: order,
                             onCancelItem: onCancelItem
                         )
                         .padding(.horizontal, .xl)
                         .contentShape(.rect)
-                        .background(
-                            GeometryReader { geo in
-                                Color.clear
-                                    .preference(key: SizePreferenceKey.self, value: geo.size)
-                            }
-                        )
-                        .onPreferenceChange(SizePreferenceKey.self) { newSize in
-                            heightOrder[order.id] = newSize.height
-                        }
                         .swipeToDelete(
                             offset: offsetBinding,
                             isDeleted: deleteBinding,
                             enableDrag: .constant(order.status == .created),
-                            height: bindingHeight,
+                            height: .constant(order.heightSize),
                             image: .icCancelOrder,
                             onDelete: onCancelItem
                         )

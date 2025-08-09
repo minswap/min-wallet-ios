@@ -21,6 +21,7 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
     var outputAsset: [OrderHistory.InputOutput] = []
     var status: OrderV2Status = .batched
     var percent: Double = 0
+    var heightSize: CGFloat = 170
     
     init(orders: [OrderHistory] = [], key: String = "") {
         id = key
@@ -57,5 +58,9 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
             let orderCompleted = orders.filter({ $0.status == .batched }).count
             percent = Double(orderCompleted) / Double(orders.count) * 100
         }
+        
+        let heightInputAsset = CGFloat(max(inputAsset.count * 20 + (inputAsset.count - 1) * 4, 36))
+        let heightOutputAsset = CGFloat(max(outputAsset.count * 20 + (outputAsset.count - 1) * 4, 36))
+        heightSize = max(170, 170 - 36 * 2 + heightInputAsset + heightOutputAsset)
     }
 }

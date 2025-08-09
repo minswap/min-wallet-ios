@@ -69,25 +69,19 @@ struct SwapTokenRoutingView: View {
                                                         DashedLineView().frame(minWidth: dashWidth, maxWidth: dashWidth)
                                                     }
                                                     let split = splits[index]
-                                                    let tokenDefault = split.tokenOut.tokenDefault
                                                     Circle()
                                                         .fill(.colorBaseBackground)
                                                         .frame(width: circleWidth, height: 24)
                                                         .overlay(
-                                                            TokenLogoView(
-                                                                currencySymbol: tokenDefault.currencySymbol,
-                                                                tokenName: tokenDefault.tokenName,
-                                                                isVerified: false,
-                                                                forceVerified: true,
-                                                                size: .init(width: 20, height: 20)
-                                                            )
+                                                            Image(split.source.image)
+                                                                .fixSize(20)
                                                         )
                                                         .overlay(
                                                             Circle()
                                                                 .stroke(.colorBorderPrimaryDefault, lineWidth: 1)
                                                         )
                                                         .containerShape(.rect)
-                                                        .onTapGesture { showPopover(target: split.id, protocolName: split.protocolName) }
+                                                        .onTapGesture { showPopover(target: split.id, protocolName: split.source.name.toString()) }
                                                         .matchedGeometryEffect(id: split.id, in: nsPopover, anchor: .bottom)
                                                     
                                                     DashedLineView().frame(minWidth: dashWidth, maxWidth: dashWidth)

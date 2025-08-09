@@ -4,11 +4,14 @@ import Alamofire
 
 enum OrderAPIRouter: DomainAPIRouter {
     case getOrders(request: OrderHistory.Request)
+    case cancelOrder(address: String, orders: [OrderHistory])
     
     func path() -> String {
         switch self {
         case .getOrders:
             return "/aggregator/orders"
+        case .cancelOrder:
+            return "/aggregator/cancel-tx"
         }
     }
     
@@ -48,6 +51,15 @@ enum OrderAPIRouter: DomainAPIRouter {
             if let toTime = request.toTime {
                 params["to_time"] = toTime
             }
+        case let .cancelOrder(address, orders):
+            params["sender"] = address
+            let orderJSON = orders.map({ order in
+                var params: Parameters = [:]
+                params["tx_in"] = "\(order.createdTxId)#\(order.createdTxIndex)"
+                params["protocol"] = order.protocolSource?.rawId
+                return params
+            })
+            params["orders"] = orderJSON
         }
         return params
     }
