@@ -46,12 +46,12 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
         inputAsset = inputs.map({ (key, values) in
             let amount = values.map({ $0.amount }).reduce(0, +)
             let minimumAmount = values.map({ $0.minimumAmount }).reduce(0, +)
-            return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount)
+            return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount, amountInDecimal: true)
         })
         outputAsset = outputs.map({ (key, values) in
             let amount = values.map({ $0.amount }).reduce(0, +)
             let minimumAmount = values.map({ $0.minimumAmount }).reduce(0, +)
-            return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount)
+            return OrderHistory.InputOutput(asset: values.first?.asset, amount: amount, minimumAmount: minimumAmount, amountInDecimal: true)
         })
         
         if orderType == .partialSwap && orders.count > 1 {

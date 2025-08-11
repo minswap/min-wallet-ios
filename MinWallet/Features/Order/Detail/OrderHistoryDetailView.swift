@@ -71,9 +71,17 @@ struct OrderHistoryDetailView: View {
                             let inputs = wrapOrder.inputAsset
                             VStack(alignment: .trailing, spacing: 4) {
                                 ForEach(inputs, id: \.self) { input in
-                                    Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.1)
+                                    Text(
+                                        input.amount
+                                            .formatNumber(
+                                                suffix: input.currency,
+                                                roundingOffset: input.decimals,
+                                                font: .labelSmallSecondary,
+                                                fontColor: .colorBaseTent
+                                            )
+                                    )
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
                                 }
                             }
                             if wrapOrder.percent > 0 {
@@ -101,9 +109,17 @@ struct OrderHistoryDetailView: View {
                                 let outputs = wrapOrder.outputAsset
                                 VStack(alignment: .trailing, spacing: 4) {
                                     ForEach(outputs, id: \.self) { output in
-                                        Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.1)
+                                        Text(
+                                            output.amount
+                                                .formatNumber(
+                                                    suffix: output.currency,
+                                                    roundingOffset: output.decimals,
+                                                    font: .labelSmallSecondary,
+                                                    fontColor: .colorBaseTent
+                                                )
+                                        )
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.1)
                                     }
                                 }
                             }
@@ -352,9 +368,16 @@ struct OrderHistoryDetailView: View {
                     let inputs = order.inputAsset
                     VStack(alignment: .trailing, spacing: 4) {
                         ForEach(inputs, id: \.self) { input in
-                            Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                            Text(
+                                input.amount
+                                    .formatNumber(
+                                        suffix: input.currency,
+                                        roundingOffset: input.decimals,
+                                        font: .labelSmallSecondary,
+                                        fontColor: .colorBaseTent)
+                            )
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
                         }
                     }
                 }
@@ -438,8 +461,17 @@ struct OrderHistoryDetailView: View {
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
-                            Text(order.detail.limitAmount.toExact(decimal: order.output?.decimals).formatNumber(suffix: order.output?.currency ?? "", font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                .lineLimit(1)
+                            Text(
+                                order.detail.limitAmount
+                                    .toExact(decimal: order.output?.decimals)
+                                    .formatNumber(
+                                        suffix: order.output?.currency ?? "",
+                                        roundingOffset: order.output?.decimals,
+                                        font: .labelSmallSecondary,
+                                        fontColor: .colorBaseTent
+                                    )
+                            )
+                            .lineLimit(1)
                         }
                         .padding(.vertical, .md)
                     }
@@ -619,8 +651,16 @@ struct OrderHistoryDetailView: View {
                         let outputs = order.outputAsset
                         VStack(alignment: .trailing, spacing: 4) {
                             ForEach(outputs, id: \.self) { output in
-                                Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseSuccess))
-                                    .lineLimit(1)
+                                Text(
+                                    output.amount
+                                        .formatNumber(
+                                            suffix: output.currency,
+                                            roundingOffset: output.decimals,
+                                            font: .labelSmallSecondary,
+                                            fontColor: .colorBaseSuccess
+                                        )
+                                )
+                                .lineLimit(1)
                             }
                         }
                     }

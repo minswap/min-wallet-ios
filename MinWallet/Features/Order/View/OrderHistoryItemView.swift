@@ -24,10 +24,17 @@ struct OrderHistoryItemView: View {
                 let inputs = wrapOrder?.inputAsset ?? []
                 VStack(alignment: .trailing, spacing: 4) {
                     ForEach(inputs, id: \.self) { input in
-                        Text(input.amount.formatNumber(suffix: input.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.1)
-                            .frame(height: 20)
+                        Text(
+                            input.amount
+                                .formatNumber(
+                                    suffix: input.currency,
+                                    roundingOffset: input.decimals,
+                                    font: .labelSmallSecondary,
+                                    fontColor: .colorBaseTent)
+                        )
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
+                        .frame(height: 20)
                     }
                 }
                 if let percent = wrapOrder?.percent, percent > 0 {
@@ -54,10 +61,18 @@ struct OrderHistoryItemView: View {
                     let outputs = wrapOrder?.outputAsset ?? []
                     VStack(alignment: .trailing, spacing: 4) {
                         ForEach(outputs, id: \.self) { output in
-                            Text(output.amount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
-                                .frame(height: 20)
+                            Text(
+                                output.amount
+                                    .formatNumber(
+                                        suffix: output.currency,
+                                        roundingOffset: output.decimals,
+                                        font: .labelSmallSecondary,
+                                        fontColor: .colorBaseTent
+                                    )
+                            )
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                            .frame(height: 20)
                         }
                     }
                 }
