@@ -26,7 +26,7 @@ struct SwipeToDeleteModifier: ViewModifier {
                 state = true
             }
             .onChanged { gesture in
-                    // Lock to horizontal drag
+                // Lock to horizontal drag
                 if !isHorizontalDrag {
                     isHorizontalDrag = abs(gesture.translation.width) > abs(gesture.translation.height)
                 }
