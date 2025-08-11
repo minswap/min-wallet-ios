@@ -99,7 +99,7 @@ struct OrderHistoryDetailView: View {
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
-                            if wrapOrder.status == .cancelled {
+                            if wrapOrder.status == .cancelled || wrapOrder.status == .created {
                                 Text("--")
                                     .font(.labelSmallSecondary)
                                     .foregroundStyle(.colorBaseTent)

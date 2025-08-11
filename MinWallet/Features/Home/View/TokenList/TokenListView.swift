@@ -43,7 +43,6 @@ struct TokenListView: View {
                             }
                         }
                     }
-                    .disableBounces()
                     .scrollIndicators(.hidden)
                     if let countToken = viewModel.countToken, countToken > 0 {
                         let suffix = viewModel.tabType == .yourToken ? "tokens" : "NFTs"

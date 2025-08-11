@@ -20,6 +20,15 @@ struct TermOfServiceView: View {
         .modifier(
             BaseContentView(
                 screenTitle: " ",
+                titleView: {
+                    AnyView(
+                        HStack(spacing: 5) {
+                            Image(.icSplash).resizable().frame(width: 32, height: 32)
+                            Text("minswap").font(.titleH6)
+                                .foregroundStyle(.colorBaseSecond)
+                            Spacer()
+                        })
+                },
                 actionLeft: {
                     navigator.pop()
                 })

@@ -86,7 +86,8 @@ struct SendTokenView: View {
                                 AmountTextField(
                                     value: $item.amount,
                                     minValue: minValueBinding,
-                                    maxValue: maxValueBinding
+                                    maxValue: maxValueBinding,
+                                    minimumFractionDigits: .constant(item.token.isTokenADA ? 6 : item.token.decimals)
                                 )
                                 .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 Text("Max")
