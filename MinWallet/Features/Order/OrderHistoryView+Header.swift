@@ -76,14 +76,32 @@ extension OrderHistoryView {
                                 isFocus = true
                             }
                         }
-                    Image(.icFilter)
-                        .fixSize(40)
-                        .onTapGesture {
-                            withAnimation {
-                                filterViewModel.bindData(vm: viewModel)
-                                viewModel.showFilterView = true
-                            }
+                    
+                    ZStack {
+                        Image(.icFilter)
+                            .fixSize(40)
+                        let countFilter = filterViewModel.countFilter
+                        if countFilter > 0 {
+                            Text("\(countFilter)")
+                                .font(.paragraphXMediumSmall)
+                                .foregroundStyle(.colorBaseTentNoDarkMode)
+                                .frame(width: 16, height: 16)
+                                .background(
+                                    Circle()
+                                        .fill(.colorInteractiveToneHighlight)
+                                )
+                                .position(x: 34, y: 34)
                         }
+                    }
+                    .contentShape(.rect)
+                    .frame(width: 40, height: 40)
+                    .onTapGesture {
+                        withAnimation {
+                            filterViewModel.bindData(vm: viewModel)
+                            viewModel.showFilterView = true
+                        }
+                    }
+                    
                 }
                 .transition(.scale.combined(with: .opacity))
             }
