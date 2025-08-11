@@ -44,6 +44,8 @@ class OrderHistoryViewModel: ObservableObject {
     @Published
     var orderCancel: WrapOrderHistory?
     
+    private var rawOrders: [OrderHistory] = []
+    
     var hasOnlyOneOrderCancel: Bool {
         guard let orderCancel = orderCancel else { return false }
         return orderCancel.orders.count == 1 && orderCancel.orders.first?.status == .created
@@ -77,16 +79,16 @@ class OrderHistoryViewModel: ObservableObject {
             .with({
                 $0.isFetching = true
             })
-        let orders = await getOrderHistory()
-        let cursorID = orders.last?.cursor ?? ""
+        let rawOrders = await getOrderHistory()
+        let cursorID = rawOrders.last?.id ?? ""
         pagination = pagination.with({
             $0.isFetching = false
             //$0.hasMore = orders.count >= pagination.limit
-            $0.hasMore = !orders.isEmpty
+            $0.hasMore = !rawOrders.isEmpty
             $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
         })
         
-        self.wrapOrders = orders
+        self.wrapOrders = groupOrders(rawOrders)
         self.isDeleted = self.wrapOrders.map({ _ in false })
         self.offsets = self.wrapOrders.map({ _ in 0 })
         
@@ -103,7 +105,7 @@ class OrderHistoryViewModel: ObservableObject {
                 pagination = pagination.with({ $0.isFetching = true })
                 let _orders = await getOrderHistory()
                 
-                self.wrapOrders += _orders
+                self.rawOrders += _orders
                 let cursorID = _orders.last?.id ?? ""
                 pagination = pagination.with({
                     $0.isFetching = false
@@ -111,6 +113,8 @@ class OrderHistoryViewModel: ObservableObject {
                     $0.hasMore = !_orders.isEmpty
                     $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
                 })
+                
+                self.wrapOrders = groupOrders(rawOrders)
                 self.isDeleted = self.wrapOrders.map({ _ in false })
                 self.offsets = self.wrapOrders.map({ _ in 0 })
             }
@@ -166,15 +170,11 @@ extension OrderHistory.Request {
 }
 
 extension OrderHistoryViewModel {
-    private func getOrderHistory() async -> [WrapOrderHistory] {
+    private func getOrderHistory() async -> [OrderHistory] {
         do {
             let jsonData = try await OrderAPIRouter.getOrders(request: input).async_request()
             let orders = Mapper<OrderHistory>().gk_mapArrayOrNull(JSONObject: JSON(jsonData)["orders"].arrayObject ?? [:]) ?? []
-            let groupedOrders = Dictionary(grouping: orders, by: { $0.keyToGroup })
-            let wrapOrders = groupedOrders.map({ key, orders in
-                return WrapOrderHistory(orders: orders, key: key)
-            })
-            return wrapOrders
+            return orders
         } catch {
             return []
         }
@@ -234,6 +234,27 @@ extension OrderHistoryViewModel {
             return orders?.first { $0.id == order.id } ?? order
         } catch {
             return order
+        }
+    }
+}
+
+
+extension OrderHistoryViewModel {
+    private func groupOrders(_ orders: [OrderHistory]) -> [WrapOrderHistory] {
+        var groups: [(key: String, values: [OrderHistory])] = []
+        var seenKeys: Set<String> = []
+        
+        for item in orders {
+            if let index = groups.firstIndex(where: { $0.key == item.keyToGroup }) {
+                groups[index].values.append(item)
+            } else {
+                groups.append((key: item.keyToGroup, values: [item]))
+                seenKeys.insert(item.keyToGroup)
+            }
+        }
+        
+        return groups.map { (key: String, values: [OrderHistory]) in
+            WrapOrderHistory(orders: values, key: key)
         }
     }
 }

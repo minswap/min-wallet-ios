@@ -319,6 +319,6 @@ extension OrderHistory {
 extension OrderHistory {
     var keyToGroup: String {
         guard let aggregatorSource = aggregatorSource else { return createdTxId + "_" + id }
-        return createdTxId + "_ " + aggregatorSource.rawValue
+        return createdTxId + "_" + aggregatorSource.rawValue
     }
 }
