@@ -26,7 +26,7 @@ enum OrderAPIRouter: DomainAPIRouter {
         case let .getOrders(request):
             params["owner_address"] = request.ownerAddress
             params["limit"] = request.limit
-            if let cursor = request.cursor {
+            if let cursor = request.cursor, cursor > 0 {
                 params["cursor"] = cursor
             }
             params["amount_in_decimal"] = false
@@ -40,7 +40,7 @@ enum OrderAPIRouter: DomainAPIRouter {
                 params["type"] = type.rawValue
             }
             if let token = request.token {
-                params["token"] = token
+                params["asset"] = token
             }
             if let txId = request.txId {
                 params["tx_id"] = txId

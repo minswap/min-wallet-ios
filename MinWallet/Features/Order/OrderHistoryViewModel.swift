@@ -88,6 +88,7 @@ class OrderHistoryViewModel: ObservableObject {
             $0.cursor = cursorID.isEmpty ? nil : Int(cursorID)
         })
         
+        self.rawOrders = rawOrders
         self.wrapOrders = groupOrders(rawOrders)
         self.isDeleted = self.wrapOrders.map({ _ in false })
         self.offsets = self.wrapOrders.map({ _ in 0 })
