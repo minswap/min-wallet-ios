@@ -52,7 +52,8 @@ struct TokenDetailView: View {
                 }
                 Spacer()
                 Spacer()
-                if tokenManager.adaValue > 0 {
+                let tokenByID = tokenManager.tokenById(tokenID: viewModel.token.uniqueID)
+                if let tokenByID = tokenByID, tokenByID.amount > 0 {
                     tokenDetailBottomView
                         .background(.colorBaseBackground)
                         .padding(.horizontal, .md)
