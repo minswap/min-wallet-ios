@@ -5,6 +5,8 @@ struct AmountTextField: View {
     @Binding var value: String
     @Binding var minValue: Double
     @Binding var maxValue: Double?
+    @Binding var minimumFractionDigits: Int?
+    
     @State var fontPlaceHolder: Font = .paragraphSmall
     
     var body: some View {
@@ -15,7 +17,7 @@ struct AmountTextField: View {
             .submitLabel(.done)
             .autocorrectionDisabled()
             .onChange(of: value) { newValue in
-                value = AmountTextField.formatCurrency(newValue, minValue: minValue, maxValue: maxValue)
+                value = AmountTextField.formatCurrency(newValue, minValue: minValue, maxValue: maxValue, minimumFractionDigits: minimumFractionDigits)
             }
     }
     

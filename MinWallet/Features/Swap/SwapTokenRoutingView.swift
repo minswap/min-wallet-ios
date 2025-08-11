@@ -69,12 +69,18 @@ struct SwapTokenRoutingView: View {
                                                         DashedLineView().frame(minWidth: dashWidth, maxWidth: dashWidth)
                                                     }
                                                     let split = splits[index]
+                                                    let tokenDefault = split.tokenOut.tokenDefault
                                                     Circle()
                                                         .fill(.colorBaseBackground)
                                                         .frame(width: circleWidth, height: 24)
                                                         .overlay(
-                                                            Image(split.source.image)
-                                                                .fixSize(20)
+                                                            TokenLogoView(
+                                                                currencySymbol: tokenDefault.currencySymbol,
+                                                                tokenName: tokenDefault.tokenName,
+                                                                isVerified: false,
+                                                                forceVerified: true,
+                                                                size: .init(width: 20, height: 20)
+                                                            )
                                                         )
                                                         .overlay(
                                                             Circle()

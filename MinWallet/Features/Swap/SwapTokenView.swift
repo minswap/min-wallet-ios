@@ -238,6 +238,7 @@ struct SwapTokenView: View {
                         value: $viewModel.tokenPay.amount,
                         minValue: minValueBinding,
                         maxValue: .constant(nil),
+                        minimumFractionDigits: .constant(nil),
                         fontPlaceHolder: .titleH4
                     )
                     .font(.titleH4)
@@ -309,6 +310,7 @@ struct SwapTokenView: View {
                         value: $viewModel.tokenReceive.amount,
                         minValue: minValueBinding,
                         maxValue: .constant(nil),
+                        minimumFractionDigits: .constant(nil),
                         fontPlaceHolder: .titleH4
                     )
                     .font(.titleH4)
