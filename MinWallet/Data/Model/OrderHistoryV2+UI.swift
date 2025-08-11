@@ -14,9 +14,9 @@ extension OrderHistory {
         
         init() {}
         
-        init(asset: Asset?, amount: Double, minimumAmount: Double = 0) {
+        init(asset: Asset?, amount: Double, minimumAmount: Double = 0, amountInDecimal: Bool = false) {
             self.asset = asset ?? .init()
-            self.amount = amount.toExact(decimal: asset?.decimals ?? 0)
+            self.amount = amountInDecimal ? amount : (amount.toExact(decimal: asset?.decimals ?? 0))
             self.minimumAmount = minimumAmount.toExact(decimal: asset?.decimals ?? 0)
         }
     }
