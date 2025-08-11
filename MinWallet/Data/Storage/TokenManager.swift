@@ -81,6 +81,10 @@ class TokenManager: ObservableObject {
             minimumAdaValue = 0
         }
     }
+    
+    func tokenById(tokenID: String) -> TokenProtocol? {
+        normalTokens.first { $0.uniqueID == tokenID }
+    }
 }
 
 extension TokenManager {
