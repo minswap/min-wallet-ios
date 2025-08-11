@@ -40,7 +40,7 @@ enum OrderAPIRouter: DomainAPIRouter {
                 params["type"] = type.rawValue
             }
             if let token = request.token {
-                params["asset"] = token
+                params["token"] = token
             }
             if let txId = request.txId {
                 params["tx_id"] = txId
