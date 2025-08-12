@@ -29,6 +29,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "AssetMetadata": return MinWalletAPI.Objects.AssetMetadata
     case "AssetSocialLinks": return MinWalletAPI.Objects.AssetSocialLinks
     case "AssetsResponse": return MinWalletAPI.Objects.AssetsResponse
+    case "CurrencyStats": return MinWalletAPI.Objects.CurrencyStats
     case "DepositOverSlippageDetail": return MinWalletAPI.Objects.DepositOverSlippageDetail
     case "DexV2WithdrawImbalanceOverSlippageDetail": return MinWalletAPI.Objects.DexV2WithdrawImbalanceOverSlippageDetail
     case "IosTradeEstimateOutput": return MinWalletAPI.Objects.IosTradeEstimateOutput

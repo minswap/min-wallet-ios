@@ -1,4 +1,4 @@
-query TopAssetsQuery($input: TopAssetsInput) {
+query MINTopAssetsQuery($input: TopAssetsInput) {
   topAssets(input: $input) {
     searchAfter
     topAssets {

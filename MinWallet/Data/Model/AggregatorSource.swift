@@ -239,7 +239,7 @@ enum AggrSource: String {
         case .DexHunter:
             .dexhunter
         case .MuesliSwap:
-            .muesliswap 
+            .muesliswap
         case .Cardexscan:
             .cardexscan
         }

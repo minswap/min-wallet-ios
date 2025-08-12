@@ -1,4 +1,4 @@
-query IosTradeEstimateQuery($input: IosTradeEstimateInput!) {
+query MINIosTradeEstimateQuery($input: IosTradeEstimateInput!) {
   iosTradeEstimate(input: $input) {
     estimateAmount
     inputIndex

@@ -1,3 +1,3 @@
-mutation NotificationGenerateAuthHash($identifier: String!) {
+mutation MINNotificationGenerateAuthHash($identifier: String!) {
   notificationGenerateAuthHash(identifier: $identifier)
 }

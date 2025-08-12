@@ -33,10 +33,10 @@ struct PolicyConfirmView: View {
                     variant: .primary,
                     action: {
                         switch screenType {
-                            case .splash:
-                                navigator.push(.gettingStarted)
-                            case .about:
-                                navigator.pop()
+                        case .splash:
+                            navigator.push(.gettingStarted)
+                        case .about:
+                            navigator.pop()
                         }
                     }
                 )
