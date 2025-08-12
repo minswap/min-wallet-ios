@@ -44,6 +44,7 @@ struct OrderHistory: Then, Identifiable, Hashable {
     var input: InputOutput?
     var output: InputOutput?
     var orderAttribute: AttributedString?
+    var orderAttributeDisable: AttributedString?
     
     init() {
         mappingUI()
@@ -253,21 +254,39 @@ extension OrderHistory {
         
         routing = buildRouting()
         
-        var attr: [AttributedString?] = []
-        attr = [
-            AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
-            input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
-            AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
-            output?.amount.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
-        ]
-        attr = attr.compactMap { $0 }
-        var raw = AttributedString()
-        attr.forEach { r in
-            guard let r = r else { return }
-            raw += r
-        }
+        orderAttribute = {
+            var attr: [AttributedString?] = []
+            attr = [
+                AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
+                input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+                AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
+                output?.amount.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+            ]
+            attr = attr.compactMap { $0 }
+            var raw = AttributedString()
+            attr.forEach { r in
+                guard let r = r else { return }
+                raw += r
+            }
+            return raw
+        }()
         
-        orderAttribute = raw
+        orderAttributeDisable = {
+            var attr: [AttributedString?] = []
+            attr = [
+                AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimaryDisable),
+                input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorInteractiveTentPrimaryDisable),
+                AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimaryDisable),
+                output?.amount.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorInteractiveTentPrimaryDisable),
+            ]
+            attr = attr.compactMap { $0 }
+            var raw = AttributedString()
+            attr.forEach { r in
+                guard let r = r else { return }
+                raw += r
+            }
+            return raw
+        }()
     }
     
     static let TYPE_SHOW_ROUTER: [OrderType] = [.swap, .limit, .stopLoss, .oco, .partialSwap]
