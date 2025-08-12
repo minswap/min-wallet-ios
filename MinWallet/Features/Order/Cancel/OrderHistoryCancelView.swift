@@ -62,7 +62,7 @@ struct OrderHistoryCancelView: View {
                 VStack(spacing: 10) {
                     ForEach(Array(orders.enumerated()), id: \.offset) { index, order in
                         let isSelected: Binding<Bool> = .constant(orderSelected[order.id] != nil)
-                        let isCanSelect: Binding<Bool> = .constant(orderCanSelect[order.id] != nil)
+                        let isCanSelect: Binding<Bool> = .constant(orderCanSelect[order.id] != nil || orderCanSelect.isEmpty)
                         OrderHistoryItemStatusView(
                             number: index + 1,
                             isShowStatus: false,
@@ -181,7 +181,7 @@ struct OrderHistoryCancelView: View {
 
 #Preview {
     VStack {
-        OrderHistoryCancelView(orders: .constant([]), orderSelected: .constant([:]), orderCanSelect: .constant([:]))
+        OrderHistoryCancelView(orders: .constant([.init()]), orderSelected: .constant([:]), orderCanSelect: .constant([:]))
     }
 }
 
@@ -201,53 +201,62 @@ struct OrderHistoryItemStatusView: View {
     var order: OrderHistory = .init()
     
     var body: some View {
-        VStack(alignment: .leading, spacing: .xl) {
-            HStack(alignment: .center) {
-                Text("#\(number)")
-                    .font(.labelSmallSecondary)
-                    .foregroundStyle(.colorInteractiveToneHighlight)
-                Spacer()
-                if isShowStatus {
-                    HStack(spacing: 4) {
-                        Circle().frame(width: 4, height: 4)
-                            .foregroundStyle(order.status?.foregroundCircleColor ?? .clear)
-                        Text(order.status?.title)
-                            .font(.paragraphXMediumSmall)
-                            .foregroundStyle(order.status?.foregroundColor ?? .colorInteractiveToneHighlight)
+        ZStack {
+            VStack(alignment: .leading, spacing: .xl) {
+                HStack(alignment: .center) {
+                    Text("#\(number)")
+                        .font(.labelSmallSecondary)
+                        .foregroundStyle(isCanSelect ? .colorInteractiveToneHighlight : .colorInteractiveTentPrimaryDisable)
+                    Spacer()
+                    if isShowStatus {
+                        HStack(spacing: 4) {
+                            Circle().frame(width: 4, height: 4)
+                                .foregroundStyle(order.status?.foregroundCircleColor ?? .clear)
+                            Text(order.status?.title)
+                                .font(.paragraphXMediumSmall)
+                                .foregroundStyle(order.status?.foregroundColor ?? .colorInteractiveToneHighlight)
+                        }
+                        .padding(.horizontal, .lg)
+                        .padding(.vertical, .xs)
+                        .background(
+                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(order.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
+                        )
+                        .lineLimit(1)
                     }
-                    .padding(.horizontal, .lg)
-                    .padding(.vertical, .xs)
-                    .background(
-                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(order.status?.backgroundColor ?? .colorSurfaceHighlightDefault)
-                    )
-                    .lineLimit(1)
+                    if isShowSelected && isSelected {
+                        Image(isSelected ? .icChecked : .icUnchecked)
+                            .fixSize(16)
+                            .padding(.leading, 4)
+                    }
                 }
-                if isShowSelected && isSelected {
-                    Image(isSelected ? .icChecked : .icUnchecked)
-                        .fixSize(16)
-                        .padding(.leading, 4)
+                VStack(alignment: .leading, spacing: .lg) {
+                    if let attr = order.orderAttribute, isCanSelect {
+                        Text(attr)
+                    }
+                    if let attr = order.orderAttributeDisable, !isCanSelect {
+                        Text(attr)
+                    }
+                    HStack(spacing: 6) {
+                        Text("on")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(isCanSelect ? .colorInteractiveTentPrimarySub : .colorInteractiveTentPrimaryDisable)
+                        if let source = order.protocolSource {
+                            Image(source.image)
+                                .fixSize(20)
+                            Text(source.name)
+                                .font(.labelSmallSecondary)
+                                .foregroundStyle(isCanSelect ? .colorBaseTent : .colorInteractiveTentPrimaryDisable)
+                                .lineLimit(1)
+                        }
+                    }
                 }
             }
-            VStack(alignment: .leading, spacing: .lg) {
-                if let attr = order.orderAttribute {
-                    Text(attr)
-                }
-                HStack(spacing: 6) {
-                    Text("on")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    if let source = order.protocolSource {
-                        Image(source.image)
-                            .fixSize(20)
-                        Text(source.name)
-                            .font(.labelSmallSecondary)
-                            .foregroundStyle(.colorBaseTent)
-                            .lineLimit(1)
-                    }
-                }
+            .padding(.xl)
+            if !isCanSelect {
+                Color.colorSurfacePrimaryDisable.clipped()
+                    .cornerRadius(16)
             }
         }
-        .padding(.xl)
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(isSelected ? .colorInteractiveToneHighlight : .colorBorderPrimaryTer, lineWidth: 2))
         .contentShape(.rect)
         .padding(.top, 2)
