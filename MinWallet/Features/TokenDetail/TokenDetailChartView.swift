@@ -30,138 +30,153 @@ extension TokenDetailView {
             let maxY: Double = (viewModel.chartDatas.map { $0.value }.max() ?? 0) * 1.2
             let minDate: Date = viewModel.chartDatas.map { $0.date }.min() ?? Date()
             let maxDate: Date = viewModel.chartDatas.map { $0.date }.max() ?? Date()
+            let isShowNoData: Bool = !viewModel.isLoadingPriceChart && viewModel.chartDatas.isEmpty
             VStack(alignment: .leading, spacing: 0) {
-                Chart {
-                    if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
-                        ForEach(0..<selectedIndex + 1, id: \.self) { index in
-                            let data = viewModel.chartDatas[gk_safeIndex: index]
-                            LineMark(
-                                x: .value("Date", data?.date ?? Date()),
-                                y: .value("Value", data?.value ?? 0)
+                if isShowNoData {
+                    VStack(alignment: .center, spacing: .xl) {
+                        Image(.icNoChartData)
+                            .resizable()
+                            .frame(width: 160, height: 160)
+                        Text("Chart is unavailable")
+                            .font(.labelSemiSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, -20)
+                    .padding(.bottom, 27)
+                } else {
+                    Chart {
+                        if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
+                            ForEach(0..<selectedIndex + 1, id: \.self) { index in
+                                let data = viewModel.chartDatas[gk_safeIndex: index]
+                                LineMark(
+                                    x: .value("Date", data?.date ?? Date()),
+                                    y: .value("Value", data?.value ?? 0)
+                                )
+                                .foregroundStyle(.colorInteractiveToneHighlight)
+                                //.interpolationMethod(.catmullRom)
+                                //.lineStyle(.init(lineWidth: 1))
+                                .lineStyle(by: .value("Type", "PM2.5"))
+                            }
+                        }
+                        if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
+                            ForEach(selectedIndex..<viewModel.chartDatas.count, id: \.self) { index in
+                                let data = viewModel.chartDatas[gk_safeIndex: index]
+                                LineMark(
+                                    x: .value("Date", data?.date ?? Date()),
+                                    y: .value("Value", data?.value ?? 0)
+                                )
+                                //.interpolationMethod(.catmullRom)
+                                .foregroundStyle(viewModel.isInteracting ? .colorBorderPrimarySub : .colorInteractiveToneHighlight)
+                            }
+                        }
+                        if let selectedIndex = viewModel.selectedIndex, viewModel.isInteracting, let data = viewModel.chartDatas[gk_safeIndex: selectedIndex] {
+                            PointMark(
+                                x: .value("Date", data.date),
+                                y: .value("Value", data.value)
                             )
+                            .symbolSize(60)
                             .foregroundStyle(.colorInteractiveToneHighlight)
-                            //.interpolationMethod(.catmullRom)
-                            //.lineStyle(.init(lineWidth: 1))
-                            .lineStyle(by: .value("Type", "PM2.5"))
-                        }
-                    }
-                    if let selectedIndex = viewModel.selectedIndex, viewModel.chartDatas.count > selectedIndex {
-                        ForEach(selectedIndex..<viewModel.chartDatas.count, id: \.self) { index in
-                            let data = viewModel.chartDatas[gk_safeIndex: index]
-                            LineMark(
-                                x: .value("Date", data?.date ?? Date()),
-                                y: .value("Value", data?.value ?? 0)
-                            )
-                            //.interpolationMethod(.catmullRom)
-                            .foregroundStyle(viewModel.isInteracting ? .colorBorderPrimarySub : .colorInteractiveToneHighlight)
-                        }
-                    }
-                    if let selectedIndex = viewModel.selectedIndex, viewModel.isInteracting, let data = viewModel.chartDatas[gk_safeIndex: selectedIndex] {
-                        PointMark(
-                            x: .value("Date", data.date),
-                            y: .value("Value", data.value)
-                        )
-                        .symbolSize(60)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        if #available(iOS 17.0, *) {
-                            RuleMark(x: .value("Date", data.date))
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                                .annotation(
-                                    position: .automatic, alignment: .top, spacing: 0, overflowResolution: .init(x: .fit, y: .fit),
-                                    content: {
-                                        VStack {
-                                            Text("\(viewModel.formatDateAnnotation(value: data.date))")
-                                                .font(.paragraphXSmall)
-                                                .foregroundStyle(.colorBaseTent)
-                                        }
-                                        .background(.colorBaseBackground)
-                                    })
-                        } else {
-                            RuleMark(x: .value("Date", data.date))
-                                .foregroundStyle(.colorInteractiveTentPrimarySub)
-                                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                                .annotation(
-                                    position: .automatic, alignment: .top,
-                                    content: {
-                                        VStack {
-                                            Text("\(viewModel.formatDateAnnotation(value: data.date))")
-                                                .font(.paragraphXSmall)
-                                                .foregroundStyle(.colorBaseTent)
-                                        }
-                                    })
-                        }
-                    }
-                }
-                .chartYAxis {
-                    AxisMarks(preset: .extended, position: .leading) {
-                        let value = $0.as(Double.self)!
-                        AxisValueLabel {
-                            Text(value.formatNumber(font: .paragraphXMediumSmall, fontColor: .colorInteractiveTentPrimaryDisable))
-                        }
-                    }
-                }
-                .chartYScale(domain: 0...maxY)
-                .chartXAxis(.hidden)
-                .chartLegend(.hidden)
-                .padding(.horizontal, .xl)
-                .chartOverlay { chart in
-                    GeometryReader { geometry in
-                        Rectangle()
-                            .fill(Color.clear)
-                            .contentShape(Rectangle())
-                            .gesture(
-                                DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                                    .onChanged { value in
-                                        guard !viewModel.chartDatas.isEmpty else { return }
-                                        self.viewModel.isInteracting = true
-                                        updateSelectedIndex(using: chart, at: value.location, in: geometry)
-                                    }
-                                    .onEnded { _ in
-                                        guard !viewModel.chartDatas.isEmpty else { return }
-                                        self.viewModel.isInteracting = false
-                                        self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
-                                    })
-                        /*
-                            .gesture(
-                                LongPressGesture(minimumDuration: 2)
-                                    .onChanged { _ in
-                                        guard !self.viewModel.isInteracting else { return }
-                                        self.viewModel.isInteracting = true
-                                        self.triggerVibration()
-                                    }
-                                    .onEnded { _ in
-                                        // When the long press ends, set interaction flag to false
-                                        self.viewModel.isInteracting = false
-                                        self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
-                                    }
-                                    .simultaneously(
-                                        with: DragGesture(minimumDistance: 0)
-                                            .onChanged { value in
-                                                guard viewModel.isInteracting else { return }
-                                                updateSelectedIndex(using: chart, at: value.location, in: geometry)
+                            if #available(iOS 17.0, *) {
+                                RuleMark(x: .value("Date", data.date))
+                                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                                    .annotation(
+                                        position: .automatic, alignment: .top, spacing: 0, overflowResolution: .init(x: .fit, y: .fit),
+                                        content: {
+                                            VStack {
+                                                Text("\(viewModel.formatDateAnnotation(value: data.date))")
+                                                    .font(.paragraphXSmall)
+                                                    .foregroundStyle(.colorBaseTent)
                                             }
-                                            .onEnded { _ in
-                                                self.viewModel.isInteracting = false
-                                                self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                                            .background(.colorBaseBackground)
+                                        })
+                            } else {
+                                RuleMark(x: .value("Date", data.date))
+                                    .foregroundStyle(.colorInteractiveTentPrimarySub)
+                                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                                    .annotation(
+                                        position: .automatic, alignment: .top,
+                                        content: {
+                                            VStack {
+                                                Text("\(viewModel.formatDateAnnotation(value: data.date))")
+                                                    .font(.paragraphXSmall)
+                                                    .foregroundStyle(.colorBaseTent)
                                             }
-                                    )
-                            )
-                         */
+                                        })
+                            }
+                        }
                     }
+                    .chartYAxis {
+                        AxisMarks(preset: .extended, position: .leading) {
+                            let value = $0.as(Double.self)!
+                            AxisValueLabel {
+                                Text(value.formatNumber(font: .paragraphXMediumSmall, fontColor: .colorInteractiveTentPrimaryDisable))
+                            }
+                        }
+                    }
+                    .chartYScale(domain: 0...maxY)
+                    .chartXAxis(.hidden)
+                    .chartLegend(.hidden)
+                    .padding(.horizontal, .xl)
+                    .chartOverlay { chart in
+                        GeometryReader { geometry in
+                            Rectangle()
+                                .fill(Color.clear)
+                                .contentShape(Rectangle())
+                                .gesture(
+                                    DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                                        .onChanged { value in
+                                            guard !viewModel.chartDatas.isEmpty else { return }
+                                            self.viewModel.isInteracting = true
+                                            updateSelectedIndex(using: chart, at: value.location, in: geometry)
+                                        }
+                                        .onEnded { _ in
+                                            guard !viewModel.chartDatas.isEmpty else { return }
+                                            self.viewModel.isInteracting = false
+                                            self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                                        })
+                            /*
+                             .gesture(
+                             LongPressGesture(minimumDuration: 2)
+                             .onChanged { _ in
+                             guard !self.viewModel.isInteracting else { return }
+                             self.viewModel.isInteracting = true
+                             self.triggerVibration()
+                             }
+                             .onEnded { _ in
+                             // When the long press ends, set interaction flag to false
+                             self.viewModel.isInteracting = false
+                             self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                             }
+                             .simultaneously(
+                             with: DragGesture(minimumDistance: 0)
+                             .onChanged { value in
+                             guard viewModel.isInteracting else { return }
+                             updateSelectedIndex(using: chart, at: value.location, in: geometry)
+                             }
+                             .onEnded { _ in
+                             self.viewModel.isInteracting = false
+                             self.viewModel.selectedIndex = viewModel.chartDatas.count - 1
+                             }
+                             )
+                             )
+                             */
+                        }
+                    }
+                    .frame(height: 180)
+                    HStack {
+                        Text(viewModel.formatDate(value: minDate))
+                            .font(.paragraphXMediumSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                        Spacer()
+                        Text(viewModel.formatDate(value: maxDate))
+                            .font(.paragraphXMediumSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimaryDisable)
+                    }
+                    .padding(.top, .md)
+                    .padding(.horizontal, .xl)
                 }
-                .frame(height: 180)
-                HStack {
-                    Text(viewModel.formatDate(value: minDate))
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                    Spacer()
-                    Text(viewModel.formatDate(value: maxDate))
-                        .font(.paragraphXMediumSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimaryDisable)
-                }
-                .padding(.top, .md)
-                .padding(.horizontal, .xl)
             }
             .loading(isShowing: $viewModel.isLoadingPriceChart)
             .animation(.default, value: viewModel.chartDatas)
