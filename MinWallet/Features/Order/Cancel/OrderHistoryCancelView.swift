@@ -74,7 +74,7 @@ struct OrderHistoryCancelView: View {
                         .padding(.horizontal, .xl)
                         .contentShape(.rect)
                         .onTapGesture {
-                            guard orderCanSelect[order.id] != nil else { return }
+                            guard orderCanSelect[order.id] != nil || orderCanSelect.isEmpty else { return }
                             if orderSelected[order.id] == nil {
                                 orderSelected[order.id] = order
                             } else {
