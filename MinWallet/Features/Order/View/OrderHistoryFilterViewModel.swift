@@ -41,4 +41,16 @@ class OrderHistoryFilterViewModel: ObservableObject {
         fromDate = input.fromDateTimeInterval
         toDate = input.toDateTimeInterval
     }
+    
+    var countFilter: Int {
+        [
+            (fromDate != nil || toDate != nil) ? true : nil,
+            contractTypeSelected,
+            protocolSelected,
+            statusSelected,
+            actionSelected,
+        ]
+        .compactMap { $0 }
+        .count
+    }
 }

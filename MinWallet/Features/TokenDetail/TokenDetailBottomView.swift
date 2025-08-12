@@ -9,6 +9,9 @@ extension TokenDetailView {
                 alignment: .leading,
                 spacing: .md,
                 content: {
+                    let tokenByID = tokenManager.tokenById(tokenID: viewModel.token.uniqueID)
+                    let amount = tokenByID?.amount ?? 0
+                    let valueInAda = tokenByID?.subPriceValue ?? 0
                     Text("My balance")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -16,10 +19,10 @@ extension TokenDetailView {
                         .padding(.top, .xl)
                     HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(tokenManager.adaValue.formatNumber(suffix: Currency.ada.prefix, font: .titleH5, fontColor: .colorBaseTent))
+                            Text(amount.formatNumber(suffix: "", font: .titleH5, fontColor: .colorBaseTent))
                                 .minimumScaleFactor(0.8)
                                 .lineLimit(1)
-                            Text(tokenManager.adaValue.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
+                            Text(valueInAda.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
                                 .minimumScaleFactor(0.8)
                                 .lineLimit(1)
                                 .padding(.bottom, 2)

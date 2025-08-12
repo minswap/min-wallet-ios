@@ -21,7 +21,7 @@ struct SwipeToDeleteModifier: ViewModifier {
     private var isHorizontalDrag = false
     
     private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 5, coordinateSpace: .local)
+        DragGesture(minimumDistance: 8)
             .updating($isDragging) { _, state, _ in
                 state = true
             }
@@ -66,7 +66,7 @@ struct SwipeToDeleteModifier: ViewModifier {
                     .cornerRadius(offset < 0 ? 12 : 0, corners: [.topRight, .bottomRight])
                     .shadow(color: offset < 0 ? .colorBaseTent.opacity(0.18) : .clear, radius: 4, x: 2, y: 4)
                     .offset(x: offset)
-                    .gesture(enableDrag ? dragGesture : nil)
+                    .simultaneousGesture(enableDrag ? dragGesture : nil)
             }
             .opacity(isDeleted ? 0 : 1)
             //.animation(.easeInOut(duration: 0.2), value: offset)

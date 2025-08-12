@@ -74,7 +74,7 @@ struct OrderHistoryCancelView: View {
                         .padding(.horizontal, .xl)
                         .contentShape(.rect)
                         .onTapGesture {
-                            guard orderCanSelect[order.id] != nil else { return }
+                            guard orderCanSelect[order.id] != nil || orderCanSelect.isEmpty else { return }
                             if orderSelected[order.id] == nil {
                                 orderSelected[order.id] = order
                             } else {
@@ -159,7 +159,7 @@ struct OrderHistoryCancelView: View {
     }
     
     private let PLUTUS_V1: Set<AggregatorSource> = [
-        .Minswap, .SundaeSwap, .VyFinance, .WingRiders, .WingRidersStableV1,
+        .Minswap, .SundaeSwap, .VyFinance, .WingRiders,
     ]
 
     private let PLUTUS_V2: Set<AggregatorSource> = [

@@ -38,6 +38,7 @@ type AMMPool {
   tvlInAda: BigInt
   type: AMMType!
   utxo: AMMUtxo!
+  volume24h: BigInt
 }
 
 enum AMMType {
@@ -61,7 +62,61 @@ type ActiveLaunchEvent {
 
 type AdaPrice {
   currency: SupportedCurrency!
-  value: Float
+  value: CurrencyStats
+}
+
+type AggregatorFeeApp {
+  feeReceiverAddress: String!
+  feeReceiverPeriod: AggregatorFeeReceiverPeriod!
+  id: Int!
+  name: String!
+  ownerAddress: String!
+  stats: AggregatorFeeAppStats!
+  swapFeeNum: Int!
+}
+
+type AggregatorFeeAppStats {
+  paidFee: BigInt!
+  pendingFee: BigInt!
+  totalFee: BigInt!
+  transactions: BigInt!
+}
+
+input AggregatorFeeAppsInput {
+  name: String
+  ownerAddress: String!
+}
+
+input AggregatorFeeCreateAppInput {
+  feeReceiverAddress: String!
+  feeReceiverPeriod: AggregatorFeeReceiverPeriod!
+  name: String!
+  ownerAddress: String!
+  swapFeeNum: Int!
+  tx: String!
+}
+
+input AggregatorFeePreCreateAppInput {
+  inputsToChoose: [String!]!
+  ownerAddress: String!
+}
+
+enum AggregatorFeeReceiverPeriod {
+  DAILY
+  MONTHLY
+  WEEKLY
+}
+
+type AggregatorFeeTransaction {
+  earnedFee: BigInt!
+  id: BigInt!
+  serviceFee: BigInt!
+  txHash: String!
+}
+
+input AggregatorFeeTransactionsInput {
+  appName: String!
+  ownerAddress: String!
 }
 
 type AnalyticsFarmContribution {
@@ -74,6 +129,7 @@ type AnalyticsFarmContribution {
 type Asset {
   currencySymbol: String!
   details: AssetDetails
+  marketData: AssetMarketData
   metadata: AssetMetadata
   tokenName: String!
 }
@@ -87,6 +143,13 @@ type AssetDetails {
   categories: [String!]!
   project: String!
   socialLinks: AssetSocialLinks
+}
+
+type AssetMarketData {
+  marketCap: BigNumber!
+  price: BigNumber!
+  priceChange24h: BigNumber!
+  volume24h: BigNumber!
 }
 
 type AssetMetadata {
@@ -289,27 +352,6 @@ input CLIWallet {
   stakeSkey: String
 }
 
-input CZIBuildZapInInput {
-  address: String!
-  amount: BigInt!
-  inputsToChoose: [String!]!
-  projectID: String!
-  shouldSplitChange: Boolean
-}
-
-type CZIProjectDetail {
-  amountADA: BigInt!
-  amountLP: BigInt!
-  cziAsset: Asset!
-  id: String!
-  participant: Int!
-  pool: Pool!
-  purrAsset: Asset!
-  remainingAmountADA: BigInt!
-  remainingAmountAsset: BigInt!
-  service: LaunchBowlService!
-}
-
 input CancelLbeV2EventInput {
   baseAsset: InputAsset!
   inputsToChoose: [String!]!
@@ -346,6 +388,11 @@ input CreateLbeV2OrderInput {
   inputsToChoose: [String!]!
   owner: String!
   raiseAsset: InputAsset!
+}
+
+type CurrencyStats {
+  change24h: Float!
+  price: Float!
 }
 
 enum DAOChoiceType {
@@ -386,6 +433,7 @@ enum DAOTreasuryCategory {
   DAO
   DAO_FEE
   DAO_HOT
+  FARMING_ADA_MIN_POL
   POL
 }
 
@@ -420,6 +468,17 @@ type DailyRewardEmission {
   asset: Asset!
   endAt: BigInt
   reward: BigInt!
+}
+
+input DaoCreateTempCheckInput {
+  endAt: BigInt
+  inputsToChoose: [String!]!
+  linkForum: String!
+  officialEndAt: BigInt
+  officialStartAt: BigInt
+  ownerAddress: String!
+  startAt: BigInt!
+  type: ProposalType!
 }
 
 """
@@ -518,7 +577,7 @@ type DexV2WithdrawImbalanceOverSlippageDetail {
 
 type Events {
   ido: [IdoEvent!]!
-  lbeAndCzi: [String!]!
+  lbe: [String!]!
   lbeV2: [LbeV2Event!]!
 }
 
@@ -623,6 +682,12 @@ type FarmPool {
 
   """Number of LP Tokens are staked on Yield Farming"""
   totalLiquidityStaking: BigInt!
+
+  """
+  Determine the buy fee and sell fee, respectively. If the two values are equal, only one value is returned
+  """
+  tradingFee: [Float!]
+  volume24h: BigInt
 }
 
 input FarmPoolInfoFilterInput {
@@ -651,12 +716,17 @@ input FarmPoolInfoSortInput {
 }
 
 type FarmRebalance {
+  ammType: AMMType!
   assets: [Asset!]!
   change: Float!
   date: String!
+  lpAsset: Asset!
   point: Float!
   tier: String!
   tierLogo: String!
+  tradingFee: [Float!]!
+  tvl: BigInt!
+  volume24h: BigInt!
 }
 
 type FarmRewardAPR {
@@ -1105,10 +1175,7 @@ type LaunchBowlProject {
   purrAsset: Asset!
 }
 
-union LaunchBowlProjectDetail = CZIProjectDetail | LBEProjectDetail
-
 enum LaunchBowlService {
-  CZI
   IDO
   LBE
   LBE_V2
@@ -1503,6 +1570,8 @@ type MintStakingPools {
 }
 
 type Mutation {
+  aggregatorFeeCreateApp(input: AggregatorFeeCreateAppInput!): [AggregatorFeeApp!]!
+  aggregatorFeePreCreateApp(input: AggregatorFeePreCreateAppInput!): String!
   buildCreatePool(options: BuildCreatePoolOptions!): BuildCreatePoolResponse!
   buildEmergencyWithdrawV2(options: BuildEmergencyWithdrawOptions!): String!
   buildFarmMigration(options: BuildFarmMigrationOptions!): String!
@@ -1521,13 +1590,12 @@ type Mutation {
   createBulkOrders(input: InputCreateBulkOrders!): String!
   createLbeV2Event(input: CreateLbeV2EventInput!): String!
   createLbeV2Order(input: CreateLbeV2OrderInput!): String!
-  cziBuildZapIn(input: CZIBuildZapInInput!): String!
+  daoCreateTempCheck(input: DaoCreateTempCheckInput!): String!
   finalizeAndSubmit(input: InputFinalizeAndSubmit!): String!
   hello: Void
   idoCreateEvent(input: IdoCreateEventInput!): String!
   idoDepositOrWithdrawOrder(input: IdoDepositOrWithdrawOrderInput!): String!
   lbeBuildDeposit(input: LBEBuildDepositInput!): String!
-  logTx(input: PendingTxInput!): String!
   minBarBuildLiquidHarvestTx(options: MinBarBuildLiquidHarvestOptions!): String!
   minBarBuildLiquidStakeTx(options: MinBarBuildLiquidStakeOptions!): String!
   minBarBuildLiquidUnstakeTx(options: MinBarBuildLiquidUnstakeOptions!): String!
@@ -1774,6 +1842,9 @@ type PortfolioFarmPosition {
   pendingRewardsAdaValue: BigInt!
   pnl24H: BigInt!
   poolShare: Float!
+  tradingFee: [Float!]!
+  tvl: BigInt!
+  volume24h: BigInt!
 }
 
 type PortfolioLPPosition {
@@ -1783,6 +1854,9 @@ type PortfolioLPPosition {
   lpAdaValue: BigInt!
   pnl24H: BigInt!
   poolShare: Float!
+  tradingFee: [Float!]!
+  tvl: BigInt!
+  volume24h: BigInt!
 }
 
 type PortfolioLiquidStakingPosition {
@@ -1875,18 +1949,28 @@ type Proposal {
   entity: String!
   ipfs: String!
   limitVoteChoice: Int!
+  mipTxId: String
   options: [ProposalOption!]!
   ownerAddress: String!
   ownerStakeAddress: String!
+  proposalChoices: [ProposalOption!]
+  proposalChoicesType: ProposalOptionType
+  proposalEndAt: BigInt
+  proposalLimitVoteChoice: Int
+  proposalPurpose: String
+  proposalStartAt: BigInt
+  proposalType: String
   quorum: BigInt!
   startAt: BigInt!
   status: ProposalStatus!
+  tempCheckTxId: String
   title: String!
   totalVote: Int
   totalVotingPower: BigInt
   txId: String!
   type: ProposalOptionType!
   userVotingPower: BigInt
+  version: String!
 }
 
 input ProposalInput {
@@ -1913,6 +1997,11 @@ enum ProposalStatus {
   LISTING
 }
 
+enum ProposalType {
+  CONSTITUTIONAL
+  NON_CONSTITUTIONAL
+}
+
 input ProposalVotesInput {
   limit: Int!
   offset: Int!
@@ -1926,12 +2015,14 @@ input ProposalsInput {
 
 type Query {
   adaPrice(currency: SupportedCurrency!): AdaPrice!
+  aggregatorFeeApps(input: AggregatorFeeAppsInput!): [AggregatorFeeApp!]!
+  aggregatorFeeTransactions(input: AggregatorFeeTransactionsInput!): [AggregatorFeeTransaction!]!
   appliedPoolsByLPAssets(lpAssets: [InputAsset!]!): [AMMPool!]!
   appliedPoolsByPairs(pairs: [InputPair!]!): [AMMPool!]!
   assetMetadata(inputs: [InputAsset!]!): [Asset!]!
   assets(input: AssetsInput): AssetsResponse!
-  batcherFeeReferences(address: String!): [DetailedUtxo!]!
   cip68MetadataUtxos(address: String!): [ScriptUtxo!]!
+  daoCheckDuplicate(forumLink: String!): Boolean!
   daoTreasury: DAOTreasury!
   duplicatedPoolsByLPAssets(lpAssets: [InputAsset!]!): [AMMPool!]!
   extractNftPolicyIds(policyIds: [String!]!): [String!]!
@@ -1963,7 +2054,7 @@ type Query {
   launchBowlJoinedProject(input: LaunchBowlJoinedProjectsInput!): Events!
   launchBowlLiveProjectCount: Int!
   launchBowlProjectChart(id: String!, type: LaunchBowlService!): [SimpleChart!]!
-  launchBowlProjectDetail(id: String!): LaunchBowlProjectDetail!
+  launchBowlProjectDetail(id: String!): LBEProjectDetail!
   launchBowlProjects: [LaunchBowlProject!]!
   lbeV2Details(input: LbeV2DetailsInput!): LbeV2Details!
   lbeV2Events(input: LbeV2EventFilterOptions): [LbeV2Event!]!
@@ -1988,7 +2079,6 @@ type Query {
   ohlc(input: OHLCInput!): [OHLC!]!
   orders(input: OrderV2Input!): OrderHistoryResponse!
   pendingOrder(address: String!): PendingOrder!
-  pendingTxs(address: String!): [PendingTx!]!
   poolFeeHistories(input: PoolFeeHistoryInput!): [PoolFeeHistory!]!
   poolsByAsset(input: PoolsByAssetInput!): PoolsByAssetResponse!
   poolsByLPAssets(lpAssets: [InputAsset!]!): [AMMPool!]!
@@ -2023,7 +2113,9 @@ type Query {
   testingCreateVesting(address: String!, amount: BigInt!, from: BigInt!, skey: String!, to: BigInt!): String
   testingCustomMintAssets(options: BuildCustomMintTestAssetOptions!): String
   testingDaoCreateProposal(owner: String!, proposal: DAOProposal!, skey: String!, stakeSkey: String!): String
+  testingDaoDeactivateMipProposal(proposalId: String!): String
   testingDaoDeactivateProposal(owner: String!, proposalId: String!, skey: String!, stakeSkey: String!): String
+  testingDaoDeactivateTempCheck(proposalId: String!): String
   testingDaoVoteOnProposal(owner: String!, proposalId: String!, skey: String!, stakeSkey: String!, vote: BigInt!): String
   testingDeployPlutusScript(address: String!, deployTo: String!, scriptMessage: String!, scripts: [String!]!, skey: String!): String
   testingEnableProfitSharing(lpAsset: String!): String
@@ -2035,7 +2127,7 @@ type Query {
   testingMintTestAssets(options: BuildMintTestAssetOptions!): String
   testingRequestUpdateFee(manager: WalletOption!, newFee: Int!, poolLPAsset: String!): String!
   testingRugPullV2(input: RugPullV2Input!): String!
-  testingSignedAndSubmit(skey: String!, txRaw: String!): String
+  testingSignedAndSubmit(seed: String, skey: String, txRaw: String!): String
   testingStableswapCreateOrder(address: String!, options: StableswapCreateOrderOptions!, skey: String!): String
   testingStableswapDeposit(address: String!, lpAsset: String!, options: [StableswapDepositOptions!]!, skey: String!): String
   testingTransferMoney(address: String!, skey: String!, toAddresses: [TransferAssetAddress!]!): String

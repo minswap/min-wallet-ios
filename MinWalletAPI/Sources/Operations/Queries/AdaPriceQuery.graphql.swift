@@ -7,7 +7,7 @@ public class AdaPriceQuery: GraphQLQuery {
   public static let operationName: String = "AdaPriceQuery"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query AdaPriceQuery($currency: SupportedCurrency!) { adaPrice(currency: $currency) { __typename value currency } }"#
+      #"query AdaPriceQuery($currency: SupportedCurrency!) { adaPrice(currency: $currency) { __typename currency value { __typename price } } }"#
     ))
 
   public var currency: GraphQLEnum<SupportedCurrency>
@@ -39,12 +39,28 @@ public class AdaPriceQuery: GraphQLQuery {
       public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.AdaPrice }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("value", Double?.self),
         .field("currency", GraphQLEnum<MinWalletAPI.SupportedCurrency>.self),
+        .field("value", Value?.self),
       ] }
 
-      public var value: Double? { __data["value"] }
       public var currency: GraphQLEnum<MinWalletAPI.SupportedCurrency> { __data["currency"] }
+      public var value: Value? { __data["value"] }
+
+      /// AdaPrice.Value
+      ///
+      /// Parent Type: `CurrencyStats`
+      public struct Value: MinWalletAPI.SelectionSet {
+        public let __data: DataDict
+        public init(_dataDict: DataDict) { __data = _dataDict }
+
+        public static var __parentType: any ApolloAPI.ParentType { MinWalletAPI.Objects.CurrencyStats }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("price", Double.self),
+        ] }
+
+        public var price: Double { __data["price"] }
+      }
     }
   }
 }
