@@ -235,13 +235,13 @@ enum AggrSource: String {
         case .Minswap:
             .min
         case .SteelSwap:
-            .min
+            .steelswap
         case .DexHunter:
-            .min
+            .dexhunter
         case .MuesliSwap:
-            .min
+            .muesliswap 
         case .Cardexscan:
-            .min
+            .cardexscan
         }
     }
     
