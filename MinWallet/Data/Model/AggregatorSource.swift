@@ -16,7 +16,6 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     case VyFinance
     case WingRidersV2
     case WingRiders
-    case WingRidersStableV1
     case WingRidersStableV2
     
     var name: LocalizedStringKey {
@@ -41,8 +40,6 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             "Wingriders V2"
         case .WingRiders:
             "Wingriders V1"
-        case .WingRidersStableV1:
-            "Wingriders Stable V1"
         case .WingRidersStableV2:
             "Wingriders Stable V2"
         case .Spectrum:
@@ -64,7 +61,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             .icSundae
         case .VyFinance:
             .icVyfinance
-        case .WingRidersV2, .WingRiders, .WingRidersStableV1, .WingRidersStableV2:
+        case .WingRidersV2, .WingRiders, .WingRidersStableV2:
             .icWingriders
         }
     }
@@ -100,8 +97,6 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             "WingRidersV2"
         case .WingRiders:
             "WingRiders"
-        case .WingRidersStableV1:
-            "WingRidersStableV1"
         case .WingRidersStableV2:
             "WingRidersStableV2"
         case .Spectrum:
@@ -137,8 +132,6 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             self = .WingRidersV2
         case AggregatorSource.WingRiders.name.toString():
             self = .WingRiders
-        case AggregatorSource.WingRidersStableV1.name.toString():
-            self = .WingRidersStableV1
         case AggregatorSource.WingRidersStableV2.name.toString():
             self = .WingRidersStableV2
         default:
@@ -171,8 +164,6 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             self = .WingRidersV2
         case AggregatorSource.WingRiders.rawId:
             self = .WingRiders
-        case AggregatorSource.WingRidersStableV1.rawId:
-            self = .WingRidersStableV1
         case AggregatorSource.WingRidersStableV2.rawId:
             self = .WingRidersStableV2
         default:
@@ -186,7 +177,7 @@ extension AggregatorSource {
         switch self {
         case .MinswapV2, .WingRidersV2, .WingRidersStableV2:
             return "V2"
-        case .Minswap, .SundaeSwap, .WingRidersStableV1, .WingRiders:
+        case .Minswap, .SundaeSwap, .WingRiders:
             return "V1"
         case .MinswapStable, .SplashStable:
             return "Stable"

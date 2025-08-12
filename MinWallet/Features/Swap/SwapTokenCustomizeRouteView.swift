@@ -117,6 +117,7 @@ private struct SwapTokenCustomizedRouteItemView: View {
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
                 .frame(height: 20)
+                .minimumScaleFactor(0.8)
         }
         .padding(.xl)
         .overlay(RoundedRectangle(cornerRadius: 20).stroke(excludedSource[source.rawId] == nil ? .colorInteractiveToneHighlight : .colorBorderPrimaryTer, lineWidth: 2))

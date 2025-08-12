@@ -159,7 +159,7 @@ struct OrderHistoryCancelView: View {
     }
     
     private let PLUTUS_V1: Set<AggregatorSource> = [
-        .Minswap, .SundaeSwap, .VyFinance, .WingRiders, .WingRidersStableV1,
+        .Minswap, .SundaeSwap, .VyFinance, .WingRiders,
     ]
 
     private let PLUTUS_V2: Set<AggregatorSource> = [
