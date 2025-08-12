@@ -88,9 +88,9 @@ extension OrderHistoryView {
                                 .frame(width: 16, height: 16)
                                 .background(
                                     Circle()
-                                        .fill(.colorInteractiveToneHighlight)
+                                        .fill(.colorFillFilter)
                                 )
-                                .position(x: 34, y: 34)
+                                .position(x: 34, y: 32)
                         }
                     }
                     .contentShape(.rect)
@@ -101,7 +101,7 @@ extension OrderHistoryView {
                             viewModel.showFilterView = true
                         }
                     }
-                    
+                    .zIndex(999)
                 }
                 .transition(.scale.combined(with: .opacity))
             }
