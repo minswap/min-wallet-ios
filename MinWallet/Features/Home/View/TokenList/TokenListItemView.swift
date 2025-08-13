@@ -29,8 +29,9 @@ struct TokenListItemView: View {
                         .lineLimit(1)
                         .foregroundStyle(.colorBaseTent)
                     Spacer()
+                    
                     if showSubPrice {
-                        Text((token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : ""))
+                        Text((token?.priceValue ?? 0).formatNumber(suffix: !showSubPrice ? Currency.ada.prefix : "", roundingOffset: token?.decimals))
                             .font(.labelMediumSecondary)
                             .foregroundStyle(.colorBaseTent)
                     } else {
@@ -56,11 +57,14 @@ struct TokenListItemView: View {
                     Spacer()
                     
                     if showSubPrice {
-                        let subPrice: Double = (token?.subPriceValue ?? 0).toExact(decimal: 6)
+                        let subPrice: Double = {
+                            guard token?.isTokenADA == false else { return token?.subPriceValue ?? 0 }
+                            return (token?.subPriceValue ?? 0).toExact(decimal: 6)
+                        }()
                         let subPriceValue: AttributedString = {
                             switch appSetting.currency {
                             case Currency.ada.rawValue:
-                                return subPrice.formatNumber(suffix: Currency.ada.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                                return subPrice.formatNumber(suffix: Currency.ada.prefix, roundingOffset: token?.decimals, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
                             default:
                                 return (subPrice * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
                             }
