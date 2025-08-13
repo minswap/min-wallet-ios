@@ -90,7 +90,7 @@ struct SendTokenView: View {
                                     minimumFractionDigits: .constant(item.token.isTokenADA ? 6 : item.token.decimals)
                                 )
                                 .font(.labelMediumSecondary)
-                                .foregroundStyle(.colorBaseTent)
+                                .foregroundStyle(viewModel.isSendAll ? .colorInteractiveTentPrimarySub : .colorBaseTent)
                                 .focused($focusedField, equals: .row(id: item.token.uniqueID))
                                 .disabled(viewModel.isSendAll)
                                 if !viewModel.isSendAll {
@@ -102,7 +102,26 @@ struct SendTokenView: View {
                                             viewModel.setMaxAmount(item: item)
                                         }
                                 }
-                                TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
+                                if item.isNFT {
+                                    CustomWebImage(
+                                        url: item.token.buildNFTURL(),
+                                        placeholder: {
+                                            Image(nil)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .background(.colorSurfacePrimaryDefault)
+                                                .clipped()
+                                                .overlay {
+                                                    Image(.icNftPlaceholder)
+                                                        .fixSize(24)
+                                                }
+                                        }
+                                    )
+                                    .cornerRadius(12)
+                                    .frame(width: 24, height: 24)
+                                } else {
+                                    TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
+                                }
                                 Text(item.isNFT ? "NFT" : item.token.adaName)
                                     .font(.labelSemiSecondary)
                                     .foregroundStyle(.colorBaseTent)
@@ -139,6 +158,30 @@ struct SendTokenView: View {
                     })
             }
             Spacer()
+            if viewModel.isSendAll {
+                HStack(alignment: .top, spacing: 8) {
+                    Image(viewModel.isCheckedWarning ? .icSquareCheckBox : .icSquareUncheckBox)
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                    VStack(spacing: 4) {
+                        Text("Important")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 2)
+                        Text("This feature is designed for recovery in case user forgets their seed phrase but have the wallet logged in the DEX app. Proceeded with caution. Do not send to a CEX address as you could lose your native tokens.")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .padding(.horizontal, .xl)
+                .padding(.vertical, .xl)
+                .contentShape(.rect)
+                .onTapGesture {
+                    viewModel.isCheckedWarning.toggle()
+                }
+            }
             let combinedBinding = Binding<Bool>(
                 get: { viewModel.isValidTokenToSend },
                 set: { _ in }
@@ -150,9 +193,9 @@ struct SendTokenView: View {
                     guard !tokens.isEmpty else { return }
                     switch viewModel.screenType {
                     case .scanQRCode(let address):
-                        navigator.push(.sendToken(.confirm(tokens: tokens, address: address)))
+                        navigator.push(.sendToken(.confirm(tokens: tokens, address: address, sendAll: viewModel.isSendAll)))
                     case .normal:
-                        navigator.push(.sendToken(.toWallet(tokens: tokens)))
+                        navigator.push(.sendToken(.toWallet(tokens: tokens, sendAll: viewModel.isSendAll)))
                     }
                 }
                 .frame(height: 56)

@@ -98,7 +98,7 @@ struct SelectTokenView: View {
                 RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
             )
             .contentShape(.rect)
-            .onTapGesture { 
+            .onTapGesture {
                 onSelectToken?(viewModel.rawTokens, true)
                 navigator.push(.sendToken(.sendToken(tokensSelected: viewModel.rawTokens, sendAll: true, screenType: viewModel.sourceScreenType)))
             }
@@ -215,6 +215,7 @@ struct SelectTokenView: View {
     SelectTokenView(
         viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .initSelectedToken, sourceScreenType: .normal),
         onSelectToken: { _, _ in
-        })
-        .environmentObject(AppSetting.shared)
+        }
+    )
+    .environmentObject(AppSetting.shared)
 }

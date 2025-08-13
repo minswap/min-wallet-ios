@@ -86,10 +86,10 @@ struct MainCoordinator: View {
                         switch screen {
                         case let .sendToken(tokenSelected, isSendAll, screenType):
                             SendTokenView(viewModel: .init(tokens: tokenSelected, isSendAll: isSendAll, screenType: screenType)).navigationBarHidden(true)
-                        case let .toWallet(tokens):
-                            ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: tokens)).navigationBarHidden(true)
-                        case let .confirm(tokens, address):
-                            ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: tokens, address: address)).navigationBarHidden(true)
+                        case let .toWallet(tokens, sendAll):
+                            ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: tokens, isSendAll: sendAll)).navigationBarHidden(true)
+                        case let .confirm(tokens, address, sendAll):
+                            ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: tokens, address: address, isSendAll: sendAll)).navigationBarHidden(true)
                         case let .selectToken(tokensSelected, screenType, sourceScreenType, onSelectToken):
                             SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: tokensSelected, screenType: screenType, sourceScreenType: sourceScreenType), onSelectToken: onSelectToken)
                                 .navigationBarHidden(true)

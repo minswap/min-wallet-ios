@@ -59,10 +59,11 @@ class SendTokenViewModel: ObservableObject {
     }
     
     var tokensToSend: [WrapTokenSend] {
-        tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 }
+        tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 || $0.isNFT }
     }
     
     var isValidTokenToSend: Bool {
+        guard !isSendAll else { return isCheckedWarning }
         if tokens.count == 1 && tokens.first?.amount.isBlank == true {
             return false
         }

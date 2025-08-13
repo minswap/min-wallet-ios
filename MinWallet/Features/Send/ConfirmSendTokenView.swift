@@ -35,13 +35,35 @@ struct ConfirmSendTokenView: View {
                         .padding(.horizontal, .xl)
                     ForEach(viewModel.tokens) { item in
                         HStack(spacing: 8) {
-                            let amount = item.amount.doubleValue
-                            Text(amount.formatSNumber(maximumFractionDigits: 15))
+                            let amount: String = {
+                                guard !viewModel.isSendAll else { return item.amount }
+                                return item.amount.doubleValue.formatSNumber(maximumFractionDigits: 15)
+                            }()
+                            Text(amount)
                                 .font(.labelSmallSecondary)
                                 .foregroundStyle(.colorBaseTent)
                             Spacer(minLength: 0)
-                            TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
-                            Text(item.token.adaName)
+                            if item.isNFT {
+                                CustomWebImage(
+                                    url: item.token.buildNFTURL(),
+                                    placeholder: {
+                                        Image(nil)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .background(.colorSurfacePrimaryDefault)
+                                            .clipped()
+                                            .overlay {
+                                                Image(.icNftPlaceholder)
+                                                    .fixSize(24)
+                                            }
+                                    }
+                                )
+                                .cornerRadius(12)
+                                .frame(width: 24, height: 24)
+                            } else {
+                                TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
+                            }
+                            Text(item.isNFT ? "NFT" : item.token.adaName)
                                 .font(.labelSemiSecondary)
                                 .foregroundStyle(.colorBaseTent)
                         }
@@ -163,7 +185,13 @@ struct ConfirmSendTokenView: View {
 }
 
 #Preview {
-    ConfirmSendTokenView(viewModel: ConfirmSendTokenViewModel(tokens: [.init(token: TokenManager.shared.tokenAda)], address: "addr_test1qrckpdddp4weyhv72de83y72sth4pwfu6xmy3ugcurtqe76kp8zluvc7mydvp9snyrfsnexfkw89uukajky80js83rzqufn9cj"))
-        .environmentObject(AppSetting.shared)
-        .environmentObject(HUDState())
+    ConfirmSendTokenView(
+        viewModel: ConfirmSendTokenViewModel(
+            tokens: [.init(token: TokenManager.shared.tokenAda)],
+            address: "addr_test1qrckpdddp4weyhv72de83y72sth4pwfu6xmy3ugcurtqe76kp8zluvc7mydvp9snyrfsnexfkw89uukajky80js83rzqufn9cj",
+            isSendAll: true
+        )
+    )
+    .environmentObject(AppSetting.shared)
+    .environmentObject(HUDState())
 }

@@ -422,6 +422,9 @@
     "Import Minwallet.json file" : {
 
     },
+    "Important" : {
+
+    },
     "In case you forgot your seed phrase, Minswap can not retrieve your wallet once you click Disconnect button." : {
 
     },
@@ -854,6 +857,9 @@
 
     },
     "This amount of ADA will be held as minimum UTxO ADA and will be returned when your orders are processed or cancelled" : {
+
+    },
+    "This feature is designed for recovery in case user forgets their seed phrase but have the wallet logged in the DEX app. Proceeded with caution. Do not send to a CEX address as you could lose your native tokens." : {
 
     },
     "This project token is migrated to a new token, you can exchange your old token on %@ app. The new token has policyID %@ and tokenName %@." : {

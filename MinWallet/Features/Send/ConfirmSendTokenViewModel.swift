@@ -9,10 +9,13 @@ class ConfirmSendTokenViewModel: ObservableObject {
     var tokens: [WrapTokenSend] = []
     @Published
     var address: String = ""
+    @Published
+    var isSendAll: Bool = false
     
-    init(tokens: [WrapTokenSend], address: String) {
+    init(tokens: [WrapTokenSend], address: String, isSendAll: Bool) {
         self.tokens = tokens
         self.address = address
+        self.isSendAll = isSendAll
     }
     
     func sendTokens() async throws -> String {

@@ -66,8 +66,8 @@ enum WalletSettingScreen: Hashable {
 
 enum SendTokenScreen: Hashable, Identifiable {
     case sendToken(tokensSelected: [TokenProtocol], sendAll: Bool, screenType: SendTokenView.ScreenType)
-    case toWallet(tokens: [WrapTokenSend])
-    case confirm(tokens: [WrapTokenSend], address: String)
+    case toWallet(tokens: [WrapTokenSend], sendAll: Bool)
+    case confirm(tokens: [WrapTokenSend], address: String, sendAll: Bool)
     case selectToken(
         tokensSelected: [TokenProtocol?],
         screenType: SelectTokenView.ScreenType,
