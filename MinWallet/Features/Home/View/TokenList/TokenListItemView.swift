@@ -56,7 +56,7 @@ struct TokenListItemView: View {
                     Spacer()
                     
                     if showSubPrice {
-                        let subPrice: Double = token?.subPriceValue ?? 0
+                        let subPrice: Double = (token?.subPriceValue ?? 0).toExact(decimal: 6)
                         let subPriceValue: AttributedString = {
                             switch appSetting.currency {
                             case Currency.ada.rawValue:
