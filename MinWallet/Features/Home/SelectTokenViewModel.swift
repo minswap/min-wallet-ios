@@ -28,7 +28,7 @@ class SelectTokenViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var cachedIndex: [String: Int] = [:]
     
-    private var rawTokens: [TokenProtocol] {
+    var rawTokens: [TokenProtocol] {
         [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
     }
     

@@ -113,7 +113,7 @@ struct SwapTokenView: View {
             content: {
                 SelectTokenView(
                     viewModel: viewModel.selectTokenVM,
-                    onSelectToken: { tokens in
+                    onSelectToken: { tokens, _ in
                         viewModel.action.send(.selectToken(token: tokens.first))
                     }
                 )

@@ -89,16 +89,21 @@ struct SendTokenView: View {
                                     maxValue: maxValueBinding,
                                     minimumFractionDigits: .constant(item.token.isTokenADA ? 6 : item.token.decimals)
                                 )
+                                .font(.labelMediumSecondary)
+                                .foregroundStyle(.colorBaseTent)
                                 .focused($focusedField, equals: .row(id: item.token.uniqueID))
-                                Text("Max")
-                                    .font(.labelMediumSecondary)
-                                    .foregroundStyle(.colorInteractiveToneHighlight)
-                                    .onTapGesture {
-                                        hideKeyboard()
-                                        viewModel.setMaxAmount(item: item)
-                                    }
+                                .disabled(viewModel.isSendAll)
+                                if !viewModel.isSendAll {
+                                    Text("Max")
+                                        .font(.labelMediumSecondary)
+                                        .foregroundStyle(.colorInteractiveToneHighlight)
+                                        .onTapGesture {
+                                            hideKeyboard()
+                                            viewModel.setMaxAmount(item: item)
+                                        }
+                                }
                                 TokenLogoView(currencySymbol: item.token.currencySymbol, tokenName: item.token.tokenName, isVerified: false, size: .init(width: 24, height: 24))
-                                Text(item.token.adaName)
+                                Text(item.isNFT ? "NFT" : item.token.adaName)
                                     .font(.labelSemiSecondary)
                                     .foregroundStyle(.colorBaseTent)
                             }
@@ -108,27 +113,29 @@ struct SendTokenView: View {
                             .padding(.horizontal, .xl)
                             .padding(.top, .lg)
                         }
-                        Button(
-                            action: {
-                                hideKeyboard()
-                                viewModel.selectTokenVM.selectToken(tokens: viewModel.tokens.map({ $0.token }))
-                                ignoresKeyboard = true
-                                $isShowSelectToken.showSheet()
-                            },
-                            label: {
-                                Text("Add Token")
-                                    .font(.labelSmallSecondary)
-                                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(content: {
-                                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
-                                    })
-                            }
-                        )
-                        .frame(height: 36)
-                        .padding(.horizontal, .xl)
-                        .padding(.top, .md)
-                        .buttonStyle(.plain)
+                        if !viewModel.isSendAll {
+                            Button(
+                                action: {
+                                    hideKeyboard()
+                                    viewModel.selectTokenVM.selectToken(tokens: viewModel.tokens.map({ $0.token }))
+                                    ignoresKeyboard = true
+                                    $isShowSelectToken.showSheet()
+                                },
+                                label: {
+                                    Text("Add Token")
+                                        .font(.labelSmallSecondary)
+                                        .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .background(content: {
+                                            RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+                                        })
+                                }
+                            )
+                            .frame(height: 36)
+                            .padding(.horizontal, .xl)
+                            .padding(.top, .md)
+                            .buttonStyle(.plain)
+                        }
                     })
             }
             Spacer()
@@ -184,7 +191,7 @@ struct SendTokenView: View {
             content: {
                 SelectTokenView(
                     viewModel: viewModel.selectTokenVM,
-                    onSelectToken: { tokens in
+                    onSelectToken: { tokens, isSendAll in
                         viewModel.addToken(tokens: tokens)
                     }
                 )
@@ -228,6 +235,6 @@ struct SendTokenView: View {
 }
 
 #Preview {
-    SendTokenView(viewModel: SendTokenViewModel(tokens: [TokenManager.shared.tokenAda], screenType: .normal))
+    SendTokenView(viewModel: SendTokenViewModel(tokens: [TokenManager.shared.tokenAda], isSendAll: true, screenType: .normal))
         .environmentObject(TokenManager.shared)
 }
