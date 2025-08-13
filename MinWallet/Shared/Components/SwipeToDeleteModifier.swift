@@ -21,7 +21,7 @@ struct SwipeToDeleteModifier: ViewModifier {
     private var isHorizontalDrag = false
     
     private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 8)
+        DragGesture(minimumDistance: 16)
             .updating($isDragging) { _, state, _ in
                 state = true
             }
