@@ -10,10 +10,34 @@ class SendTokenViewModel: ObservableObject {
     var screenType: SendTokenView.ScreenType = .normal
     @Published
     var selectTokenVM: SelectTokenViewModel = .init(screenType: .sendToken, sourceScreenType: .normal)
+    @Published
+    var isSendAll: Bool
+    @Published
+    var isCheckedWarning: Bool = false
     
-    init(tokens: [TokenProtocol], screenType: SendTokenView.ScreenType) {
-        self.tokens = tokens.map({ WrapTokenSend(token: $0) })
+    init(tokens: [TokenProtocol], isSendAll: Bool, screenType: SendTokenView.ScreenType) {
         self.screenType = screenType
+        self.isSendAll = isSendAll
+        
+        if isSendAll {
+            self.tokens = tokens.map({ token in
+                let minValue = pow(10, Double(token.isTokenADA ? 6 : token.decimals) * -1)
+                let amount = token.isTokenADA ? (max(token.amount - TokenManager.shared.minimumAdaValue, 0)) : token.amount
+                let amountString = AmountTextField.formatCurrency(
+                    String(amount),
+                    minValue: minValue,
+                    maxValue: amount,
+                    minimumFractionDigits: token.isTokenADA ? 6 : token.decimals
+                )
+                return WrapTokenSend(token: token, amount: amountString)
+            })
+            self.tokens += TokenManager.shared.nftTokens.map({ item in
+                let name = item.isAdaHandleName ? "$\(item.tokenName.adaName ?? "")" : (item.nftDisplayName.isBlank ? item.adaName : item.nftDisplayName)
+                return WrapTokenSend(token: item, amount: name, isNFT: true)
+            })
+        } else {
+            self.tokens = tokens.map({ WrapTokenSend(token: $0) })
+        }
     }
     
     func addToken(tokens: [TokenProtocol]) {
@@ -35,10 +59,11 @@ class SendTokenViewModel: ObservableObject {
     }
     
     var tokensToSend: [WrapTokenSend] {
-        tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 }
+        tokens.filter { (Decimal(string: $0.amount) ?? 0) > 0 || $0.isNFT }
     }
     
     var isValidTokenToSend: Bool {
+        guard !isSendAll else { return isCheckedWarning }
         if tokens.count == 1 && tokens.first?.amount.isBlank == true {
             return false
         }
@@ -52,10 +77,12 @@ struct WrapTokenSend: Identifiable {
     var token: TokenProtocol
     
     var amount: String = ""
+    var isNFT: Bool = false
     
-    init(token: TokenProtocol, amount: String = "") {
+    init(token: TokenProtocol, amount: String = "", isNFT: Bool = false) {
         self.token = token
         self.amount = amount
+        self.isNFT = isNFT
     }
     
     var uniqueID: String {

@@ -52,8 +52,7 @@ struct AmountTextField: View {
             fractionalPart = String(fractionalPart.prefix(minimumFractionDigits + 1))
         }
         
-        let formattedValue = wholeNumber + fractionalPart
-        
+        let formattedValue = fractionalPart == "." ? wholeNumber : (wholeNumber + fractionalPart)
         if let doubleValue = Double(formattedValue.replacingOccurrences(of: ",", with: "")), !input.isBlank, doubleValue > 0 {
             let clampedValue: Double = {
                 guard let maxValue = maxValue else { return max(doubleValue, minValue) }

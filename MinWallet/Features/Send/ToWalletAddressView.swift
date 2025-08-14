@@ -124,7 +124,7 @@ struct ToWalletAddressView: View {
                 guard viewModel.isChecking != true else { return }
                 let address = viewModel.adaAddress?.address ?? viewModel.address
                 guard address.count > 1 else { return }
-                navigator.push(.sendToken(.confirm(tokens: viewModel.tokens, address: address)))
+                navigator.push(.sendToken(.confirm(tokens: viewModel.tokens, address: address, sendAll: viewModel.isSendAll)))
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
@@ -223,5 +223,5 @@ struct ToWalletAddressView: View {
 }
 
 #Preview {
-    ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: []))
+    ToWalletAddressView(viewModel: ToWalletAddressViewModel(tokens: [], isSendAll: false))
 }

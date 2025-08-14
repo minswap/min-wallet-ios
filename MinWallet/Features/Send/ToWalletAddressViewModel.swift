@@ -18,9 +18,11 @@ class ToWalletAddressViewModel: ObservableObject {
     let tokens: [WrapTokenSend]
     
     private var cancellables: Set<AnyCancellable> = []
+    let isSendAll: Bool
     
-    init(tokens: [WrapTokenSend]) {
+    init(tokens: [WrapTokenSend], isSendAll: Bool) {
         self.tokens = tokens
+        self.isSendAll = isSendAll
         $address
             .map({ $0.replacingOccurrences(of: " ", with: "") })
             .removeDuplicates()

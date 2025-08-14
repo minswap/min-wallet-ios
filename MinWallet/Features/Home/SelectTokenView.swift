@@ -19,7 +19,7 @@ struct SelectTokenView: View {
     
     init(
         viewModel: SelectTokenViewModel,
-        onSelectToken: (([TokenProtocol]) -> Void)?
+        onSelectToken: (([TokenProtocol], Bool) -> Void)?
     ) {
         self._viewModel = .init(wrappedValue: viewModel)
         self.onSelectToken = onSelectToken
@@ -28,7 +28,7 @@ struct SelectTokenView: View {
     @StateObject
     private var viewModel: SelectTokenViewModel
     
-    var onSelectToken: (([TokenProtocol]) -> Void)?
+    var onSelectToken: (([TokenProtocol], Bool) -> Void)?
     
     var body: some View {
         ZStack {
@@ -46,10 +46,10 @@ struct SelectTokenView: View {
                             switch viewModel.screenType {
                             case .initSelectedToken:
                                 guard !tokenSelected.isEmpty else { return }
-                                onSelectToken?(tokenSelected)
-                                navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected, screenType: viewModel.sourceScreenType)))
+                                onSelectToken?(tokenSelected, false)
+                                navigator.push(.sendToken(.sendToken(tokensSelected: tokenSelected, sendAll: false, screenType: viewModel.sourceScreenType)))
                             case .sendToken:
-                                onSelectToken?(tokenSelected)
+                                onSelectToken?(tokenSelected, false)
                                 onDismiss?()
                             case .swapToken:
                                 break
@@ -85,6 +85,23 @@ struct SelectTokenView: View {
             )
             .buttonStyle(.plain)
             Spacer()
+            HStack(spacing: 8) {
+                Text("Send all")
+                    .font(.labelMediumSecondary)
+                    .foregroundStyle(.colorInteractiveTentSecondaryDefault)
+                Image(.icSendAll)
+                    .fixSize(20)
+            }
+            .padding(.horizontal, .xl)
+            .frame(height: 40)
+            .background(
+                RoundedRectangle(cornerRadius: BorderRadius.full).fill(.colorSurfacePrimaryDefault)
+            )
+            .contentShape(.rect)
+            .onTapGesture {
+                onSelectToken?(viewModel.rawTokens, true)
+                navigator.push(.sendToken(.sendToken(tokensSelected: viewModel.rawTokens, sendAll: true, screenType: viewModel.sourceScreenType)))
+            }
         }
         .frame(height: 48)
         .padding(.horizontal, .xl)
@@ -166,7 +183,7 @@ struct SelectTokenView: View {
                                                 viewModel.toggleSelected(token: item)
                                                 onDismiss?()
                                                 let tokenSelected = viewModel.tokenCallBack
-                                                onSelectToken?(tokenSelected)
+                                                onSelectToken?(tokenSelected, false)
                                             }
                                     }
                                 }
@@ -195,6 +212,10 @@ struct SelectTokenView: View {
 }
 
 #Preview {
-    SelectTokenView(viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .swapToken, sourceScreenType: .normal), onSelectToken: { _ in })
-        .environmentObject(AppSetting.shared)
+    SelectTokenView(
+        viewModel: SelectTokenViewModel(tokensSelected: [TokenProtocolDefault()], screenType: .initSelectedToken, sourceScreenType: .normal),
+        onSelectToken: { _, _ in
+        }
+    )
+    .environmentObject(AppSetting.shared)
 }
