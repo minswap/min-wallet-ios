@@ -23,15 +23,15 @@ class ConfirmSendTokenViewModel: ObservableObject {
         let sender = UserInfo.shared.minWallet?.address ?? ""
         let publicKey = UserInfo.shared.minWallet?.publicKey ?? ""
         
-        guard !isSendAll else {
-            //TODO: cuongnv send all
-            return ""
-        }
-        let assetAmounts: [InputAssetAmount] = tokens.map { token in
-            let amount = token.amount.toSendBE(decimal: token.token.decimals)
-            return InputAssetAmount(amount: amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0), asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
-        }
-        let sendTokensMutation = SendTokensMutation(input: InputSendTokens(assetAmounts: assetAmounts, publicKey: publicKey, receiver: receiver, sender: sender))
+        let assetAmounts: [InputAssetAmount] = {
+            guard !isSendAll else { return [] }
+            return tokens.map { token in
+                let amount = token.amount.toSendBE(decimal: token.token.decimals)
+                return InputAssetAmount(amount: amount.formatSNumber(usesGroupingSeparator: false, maximumFractionDigits: 0), asset: InputAsset(currencySymbol: token.token.currencySymbol, tokenName: token.token.tokenName))
+            }
+        }()
+
+        let sendTokensMutation = SendTokensMutation(input: InputSendTokens(assetAmounts: assetAmounts, publicKey: publicKey, receiver: receiver, sendAll: .some(isSendAll), sender: sender))
         let sendTokens = try await MinWalletService.shared.mutation(mutation: sendTokensMutation)
         guard let txRaw = sendTokens?.sendTokens else { throw AppGeneralError.localErrorLocalized(message: "Transaction not exist") }
         let finalID = try await TokenManager.finalizeAndSubmit(txRaw: txRaw)

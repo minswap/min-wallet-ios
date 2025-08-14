@@ -983,6 +983,7 @@ input InputSendTokens {
   assetAmounts: [InputAssetAmount!]!
   publicKey: String!
   receiver: String!
+  sendAll: Boolean
   sender: String!
 }
 
