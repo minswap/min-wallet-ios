@@ -11,7 +11,7 @@ extension TokenDetailView {
                 content: {
                     let tokenByID = tokenManager.tokenById(tokenID: viewModel.token.uniqueID)
                     let amount = tokenByID?.amount ?? 0
-                    let valueInAda = tokenByID?.subPriceValue ?? 0
+                    let valueInAda = (tokenByID?.subPriceValue ?? 0).toExact(decimal: tokenByID?.isTokenADA == true ? 0 : 6)
                     Text("My balance")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
@@ -19,13 +19,27 @@ extension TokenDetailView {
                         .padding(.top, .xl)
                     HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(amount.formatNumber(suffix: "", font: .titleH5, fontColor: .colorBaseTent))
-                                .minimumScaleFactor(0.8)
-                                .lineLimit(1)
-                            Text(valueInAda.getPriceValue(appSetting: appSetting, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub).attribute)
-                                .minimumScaleFactor(0.8)
-                                .lineLimit(1)
-                                .padding(.bottom, 2)
+                            Text(
+                                amount.formatNumber(
+                                    suffix: "",
+                                    roundingOffset: tokenByID?.decimals == 0 ? nil : tokenByID?.decimals,
+                                    font: .titleH5,
+                                    fontColor: .colorBaseTent)
+                            )
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
+                            Text(
+                                valueInAda.getPriceValue(
+                                    appSetting: appSetting,
+                                    font: .paragraphSmall,
+                                    roundingOffset: appSetting.currency == Currency.ada.rawValue ? (tokenByID?.decimals == 0 ? nil : tokenByID?.decimals) : 3,
+                                    fontColor: .colorInteractiveTentPrimarySub
+                                )
+                                .attribute
+                            )
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
+                            .padding(.bottom, 2)
                         }
                         Spacer()
                         CustomButton(title: "Swap") {
