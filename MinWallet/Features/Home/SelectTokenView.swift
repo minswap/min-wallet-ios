@@ -161,7 +161,7 @@ struct SelectTokenView: View {
                                     let item = $item.wrappedValue.token
                                     if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
                                         let combinedBinding = Binding<Bool>(
-                                            get: { viewModel.tokensSelected[item.uniqueID] != nil || item.uniqueID == MinWalletConstant.adaToken },
+                                            get: { viewModel.tokensSelected[item.uniqueID] != nil },
                                             set: { _ in }
                                         )
                                         SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: true)

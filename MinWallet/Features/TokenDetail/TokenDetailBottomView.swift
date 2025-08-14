@@ -22,7 +22,7 @@ extension TokenDetailView {
                             Text(
                                 amount.formatNumber(
                                     suffix: "",
-                                    roundingOffset: tokenByID?.decimals == 0 ? nil : tokenByID?.decimals,
+                                    roundingOffset: tokenByID?.decimals,
                                     font: .titleH5,
                                     fontColor: .colorBaseTent)
                             )
@@ -32,7 +32,7 @@ extension TokenDetailView {
                                 valueInAda.getPriceValue(
                                     appSetting: appSetting,
                                     font: .paragraphSmall,
-                                    roundingOffset: appSetting.currency == Currency.ada.rawValue ? (tokenByID?.decimals == 0 ? nil : tokenByID?.decimals) : 3,
+                                    roundingOffset: appSetting.currency == Currency.ada.rawValue ? 6 : 3,
                                     fontColor: .colorInteractiveTentPrimarySub
                                 )
                                 .attribute

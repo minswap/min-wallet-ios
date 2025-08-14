@@ -50,12 +50,7 @@ class SelectTokenViewModel: ObservableObject {
                 self.cachedIndex[token?.uniqueID ?? ""] = idx
             }
         self.cachedIndex[TokenManager.shared.tokenAda.uniqueID] = -1
-        switch screenType {
-        case .initSelectedToken:
-            self.tokensSelected[TokenManager.shared.tokenAda.uniqueID] = TokenManager.shared.tokenAda
-        default:
-            break
-        }
+        
         $keyword
             .map({ $0.trimmingCharacters(in: .whitespacesAndNewlines) })
             .removeDuplicates()
@@ -182,7 +177,7 @@ class SelectTokenViewModel: ObservableObject {
     func toggleSelected(token: TokenProtocol) {
         switch screenType {
         case .initSelectedToken, .sendToken:
-            guard token.uniqueID != MinWalletConstant.adaToken else { return }
+            //guard token.uniqueID != MinWalletConstant.adaToken else { return }
             if tokensSelected[token.uniqueID] != nil {
                 tokensSelected.removeValue(forKey: token.uniqueID)
             } else {

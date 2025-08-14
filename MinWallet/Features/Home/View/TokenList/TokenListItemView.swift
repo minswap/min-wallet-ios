@@ -68,7 +68,7 @@ struct TokenListItemView: View {
                                     subPrice
                                     .formatNumber(
                                         suffix: Currency.ada.prefix,
-                                        roundingOffset: token?.decimals == 0 ? nil : token?.decimals,
+                                        roundingOffset: 6,
                                         font: .paragraphSmall,
                                         fontColor: .colorInteractiveTentPrimarySub
                                     )
