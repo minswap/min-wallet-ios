@@ -14,12 +14,14 @@ public struct InputSendTokens: InputObject {
     assetAmounts: [InputAssetAmount],
     publicKey: String,
     receiver: String,
+    sendAll: GraphQLNullable<Bool> = nil,
     sender: String
   ) {
     __data = InputDict([
       "assetAmounts": assetAmounts,
       "publicKey": publicKey,
       "receiver": receiver,
+      "sendAll": sendAll,
       "sender": sender
     ])
   }
@@ -37,6 +39,11 @@ public struct InputSendTokens: InputObject {
   public var receiver: String {
     get { __data["receiver"] }
     set { __data["receiver"] = newValue }
+  }
+
+  public var sendAll: GraphQLNullable<Bool> {
+    get { __data["sendAll"] }
+    set { __data["sendAll"] = newValue }
   }
 
   public var sender: String {
