@@ -64,7 +64,14 @@ struct TokenListItemView: View {
                         let subPriceValue: AttributedString = {
                             switch appSetting.currency {
                             case Currency.ada.rawValue:
-                                return subPrice.formatNumber(suffix: Currency.ada.prefix, roundingOffset: token?.decimals, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                                return
+                                    subPrice
+                                    .formatNumber(
+                                        suffix: Currency.ada.prefix,
+                                        roundingOffset: 6,
+                                        font: .paragraphSmall,
+                                        fontColor: .colorInteractiveTentPrimarySub
+                                    )
                             default:
                                 return (subPrice * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
                             }

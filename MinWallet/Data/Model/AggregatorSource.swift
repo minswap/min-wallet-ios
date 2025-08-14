@@ -7,7 +7,6 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     case MinswapV2
     case Minswap
     case MinswapStable
-    case MuesliSwap
     case Splash
     case SplashStable
     case Spectrum
@@ -17,6 +16,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     case WingRidersV2
     case WingRiders
     case WingRidersStableV2
+    case MuesliSwap
     
     var name: LocalizedStringKey {
         switch self {

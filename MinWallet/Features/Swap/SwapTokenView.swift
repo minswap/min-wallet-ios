@@ -36,6 +36,9 @@ struct SwapTokenView: View {
     private var excludedPoolsCached: [String: AggregatorSource] = [:]
     
     init(viewModel: SwapTokenViewModel) {
+        viewModel.swapSetting.excludedPools = [.MuesliSwap]
+        self._excludedPoolsCached = .init(wrappedValue: [AggregatorSource.MuesliSwap.rawId: .MuesliSwap])
+        self._swapSettingCached = .init(wrappedValue: viewModel.swapSetting)
         _viewModel = .init(wrappedValue: viewModel)
     }
     
