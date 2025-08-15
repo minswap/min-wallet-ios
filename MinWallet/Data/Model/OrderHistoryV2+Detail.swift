@@ -58,6 +58,8 @@ extension OrderHistory {
         var fillHistory: [FillHistory] = []
         var isChangeAssetA: Bool = false
         
+        var stopAmount: Double = 0
+        
         init() {}
     }
     
