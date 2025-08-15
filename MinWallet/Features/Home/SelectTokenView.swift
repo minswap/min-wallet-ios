@@ -41,7 +41,14 @@ struct SelectTokenView: View {
                     }
                     contentView
                     if viewModel.screenType == .initSelectedToken || viewModel.screenType == .sendToken {
-                        CustomButton(title: viewModel.screenType == .initSelectedToken ? "Next" : "Confirm") {
+                        let combinedBinding = Binding<Bool>(
+                            get: { viewModel.tokensSelected.count > 0 },
+                            set: { _ in }
+                        )
+                        CustomButton(
+                            title: viewModel.screenType == .initSelectedToken ? "Next" : "Confirm",
+                            isEnable: combinedBinding
+                        ) {
                             let tokenSelected = viewModel.tokenCallBack
                             switch viewModel.screenType {
                             case .initSelectedToken:
