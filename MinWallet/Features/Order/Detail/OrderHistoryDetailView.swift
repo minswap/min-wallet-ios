@@ -535,7 +535,24 @@ struct OrderHistoryDetailView: View {
                         }
                     }
                 } else if order.detail.orderType == .stopLoss {
-                    //TODO: cuongnv Fill stop
+                    HStack(spacing: 4) {
+                        Text("Stop amount")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentPrimarySub)
+                        Spacer()
+                        Text(
+                            order.detail.minimumAmount
+                                .toExact(decimal: order.output?.decimals)
+                                .formatNumber(
+                                    suffix: order.output?.currency ?? "",
+                                    roundingOffset: order.output?.decimals,
+                                    font: .labelSmallSecondary,
+                                    fontColor: .colorBaseTent
+                                )
+                        )
+                        .lineLimit(1)
+                    }
+                    .padding(.vertical, .md)
                     if let input = order.input, let output = order.output, order.detail.minimumAmount > 0 {
                         HStack(spacing: 4) {
                             Text("Stop price")
@@ -558,24 +575,6 @@ struct OrderHistoryDetailView: View {
                             isExchangeStopRate.toggle()
                         }
                     }
-                    HStack(spacing: 4) {
-                        Text("Stop amount")
-                            .font(.paragraphSmall)
-                            .foregroundStyle(.colorInteractiveTentPrimarySub)
-                        Spacer()
-                        Text(
-                            order.detail.limitAmount
-                                .toExact(decimal: order.output?.decimals)
-                                .formatNumber(
-                                    suffix: order.output?.currency ?? "",
-                                    roundingOffset: order.output?.decimals,
-                                    font: .labelSmallSecondary,
-                                    fontColor: .colorBaseTent
-                                )
-                        )
-                        .lineLimit(1)
-                    }
-                    .padding(.vertical, .md)
                 } else if order.detail.orderType == .partialSwap {
                     if order.detail.limitAmount > 0 {
                         HStack(alignment: .top) {
