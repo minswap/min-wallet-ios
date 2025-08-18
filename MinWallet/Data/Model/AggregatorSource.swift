@@ -245,4 +245,18 @@ enum AggrSource: String {
         }
     }
     
+    var name: String {
+        switch self {
+        case .Minswap:
+            return "Minswap"
+        case .SteelSwap:
+            return "SteelSwap"
+        case .DexHunter:
+            return "Dex Hunter"
+        case .MuesliSwap:
+            return "MuesliSwap"
+        case .Cardexscan:
+            return "Cardexscan"
+        }
+    }
 }

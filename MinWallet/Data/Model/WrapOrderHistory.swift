@@ -15,6 +15,7 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
     var orderType: OrderHistory.OrderType = .swap
     
     var source: AggrSource?
+    var protocolSource: AggregatorSource?
     var input: OrderHistory.InputOutput?
     var output: OrderHistory.InputOutput?
     var inputAsset: [OrderHistory.InputOutput] = []
@@ -37,6 +38,7 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
         
         orderType = orders.first?.detail.orderType ?? .swap
         source = orders.first?.aggregatorSource
+        protocolSource = orders.first?.protocolSource
         input = orders.first?.input
         output = orders.first?.output
         

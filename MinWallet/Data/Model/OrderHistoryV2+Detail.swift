@@ -58,6 +58,8 @@ extension OrderHistory {
         var fillHistory: [FillHistory] = []
         var isChangeAssetA: Bool = false
         
+        var stopAmount: Double = 0
+        
         init() {}
     }
     
@@ -132,6 +134,7 @@ extension OrderHistory.Detail: Mappable {
         
         fillHistory <- map["fill_history"]
         isChangeAssetA <- map["is_change_asset_a"]
+        stopAmount <- (map["stop_amount"], GKMapFromJSONToDouble)
     }
 }
 
