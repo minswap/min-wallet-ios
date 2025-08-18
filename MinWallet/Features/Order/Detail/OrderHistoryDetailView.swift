@@ -317,12 +317,14 @@ struct OrderHistoryDetailView: View {
             Text(wrapOrder.orderType.title)
                 .font(.labelMediumSecondary)
                 .foregroundStyle(.colorBaseTent)
-            if let source = wrapOrder.source {
+            let sourceImage = wrapOrder.source?.image ?? wrapOrder.protocolSource?.image
+            let sourceName = wrapOrder.source?.name ?? wrapOrder.protocolSource?.name.toString()
+            if let sourceImage = sourceImage, let sourceName = sourceName {
                 Text("via")
                     .font(.labelMediumSecondary)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 ZStack {
-                    Image(source.image)
+                    Image(sourceImage)
                         .fixSize(24)
                     if wrapOrder.orders.count != 1 {
                         Image(.icAggrsource)
@@ -333,7 +335,7 @@ struct OrderHistoryDetailView: View {
                 .frame(width: 24, height: 24)
                 .padding(.leading, wrapOrder.orders.count == 1 ? 0 : 4)
                 .contentShape(.rect)
-                .onTapGesture { showPopover(target: uuidAggSource, protocolName: source.rawValue) }
+                .onTapGesture { showPopover(target: uuidAggSource, protocolName: sourceName) }
                 .matchedGeometryEffect(id: uuidAggSource, in: nsPopover, anchor: .bottom)
             }
         }
@@ -464,7 +466,7 @@ struct OrderHistoryDetailView: View {
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
                         Text(
-                            order.detail.limitAmount
+                            order.detail.stopAmount
                                 .toExact(decimal: order.output?.decimals)
                                 .formatNumber(
                                     suffix: order.output?.currency ?? "",
@@ -476,14 +478,14 @@ struct OrderHistoryDetailView: View {
                         .lineLimit(1)
                     }
                     .padding(.vertical, .md)
-                    if let input = order.input, let output = order.output, order.detail.minimumAmount > 0 {
+                    if let input = order.input, let output = order.output, order.detail.stopAmount > 0 {
                         HStack(spacing: 4) {
                             Text("Stop price")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
                             let rate = pow(
-                                order.detail.minimumAmount.toExact(decimal: output.decimals) / (input.amount == 0 ? 1 : input.amount),
+                                order.detail.stopAmount.toExact(decimal: output.decimals) / (input.amount == 0 ? 1 : input.amount),
                                 isExchangeStopRate ? 1 : -1
                             )
                             Text("1 \(isExchangeStopRate ? input.asset.adaName : output.asset.adaName) = ")
@@ -503,23 +505,27 @@ struct OrderHistoryDetailView: View {
                             .font(.paragraphSmall)
                             .foregroundStyle(.colorInteractiveTentPrimarySub)
                         Spacer()
-                        let outputs = order.outputAsset
-                        VStack(alignment: .trailing, spacing: 4) {
-                            ForEach(outputs, id: \.self) { output in
-                                Text(output.minimumAmount.formatNumber(suffix: output.currency, font: .labelSmallSecondary, fontColor: .colorBaseTent))
-                                    .lineLimit(1)
-                            }
-                        }
+                        Text(
+                            order.detail.limitAmount
+                                .toExact(decimal: order.output?.decimals)
+                                .formatNumber(
+                                    suffix: order.output?.currency ?? "",
+                                    roundingOffset: order.output?.decimals,
+                                    font: .labelSmallSecondary,
+                                    fontColor: .colorBaseTent
+                                )
+                        )
+                        .lineLimit(1)
                     }
                     .padding(.vertical, .md)
-                    if let input = order.input, let output = order.output, order.detail.minimumAmount > 0 {
+                    if let input = order.input, let output = order.output, order.detail.limitAmount > 0 {
                         HStack(spacing: 4) {
                             Text("Limit price")
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
                             let rate = pow(
-                                order.detail.minimumAmount.toExact(decimal: output.decimals) / (input.amount == 0 ? 1 : input.amount),
+                                order.detail.limitAmount.toExact(decimal: output.decimals) / (input.amount == 0 ? 1 : input.amount),
                                 isExchangeLimitRate ? 1 : -1
                             )
                             Text("1 \(isExchangeLimitRate ? input.asset.adaName : output.asset.adaName) = ")

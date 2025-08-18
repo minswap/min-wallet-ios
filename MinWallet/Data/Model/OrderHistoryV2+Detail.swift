@@ -134,6 +134,7 @@ extension OrderHistory.Detail: Mappable {
         
         fillHistory <- map["fill_history"]
         isChangeAssetA <- map["is_change_asset_a"]
+        stopAmount <- (map["stop_amount"], GKMapFromJSONToDouble)
     }
 }
 
