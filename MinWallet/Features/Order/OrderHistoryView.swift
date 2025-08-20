@@ -53,8 +53,9 @@ struct OrderHistoryView: View {
         .presentSheet(isPresented: $viewModel.showFilterView) {
             OrderHistoryFilterView(
                 viewModel: filterViewModel,
-                onFilterSelected: { status, source, action, fromDate, toDate in
+                onFilterSelected: { filterSource, status, source, action, fromDate, toDate in
                     Task {
+                        viewModel.filterSourceSelected = filterSource
                         viewModel.statusSelected = status
                         viewModel.orderType = action
                         viewModel.source = source

@@ -209,3 +209,44 @@ extension AttributedString {
         self.init(key.toString())
     }
 }
+
+
+extension OrderHistory {
+    enum FilterSource: CaseIterable {
+        case direct
+        case aggregator
+        
+        var rawID: Int {
+            switch self {
+            case .direct:
+                return 0
+            case .aggregator:
+                return 1
+            }
+        }
+    }
+}
+
+extension OrderHistory.FilterSource: Identifiable {
+    public var id: String { UUID().uuidString }
+    
+    var title: LocalizedStringKey {
+        switch self {
+        case .direct:
+            "Direct"
+        case .aggregator:
+            "Aggregator"
+        }
+    }
+    
+    public init?(title: String) {
+        switch title {
+        case OrderHistory.FilterSource.direct.title.toString():
+            self = .direct
+        case OrderHistory.FilterSource.aggregator.title.toString():
+            self = .aggregator
+        default:
+            self = .direct
+        }
+    }
+}

@@ -4,6 +4,8 @@ import MinWalletAPI
 @MainActor
 class OrderHistoryFilterViewModel: ObservableObject {
     @Published
+    var filterSourceSelected: OrderHistory.FilterSource?
+    @Published
     var contractTypeSelected: ContractType?
     @Published
     var protocolSelected: AggregatorSource?
@@ -25,6 +27,7 @@ class OrderHistoryFilterViewModel: ObservableObject {
     func reset() {
         showSelectToDate = false
         showSelectFromDate = false
+        filterSourceSelected = nil
         contractTypeSelected = nil
         protocolSelected = nil
         statusSelected = nil
@@ -35,6 +38,7 @@ class OrderHistoryFilterViewModel: ObservableObject {
     
     func bindData(vm: OrderHistoryViewModel) {
         let input = vm.input
+        filterSourceSelected = input.filterSource
         statusSelected = input.status
         actionSelected = input.type
         protocolSelected = input.source
@@ -46,6 +50,7 @@ class OrderHistoryFilterViewModel: ObservableObject {
         [
             (fromDate != nil || toDate != nil) ? true : nil,
             contractTypeSelected,
+            filterSourceSelected,
             protocolSelected,
             statusSelected,
             actionSelected,

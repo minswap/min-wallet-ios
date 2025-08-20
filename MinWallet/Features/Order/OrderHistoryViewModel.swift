@@ -27,6 +27,7 @@ class OrderHistoryViewModel: ObservableObject {
     
     private var cancellables: Set<AnyCancellable> = []
     
+    var filterSourceSelected: OrderHistory.FilterSource?
     var statusSelected: OrderV2Status?
     var orderType: OrderHistory.OrderType?
     var source: AggregatorSource?
@@ -135,6 +136,7 @@ class OrderHistoryViewModel: ObservableObject {
                 $0.token = !keyword.isBlank && !isTxID ? keyword : nil
                 $0.toTime = fromDate != nil ? String(Int(fromDate!.timeIntervalSince1970 * 1000)) : nil
                 $0.status = statusSelected
+                $0.filterSource = filterSourceSelected
                 $0.source = source
                 $0.type = orderType
                 $0.toTime = toDate != nil ? String(toDate!.timeIntervalSince1970 * 1000 - 1) : nil
