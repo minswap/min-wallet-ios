@@ -80,7 +80,7 @@ extension OrderHistoryView {
                     ZStack {
                         Image(.icFilter)
                             .fixSize(40)
-                        let countFilter = filterViewModel.countFilter
+                        let countFilter = viewModel.countFilter
                         if countFilter > 0 {
                             Text("\(countFilter)")
                                 .font(.paragraphXMediumSmall)

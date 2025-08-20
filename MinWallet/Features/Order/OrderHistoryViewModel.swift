@@ -27,11 +27,17 @@ class OrderHistoryViewModel: ObservableObject {
     
     private var cancellables: Set<AnyCancellable> = []
     
+    @Published
     var filterSourceSelected: OrderHistory.FilterSource?
+    @Published
     var statusSelected: OrderV2Status?
+    @Published
     var orderType: OrderHistory.OrderType?
+    @Published
     var source: AggregatorSource?
+    @Published
     var fromDate: Date?
+    @Published
     var toDate: Date?
     
     private var pagination: Pagination = .init()
@@ -50,6 +56,18 @@ class OrderHistoryViewModel: ObservableObject {
     var hasOnlyOneOrderCancel: Bool {
         guard let orderCancel = orderCancel else { return false }
         return orderCancel.orders.count == 1 && orderCancel.orders.first?.status == .created
+    }
+    
+    var countFilter: Int {
+        [
+            (fromDate != nil || toDate != nil) ? true : nil,
+            filterSourceSelected,
+            statusSelected,
+            orderType,
+            source,
+        ]
+        .compactMap { $0 }
+        .count
     }
     
     init() {

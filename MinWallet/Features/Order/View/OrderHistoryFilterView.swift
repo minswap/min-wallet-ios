@@ -30,6 +30,9 @@ struct OrderHistoryFilterView: View {
         return formatter.string(from: date)
     }
     
+    private static let heightExpand: CGFloat = (UIScreen.current?.bounds.height ?? 0) * 0.85
+    private static let heightCollapse: CGFloat = 450
+    
     var body: some View {
         VStack(spacing: 0) {
             Text("Filter")
@@ -94,7 +97,6 @@ struct OrderHistoryFilterView: View {
                             }
                             .frame(height: heightz)
                             Color.colorBorderPrimarySub.frame(height: 1)
-                                .padding(.top, .md)
                                 .padding(.bottom, .xl)
                             Text("Action")
                                 .font(.labelSmallSecondary)
@@ -257,6 +259,10 @@ struct OrderHistoryFilterView: View {
                 CustomButton(title: "Reset", variant: .secondary) {
                     onDismiss?()
                     onFilterSelected?(nil, nil, nil, nil, nil, nil)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
+                        viewModel.showSelectToDate = false
+                        viewModel.showSelectFromDate = false
+                    }
                 }
                 .frame(height: 56)
                 CustomButton(title: "Apply") {
@@ -288,7 +294,7 @@ struct OrderHistoryFilterView: View {
             .padding(.vertical, .md)
             .padding(.horizontal, .xl)
         }
-        .frame(height: (UIScreen.current?.bounds.height ?? 0) * 0.9)
+        .frame(height: !viewModel.showSelectToDate && !viewModel.showSelectFromDate ? Self.heightExpand : Self.heightCollapse)
         .presentSheetModifier()
         .onAppear {
             enableDragGesture?(false)
