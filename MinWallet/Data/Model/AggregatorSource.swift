@@ -248,13 +248,13 @@ enum AggrSource: String {
     var name: String {
         switch self {
         case .Minswap:
-            return "Minswap"
+            return "Minswap Aggregator"
         case .SteelSwap:
-            return "SteelSwap"
+            return "Steelswap"
         case .DexHunter:
-            return "Dex Hunter"
+            return "DexHunter"
         case .MuesliSwap:
-            return "MuesliSwap"
+            return "Muesliswap"
         case .Cardexscan:
             return "Cardexscan"
         }
