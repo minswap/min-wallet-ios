@@ -250,11 +250,11 @@ enum AggrSource: String {
         case .Minswap:
             return "Minswap Aggregator"
         case .SteelSwap:
-            return "Steelswap"
+            return "SteelSwap"
         case .DexHunter:
             return "DexHunter"
         case .MuesliSwap:
-            return "Muesliswap"
+            return "MuesliSwap"
         case .Cardexscan:
             return "Cardexscan"
         }
