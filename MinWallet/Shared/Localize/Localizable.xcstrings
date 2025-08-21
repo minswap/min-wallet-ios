@@ -104,9 +104,6 @@
     "Add Token" : {
 
     },
-    "Aggregator" : {
-
-    },
     "All" : {
 
     },
@@ -165,6 +162,9 @@
 
     },
     "Cancelled at" : {
+
+    },
+    "Cardexscan" : {
 
     },
     "Certain tokens on the Cardano blockchain are designed as indivisible. This means each token must be used, transferred, or traded as a whole unit." : {
@@ -269,7 +269,7 @@
     "DEX's Fees" : {
 
     },
-    "Direct" : {
+    "DexHunter" : {
 
     },
     "Disconnect" : {
@@ -531,6 +531,9 @@
 
     },
     "minswap" : {
+
+    },
+    "Minswap Aggregator" : {
 
     },
     "Minswap Stable" : {
@@ -800,6 +803,9 @@
 
     },
     "Status" : {
+
+    },
+    "SteelSwap" : {
 
     },
     "Stop" : {

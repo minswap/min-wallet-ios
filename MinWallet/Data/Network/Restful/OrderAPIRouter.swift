@@ -52,7 +52,7 @@ enum OrderAPIRouter: DomainAPIRouter {
                 params["to_time"] = toTime
             }
             if let filterSource = request.filterSource {
-                params["platform"] = filterSource.rawID
+                params["aggr_source"] = filterSource.rawValue
             }
         case let .cancelOrder(address, orders):
             params["sender"] = address

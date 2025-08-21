@@ -17,7 +17,7 @@ struct OrderHistoryFilterView: View {
     @Environment(\.enableDragGesture)
     var enableDragGesture
     
-    var onFilterSelected: ((OrderHistory.FilterSource?, OrderV2Status?, AggregatorSource?, OrderHistory.OrderType?, Date?, Date?) -> Void)?
+    var onFilterSelected: ((AggrSource?, OrderV2Status?, AggregatorSource?, OrderHistory.OrderType?, Date?, Date?) -> Void)?
     
     private func formateDate(_ date: Date?) -> String {
         guard let date = date else { return "Select date" }
@@ -49,13 +49,13 @@ struct OrderHistoryFilterView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.bottom, .md)
                             let allKeyType: LocalizedStringKey = "All"
-                            let filterSource = ([allKeyType] + OrderHistory.FilterSource.allCases.map({ $0.title })).map { $0.toString() }
+                            let filterSource = ([allKeyType] + AggrSource.allCases.map({ $0.title })).map { $0.toString() }
                             FlexibleView(
                                 data: filterSource,
                                 spacing: 0,
                                 alignment: .leading
                             ) { title in
-                                let action = OrderHistory.FilterSource(title: title)
+                                let action = AggrSource(title: title)
                                 let isActionAll = title == allKeyType.toString()
                                 let content: LocalizedStringKey? = isActionAll ? allKeyType : action?.title
                                 return TextSelectable(

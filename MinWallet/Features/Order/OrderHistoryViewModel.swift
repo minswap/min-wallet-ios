@@ -28,7 +28,7 @@ class OrderHistoryViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     
     @Published
-    var filterSourceSelected: OrderHistory.FilterSource?
+    var filterSourceSelected: AggrSource?
     @Published
     var statusSelected: OrderV2Status?
     @Published

@@ -6,7 +6,7 @@ import Then
 extension OrderHistory {
     struct Request: Then {
         var ownerAddress: String = ""
-        var filterSource: OrderHistory.FilterSource?
+        var filterSource: AggrSource?
         var status: OrderV2Status?
         var source: AggregatorSource?
         var type: OrderType?

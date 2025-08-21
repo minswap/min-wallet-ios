@@ -4,7 +4,7 @@ import MinWalletAPI
 @MainActor
 class OrderHistoryFilterViewModel: ObservableObject {
     @Published
-    var filterSourceSelected: OrderHistory.FilterSource?
+    var filterSourceSelected: AggrSource?
     @Published
     var protocolSelected: AggregatorSource?
     @Published
