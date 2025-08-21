@@ -223,12 +223,16 @@ extension String {
 }
 
 
-enum AggrSource: String {
+enum AggrSource: String, CaseIterable, Identifiable {
     case Minswap = "MINSWAP"
     case SteelSwap = "STEELSWAP"
     case DexHunter = "DEX_HUNTER"
     case MuesliSwap = "MUESLISWAP"
     case Cardexscan = "CARDEXSCAN"
+    
+    var id: String {
+        rawValue
+    }
     
     var image: ImageResource {
         switch self {
@@ -248,15 +252,48 @@ enum AggrSource: String {
     var name: String {
         switch self {
         case .Minswap:
-            return "Minswap"
+            return "Minswap Aggregator"
         case .SteelSwap:
             return "SteelSwap"
         case .DexHunter:
-            return "Dex Hunter"
+            return "DexHunter"
         case .MuesliSwap:
             return "MuesliSwap"
         case .Cardexscan:
             return "Cardexscan"
         }
     }
+    
+    var title: LocalizedStringKey {
+        switch self {
+        case .Minswap:
+            return "Minswap Aggregator"
+        case .SteelSwap:
+            return "SteelSwap"
+        case .DexHunter:
+            return "DexHunter"
+        case .MuesliSwap:
+            return "MuesliSwap"
+        case .Cardexscan:
+            return "Cardexscan"
+        }
+    }
+    
+    public init?(title: String) {
+        switch title {
+        case AggrSource.Minswap.name:
+            self = .Minswap
+        case AggrSource.SteelSwap.name:
+            self = .SteelSwap
+        case AggrSource.DexHunter.name:
+            self = .DexHunter
+        case AggrSource.MuesliSwap.name:
+            self = .MuesliSwap
+        case AggrSource.Cardexscan.name:
+            self = .Cardexscan
+        default:
+            self = .Minswap
+        }
+    }
+    
 }

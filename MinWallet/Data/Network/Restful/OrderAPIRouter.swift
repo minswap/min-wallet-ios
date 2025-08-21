@@ -51,6 +51,9 @@ enum OrderAPIRouter: DomainAPIRouter {
             if let toTime = request.toTime {
                 params["to_time"] = toTime
             }
+            if let filterSource = request.filterSource {
+                params["aggr_source"] = filterSource.rawValue
+            }
         case let .cancelOrder(address, orders):
             params["sender"] = address
             let orderJSON = orders.map({ order in

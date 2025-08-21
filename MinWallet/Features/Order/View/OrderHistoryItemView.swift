@@ -227,14 +227,14 @@ struct OrderHistoryItemView: View {
                 ZStack {
                     Image(image)
                         .fixSize(24)
-                    if wrapOrder?.orders.count != 1 {
+                    if wrapOrder?.source != nil {
                         Image(.icAggrsource)
                             .fixSize(16)
                             .position(x: 2, y: 2)
                     }
                 }
                 .frame(width: 24, height: 24)
-                .padding(.leading, wrapOrder?.orders.count == 1 ? 0 : 4)
+                .padding(.leading, wrapOrder?.source != nil ? 4 : 0)
             }
         }
     }
