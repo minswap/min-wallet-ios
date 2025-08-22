@@ -17,6 +17,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     case WingRiders
     case WingRidersStableV2
     case MuesliSwap
+    case CSwap
     
     var name: LocalizedStringKey {
         switch self {
@@ -46,6 +47,8 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             "Spectrum"
         case .SplashStable:
             "Splash Stable"
+            case .CSwap:
+                "Cswap"
         }
     }
     
@@ -63,6 +66,8 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             .icVyfinance
         case .WingRidersV2, .WingRiders, .WingRidersStableV2:
             .icWingriders
+            case .CSwap
+                    .icCswap
         }
     }
     
@@ -103,6 +108,8 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             "Spectrum"
         case .SplashStable:
             "SplashStable"
+            case .CSwap:
+                "CSwap"
         }
     }
     
@@ -134,10 +141,13 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             self = .WingRiders
         case AggregatorSource.WingRidersStableV2.name.toString():
             self = .WingRidersStableV2
+            case AggregatorSource.CSwap.name.toString():
+                self = .CSwap
         default:
             self = .Minswap
         }
     }
+    
     public init?(rawId: String) {
         switch rawId {
         case AggregatorSource.MinswapV2.rawId:
@@ -166,6 +176,8 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             self = .WingRiders
         case AggregatorSource.WingRidersStableV2.rawId:
             self = .WingRidersStableV2
+            case AggregatorSource.CSwap.rawId:
+                self = .CSwap
         default:
             self = .Minswap
         }
@@ -295,5 +307,4 @@ enum AggrSource: String, CaseIterable, Identifiable {
             self = .Minswap
         }
     }
-    
 }
