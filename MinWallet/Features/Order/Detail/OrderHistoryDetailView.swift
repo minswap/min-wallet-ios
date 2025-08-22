@@ -417,6 +417,7 @@ struct OrderHistoryDetailView: View {
                         .baselineOffset(4)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
+                        .multilineTextAlignment(.trailing)
                         .onTapGesture {
                             order.createdTxId.viewTransaction()
                         }
@@ -459,7 +460,6 @@ struct OrderHistoryDetailView: View {
                     )
                     .padding(.bottom, .md)
                 if order.detail.orderType == .oco {
-                    //TODO: cuongnv Fill oco
                     HStack(spacing: 4) {
                         Text("Stop amount")
                             .font(.paragraphSmall)
@@ -847,6 +847,7 @@ struct OrderHistoryDetailView: View {
                         .baselineOffset(4)
                         .font(.labelSmallSecondary)
                         .foregroundStyle(.colorBaseTent)
+                        .multilineTextAlignment(.trailing)
                         .onTapGesture {
                             order.updatedTxId?.viewTransaction()
                         }

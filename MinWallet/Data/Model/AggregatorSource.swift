@@ -295,5 +295,4 @@ enum AggrSource: String, CaseIterable, Identifiable {
             self = .Minswap
         }
     }
-    
 }
