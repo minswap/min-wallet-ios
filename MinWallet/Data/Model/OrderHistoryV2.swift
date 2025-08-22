@@ -258,7 +258,7 @@ extension OrderHistory {
             var attr: [AttributedString?] = []
             attr = [
                 AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
-                (status == .batched ? (input?.amount) : (input?.minimumAmount))?.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
+                input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
                 AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimarySub),
                 (status == .batched ? (output?.amount) : (output?.minimumAmount))?.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorBaseTent),
             ]
@@ -275,7 +275,7 @@ extension OrderHistory {
             var attr: [AttributedString?] = []
             attr = [
                 AttributedString(key: "Swap ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimaryDisable),
-                (status == .batched ? (input?.amount) : (input?.minimumAmount))?.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorInteractiveTentPrimaryDisable),
+                input?.amount.formatNumber(suffix: input?.currency ?? "", roundingOffset: input?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorInteractiveTentPrimaryDisable),
                 AttributedString(key: " for ").build(font: .paragraphSmall, color: .colorInteractiveTentPrimaryDisable),
                 (status == .batched ? (output?.amount) : (output?.minimumAmount))?.formatNumber(suffix: output?.currency ?? "", roundingOffset: output?.decimals ?? 0, font: .labelSmallSecondary, fontColor: .colorInteractiveTentPrimaryDisable),
             ]
