@@ -143,16 +143,14 @@ class OrderHistoryViewModel: ObservableObject {
     
     var input: OrderHistory.Request {
         let address = UserInfo.shared.minWallet?.address ?? ""
-        //        let address = "addr1q8rzzzrr58pa85p2ca8sxxgptf6sdtcxp2drx8cg4lxqml5w3z9f2vttuvt48p3ddxq74x95gh8ngwqsddk5nsmrfkwqjkwhpt"
         let keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-        //ce7c194517fc3d82569a2abff6b9ad93ea83b079016577cd5ac436ed6c6edeb2
         let isTxID = keyword.count == 64
         return OrderHistory.Request()
             .with({
                 $0.ownerAddress = address
                 $0.txId = !keyword.isBlank && isTxID ? keyword : nil
                 $0.token = !keyword.isBlank && !isTxID ? keyword : nil
-                $0.toTime = fromDate != nil ? String(Int(fromDate!.timeIntervalSince1970 * 1000)) : nil
+                $0.fromTime = fromDate != nil ? String(Int(fromDate!.timeIntervalSince1970 * 1000)) : nil
                 $0.status = statusSelected
                 $0.filterSource = filterSourceSelected
                 $0.source = source

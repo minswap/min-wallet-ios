@@ -1040,7 +1040,7 @@
     "You are disconnecting your wallet?" : {
 
     },
-    "You can cancel only 1 type per time - p1, p2" : {
+    "You can cancel only 1 type per time - Plutus V1, Plutus V2" : {
 
     },
     "You currently have notifications turned off for this application. You can open Setting to re-enable them." : {
