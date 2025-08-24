@@ -14,8 +14,6 @@ struct OrderHistoryFilterView: View {
     
     @Environment(\.partialSheetDismiss)
     var onDismiss
-    @Environment(\.enableDragGesture)
-    var enableDragGesture
     
     var onFilterSelected: ((AggrSource?, OrderV2Status?, AggregatorSource?, OrderHistory.OrderType?, Date?, Date?) -> Void)?
     
@@ -296,9 +294,6 @@ struct OrderHistoryFilterView: View {
         }
         .frame(height: !viewModel.showSelectToDate && !viewModel.showSelectFromDate ? Self.heightExpand : Self.heightCollapse)
         .presentSheetModifier()
-        .onAppear {
-            enableDragGesture?(false)
-        }
     }
 }
 

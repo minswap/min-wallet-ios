@@ -44,7 +44,7 @@ struct OrderHistoryCancelView: View {
                             Circle().frame(width: 4, height: 4)
                                 .foregroundStyle(.colorInteractiveToneWarning)
                                 .padding(.top, 6)
-                            Text("You can cancel only 1 type per time - p1, p2")
+                            Text("You can cancel only 1 type per time - Plutus V1, Plutus V2")
                                 .font(.paragraphXSmall)
                                 .lineLimit(nil)
                                 .foregroundStyle(.colorInteractiveToneWarning)
@@ -123,7 +123,7 @@ struct OrderHistoryCancelView: View {
         let splashSelectedCount = selected.map({ (key, value: OrderHistory) in value })
             .filter {
                 guard let protocolSource = $0.protocolSource else { return false }
-                return SPLASH_ORDERS.contains(protocolSource)
+                return Self.SPLASH_ORDERS.contains(protocolSource)
             }
             .count
         
@@ -143,7 +143,7 @@ struct OrderHistoryCancelView: View {
                 ver != selVer
             {
                 canSelect = false
-            } else if let protocolSource = order.protocolSource, SPLASH_ORDERS.contains(protocolSource),
+            } else if let protocolSource = order.protocolSource, Self.SPLASH_ORDERS.contains(protocolSource),
                 splashSelectedCount >= 1
             {
                 canSelect = false
@@ -158,24 +158,37 @@ struct OrderHistoryCancelView: View {
         return orderCanSelect
     }
     
-    private let PLUTUS_V1: Set<AggregatorSource> = [
+    static let PLUTUS_V1: Set<AggregatorSource> = [
         .Minswap, .SundaeSwap, .VyFinance, .WingRiders,
     ]
 
-    private let PLUTUS_V2: Set<AggregatorSource> = [
+    static let PLUTUS_V2: Set<AggregatorSource> = [
         .MinswapStable, .MinswapV2, .MuesliSwap, .Spectrum, .Splash, .SplashStable,
         .SundaeSwapV3, .WingRidersStableV2, .WingRidersV2,
     ]
 
-    private let SPLASH_ORDERS: Set<AggregatorSource> = [
+    static let SPLASH_ORDERS: Set<AggregatorSource> = [
         .Splash, .SplashStable, .Spectrum,
     ]
 
     private func plutusVersion(_ src: AggregatorSource?) -> Int? {
         guard let src else { return nil }
-        if PLUTUS_V1.contains(src) { return 1 }
-        if PLUTUS_V2.contains(src) { return 2 }
+        if Self.PLUTUS_V1.contains(src) { return 1 }
+        if Self.PLUTUS_V2.contains(src) { return 2 }
         return nil
+    }
+}
+
+
+extension AggregatorSource {
+    var nameAndBackgroundColorPlus: (String?, Color?) {
+        if OrderHistoryCancelView.PLUTUS_V1.contains(self) {
+            return ("P1", .colorBaseChartGreen)
+        }
+        if OrderHistoryCancelView.PLUTUS_V2.contains(self) {
+            return ("P2", .colorBaseChartPurple)
+        }
+        return (nil, nil)
     }
 }
 
@@ -247,6 +260,20 @@ struct OrderHistoryItemStatusView: View {
                                 .font(.labelSmallSecondary)
                                 .foregroundStyle(isCanSelect ? .colorBaseTent : .colorInteractiveTentPrimaryDisable)
                                 .lineLimit(1)
+                            
+                            let (name, bgColor) = source.nameAndBackgroundColorPlus
+                            
+                            if let name = name, let bgColor = bgColor {
+                                Text(name)
+                                    .font(.paragraphXSemiSmall)
+                                    .foregroundStyle(.colorBaseTentNoDarkMode)
+                                    .padding(.horizontal, .md)
+                                    .frame(height: 20)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: BorderRadius.full).fill(bgColor)
+                                    )
+                                    .lineLimit(1)
+                            }
                         }
                     }
                 }
