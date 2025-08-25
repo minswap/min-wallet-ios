@@ -51,28 +51,32 @@ struct OrderHistoryItemView: View {
                     .font(.paragraphSmall)
                     .foregroundStyle(.colorInteractiveTentPrimarySub)
                 Spacer()
-                if wrapOrder?.status == .cancelled || wrapOrder?.status == .created {
-                    Text("--")
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                } else {
-                    let outputs = wrapOrder?.outputAsset ?? []
-                    VStack(alignment: .trailing, spacing: 4) {
-                        ForEach(outputs, id: \.self) { output in
-                            Text(
-                                output.amount
-                                    .formatNumber(
-                                        suffix: output.currency,
-                                        roundingOffset: output.decimals,
-                                        font: .labelSmallSecondary,
-                                        fontColor: .colorBaseTent
-                                    )
-                            )
+                if let wrapOrder = wrapOrder {
+                    if wrapOrder.orders.allSatisfy({ $0.status != .batched }) {
+                        Text("--")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorBaseTent)
                             .lineLimit(1)
                             .minimumScaleFactor(0.1)
-                            .frame(height: 20)
+                    } else {
+                        let outputs = wrapOrder.outputAsset.filter { $0.amount > 0 }
+                        if !outputs.isEmpty {
+                            VStack(alignment: .trailing, spacing: 4) {
+                                ForEach(outputs, id: \.self) { output in
+                                    Text(
+                                        output.amount
+                                            .formatNumber(
+                                                suffix: output.currency,
+                                                roundingOffset: output.decimals,
+                                                font: .labelSmallSecondary,
+                                                fontColor: .colorBaseTent
+                                            )
+                                    )
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                                    .frame(height: 20)
+                                }
+                            }
                         }
                     }
                 }
