@@ -104,46 +104,6 @@ struct OrderHistoryItemView: View {
             }
             .frame(height: 40)
             .padding(.bottom, 9)
-            /*
-            if let source = order?.aggregatorSource {
-                HStack(alignment: .top, spacing: .xs) {
-                    Text("Interacted with")
-                        .font(.paragraphSmall)
-                        .foregroundStyle(.colorInteractiveTentPrimarySub)
-                    Spacer()
-                    Image(source.image)
-                        .fixSize(20)
-                    Text(source.name)
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                }
-            }
-            if let order = order, let expiredAt = order.detail.expireAt, !expiredAt.isEmpty, order.status == .created {
-                HStack(spacing: Spacing.md) {
-                    Image(.icWarningYellow)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text("Expires at \(expiredAt.formattedDateGMT)")
-                        .lineLimit(nil)
-                        .font(.paragraphXSmall)
-                        .foregroundStyle(.colorInteractiveToneWarning)
-                    Spacer(minLength: 0)
-                }
-                .padding(.md)
-                .background(
-                    RoundedRectangle(cornerRadius: .lg).fill(.colorSurfaceWarningDefault)
-                )
-                .frame(minHeight: 32)
-            }
-            if let order = order, order.status == .created {
-                CustomButton(title: "Cancel", variant: .secondary) {
-                    onCancelItem?()
-                }
-                .frame(height: 36)
-            }
-            */
             Color.colorBorderPrimarySub.frame(height: 1)
         }
     }

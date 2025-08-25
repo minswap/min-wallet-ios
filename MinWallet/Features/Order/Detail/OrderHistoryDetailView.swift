@@ -154,7 +154,7 @@ struct OrderHistoryDetailView: View {
                         .padding(.horizontal, .xl)
                         Color.colorBorderPrimarySub.frame(height: 1)
                             .padding(.xl)
-                        if wrapOrder.orders.count > 1 {
+                        if wrapOrder.orders.first?.aggregatorSource != nil || wrapOrder.orders.count > 1 {
                             ordersStateInfo
                                 .padding(.top, .md)
                                 .padding(.bottom, 16 + 8)
