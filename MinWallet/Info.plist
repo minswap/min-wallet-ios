@@ -21,8 +21,8 @@
 	<string>${MIN_ADA_CURRENCY}</string>
 	<key>MIN_ADA_TOKEN</key>
 	<string>${MIN_ADA_TOKEN}</string>
-	<key>MIN_URL</key>
-	<string>${MIN_URL}</string>
+	<key>MIN_GRAPH_URL</key>
+	<string>${MIN_GRAPH_URL}</string>
 	<key>MIN_KEYCHAIN_ACCESS_GROUP</key>
 	<string>${MIN_KEYCHAIN_ACCESS_GROUP}</string>
 	<key>MIN_KEYCHAIN_SERVICE_NAME</key>

@@ -2,7 +2,7 @@ import Foundation
 
 
 struct MinWalletConstant {
-    static let minURL = GetInfoDictionaryString(for: "MIN_URL", true)
+    static let minGraphURL = GetInfoDictionaryString(for: "MIN_GRAPH_URL", true)
     static let transactionURL = GetInfoDictionaryString(for: "MIN_TRANSACTION_URL", true)
     static let adaHandleURL = GetInfoDictionaryString(for: "MIN_ADA_HANDLE_URL", true)
     static let keyChainService = GetInfoDictionaryString(for: "MIN_KEYCHAIN_SERVICE_NAME")
