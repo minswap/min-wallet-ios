@@ -101,27 +101,29 @@ struct OrderHistoryDetailView: View {
                                 .font(.paragraphSmall)
                                 .foregroundStyle(.colorInteractiveTentPrimarySub)
                             Spacer()
-                            if wrapOrder.status == .cancelled || wrapOrder.status == .created {
+                            if wrapOrder.orders.allSatisfy({ $0.status != .batched }) {
                                 Text("--")
                                     .font(.labelSmallSecondary)
                                     .foregroundStyle(.colorBaseTent)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.1)
                             } else {
-                                let outputs = wrapOrder.outputAsset
-                                VStack(alignment: .trailing, spacing: 4) {
-                                    ForEach(outputs, id: \.self) { output in
-                                        Text(
-                                            output.amount
-                                                .formatNumber(
-                                                    suffix: output.currency,
-                                                    roundingOffset: output.decimals,
-                                                    font: .labelSmallSecondary,
-                                                    fontColor: .colorBaseTent
-                                                )
-                                        )
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.1)
+                                let outputs = wrapOrder.outputAsset.filter({ $0.amount > 0 })
+                                if !outputs.isEmpty {
+                                    VStack(alignment: .trailing, spacing: 4) {
+                                        ForEach(outputs, id: \.self) { output in
+                                            Text(
+                                                output.amount
+                                                    .formatNumber(
+                                                        suffix: output.currency,
+                                                        roundingOffset: output.decimals,
+                                                        font: .labelSmallSecondary,
+                                                        fontColor: .colorBaseTent
+                                                    )
+                                            )
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.1)
+                                        }
                                     }
                                 }
                             }
@@ -152,7 +154,7 @@ struct OrderHistoryDetailView: View {
                         .padding(.horizontal, .xl)
                         Color.colorBorderPrimarySub.frame(height: 1)
                             .padding(.xl)
-                        if wrapOrder.orders.count > 1 {
+                        if wrapOrder.orders.first?.aggregatorSource != nil || wrapOrder.orders.count > 1 {
                             ordersStateInfo
                                 .padding(.top, .md)
                                 .padding(.bottom, 16 + 8)
@@ -182,12 +184,6 @@ struct OrderHistoryDetailView: View {
                         }
                     }
                     .frame(height: 56)
-                    /*
-                    CustomButton(title: "Update") {
-                    
-                    }
-                    .frame(height: 56)
-                     */
                 }
                 .padding(EdgeInsets(top: 24, leading: .xl, bottom: .xl, trailing: .xl))
             }

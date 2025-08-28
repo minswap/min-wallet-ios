@@ -15,6 +15,13 @@ enum OrderAPIRouter: DomainAPIRouter {
         }
     }
     
+    //TODO: REMOVE use MIN_AGG_URL
+    //#if DEBUG
+    func baseUrl() -> String {
+        "https://dev-2.minswap.org"
+    }
+    //#endif
+    
     func method() -> HTTPMethod {
         return .post
     }
