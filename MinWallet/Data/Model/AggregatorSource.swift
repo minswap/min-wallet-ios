@@ -48,7 +48,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
         case .SplashStable:
             "Splash Stable"
         case .CSwap:
-            "Cswap"
+            "CSWAP"
         }
     }
     
@@ -109,7 +109,7 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
         case .SplashStable:
             "SplashStable"
         case .CSwap:
-            "CSwap"
+            "CswapV1"
         }
     }
     
