@@ -394,11 +394,6 @@ extension AssetsQuery.Data.Assets.Asset: TokenProtocol {
     }
     
     var priceValue: Double {
-        /* TODO: price value
-        let decimals = pow(10.0, Double(amountAsset.asset.metadata?.decimals ?? 0))
-        let price = (Double(amountAsset.amount) ?? 0) / decimals
-        return price
-         */
         return 0
     }
     

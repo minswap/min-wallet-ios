@@ -73,7 +73,6 @@ class ToWalletAddressViewModel: ObservableObject {
             } else {
                 let suffixAddress = address.trimmingPrefix(MinWalletConstant.addressPrefix)
                 if suffixAddress.count == 98 {
-                    //TODO: Call api
                     errorType = nil
                 } else {
                     errorType = .invalidAddress
