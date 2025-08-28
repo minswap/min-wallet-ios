@@ -72,11 +72,12 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
     }
     
     var isLocked: Bool {
+        guard MinWalletConstant.minLockAggSource else { return false }
         switch self {
         case .MinswapV2, .Minswap, .MinswapStable:
-            true
+            return true
         default:
-            false
+            return false
         }
     }
     
