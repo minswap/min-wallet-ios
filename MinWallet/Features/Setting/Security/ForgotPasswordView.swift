@@ -75,25 +75,6 @@ struct ForgotPasswordView: View {
                     appSetting.rootScreen = .gettingStarted
                 }
                 navigator.popToRoot()
-                /*
-                switch screenType {
-                case .enterPassword:
-                    break
-                case .changeYourPassword(let screenType):
-                    switch screenType {
-                    case .setting:
-                        userInfo.deleteAccount()
-                        appSetting.deleteAccount()
-                        appSetting.rootScreen = .gettingStarted
-                        navigator.popToRoot()
-                    case .walletSetting:
-                        userInfo.deleteAccount()
-                        appSetting.deleteAccount()
-                        appSetting.rootScreen = .gettingStarted
-                        navigator.popToRoot()
-                    }
-                }
-                 */
             }
             .frame(height: 56)
             .padding(.horizontal, .xl)
