@@ -53,6 +53,8 @@
 	<string>${MIN_ASSET_URL}</string>
 	<key>MIN_AGG_URL</key>
 	<string>${MIN_AGG_URL}</string>
+	<key>MIN_LOCK_AGGREGATOR_SOURCE</key>
+	<string>${MIN_LOCK_AGGREGATOR_SOURCE}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>InterDisplay-SemiBold.ttf</string>

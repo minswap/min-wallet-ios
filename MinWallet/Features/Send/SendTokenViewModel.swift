@@ -27,7 +27,8 @@ class SendTokenViewModel: ObservableObject {
                     String(amount),
                     minValue: minValue,
                     maxValue: amount,
-                    minimumFractionDigits: token.isTokenADA ? 6 : token.decimals
+                    minimumFractionDigits: token.isTokenADA ? 6 : token.decimals,
+                    isCheckFractionalPart: true
                 )
                 return WrapTokenSend(token: token, amount: amountString)
             })

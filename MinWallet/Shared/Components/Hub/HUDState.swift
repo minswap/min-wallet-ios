@@ -1,7 +1,6 @@
 import SwiftUI
 
 
-//TODO: Hub for error, loading success... etc
 @MainActor
 class HUDState: ObservableObject {
     @Published

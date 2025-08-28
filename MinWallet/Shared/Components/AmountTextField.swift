@@ -21,7 +21,13 @@ struct AmountTextField: View {
             }
     }
     
-    static func formatCurrency(_ input: String, minValue: Double, maxValue: Double?, minimumFractionDigits: Int? = nil) -> String {
+    static func formatCurrency(
+        _ input: String,
+        minValue: Double,
+        maxValue: Double?,
+        minimumFractionDigits: Int? = nil,
+        isCheckFractionalPart: Bool = false
+    ) -> String {
         var input = input
         if input.count > 1 && input.last == "," {
             input = String(input.dropLast(1)) + "."
@@ -52,7 +58,7 @@ struct AmountTextField: View {
             fractionalPart = String(fractionalPart.prefix(minimumFractionDigits + 1))
         }
         
-        let formattedValue = fractionalPart == "." ? wholeNumber : (wholeNumber + fractionalPart)
+        let formattedValue = (isCheckFractionalPart && fractionalPart == ".") ? wholeNumber : (wholeNumber + fractionalPart)
         if let doubleValue = Double(formattedValue.replacingOccurrences(of: ",", with: "")), !input.isBlank, doubleValue > 0 {
             let clampedValue: Double = {
                 guard let maxValue = maxValue else { return max(doubleValue, minValue) }
