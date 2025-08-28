@@ -152,11 +152,9 @@ class AppSetting: ObservableObject {
         OneSignal.Notifications.clearAll()
         OneSignal.logout()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.authenticationType = .biometric
-            self.enableNotification = true
-            self.timeZone = TimeZone.local.rawValue
-        }
+        authenticationType = .biometric
+        enableNotification = true
+        timeZone = TimeZone.local.rawValue
     }
     
     func isSuspiciousToken(currencySymbol: String) async -> Bool {

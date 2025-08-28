@@ -81,18 +81,13 @@ struct DisconnectWalletView: View {
                     ),
                     isEnable: combinedBinding
                 ) {
+                    appSetting.deleteAccount()
+                    userInfo.deleteAccount()
                     onDismiss?()
                     if appSetting.rootScreen != .gettingStarted {
                         appSetting.rootScreen = .gettingStarted
                     }
                     navigator.popToRoot()
-                    
-                    DispatchQueue.main.asyncAfter(
-                        deadline: .now() + .milliseconds(800),
-                        execute: {
-                            appSetting.deleteAccount()
-                            userInfo.deleteAccount()
-                        })
                 }
                 .frame(height: 56)
                 .disabled(!conditionOne || !conditionTwo)
