@@ -1,3 +1,0 @@
-mutation MINCancelBulkOrdersMutation($input: InputCancelBulkOrders!) {
-  cancelBulkOrders(input: $input)
-}

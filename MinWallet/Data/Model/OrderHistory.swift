@@ -85,7 +85,13 @@ extension OrderHistory.OrderType: Identifiable {
     }
 }
 
-extension OrderV2Status: @retroactive Identifiable {
+enum OrderV2Status: String, CaseIterable {
+    case batched = "BATCHED"
+    case cancelled = "CANCELLED"
+    case created = "CREATED"
+}
+
+extension OrderV2Status: Identifiable {
     public var id: String { UUID().uuidString }
     
     var title: LocalizedStringKey {
