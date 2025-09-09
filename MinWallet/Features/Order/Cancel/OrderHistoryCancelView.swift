@@ -118,43 +118,46 @@ struct OrderHistoryCancelView: View {
     }
     
     private func updateSelectableOrders(_ orders: [OrderHistory], selected: [String: OrderHistory]) -> [String: OrderHistory] {
-        let selectedCount = selected.count
-        let selectedVersions = Set(selected.map({ _, value in value }).compactMap { plutusVersion($0.protocolSource) })
-        let splashSelectedCount = selected.map({ (key, value: OrderHistory) in value })
-            .filter {
-                guard let protocolSource = $0.protocolSource else { return false }
-                return Self.SPLASH_ORDERS.contains(protocolSource)
-            }
-            .count
-        
         var orderCanSelect: [String: OrderHistory] = [:]
         
-        orders.forEach { order in
-            var canSelect = true
+        let selectedValues = Array(selected.values)
+        let selectedCount = selectedValues.count
+        let hasP1 = selectedValues.contains { Self.isP1($0.protocolSource) }
+        let hasP2 = selectedValues.contains { Self.isP2($0.protocolSource) }
+        let hasP3 = selectedValues.contains { Self.isP3($0.protocolSource) }
+        let p3Count = selectedValues.filter { Self.isP3($0.protocolSource) }.count
+        let splashCount = selectedValues.filter { Self.isSplashOrder($0.protocolSource) }.count
+        let selectedIDs = Set(selectedValues.map { $0.id })
+        
+        if selectedCount >= 6 {
+            return [:]
+        }
+        
+        for order in orders {
+            if selectedIDs.contains(order.id) { continue }
             
-            if selected[order.id] != nil {
-                canSelect = true
-            } else if selectedCount >= 6 {
-                canSelect = false
-            } else if selectedVersions.count > 1 {
-                canSelect = false
-            } else if let ver = plutusVersion(order.protocolSource),
-                let selVer = selectedVersions.first,
-                ver != selVer
-            {
-                canSelect = false
-            } else if let protocolSource = order.protocolSource, Self.SPLASH_ORDERS.contains(protocolSource),
-                splashSelectedCount >= 1
-            {
-                canSelect = false
-            } else {
-                canSelect = true
-            }
+            if selectedCount + 1 > 6 { continue }
             
-            if canSelect {
+            let src = order.protocolSource
+            let candIsP1 = Self.isP1(src)
+            let candIsP2 = Self.isP2(src)
+            let candIsP3 = Self.isP3(src)
+            let candIsSplash = Self.isSplashOrder(src)
+            
+            var allowed = true
+            if candIsP1 && (hasP2 || hasP3) { allowed = false }
+            if candIsP2 && hasP1 { allowed = false }
+            if candIsP3 && (hasP1 || splashCount > 0) { allowed = false }
+            if candIsSplash && hasP3 { allowed = false }
+            
+            if candIsP3 && p3Count >= 1 { allowed = false }
+            if candIsSplash && splashCount >= 1 { allowed = false }
+            
+            if allowed {
                 orderCanSelect[order.id] = order
             }
         }
+        
         return orderCanSelect
     }
     
@@ -164,18 +167,35 @@ struct OrderHistoryCancelView: View {
 
     static let PLUTUS_V2: Set<AggregatorSource> = [
         .MinswapStable, .MinswapV2, .MuesliSwap, .Spectrum, .Splash, .SplashStable,
-        .SundaeSwapV3, .WingRidersStableV2, .WingRidersV2,
+        .SundaeSwapV3, .WingRidersStableV2, .WingRidersV2, .CSwap,
+    ]
+
+    static let PLUTUS_V3: Set<AggregatorSource> = [
+        .CSwap
     ]
 
     static let SPLASH_ORDERS: Set<AggregatorSource> = [
         .Splash, .SplashStable, .Spectrum,
     ]
 
-    private func plutusVersion(_ src: AggregatorSource?) -> Int? {
-        guard let src else { return nil }
-        if Self.PLUTUS_V1.contains(src) { return 1 }
-        if Self.PLUTUS_V2.contains(src) { return 2 }
-        return nil
+    static func isP1(_ s: AggregatorSource?) -> Bool {
+        guard let s = s else { return false }
+        return Self.PLUTUS_V1.contains(s)
+    }
+    
+    static func isP2(_ s: AggregatorSource?) -> Bool {
+        guard let s = s else { return false }
+        return Self.PLUTUS_V2.contains(s)
+    }
+    
+    static func isP3(_ s: AggregatorSource?) -> Bool {
+        guard let s = s else { return false }
+        return Self.PLUTUS_V3.contains(s)
+    }
+    
+    static func isSplashOrder(_ s: AggregatorSource?) -> Bool {
+        guard let s = s else { return false }
+        return Self.SPLASH_ORDERS.contains(s)
     }
 }
 
@@ -187,6 +207,9 @@ extension AggregatorSource {
         }
         if OrderHistoryCancelView.PLUTUS_V2.contains(self) {
             return ("P2", .colorBaseChartPurple)
+        }
+        if OrderHistoryCancelView.PLUTUS_V3.contains(self) {
+            return ("P3", .colorBaseChartGold)
         }
         return (nil, nil)
     }
