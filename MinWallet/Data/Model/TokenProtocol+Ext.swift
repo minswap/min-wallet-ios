@@ -521,24 +521,6 @@ enum SocialLinks: String {
     }
 }
 
-extension RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Pool.PoolAsset {
-    var uniqueID: String {
-        if currencySymbol.isEmpty && tokenName.isEmpty {
-            return "lovelace"
-        }
-        return currencySymbol + "." + tokenName
-    }
-}
-
-extension RoutedPoolsByPairQuery.Data.RoutedPoolsByPair.Routing.Routing {
-    var uniqueID: String {
-        if currencySymbol.isEmpty && tokenName.isEmpty {
-            return "lovelace"
-        }
-        return currencySymbol + "." + tokenName
-    }
-}
-
 struct TokenDefault: TokenProtocol, Hashable, Then {
     var currencySymbol: String {
         symbol

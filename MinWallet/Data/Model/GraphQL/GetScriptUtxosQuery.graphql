@@ -1,6 +1,0 @@
-query MINGetScriptUtxos($txIns: [String!]!) {
-  getScriptUtxos(txIns: $txIns) {
-    rawDatum
-    rawUtxo
-  }
-}
