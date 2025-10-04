@@ -1,6 +1,5 @@
 import SwiftUI
 import FlowStacks
-import MinWalletAPI
 
 
 struct MainCoordinator: View {

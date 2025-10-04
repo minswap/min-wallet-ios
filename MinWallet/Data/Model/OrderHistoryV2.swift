@@ -1,15 +1,7 @@
 import Foundation
 import ObjectMapper
 import Then
-import MinWalletAPI
 
-/*
-public enum OrderV2Status: String, EnumType {
-    case batched = "BATCHED"
-    case cancelled = "CANCELLED"
-    case created = "CREATED"
-}
-*/
 
 struct OrderHistory: Then, Identifiable, Hashable {
     var id: String = ""

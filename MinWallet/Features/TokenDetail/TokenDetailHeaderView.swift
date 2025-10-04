@@ -32,7 +32,7 @@ extension TokenDetailView {
                     let chartSelected =
                         viewModel.chartDataSelected?.value
                         .formatNumber(
-                            suffix: Currency.ada.prefix,
+                            prefix: Currency.usd.prefix,
                             font: .paragraphXSmall,
                             fontColor: .colorInteractiveTentPrimarySub) ?? "--"
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -90,7 +90,7 @@ extension TokenDetailView {
             let chartSelected =
                 viewModel.chartDataSelected?.value
                 .formatNumber(
-                    suffix: Currency.ada.prefix,
+                    prefix: Currency.usd.prefix,
                     font: .titleH4,
                     fontColor: .colorBaseTent) ?? "-"
             
@@ -99,6 +99,7 @@ extension TokenDetailView {
                 .padding(.bottom, .xs)
                 .frame(height: 55)
             HStack(spacing: 4) {
+                /*
                 let value: Double? = {
                     guard let value = viewModel.chartDataSelected?.value else { return nil }
                     return value * appSetting.currencyInADA
@@ -112,6 +113,7 @@ extension TokenDetailView {
                     )
                     .padding(.horizontal, .xs)
                 }
+                 */
                 if !viewModel.percent.isZero {
                     Text("\(abs(viewModel.percent).formatSNumber(maximumFractionDigits: 2))%")
                         .font(.labelSmallSecondary)

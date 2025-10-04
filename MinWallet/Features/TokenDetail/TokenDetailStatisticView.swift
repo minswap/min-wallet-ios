@@ -13,7 +13,7 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Avg. price", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    let priceValue = (viewModel.topAsset?.price ?? "").getPriceValue(appSetting: appSetting)
+                    let priceValue = (viewModel.topAsset?.price_usd ?? 0).getPriceValue(appSetting: appSetting)
                     Text(priceValue.1)
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -26,7 +26,7 @@ extension TokenDetailView {
                     $isShowToolTip.showSheet()
                 }
                 HStack(spacing: 2) {
-                    let priceChange24h: Double = (Double(viewModel.topAsset?.priceChange24h ?? "") ?? 0)
+                    let priceChange24h: Double = viewModel.topAsset?.price_change_24h ?? 0
                     DashedUnderlineText(text: "Avg. price change (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
                     if priceChange24h != 0 {
@@ -52,7 +52,7 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Volume (24h)", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    let volume24hValue = (viewModel.topAsset?.volume24h ?? "").toExact(decimal: 6).getPriceValue(appSetting: appSetting)
+                    let volume24hValue = (viewModel.topAsset?.volume_usd_24h ?? 0).getPriceValue(appSetting: appSetting)
                     Text(volume24hValue.value > 0 ? volume24hValue.attribute : AttributedString("--"))
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -83,7 +83,7 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    let value = (viewModel.topAsset?.marketCap ?? "").toExact(decimal: 6).getPriceValue(appSetting: appSetting, isFormatK: true)
+                    let value = (viewModel.topAsset?.market_cap_usd ?? 0).getPriceValue(appSetting: appSetting, isFormatK: true)
                     Text(value.value > 0 ? value.attribute : AttributedString("--"))
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -98,7 +98,7 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Fd Market cap", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    let value = (viewModel.topAsset?.fdMarketCap ?? "").toExact(decimal: 6).getPriceValue(appSetting: appSetting, isFormatK: true)
+                    let value = (viewModel.topAsset?.fully_diluted_usd ?? 0).getPriceValue(appSetting: appSetting, isFormatK: true)
                     Text(value.value > 0 ? value.attribute : AttributedString("--"))
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -113,7 +113,7 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Circulating supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    let value = (viewModel.topAsset?.circulatingSupply ?? "").toExact(decimal: 6).getPriceValue(appSetting: appSetting, isFormatK: true)
+                    let value = (viewModel.topAsset?.circulating_supply ?? 0).getPriceValue(appSetting: appSetting, isFormatK: true)
                     Text(value.value > 0 ? value.attribute : AttributedString("--"))
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -128,7 +128,7 @@ extension TokenDetailView {
                 HStack {
                     DashedUnderlineText(text: "Total supply", textColor: .colorInteractiveTentPrimarySub, font: .paragraphSmall)
                     Spacer()
-                    let value = (viewModel.topAsset?.totalSupply ?? "").toExact(decimal: 6).getPriceValue(appSetting: appSetting, isFormatK: true)
+                    let value = (viewModel.topAsset?.total_supply ?? 0).getPriceValue(appSetting: appSetting, isFormatK: true)
                     Text(value.value > 0 ? value.attribute : AttributedString("--"))
                         .font(.labelMediumSecondary)
                         .foregroundStyle(.colorBaseTent)
@@ -141,7 +141,7 @@ extension TokenDetailView {
                     content = "Total supply = Total coins created - coins that have been burned (if any) It is comparable to outstanding shares in the market."
                     $isShowToolTip.showSheet()
                 }
-                Text("About \(viewModel.token.adaName) (\(viewModel.token.projectName.isBlank ? viewModel.token.adaName :  viewModel.token.projectName))")
+                Text("About \(viewModel.token.adaName) (\(viewModel.token.projectName.isBlank ? viewModel.token.adaName : viewModel.token.projectName))")
                     .font(.titleH6)
                     .foregroundStyle(.colorBaseTent)
                     .padding(.bottom, .lg)

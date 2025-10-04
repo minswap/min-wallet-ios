@@ -330,7 +330,8 @@ extension String {
         case Currency.ada.rawValue:
             return (price, price.formatNumber(suffix: Currency.ada.prefix))
         default:
-            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
+            //return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
+            return (price, price.formatNumber(prefix: Currency.usd.prefix, isFormatK: isFormatK))
         }
     }
 }
@@ -342,7 +343,8 @@ extension Double {
         case Currency.ada.rawValue:
             return (price, price.formatNumber(suffix: Currency.ada.prefix, roundingOffset: roundingOffset, font: font))
         default:
-            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, roundingOffset: roundingOffset, font: font, fontColor: fontColor, isFormatK: isFormatK))
+            return (price, price.formatNumber(prefix: Currency.usd.prefix, roundingOffset: roundingOffset, font: font, fontColor: fontColor, isFormatK: isFormatK))
+        //            return (price, (price * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, roundingOffset: roundingOffset, font: font, fontColor: fontColor, isFormatK: isFormatK))
         }
     }
 }

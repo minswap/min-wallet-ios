@@ -1,7 +1,5 @@
 import SwiftUI
 import Then
-import MinWalletAPI
-
 
 protocol TokenProtocol {
     var currencySymbol: String { get }
@@ -23,6 +21,7 @@ protocol TokenProtocol {
     var nftDisplayName: String { get }
     var nftImage: String { get }
     var hasMetaData: Bool { get }
+    var adaName: String { get }
 }
 
 extension TokenProtocol {

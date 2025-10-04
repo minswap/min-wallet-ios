@@ -1,7 +1,0 @@
-query PortfolioOverviewQuery($address: String!) {
-  portfolioOverview(address: $address) {
-    netAdaValue
-    pnl24H
-    adaValue
-  }
-}

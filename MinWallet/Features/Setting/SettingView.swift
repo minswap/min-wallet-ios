@@ -166,9 +166,11 @@ struct SettingView: View {
                 }
                 .frame(height: 52)
                 .contentShape(.rect)
+                /*
                 .onTapGesture {
                     $isShowCurrency.showSheet()
                 }
+                 */
                 HStack(spacing: 12) {
                     Text("Timezone")
                         .font(.labelSmallSecondary)
