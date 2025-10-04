@@ -49,19 +49,10 @@ extension LPAssetPosition: TokenProtocol {
     var ticker: String { asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? "" }
     var projectName: String { asset.metadata?.name ?? "" }
     
-    var priceValue: Double {
-        amount_position
-    }
-    
-    var amount: Double {
-        priceValue
-    }
-    
+    var priceValue: Double { amount_position }
+    var amount: Double { priceValue }
     var percentChange: Double { pnl_24h_percent }
-    
-    var subPriceValue: Double {
-        amount_position_usd
-    }
+    var subPriceValue: Double { amount_position_usd }
     
     var category: [String] { [] }
     
@@ -99,6 +90,4 @@ extension LPAssetPosition: TokenProtocol {
     var hasMetaData: Bool {
         asset.metadata != nil
     }
-    var fixedUSD: Bool { true }
-    
 }

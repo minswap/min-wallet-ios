@@ -21,7 +21,6 @@ protocol TokenProtocol {
     var nftDisplayName: String { get }
     var nftImage: String { get }
     var hasMetaData: Bool { get }
-    var fixedUSD: Bool { get }
     var adaName: String { get }
 }
 
@@ -58,7 +57,6 @@ extension TokenProtocol {
     
     var nftDisplayName: String { "" }
     var nftImage: String { "" }
-    var fixedUSD: Bool { false }
 }
 
 struct WrapTokenProtocol: Identifiable {

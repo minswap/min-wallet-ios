@@ -62,41 +62,16 @@ extension TopAssetsResponse {
 
 
 extension TopAssetsResponse.AssetMetric: TokenProtocol {
-    var currencySymbol: String {
-        asset.currencySymbol
-    }
+    var currencySymbol: String { asset.currencySymbol }
+    var tokenName: String { asset.tokenName }
+    var isVerified: Bool { asset.is_verified }
+    var ticker: String { asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? "" }
+    var projectName: String { asset.metadata?.name ?? "" }
+    var percentChange: Double { price_change_24h }
+    var priceValue: Double { price_usd }
+    var subPriceValue: Double { 0 }
     
-    var tokenName: String {
-        asset.tokenName
-    }
-    
-    var isVerified: Bool {
-        asset.is_verified
-    }
-    
-    var ticker: String {
-        asset.metadata?.ticker ?? UserInfo.TOKEN_NAME_DEFAULT[uniqueID] ?? ""
-    }
-    
-    var projectName: String {
-        asset.metadata?.name ?? ""
-    }
-    
-    var percentChange: Double {
-        price_change_24h
-    }
-    
-    var priceValue: Double {
-        price_usd
-    }
-    
-    var subPriceValue: Double {
-        0
-    }
-    
-    var category: [String] {
-        categories
-    }
+    var category: [String] { categories }
     
     var socialLinks: [SocialLinks: String] {
         guard let socialLinks = asset.social_links else { return [:] }
@@ -125,13 +100,6 @@ extension TopAssetsResponse.AssetMetric: TokenProtocol {
         return links
     }
     
-    var decimals: Int {
-        asset.metadata?.decimals ?? 0
-    }
-    
-    var hasMetaData: Bool {
-        asset.metadata != nil
-    }
-    
-    var fixedUSD: Bool { true }
+    var decimals: Int { asset.metadata?.decimals ?? 0 }
+    var hasMetaData: Bool { asset.metadata != nil }
 }

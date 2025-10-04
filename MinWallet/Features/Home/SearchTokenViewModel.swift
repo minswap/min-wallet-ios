@@ -64,11 +64,10 @@ class SearchTokenViewModel: ObservableObject {
                 }
                 if !keyword.isBlank {
                     $0.term = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-                    $0.limit = limit
                 } else {
                     $0.term = nil
-                    $0.limit = 1
                 }
+                $0.limit = limit
                 $0.sort_field = .volume_usd_24h
                 $0.sort_direction = .desc
             })

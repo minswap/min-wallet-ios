@@ -85,5 +85,4 @@ extension AssetData: TokenProtocol {
     var nftDisplayName: String { metadata?.name ?? "" }
     var nftImage: String { metadata?.url ?? "" }
     var hasMetaData: Bool { true }
-    var fixedUSD: Bool { true }
 }
