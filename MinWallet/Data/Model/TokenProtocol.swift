@@ -1,7 +1,5 @@
 import SwiftUI
 import Then
-import MinWalletAPI
-
 
 protocol TokenProtocol {
     var currencySymbol: String { get }

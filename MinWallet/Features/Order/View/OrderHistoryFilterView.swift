@@ -1,7 +1,5 @@
 import SwiftUI
 import FlowStacks
-import MinWalletAPI
-import UIKit
 import Then
 import SwiftyAttributes
 

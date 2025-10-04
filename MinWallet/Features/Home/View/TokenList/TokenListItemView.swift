@@ -1,6 +1,5 @@
 import SwiftUI
 import SkeletonUI
-import MinWalletAPI
 
 
 struct TokenListItemView: View {

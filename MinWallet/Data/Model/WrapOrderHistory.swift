@@ -1,7 +1,6 @@
 import Foundation
 import Then
 import SwiftUI
-import MinWalletAPI
 
 
 struct WrapOrderHistory: Then, Equatable, Identifiable {

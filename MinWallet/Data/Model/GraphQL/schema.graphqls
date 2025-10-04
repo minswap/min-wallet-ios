@@ -2599,6 +2599,7 @@ type Vote {
   proposalId: String!
   txId: String!
   voteValue: BigInt!
+  votes: String
   votingPower: BigInt!
 }
 

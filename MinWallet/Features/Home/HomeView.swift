@@ -1,6 +1,5 @@
 import SwiftUI
 import FlowStacks
-import MinWalletAPI
 import OneSignalFramework
 import ObjectMapper
 import SwiftyJSON
