@@ -58,10 +58,14 @@ struct TokenListItemView: View {
                     
                     if showSubPrice {
                         let subPrice: Double = {
+                            guard token?.fixedUSD == false else { return token?.subPriceValue ?? 0 }
                             guard token?.isTokenADA == false else { return token?.subPriceValue ?? 0 }
                             return (token?.subPriceValue ?? 0).toExact(decimal: 6)
                         }()
                         let subPriceValue: AttributedString = {
+                            guard token?.fixedUSD == false else {
+                                return subPrice.formatNumber(prefix: Currency.usd.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                            }
                             switch appSetting.currency {
                             case Currency.ada.rawValue:
                                 return

@@ -183,6 +183,19 @@ enum AggregatorSource: Int, CaseIterable, Identifiable, Hashable {
             self = .Minswap
         }
     }
+    
+    var nameLP: String {
+        switch self {
+        case .Minswap:
+            return "V1"
+        case .MinswapV2:
+            return "V2"
+        case .MinswapStable:
+            return "Stable"
+        default:
+            return ""
+        }
+    }
 }
 
 enum AggrSource: String, CaseIterable, Identifiable {

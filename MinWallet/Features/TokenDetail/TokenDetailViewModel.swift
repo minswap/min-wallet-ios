@@ -1,4 +1,5 @@
 import SwiftUI
+import ObjectMapper
 import MinWalletAPI
 import Combine
 
@@ -11,7 +12,7 @@ class TokenDetailViewModel: ObservableObject {
     @Published
     var token: TokenProtocol!
     @Published
-    var topAsset: TopAssetQuery.Data.TopAsset?
+    var topAsset: TopAssetsResponse.AssetMetric?
     @Published
     var riskCategory: RiskScoreOfAssetQuery.Data.RiskScoreOfAsset?
     @Published
@@ -32,8 +33,6 @@ class TokenDetailViewModel: ObservableObject {
     var isLoadingPriceChart: Bool = true
     @Published
     var isInteracting = false
-    
-    private var lpAsset: PoolsByPairsQuery.Data.PoolsByPair.LpAsset?
     
     var chartDataSelected: LineChartData? {
         guard let selectedIndex = selectedIndex, selectedIndex < chartDatas.count else { return chartDatas.last }
@@ -76,30 +75,19 @@ class TokenDetailViewModel: ObservableObject {
     
     private func getTokenDetail() {
         Task {
-            let asset = try? await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
-            self.topAsset = asset?.topAsset
+            let jsonData = try await MinWalletAPIRouter.detailAsset(id: token.currencySymbol + token.tokenName).async_request()
+            let asset = Mapper<TopAssetsResponse.AssetMetric>.init().map(JSON: jsonData.dictionaryObject ?? [:])
+            self.topAsset = asset
         }
     }
     
     private func getPriceChart() async {
-        if lpAsset == nil {
-            let inputPair = InputPair(assetA: InputAsset(currencySymbol: "", tokenName: ""), assetB: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName))
-            let poolByPair = try? await MinWalletService.shared.fetch(query: PoolsByPairsQuery(pairs: [inputPair]))
-            self.lpAsset = poolByPair?.poolsByPairs.first?.lpAsset
-        }
-        
-        let input = PriceChartInput(
-            assetIn: InputAsset(currencySymbol: "", tokenName: ""),
-            assetOut: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName),
-            lpAsset: InputAsset(currencySymbol: lpAsset?.currencySymbol ?? "", tokenName: lpAsset?.tokenName ?? ""),
-            period: .case(chartPeriod))
-        let data = try? await MinWalletService.shared.fetch(query: PriceChartQuery(input: input))
-        let chartDatas = data?.priceChart
-            .map({ priceChart in
-                //2025-01-03T07:00:00.000Z
-                let time = priceChart.time
-                let value = priceChart.value
-                return LineChartData(date: time.formatToDate, value: Double(value) ?? 0, type: .outside)
+        let jsonData = try? await MinWalletAPIRouter.chartInfo(id: token.currencySymbol + token.tokenName, period: chartPeriod).async_request()
+        let chartDatas = jsonData?.arrayValue
+            .map({ priceChartJSON in
+                let time = priceChartJSON["timestamp"].doubleValue / 1000
+                let value = priceChartJSON["value"].doubleValue
+                return LineChartData(date: Date(timeIntervalSince1970: time), value: value, type: .outside)
             })
         self.chartDatas = chartDatas ?? []
         self.selectedIndex = max(0, self.chartDatas.count - 1)
@@ -154,26 +142,5 @@ class TokenDetailViewModel: ObservableObject {
         }
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
-    }
-}
-
-extension ChartPeriod: @retroactive Identifiable {
-    public var id: UUID {
-        UUID()
-    }
-    
-    var title: String {
-        switch self {
-        case .oneDay:
-            "1D"
-        case .oneMonth:
-            "1M"
-        case .oneWeek:
-            "1W"
-        case .oneYear:
-            "1Y"
-        case .sixMonths:
-            "6M"
-        }
     }
 }

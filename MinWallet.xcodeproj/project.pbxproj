@@ -106,16 +106,10 @@
 			membershipExceptions = (
 				Model/GraphQL/ADAHandleNameQuery.graphql,
 				Model/GraphQL/AdaPrice.graphql,
-				Model/GraphQL/AssetsQuery.graphql,
 				Model/GraphQL/FinalizeAndSubmitMutation.graphql,
-				Model/GraphQL/PoolsByPairsQuery.graphql,
-				Model/GraphQL/PortfolioOverviewQuery.graphql,
-				Model/GraphQL/PriceChartQuery.graphql,
 				Model/GraphQL/RiskScoreOfAssetQuery.graphql,
 				Model/GraphQL/schema.graphqls,
 				Model/GraphQL/SendTokensMutation.graphql,
-				Model/GraphQL/TopAssetQuery.graphql,
-				Model/GraphQL/WalletAssetsQuery.graphql,
 			);
 			target = 57F102912C64CCA0000B3544 /* MinWallet */;
 		};

@@ -1,7 +1,7 @@
 import SwiftUI
-import MinWalletAPI
 import Then
 import Combine
+import ObjectMapper
 
 
 @MainActor
@@ -29,7 +29,8 @@ class SelectTokenViewModel: ObservableObject {
     private var cachedIndex: [String: Int] = [:]
     
     var rawTokens: [TokenProtocol] {
-        [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
+        //[TokenManager.shared.tokenAda] +
+        TokenManager.shared.normalTokens
     }
     
     init(
@@ -139,16 +140,17 @@ class SelectTokenViewModel: ObservableObject {
                     let input = AssetsInput()
                         .with {
                             if isLoadMore, let searchAfter = searchAfter {
-                                $0.searchAfter = .some(searchAfter)
+                                $0.searchAfter = searchAfter
                             }
                             if !keyword.isBlank {
-                                $0.term = .some(keyword)
+                                $0.term = keyword
                             }
                         }
-                    let assets = try await MinWalletService.shared.fetch(query: AssetsQuery(input: .some(input)))
-                    self.searchAfter = assets?.assets.searchAfter
+                    let jsonData = try await MinWalletAPIRouter.assets(input: input).async_request()
+                    let assets = Mapper<AssetsResponse>.init().map(JSON: jsonData.dictionaryObject ?? [:])
+                    self.searchAfter = assets?.searchAfter
                     self.hasLoadMore = self.searchAfter != nil
-                    if let assets = assets?.assets.assets, !assets.isEmpty {
+                    if let assets = assets?.assets, !assets.isEmpty {
                         let currentUniqueIds = _tokens.map { $0.uniqueID }
                         let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
                         self.tokens = (_tokens + _assets).map({ WrapTokenProtocol(token: $0) })

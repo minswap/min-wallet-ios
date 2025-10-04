@@ -219,7 +219,7 @@ class SwapTokenViewModel: ObservableObject {
                 warningInfo.append(.unsafeSlippageTolerance(percent: "50"))
             }
         case .reloadBalance:
-            let tokens = TokenManager.shared.normalTokens + [TokenManager.shared.tokenAda]
+            let tokens = TokenManager.shared.normalTokens  // + [TokenManager.shared.tokenAda]
             var isReloadSelectToken: Bool = false
             if let tokenPayChange = tokens.first(where: { $0.uniqueID == tokenPay.uniqueID }), tokenPay.token.amount != tokenPayChange.amount {
                 tokenPay.token = tokenPayChange

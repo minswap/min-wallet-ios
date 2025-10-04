@@ -1,5 +1,5 @@
 import SwiftUI
-import MinWalletAPI
+import ObjectMapper
 import Then
 import Combine
 
@@ -7,7 +7,7 @@ import Combine
 @MainActor
 class SearchTokenViewModel: ObservableObject {
     @Published
-    var tokens: [TopAssetsQuery.Data.TopAssets.TopAsset] = []
+    var tokens: [TopAssetsResponse.AssetMetric] = []
     @Published
     var tokensFav: [TokenProtocol] = []
     @Published
@@ -58,18 +58,19 @@ class SearchTokenViewModel: ObservableObject {
         input = TopAssetsInput()
             .with({
                 if let searchAfter = searchAfter, isLoadMore {
-                    $0.searchAfter = .some(searchAfter)
+                    $0.search_after = searchAfter
                 } else {
-                    $0.searchAfter = nil
+                    $0.search_after = nil
                 }
                 if !keyword.isBlank {
-                    $0.term = .some(keyword.trimmingCharacters(in: .whitespacesAndNewlines))
-                    $0.limit = .some(limit)
+                    $0.term = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+                    $0.limit = limit
                 } else {
                     $0.term = nil
-                    $0.limit = .some(10)
+                    $0.limit = 1
                 }
-                $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
+                $0.sort_field = .volume_usd_24h
+                $0.sort_direction = .desc
             })
         
         Task {
@@ -82,21 +83,23 @@ class SearchTokenViewModel: ObservableObject {
                 self.isDeleted = []
                 self.offsets = []
             }
-            let tokens = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
-            let _tokens = tokens?.topAssets.topAssets ?? []
+            
+            let jsonData = try? await MinWalletAPIRouter.topAssets(input: input).async_request()
+            let tokens = Mapper<TopAssetsResponse>.init().map(JSON: jsonData?.dictionaryObject ?? [:])
+            let _tokens = tokens?.assets ?? []
             if isLoadMore {
                 self.tokens += _tokens
             } else {
                 self.tokens = _tokens
             }
-            self.searchAfter = tokens?.topAssets.searchAfter
+            self.searchAfter = tokens?.search_after
             self.hasLoadMore = _tokens.count >= self.limit || self.searchAfter != nil
             self.showSkeleton = false
             self.isFetching = false
         }
     }
     
-    func loadMoreData(item: TopAssetsQuery.Data.TopAssets.TopAsset) {
+    func loadMoreData(item: TopAssetsResponse.AssetMetric) {
         guard hasLoadMore, !isFetching, !keyword.isBlank else { return }
         let thresholdIndex = tokens.index(tokens.endIndex, offsetBy: -2)
         if tokens.firstIndex(where: { ($0.asset.currencySymbol + $0.asset.tokenName) == (item.asset.currencySymbol + $0.asset.tokenName) }) == thresholdIndex {
@@ -146,10 +149,11 @@ class SearchTokenViewModel: ObservableObject {
         return tokens.compactMap { $0 }
     }
     
-    private func fetchToken(for token: TokenFavourite) async -> TopAssetQuery.Data.TopAsset? {
+    private func fetchToken(for token: TokenFavourite) async -> TopAssetsResponse.AssetMetric? {
         do {
-            let asset = try await MinWalletService.shared.fetch(query: TopAssetQuery(asset: InputAsset(currencySymbol: token.currencySymbol, tokenName: token.tokenName)))
-            return asset?.topAsset
+            let jsonData = try await MinWalletAPIRouter.detailAsset(id: token.currencySymbol + token.tokenName).async_request()
+            let asset = Mapper<TopAssetsResponse.AssetMetric>.init().map(JSON: jsonData.dictionaryObject ?? [:])
+            return asset
         } catch {
             return nil
         }
