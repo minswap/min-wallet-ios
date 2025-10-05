@@ -14,7 +14,7 @@ enum MinWalletAPIRouter: DomainAPIRouter {
         case .portfolio:
             return "/v1/portfolio/tokens"
         case let .chartInfo(tokenId, _):
-            return "/v1/timeseries/assets/\(tokenId)/price"
+            return "/v1/assets/\(tokenId)/price/timeseries"
         case .assets:
             return "/v1/assets"
         case .topAssets:
