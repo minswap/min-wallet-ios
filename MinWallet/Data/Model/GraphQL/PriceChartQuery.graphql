@@ -1,6 +1,0 @@
-query PriceChartQuery($input: PriceChartInput!) {
-  priceChart(input: $input) {
-    time
-    value
-  }
-}

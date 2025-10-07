@@ -1,8 +1,8 @@
 import SwiftUI
 import Foundation
 import Combine
-import MinWalletAPI
 import OneSignalFramework
+import ObjectMapper
 
 
 @MainActor
@@ -31,36 +31,37 @@ class MarketViewModel: ObservableObject {
         
         input = TopAssetsInput()
             .with({
-                $0.limit = .some(limit)
-                $0.onlyVerified = .some(false)
-                $0.favoriteAssets = nil
-                $0.sortBy = .some(TopAssetsSortInput(column: .case(.volume24H), type: .case(.desc)))
+                $0.limit = limit
+                $0.only_verified = false
+                $0.favorite_asset_ids = nil
+                $0.sort_field = .volume_usd_24h
+                $0.sort_direction = .desc
                 if isLoadMore, let searchAfter = searchAfter {
-                    $0.searchAfter = .some(searchAfter)
+                    $0.search_after = searchAfter
                 }
             })
         
         if isFirstTime {
-            async let tokenRaw = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
+            async let tokenRaw = try? await MinWalletAPIRouter.topAssets(input: input).async_request()
             async let getPortfolioOverviewAndYourToken: Void? = try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
             
             let results = await (tokenRaw, getPortfolioOverviewAndYourToken)
-            let tokens = results.0
+            let tokens = Mapper<TopAssetsResponse>.init().map(JSON: results.0?.dictionaryObject ?? [:])
             
-            let _tokens = tokens?.topAssets.topAssets ?? []
+            let _tokens = tokens?.assets ?? []
             self.tokens = _tokens
-            searchAfter = tokens?.topAssets.searchAfter
+            searchAfter = tokens?.search_after
             hasLoadMore = _tokens.count >= limit || searchAfter != nil
         } else {
-            let tokenRaw = try? await MinWalletService.shared.fetch(query: TopAssetsQuery(input: .some(input)))
-            
-            let _tokens = tokenRaw?.topAssets.topAssets ?? []
+            let jsonData = try? await MinWalletAPIRouter.topAssets(input: input).async_request()
+            let tokenRaw = Mapper<TopAssetsResponse>.init().map(JSON: jsonData?.dictionaryObject ?? [:])
+            let _tokens = tokenRaw?.assets ?? []
             if isLoadMore {
                 tokens += _tokens
             } else {
                 tokens = _tokens
             }
-            searchAfter = tokenRaw?.topAssets.searchAfter
+            searchAfter = tokenRaw?.search_after
             hasLoadMore = _tokens.count >= limit || searchAfter != nil
         }
         showSkeleton = false

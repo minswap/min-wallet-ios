@@ -2,7 +2,6 @@ import SwiftUI
 import FlowStacks
 import Apollo
 import ApolloAPI
-import MinWalletAPI
 
 
 @MainActor

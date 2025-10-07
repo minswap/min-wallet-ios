@@ -13,4 +13,4 @@ MIN_ADA_CURRENCY = ₳
 MIN_ADDRESS_PREFIX = addr1
 MIN_POLICY_URL = https:\/\/minswap.org
 MIN_ASSET_URL = https:\/\/asset-logos.minswap.org
-MIN_AGG_URL = https:\/\/dev-3.minswap.org
+MIN_AGG_URL = https:\/\/dev-2.minswap.org

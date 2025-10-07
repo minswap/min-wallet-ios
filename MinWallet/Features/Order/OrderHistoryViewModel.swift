@@ -1,5 +1,4 @@
 import SwiftUI
-import MinWalletAPI
 import Combine
 import SwiftyJSON
 import ObjectMapper

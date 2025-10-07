@@ -1,6 +1,5 @@
 import SwiftUI
 import Combine
-import MinWalletAPI
 import Then
 import ObjectMapper
 import SwiftyJSON
@@ -556,20 +555,6 @@ extension SwapTokenViewModel {
         }
     }
 }
-
-extension IosTradeEstimateQuery.Data.IosTradeEstimate {
-    var priceImpactColor: (Color, Color) {
-        guard let priceImpact = priceImpact else { return (.clear, .clear) }
-        if priceImpact < 2 {
-            return (.colorInteractiveToneSuccess, .colorSurfaceSuccess)
-        } else if priceImpact > 5 {
-            return (.colorInteractiveToneDanger, .colorSurfaceDanger)
-        } else {
-            return (.colorInteractiveToneWarning, .colorSurfaceWarningDefault)
-        }
-    }
-}
-
 
 extension EstimationResponse {
     var priceImpactColor: (Color, Color) {

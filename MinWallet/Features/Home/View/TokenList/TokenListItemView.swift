@@ -1,6 +1,5 @@
 import SwiftUI
 import SkeletonUI
-import MinWalletAPI
 
 
 struct TokenListItemView: View {
@@ -58,10 +57,17 @@ struct TokenListItemView: View {
                     
                     if showSubPrice {
                         let subPrice: Double = {
+                            return token?.subPriceValue ?? 0
+                            /*
                             guard token?.isTokenADA == false else { return token?.subPriceValue ?? 0 }
                             return (token?.subPriceValue ?? 0).toExact(decimal: 6)
+                             */
                         }()
                         let subPriceValue: AttributedString = {
+                            //guard token?.fixedUSD == false else {
+                            return subPrice.formatNumber(prefix: Currency.usd.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
+                            //}
+                            /*
                             switch appSetting.currency {
                             case Currency.ada.rawValue:
                                 return
@@ -75,6 +81,7 @@ struct TokenListItemView: View {
                             default:
                                 return (subPrice * appSetting.currencyInADA).formatNumber(prefix: Currency.usd.prefix, font: .paragraphSmall, fontColor: .colorInteractiveTentPrimarySub)
                             }
+                             */
                         }()
 
                         Text(subPriceValue)

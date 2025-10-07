@@ -1,6 +1,7 @@
 import Foundation
 import MinWalletAPI
 import Combine
+import ObjectMapper
 
 
 @MainActor
@@ -16,7 +17,7 @@ class TokenManager: ObservableObject {
     var isLoadingPortfolioOverviewAndYourToken: Bool = false
     
     ///Cached your token, include normal + lp tokens + nft
-    private(set) var yourTokens: WalletAssetsQuery.Data.GetWalletAssetsPositions? {
+    private(set) var yourTokens: WalletAssetPosition? {
         willSet {
             objectWillChange.send()
         }
@@ -28,7 +29,7 @@ class TokenManager: ObservableObject {
         }
     }
     
-    var pnl24H: Double = 0 {
+    var pnl24HPercent: Double = 0 {
         willSet {
             objectWillChange.send()
         }
@@ -50,24 +51,12 @@ class TokenManager: ObservableObject {
     
     private init() {}
     
-    private func getPortfolioOverview() async -> Void {
-        guard AppSetting.shared.isLogin else { return }
-        guard let address = UserInfo.shared.minWallet?.address, !address.isBlank else { return }
-        let portfolioOverview = try? await MinWalletService.shared.fetch(query: PortfolioOverviewQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-        netAdaValue = (portfolioOverview?.portfolioOverview.netAdaValue.doubleValue ?? 0) / 1_000_000
-        pnl24H = (portfolioOverview?.portfolioOverview.pnl24H.doubleValue ?? 0) / 1_000_000
-        adaValue = (portfolioOverview?.portfolioOverview.adaValue.doubleValue ?? 0) / 1_000_000
-        tokenAda.netValue = adaValue
-        tokenAda.netSubValue = adaValue
-    }
-    
     func getPortfolioOverviewAndYourToken() async throws -> Void {
         isLoadingPortfolioOverviewAndYourToken = true
-        async let getPortfolioOverviewAsync: Void = getPortfolioOverview()
         async let getYourTokenAsync: Void? = TokenManager.getYourToken().map { _ in return () }
         async let fetchMinimumAdaValueAsync: Void? = fetchMinimumAdaValue()
         
-        let _ = try await [getPortfolioOverviewAsync, getYourTokenAsync, fetchMinimumAdaValueAsync]
+        let _ = try await [getYourTokenAsync, fetchMinimumAdaValueAsync]
         isLoadingPortfolioOverviewAndYourToken = false
         reloadBalance.send(())
     }
@@ -93,10 +82,18 @@ extension TokenManager {
     }
     
     @discardableResult
-    private static func getYourToken() async throws -> WalletAssetsQuery.Data.GetWalletAssetsPositions? {
-        let tokens = try await MinWalletService.shared.fetch(query: WalletAssetsQuery(address: UserInfo.shared.minWallet?.address ?? ""))
-        TokenManager.shared.yourTokens = tokens?.getWalletAssetsPositions
-        UserInfo.shared.adaHandleName = tokens?.getWalletAssetsPositions.nfts.first(where: { $0.asset.currencySymbol == UserInfo.POLICY_ID })?.asset.tokenName.adaName ?? ""
+    private static func getYourToken() async throws -> WalletAssetPosition? {
+        let jsonData = try await MinWalletAPIRouter.portfolio.async_request()
+        let tokens = Mapper<WalletAssetPosition>().map(JSON: jsonData["positions"].dictionaryObject ?? [:])
+        
+        TokenManager.shared.netAdaValue = tokens?.netAdaValue ?? 0
+        TokenManager.shared.pnl24HPercent = tokens?.pnl24HPercent ?? 0
+        TokenManager.shared.adaValue = tokens?.pnl24H ?? 0
+        TokenManager.shared.tokenAda.netValue = tokens?.pnl24H ?? 0
+        TokenManager.shared.tokenAda.netSubValue = tokens?.pnl24H ?? 0
+        
+        TokenManager.shared.yourTokens = tokens
+        UserInfo.shared.adaHandleName = tokens?.nfts.first(where: { $0.currencySymbol == UserInfo.POLICY_ID })?.tokenName.adaName ?? ""
         return TokenManager.shared.yourTokens
     }
     

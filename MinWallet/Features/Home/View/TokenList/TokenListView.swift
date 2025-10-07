@@ -1,7 +1,6 @@
 import SwiftUI
 import FlowStacks
 import SkeletonUI
-import MinWalletAPI
 
 
 struct TokenListView: View {
