@@ -23,7 +23,7 @@ class YourTokenViewModel: ObservableObject {
         }
         try? await Task.sleep(for: .milliseconds(300))
         try? await TokenManager.shared.getPortfolioOverviewAndYourToken()
-        tokens = type == .nft ? (TokenManager.shared.yourTokens?.nfts ?? []) : ([TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens)
+        tokens = type == .nft ? (TokenManager.shared.yourTokens?.nfts ?? []) : ([TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens.filter({ !$0.isTokenADA }))
         showSkeleton = false
     }
 }

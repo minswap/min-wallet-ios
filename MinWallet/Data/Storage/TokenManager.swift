@@ -47,7 +47,9 @@ class TokenManager: ObservableObject {
         }
     }
     
-    var tokenAda: TokenDefault = TokenDefault(symbol: "", tName: "", minName: "Cardano", decimal: 6)
+    var tokenAda: TokenProtocol {
+        yourTokens?.assets.first { $0.isTokenADA } ?? TokenDefault(symbol: "", tName: "", minName: "Cardano", decimal: 6)
+    }
     
     private init() {}
     
@@ -89,8 +91,6 @@ extension TokenManager {
         TokenManager.shared.netAdaValue = tokens?.netAdaValue ?? 0
         TokenManager.shared.pnl24HPercent = tokens?.pnl24HPercent ?? 0
         TokenManager.shared.adaValue = tokens?.pnl24H ?? 0
-        TokenManager.shared.tokenAda.netValue = tokens?.pnl24H ?? 0
-        TokenManager.shared.tokenAda.netSubValue = tokens?.pnl24H ?? 0
         
         TokenManager.shared.yourTokens = tokens
         UserInfo.shared.adaHandleName = tokens?.nfts.first(where: { $0.currencySymbol == UserInfo.POLICY_ID })?.tokenName.adaName ?? ""
