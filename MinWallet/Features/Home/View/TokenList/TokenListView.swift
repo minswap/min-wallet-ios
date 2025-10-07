@@ -205,7 +205,7 @@ extension TokenListView {
                     let tokens: [TokenProtocol] = viewModel.yourTokenViewModel.tokens
                     ForEach(0..<tokens.count, id: \.self) { index in
                         if let item = tokens[gk_safeIndex: index] {
-                            TokenListItemView(token: item, showSubPrice: true)
+                            TokenListItemView(token: item, showSubPrice: true, isFav: UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == item.uniqueID }))
                                 .contentShape(.rect)
                                 .onTapGesture {
                                     guard !item.isTokenADA else { return }

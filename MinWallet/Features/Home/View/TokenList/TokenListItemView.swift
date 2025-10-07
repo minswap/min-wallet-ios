@@ -10,15 +10,28 @@ struct TokenListItemView: View {
     let showSubPrice: Bool
     let showBottomLine: Bool
     
-    init(token: TokenProtocol?, showSubPrice: Bool = false, showBottomLine: Bool = true) {
+    @Binding var isFav: Bool
+    
+    init(
+        token: TokenProtocol?,
+        showSubPrice: Bool = false,
+        showBottomLine: Bool = true,
+        isFav: Bool = false
+    ) {
         self.token = token
         self.showSubPrice = showSubPrice
         self.showBottomLine = showBottomLine
+        self._isFav = .constant(isFav)
     }
     
     var body: some View {
         HStack(spacing: .xl) {
-            TokenLogoView(currencySymbol: token?.currencySymbol, tokenName: token?.tokenName, isVerified: token?.isVerified)
+            TokenLogoView(
+                currencySymbol: token?.currencySymbol,
+                tokenName: token?.tokenName,
+                isVerified: token?.isVerified,
+                isFav: isFav
+            )
             VStack(spacing: 4) {
                 let adaName = token?.adaName
                 let name = token?.projectName ?? ""

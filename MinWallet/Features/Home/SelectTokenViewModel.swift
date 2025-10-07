@@ -78,7 +78,7 @@ class SelectTokenViewModel: ObservableObject {
                             ]
                             return stringToCompare.first { $0.contains(keyword) } != nil
                         })
-                    self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
+                    self.tokens = UserInfo.sortTokens(tokens: _tokens).map({ WrapTokenProtocol(token: $0) })
                 case .swapToken:
                     self.getTokens()
                 }
@@ -91,7 +91,7 @@ class SelectTokenViewModel: ObservableObject {
             if rawTokens.count <= 1 {
                 self.getTokens()
             } else {
-                self.tokens = rawTokens.map({ WrapTokenProtocol(token: $0) })
+                self.tokens = UserInfo.sortTokens(tokens: rawTokens).map({ WrapTokenProtocol(token: $0) })
             }
         case .swapToken:
             self.getTokens()
@@ -128,11 +128,13 @@ class SelectTokenViewModel: ObservableObject {
                 switch screenType {
                 case .initSelectedToken:
                     self.hasLoadMore = false
+                    _tokens = UserInfo.sortTokens(tokens: _tokens)
                     self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
                     self.tokensSelected[TokenManager.shared.tokenAda.uniqueID] = TokenManager.shared.tokenAda
 
                 case .sendToken:
                     self.hasLoadMore = false
+                    _tokens = UserInfo.sortTokens(tokens: _tokens)
                     self.tokens = _tokens.map({ WrapTokenProtocol(token: $0) })
 
                 case .swapToken:
@@ -152,7 +154,8 @@ class SelectTokenViewModel: ObservableObject {
                     if let assets = assets?.assets, !assets.isEmpty {
                         let currentUniqueIds = _tokens.map { $0.uniqueID }
                         let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
-                        self.tokens = (_tokens + _assets).map({ WrapTokenProtocol(token: $0) })
+                        
+                        self.tokens = UserInfo.sortTokens(tokens: _tokens + _assets).map({ WrapTokenProtocol(token: $0) })
                     }
                 }
                 
