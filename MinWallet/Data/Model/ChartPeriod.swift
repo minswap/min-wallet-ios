@@ -7,6 +7,7 @@ enum ChartPeriod: String {
     case oneWeek = "1w"
     case oneYear = "1y"
     case sixMonths = "6M"
+    case all = "all"
 }
 
 extension ChartPeriod: Identifiable {
@@ -26,6 +27,8 @@ extension ChartPeriod: Identifiable {
             "1Y"
         case .sixMonths:
             "6M"
+        case .all:
+            "All"
         }
     }
 }

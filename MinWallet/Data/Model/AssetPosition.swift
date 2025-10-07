@@ -7,7 +7,7 @@ struct AssetPosition: Mappable {
     var price_usd: Double = 0
     var amount_position: Double = 0
     var amount_position_usd: Double = 0
-    var pnl_24h: Double = 0
+    var pnl_24h_usd: Double = 0
     var pnl_24h_percent: Double = 0
     
     init() {}
@@ -19,7 +19,7 @@ struct AssetPosition: Mappable {
         price_usd <- (map["price_usd"], GKMapFromJSONToDouble)
         amount_position <- (map["amount"], GKMapFromJSONToDouble)
         amount_position_usd <- (map["amount_usd"], GKMapFromJSONToDouble)
-        pnl_24h <- (map["pnl_24h_usd"], GKMapFromJSONToDouble)
+        pnl_24h_usd <- (map["pnl_24h_usd"], GKMapFromJSONToDouble)
         pnl_24h_percent <- (map["pnl_24h_percent"], GKMapFromJSONToDouble)
     }
 }

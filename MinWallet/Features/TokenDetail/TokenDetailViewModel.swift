@@ -120,6 +120,8 @@ class TokenDetailViewModel: ObservableObject {
             inputFormatter.dateFormat = "MMM yyyy"
         case .sixMonths:
             inputFormatter.dateFormat = "MMM dd"
+        case .all:
+            inputFormatter.dateFormat = "HH:mm, MMM dd yyyy"
         }
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
@@ -139,6 +141,8 @@ class TokenDetailViewModel: ObservableObject {
             inputFormatter.dateFormat = "MMM dd, yyyy"
         case .sixMonths:
             inputFormatter.dateFormat = "HH:mm, MMM dd"
+        case .all:
+            inputFormatter.dateFormat = "HH:mm, MMM dd yyyy"
         }
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
