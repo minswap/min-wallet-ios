@@ -29,7 +29,7 @@ class SelectTokenViewModel: ObservableObject {
     private var cachedIndex: [String: Int] = [:]
     
     var rawTokens: [TokenProtocol] {
-        [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens
+        [TokenManager.shared.tokenAda] + TokenManager.shared.normalTokens.filter({ !$0.isTokenADA })
     }
     
     init(
