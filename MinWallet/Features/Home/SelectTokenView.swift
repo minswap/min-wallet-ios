@@ -170,27 +170,37 @@ struct SelectTokenView: View {
                                             get: { viewModel.tokensSelected[item.uniqueID] != nil },
                                             set: { _ in }
                                         )
-                                        SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: true)
-                                            .contentShape(.rect)
-                                            .onTapGesture {
-                                                viewModel.toggleSelected(token: item)
-                                            }
+                                        SelectTokenListItemView(
+                                            token: item,
+                                            isSelected: combinedBinding,
+                                            isShowSelected: true,
+                                            isFav: UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == item.uniqueID })
+                                        )
+                                        .contentShape(.rect)
+                                        .onTapGesture {
+                                            viewModel.toggleSelected(token: item)
+                                        }
                                     } else {
                                         let combinedBinding = Binding<Bool>(
                                             get: { viewModel.tokensSelected[item.uniqueID] != nil },
                                             set: { _ in }
                                         )
-                                        SelectTokenListItemView(token: item, isSelected: combinedBinding, isShowSelected: false)
-                                            .contentShape(.rect)
-                                            .onAppear() {
-                                                viewModel.loadMoreData(item: item)
-                                            }
-                                            .onTapGesture {
-                                                viewModel.toggleSelected(token: item)
-                                                onDismiss?()
-                                                let tokenSelected = viewModel.tokenCallBack
-                                                onSelectToken?(tokenSelected, false)
-                                            }
+                                        SelectTokenListItemView(
+                                            token: item,
+                                            isSelected: combinedBinding,
+                                            isShowSelected: false,
+                                            isFav: UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == item.uniqueID })
+                                        )
+                                        .contentShape(.rect)
+                                        .onAppear() {
+                                            viewModel.loadMoreData(item: item)
+                                        }
+                                        .onTapGesture {
+                                            viewModel.toggleSelected(token: item)
+                                            onDismiss?()
+                                            let tokenSelected = viewModel.tokenCallBack
+                                            onSelectToken?(tokenSelected, false)
+                                        }
                                     }
                                 }
                             }

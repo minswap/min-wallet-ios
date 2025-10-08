@@ -142,3 +142,7 @@ extension View {
         }
     }
 }
+
+extension Notification.Name {
+    static let favDidChange = Notification.Name("favDidChange")
+}

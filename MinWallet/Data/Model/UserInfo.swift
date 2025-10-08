@@ -78,6 +78,7 @@ class UserInfo: ObservableObject {
             self.tokensFav.removeAll { $0.uniqueID == token.uniqueID }
         }
         saveTokenFav()
+        NotificationCenter.default.post(name: .favDidChange, object: nil)
     }
     
     private func readTokenFav() {
@@ -90,5 +91,16 @@ class UserInfo: ObservableObject {
     private func saveTokenFav() {
         guard let encoded = try? JSONEncoder().encode(tokensFav) else { return }
         UserDefaults.standard.set(encoded, forKey: UserDataManager.TOKEN_FAVORITE)
+    }
+}
+
+extension UserInfo {
+    static func sortTokens(tokens: [TokenProtocol]) -> [TokenProtocol] {
+        let favoriteIDs: Set<String> = Set(UserInfo.shared.tokensFav.map { $0.uniqueID })
+        let tokenAda = tokens.filter { $0.isTokenADA }
+        let favs = tokens.filter { favoriteIDs.contains($0.uniqueID) && !$0.isTokenADA }
+        let nonFavs = tokens.filter { !favoriteIDs.contains($0.uniqueID) && !$0.isTokenADA }
+        
+        return tokenAda + favs + nonFavs
     }
 }
