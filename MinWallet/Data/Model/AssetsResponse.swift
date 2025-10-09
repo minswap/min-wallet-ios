@@ -6,7 +6,7 @@ struct AssetsInput: Then {
     var term: String?
     var limit: Int = 20
     var onlyVerified: Bool?
-    var searchAfter: [String]?
+    var searchAfter: [Any]?
     
     init() {}
 }

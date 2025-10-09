@@ -79,7 +79,33 @@ extension AssetData: TokenProtocol {
     var amount: Double { 0 }
     var subPriceValue: Double { 0 }
     var category: [String] { [] }
-    var socialLinks: [SocialLinks: String] { [:] }
+    var socialLinks: [SocialLinks: String] {
+        guard let socialLinks = social_links else { return [:] }
+        var links: [SocialLinks: String] = [:]
+        if let coinGecko = socialLinks.coinGecko {
+            links[.coinGecko] = coinGecko
+        }
+        if let coinMarketCap = socialLinks.coinMarketCap {
+            links[.coinMarketCap] = coinMarketCap
+        }
+        if let discord = socialLinks.discord {
+            links[.discord] = discord
+        }
+        if let telegram = socialLinks.telegram {
+            links[.telegram] = telegram
+        }
+        if let telegram = socialLinks.telegram {
+            links[.telegram] = telegram
+        }
+        if let twitter = socialLinks.twitter {
+            links[.twitter] = twitter
+        }
+        if let website = socialLinks.website {
+            links[.website] = website
+        }
+        return links
+    }
+    
     var decimals: Int { 0 }
     
     var nftDisplayName: String { metadata?.name ?? "" }

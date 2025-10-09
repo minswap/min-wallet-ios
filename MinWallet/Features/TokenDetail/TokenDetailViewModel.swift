@@ -7,7 +7,7 @@ import Combine
 @MainActor
 class TokenDetailViewModel: ObservableObject {
     
-    var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .oneYear]
+    var chartPeriods: [ChartPeriod] = [.oneDay, .oneWeek, .oneMonth, .sixMonths, .oneYear, .all]
     
     @Published
     var token: TokenProtocol!
@@ -121,7 +121,7 @@ class TokenDetailViewModel: ObservableObject {
         case .sixMonths:
             inputFormatter.dateFormat = "MMM dd"
         case .all:
-            inputFormatter.dateFormat = "HH:mm, MMM dd yyyy"
+            inputFormatter.dateFormat = "MMM dd yyyy"
         }
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
@@ -142,7 +142,7 @@ class TokenDetailViewModel: ObservableObject {
         case .sixMonths:
             inputFormatter.dateFormat = "HH:mm, MMM dd"
         case .all:
-            inputFormatter.dateFormat = "HH:mm, MMM dd yyyy"
+            inputFormatter.dateFormat = "MMM dd yyyy"
         }
         inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         return inputFormatter.string(from: value)
