@@ -164,7 +164,7 @@ extension TokenListView {
                     let tokens: [TokenProtocol] = viewModel.marketViewModel.tokens
                     ForEach(0..<tokens.count, id: \.self) { index in
                         if let item = tokens[gk_safeIndex: index] {
-                            TokenListItemView(token: item, showSubPrice: false)
+                            TokenListItemView(token: item, showSubPrice: false, isFav: UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == item.uniqueID }))
                                 .contentShape(.rect)
                                 .onAppear() {
                                     viewModel.marketViewModel.loadMoreData(item: item)

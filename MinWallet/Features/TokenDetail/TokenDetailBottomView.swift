@@ -11,7 +11,7 @@ extension TokenDetailView {
                 content: {
                     let tokenByID = tokenManager.tokenById(tokenID: viewModel.token.uniqueID)
                     let amount = tokenByID?.amount ?? 0
-                    let valueInAda = (tokenByID?.subPriceValue ?? 0).toExact(decimal: tokenByID?.isTokenADA == true ? 0 : 6)
+                    let valueInAda = (tokenByID?.subPriceValue ?? 0)
                     Text("My balance")
                         .font(.paragraphSmall)
                         .foregroundStyle(.colorInteractiveTentPrimarySub)
