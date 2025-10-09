@@ -20,7 +20,15 @@ class YourTokenViewModel: ObservableObject {
         NotificationCenter.default.publisher(for: .favDidChange)
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
-                self?.tokens = UserInfo.sortTokens(tokens: TokenManager.shared.normalTokens)
+                guard let self = self else { return }
+                switch type {
+                case .market:
+                    break
+                case .yourToken:
+                    self.tokens = UserInfo.sortTokens(tokens: TokenManager.shared.normalTokens)
+                case .nft:
+                    break
+                }
             }
             .store(in: &bag)
     }

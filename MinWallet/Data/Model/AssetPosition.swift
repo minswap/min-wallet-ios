@@ -39,7 +39,7 @@ extension AssetPosition: TokenProtocol {
     var category: [String] { [] }
     
     var socialLinks: [SocialLinks: String] {
-        guard let socialLinks = asset.social_links else { return [:] }
+        let socialLinks = asset.social_links ?? .init()
         var links: [SocialLinks: String] = [:]
         if let coinGecko = socialLinks.coinGecko {
             links[.coinGecko] = coinGecko
@@ -62,6 +62,8 @@ extension AssetPosition: TokenProtocol {
         if let website = socialLinks.website {
             links[.website] = website
         }
+        links[.cardanoscan] = "https://cardanoscan.io/token/\(currencySymbol)\(tokenName)"
+        links[.adaStat] = "https://adastat.net/tokens/\(currencySymbol)\(tokenName)"
         return links
     }
     

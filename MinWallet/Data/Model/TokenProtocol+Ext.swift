@@ -93,6 +93,8 @@ enum SocialLinks: String {
     case telegram
     case twitter
     case website
+    case cardanoscan
+    case adaStat
     
     var image: ImageResource {
         switch self {
@@ -108,6 +110,10 @@ enum SocialLinks: String {
             return .icTwitter
         case .website:
             return .icWebsite
+        case .cardanoscan:
+            return .icCardanoscan
+        case .adaStat:
+            return .icAdaStat
         }
     }
     
@@ -125,6 +131,10 @@ enum SocialLinks: String {
             4
         case .website:
             5
+        case .cardanoscan:
+            6
+        case .adaStat:
+            7
         }
     }
 }

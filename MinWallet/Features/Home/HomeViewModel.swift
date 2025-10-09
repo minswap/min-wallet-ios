@@ -28,6 +28,9 @@ class HomeViewModel: ObservableObject {
     @Published
     var nftViewModel: YourTokenViewModel = .init(type: .nft)
     
+    @Published
+    var favTokenIds: [String] = []
+    
     deinit {
         timerReloadBalance?.cancel()
         timerReloadMarket?.cancel()
