@@ -3,6 +3,7 @@ import Foundation
 import Combine
 import OneSignalFramework
 import ObjectMapper
+import Then
 
 
 @MainActor
@@ -115,8 +116,16 @@ extension MarketViewModel {
             })
         
         let tokenRaw = try? await MinWalletAPIRouter.topAssets(input: input).async_request()
-        let tokens = Mapper<TopAssetsResponse>.init().map(JSON: tokenRaw?.dictionaryObject ?? [:])
+        let tokens = Mapper<TopAssetsResponse>.init().map(JSON: tokenRaw?.dictionaryObject ?? [:]) ?? .init()
         
-        return tokens?.assets ?? []
+        guard !tokens.assets.isEmpty else { return [] }
+        
+        let indexMap = Dictionary(uniqueKeysWithValues: favAssetIds.enumerated().map { ($1, $0) })
+        let sortedAssets = tokens.assets.sorted {
+            let lhs = indexMap[$0.currencySymbol + $0.tokenName] ?? Int.max
+            let rhs = indexMap[$1.currencySymbol + $1.tokenName] ?? Int.max
+            return lhs < rhs
+        }
+        return sortedAssets
     }
 }

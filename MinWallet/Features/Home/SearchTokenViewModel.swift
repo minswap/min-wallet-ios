@@ -129,32 +129,6 @@ class SearchTokenViewModel: ObservableObject {
     }
     
     private func getTokenFav() async -> [TokenProtocol] {
-        let tokens = await withTaskGroup(of: TokenProtocol?.self) { taskGroup in
-            let tokens = UserInfo.shared.tokensFav
-            var results: [TokenProtocol?] = []
-            
-            for item in tokens {
-                taskGroup.addTask {
-                    await self.fetchToken(for: item)
-                }
-            }
-            
-            for await result in taskGroup {
-                results.append(result)
-            }
-            
-            return results
-        }
-        return tokens.compactMap { $0 }
-    }
-    
-    private func fetchToken(for token: TokenFavourite) async -> TopAssetsResponse.AssetMetric? {
-        do {
-            let jsonData = try await MinWalletAPIRouter.detailAsset(id: token.currencySymbol + token.tokenName).async_request()
-            let asset = Mapper<TopAssetsResponse.AssetMetric>.init().map(JSON: jsonData.dictionaryObject ?? [:])
-            return asset
-        } catch {
-            return nil
-        }
+        await MarketViewModel.getTopAssetsFav()
     }
 }
