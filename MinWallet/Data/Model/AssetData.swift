@@ -80,7 +80,7 @@ extension AssetData: TokenProtocol {
     var subPriceValue: Double { 0 }
     var category: [String] { [] }
     var socialLinks: [SocialLinks: String] {
-        guard let socialLinks = social_links else { return [:] }
+        let socialLinks = social_links ?? .init()
         var links: [SocialLinks: String] = [:]
         if let coinGecko = socialLinks.coinGecko {
             links[.coinGecko] = coinGecko
@@ -103,6 +103,8 @@ extension AssetData: TokenProtocol {
         if let website = socialLinks.website {
             links[.website] = website
         }
+        links[.cardanoscan] = "https://cardanoscan.io/token/\(currencySymbol)\(tokenName)"
+        links[.adaStat] = "https://adastat.net/tokens/\(currencySymbol)\(tokenName)"
         return links
     }
     

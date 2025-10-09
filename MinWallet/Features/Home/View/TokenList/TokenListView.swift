@@ -81,6 +81,9 @@ struct TokenListView: View {
                 }
             }
         }
+        .onAppear {
+            viewModel.favTokenIds = UserInfo.shared.tokensFav.map({ $0.uniqueID })
+        }
     }
 }
 
@@ -164,7 +167,7 @@ extension TokenListView {
                     let tokens: [TokenProtocol] = viewModel.marketViewModel.tokens
                     ForEach(0..<tokens.count, id: \.self) { index in
                         if let item = tokens[gk_safeIndex: index] {
-                            TokenListItemView(token: item, showSubPrice: false, isFav: UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == item.uniqueID }))
+                            TokenListItemView(token: item, showSubPrice: false, isFav: viewModel.favTokenIds.contains(where: { $0 == item.uniqueID }))
                                 .contentShape(.rect)
                                 .onAppear() {
                                     viewModel.marketViewModel.loadMoreData(item: item)
@@ -205,7 +208,7 @@ extension TokenListView {
                     let tokens: [TokenProtocol] = viewModel.yourTokenViewModel.tokens
                     ForEach(0..<tokens.count, id: \.self) { index in
                         if let item = tokens[gk_safeIndex: index] {
-                            TokenListItemView(token: item, showSubPrice: true, isFav: UserInfo.shared.tokensFav.contains(where: { $0.uniqueID == item.uniqueID }))
+                            TokenListItemView(token: item, showSubPrice: true, isFav: viewModel.favTokenIds.contains(where: { $0 == item.uniqueID }))
                                 .contentShape(.rect)
                                 .onTapGesture {
                                     guard !item.isTokenADA else { return }
