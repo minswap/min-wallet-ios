@@ -20,7 +20,7 @@ class SearchTokenViewModel: ObservableObject {
     var recentSearch: [String] = []
     
     private var input: TopAssetsInput = .init()
-    private var searchAfter: [String]? = nil
+    private var searchAfter: [Any]? = nil
     private var hasLoadMore: Bool = true
     private let limit: Int = 20
     private var isFetching: Bool = true

@@ -5,7 +5,7 @@ struct TopAssetsInput: Then {
     var term: String?
     var limit: Int = 20
     var only_verified: Bool?
-    var search_after: [String]?
+    var search_after: [Any]?
     var sort_direction: SortDirection?
     var sort_field: SortField?
     var favorite_asset_ids: [String]?

@@ -4,7 +4,7 @@ import Foundation
 
 
 struct TopAssetsResponse: Then, Mappable {
-    var search_after: [String]?
+    var search_after: [Any]?
     var assets: [AssetMetric] = []
     
     init() {}

@@ -14,7 +14,7 @@ class MarketViewModel: ObservableObject {
     var showSkeleton: Bool? = nil
     
     private var input: TopAssetsInput = .init()
-    private var searchAfter: [String]? = nil
+    private var searchAfter: [Any]? = nil
     private var hasLoadMore = false
     private var isFetching: Bool = false
     private let limit: Int = 20
