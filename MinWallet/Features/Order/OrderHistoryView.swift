@@ -22,12 +22,23 @@ struct OrderHistoryView: View {
     @StateObject
     var filterViewModel: OrderHistoryFilterViewModel = .init()
     
+    //TODO: Remove
+    @State
+    private var showInputFakeAddress = false
+    @State
+    private var fakeWalletAddress: String = AppSetting.shared.fakeWalletAddress
+    
     var body: some View {
         ZStack {
             Color.colorBaseBackground.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
                 headerView
                     .padding(.top, .md)
+                    //TODO: Remove
+                    .onLongPressGesture {
+                        guard AppSetting.fakeWalletAddress else { return }
+                        showInputFakeAddress = true
+                    }
                 OffsetObservingScrollView(
                     offset: $scrollOffset,
                     onRefreshable: {
@@ -104,6 +115,21 @@ struct OrderHistoryView: View {
                     }
                 }
             }
+        }
+        //TODO: Remove
+        .alert("Address wallet", isPresented: $showInputFakeAddress) {
+            TextField("Address", text: $fakeWalletAddress)
+            Button("OK") {
+                Task {
+                    AppSetting.shared.fakeWalletAddress = fakeWalletAddress
+                    await viewModel.fetchData(fromPullToRefresh: true)
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                
+            }
+        } message: {
+            Text("Please enter wallet address below. Empty will use your current wallet address.")
         }
     }
     

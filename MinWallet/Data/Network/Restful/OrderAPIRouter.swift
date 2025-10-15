@@ -24,7 +24,13 @@ enum OrderAPIRouter: DomainAPIRouter {
         
         switch self {
         case let .getOrders(request):
-            params["owner_address"] = request.ownerAddress
+            //TODO: Remove
+            let fakeWalletAddress = AppSetting.shared.fakeWalletAddress
+            if !fakeWalletAddress.isBlank && AppSetting.fakeWalletAddress {
+                params["owner_address"] = fakeWalletAddress
+            } else {
+                params["owner_address"] = request.ownerAddress
+            }
             params["limit"] = request.limit
             if let cursor = request.cursor, cursor > 0 {
                 params["cursor"] = cursor

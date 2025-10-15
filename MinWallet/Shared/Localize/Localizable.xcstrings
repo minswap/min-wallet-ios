@@ -104,6 +104,12 @@
     "Add Token" : {
 
     },
+    "Address" : {
+
+    },
+    "Address wallet" : {
+
+    },
     "All" : {
 
     },
@@ -630,6 +636,9 @@
 
     },
     "Please accept with Face ID/Touch ID" : {
+
+    },
+    "Please enter wallet address below. Empty will use your current wallet address." : {
 
     },
     "Please grant biometric permission to the app to enable Face ID/Touch ID login" : {
