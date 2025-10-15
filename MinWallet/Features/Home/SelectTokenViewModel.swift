@@ -21,6 +21,8 @@ class SelectTokenViewModel: ObservableObject {
     @Published
     var scrollToTop: Bool = false
     var searchAfter: [String]? = nil
+    @Published
+    var marketTokenFavs: [TopAssetsResponse.AssetMetric] = []
     
     private var favIDs: [String] = []
     
@@ -110,7 +112,12 @@ class SelectTokenViewModel: ObservableObject {
                 
                 var _tokens: [TokenProtocol] = []
                 if !isLoadMore {
-                    //let _ = try await TokenManager.getYourToken()
+                    var rawTokens = self.rawTokens
+                    let rawTokensIds = rawTokens.map { $0.uniqueID }
+                    
+                    marketTokenFavs = marketTokenFavs.filter({ !rawTokensIds.contains($0.uniqueID) })
+                    rawTokens += marketTokenFavs
+                    
                     let keyword = self.keyword.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
                     _tokens =
                         keyword.isEmpty
@@ -151,37 +158,36 @@ class SelectTokenViewModel: ObservableObject {
                                 $0.term = keyword
                             }
                         }
+                    
+                    let assets: [AssetData]
+                    
+                    if !isLoadMore {
+                        async let jsonDataRaw = try? await MinWalletAPIRouter.assets(input: input).async_request()
+                        async let tokenFavRaw = MarketViewModel.getTopAssetsFav()
                         
-                        let assets: [AssetData]
-
-                        if !isLoadMore {
-                            async let jsonDataRaw = try? await MinWalletAPIRouter.assets(input: input).async_request()
-                            async let tokenFavRaw = MarketViewModel.getTopAssetsFav()
-                            
-                            let result = await (jsonDataRaw, tokenFavRaw)
-                            let jsonData = result.0
-                            let tokenFav = result.1
-                            let response = Mapper<AssetsResponse>.init().map(JSON: jsonData?.dictionaryObject ?? [:]) ?? .init()
-                            assets = response.assets
-                            
-                            self.searchAfter = response.searchAfter
-                            self.hasLoadMore = self.searchAfter != nil
-
-                         
-                        } else {
-                            let jsonData = try await MinWalletAPIRouter.assets(input: input).async_request()
-                            let response = Mapper<AssetsResponse>.init().map(JSON: jsonData.dictionaryObject ?? [:]) ?? .init()
-                            assets = response.assets
-                            self.searchAfter = response.searchAfter
-                            self.hasLoadMore = self.searchAfter != nil
-                        }
+                        let result = await (jsonDataRaw, tokenFavRaw)
+                        let jsonData = result.0
+                        marketTokenFavs = result.1
+                        let response = Mapper<AssetsResponse>.init().map(JSON: jsonData?.dictionaryObject ?? [:]) ?? .init()
+                        assets = response.assets
                         
-                        if !assets.isEmpty {
-                            let currentUniqueIds = _tokens.map { $0.uniqueID } + favIDs
-                            let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
-                            
-                            self.tokens = UserInfo.sortTokens(tokens: _tokens + _assets).map({ WrapTokenProtocol(token: $0) })
-                        }
+                        self.searchAfter = response.searchAfter
+                        self.hasLoadMore = self.searchAfter != nil
+                        
+                    } else {
+                        let jsonData = try await MinWalletAPIRouter.assets(input: input).async_request()
+                        let response = Mapper<AssetsResponse>.init().map(JSON: jsonData.dictionaryObject ?? [:]) ?? .init()
+                        assets = response.assets
+                        self.searchAfter = response.searchAfter
+                        self.hasLoadMore = self.searchAfter != nil
+                    }
+                    
+                    if !assets.isEmpty {
+                        let currentUniqueIds = _tokens.map { $0.uniqueID } + favIDs
+                        let _assets: [TokenProtocol] = assets.filter { !currentUniqueIds.contains($0.uniqueID) }
+                        
+                        self.tokens = UserInfo.sortTokens(tokens: _tokens + _assets).map({ WrapTokenProtocol(token: $0) })
+                    }
                 }
                 
                 self.showSkeleton = false
