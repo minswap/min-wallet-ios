@@ -109,7 +109,7 @@ extension UserInfo {
     static func sortTokens(tokens: [TokenProtocol]) -> [TokenProtocol] {
         let favoriteIDs: Set<String> = Set(UserInfo.shared.tokensFav.map { $0.uniqueID })
         let tokenAda = tokens.filter { $0.isTokenADA }
-        let favs = tokens.filter { favoriteIDs.contains($0.uniqueID) && !$0.isTokenADA }
+        let favs = tokens.filter { favoriteIDs.contains($0.uniqueID) && !$0.isTokenADA }.sorted { $0.amount > $1.amount }
         let nonFavs = tokens.filter { !favoriteIDs.contains($0.uniqueID) && !$0.isTokenADA }
         
         return tokenAda + favs + nonFavs

@@ -105,6 +105,14 @@ class AppSetting: ObservableObject {
         }
     }
     
+    //TODO: Remove
+    @UserDefault("fake_wallet_address", defaultValue: "")
+    var fakeWalletAddress: String {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
     var authenticationType: AuthenticationType {
         get { AuthenticationType(rawValue: securityType) ?? .biometric }
         set { securityType = newValue.rawValue }
@@ -280,4 +288,9 @@ extension AppSetting {
         case biometric
         case password
     }
+}
+
+
+extension AppSetting {
+    static let fakeWalletAddress: Bool = true
 }
