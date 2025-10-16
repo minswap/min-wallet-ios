@@ -32,6 +32,9 @@ struct WrapOrderHistory: Then, Equatable, Identifiable {
         
         status = {
             guard orders.count > 1 else { return orders.first?.status ?? .created }
+            if orders.allSatisfy({ $0.status == .cancelled }) {
+                return .cancelled
+            }
             return orders.first { $0.status == .created } != nil ? .created : .batched
         }()
         
