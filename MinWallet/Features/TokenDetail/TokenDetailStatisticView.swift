@@ -6,6 +6,34 @@ extension TokenDetailView {
         VStack(
             alignment: .leading, spacing: 0,
             content: {
+                HStack(alignment: .center, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("For project, let's increase you visibility by")
+                            .font(.paragraphSmall)
+                            .foregroundStyle(.colorInteractiveTentSecondarySub)
+                        Text("Update token supply")
+                            .font(.labelSmallSecondary)
+                            .foregroundStyle(.colorInteractiveToneHighlight)
+                            .onTapGesture {
+                                UIApplication.shared.open(URL(string: "https://github.com/minswap/minswap-tokens")!, options: [:], completionHandler: nil)
+                            }
+                    }
+                    Spacer(minLength: 0)
+                    Image(.icArrowUp)
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(.colorInteractiveToneHighlight)
+                        .frame(width: 24, height: 24)
+                        .onTapGesture {
+                            UIApplication.shared.open(URL(string: "https://github.com/minswap/minswap-tokens")!, options: [:], completionHandler: nil)
+                        }
+                        .offset(y: 1)
+                }
+                .padding(.horizontal, .xl)
+                .padding(.vertical, .lg)
+                .background(.colorSurfaceHighlightDefault)
+                .cornerRadius(.xl)
+                .padding(.bottom, .xl)
                 Text("Statistics")
                     .font(.titleH6)
                     .foregroundStyle(.colorBaseTent)
@@ -352,32 +380,6 @@ extension TokenDetailView {
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
                         }
                 }
-                HStack(alignment: .center, spacing: 4) {
-                    Text("For projects")
-                        .font(.labelSemiSecondary)
-                        .foregroundStyle(.colorBaseTent)
-                        .frame(height: 28)
-                    Spacer()
-                    Text("Update token supply")
-                        .underline()
-                        .baselineOffset(4)
-                        .font(.labelSmallSecondary)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        .onTapGesture {
-                            UIApplication.shared.open(URL(string: "https://github.com/minswap/minswap-tokens")!, options: [:], completionHandler: nil)
-                        }
-                        .offset(y: 2)
-                    Image(.icArrowUp)
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(.colorInteractiveToneHighlight)
-                        .frame(width: 16, height: 16)
-                        .onTapGesture {
-                            UIApplication.shared.open(URL(string: "https://github.com/minswap/minswap-tokens")!, options: [:], completionHandler: nil)
-                        }
-                        .offset(y: 1)
-                }
-                .padding(.bottom, .xl)
             })
     }
 }
