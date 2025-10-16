@@ -40,7 +40,7 @@ struct OrderHistoryFilterView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     if !viewModel.showSelectToDate && !viewModel.showSelectFromDate {
                         VStack(spacing: 0) {
-                            Text("Type")
+                            Text("Aggregator Source")
                                 .font(.labelSmallSecondary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.bottom, .md)
