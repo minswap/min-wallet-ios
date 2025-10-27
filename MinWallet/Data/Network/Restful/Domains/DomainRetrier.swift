@@ -5,37 +5,13 @@ import Combine
 
 // MARK: - Domain Token Refresher
 protocol GDomainTokenRefresher {
-    /// refresh token dùng để gọid API refresh, nếu trống sẽ ko gọi `requestRefreshToken` mà lỗi luôn
     var refreshToken: String { get }
-    /// biến quyết định có cần gọi refresh trước khi gọi API ko
-    ///
-    /// biến nên là `requiresRefresh` trước khi (access) token hết hạn một khoảng thời gian
-    /// để hạn chế API bị gọi với token hết hạn và phải retry sau refresh
-    ///
-    /// ````
-    /// func shouldRefreshTokenIfRequired(endpoint: APIRouter) -> RequiresRefreshResult {
-    ///   if endpoint == <Refresh Token API endpoint> {
-    ///     return .doesNotRequireRefresh
-    ///   }
-    ///
-    ///   let date_now = ..
-    ///   let date_to_refresh = date_token_expire - 5ph // vd token valid trong 30ph
-    ///   // date_to_refresh => nên cache Date này cho so sánh nhanh
-    ///   // thay vì dùng Date(), có thể dùng so sánh TimeInterval với ProcessInfo.processInfo.systemUptime
-    ///   if date_now < date_to_refresh {
-    ///     return doesNotRequireRefresh
-    ///   }
-    ///   return .requiresRefresh / requiresRefreshThenDelay(TimeInterval(0.25))
-    /// }
-    /// ````
     func shouldRefreshTokenIfRequired(endpoint: APIRouter) -> RequiresRefreshResult
-    /// hàm gọi API refresh lấy (access) token mới
     func requestRefreshToken() async throws
     func requestRefreshToken() -> AnyPublisher<Void, Error>
 }
 
 extension GDomainTokenRefresher {
-    // default ko có luồng chủ động refresh
     func shouldRefreshTokenIfRequired(endpoint: APIRouter) -> RequiresRefreshResult {
         return .doesNotRequireRefresh
     }

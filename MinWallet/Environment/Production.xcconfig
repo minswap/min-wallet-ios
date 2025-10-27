@@ -1,6 +1,6 @@
 #include "AppConfig.xcconfig"
 
-MIN_GRAPH_URL      = https:\/\/monorepo-mainnet-staging.minswap.org
+MIN_GRAPH_URL      = https:\/\/ios-api.minswap.org
 MIN_PUBLIC_NETWORK_ID = mainnet
 MIN_TRANSACTION_URL = https:/\/\cardanoscan.io
 MIN_ADA_HANDLE_URL = https:/\/\api.handle.me\/handles
@@ -13,4 +13,4 @@ MIN_ADA_CURRENCY = ₳
 MIN_ADDRESS_PREFIX = addr1
 MIN_POLICY_URL = https:\/\/eternl-dapp-browser.minswap.org
 MIN_ASSET_URL = https:\/\/asset-logos.minswap.org
-MIN_AGG_URL = https:\/\/dev-2.minswap.org
+MIN_AGG_URL = https:\/\/ios-api.minswap.org
